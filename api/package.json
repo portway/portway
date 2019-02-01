@@ -1,0 +1,19 @@
+{
+  "name": "project-danger-api",
+  "version": "1.0.0",
+  "description": "Project Danger API",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/BonkeyBong/project-danger.git"
+  },
+  "author": "BonkeyBong, LLC",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
