@@ -4,8 +4,9 @@
   "description": "Project Danger API",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "serve": "node src/index.js",
+    "serve": "NODE_ENV=development babel-node -- src/index.js",
+    "build": "NODE_ENV=production babel-node -- src/index.js",
+    "babel-node": "babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -14,6 +15,11 @@
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2"
+  },
   "dependencies": {
     "express": "^4.16.4"
   }

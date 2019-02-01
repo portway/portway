@@ -1,12 +1,9 @@
 # Project Danger 🔥
 
-### Web
-
-To get running:
+To get running locally:
 
 ```
 make install
 make start
+make kill
 ```
-
-### API

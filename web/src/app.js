@@ -19,8 +19,18 @@ import usersRouter from './routes/users'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
-const webpackConfig = require('../webpack.config')
-const compiler = webpack(webpackConfig)
+const devMode = process.env.NODE_ENV !== 'production'
+
+if (devMode) {
+  const webpackConfig = require('../webpack.config')
+  const compiler = webpack(webpackConfig)
+  app.use(webpackMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath,
+    mode: 'development'
+  }))
+  app.use(webpackHotMiddleware(compiler))
+}
 
 // view engine setup
 app.set('views', join(__dirname, 'views'))
@@ -31,12 +41,7 @@ app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(webpackMiddleware(compiler, {
-  noInfo: true,
-  publicPath: webpackConfig.output.publicPath,
-  mode: 'development'
-}))
-app.use(webpackHotMiddleware(compiler))
+
 app.use(
   sassMiddleware({
     src: join(__dirname, 'sass'),
