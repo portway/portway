@@ -4,4 +4,4 @@ const port = 3001
 
 app.get('/', (req, res) => res.send('Hello API world!'))
 
-app.listen(port, () => console.log(`App listening on port ${port}`))
+app.listen(port, () => console.log(`API listening on port ${port}`))

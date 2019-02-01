@@ -1,9 +1,11 @@
 const webpack = require('webpack')
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 const devMode = process.env.NODE_ENV !== 'production'
+console.log('DEV MODE ' + devMode)
 
 module.exports = {
   mode: devMode ? 'development' : 'production',
@@ -15,15 +17,19 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'src/public'),
-    filename: 'js/[name].bundle.js',
-    chunkFilename: 'js/[name].bundle.js',
+    filename: devMode ? 'js/[name].[hash].js' : 'js/[name].[contenthash].js',
+    chunkFilename: devMode ? 'js/[name].[hash].js' : 'js/[name].[chunkhash].js',
     publicPath: '/'
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'css/[name].css'
+      filename: devMode ? 'css/[name][hash].css' : 'css/[name][contenthash].css'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: '!!raw-loader!./src/views/index.ejs'
+    }),
+    devMode ? new webpack.HotModuleReplacementPlugin() : null
   ],
   optimization: {
     splitChunks: {
@@ -74,10 +80,6 @@ module.exports = {
             }
           }
         ]
-      },
-      {
-        test: /\.html$/,
-        loader: 'html-loader'
       }
     ]
   }
