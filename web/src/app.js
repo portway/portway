@@ -10,7 +10,7 @@ import { createServer } from 'http'
 import indexRouter from './routes/index'
 import usersRouter from './routes/users'
 
-const app = express();
+const app = express()
 const port = normalizePort(process.env.PORT || '3000')
 
 // view engine setup
@@ -22,12 +22,14 @@ app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(sassMiddleware({
-  src: join(__dirname, 'public'),
-  dest: join(__dirname, 'public'),
-  indentedSyntax: false, // true = .sass and false = .scss
-  sourceMap: true
-}))
+app.use(
+  sassMiddleware({
+    src: join(__dirname, 'public'),
+    dest: join(__dirname, 'public'),
+    indentedSyntax: false, // true = .sass and false = .scss
+    sourceMap: true
+  })
+)
 app.use(express.static(join(__dirname, 'public')))
 
 app.use('/', indexRouter)
@@ -36,7 +38,7 @@ app.use('/users', usersRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404))
-});
+})
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -53,7 +55,7 @@ app.use(function(err, req, res, next) {
  */
 var server = createServer(app)
 
-const onListening = ()  => {
+const onListening = () => {
   const addr = server.address()
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.info(`Listening on ${bind}`)
@@ -61,23 +63,21 @@ const onListening = ()  => {
 
 const onError = (error) => {
   if (error.syscall !== 'listen') {
-    throw error;
+    throw error
   }
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
+      console.error(bind + ' requires elevated privileges')
+      process.exit(1)
+      break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
+      console.error(bind + ' is already in use')
+      process.exit(1)
+      break
     default:
-      throw error;
+      throw error
   }
 }
 
@@ -88,4 +88,4 @@ server.listen(port)
 server.on('error', onError)
 server.on('listening', onListening)
 
-export default app;
+export default app

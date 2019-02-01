@@ -8,7 +8,7 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   entry: {
-    index: './src/js/index.js',
+    index: './src/js/index.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -27,9 +27,10 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       {
-        from: 'src/images', to: 'images'
+        from: 'src/images',
+        to: 'images'
       }
-    ]),
+    ])
   ],
   optimization: {
     splitChunks: {
@@ -41,9 +42,7 @@ module.exports = {
         }
       }
     },
-    minimizer: [
-      new OptimizeCSSAssetsPlugin({})
-    ]
+    minimizer: [new OptimizeCSSAssetsPlugin({})]
   },
   module: {
     rules: [
@@ -64,22 +63,24 @@ module.exports = {
             options: {
               sourceMap: true,
               config: {
-                path: path.resolve(__dirname, './postcss.config.js'),
-              },
-            },
+                path: path.resolve(__dirname, './postcss.config.js')
+              }
+            }
           },
-          'sass-loader',
+          'sass-loader'
         ]
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 8000, // Convert images < 8kb to base64 strings
-            name: 'images/[hash]-[name].[ext]'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8000, // Convert images < 8kb to base64 strings
+              name: 'images/[hash]-[name].[ext]'
+            }
           }
-        }]
+        ]
       },
       {
         test: /\.html$/,
@@ -96,7 +97,7 @@ module.exports = {
     watchOptions: {
       aggregateTimeout: 500, // delay before reloading
       poll: 1000 // enable polling since fsevents are not supported in docker
-    },
+    }
     // historyApiFallback: {
     //   rewrites: [
     //     // Can't import constants from inside the bundle
