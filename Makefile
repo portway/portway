@@ -4,3 +4,6 @@ install:
 
 dev:
 	docker-compose up
+
+kill:
+	docker-compose stop
