@@ -1,3 +1,7 @@
+# App Specific
+web/src/public/css/
+web/src/public/js/
+
 # Logs
 logs
 *.log

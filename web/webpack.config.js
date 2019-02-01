@@ -1,36 +1,29 @@
+const webpack = require('webpack')
 const path = require('path')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
+  mode: devMode ? 'development' : 'production',
   entry: {
-    index: './src/js/index.js'
+    index: [
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+      './src/scripts/index.js'
+    ]
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'src/public'),
     filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[name].bundle.js',
     publicPath: '/'
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: './index.html',
-      chunks: ['index']
-    }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].css'
     }),
-    new CopyWebpackPlugin([
-      {
-        from: 'src/images',
-        to: 'images'
-      }
-    ])
+    new webpack.HotModuleReplacementPlugin()
   ],
   optimization: {
     splitChunks: {
@@ -87,22 +80,5 @@ module.exports = {
         loader: 'html-loader'
       }
     ]
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 3000,
-    compress: true,
-    hot: true,
-    overlay: true,
-    watchOptions: {
-      aggregateTimeout: 500, // delay before reloading
-      poll: 1000 // enable polling since fsevents are not supported in docker
-    }
-    // historyApiFallback: {
-    //   rewrites: [
-    //     // Can't import constants from inside the bundle
-    //     { from: /^\/home|about|contact/, to: 'index.html' }
-    //   ]
-    // }
   }
 }

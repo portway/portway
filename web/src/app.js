@@ -1,10 +1,17 @@
+import webpack from 'webpack'
 import express, { json, urlencoded } from 'express'
+
 import createError from 'http-errors'
 import { normalizePort } from './libs/express-utilities'
 import { join } from 'path'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
+
+// Express Middleware
+import webpackMiddleware  from 'webpack-dev-middleware'
+import webpackHotMiddleware  from 'webpack-hot-middleware'
 import sassMiddleware from 'node-sass-middleware'
+
 import { createServer } from 'http'
 
 import indexRouter from './routes/index'
@@ -12,6 +19,8 @@ import usersRouter from './routes/users'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
+const webpackConfig = require('../webpack.config')
+const compiler = webpack(webpackConfig)
 
 // view engine setup
 app.set('views', join(__dirname, 'views'))
@@ -22,9 +31,15 @@ app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(webpackMiddleware(compiler, {
+  noInfo: true,
+  publicPath: webpackConfig.output.publicPath,
+  mode: 'development'
+}))
+app.use(webpackHotMiddleware(compiler))
 app.use(
   sassMiddleware({
-    src: join(__dirname, 'public'),
+    src: join(__dirname, 'sass'),
     dest: join(__dirname, 'public'),
     indentedSyntax: false, // true = .sass and false = .scss
     sourceMap: true

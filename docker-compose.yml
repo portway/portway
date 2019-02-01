@@ -7,7 +7,7 @@ services:
     volumes:
       - ./web:/usr/src/service/web
     working_dir: /usr/src/service/web
-    command: npm start
+    command: npm run serve
     ports:
       - 3000:3000
       - 1235:1235
@@ -19,7 +19,7 @@ services:
     volumes:
       - ./api:/usr/src/service/api
     working_dir: /usr/src/service/api
-    command: npm start
+    command: npm run serve
     ports:
       - 3001:3001
     environment:
