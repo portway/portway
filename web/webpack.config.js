@@ -1,41 +1,45 @@
 const webpack = require('webpack')
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const WebpackAssetsManifest = require('webpack-assets-manifest')
 
 const devMode = process.env.NODE_ENV !== 'production'
-console.log('DEV MODE ' + devMode)
+
+const entryPoints = {
+  'index': [
+    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+    './src/scripts/index.js'
+  ]
+}
+
+const entryFunction = (key) => {
+  return devMode ? entryPoints[key] : entryPoints[key][1]
+}
 
 module.exports = {
   mode: devMode ? 'development' : 'production',
   entry: {
-    index: [
-      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-      './src/scripts/index.js'
-    ]
+    index: entryFunction('index')
   },
   output: {
     path: path.resolve(__dirname, 'src/public'),
-    filename: devMode ? 'js/[name].[hash].js' : 'js/[name].[contenthash].js',
-    chunkFilename: devMode ? 'js/[name].[hash].js' : 'js/[name].[chunkhash].js',
+    filename: devMode ? 'js/[name].bundle.js' : 'js/[name].[contenthash].js',
+    chunkFilename: devMode ? 'js/[name].bundle.js' : 'js/[name].[chunkhash].js',
     publicPath: '/'
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: devMode ? 'css/[name][hash].css' : 'css/[name][contenthash].css'
+      filename: devMode ? 'css/[name].bundle.css' : 'css/[name].[contenthash].css'
     }),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: '!!raw-loader!./src/views/index.ejs'
-    }),
-    devMode ? new webpack.HotModuleReplacementPlugin() : null
+    !devMode ? new WebpackAssetsManifest() : () => {},
+    devMode ? new webpack.HotModuleReplacementPlugin() : () => {}
   ],
   optimization: {
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       cacheGroups: {
-        vendors: {
+        vendor: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10
         }

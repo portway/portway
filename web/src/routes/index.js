@@ -3,7 +3,11 @@ var router = express.Router()
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' })
+  const options = {
+    title: 'Express',
+    bundles: req.app.locals.bundles
+  }
+  res.render('index', options)
 })
 
 module.exports = router

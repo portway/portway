@@ -24,12 +24,22 @@ const devMode = process.env.NODE_ENV !== 'production'
 if (devMode) {
   const webpackConfig = require('../webpack.config')
   const compiler = webpack(webpackConfig)
+  const bundleKeys = Object.keys(webpackConfig.entry)
+  const bundleObject = {}
+  bundleKeys.forEach((key) => {
+    bundleObject[`${key}.css`] = `/css/${key}.bundle.css`
+    bundleObject[`vendor~${key}.js`] = `/js/vendor~${key}.bundle.js`
+    bundleObject[`${key}.js`] = `/js/${key}.bundle.js`
+  })
   app.use(webpackMiddleware(compiler, {
     noInfo: true,
     publicPath: webpackConfig.output.publicPath,
     mode: 'development'
   }))
   app.use(webpackHotMiddleware(compiler))
+  app.locals.bundles = bundleObject
+} else {
+  app.locals.bundles = require('./public/manifest.json')
 }
 
 // view engine setup
