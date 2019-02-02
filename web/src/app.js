@@ -17,7 +17,7 @@ import sassMiddleware from 'node-sass-middleware'
 
 // Routes
 import indexRouter from './routes/index'
-import usersRouter from './routes/users'
+import registrationRouter from './routes/registration'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -25,7 +25,7 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 // Set up the routes
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/registration', registrationRouter)
 
 // Set up Sass middleware for Sass compilation of global Sass files in
 // ./src/sass – These will be output to the css directory in public
