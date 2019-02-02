@@ -1,7 +1,5 @@
 # App Specific
-web/src/public/css/
-web/src/public/js/
-web/src/public/manifest.json
+web/dist
 
 # Logs
 logs
