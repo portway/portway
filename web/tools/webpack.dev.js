@@ -16,7 +16,7 @@ module.exports = {
     index: entryPoints['index']
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../dist/public'),
     filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[name].bundle.js',
     publicPath: '/'
