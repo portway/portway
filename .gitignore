@@ -1,3 +1,10 @@
+# App Specific
+web/src/public/css/
+web/src/public/js/
+web/src/public/manifest.json
+.DS_Store
+web/dist
+
 # Logs
 logs
 *.log
