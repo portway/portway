@@ -65,12 +65,12 @@ if (devMode) {
 } else {
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
-  app.locals.bundles = require('../dist/manifest.json')
+  app.locals.bundles = require('../manifest.json')
 }
 
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
-app.use(express.static(join(__dirname, '../dist/public')))
+app.use(express.static(join(__dirname, '../public')))
 
 // Set up Express
 app.set('views', join(__dirname, 'views'))

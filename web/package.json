@@ -4,9 +4,9 @@
   "description": "Project Danger Web Client",
   "main": "src/index.js",
   "scripts": {
-    "serve": "NODE_ENV=development nodemon --config ./tools/nodemon.config.json --exec babel-node ./src/app.js",
-    "build": "NODE_ENV=production webpack --env.production --config ./tools/webpack.prod.js",
-    "start": "NODE_ENV=production babel-node ./src/app.js",
+    "serve": "NODE_ENV=development nodemon --config ./tools/nodemon.config.json --exec babel-node ./server/app.js",
+    "build": "NODE_ENV=production webpack --env.production --config ./tools/webpack.prod.js && babel ./server -d dist/server --copy-files",
+    "start": "NODE_ENV=production node ./dist/server/app.js",
     "babel-node": "babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
