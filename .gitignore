@@ -1,12 +1,9 @@
 # App Specific
-<<<<<<< HEAD
 web/src/public/css/
 web/src/public/js/
 web/src/public/manifest.json
 .DS_Store
-=======
 web/dist
->>>>>>> 36ed3e8408dccde7176fa56889c69380c9ae8ece
 
 # Logs
 logs

@@ -24,53 +24,46 @@ app.use('/registration', registrationRouter)
 // starts.
 if (devMode) {
 
-  const devMiddlewares = [
-    import('../tools/webpack.dev'),
-    import('webpack'),
-    import('webpack-dev-middleware'),
-    import('webpack-hot-middleware'),
-    import('node-sass-middleware')
-  ]
+  const webpackConfig = require('../tools/webpack.dev')
+  const webpack = require('webpack')
+  const webpackMiddleware = require('webpack-dev-middleware')
+  const webpackHotMiddleware = require('webpack-hot-middleware')
+  const sassMiddleware = require('node-sass-middleware')
 
-  Promise.all(devMiddlewares)
-    .then(([ webpackConfig, webpack, webpackMiddleware, webpackHotMiddleware, sassMiddleware ]) => {
-      // Enable the Webpack middleware, with Webpack options
-      const compiler = webpack(webpackConfig)
-      app.use(webpackMiddleware(compiler, {
-        noInfo: true,
-        publicPath: webpackConfig.output.publicPath,
-        mode: 'development'
-      }))
-      // Enable Webpack hot reloading with Express
-      app.use(webpackHotMiddleware(compiler))
-      // Set up Sass middleware for Sass compilation of global Sass files in
-      // ./src/sass – These will be output to the css directory in public
-      app.use(
-        sassMiddleware({
-          src: join(__dirname),
-          dest: join(__dirname, '../dist'),
-          indentedSyntax: false, // true = .sass and false = .scss
-          sourceMap: true,
-          debug: false
-        })
-      )
-      // Scan the Webpack Development config for entries, creating a bundle
-      // object keyed by the base bundle name
-      // This is passed to the views using Express's app.locals global store
-      // so that we can import the right bundle in development or production
-      const bundleKeys = Object.keys(webpackConfig.entry)
-      const bundleObject = {}
-      bundleKeys.forEach((key) => {
-        bundleObject[`vendor~${key}.js`] = `/js/vendor~${key}.bundle.js`
-        bundleObject[`${key}.js`] = `/js/${key}.bundle.js`
-      })
-      app.locals.bundles = bundleObject
+  // Enable the Webpack middleware, with Webpack options
+  const compiler = webpack(webpackConfig)
+  app.use(webpackMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath,
+    mode: 'development'
+  }))
+  // Enable Webpack hot reloading with Express
+  app.use(webpackHotMiddleware(compiler))
+  // Set up Sass middleware for Sass compilation of global Sass files in
+  // ./src/sass – These will be output to the css directory in public
+  app.use(
+    sassMiddleware({
+      src: join(__dirname),
+      dest: join(__dirname, '../dist'),
+      indentedSyntax: false, // true = .sass and false = .scss
+      sourceMap: true,
+      debug: false
     })
-    .catch(err => {
-      console.error(err)
-    })
+  )
+  // Scan the Webpack Development config for entries, creating a bundle
+  // object keyed by the base bundle name
+  // This is passed to the views using Express's app.locals global store
+  // so that we can import the right bundle in development or production
+  const bundleKeys = Object.keys(webpackConfig.entry)
+  const bundleObject = {}
+  bundleKeys.forEach((key) => {
+    bundleObject[`vendor~${key}.js`] = `/js/vendor~${key}.bundle.js`
+    bundleObject[`${key}.js`] = `/js/${key}.bundle.js`
+  })
+  app.locals.bundles = bundleObject
+
 } else {
-  // Using the WebpackAssetsManifest plugin in production, store the
+  // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
   app.locals.bundles = require('../dist/manifest.json')
 }

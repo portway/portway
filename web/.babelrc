@@ -1,4 +1,4 @@
 {
-  "plugins": ["dynamic-import-node-babel-7"],
+  "plugins": ["@babel/plugin-syntax-dynamic-import"],
   "presets": ["@babel/preset-env", "@babel/preset-react"]
 }

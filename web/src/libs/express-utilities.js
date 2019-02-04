@@ -4,8 +4,7 @@
 export const normalizePort = (val) => {
   var port = parseInt(val, 10)
   if (isNaN(port)) {
-    // named pipe
-    return val
+    throw new Error('PORT env var must be a number')
   }
   if (port >= 0) {
     // port number
