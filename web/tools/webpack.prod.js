@@ -1,39 +1,29 @@
-const webpack = require('webpack')
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 
-const devMode = process.env.NODE_ENV !== 'production'
-
 const entryPoints = {
-  'index': [
-    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-    './src/scripts/index.js'
-  ]
+  'index': './src/scripts/index.js'
 }
-
-const entryFunction = (key) => {
-  return devMode ? entryPoints[key] : entryPoints[key][1]
-}
-
 module.exports = {
-  mode: devMode ? 'development' : 'production',
+  mode: 'production',
   entry: {
-    index: entryFunction('index')
+    index: entryPoints['index']
   },
   output: {
-    path: path.resolve(__dirname, 'src/public'),
-    filename: devMode ? 'js/[name].bundle.js' : 'js/[name].[contenthash].js',
-    chunkFilename: devMode ? 'js/[name].bundle.js' : 'js/[name].[chunkhash].js',
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'js/[name].[contenthash].js',
+    chunkFilename: 'js/[name].[chunkhash].js',
     publicPath: '/'
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: devMode ? 'css/[name].bundle.css' : 'css/[name].[contenthash].css'
+      filename: 'css/[name].[contenthash].css'
     }),
-    !devMode ? new WebpackAssetsManifest() : () => {},
-    devMode ? new webpack.HotModuleReplacementPlugin() : () => {}
+    new WebpackAssetsManifest({
+      publicPath: true
+    })
   ],
   optimization: {
     splitChunks: {
@@ -59,7 +49,7 @@ module.exports = {
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          MiniCssExtractPlugin.loader,
           'css-loader',
           {
             loader: 'postcss-loader',
