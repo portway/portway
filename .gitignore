@@ -2,6 +2,7 @@
 web/src/public/css/
 web/src/public/js/
 web/src/public/manifest.json
+.DS_Store
 
 # Logs
 logs
