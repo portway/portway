@@ -2,10 +2,9 @@
   "name": "project-danger-api",
   "version": "1.0.0",
   "description": "Project Danger API",
-  "main": "src/index.js",
   "scripts": {
-    "serve": "NODE_ENV=development babel-node -- src/index.js",
-    "build": "NODE_ENV=production babel-node -- src/index.js",
+    "serve": "NODE_ENV=development babel-node --require node_modules/dotenv/config -- server.js",
+    "build": "NODE_ENV=production babel-node -- server.js",
     "babel-node": "babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,7 +17,9 @@
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
-    "@babel/node": "^7.2.2"
+    "@babel/node": "^7.2.2",
+    "babel-preset-env": "^1.7.0",
+    "dotenv": "^6.2.0"
   },
   "dependencies": {
     "express": "^4.16.4"
