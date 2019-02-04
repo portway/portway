@@ -2,7 +2,7 @@
   "name": "project-danger-web",
   "version": "1.0.0",
   "description": "Project Danger Web Client",
-  "main": "src/index.js",
+  "main": "src/app.js",
   "scripts": {
     "serve": "NODE_ENV=development babel-node -- src/app.js",
     "babel-node": "babel-node",

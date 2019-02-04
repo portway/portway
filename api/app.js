@@ -42,14 +42,8 @@ router.get('/', function (req, res) {
 })
 
 //Load the controllers
-let controllersDirectoryPath = path.join(__dirname, 'controllers')
-let controllerFiles = fs.readdirSync(controllersDirectoryPath)
+import { billingController } from './controllers'
 
-const isController = /_controller\.js$/
-controllerFiles.forEach(fileName => {
-  if (isController.test(fileName)) {
-    require(path.join(controllersDirectoryPath, fileName))(router)
-  }
-});
+billingController(router)
 
 export default app

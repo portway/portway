@@ -16,6 +16,7 @@ import { createServer } from 'http'
 
 import indexRouter from './routes/index'
 import usersRouter from './routes/users'
+import billingRouter from './routes/billing'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -54,6 +55,7 @@ app.use(express.static(join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
+app.use('/billing', billingRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
