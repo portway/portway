@@ -70,7 +70,7 @@ if (devMode) {
 
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
-app.use(express.static(join(__dirname, '../dist')))
+app.use(express.static(join(__dirname, '../dist/public')))
 
 // Set up Express
 app.set('views', join(__dirname, 'views'))

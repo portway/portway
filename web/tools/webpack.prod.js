@@ -12,7 +12,7 @@ module.exports = {
     index: entryPoints['index']
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../dist/public'),
     filename: 'js/[name].[contenthash].js',
     chunkFilename: 'js/[name].[chunkhash].js',
     publicPath: '/'
