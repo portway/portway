@@ -42,7 +42,7 @@ router.get('/', function (req, res) {
 })
 
 //Load the controllers
-import { billingController } from './controllers'
+import billingController from './controllers/billing'
 
 billingController(router)
 

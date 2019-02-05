@@ -5,17 +5,18 @@ const billingController = function(router) {
 }
 
 const addBilling = async function(req, res) {
-  const stripeToken = req.stripeToken
-  const planId = req.planId
-  const email = req.email
+  const { token, planId, email } = req.body
 
   try {
-    billingCoordinator.subscribeCustomerToPlan({
-      stripeToken,
+    await billingCoordinator.subscribeCustomerToPlan({
+      token,
       planId,
       email
     })
+
+    res.send('successfully subscribed user to plan')
   } catch(err) {
+    console.error(err)
     const message = 'unable to add billing information'
     res.status(err.statusCode || 500).send(message)
   }
