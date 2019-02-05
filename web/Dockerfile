@@ -15,3 +15,5 @@ RUN rm -rf node_modules/
 
 ENV NODE_ENV production
 RUN npm install --production
+
+ENTRYPOINT ["/bin/bash", "./run.sh"]

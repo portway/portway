@@ -20,7 +20,7 @@ spec:
       - image: danger/web
         imagePullPolicy: "Never"
         name: web
-        command: [ "/bin/sh", "-c", "node dist/server/app.js" ]
+        args: [ "start" ]
         env:
         - name: STATIC_PORT
           valueFrom:
