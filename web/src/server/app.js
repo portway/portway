@@ -24,7 +24,7 @@ app.use('/registration', registrationRouter)
 // starts.
 if (devMode) {
 
-  const webpackConfig = require('../config/webpack.dev')
+  const webpackConfig = require('../../config/webpack.dev')
   const webpack = require('webpack')
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
