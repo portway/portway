@@ -30,7 +30,6 @@
     "indent": [2, 2, { "MemberExpression": 1, "SwitchCase": 1 }],
     "key-spacing": [2, { "beforeColon": false, "afterColon": true, "mode": "strict" }],
     "keyword-spacing": [2, { "after": true }],
-    "new-cap": [2, { "capIsNewExceptions": ["Model", "View", "TROGDOR"] }],
     "no-array-constructor": 2,
     "no-bitwise": 2,
     "no-caller": 2,

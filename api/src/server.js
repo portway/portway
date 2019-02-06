@@ -5,6 +5,6 @@ const port = process.env.API_PORT
 //START THE SERVER
 //=============================================================================
 
-app.listen(port, function() {
-  console.log('api running on port ' + port)
+app.listen(port, () => {
+  console.info('api running on port ' + port)
 })

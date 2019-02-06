@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 //ROUTES
 //=============================================================================
 
-const router = new express.Router()
+const router = express.Router()
 
 //Use our router configuration when we call /api
 app.use('/api', router)
