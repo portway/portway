@@ -2,8 +2,11 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/registration.css" />
+    <% css.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+      <link rel="stylesheet" href="/<%= bundle %>" />
+      <% } %>
+    <% }) %>
   </head>
   <body>
 
@@ -85,6 +88,17 @@
 
     </div>
     <!-- /registration page -->
+
+    <% vendor.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+        <script type="text/javascript" src="/<%= bundle %>"></script>
+      <% } %>
+    <% }) %>
+    <% js.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+        <script type="text/javascript" src="/<%= bundle %>"></script>
+      <% } %>
+    <% }) %>
 
   </body>
 </html>

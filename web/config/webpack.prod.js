@@ -2,36 +2,39 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries")
+const entryPoints = require('./entryPoints.js')
 
-const entryPoints = {
-  'index': './src/scripts/index.js'
-}
 module.exports = {
   mode: 'production',
-  entry: {
-    index: entryPoints['index']
-  },
+  entry: entryPoints,
   output: {
-    path: path.resolve(__dirname, '../dist/public'),
+    path: path.resolve(__dirname, '../dist/server/public'),
     filename: 'js/[name].[contenthash].js',
     chunkFilename: 'js/[name].[chunkhash].js',
     publicPath: '/'
   },
   plugins: [
+    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css'
     }),
-    new WebpackAssetsManifest({
-      publicPath: true
-    })
+    new WebpackAssetsManifest()
   ],
   optimization: {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
         vendor: {
+          name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
           priority: -10
+        },
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
         }
       }
     },
