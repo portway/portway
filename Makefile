@@ -1,9 +1,15 @@
-install:
-	docker-compose -f docker-compose.builder.yml run --rm install_api
-	docker-compose -f docker-compose.builder.yml run --rm install_web
+build:
+	./build.sh
+
+builddev:
+	./build.sh && docker-compose build
+
+cleardev:
+	# Erases the volumes, including node_modules. Run this if node_modules changes
+	docker-compose down
 
 start:
 	docker-compose up
 
-kill:
+stop:
 	docker-compose stop

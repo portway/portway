@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <% css.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+      <link rel="stylesheet" href="/<%= bundle %>" />
+      <% } %>
+    <% }) %>
+  </head>
+  <body>
+
+    <nav>
+      <a href="/registration">Sign up</a>
+      <a href="#">Log in</a>
+    </nav>
+
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <div id="index"></div>
+
+    <% vendor.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+        <script type="text/javascript" src="/<%= bundle %>"></script>
+      <% } %>
+    <% }) %>
+    <% js.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+        <script type="text/javascript" src="/<%= bundle %>"></script>
+      <% } %>
+    <% }) %>
+
+  </body>
+</html>

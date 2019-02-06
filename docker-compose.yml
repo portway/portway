@@ -3,22 +3,24 @@ version: '3'
 services:
 
   web:
-    image: node:10.15.1
+    build:
+      context: ./web
+      dockerfile: Dockerfile-dev
     volumes:
-      - ./web:/usr/src/service/web
-    working_dir: /usr/src/service/web
-    command: npm run serve
+      - ./web:/web
+      - /web/node_modules
+    working_dir: /web
+    command: devstart
     ports:
       - 3000:3000
-      - 1235:1235
     environment:
       NODE_ENV: development
 
   api:
-    image: node:10.15.1
+    image: danger/api
     volumes:
-      - ./api:/usr/src/service/api
-    working_dir: /usr/src/service/api
+      - ./api:/api
+    working_dir: /api
     command: npm run serve
     ports:
       - 3001:3001
