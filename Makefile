@@ -7,5 +7,5 @@ builddev:
 start:
 	docker-compose up
 
-kill:
+stop:
 	docker-compose stop

@@ -6,7 +6,7 @@ To get started, you'll need Docker installed, then run the following commands
 // Local development
 make builddev
 make start
-make kill
+make stop
 
 // Production image build
 make build

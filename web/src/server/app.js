@@ -23,54 +23,56 @@ app.use('/registration', registrationRouter)
 // and use the Webpack Express Middleware to run webpack when the server
 // starts.
 if (devMode) {
-
   const webpackConfig = require('../../config/webpack.dev')
   const webpack = require('webpack')
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
-  const sassMiddleware = require('node-sass-middleware')
+
+  // Best way to find file extension of a string
+  // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
+  const fileExtReg = /(?:\.([^.]+))?$/
 
   // Enable the Webpack middleware, with Webpack options
-  const compiler = webpack(webpackConfig)
+  // const compiler = webpack(webpackConfig)
+  const compiler = webpack(webpackConfig, (err, stats) => {
+    // Get the files and dependent chunks for each bundle
+    const webpackStats = stats.toJson('normal').chunks
+    const bundles = {}
+    webpackStats.forEach((bundle) => {
+      const files = bundle.files.map(file => file)
+      bundles[`${bundle.id}`] = {
+        css: files.filter(file => fileExtReg.exec(file)[1] === 'css'),
+        js: files.filter(file => fileExtReg.exec(file)[1] === 'js')
+      }
+    })
+    app.locals.bundles = bundles
+  })
+
+  // Use webpack middleware
   app.use(webpackMiddleware(compiler, {
     noInfo: true,
     publicPath: webpackConfig.output.publicPath,
     mode: 'development'
   }))
+
   // Enable Webpack hot reloading with Express
   app.use(webpackHotMiddleware(compiler))
-  // Set up Sass middleware for Sass compilation of global Sass files in
-  // ./src/sass – These will be output to the css directory in public
-  app.use(
-    sassMiddleware({
-      src: join(__dirname),
-      dest: join(__dirname, '../dist'),
-      indentedSyntax: false, // true = .sass and false = .scss
-      sourceMap: true,
-      debug: false
-    })
-  )
-  // Scan the Webpack Development config for entries, creating a bundle
-  // object keyed by the base bundle name
-  // This is passed to the views using Express's app.locals global store
-  // so that we can import the right bundle in development or production
-  const bundleKeys = Object.keys(webpackConfig.entry)
-  const bundleObject = {}
-  bundleKeys.forEach((key) => {
-    bundleObject[`vendor~${key}.js`] = `/js/vendor~${key}.bundle.js`
-    bundleObject[`${key}.js`] = `/js/${key}.bundle.js`
-  })
-  app.locals.bundles = bundleObject
+
+  console.log(webpackConfig.output.publicPath)
+  console.log(webpackConfig.output.path)
+  console.log(join(__dirname, './public'))
 
 } else {
+
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
   app.locals.bundles = require('../manifest.json')
+
 }
 
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
-app.use(express.static(join(__dirname, '../public')))
+app.use(express.static(join(__dirname, './public')))
 
 // Set up Express
 app.set('views', join(__dirname, 'views'))
@@ -95,15 +97,15 @@ const onError = (error) => {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges')
-      process.exit(1)
-      break
+    console.error(bind + ' requires elevated privileges')
+    process.exit(1)
+    break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use')
-      process.exit(1)
-      break
+    console.error(bind + ' is already in use')
+    process.exit(1)
+    break
     default:
-      throw error
+    throw error
   }
 }
 
