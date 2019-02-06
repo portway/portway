@@ -6,7 +6,12 @@ To get started, you'll need Docker installed, then run the following commands
 // Local development
 make builddev
 make start
-make kill
+make stop
+
+// Changed a dependency in package.json?
+make cleardev
+make builddev
+make start
 
 // Production image build
 make build
