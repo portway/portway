@@ -28,14 +28,15 @@ if (devMode) {
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
 
-  // Best way to find file extension of a string
-  // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
-  const fileExtReg = /(?:\.([^.]+))?$/
-
   // Enable the Webpack middleware, with Webpack options
   // const compiler = webpack(webpackConfig)
-  const compiler = webpack(webpackConfig, (err, stats) => {
-    // Get the files and dependent chunks for each bundle
+  const compiler = webpack(webpackConfig)
+
+  // Get the files and dependent chunks for each bundle
+  compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
+    // Best way to find file extension of a string
+    // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
+    const fileExtReg = /(?:\.([^.]+))?$/
     const webpackStats = stats.toJson('normal').chunks
     const bundles = {}
     webpackStats.forEach((bundle) => {
@@ -58,15 +59,25 @@ if (devMode) {
   // Enable Webpack hot reloading with Express
   app.use(webpackHotMiddleware(compiler))
 
-  console.log(webpackConfig.output.publicPath)
-  console.log(webpackConfig.output.path)
-  console.log(join(__dirname, './public'))
-
 } else {
 
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
-  app.locals.bundles = require('../manifest.json')
+  // Format it like dev bundle object
+  const fileNameReg = /([^\/]+)(?=\.\w+$)/
+  const manifest = require('./public/manifest.json')
+  const bundleKeys = Object.keys(manifest)
+  const bundles = {}
+  bundleKeys.forEach((key) => {
+    const bundleKey = key.match(fileNameReg)[0]
+    bundles[bundleKey] = { css: [], js: [] }
+    const css = manifest[`${bundleKey}.css`]
+    const js = manifest[`${bundleKey}.js`]
+    css && bundles[bundleKey].css.push(css)
+    js && bundles[bundleKey].js.push(js)
+  })
+
+  app.locals.bundles = bundles
 
 }
 

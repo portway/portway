@@ -2,6 +2,7 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries")
 const entryPoints = require('./entryPoints.js')
 
 module.exports = {
@@ -17,12 +18,11 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
+    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css'
     }),
-    new WebpackAssetsManifest({
-      publicPath: true
-    })
+    new WebpackAssetsManifest()
   ],
   optimization: {
     splitChunks: {
