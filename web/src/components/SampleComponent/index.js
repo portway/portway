@@ -11,4 +11,6 @@ class AppContainer extends React.Component {
 
 }
 
+console.log('blahdddadfadfd')
+
 export default AppContainer

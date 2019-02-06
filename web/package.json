@@ -23,9 +23,13 @@
     "not dead"
   ],
   "lint-staged": {
-    "**/*.{js}": [
+    "*.{js,jsx,css,md}": [
       "eslint --fix",
       "git add"
+    ],
+    "ignore": [
+      "node_modules",
+      "dist"
     ]
   },
   "husky": {
