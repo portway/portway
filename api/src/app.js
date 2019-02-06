@@ -1,6 +1,3 @@
-//BASE SETUP
-//=============================================================================
-
 //packages
 import express from 'express'
 import bodyParser from 'body-parser'
