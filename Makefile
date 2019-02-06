@@ -1,6 +1,8 @@
-install:
-	docker-compose -f docker-compose.builder.yml run --rm install_api
-	docker-compose -f docker-compose.builder.yml run --rm install_web
+build:
+	./build.sh
+
+builddev:
+	./build.sh && docker-compose build
 
 start:
 	docker-compose up

@@ -4,13 +4,12 @@ To get started, you'll need Docker installed, then run the following commands
 
 ```
 // Local development
-make install
+make builddev
 make start
 make kill
 
-// Production build/serve in each container
-npm run build
-npm start
+// Production image build
+make build
 ```
 
 ## Documentation

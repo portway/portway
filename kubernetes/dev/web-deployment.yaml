@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        run: web
+        app: web
+    spec:
+      containers:
+      - image: danger/web
+        imagePullPolicy: "Never"
+        name: web
+        args: [ "start" ]
+        env:
+        - name: STATIC_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.static_port
+        ports:
+        - containerPort: 3000
+          protocol: TCP
