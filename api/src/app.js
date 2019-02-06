@@ -3,8 +3,6 @@
 
 //packages
 import express from 'express'
-import fs from 'fs'
-import path from 'path'
 import bodyParser from 'body-parser'
 
 //instances
@@ -15,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 //cors
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE')
@@ -31,13 +29,13 @@ app.use(function (req, res, next) {
 //ROUTES
 //=============================================================================
 
-const router = express.Router()
+const router = new express.Router()
 
 //Use our router configuration when we call /api
 app.use('/api', router)
 
 //now we can set the route path & initialize the API
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   res.json({ message: 'API Initialized!' })
 })
 
