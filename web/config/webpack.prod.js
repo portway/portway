@@ -7,10 +7,7 @@ const entryPoints = require('./entryPoints.js')
 
 module.exports = {
   mode: 'production',
-  entry: {
-    index: entryPoints['index'],
-    registration: entryPoints['registration']
-  },
+  entry: entryPoints,
   output: {
     path: path.resolve(__dirname, '../dist/server/public'),
     filename: 'js/[name].[contenthash].js',

@@ -27,10 +27,7 @@ const globalStyleLoaders = [
 
 module.exports = {
   mode: 'development',
-  entry: {
-    index: entryPoints['index'],
-    registration: entryPoints['registration']
-  },
+  entry: entryPoints,
   output: {
     path: path.resolve(__dirname, '../src/server/public'),
     filename: 'js/[name].bundle.js',
