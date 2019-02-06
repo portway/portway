@@ -24,7 +24,7 @@ app.use('/registration', registrationRouter)
 // starts.
 if (devMode) {
 
-  const webpackConfig = require('../tools/webpack.dev')
+  const webpackConfig = require('../../config/webpack.dev')
   const webpack = require('webpack')
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -65,12 +65,12 @@ if (devMode) {
 } else {
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
-  app.locals.bundles = require('../dist/manifest.json')
+  app.locals.bundles = require('../manifest.json')
 }
 
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
-app.use(express.static(join(__dirname, '../dist')))
+app.use(express.static(join(__dirname, '../public')))
 
 // Set up Express
 app.set('views', join(__dirname, 'views'))

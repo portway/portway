@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        run: api
+        app: api
+    spec:
+      containers:
+      - image: danger/api
+        imagePullPolicy: "Never"
+        name: api
+        command: [ "/bin/sh", "-c", "npm run start"  ]
+        env:
+        - name: API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.port         
+        ports:
+        - containerPort: 3001
+          protocol: TCP

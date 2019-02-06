@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    api.port: "3001"
+  kind: ConfigMap
+  metadata:
+    name: api-config
+    namespace: default
+- apiVersion: v1
+  data:
+    web.static_port: "3000"
+  kind: ConfigMap
+  metadata:
+    name: web-config
+    namespace: default
+kind: List
