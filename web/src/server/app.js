@@ -25,7 +25,6 @@ app.use('/billing', billingRouter)
 // and use the Webpack Express Middleware to run webpack when the server
 // starts.
 if (devMode) {
-
   const webpackConfig = require('../../config/webpack.dev')
   const webpack = require('webpack')
   const webpackMiddleware = require('webpack-dev-middleware')
@@ -34,11 +33,13 @@ if (devMode) {
 
   // Enable the Webpack middleware, with Webpack options
   const compiler = webpack(webpackConfig)
-  app.use(webpackMiddleware(compiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath,
-    mode: 'development'
-  }))
+  app.use(
+    webpackMiddleware(compiler, {
+      noInfo: true,
+      publicPath: webpackConfig.output.publicPath,
+      mode: 'development'
+    })
+  )
   // Enable Webpack hot reloading with Express
   app.use(webpackHotMiddleware(compiler))
   // Set up Sass middleware for Sass compilation of global Sass files in
@@ -63,7 +64,6 @@ if (devMode) {
     bundleObject[`${key}.js`] = `/js/${key}.bundle.js`
   })
   app.locals.bundles = bundleObject
-
 } else {
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
@@ -93,7 +93,7 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
@@ -110,7 +110,7 @@ const onError = (error) => {
 }
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
@@ -120,7 +120,7 @@ app.use(function(err, req, res, next) {
 })
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404))
 })
 

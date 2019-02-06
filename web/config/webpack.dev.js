@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
 const entryPoints = {
-  'index': [
+  index: [
     'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     './src/scripts/index.js'
   ]
@@ -13,7 +13,7 @@ const entryPoints = {
 module.exports = {
   mode: 'development',
   entry: {
-    index: entryPoints['index']
+    index: entryPoints.index
   },
   output: {
     path: path.resolve(__dirname, '../dist/public'),

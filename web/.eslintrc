@@ -2,7 +2,7 @@
   "env": {
     "node": true,
     "jest": true,
-    "web": true
+    "browser": true
   },
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -12,7 +12,12 @@
       "impliedStrict": true
     }
   },
-  "extends": ["plugin:prettier/recommended"],
+  "extends": ["plugin:prettier/recommended", "plugin:react/recommended"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "array-bracket-spacing": [2, "never"],
     "arrow-body-style": 0,

@@ -7,5 +7,3 @@ render(<SampleComponent />, document.getElementById('index'))
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept()
 }
-
-console.log('blahhhhhhhh')

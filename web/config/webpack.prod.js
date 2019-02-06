@@ -4,12 +4,12 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 
 const entryPoints = {
-  'index': './src/scripts/index.js'
+  index: './src/scripts/index.js'
 }
 module.exports = {
   mode: 'production',
   entry: {
-    index: entryPoints['index']
+    index: entryPoints.index
   },
   output: {
     path: path.resolve(__dirname, '../dist/public'),
