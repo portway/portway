@@ -1,29 +1,44 @@
 const webpack = require('webpack')
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries")
+const entryPoints = require('./entryPoints.js')
 
-const entryPoints = {
-  index: [
-    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
-    './src/scripts/index.js'
-  ]
-}
+const globalStyleLoaders = [
+  {
+    loader: 'css-loader', options: {
+      sourceMap: true
+    }
+  },
+  {
+    loader: 'postcss-loader', options: {
+      sourceMap: true,
+      config: {
+        path: path.resolve(__dirname, './postcss.config.js')
+      }
+    }
+  },
+  {
+    loader: 'sass-loader', options: {
+      sourceMap: true
+    }
+  }
+]
 
 module.exports = {
   mode: 'development',
-  entry: {
-    index: entryPoints.index
-  },
+  entry: entryPoints,
   output: {
-    path: path.resolve(__dirname, '../dist/public'),
+    path: path.resolve(__dirname, '../src/server/public'),
     filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[name].bundle.js',
     publicPath: '/'
   },
   plugins: [
+    new FixStyleOnlyEntriesPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].bundle.css'
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[id].css'
     }),
     new webpack.HotModuleReplacementPlugin()
   ],
@@ -32,12 +47,18 @@ module.exports = {
       chunks: 'all',
       cacheGroups: {
         vendor: {
+          name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
           priority: -10
+        },
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
         }
       }
-    },
-    minimizer: [new OptimizeCSSAssetsPlugin({})]
+    }
   },
   module: {
     rules: [
@@ -49,20 +70,17 @@ module.exports = {
         }
       },
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /src\/client\/css\/.*.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          ...globalStyleLoaders
+        ]
+      },
+      {
+        test: /src\/client\/components\/.*.(sa|sc|c)ss$/,
         use: [
           'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              config: {
-                path: path.resolve(__dirname, './postcss.config.js')
-              }
-            }
-          },
-          'sass-loader'
+          ...globalStyleLoaders
         ]
       },
       {

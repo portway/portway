@@ -9,8 +9,8 @@ import { normalizePort } from './libs/express-utilities'
 
 // Routes
 import indexRouter from './routes/index'
-import billingRouter from './routes/billing'
 import registrationRouter from './routes/registration'
+import billingRouter from './routes/billing'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -29,50 +29,63 @@ if (devMode) {
   const webpack = require('webpack')
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpackHotMiddleware = require('webpack-hot-middleware')
-  const sassMiddleware = require('node-sass-middleware')
 
   // Enable the Webpack middleware, with Webpack options
+  // const compiler = webpack(webpackConfig)
   const compiler = webpack(webpackConfig)
-  app.use(
-    webpackMiddleware(compiler, {
-      noInfo: true,
-      publicPath: webpackConfig.output.publicPath,
-      mode: 'development'
+
+  // Get the files and dependent chunks for each bundle
+  compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
+    // Best way to find file extension of a string
+    // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
+    const fileExtReg = /(?:\.([^.]+))?$/
+    const webpackStats = stats.toJson('normal').chunks
+    const bundles = {}
+    webpackStats.forEach((bundle) => {
+      const files = bundle.files.map(file => file)
+      bundles[`${bundle.id}`] = {
+        css: files.filter(file => fileExtReg.exec(file)[1] === 'css'),
+        js: files.filter(file => fileExtReg.exec(file)[1] === 'js')
+      }
     })
-  )
+    app.locals.bundles = bundles
+  })
+
+  // Use webpack middleware
+  app.use(webpackMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath,
+    mode: 'development'
+  }))
+
   // Enable Webpack hot reloading with Express
   app.use(webpackHotMiddleware(compiler))
-  // Set up Sass middleware for Sass compilation of global Sass files in
-  // ./src/sass – These will be output to the css directory in public
-  app.use(
-    sassMiddleware({
-      src: join(__dirname),
-      dest: join(__dirname, '../dist'),
-      indentedSyntax: false, // true = .sass and false = .scss
-      sourceMap: true,
-      debug: false
-    })
-  )
-  // Scan the Webpack Development config for entries, creating a bundle
-  // object keyed by the base bundle name
-  // This is passed to the views using Express's app.locals global store
-  // so that we can import the right bundle in development or production
-  const bundleKeys = Object.keys(webpackConfig.entry)
-  const bundleObject = {}
-  bundleKeys.forEach((key) => {
-    bundleObject[`vendor~${key}.js`] = `/js/vendor~${key}.bundle.js`
-    bundleObject[`${key}.js`] = `/js/${key}.bundle.js`
-  })
-  app.locals.bundles = bundleObject
+
 } else {
+
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
-  app.locals.bundles = require('../manifest.json')
+  // Format it like dev bundle object
+  const fileNameReg = /([^\/]+)(?=\.\w+$)/
+  const manifest = require('./public/manifest.json')
+  const bundleKeys = Object.keys(manifest)
+  const bundles = {}
+  bundleKeys.forEach((key) => {
+    const bundleKey = key.match(fileNameReg)[0]
+    bundles[bundleKey] = { css: [], js: [] }
+    const css = manifest[`${bundleKey}.css`]
+    const js = manifest[`${bundleKey}.js`]
+    css && bundles[bundleKey].css.push(css)
+    js && bundles[bundleKey].js.push(js)
+  })
+
+  app.locals.bundles = bundles
+
 }
 
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
-app.use(express.static(join(__dirname, '../public')))
+app.use(express.static(join(__dirname, './public')))
 
 // Set up Express
 app.set('views', join(__dirname, 'views'))
@@ -93,24 +106,24 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges')
-      process.exit(1)
-      break
+    console.error(bind + ' requires elevated privileges')
+    process.exit(1)
+    break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use')
-      process.exit(1)
-      break
+    console.error(bind + ' is already in use')
+    process.exit(1)
+    break
     default:
-      throw error
+    throw error
   }
 }
 
 // error handler
-app.use((err, req, res, next) => {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
@@ -120,7 +133,7 @@ app.use((err, req, res, next) => {
 })
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+app.use(function(req, res, next) {
   next(createError(404))
 })
 
