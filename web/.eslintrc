@@ -1,16 +1,18 @@
 {
   "env": {
-    "browser": true,
     "node": true,
-    "jest": true
+    "jest": true,
+    "web": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "impliedStrict": true
     }
   },
+  "extends": ["plugin:prettier/recommended"],
   "rules": {
     "array-bracket-spacing": [2, "never"],
     "arrow-body-style": 0,
@@ -21,7 +23,7 @@
     "comma-spacing": [2, { "before": false, "after": true }],
     "comma-style": [2, "last"],
     "curly": [2, "multi-line"],
-    "dot-notation": [2, { "allowKeywords": true }],
+    "dot-notation": [2, {"allowKeywords": true }],
     "eqeqeq": [2, "allow-null"],
     "generator-star-spacing": [2, { "before": false, "after": true }],
     "guard-for-in": 0,
@@ -29,7 +31,6 @@
     "indent": [2, 2, { "MemberExpression": 1, "SwitchCase": 1 }],
     "key-spacing": [2, { "beforeColon": false, "afterColon": true, "mode": "strict" }],
     "keyword-spacing": [2, { "after": true }],
-    "new-cap": [2, { "capIsNewExceptions": ["Model", "View", "TROGDOR"] }],
     "no-array-constructor": 2,
     "no-bitwise": 2,
     "no-caller": 2,
