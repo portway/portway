@@ -2,12 +2,22 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/css/style.css' />
+    <link rel="stylesheet" href="<%= bundles['index.css'] %>" />
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
+
+    <nav>
+      <a href="/registration">Sign up</a>
+      <a href="#">Log in</a>
+    </nav>
+
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
     <div id="index"></div>
-    <script type="text/javascript" src="/js/index.bundle.js"></script>
+    <script type="text/javascript" src="<%= bundles['vendor~index.js'] %>"></script>
+    <script type="text/javascript" src="<%= bundles['index.js'] %>"></script>
+
   </body>
 </html>

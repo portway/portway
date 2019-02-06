@@ -23,23 +23,3 @@ services:
     extends:
       service: api
     command: npm install
-
-  build_web:
-    extends:
-      service: web
-    command: npm run build
-
-  build_api:
-    extends:
-      service: api
-    command: npm run build
-
-  create-bundles_web:
-    extends:
-      service: web
-    command: npm run create-bundles
-
-  create-bundles_api:
-    extends:
-      service: api
-    command: npm run create-bundles

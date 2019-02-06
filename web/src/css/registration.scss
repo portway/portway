@@ -1,0 +1,15 @@
+
+.register-plan-selection {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  margin: auto;
+  width: 90%;
+
+  .register-plan-item {
+    border: 1px solid #e8eae8;
+    padding: 1em;
+    width: 30%;
+  }
+
+}

@@ -4,6 +4,6 @@ import SampleComponent from '../components/SampleComponent'
 
 render(<SampleComponent />, document.getElementById('index'))
 
-if (module.hot) {
+if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept()
 }
