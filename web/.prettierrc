@@ -1,5 +1,4 @@
 {
-  "arrowParens": "always",
   "jsxBracketSameLine": true,
   "printWidth": 100,
   "parser": "flow",
