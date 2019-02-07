@@ -23,12 +23,15 @@
     "not dead"
   ],
   "lint-staged": {
+  "lint-staged": {
     "linters": {
-      "*.{js,jsx,css,md}": [
+      "src/**/*.{js,json,jsx,css,md}": [
         "eslint --fix",
         "git add"
       ]
     },
+    "relative": true
+  },
     "ignore": [
       "node_modules",
       "dist"

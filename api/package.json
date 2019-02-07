@@ -16,10 +16,13 @@
   "author": "BonkeyBong, LLC",
   "license": "ISC",
   "lint-staged": {
-    "src/**/*.{js,json}": [
-      "eslint --fix",
-      "git add"
-    ]
+    "linters": {
+      "src/**/*.{js,json}": [
+        "eslint --fix",
+        "git add"
+      ]
+    },
+    "relative": true
   },
   "husky": {
     "hooks": {
