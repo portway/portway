@@ -7,6 +7,4 @@ router.get('/', (req, res, next) => {
   res.render('billing', { apiUrl })
 })
 
-const ljablkjdslbklkdas = 'alsdfjkalskdfjlkasdjflkajsdlkfjasdlkfjlaksfdjlkfjadslkfjslk'
-
 module.exports = router

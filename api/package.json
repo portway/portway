@@ -17,7 +17,7 @@
   "license": "ISC",
   "lint-staged": {
     "linters": {
-      "*.{js,jsx,md,css}": [
+      "*.{js}": [
         "pretty-quick --staged",
         "eslint src/ --fix",
         "git add"
@@ -37,7 +37,6 @@
     "dotenv": "^6.2.0",
     "eslint": "^5.13.0",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-prettier": "^3.0.1",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.3",
     "nodemon": "^1.18.9",
