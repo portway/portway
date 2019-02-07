@@ -23,19 +23,13 @@
     "not dead"
   ],
   "lint-staged": {
-  "lint-staged": {
     "linters": {
-      "src/**/*.{js,json,jsx,css,md}": [
-        "eslint --fix",
+      "*.{js,jsx,md,css}": [
+        "pretty-quick --staged",
+        "eslint src/ --fix",
         "git add"
       ]
-    },
-    "relative": true
-  },
-    "ignore": [
-      "node_modules",
-      "dist"
-    ]
+    }
   },
   "husky": {
     "hooks": {
@@ -54,10 +48,8 @@
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.0",
     "dotenv-webpack": "^1.5.7",
-    "eslint": "^5.6.1",
+    "eslint": "^5.13.0",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-config-react-app": "^3.0.6",
-    "eslint-plugin-flowtype": "^3.2.1",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
@@ -72,6 +64,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
     "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",

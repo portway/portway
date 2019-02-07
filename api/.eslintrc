@@ -11,7 +11,7 @@
       "impliedStrict": true
     }
   },
-  "extends": ["plugin:prettier/recommended"],
+  "extends": ["prettier"],
   "rules": {
     "array-bracket-spacing": [2, "never"],
     "arrow-body-style": 0,

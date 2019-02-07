@@ -15,6 +15,7 @@
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",
+  "precommit": "NODE_ENV=production lint-staged",
   "lint-staged": {
     "linters": {
       "src/**/*.{js,json}": [
@@ -23,11 +24,6 @@
       ]
     },
     "relative": true
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
