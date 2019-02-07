@@ -1,9 +1,9 @@
-const express = require('express')
-const router = express.Router()
+var express = require('express')
+var router = express.Router()
 const apiUrl = process.env.API_URL
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', function (req, res, next) {
   res.render('billing', { apiUrl })
 })
 
