@@ -1,0 +1,120 @@
+<%- include('partials/head', { title: title }); %>
+<%- include('partials/navigation'); %>
+<main class="section">
+  <div class="container">
+
+    <div class="content">
+      <h1 class="title">Join</h1>
+      <h2 class="subtitle">Your organization's new content repository</h2>
+    </div>
+
+    <!-- Start plan selection -->
+    <div class="section register-plan-section">
+
+      <div class="register-plan-item card">
+        <header class="card-header">
+          <h2 class="card-header-title">Basic</h2>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <ol>
+              <li>Feature</li>
+              <li>Feature</li>
+              <li>Feature</li>
+            </ol>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item">Choose plan</a>
+        </footer>
+      </div>
+      <!-- /register-plan-item card -->
+
+      <div class="register-plan-item card">
+        <header class="card-header">
+          <h2 class="card-header-title">Advanced</h2>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <ol>
+              <li>Feature</li>
+              <li>Feature</li>
+              <li>Feature</li>
+            </ol>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item">Choose plan</a>
+        </footer>
+      </div>
+      <!-- /register-plan-item card -->
+
+      <div class="register-plan-item card">
+        <header class="card-header">
+          <h2 class="card-header-title">Enterprise</h2>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <ol>
+              <li>Feature</li>
+              <li>Feature</li>
+              <li>Feature</li>
+            </ol>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item">Contact us</a>
+        </footer>
+      </div>
+      <!-- /register-plan-item card -->
+
+    </div>
+    <!-- /register-plan-section -->
+
+    <div class="section">
+      <form method="post">
+
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="name">Your name</label>
+          </div>
+          <div class="field-body">
+            <div class="control">
+              <input class="input" type="text" name="name" id="name" placeholder="Your name" />
+            </div>
+          </div>
+        </div>
+        <!-- /name -->
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label" for="name">Your name</label>
+            </div>
+            <div class="field-body">
+              <div class="control">
+                <input class="input" type="text" name="name" id="name" placeholder="Your name" />
+              </div>
+            </div>
+          </div>
+          <!-- /name -->
+
+        <div class="field is-horizontal">
+          <div class="field-label">
+            <!-- Left empty for spacing -->
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input class="button is-primary" type="submit" value="Register">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <!-- /section -->
+
+  </main>
+  <!-- /registration page -->
+  <%- include('partials/foot'); %>

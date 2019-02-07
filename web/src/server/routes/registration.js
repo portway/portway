@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
     vendor: req.app.locals.bundles.vendor.js,
     js: req.app.locals.bundles.registration.js
   }
-  res.render('register', options)
+  res.render('registration', options)
 })
 
 module.exports = router

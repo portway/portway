@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <% css.forEach(function(bundle) { %>
+  <% if (bundle) { %>
+  <link rel="stylesheet" href="/<%= bundle %>" />
+  <% } %>
+  <% }) %>
+</head>
+<body>
