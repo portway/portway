@@ -15,15 +15,19 @@
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",
-  "precommit": "NODE_ENV=production lint-staged",
   "lint-staged": {
     "linters": {
-      "src/**/*.{js,json}": [
-        "eslint --fix",
+      "*.{js,jsx,md,css}": [
+        "pretty-quick --staged",
+        "eslint src/ --fix",
         "git add"
       ]
-    },
-    "relative": true
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -37,7 +41,8 @@
     "husky": "^1.3.1",
     "lint-staged": "^8.1.3",
     "nodemon": "^1.18.9",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0"
   },
   "dependencies": {
     "express": "^4.16.4",
