@@ -1,0 +1,5 @@
+FROM danger/api:latest
+
+ENV NODE_ENV development
+
+RUN npm install

@@ -1,6 +1,10 @@
 //packages
 import express from 'express'
 import bodyParser from 'body-parser'
+import envVarValidation from './libs/envVarValidation'
+
+// Check if required env vars are set the right format
+envVarValidation()
 
 //instances
 const app = express()
