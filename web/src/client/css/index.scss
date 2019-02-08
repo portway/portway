@@ -1,1 +1,22 @@
 @import 'inc/base';
+@import 'bulma/sass/layout/hero.sass';
+@import 'bulma/sass/elements/form.sass';
+
+body {
+  background: $info;
+}
+
+.hero-head {
+  .navbar {
+    background: $info;
+    .navbar-start, .navbar-brand {
+      a {
+        color: $white;
+      }
+    }
+  }
+}
+
+.login-form {
+  width: 400px;
+}

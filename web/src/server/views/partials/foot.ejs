@@ -1,12 +1,16 @@
-  <% vendor.forEach(function(bundle) { %>
-    <% if (bundle) { %>
-    <script type="text/javascript" src="/<%= bundle %>"></script>
-    <% } %>
-  <% }) %>
-  <% js.forEach(function(bundle) { %>
-    <% if (bundle) { %>
-    <script type="text/javascript" src="/<%= bundle %>"></script>
-    <% } %>
-  <% }) %>
+  <% if (typeof vendor !== 'undefined') { %>
+    <% vendor.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+      <script type="text/javascript" src="/<%= bundle %>"></script>
+      <% } %>
+    <% }) %>
+  <% } %>
+  <% if (typeof js !== 'undefined') { %>
+    <% js.forEach(function(bundle) { %>
+      <% if (bundle) { %>
+      <script type="text/javascript" src="/<%= bundle %>"></script>
+      <% } %>
+    <% }) %>
+  <% } %>
 </body>
 </html>

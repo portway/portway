@@ -1,10 +1,12 @@
-var express = require('express')
-var router = express.Router()
+import express from 'express'
+import constants from '../../shared/constants'
+
+const router = express.Router()
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   const options = {
-    title: 'Project Danger',
+    title: constants.PRODUCT_NAME,
     css: req.app.locals.bundles.index.css,
     vendor: req.app.locals.bundles.vendor.js,
     js: req.app.locals.bundles.index.js
@@ -12,4 +14,4 @@ router.get('/', function(req, res, next) {
   res.render('index', options)
 })
 
-module.exports = router
+export default router

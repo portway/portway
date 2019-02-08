@@ -7,10 +7,12 @@ import logger from 'morgan'
 // Custom libraries
 import { normalizePort } from './libs/express-utilities'
 
-// Routes
+// Un-auth'd Routes
 import indexRouter from './routes/index'
+import signupRouter from './routes/sign-up'
+
+// Auth'd Routes
 import billingRouter from './routes/billing'
-import registrationRouter from './routes/registration'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -18,7 +20,7 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 // Set up the routes
 app.use('/', indexRouter)
-app.use('/registration', registrationRouter)
+app.use('/sign-up', signupRouter)
 app.use('/billing', billingRouter)
 
 // If we're in development mode, load the development Webpack config
@@ -42,27 +44,27 @@ if (devMode) {
     const webpackStats = stats.toJson('normal').chunks
     const bundles = {}
     webpackStats.forEach((bundle) => {
-      const files = bundle.files.map(file => file)
+      const files = bundle.files.map((file) => file)
       bundles[`${bundle.id}`] = {
-        css: files.filter(file => fileExtReg.exec(file)[1] === 'css'),
-        js: files.filter(file => fileExtReg.exec(file)[1] === 'js')
+        css: files.filter((file) => fileExtReg.exec(file)[1] === 'css'),
+        js: files.filter((file) => fileExtReg.exec(file)[1] === 'js')
       }
     })
     app.locals.bundles = bundles
   })
 
   // Use webpack middleware
-  app.use(webpackMiddleware(compiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath,
-    mode: 'development'
-  }))
+  app.use(
+    webpackMiddleware(compiler, {
+      noInfo: true,
+      publicPath: webpackConfig.output.publicPath,
+      mode: 'development'
+    })
+  )
 
   // Enable Webpack hot reloading with Express
   app.use(webpackHotMiddleware(compiler))
-
 } else {
-
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
   // Format it like dev bundle object
@@ -80,7 +82,6 @@ if (devMode) {
   })
 
   app.locals.bundles = bundles
-
 }
 
 // Set public directory for static assets
@@ -110,15 +111,15 @@ const onError = (error) => {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-    console.error(bind + ' requires elevated privileges')
-    process.exit(1)
-    break
+      console.error(bind + ' requires elevated privileges')
+      process.exit(1)
+      break
     case 'EADDRINUSE':
-    console.error(bind + ' is already in use')
-    process.exit(1)
-    break
+      console.error(bind + ' is already in use')
+      process.exit(1)
+      break
     default:
-    throw error
+      throw error
   }
 }
 
@@ -129,7 +130,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {}
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.render('error', { title: `Error`, error: err })
 })
 
 // catch 404 and forward to error handler

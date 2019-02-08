@@ -2,10 +2,12 @@
 <html>
 <head>
   <title><%= title %></title>
-  <% css.forEach(function(bundle) { %>
-  <% if (bundle) { %>
-  <link rel="stylesheet" href="/<%= bundle %>" />
+  <% if (typeof css !== 'undefined') { %>
+    <% css.forEach(function(bundle) { %>
+    <% if (bundle) { %>
+    <link rel="stylesheet" href="/<%= bundle %>" />
+    <% } %>
+    <% }) %>
   <% } %>
-  <% }) %>
 </head>
 <body>

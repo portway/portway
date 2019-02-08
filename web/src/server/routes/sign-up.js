@@ -2,18 +2,16 @@ import express from 'express'
 import constants from '../../shared/constants'
 
 const router = express.Router()
-const apiUrl = process.env.API_URL
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
   const options = {
-    title: `Billing – ${constants.PRODUCT_NAME}`,
-    css: req.app.locals.bundles.billing.css,
+    title: `Sign up for ${constants.PRODUCT_NAME}`,
+    css: req.app.locals.bundles['sign-up'].css,
     vendor: req.app.locals.bundles.vendor.js,
-    js: req.app.locals.bundles.billing.js,
-    apiUrl: apiUrl
+    js: req.app.locals.bundles['sign-up'].js
   }
-  res.render('billing', options)
+  res.render('sign-up', options)
 })
 
 export default router
