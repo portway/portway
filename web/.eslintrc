@@ -12,7 +12,10 @@
       "impliedStrict": true
     }
   },
-  "extends": ["plugin:prettier/recommended", "plugin:react/recommended"],
+  "extends": [
+    "plugin:react/recommended",
+    "prettier"
+  ],
   "settings": {
     "react": {
       "version": "detect"

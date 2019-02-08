@@ -7,11 +7,10 @@
     "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true,
       "impliedStrict": true
     }
   },
-  "extends": ["plugin:prettier/recommended"],
+  "extends": ["prettier"],
   "rules": {
     "array-bracket-spacing": [2, "never"],
     "arrow-body-style": 0,

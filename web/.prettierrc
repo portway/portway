@@ -1,7 +1,6 @@
 {
   "jsxBracketSameLine": true,
-  "printWidth": 100,
-  "parser": "flow",
+  "printWidth": 70,
   "semi": false,
   "singleQuote": true,
   "tabWidth": 2,
