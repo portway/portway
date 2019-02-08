@@ -17,12 +17,16 @@ services:
       NODE_ENV: development
 
   api:
-    image: danger/api
+    build:
+      context: ./api
+      dockerfile: Dockerfile-dev
     volumes:
       - ./api:/api
+      - /api/node_modules
     working_dir: /api
-    command: npm run serve
+    command: devstart
     ports:
       - 3001:3001
     environment:
       NODE_ENV: development
+      API_PORT: 3001

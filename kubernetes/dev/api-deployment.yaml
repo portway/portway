@@ -20,7 +20,7 @@ spec:
       - image: danger/api
         imagePullPolicy: "Never"
         name: api
-        command: [ "/bin/sh", "-c", "npm run start"  ]
+        args: [ "start"  ]
         env:
         - name: API_PORT
           valueFrom:
