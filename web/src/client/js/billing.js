@@ -3,7 +3,9 @@ import { render } from 'react-dom'
 import MessageComponent from '../components/MessageComponent'
 
 // Create a Stripe client.
+// eslint-disable-next-line no-undef
 const stripe = Stripe('pk_test_1pwhBFZzMbjvUlsgn2EjsfWP')
+
 // Create an instance of Elements.
 // Todo: pass whatever font here
 // https://github.com/stripe/elements-examples/blob/master/js/example1.js
@@ -50,8 +52,8 @@ cardCvc.mount('#card-cvc')
 
 function stripeTokenHandler(token) {
   // Insert the token ID into the form so it gets submitted to the server
-  var form = document.getElementById('payment-form')
-  var hiddenInput = document.createElement('input')
+  const form = document.getElementById('payment-form')
+  const hiddenInput = document.createElement('input')
   hiddenInput.setAttribute('type', 'hidden')
   hiddenInput.setAttribute('name', 'token')
   hiddenInput.setAttribute('value', token.id)
@@ -62,14 +64,17 @@ function stripeTokenHandler(token) {
 
 function createToken() {
   const cardData = {
-    address_zip: document.getElementById('zip-code').value
+    postalCode: document.getElementById('zip-code').value
   }
-  stripe.createToken(cardNumber, cardData).then(function(result) {
+  stripe.createToken(cardNumber, cardData).then((result) => {
     if (result.error) {
-      console.log(result)
       // Inform the user if there was an error
       render(
-        <MessageComponent visible={true} type="error" message={result.error.message} />,
+        <MessageComponent
+          visible={true}
+          type="error"
+          message={result.error.message}
+        />,
         document.getElementById('message-mount')
       )
       return
@@ -81,12 +86,8 @@ function createToken() {
 }
 
 // Create a token when the form is submitted.
-var form = document.getElementById('payment-form')
-form.addEventListener('submit', function(e) {
+const form = document.getElementById('payment-form')
+form.addEventListener('submit', (e) => {
   e.preventDefault()
   createToken()
 })
-
-if (process.env.NODE_ENV !== 'production' && module.hot) {
-  module.hot.accept()
-}

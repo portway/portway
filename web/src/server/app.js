@@ -44,10 +44,10 @@ if (devMode) {
     const webpackStats = stats.toJson('normal').chunks
     const bundles = {}
     webpackStats.forEach((bundle) => {
-      const files = bundle.files.map((file) => file)
+      const files = bundle.files.map(file => file)
       bundles[`${bundle.id}`] = {
-        css: files.filter((file) => fileExtReg.exec(file)[1] === 'css'),
-        js: files.filter((file) => fileExtReg.exec(file)[1] === 'js')
+        css: files.filter(file => fileExtReg.exec(file)[1] === 'css'),
+        js: files.filter(file => fileExtReg.exec(file)[1] === 'js')
       }
     })
     app.locals.bundles = bundles
@@ -99,7 +99,8 @@ app.use(urlencoded({ extended: false }))
 // Server Events
 const onListening = () => {
   const addr = server.address()
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
+  const bind =
+    typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.info(`Listening on ${bind}`)
 }
 
@@ -107,7 +108,8 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  const bind =
+    typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':

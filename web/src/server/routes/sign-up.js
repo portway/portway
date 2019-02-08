@@ -4,7 +4,7 @@ import constants from '../../shared/constants'
 const router = express.Router()
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   const options = {
     title: `Sign up for ${constants.PRODUCT_NAME}`,
     css: req.app.locals.bundles['sign-up'].css,

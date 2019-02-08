@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import MessageComponent from './MessageComponent'
 
 class MessageComponentContainer extends React.Component {
@@ -16,13 +17,25 @@ class MessageComponentContainer extends React.Component {
   }
 
   render() {
-    return <MessageComponent visible={this.state.visible} type={this.props.type} message={this.props.message} onDelete={this.deleteHandler.bind(this)} />
+    return (
+      <MessageComponent
+        visible={this.state.visible}
+        type={this.props.type}
+        message={this.props.message}
+        onDelete={this.deleteHandler.bind(this)}
+      />
+    )
   }
 
   deleteHandler() {
     this.setState({ visible: false })
   }
+}
 
+MessageComponentContainer.propTypes = {
+  visible: PropTypes.bool,
+  type: PropTypes.string,
+  message: PropTypes.string
 }
 
 export default MessageComponentContainer
