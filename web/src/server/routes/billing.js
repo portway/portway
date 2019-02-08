@@ -7,8 +7,7 @@ const apiUrl = process.env.API_URL
 /* GET home page. */
 router.get('/', (req, res, next) => {
   const options = {
-    // eslint-disable-next-line no-irregular-whitespace
-    title: `Billing – ${constants.PRODUCT_NAME}`,
+    title: `Billing – ${constants.PRODUCT_NAME}`,
     css: req.app.locals.bundles.billing.css,
     vendor: req.app.locals.bundles.vendor.js,
     js: req.app.locals.bundles.billing.js,
