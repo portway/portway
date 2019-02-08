@@ -6,7 +6,8 @@
     "serve": "NODE_ENV=development nodemon --exec babel-node --require node_modules/dotenv/config -- src/server.js",
     "build": "NODE_ENV=production babel-node -- server.js",
     "babel-node": "babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
@@ -14,13 +15,33 @@
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",
+  "lint-staged": {
+    "linters": {
+      "*.{js}": [
+        "pretty-quick --staged",
+        "eslint src/ --fix",
+        "git add"
+      ]
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
     "babel-preset-env": "^1.7.0",
     "dotenv": "^6.2.0",
-    "nodemon": "^1.18.9"
+    "eslint": "^5.13.0",
+    "eslint-config-prettier": "^4.0.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.3",
+    "nodemon": "^1.18.9",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0"
   },
   "dependencies": {
     "express": "^4.16.4",

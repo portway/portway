@@ -107,7 +107,7 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
@@ -124,7 +124,7 @@ const onError = (error) => {
 }
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
@@ -134,7 +134,7 @@ app.use(function(err, req, res, next) {
 })
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404))
 })
 

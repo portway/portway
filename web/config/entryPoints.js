@@ -17,7 +17,7 @@ const exportedEntrypoints = {
 if (process.env.NODE_ENV === 'development') {
   const entryPoints = Object.keys(exportedEntrypoints)
   entryPoints.forEach((entryPoint) => {
-    console.log(`Add middleware to ${entryPoint}`)
+    console.info(`Add middleware to ${entryPoint}`)
     exportedEntrypoints[entryPoint].push(`${middlewareScript}${entryPoint}.css`) // .css is a hack
   })
 }

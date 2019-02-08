@@ -15,7 +15,7 @@ const addBilling = async function(req, res) {
     })
 
     res.send('successfully subscribed user to plan')
-  } catch(err) {
+  } catch (err) {
     console.error(err)
     const message = 'unable to add billing information'
     res.status(err.statusCode || 500).send(message)
