@@ -7,9 +7,11 @@ import logger from 'morgan'
 // Custom libraries
 import { normalizePort } from './libs/express-utilities'
 
-// Routes
+// Un-auth'd Routes
 import indexRouter from './routes/index'
-import registrationRouter from './routes/registration'
+import signupRouter from './routes/sign-up'
+
+// Auth'd Routes
 import billingRouter from './routes/billing'
 
 const app = express()
@@ -18,7 +20,7 @@ const devMode = process.env.NODE_ENV !== 'production'
 
 // Set up the routes
 app.use('/', indexRouter)
-app.use('/registration', registrationRouter)
+app.use('/sign-up', signupRouter)
 app.use('/billing', billingRouter)
 
 // If we're in development mode, load the development Webpack config
@@ -97,7 +99,8 @@ app.use(urlencoded({ extended: false }))
 // Server Events
 const onListening = () => {
   const addr = server.address()
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
+  const bind =
+    typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.info(`Listening on ${bind}`)
 }
 
@@ -105,7 +108,8 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  const bind =
+    typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
@@ -128,7 +132,7 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {}
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.render('error', { title: `Error`, error: err })
 })
 
 // catch 404 and forward to error handler

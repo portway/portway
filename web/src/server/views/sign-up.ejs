@@ -1,0 +1,153 @@
+<%- include('partials/head', { title: title }); %>
+<%- include('partials/navigation'); %>
+
+<main>
+
+  <header class="section">
+    <div class="container">
+      <h1 class="title">Sign up</h1>
+    </div>
+  </header>
+
+  <!-- Start plan selection -->
+  <div class="section">
+    <div class="container">
+      <h2 class="subtitle">Choose a plan</h2>
+
+      <div class="register-plan-section">
+        <div class="register-plan-item card">
+          <header class="card-header">
+            <h2 class="card-header-title">Basic</h2>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <ol>
+                <li>Feature</li>
+                <li>Feature</li>
+                <li>Feature</li>
+              </ol>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a class="card-footer-item">Choose plan</a>
+          </footer>
+        </div>
+        <!-- /register-plan-item card -->
+        <div class="register-plan-item card">
+          <header class="card-header">
+            <h2 class="card-header-title">Advanced</h2>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <ol>
+                <li>Feature</li>
+                <li>Feature</li>
+                <li>Feature</li>
+              </ol>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a class="card-footer-item">Choose plan</a>
+          </footer>
+        </div>
+        <!-- /register-plan-item card -->
+        <div class="register-plan-item card">
+          <header class="card-header">
+            <h2 class="card-header-title">Enterprise</h2>
+          </header>
+          <div class="card-content">
+            <div class="content">
+              <ol>
+                <li>Feature</li>
+                <li>Feature</li>
+                <li>Feature</li>
+              </ol>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a class="card-footer-item">Contact us</a>
+          </footer>
+        </div>
+        <!-- /register-plan-item card -->
+      </div>
+      <!-- /register-plan-section -->
+    </div>
+  </div>
+  <!-- /section -->
+
+  <div class="section">
+    <div class="container">
+      <h2 class="subtitle">Your personal information</h2>
+
+      <form method="post">
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="firstName">Your name</label>
+          </div>
+          <div class="field-body">
+            <div class="field is-narrow">
+              <div class="control">
+                <input class="input" type="text" name="firstName" id="firstName" placeholder="First name" />
+              </div>
+            </div>
+            <div class="field is-narrow">
+              <div class="control">
+                <input class="input" type="text" name="lastName" id="lastName" placeholder="Last name" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /name -->
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="companyName">Company name</label>
+          </div>
+          <div class="field-body">
+            <div class="control">
+              <input class="input" type="text" name="companyName" id="companyName" placeholder="ACME, Inc" />
+            </div>
+          </div>
+        </div>
+        <!-- /company -->
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="email">Your email</label>
+          </div>
+          <div class="field-body">
+            <div class="control">
+              <input class="input" type="email" name="email" id="email" placeholder="email@acme.com" />
+            </div>
+          </div>
+        </div>
+        <!-- /email -->
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label" for="password">Password</label>
+          </div>
+          <div class="field-body">
+            <div class="control">
+              <input class="input" type="password" name="password" id="password" />
+            </div>
+          </div>
+        </div>
+        <!-- /password -->
+        <div class="field is-horizontal">
+          <div class="field-label">
+            <!-- Left empty for spacing -->
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <div class="control">
+                <input class="button is-primary" type="submit" value="Create your account">
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /section -->
+</main>
+
+<%- include('partials/foot'); %>
