@@ -2,6 +2,7 @@
 <html>
 <head>
   <title><%= title %></title>
+  <%- include('meta-tags', { robots: robots }); %>
   <% if (typeof css !== 'undefined') { %>
     <% css.forEach(function(bundle) { %>
     <% if (bundle) { %>

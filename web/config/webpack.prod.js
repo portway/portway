@@ -1,8 +1,9 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries")
+const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const entryPoints = require('./entryPoints.js')
 
 module.exports = {
@@ -19,6 +20,12 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css'
     }),
+    new CopyWebpackPlugin([
+      {
+        from: 'src/client/images',
+        to: 'images'
+      }
+    ]),
     new WebpackAssetsManifest()
   ],
   optimization: {
