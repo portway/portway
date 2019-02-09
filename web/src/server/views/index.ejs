@@ -1,12 +1,10 @@
-<%- include('partials/head', { title: title, robots: 'index, nofollow' }); %>
+<%- include('partials/head', { title: title, permalink: permalink, robots: 'index, nofollow' }); %>
 <%- include('partials/navigation'); %>
 <main class="hero is-info is-fullheight-with-navbar">
   <div class="hero-body">
     <div class="container">
       <h1 class="title"><%= title %></h1>
       <%- include('partials/login'); %>
-      <!-- Sample react component mounting -->
-      <div id="index"></div>
     </div>
   </div>
 </main>
