@@ -7,6 +7,10 @@ const exportedEntrypoints = {
   billing: [
     './src/client/js/billing.js',
     './src/client/css/billing.scss'
+  ].concat(globals),
+  dashboard: [
+    './src/client/js/dashboard.js',
+    './src/client/css/dashboard.scss'
   ].concat(globals)
 }
 

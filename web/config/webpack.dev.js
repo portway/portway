@@ -1,17 +1,19 @@
 const webpack = require('webpack')
 const path = require('path')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries")
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const entryPoints = require('./entryPoints.js')
 
 const globalStyleLoaders = [
   {
-    loader: 'css-loader', options: {
+    loader: 'css-loader',
+    options: {
       sourceMap: true
     }
   },
   {
-    loader: 'postcss-loader', options: {
+    loader: 'postcss-loader',
+    options: {
       sourceMap: true,
       config: {
         path: path.resolve(__dirname, './postcss.config.js')
@@ -19,7 +21,8 @@ const globalStyleLoaders = [
     }
   },
   {
-    loader: 'sass-loader', options: {
+    loader: 'sass-loader',
+    options: {
       sourceMap: true
     }
   }
@@ -70,18 +73,16 @@ module.exports = {
         }
       },
       {
-        test: /src\/client\/css\/.*.(sa|sc|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          ...globalStyleLoaders
-        ]
+        test: /\.(sa|sc|c)ss$/,
+        include: [path.resolve(__dirname, '../src/client/css')],
+        use: [MiniCssExtractPlugin.loader, ...globalStyleLoaders]
       },
       {
-        test: /src\/client\/components\/.*.(sa|sc|c)ss$/,
-        use: [
-          'style-loader',
-          ...globalStyleLoaders
-        ]
+        test: /\.(sa|sc|c)ss$/,
+        include: [
+          path.resolve(__dirname, '../src/client/components')
+        ],
+        use: ['style-loader', ...globalStyleLoaders]
       },
       {
         test: /\.(png|jp(e*)g|svg)$/,

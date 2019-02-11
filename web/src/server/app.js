@@ -11,7 +11,7 @@ import { normalizePort } from './libs/express-utilities'
 import indexRouter from './routes/index'
 
 // Auth'd Routes
-import editorRouter from './routes/editor'
+import dashboardRouter from './routes/dashboard'
 import billingRouter from './routes/billing'
 
 const app = express()
@@ -21,7 +21,7 @@ const devMode = process.env.NODE_ENV !== 'production'
 // Set up the routes
 app.use('/', indexRouter)
 app.use('/billing', billingRouter)
-app.use('/dashboard', editorRouter)
+app.use('/dashboard', dashboardRouter)
 
 // If we're in development mode, load the development Webpack config
 // and use the Webpack Express Middleware to run webpack when the server
