@@ -3,15 +3,15 @@ import constants from '../../shared/constants'
 
 const router = express.Router()
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', (req, res, next) => {
   const options = {
-    title: constants.PRODUCT_NAME,
-    css: req.app.locals.bundles.index.css,
+    title: `Sign up for ${constants.PRODUCT_NAME}`,
+    css: req.app.locals.bundles['sign-up'].css,
     vendor: req.app.locals.bundles.vendor.js,
-    js: req.app.locals.bundles.index.js
+    js: req.app.locals.bundles['sign-up'].js
   }
-  res.render('index', options)
+  res.render('sign-up', options)
 })
 
 export default router

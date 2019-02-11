@@ -1,11 +1,10 @@
-//BASE SETUP
-//=============================================================================
-
 //packages
 import express from 'express'
-import fs from 'fs'
-import path from 'path'
 import bodyParser from 'body-parser'
+import envVarValidation from './libs/envVarValidation'
+
+// Check if required env vars are set the right format
+envVarValidation()
 
 //instances
 const app = express()
@@ -15,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 //cors
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE')
@@ -37,7 +36,7 @@ const router = express.Router()
 app.use('/api', router)
 
 //now we can set the route path & initialize the API
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   res.json({ message: 'API Initialized!' })
 })
 

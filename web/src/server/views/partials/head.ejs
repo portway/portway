@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <% if (typeof css !== 'undefined') { %>
+    <% css.forEach(function(bundle) { %>
+    <% if (bundle) { %>
+    <link rel="stylesheet" href="/<%= bundle %>" />
+    <% } %>
+    <% }) %>
+  <% } %>
+</head>
+<body>

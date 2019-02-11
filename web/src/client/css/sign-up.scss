@@ -1,0 +1,16 @@
+@import 'inc/base';
+@import 'bulma/sass/elements/form.sass';
+@import 'bulma/sass/components/card.sass';
+
+.register-plan-section {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  .register-plan-item {
+    flex: 1;
+    margin: 0 1em 0 0;
+    &:last-child {
+      margin: 0;
+    }
+  }
+}
