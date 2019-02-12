@@ -1,7 +1,18 @@
 import billingCoordinator from '../coordinators/billing'
+import { Joi, celebrate } from 'celebrate'
 
 const billingController = function(router) {
-  router.post('/billing', addBilling)
+  router.post(
+    '/billing',
+    celebrate({
+      body: Joi.object().keys({
+        token: Joi.string().required(),
+        planId: Joi.string().required(),
+        email: Joi.email().required()
+      })
+    }),
+    addBilling
+  )
 }
 
 const addBilling = async function(req, res) {

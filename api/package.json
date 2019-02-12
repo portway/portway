@@ -45,6 +45,7 @@
     "pretty-quick": "^1.10.0"
   },
   "dependencies": {
+    "celebrate": "^9.0.2",
     "express": "^4.16.4",
     "stripe": "^6.23.1"
   }
