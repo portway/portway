@@ -11,9 +11,6 @@ class EditorComponent extends React.Component {
   constructor(props) {
     super(props)
     this.editorRef = React.createRef()
-    this.state = {
-      tree: []
-    }
   }
 
   componentDidMount() {
@@ -44,8 +41,8 @@ class EditorComponent extends React.Component {
 
   keyupHandler(e) {
     // Process the node's textContent
-    processFormatting('i', 'italic', /(\*|_)(.*?)\1/g)
-    processFormatting('b', 'bold', /\*\*(\S(.*?\S)?)\*\*/gm)
+    processFormatting('i', 'italic', /(\*|_)(.*?)\1\s/gm)
+    processFormatting('b', 'bold', /(\*\*|__)(.*?)\1\s/gm)
 
     // Process blocks
     processBlock('h1', /^#\s/)
