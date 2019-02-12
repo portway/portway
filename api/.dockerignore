@@ -3,3 +3,4 @@ node_modules/
 .prettierrc
 Dockerfile-dev
 Dockerfile
+example.env

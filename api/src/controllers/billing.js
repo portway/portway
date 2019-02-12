@@ -1,7 +1,8 @@
 import billingCoordinator from '../coordinators/billing'
+import auth from '../libs/auth'
 
 const billingController = function(router) {
-  router.post('/billing', addBilling)
+  router.post('/billing', auth.jwtMiddleware, addBilling)
 }
 
 const addBilling = async function(req, res) {
