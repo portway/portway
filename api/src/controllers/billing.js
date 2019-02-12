@@ -1,14 +1,15 @@
 import billingCoordinator from '../coordinators/billing'
-import { Joi, celebrate } from 'celebrate'
+import Joi from 'joi'
+import validate from '../libs/payloadValidation'
 
 const billingController = function(router) {
   router.post(
     '/billing',
-    celebrate({
+    validate({
       body: Joi.object().keys({
         token: Joi.string().required(),
         planId: Joi.string().required(),
-        email: Joi.email().required()
+        email: Joi.string().email().required()
       })
     }),
     addBilling

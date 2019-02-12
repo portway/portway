@@ -2,6 +2,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import envVarValidation from './libs/envVarValidation'
+import { errors } from 'celebrate'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -44,5 +45,8 @@ router.get('/', (req, res) => {
 import billingController from './controllers/billing'
 
 billingController(router)
+
+// use celebrate error handler to return 400s for invalid payloads
+app.use(errors)
 
 export default app
