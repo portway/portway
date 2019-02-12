@@ -5,6 +5,7 @@ import passport from 'passport'
 //libs
 import envVarValidation from './libs/envVarValidation'
 import auth from './libs/auth'
+import controllerLoader from './controllers/loader'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -46,11 +47,6 @@ router.get('/', (req, res) => {
   res.json({ message: 'API Initialized!' })
 })
 
-//Load the controllers
-import loginController from './controllers/login'
-import billingController from './controllers/billing'
-
-loginController(router)
-billingController(router)
+controllerLoader(router)
 
 export default app

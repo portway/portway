@@ -1,8 +1,12 @@
 import billingCoordinator from '../coordinators/billing'
-import auth from '../libs/auth'
 
 const billingController = function(router) {
-  router.post('/billing', auth.jwtMiddleware, addBilling)
+  router.post('/', addBilling)
+  router.get('/', getBilling)
+}
+
+const getBilling = async function(req, res) {
+  res.json({ dog: 'billing!' })
 }
 
 const addBilling = async function(req, res) {
