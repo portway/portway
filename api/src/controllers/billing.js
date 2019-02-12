@@ -6,7 +6,7 @@ const billingController = function(router) {
 }
 
 const getBilling = async function(req, res) {
-  res.json({ dog: 'billing!' })
+  res.json({ billing: 'loaded' })
 }
 
 const addBilling = async function(req, res) {
