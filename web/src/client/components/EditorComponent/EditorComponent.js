@@ -43,6 +43,7 @@ class EditorComponent extends React.Component {
     // Process the node's textContent
     processFormatting('i', 'italic', /(\*|_)(.*?)\1\s/gm)
     processFormatting('b', 'bold', /(\*\*|__)(.*?)\1\s/gm)
+    processFormatting('del', 'strikeThrough', /\~\~(.*?)\~\~\s/gm)
 
     // Process blocks
     processBlock('h1', /^#\s/)
