@@ -1,20 +1,53 @@
-// https://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity
-export function setEndOfContenteditable(contentEditableElement) {
-  let range
-  let selection
-  //Firefox, Chrome, Opera, Safari, IE 9+
-  if (document.createRange) {
-    range = document.createRange() //Create a range (a range is a like the selection but invisible)
-    range.selectNodeContents(contentEditableElement) //Select the entire contents of the element with the range
-    range.collapse(false) //collapse the range to the end point. false means collapse to end rather than the start
-    selection = window.getSelection() //get the selection object (allows you to change selection)
-    selection.removeAllRanges() //remove any selections already made
-    selection.addRange(range) //make the range you have just created the visible selection
-    //IE 8 and lower
-  } else if (document.selection) {
-    range = document.body.createTextRange() //Create a range (a range is a like the selection but invisible)
-    range.moveToElementText(contentEditableElement) //Select the entire contents of the element with the range
-    range.collapse(false) //collapse the range to the end point. false means collapse to end rather than the start
-    range.select() //Select the range (make it the visible selection
+export function focusElement(node, collapse) {
+  const range = document.createRange()
+  range.selectNodeContents(node)
+  range.collapse(collapse)
+  const selection = window.getSelection()
+  selection.removeAllRanges()
+  selection.addRange(range)
+  range.detach()
+}
+
+export function processBlock(tag, pattern) {
+  const el = window.getSelection()
+  if (el.anchorNode && el.anchorNode.nodeType === 3) {
+    if (pattern.test(el.anchorNode.textContent)) {
+      document.execCommand('formatBlock', false, tag)
+    }
+  }
+}
+
+export function processFormatting(tag, style, pattern) {
+  const el = window.getSelection()
+  if (el.focusNode) {
+    // Don't process already processed elements
+    if (el.focusNode.parentElement.tagName === tag.toUpperCase()) {
+      return
+    }
+    if (el.focusNode.nodeType === 3 && el.focusNode.textContent) {
+      let patternMatch
+      while ((patternMatch = pattern.exec(el.focusNode.textContent)) != null) {
+        if (el.focusNode.parentElement.tagName !== tag.toUpperCase()) {
+          // Create the range to select
+          const range = document.createRange()
+          range.setStart(el.focusNode, patternMatch.index)
+          // grab before the trailing whitespace
+          range.setEnd(el.focusNode, pattern.lastIndex - 1)
+          // Create the new selection
+          el.removeAllRanges()
+          el.addRange(range)
+          // Format that selection
+          document.execCommand(style, false)
+          // For Firefox, remove that fucking BR
+          if (
+            el.focusNode.parentNode.nextElementSibling &&
+            el.focusNode.parentNode.nextElementSibling.nodeName === 'BR'
+          ) {
+            el.focusNode.parentNode.nextElementSibling.remove()
+          }
+          focusElement(el.focusNode.parentNode.parentNode, false)
+        }
+      }
+    }
   }
 }

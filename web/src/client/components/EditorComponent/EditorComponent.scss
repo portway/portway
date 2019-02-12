@@ -8,18 +8,28 @@
 .editor-input {
   border: none;
   font-size: 14px;
+  min-height: 14px; // hack for Firefox?
   padding: 1em 0;
+
+  br {
+    display: none;
+  } // Firefox hack
+
   &:focus {
     outline: none;
   }
+
   // Todo: Move this to dashboard.scss when you're done. The only reason it's
   // here is for hot reloading
-  div {
+  div,
+  p {
+    min-height: 14px; // hack for Firefox?
     padding: 1em 0;
     &:focus {
       outline: none;
     }
   }
+
   h1,
   h2,
   h3,

@@ -1,5 +1,6 @@
 import React from 'react'
 import { throttle } from '../../../shared/utilities'
+import { focusElement, processFormatting, processBlock } from './helpers'
 
 // Good list of markdown RegEx's
 // https://gist.github.com/jbroadway/2836900
@@ -17,103 +18,58 @@ class EditorComponent extends React.Component {
 
   componentDidMount() {
     // Get a div in there for the first item
-    const nd = document.createElement('div')
-    nd.appendChild(document.createElement('br'))
-    this.editorRef.current.appendChild(nd)
-    nd.focus()
+    this.insertInitialItem('p', this.editorRef.current)
     // Set up content editor
-    document.execCommand('insertHTML', false, 'div')
-    // document.execCommand('styleWithCSS', true)
-    document.addEventListener('keydown', this.keydownHandler.bind(this), false)
-    document.addEventListener('keyup', throttle(this.keyupHandler.bind(this)), false)
+    document.execCommand('defaultParagraphSeparator', false, 'p')
+  }
+
+  insertInitialItem(nodeType, parentNode) {
+    const ne = document.createElement(nodeType)
+    ne.textContent = ' '
+    parentNode.appendChild(ne)
+    focusElement(ne, true)
   }
 
   render() {
     return (
-      <div className="editor">
-        <div className="editor-input" contentEditable ref={this.editorRef} />
-      </div>
+      <div
+        contentEditable
+        className="editor-input"
+        ref={this.editorRef}
+        onKeyDown={this.keydownHandler.bind(this)}
+        onKeyUp={throttle(this.keyupHandler.bind(this))}
+      />
     )
   }
 
   keyupHandler(e) {
-    const el = window.getSelection()
+    // Process the node's textContent
+    processFormatting('i', 'italic', /(\*|_)(.*?)\1/g)
+    processFormatting('b', 'bold', /\*\*(\S(.*?\S)?)\*\*/gm)
 
-    if (el.focusNode) {
-      // Don't process already processed elements
-      if (el.focusNode.parentElement.tagName === 'EM') {
-        return
-      }
-
-      // Process the node's textContent
-      if (el.focusNode.nodeType === 3 && el.focusNode.textContent) {
-        let patternMatch
-        const emphasisPattern = /(\*|_)(.*?)\1\s/g
-        while ((patternMatch = emphasisPattern.exec(el.focusNode.textContent)) != null) {
-          if (el.focusNode.parentElement.tagName !== 'EM') {
-            // Create the range to select
-            const range = document.createRange()
-            range.setStart(el.focusNode, patternMatch.index)
-            // grab before the trailing whitespace
-            range.setEnd(el.focusNode, emphasisPattern.lastIndex - 1)
-            // Create the new selection
-            el.removeAllRanges()
-            el.addRange(range)
-            // Format that selection
-            // document.execCommand('insertHTML', false, `<em>${el.toString()}</em>`)
-            document.execCommand('italic', false)
-            el.collapseToEnd()
-            // range.detach()
-          }
-        }
-      }
-    }
-
-    // const range = document.createRange()
-    // range.setStart(el.focusNode, patternMatch.index)
-    // range.setEnd(el.focusNode, emphasisPattern.lastIndex)
-    // // Make the selection and italicize it
-    // el.addRange(range)
-    // document.execCommand('italic', false)
-    // el.collapseToEnd()
-
-    // If the element should be a certain one but isn't
-    if (el.anchorNode && el.anchorNode.nodeType === 3) {
-      if (/^#\s/.test(el.anchorNode.textContent)) {
-        document.execCommand('formatBlock', false, 'h1')
-      }
-      if (/^##\s/.test(el.anchorNode.textContent)) {
-        document.execCommand('formatBlock', false, 'h2')
-      }
-      if (/^###\s/.test(el.anchorNode.textContent)) {
-        document.execCommand('formatBlock', false, 'h3')
-      }
-      if (/^####\s/.test(el.anchorNode.textContent)) {
-        document.execCommand('formatBlock', false, 'h4')
-      }
-      if (/^#####\s/.test(el.anchorNode.textContent)) {
-        document.execCommand('formatBlock', false, 'h5')
-      }
-      if (/^######\s/.test(el.anchorNode.textContent)) {
-        document.execCommand('formatBlock', false, 'h6')
-      }
-    }
+    // Process blocks
+    processBlock('h1', /^#\s/)
+    processBlock('h2', /^##\s/)
+    processBlock('h3', /^###\s/)
+    processBlock('h4', /^####\s/)
+    processBlock('h5', /^#####\s/)
+    processBlock('h6', /^######\s/)
   }
 
   keydownHandler(e) {
+    const selection = window.getSelection()
     switch (e.keyCode) {
       case 13: // enter
-        document.execCommand('removeFormat', false)
-        if (this.editorRef.current.firstChild.nodeType === 3) {
-          const o = this.editorRef.current.firstChild
-          const d = document.createElement('div')
-          d.textContent = o.textContent
-          this.editorRef.current.insertBefore(d, this.editorRef.current.firstChild)
-          this.editorRef.current.removeChild(o)
-        }
-        this.setState({ tree: this.editorRef.current.children })
-        return false
+        // Todo: Firefox isn't blinking?
+        break
       case 8: // delete
+        // We've made it to an empty field and want
+        // a paragraph in there
+        if (this.editorRef.current.children.length === 1) {
+          if (selection.anchorNode.nodeType === 1) {
+            e.preventDefault()
+          }
+        }
         break
     }
   }
