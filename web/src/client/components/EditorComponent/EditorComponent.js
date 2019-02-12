@@ -1,6 +1,7 @@
 import React from 'react'
 import { throttle } from '../../../shared/utilities'
 
+// Good list of markdown RegEx's
 // https://gist.github.com/jbroadway/2836900
 
 import './EditorComponent.scss'
@@ -47,19 +48,22 @@ class EditorComponent extends React.Component {
       // Process the node's textContent
       if (el.focusNode.nodeType === 3 && el.focusNode.textContent) {
         let patternMatch
-        const emphasisPattern = /(\*|_)(.*?)\1/g
+        const emphasisPattern = /(\*|_)(.*?)\1\s/g
         while ((patternMatch = emphasisPattern.exec(el.focusNode.textContent)) != null) {
           if (el.focusNode.parentElement.tagName !== 'EM') {
             // Create the range to select
             const range = document.createRange()
             range.setStart(el.focusNode, patternMatch.index)
-            range.setEnd(el.focusNode, emphasisPattern.lastIndex)
+            // grab before the trailing whitespace
+            range.setEnd(el.focusNode, emphasisPattern.lastIndex - 1)
             // Create the new selection
             el.removeAllRanges()
             el.addRange(range)
             // Format that selection
-            document.execCommand('insertHTML', false, `<em>${el.toString()}</em>&nbsp;`)
+            // document.execCommand('insertHTML', false, `<em>${el.toString()}</em>`)
+            document.execCommand('italic', false)
             el.collapseToEnd()
+            // range.detach()
           }
         }
       }
