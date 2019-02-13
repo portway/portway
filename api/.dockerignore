@@ -3,3 +3,7 @@ node_modules/
 .prettierrc
 Dockerfile-dev
 Dockerfile
+example.env
+(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$
+**/*.test-(u|a|i).js
+**/__mocks__

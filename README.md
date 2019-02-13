@@ -4,6 +4,7 @@ To get started, you'll need Docker installed, then run the following commands
 
 ```
 // Local development
+cp api/example.env api/.env
 make builddev
 make start
 make stop
