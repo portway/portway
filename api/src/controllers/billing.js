@@ -1,7 +1,21 @@
 import billingCoordinator from '../coordinators/billing'
+import Joi from 'joi'
+import validate from '../libs/payloadValidation'
+
+const billingPayloadSchema = Joi.compile({
+  body: Joi.object().keys({
+    token: Joi.string().required(),
+    planId: Joi.string().required(),
+    email: Joi.string().email().required()
+  })
+})
 
 const billingController = function(router) {
-  router.post('/billing', addBilling)
+  router.post(
+    '/billing',
+    validate(billingPayloadSchema),
+    addBilling
+  )
 }
 
 const addBilling = async function(req, res) {
