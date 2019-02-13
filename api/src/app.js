@@ -1,7 +1,11 @@
 //packages
 import express from 'express'
 import bodyParser from 'body-parser'
+import passport from 'passport'
+//libs
 import envVarValidation from './libs/envVarValidation'
+import auth from './libs/auth'
+import controllerLoader from './controllers/loader'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -27,12 +31,15 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(passport.initialize())
+auth.init(passport)
+
 //ROUTES
 //=============================================================================
 
 const router = express.Router()
 
-//Use our router configuration when we call /api
+// Mount router at /api
 app.use('/api', router)
 
 //now we can set the route path & initialize the API
@@ -40,9 +47,6 @@ router.get('/', (req, res) => {
   res.json({ message: 'API Initialized!' })
 })
 
-//Load the controllers
-import billingController from './controllers/billing'
-
-billingController(router)
+controllerLoader(router)
 
 export default app

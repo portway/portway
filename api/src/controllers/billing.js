@@ -16,6 +16,12 @@ const billingController = function(router) {
     validate(billingPayloadSchema),
     addBilling
   )
+
+  router.get('/', getBilling)
+}
+
+const getBilling = async function(req, res) {
+  res.json({ billing: 'loaded' })
 }
 
 const addBilling = async function(req, res) {
