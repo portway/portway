@@ -8,7 +8,7 @@ const loginController = function(router) {
   router.post('/', auth.loginMiddleware, login)
 }
 
-const login = async function(req, res) {
+const login = function(req, res) {
   const token = tokenIntegrator.generateToken(req.user.email)
   res.json({
     token
