@@ -1,4 +1,3 @@
-
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import tokenSettings from './tokenSettings'
 
@@ -9,11 +8,13 @@ const options = {
 }
 
 export default function(passport) {
-  passport.use(new JwtStrategy(options, (payload, done) => {
-    if (payload.email) {
-      done(null, { email: payload.email })
-    } else {
-      done(null, false)
-    }
-  }))
+  passport.use(
+    new JwtStrategy(options, (payload, done) => {
+      if (payload.email) {
+        done(null, { email: payload.email })
+      } else {
+        done(null, false)
+      }
+    })
+  )
 }

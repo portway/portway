@@ -1,0 +1,60 @@
+.editor {
+  color: #444;
+  font-family: Helvetica;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1em;
+}
+.editor-input {
+  border: none;
+  font-size: 14px;
+  min-height: 14px; // hack for Firefox?
+  padding: 1em 0;
+
+  br {
+    display: none;
+  } // Firefox hack
+
+  &:focus {
+    outline: none;
+  }
+
+  // Todo: Move this to dashboard.scss when you're done. The only reason it's
+  // here is for hot reloading
+  div,
+  p {
+    min-height: 14px; // hack for Firefox?
+    padding: 1em 0;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #999;
+    font-weight: bold;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  h4 {
+    font-size: 16px;
+  }
+  h5 {
+    font-size: 14px;
+  }
+  h6 {
+    font-size: 14px;
+  }
+}

@@ -2,7 +2,7 @@ import passport from 'passport'
 import JWTAuth from './passportJWT'
 import localAuth from './passportLocal'
 
-const init = (passport) => {
+const init = passport => {
   passport.serializeUser((user, done) => {
     done(null, user.email)
   })

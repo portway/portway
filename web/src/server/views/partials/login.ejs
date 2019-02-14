@@ -5,14 +5,21 @@
       <input class="input" type="email" name="email" placeholder="email@domain.com">
     </div>
   </div>
+  <% if (typeof emailOnly === 'undefined' || emailOnly !== true) { %>
   <div class="field">
     <label class="label is-small" for="password">Password</label>
     <div class="control">
       <input class="input" name="password" type="password" placeholder="">
     </div>
   </div>
+  <% } %>
   <div class="field">
-    <input type="submit" class="button is-primary" value="Log in">
+    <%
+      if (typeof button === 'undefined') {
+        var button = 'Sign in'
+      }
+    %>
+    <input type="submit" class="button is-primary" value="<%= button %>">
   </div>
 </form>
 <!-- /login -->

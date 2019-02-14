@@ -18,17 +18,38 @@ describe('<MessageComponent />', () => {
 
   describe('render()', () => {
     it('should render the component with correct message', () => {
-      const component = shallow(<MessageComponent visible={visible} type={type} message={message} onDelete={onDeleteHandler} />)
+      const component = shallow(
+        <MessageComponent
+          visible={visible}
+          type={type}
+          message={message}
+          onDelete={onDeleteHandler}
+        />
+      )
       expect(component.find('.message-body').text()).toContain(message)
     })
 
     it('should not render the component if passed visible: false', () => {
-      const component = shallow(<MessageComponent visible={false} type={type} message={message} onDelete={onDeleteHandler} />)
+      const component = shallow(
+        <MessageComponent
+          visible={false}
+          type={type}
+          message={message}
+          onDelete={onDeleteHandler}
+        />
+      )
       expect(component.equals(null)).toBe(true)
     })
 
     it('should call onDeleteHandler when the delete button is clicked', () => {
-      const component = shallow(<MessageComponent visible={visible} type={type} message={message} onDelete={onDeleteHandler} />)
+      const component = shallow(
+        <MessageComponent
+          visible={visible}
+          type={type}
+          message={message}
+          onDelete={onDeleteHandler}
+        />
+      )
       component.find('.delete').simulate('click')
       expect(onDeleteHandler.mock.calls.length).toBe(1)
     })

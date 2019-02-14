@@ -6,16 +6,14 @@ const billingPayloadSchema = Joi.compile({
   body: Joi.object().keys({
     token: Joi.string().required(),
     planId: Joi.string().required(),
-    email: Joi.string().email().required()
+    email: Joi.string()
+      .email()
+      .required()
   })
 })
 
 const billingController = function(router) {
-  router.post(
-    '/billing',
-    validate(billingPayloadSchema),
-    addBilling
-  )
+  router.post('/billing', validate(billingPayloadSchema), addBilling)
 
   router.get('/', getBilling)
 }

@@ -6,7 +6,9 @@ module.exports = () => {
 
   const token = process.env.JWT_SECRET
   if (!token.length) {
-    throw new Error('JWT_SECRET: must be specified and non-zero length')
+    throw new Error(
+      'JWT_SECRET: must be specified and non-zero length'
+    )
   }
   if (token.length < 10) {
     throw new Error('JWT_SECRET: length must be greater than 9')

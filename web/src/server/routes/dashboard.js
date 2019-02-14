@@ -3,20 +3,20 @@ import constants from '../../shared/constants'
 import { makePermalinkWithString } from '../libs/string-utilities'
 
 const router = express.Router()
-const apiUrl = process.env.API_URL
+
+const renderBundles = (req, pageTitle) => {
+  return {
+    title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
+    permalink: makePermalinkWithString(pageTitle),
+    css: req.app.locals.bundles.dashboard.css,
+    vendor: req.app.locals.bundles.vendor.js,
+    js: req.app.locals.bundles.dashboard.js
+  }
+}
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  const pageTitle = 'Billing'
-  const options = {
-    title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
-    permalink: makePermalinkWithString(pageTitle),
-    css: req.app.locals.bundles.billing.css,
-    vendor: req.app.locals.bundles.vendor.js,
-    js: req.app.locals.bundles.billing.js,
-    apiUrl: apiUrl
-  }
-  res.render('billing', options)
+  res.render('dashboard/index', renderBundles(req, 'Welcome'))
 })
 
 export default router

@@ -1,17 +1,18 @@
 @import 'inc/base';
 @import 'bulma/sass/layout/hero.sass';
 @import 'bulma/sass/elements/form.sass';
+@import 'bulma/sass/components/card.sass';
 
-body {
+body.home {
   background: $info;
-}
-
-.hero-head {
-  .navbar {
-    background: $info;
-    .navbar-start, .navbar-brand {
-      a {
-        color: $white;
+  .hero-head {
+    .navbar {
+      background: $info;
+      .navbar-start,
+      .navbar-brand {
+        a {
+          color: $white;
+        }
       }
     }
   }
@@ -19,4 +20,17 @@ body {
 
 .login-form {
   width: 400px;
+}
+
+.register-plan-section {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  .register-plan-item {
+    flex: 1;
+    margin: 0 1em 0 0;
+    &:last-child {
+      margin: 0;
+    }
+  }
 }

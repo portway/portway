@@ -1,5 +1,5 @@
-<%- include('partials/head', { title: title }); %>
-<%- include('partials/navigation'); %>
+<%- include('../partials/head', { title: title, permalink: permalink, robots: 'index, nofollow' }); %>
+<%- include('../partials/navigation'); %>
 
 <main>
 
@@ -140,6 +140,7 @@
               <div class="control">
                 <input class="button is-primary" type="submit" value="Create your account">
               </div>
+              <p class="help"><a href="/sign-in">Or sign in</a></p>
             </div>
           </div>
         </div>
@@ -150,4 +151,4 @@
   <!-- /section -->
 </main>
 
-<%- include('partials/foot'); %>
+<%- include('../partials/foot'); %>

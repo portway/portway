@@ -1,4 +1,3 @@
-
 import auth from '../libs/auth'
 import tokenIntegrator from '../integrators/token'
 
