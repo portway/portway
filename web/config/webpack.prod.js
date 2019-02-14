@@ -24,6 +24,10 @@ module.exports = {
       {
         from: 'src/client/images',
         to: 'images'
+      },
+      {
+        from: 'src/client/manifest.webmanifest',
+        to: 'manifest.webmanifest'
       }
     ]),
     new WebpackAssetsManifest()

@@ -1,6 +1,8 @@
 import React from 'react'
 import SimpleMDE from 'simplemde'
+import { uniqueId } from 'lodash'
 
+import './SimpleMDE.scss'
 import './EditorComponent.scss'
 
 class EditorComponent extends React.Component {
@@ -8,19 +10,38 @@ class EditorComponent extends React.Component {
     super(props)
     this.editorRef = React.createRef()
     this.state = {
-      textEditor: null
+      textEditor: null,
+      uniqueId: uniqueId(Date.now())
     }
   }
 
   componentDidMount() {
     this.setState({
-      textEditor: new SimpleMDE({ element: this.editorRef.current })
+      textEditor: new SimpleMDE({
+        autoDownloadFontAwesome: false,
+        autofocus: true,
+        autosave: {
+          enabled: true,
+          uniqueId: this.state.uniqueId
+        },
+        element: this.editorRef.current,
+        placeholder: 'Your ideas here...',
+        shortcuts: {
+          toggleHeadingSmaller: null,
+          toggleUnorderedList: null,
+          togglePreview: null,
+          toggleSideBySide: null,
+          toggleFullScreen: null
+        },
+        status: false,
+        toolbar: false
+      })
     })
   }
 
   render() {
     return (
-      <div>
+      <div className="editor-text">
         <textarea ref={this.editorRef} />
       </div>
     )
