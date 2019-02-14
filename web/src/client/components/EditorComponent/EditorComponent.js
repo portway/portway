@@ -17,6 +17,8 @@ class EditorComponent extends React.Component {
 
   componentDidMount() {
     this.setState({
+      // SimpleMDE is a Markdown textarea editor, with previewing and all that
+      // https://github.com/sparksuite/simplemde-markdown-editor
       textEditor: new SimpleMDE({
         autoDownloadFontAwesome: false,
         autofocus: true,
