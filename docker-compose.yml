@@ -30,3 +30,15 @@ services:
     environment:
       NODE_ENV: development
       API_PORT: 3001
+
+  db:
+    image: postgres:11.2-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: bonkey
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+volumes:
+  database_data:
+    driver: local
