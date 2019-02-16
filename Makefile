@@ -13,3 +13,11 @@ start:
 
 stop:
 	docker-compose stop
+
+test-api:
+	docker-compose down && \
+	docker-compose \
+		-f docker-compose.test.yml \
+		up -d --remove-orphans && \
+	cd api && \
+	npm test

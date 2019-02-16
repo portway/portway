@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:11.2-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: bonkey
+      POSTGRES_PASSWORD: bong
+    volumes:
+      - .database_data:/var/lib/postgresql/test_db

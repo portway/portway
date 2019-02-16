@@ -37,7 +37,7 @@ services:
     environment:
       POSTGRES_PASSWORD: bonkey
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql/dev_db
 
 volumes:
   database_data:
