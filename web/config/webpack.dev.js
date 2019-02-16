@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const entryPoints = require('./entryPoints.js')
@@ -43,6 +44,16 @@ module.exports = {
       filename: 'css/[name].css',
       chunkFilename: 'css/[id].css'
     }),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../src/client/images'),
+        to: 'images'
+      },
+      {
+        from: path.resolve(__dirname, '../src/client/manifest.webmanifest'),
+        to: 'manifest.webmanifest'
+      }
+    ]),
     new webpack.HotModuleReplacementPlugin()
   ],
   optimization: {
@@ -79,9 +90,7 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        include: [
-          path.resolve(__dirname, '../src/client/components')
-        ],
+        include: [path.resolve(__dirname, '../src/client/components')],
         use: ['style-loader', ...globalStyleLoaders]
       },
       {

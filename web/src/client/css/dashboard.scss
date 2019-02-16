@@ -1,29 +1,6 @@
 @import 'inc/base';
 @import 'inc/lists';
-@import 'bulma/sass/elements/icon.sass';
-@import 'bulma/sass/elements/form.sass';
-@import 'bulma/sass/components/panel.sass';
 
-.section {
+.dashboard-container {
   display: flex;
-}
-
-.panel {
-  margin-right: 2em;
-  width: 25%;
-
-  ol {
-    @extend .list-blank;
-  }
-
-  .panel-tabs {
-    border-bottom: none;
-    a {
-      display: block;
-    }
-  }
-}
-
-.editor-window {
-  flex: 1;
 }

@@ -1,60 +1,53 @@
-.editor {
-  color: #444;
-  font-family: Helvetica;
-  height: 100vh;
-  overflow-y: auto;
-  padding: 1em;
-}
-.editor-input {
-  border: none;
-  font-size: 14px;
-  min-height: 14px; // hack for Firefox?
-  padding: 1em 0;
+.editor-text {
+  // Override the SimpleMDE styling
+  .CodeMirror {
+    border: none;
 
-  br {
-    display: none;
-  } // Firefox hack
+    .CodeMirror-code {
+      .cm-header-1 {
+        font-size: 200%;
+        line-height: 200%;
+      }
 
-  &:focus {
-    outline: none;
-  }
+      .cm-header-2 {
+        font-size: 160%;
+        line-height: 160%;
+      }
 
-  // Todo: Move this to dashboard.scss when you're done. The only reason it's
-  // here is for hot reloading
-  div,
-  p {
-    min-height: 14px; // hack for Firefox?
-    padding: 1em 0;
-    &:focus {
-      outline: none;
+      .cm-header-3 {
+        font-size: 125%;
+        line-height: 125%;
+      }
+
+      .cm-header-4 {
+        font-size: 110%;
+        line-height: 110%;
+      }
+
+      .cm-comment {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 2px;
+      }
+
+      .cm-link {
+        color: #7f8c8d;
+      }
+
+      .cm-url {
+        color: #aab2b3;
+      }
+
+      .cm-strikethrough {
+        text-decoration: line-through;
+      }
+
+      .CodeMirror-placeholder {
+        opacity: 0.5;
+      }
+
+      .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+        background: rgba(255, 0, 0, 0.15);
+      }
     }
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: #999;
-    font-weight: bold;
-  }
-  h1 {
-    font-size: 22px;
-  }
-  h2 {
-    font-size: 20px;
-  }
-  h3 {
-    font-size: 18px;
-  }
-  h4 {
-    font-size: 16px;
-  }
-  h5 {
-    font-size: 14px;
-  }
-  h6 {
-    font-size: 14px;
   }
 }
