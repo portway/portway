@@ -1,14 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
 
-import EditorComponentContainer from '../components/EditorComponent'
+import ProjectContainer from './components/ProjectComponent'
 
 class DashboardContainer extends React.Component {
   render() {
     return (
       <div>
         <h1>Dashboard</h1>
-        <EditorComponentContainer />
+        <ProjectContainer />
       </div>
     )
   }
