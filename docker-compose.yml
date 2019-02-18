@@ -35,7 +35,9 @@ services:
     image: postgres:11.2-alpine
     restart: always
     environment:
-      POSTGRES_PASSWORD: bonkey
+      POSTGRES_DB: dev
+      POSTGRES_USER: bonkey
+      POSTGRES_PASSWORD: bong
     volumes:
       - database_data:/var/lib/postgresql/dev_db
 

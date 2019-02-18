@@ -2,10 +2,23 @@ import Sequelize from 'sequelize'
 
 let connectedDb
 
-export function connect({ user, password, host, port, db }) {
-  connectedDb = new Sequelize(
-    `postgres://${user}:${password}@${host}:${port}/${db}`
-  )
+export async function connect({ user, password, host, port, db }) {
+  if (connectedDb) return connectedDb
+
+  const dbUri = `postgres://${user}:${password}@${host}:${port}/${db}`
+
+  const sequelize = new Sequelize(dbUri)
+
+  try {
+    await sequelize.authenticate()
+  } catch (err) {
+    console.error(err)
+    throw new Error('Unable to connect to the database:', err)
+  }
+
+  connectedDb = sequelize
+
+  return connectedDb
 }
 
 export function getDb() {

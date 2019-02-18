@@ -58,6 +58,8 @@
     "stripe": "^6.23.1"
   },
   "jest": {
-    "testRegex": "src/.*\\.test-(u|a|i)\\.js$"
+    "testRegex": "src/.*\\.test-(u|a|i)\\.js$",
+    "verbose": true,
+    "testEnvironment": "node"
   }
 }

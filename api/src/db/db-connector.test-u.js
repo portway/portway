@@ -9,11 +9,12 @@ describe('DBConnector', () => {
       }).toThrow()
     })
 
-    it('should connect to the db instance', () => {
-      connect({ host: 'localhost', port: 5432, user: 'bonkey', password: 'bong', db: 'test' })
+    it('should connect to the db instance and return db', async() => {
+      const db = await connect({ host: 'localhost', port: 5432, user: 'bonkey', password: 'bong', db: 'test' })
+      expect(db).toBeInstanceOf(Sequelize)
     })
   })
-  
+
   describe('getDb', () => {
     it('should return the db instance if already connected', () => {
       const db = getDb()
