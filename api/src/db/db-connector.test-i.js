@@ -27,4 +27,6 @@ describe('DBConnector', () => {
       expect(db).toEqual(db2)
     })
   })
+
+  afterAll(() => getDb().close())
 })
