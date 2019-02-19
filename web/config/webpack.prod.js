@@ -32,6 +32,12 @@ module.exports = {
     ]),
     new WebpackAssetsManifest()
   ],
+  resolve: {
+    alias: {
+      Containers: path.resolve(__dirname, '../src/client/js/containers'),
+      Components: path.resolve(__dirname, '../src/client/js/components')
+    }
+  },
   optimization: {
     splitChunks: {
       chunks: 'all',

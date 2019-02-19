@@ -19,9 +19,15 @@ const port = normalizePort(process.env.PORT || '3000')
 const devMode = process.env.NODE_ENV !== 'production'
 
 // Set up the routes
+// Todo: @dheniges, if you're auth'd - dashboardRouter... if you're not, indexRouter
 app.use('/', indexRouter)
-app.use('/billing', billingRouter)
+
+// This sucks
 app.use('/dashboard', dashboardRouter)
+app.use('/projects', dashboardRouter)
+app.use('/project', dashboardRouter)
+
+app.use('/billing', billingRouter)
 
 // If we're in development mode, load the development Webpack config
 // and use the Webpack Express Middleware to run webpack when the server
@@ -99,8 +105,7 @@ app.use(urlencoded({ extended: false }))
 // Server Events
 const onListening = () => {
   const addr = server.address()
-  const bind =
-    typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.info(`Listening on ${bind}`)
 }
 
@@ -108,8 +113,7 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  const bind =
-    typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':

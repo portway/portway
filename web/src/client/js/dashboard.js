@@ -1,20 +1,34 @@
 import React from 'react'
+import { createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
+import thunk from 'redux-thunk'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
 import { render } from 'react-dom'
 
-import ProjectContainer from './components/ProjectComponent'
+import rootReducer from './reducers'
+import ProjectContainer from 'Containers/Project/Project'
+import ProjectsContainer from 'Containers/Projects/Projects'
+import DashboardContainer from 'Containers/Dashboard/Dashboard'
 
-class DashboardContainer extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>Dashboard</h1>
-        <ProjectContainer />
-      </div>
-    )
-  }
+const middlewares = [thunk]
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)))
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <Router basename="/">
+        <div id="application" className="wrapper">
+          <Route exact path="/project/:projectId" component={ProjectContainer} />
+          <Route exact path="/projects" component={ProjectsContainer} />
+          <Route exact path="/dashboard" component={DashboardContainer} />
+        </div>
+      </Router>
+    </Provider>
+  )
 }
 
-render(<DashboardContainer />, document.getElementById('dashboard'))
+render(<App />, document.getElementById('dashboard'))
 
 // Todo: Investigate why the globals.js doesnt work for this one
 if (process.env.NODE_ENV !== 'production' && module.hot) {

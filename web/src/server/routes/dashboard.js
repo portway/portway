@@ -15,7 +15,8 @@ const renderBundles = (req, pageTitle) => {
 }
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+// Sending all requests /dashboard/* to dashboard view, for Redux Router
+router.get('/*', (req, res, next) => {
   res.render('dashboard/index', renderBundles(req, 'Welcome'))
 })
 

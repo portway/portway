@@ -56,6 +56,12 @@ module.exports = {
     ]),
     new webpack.HotModuleReplacementPlugin()
   ],
+  resolve: {
+    alias: {
+      Containers: path.resolve(__dirname, '../src/client/js/containers'),
+      Components: path.resolve(__dirname, '../src/client/js/components')
+    }
+  },
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -90,7 +96,7 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        include: [path.resolve(__dirname, '../src/client/components')],
+        include: [path.resolve(__dirname, '../src/client/js/components')],
         use: ['style-loader', ...globalStyleLoaders]
       },
       {
