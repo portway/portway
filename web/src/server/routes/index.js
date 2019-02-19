@@ -1,6 +1,7 @@
 import express from 'express'
 import constants from '../../shared/constants'
 import { makePermalinkWithString } from '../libs/string-utilities'
+import auth from '../libs/auth'
 
 const router = express.Router()
 
@@ -15,19 +16,23 @@ const renderBundles = (req, pageTitle) => {
 }
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   res.render('index', renderBundles(req, 'Home'))
 })
 
-router.get('/sign-up', (req, res, next) => {
+router.get('/sign-up', (req, res) => {
   res.render('user/sign-up', renderBundles(req, 'Sign up'))
 })
 
-router.get('/sign-in', (req, res, next) => {
+router.get('/sign-in', (req, res) => {
   res.render('user/sign-in', renderBundles(req, 'Sign in'))
 })
 
-router.get('/sign-in/password-reset', (req, res, next) => {
+router.post('/sign-in', auth.loginMiddleware, (req, res) => {
+  res.render(JSON.stringify(req.user, null, 2))
+})
+
+router.get('/sign-in/password-reset', (req, res) => {
   res.render(
     'user/password-reset',
     renderBundles(req, 'Reset password')

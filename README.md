@@ -5,6 +5,7 @@ To get started, you'll need Docker installed, then run the following commands
 ```
 // Local development
 cp api/example.env api/.env
+cp web/src/server/example.env web/src/server/.env
 make builddev
 make start
 make stop
