@@ -24,12 +24,15 @@ services:
       - ./api:/api
       - /api/node_modules
     working_dir: /api
-    command: devstart
+    entrypoint: /bin/sh
+    command: ./wait-for.sh db:5432 -- npm run serve
     ports:
       - 3001:3001
     environment:
       NODE_ENV: development
       API_PORT: 3001
+    depends_on:
+      - "db"
 
   db:
     image: postgres:11.2-alpine
@@ -40,6 +43,8 @@ services:
       POSTGRES_PASSWORD: bong
     volumes:
       - database_data:/var/lib/postgresql/dev_db
+    ports:
+      - "5432:5432"
 
 volumes:
   database_data:

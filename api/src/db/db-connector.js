@@ -7,6 +7,8 @@ export async function connect({ user, password, host, port, db }) {
 
   const dbUri = `postgres://${user}:${password}@${host}:${port}/${db}`
 
+  console.log(dbUri)
+
   const sequelize = new Sequelize(dbUri)
 
   try {
