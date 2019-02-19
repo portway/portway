@@ -15,14 +15,11 @@ passport.deserializeUser((id, done) => {
 })
 
 const authUserFunc = async function(email, password, done) {
-  console.info('authUserFunc')
-  console.info(email, password)
   let token
   try {
     token = await API.authenticate(email, password)
   } catch (error) {
-    console.info('error')
-    console.info(error)
+    console.info(error.toString())
   }
   if (token) {
     done(null, { email, token })

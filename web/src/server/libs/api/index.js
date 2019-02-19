@@ -51,12 +51,11 @@ class DangerApi {
         password
       }
     })
-    console.info(res)
-    return res.token
+    return res.data.token
   }
 
   async send(config, token) {
-    // Do whatever with token
+    // Do whatever with token to auth future requests
     return await this.axiosInstance.request(config)
   }
 }

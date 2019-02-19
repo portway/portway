@@ -29,7 +29,7 @@ router.get('/sign-in', (req, res) => {
 })
 
 router.post('/sign-in', auth.loginMiddleware, (req, res) => {
-  res.render(JSON.stringify(req.user, null, 2))
+  res.json(req.user)
 })
 
 router.get('/sign-in/password-reset', (req, res) => {
