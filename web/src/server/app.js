@@ -2,6 +2,7 @@ import express, { json, urlencoded } from 'express'
 import { createServer } from 'http'
 import createError from 'http-errors'
 import { join } from 'path'
+import passport from 'passport'
 import logger from 'morgan'
 
 // Custom libraries
@@ -86,6 +87,11 @@ if (devMode) {
   app.locals.bundles = bundles
 }
 
+app.use(json())
+app.use(urlencoded())
+
+app.use(passport.initialize())
+
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
 app.use(express.static(join(__dirname, './public')))
@@ -95,8 +101,12 @@ app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.set('port', port)
 app.use(logger('dev'))
-app.use(json())
-app.use(urlencoded({ extended: false }))
+
+// Set up the routes
+app.use('/', indexRouter)
+app.use('/billing', billingRouter)
+app.use('/dashboard', dashboardRouter)
+
 
 // Server Events
 const onListening = () => {
@@ -127,9 +137,11 @@ const onError = (error) => {
 
 // error handler
 app.use((err, req, res, next) => {
+  console.info('ERROR HANDLER')
   // set locals, only providing error in development
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
+  console.info(err)
   // render the error page
   res.status(err.status || 500)
   res.render('error', { title: `Error`, error: err })
