@@ -1,11 +1,12 @@
 import React from 'react'
+import { render } from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import thunk from 'redux-thunk'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import { render } from 'react-dom'
 
+import Constants from '../../shared/constants'
 import rootReducer from './reducers'
 import ProjectContainer from 'Containers/Project/Project'
 import ProjectsContainer from 'Containers/Projects/Projects'
@@ -17,8 +18,8 @@ const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...mi
 const App = () => {
   return (
     <Provider store={store}>
-      <Router basename="/">
-        <div id="application" className="wrapper">
+      <Router basename={Constants.PATH_APP}>
+        <div className="wrapper">
           <Route exact path="/project/:projectId" component={ProjectContainer} />
           <Route exact path="/projects" component={ProjectsContainer} />
           <Route exact path="/dashboard" component={DashboardContainer} />
@@ -28,7 +29,7 @@ const App = () => {
   )
 }
 
-render(<App />, document.getElementById('dashboard'))
+render(<App />, document.getElementById('application'))
 
 // Todo: Investigate why the globals.js doesnt work for this one
 if (process.env.NODE_ENV !== 'production' && module.hot) {

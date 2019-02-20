@@ -4,6 +4,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
+// Custom stuff
+const SharedConfig = require('./webpack.shared')
 const entryPoints = require('./entryPoints.js')
 
 module.exports = {
@@ -33,10 +35,7 @@ module.exports = {
     new WebpackAssetsManifest()
   ],
   resolve: {
-    alias: {
-      Containers: path.resolve(__dirname, '../src/client/js/containers'),
-      Components: path.resolve(__dirname, '../src/client/js/components')
-    }
+    alias: SharedConfig.resolvers
   },
   optimization: {
     splitChunks: {

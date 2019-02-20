@@ -5,13 +5,14 @@ import { join } from 'path'
 import logger from 'morgan'
 
 // Custom libraries
+import Constants from '../shared/constants'
 import { normalizePort } from './libs/express-utilities'
 
 // Un-auth'd Routes
 import indexRouter from './routes/index'
 
 // Auth'd Routes
-import dashboardRouter from './routes/dashboard'
+import appRouter from './routes/app'
 import billingRouter from './routes/billing'
 
 const app = express()
@@ -19,15 +20,10 @@ const port = normalizePort(process.env.PORT || '3000')
 const devMode = process.env.NODE_ENV !== 'production'
 
 // Set up the routes
-// Todo: @dheniges, if you're auth'd - dashboardRouter... if you're not, indexRouter
 app.use('/', indexRouter)
-
-// This sucks
-app.use('/dashboard', dashboardRouter)
-app.use('/projects', dashboardRouter)
-app.use('/project', dashboardRouter)
-
-app.use('/billing', billingRouter)
+// Auth'd routes
+app.use(Constants.PATH_APP, appRouter)
+app.use(Constants.PATH_BILLING, billingRouter)
 
 // If we're in development mode, load the development Webpack config
 // and use the Webpack Express Middleware to run webpack when the server
