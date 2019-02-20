@@ -4,7 +4,7 @@
   "description": "Project Danger Web Client",
   "main": "src/server/app.js",
   "scripts": {
-    "serve": "NODE_ENV=development nodemon --watch ./src/server --exec babel-node ./src/server/app.js",
+    "serve": "NODE_ENV=development nodemon --watch ./src/server --exec babel-node -r node_modules/dotenv/config ./src/server/app.js dotenv_config_path=./src/server/.env",
     "build": "NODE_ENV=production webpack --env.production --config ./config/webpack.prod.js && babel ./src/server -d dist/server --copy-files",
     "start": "NODE_ENV=production node ./dist/server/app.js",
     "babel-node": "babel-node",
@@ -58,6 +58,7 @@
     "bulma": "^0.7.2",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.0",
+    "dotenv": "^6.2.0",
     "dotenv-webpack": "^1.5.7",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
@@ -90,11 +91,16 @@
     "webpack-hot-middleware": "^2.24.3"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "^4.16.4",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
+    "passport": "^0.4.0",
+    "passport-custom": "^1.0.5",
+    "passport-local": "^1.0.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"
   }
