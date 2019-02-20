@@ -1,6 +1,21 @@
 version: '3'
 
 services:
+  api-testrunner:
+    build:
+      context: ./api
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./api:/api
+      - /api/node_modules
+    working_dir: /api
+    command: test
+    environment:
+      NODE_ENV: test
+      API_PORT: 3001
+    depends_on:
+      - "db"
+
   db:
     image: postgres:11.2-alpine
     restart: always

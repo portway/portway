@@ -15,9 +15,5 @@ stop:
 	docker-compose stop
 
 test-api:
-	docker-compose down && \
-	docker-compose \
-		-f docker-compose.test.yml \
-		up -d --remove-orphans && \
-	cd api && \
-	npm test
+	docker-compose build && \
+	docker-compose -f docker-compose.test.yml up --remove-orphans --exit-code-from api-testrunner
