@@ -7,9 +7,27 @@ import ProjectsListComponent from 'Components/ProjectsList/ProjectsList'
 class ProjectsContainer extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Projects</h1>
-        <ProjectsListComponent projects={this.props.projects} />
+      <div role="main">
+        <div className="scroll-container section">
+          <div className="container">
+            <div className="level">
+              <div className="level-left">
+                <h1 className="title">Projects</h1>
+              </div>
+              <div className="level-right">
+                <div className="field has-addons">
+                  <div className="control">
+                    <input className="input" type="text" placeholder="Find a project or document" />
+                  </div>
+                  <div className="control">
+                    <a className="button is-info">Search</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ProjectsListComponent projects={this.props.projects} />
+          </div>
+        </div>
       </div>
     )
   }

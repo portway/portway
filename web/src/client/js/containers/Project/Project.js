@@ -3,8 +3,10 @@ import React from 'react'
 class ProjectContainer extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Project</h1>
+      <div role="main">
+        <div className="scroll-container section">
+          <h1>Project</h1>
+        </div>
       </div>
     )
   }

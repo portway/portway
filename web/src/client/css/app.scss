@@ -1,6 +1,27 @@
 @import 'inc/base';
-@import 'inc/lists';
+@import 'inc/theme';
 
-.dashboard-container {
+.app-container {
   display: flex;
+  flex-direction: column-reverse;
+  height: 100vh;
+
+  div[role='main'] {
+    flex: 1 0;
+    overflow: hidden;
+    .scroll-container {
+      height: 100%;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
+  .masthead {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    width: 100vw;
+    z-index: 10;
+  }
 }

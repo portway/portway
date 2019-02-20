@@ -7,9 +7,11 @@ import ProjectsListComponent from 'Components/ProjectsList/ProjectsList'
 class DashboardContainer extends React.Component {
   render() {
     return (
-      <div>
-        <h1>Dashboard</h1>
-        <ProjectsListComponent projects={this.props.projects} />
+      <div role="main">
+        <div className="scroll-container section">
+          <h1>Dashboard</h1>
+          <ProjectsListComponent projects={this.props.projects} />
+        </div>
       </div>
     )
   }
