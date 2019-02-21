@@ -9,7 +9,7 @@
     "babel-node": "babel-node",
     "test": "jest",
     "lint": "eslint src",
-    "migrate": "npx sequelize db:migrate"
+    "migrate": "sequelize db:migrate"
   },
   "repository": {
     "type": "git",

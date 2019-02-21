@@ -25,7 +25,7 @@ services:
       - /api/node_modules
     working_dir: /api
     entrypoint: /bin/sh
-    command: ./wait-for.sh db:5432 -- npm run serve
+    command: ./wait-for.sh db:5432 -- npm run migrate && npm run serve
     ports:
       - 3001:3001
     environment:

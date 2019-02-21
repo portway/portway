@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 import path from 'path'
-import { modelFilePaths } from '../models'
+import { modelFilePaths } from './models'
 
 let connectedDb
 
