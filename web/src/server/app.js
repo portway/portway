@@ -6,18 +6,25 @@ import passport from 'passport'
 import logger from 'morgan'
 
 // Custom libraries
+import Constants from '../shared/constants'
 import { normalizePort } from './libs/express-utilities'
 
 // Un-auth'd Routes
 import indexRouter from './routes/index'
 
 // Auth'd Routes
-import dashboardRouter from './routes/dashboard'
+import appRouter from './routes/app'
 import billingRouter from './routes/billing'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
 const devMode = process.env.NODE_ENV !== 'production'
+
+// Set up the routes
+app.use('/', indexRouter)
+// Auth'd routes
+app.use(Constants.PATH_APP, appRouter)
+app.use(Constants.PATH_BILLING, billingRouter)
 
 // If we're in development mode, load the development Webpack config
 // and use the Webpack Express Middleware to run webpack when the server
@@ -95,17 +102,10 @@ app.set('view engine', 'ejs')
 app.set('port', port)
 app.use(logger('dev'))
 
-// Set up the routes
-app.use('/', indexRouter)
-app.use('/billing', billingRouter)
-app.use('/dashboard', dashboardRouter)
-
-
 // Server Events
 const onListening = () => {
   const addr = server.address()
-  const bind =
-    typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
   console.info(`Listening on ${bind}`)
 }
 
@@ -113,8 +113,7 @@ const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error
   }
-  const bind =
-    typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':

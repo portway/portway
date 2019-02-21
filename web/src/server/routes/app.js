@@ -8,15 +8,16 @@ const renderBundles = (req, pageTitle) => {
   return {
     title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
     permalink: makePermalinkWithString(pageTitle),
-    css: req.app.locals.bundles.dashboard.css,
+    css: req.app.locals.bundles.app.css,
     vendor: req.app.locals.bundles.vendor.js,
-    js: req.app.locals.bundles.dashboard.js
+    js: req.app.locals.bundles.app.js
   }
 }
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
-  res.render('dashboard/index', renderBundles(req, 'Welcome'))
+// Sending all requests /dashboard/* to dashboard view, for Redux Router
+router.get('/*', (req, res, next) => {
+  res.render('app/index', renderBundles(req, 'Welcome'))
 })
 
 export default router

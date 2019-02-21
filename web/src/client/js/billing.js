@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import MessageComponent from '../components/MessageComponent'
+import MessageComponent from 'Components/Message/Message'
 
 // Create a Stripe client.
 // eslint-disable-next-line no-undef
@@ -70,11 +70,7 @@ function createToken() {
     if (result.error) {
       // Inform the user if there was an error
       render(
-        <MessageComponent
-          visible={true}
-          type="error"
-          message={result.error.message}
-        />,
+        <MessageComponent visible={true} type="error" message={result.error.message} />,
         document.getElementById('message-mount')
       )
       return

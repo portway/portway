@@ -3,6 +3,8 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
+// Custom stuff
+const SharedConfig = require('./webpack.shared')
 const entryPoints = require('./entryPoints.js')
 
 const globalStyleLoaders = [
@@ -56,6 +58,9 @@ module.exports = {
     ]),
     new webpack.HotModuleReplacementPlugin()
   ],
+  resolve: {
+    alias: SharedConfig.resolvers
+  },
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -90,7 +95,7 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        include: [path.resolve(__dirname, '../src/client/components')],
+        include: [path.resolve(__dirname, '../src/client/js/components')],
         use: ['style-loader', ...globalStyleLoaders]
       },
       {
