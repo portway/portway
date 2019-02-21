@@ -1,5 +1,5 @@
 import app from './app'
-import { connect } from './db/db-connector'
+import { connect, loadModels } from './db/db-connector'
 
 const port = process.env.API_PORT
 
@@ -13,6 +13,10 @@ connect({
   db: process.env.DB_NAME
 }).then(() => {
   console.info('successfully connected to db')
+  //LOAD MODELS
+  loadModels()
+  console.info('successfully loaded models')
+
   //START THE SERVER
   app.listen(port, () => {
     console.info('api running on port ' + port)
