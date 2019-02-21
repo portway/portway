@@ -8,7 +8,8 @@
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node",
     "test": "jest",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "migrate": "npx sequelize db:migrate"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,7 @@
 import billingCoordinator from '../coordinators/billing'
 import Joi from 'joi'
 import validate from '../libs/payloadValidation'
+import { getDb } from '../db/db-connector'
 
 const billingPayloadSchema = Joi.compile({
   body: Joi.object().keys({
@@ -19,7 +20,10 @@ const billingController = function(router) {
 }
 
 const getBilling = async function(req, res) {
-  res.json({ billing: 'loaded' })
+  const db = getDb()
+  await db.models.user.create({firstname: 'bon', lastname: 'key'})
+  const user = await db.models.user.find()
+  res.json({ billing: user })
 }
 
 const addBilling = async function(req, res) {

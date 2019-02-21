@@ -1,5 +1,5 @@
 export default function(sequelize, DataTypes) {
-  return sequelize.define('user', {
+  const User = sequelize.define('user', {
     firstName: {
       type: DataTypes.STRING
     },
@@ -7,4 +7,16 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.STRING
     }
   })
+
+  // force: true will drop the table if it already exists
+  User.sync({ force: true }).then(() => {
+    // Table created
+    return User.create({
+      firstName: 'John',
+      lastName: 'Hancock'
+    })
+  })
+
+
+  return User
 }
