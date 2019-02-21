@@ -102,12 +102,6 @@ app.set('view engine', 'ejs')
 app.set('port', port)
 app.use(logger('dev'))
 
-// Set up the routes
-app.use('/', indexRouter)
-app.use('/billing', billingRouter)
-app.use('/dashboard', dashboardRouter)
-
-
 // Server Events
 const onListening = () => {
   const addr = server.address()

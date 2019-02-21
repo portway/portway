@@ -1,7 +1,5 @@
 import { ActionTypes } from '../actions'
 
-// import { ActionTypes } from '../actions'
-
 const initialState = {
   '1': {
     name: 'BonkeyBong.com',
