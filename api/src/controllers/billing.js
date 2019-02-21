@@ -21,7 +21,7 @@ const billingController = function(router) {
 
 const getBilling = async function(req, res) {
   const db = getDb()
-  await db.models.user.create({firstname: 'bon', lastname: 'key'})
+  await db.models.user.create({ firstname: 'bon', lastname: 'key' })
   const user = await db.models.user.find()
   res.json({ billing: user })
 }
