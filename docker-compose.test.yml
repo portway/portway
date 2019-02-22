@@ -15,16 +15,14 @@ services:
       API_PORT: 3001
     
     depends_on:
-      - db
+      - db-test
 
-  db:
+  db-test:
     image: postgres:11.2-alpine
     restart: always
     environment:
       POSTGRES_DB: test
       POSTGRES_USER: bonkey
       POSTGRES_PASSWORD: bong
-    volumes:
-      - .database_data:/var/lib/postgresql/test_db
     ports:
       - 5432:5432

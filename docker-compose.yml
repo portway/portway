@@ -42,7 +42,7 @@ services:
       POSTGRES_USER: bonkey
       POSTGRES_PASSWORD: bong
     volumes:
-      - database_data:/var/lib/postgresql/dev_db
+      - .database_data:/var/lib/postgresql/dev_db
     ports:
       - 5432:5432
 

@@ -66,3 +66,6 @@ typings/
 
 # next.js build output
 .next
+
+# Dev database data
+.database_data
