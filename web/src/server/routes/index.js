@@ -1,30 +1,21 @@
 import express from 'express'
-import constants from '../../shared/constants'
-import { makePermalinkWithString } from '../libs/string-utilities'
+
+import { renderBundles } from '../libs/express-utilities'
 import auth from '../libs/auth'
 
 const router = express.Router()
 
-const renderBundles = (req, pageTitle) => {
-  return {
-    title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
-    permalink: makePermalinkWithString(pageTitle),
-    css: req.app.locals.bundles.index.css,
-    js: req.app.locals.bundles.index.js
-  }
-}
-
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', renderBundles(req, 'Home'))
+  res.render('index', renderBundles(req, 'Home', 'index'))
 })
 
 router.get('/sign-up', (req, res) => {
-  res.render('user/sign-up', renderBundles(req, 'Sign up'))
+  res.render('user/sign-up', renderBundles(req, 'Sign up', 'index'))
 })
 
 router.get('/sign-in', (req, res) => {
-  res.render('user/sign-in', renderBundles(req, 'Sign in'))
+  res.render('user/sign-in', renderBundles(req, 'Sign in', 'index'))
 })
 
 router.post('/sign-in', auth.loginMiddleware, (req, res) => {
@@ -32,7 +23,7 @@ router.post('/sign-in', auth.loginMiddleware, (req, res) => {
 })
 
 router.get('/sign-in/password-reset', (req, res) => {
-  res.render('user/password-reset', renderBundles(req, 'Reset password'))
+  res.render('user/password-reset', renderBundles(req, 'Reset password', 'index'))
 })
 
 export default router

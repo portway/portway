@@ -1,3 +1,17 @@
+import { makePermalinkWithString } from '../libs/string-utilities'
+import constants from '../../shared/constants'
+const apiUrl = process.env.API_URL
+
+export const renderBundles = (req, pageTitle, bundleKey) => {
+  return {
+    title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
+    permalink: makePermalinkWithString(pageTitle),
+    css: req.app.locals.bundles[bundleKey].css,
+    js: req.app.locals.bundles[bundleKey].js,
+    apiUrl: apiUrl
+  }
+}
+
 /**
  * Normalize a port into a number, string, or false.
  */
