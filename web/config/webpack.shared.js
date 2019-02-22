@@ -2,6 +2,8 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const Constants = require('../src/shared/constants')
 
 const SharedConfig = {
   resolvers: {
@@ -22,6 +24,19 @@ const SharedConfig = {
         to: 'manifest.webmanifest'
       }
     ]),
+    new SWPrecacheWebpackPlugin({
+      cacheId: Constants.PRODUCT_ID,
+      dontCacheBustUrlsMatching: /\.\w{8}\./,
+      filename: 'service-worker.js',
+      logger(message) {
+        if (message.indexOf('Total precache size is') === 0) {
+          return
+        }
+        console.info(message)
+      },
+      minify: true,
+      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
+    }),
     new WebpackAssetsManifest()
   ],
   optimization: {
