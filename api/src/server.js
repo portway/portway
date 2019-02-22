@@ -1,10 +1,20 @@
 import app from './app'
+import { connect } from './db/db-connector'
 
 const port = process.env.API_PORT
 
-//START THE SERVER
-//=============================================================================
 
-app.listen(port, () => {
-  console.info('api running on port ' + port)
+//CONNECT TO THE DB
+connect({
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  db: process.env.DB_NAME
+}).then(() => {
+  console.info('successfully connected to db')
+  //START THE SERVER
+  app.listen(port, () => {
+    console.info('api running on port ' + port)
+  })
 })

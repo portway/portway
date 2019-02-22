@@ -13,3 +13,7 @@ start:
 
 stop:
 	docker-compose stop
+
+test-api:
+	docker-compose build && \
+	docker-compose -f docker-compose.test.yml up --remove-orphans --exit-code-from api-testrunner
