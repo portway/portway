@@ -1,28 +1,28 @@
 export default function register() {
-  //if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    const swUrl = '/service-worker.js'
-    navigator.serviceWorker
-      .register(swUrl)
-      .then((registration) => {
-        registration.onupdatefound = () => {
-          const installingWorker = registration.installing
-          installingWorker.onstatechange = () => {
-            if (installingWorker.state === 'installed') {
-              if (navigator.serviceWorker.controller) {
-                console.info('New content is available; please refresh.')
-              } else {
-                console.info('Content is cached for offline use.')
+  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      const swUrl = '/service-worker.js'
+      navigator.serviceWorker
+        .register(swUrl)
+        .then((registration) => {
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed') {
+                if (navigator.serviceWorker.controller) {
+                  console.info('New content is available; please refresh.')
+                } else {
+                  console.info('Content is cached for offline use.')
+                }
               }
             }
           }
-        }
-      })
-      .catch((error) => {
-        console.error('Error during service worker registration:', error)
-      })
-  })
-  // }
+        })
+        .catch((error) => {
+          console.error('Error during service worker registration:', error)
+        })
+    })
+  }
 }
 
 export function unregister() {
