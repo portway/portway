@@ -9,7 +9,6 @@ const renderBundles = (req, pageTitle) => {
     title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
     permalink: makePermalinkWithString(pageTitle),
     css: req.app.locals.bundles.app.css,
-    vendor: req.app.locals.bundles.vendor.js,
     js: req.app.locals.bundles.app.js
   }
 }

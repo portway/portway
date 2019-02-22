@@ -12,7 +12,6 @@ router.get('/', (req, res, next) => {
     title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
     permalink: makePermalinkWithString(pageTitle),
     css: req.app.locals.bundles.billing.css,
-    vendor: req.app.locals.bundles.vendor.js,
     js: req.app.locals.bundles.billing.js,
     apiUrl: apiUrl
   }

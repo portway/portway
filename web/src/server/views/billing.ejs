@@ -12,69 +12,8 @@
 <!-- Start plan selection -->
 <div class="section">
   <div class="container">
-
-    <div id="message-mount"></div>
-
-    <form id="payment-form" class="stripe-form" action="http://localHost:3001/api/billing" method="post">
-
-      <div class="field">
-        <label class="label" for="card-number">Credit or debit card</label>
-        <div class="control">
-          <!-- A Stripe Element will be inserted here. -->
-          <div id="card-number"></div>
-        </div>
-      </div>
-      <!-- /credit card field -->
-
-      <div class="field is-horizontal">
-        <div class="field-body">
-          <div class="field">
-            <label class="label" for="card-expiry">Expiration (MM/YY)</label>
-            <div class="control">
-              <!-- A Stripe Element will be inserted here. -->
-              <div id="card-expiry"></div>
-            </div>
-          </div>
-          <div class="field">
-            <label class="label" for="card-expiry">CVC</label>
-            <div class="control">
-              <!-- A Stripe Element will be inserted here. -->
-              <div id="card-cvc"></div>
-            </div>
-          </div>
-          <div class="field">
-            <label class="label" for="zip-code">Zip code</label>
-            <div class="control">
-              <input id="zip-code" class="input" type="number" name="zip-code" placeholder="97215" autocomplete="section-billing postal-code">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label" for="email">Your email</label>
-        <div class="control">
-          <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-billing username">
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label" for="plan">Plan ID</label>
-        <div class="control">
-          <input class="input is-static" type="text" name="planId" value="plan_ETYqFpkbcgDast" disabled readonly>
-        </div>
-      </div>
-
-      <div class="field">
-        <div class="control">
-          <input class="button is-primary" type="submit" value="Submit Payment">
-        </div>
-      </div>
-
-    </form>
+    <div id="billing-component"></div>
   </div>
 </div>
-
-<script src="https://js.stripe.com/v3/"></script>
 
 <%- include('partials/foot'); %>

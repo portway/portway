@@ -10,7 +10,6 @@ const renderBundles = (req, pageTitle) => {
     title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
     permalink: makePermalinkWithString(pageTitle),
     css: req.app.locals.bundles.index.css,
-    vendor: req.app.locals.bundles.vendor.js,
     js: req.app.locals.bundles.index.js
   }
 }
@@ -33,10 +32,7 @@ router.post('/sign-in', auth.loginMiddleware, (req, res) => {
 })
 
 router.get('/sign-in/password-reset', (req, res) => {
-  res.render(
-    'user/password-reset',
-    renderBundles(req, 'Reset password')
-  )
+  res.render('user/password-reset', renderBundles(req, 'Reset password'))
 })
 
 export default router
