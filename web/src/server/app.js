@@ -47,10 +47,25 @@ if (devMode) {
     const webpackStats = stats.toJson('normal').chunks
     const bundles = {}
     webpackStats.forEach((bundle) => {
-      const files = bundle.files.map(file => file)
-      bundles[`${bundle.id}`] = {
-        css: files.filter(file => fileExtReg.exec(file)[1] === 'css'),
-        js: files.filter(file => fileExtReg.exec(file)[1] === 'js')
+      // Only if the bundle is an entryPoint in webpack config
+      if (bundle.entry) {
+        console.info(`Entrypoint: ${bundle.id}`)
+        const files = bundle.files
+        const cssFiles = files.filter(file => fileExtReg.exec(file)[1] === 'css')
+        const jsFiles = files.filter(file => fileExtReg.exec(file)[1] === 'js')
+        // If the entryPoint has siblings, get their bundle files
+        const siblingFiles = []
+        if (bundle.siblings.length > 0) {
+          const siblings = bundle.siblings
+          siblings.forEach((sibling) => {
+            // Will bundles always have one file?
+            siblingFiles.push(webpackStats.find(b => b.id === sibling).files[0])
+          })
+        }
+        bundles[`${bundle.id}`] = {
+          css: cssFiles,
+          js: jsFiles.concat(siblingFiles)
+        }
       }
     })
     app.locals.bundles = bundles
@@ -61,7 +76,8 @@ if (devMode) {
     webpackMiddleware(compiler, {
       noInfo: true,
       publicPath: webpackConfig.output.publicPath,
-      mode: 'development'
+      mode: 'development',
+      stats: 'minimal'
     })
   )
 
@@ -83,13 +99,11 @@ if (devMode) {
     css && bundles[bundleKey].css.push(css)
     js && bundles[bundleKey].js.push(js)
   })
-
   app.locals.bundles = bundles
 }
 
 app.use(json())
 app.use(urlencoded())
-
 app.use(passport.initialize())
 
 // Set public directory for static assets

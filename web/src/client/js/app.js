@@ -6,6 +6,8 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import thunk from 'redux-thunk'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
+import registerServiceWorker from './utilities/registerServiceWorker'
+
 import Constants from 'Shared/constants'
 import rootReducer from './reducers'
 import ProjectContainer from 'Containers/Project/Project'
@@ -32,6 +34,8 @@ const App = () => {
 }
 
 render(<App />, document.getElementById('application'))
+
+registerServiceWorker()
 
 // Todo: Investigate why the globals.js doesnt work for this one
 if (process.env.NODE_ENV !== 'production' && module.hot) {

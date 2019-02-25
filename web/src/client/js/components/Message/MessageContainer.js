@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MessageComponent from './MessageComponent'
 
-class MessageComponentContainer extends React.Component {
+class MessageContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -32,10 +32,10 @@ class MessageComponentContainer extends React.Component {
   }
 }
 
-MessageComponentContainer.propTypes = {
+MessageContainer.propTypes = {
   visible: PropTypes.bool,
   type: PropTypes.string,
   message: PropTypes.string
 }
 
-export default MessageComponentContainer
+export default MessageContainer
