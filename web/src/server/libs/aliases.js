@@ -1,6 +1,7 @@
 
 const ALIASES = {
-  '/sign-in': '/users/sign-in'
+  '/sign-in': '/users/sign-in',
+  '/sign-up': '/users/sign-up'
 }
 
 const ALIAS_KEYS = Object.keys(ALIASES)
