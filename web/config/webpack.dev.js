@@ -1,32 +1,9 @@
 const webpack = require('webpack')
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
+// Custom stuff
+const SharedConfig = require('./webpack.shared')
 const entryPoints = require('./entryPoints.js')
-
-const globalStyleLoaders = [
-  {
-    loader: 'css-loader',
-    options: {
-      sourceMap: true
-    }
-  },
-  {
-    loader: 'postcss-loader',
-    options: {
-      sourceMap: true,
-      config: {
-        path: path.resolve(__dirname, './postcss.config.js')
-      }
-    }
-  },
-  {
-    loader: 'sass-loader',
-    options: {
-      sourceMap: true
-    }
-  }
-]
 
 module.exports = {
   mode: 'development',
@@ -37,65 +14,30 @@ module.exports = {
     chunkFilename: 'js/[name].bundle.js',
     publicPath: '/'
   },
-  plugins: [
-    new FixStyleOnlyEntriesPlugin(),
+  plugins: SharedConfig.plugins.concat([
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
       chunkFilename: 'css/[id].css'
     }),
     new webpack.HotModuleReplacementPlugin()
-  ],
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        vendor: {
-          name: 'vendor',
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
-        },
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
-      }
-    }
+  ]),
+  resolve: {
+    alias: SharedConfig.resolvers
   },
+  optimization: SharedConfig.optimization,
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
-      },
-      {
         test: /\.(sa|sc|c)ss$/,
         include: [path.resolve(__dirname, '../src/client/css')],
-        use: [MiniCssExtractPlugin.loader, ...globalStyleLoaders]
+        use: [MiniCssExtractPlugin.loader, ...SharedConfig.styleLoaders]
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        include: [
-          path.resolve(__dirname, '../src/client/components')
-        ],
-        use: ['style-loader', ...globalStyleLoaders]
+        include: [path.resolve(__dirname, '../src/client/js/components')],
+        use: ['style-loader', ...SharedConfig.styleLoaders]
       },
-      {
-        test: /\.(png|jp(e*)g|svg)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8000, // Convert images < 8kb to base64 strings
-              name: 'images/[hash]-[name].[ext]'
-            }
-          }
-        ]
-      }
+      ...SharedConfig.sharedLoaders
     ]
   }
 }

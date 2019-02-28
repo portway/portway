@@ -12,16 +12,10 @@ class MessageComponent extends React.PureComponent {
     }
     if (this.props.visible) {
       return (
-        <article
-          id="card-errors"
-          className={`message ${typeClass[this.props.type]}`}>
+        <article id="card-errors" className={`message ${typeClass[this.props.type]}`}>
           <div className="message-header">
             <p>Something went wrong...</p>
-            <button
-              className="delete"
-              aria-label="delete"
-              onClick={this.props.onDelete}
-            />
+            <button className="delete" aria-label="delete" onClick={this.props.onDelete} />
           </div>
           <div className="message-body">{this.props.message}</div>
         </article>

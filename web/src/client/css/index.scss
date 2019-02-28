@@ -1,7 +1,5 @@
 @import 'inc/base';
-@import 'bulma/sass/layout/hero.sass';
-@import 'bulma/sass/elements/form.sass';
-@import 'bulma/sass/components/card.sass';
+@import 'inc/theme';
 
 body.home {
   background: $info;

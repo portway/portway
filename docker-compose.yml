@@ -13,6 +13,8 @@ services:
     command: devstart
     ports:
       - 3000:3000
+    env_file:
+      - ./web/src/server/.env
     environment:
       NODE_ENV: development
 
@@ -28,6 +30,8 @@ services:
     command: ./wait-for.sh db:5432 -- npm run migrate && npm run serve
     ports:
       - 3001:3001
+    env_file:
+      - ./api/.env
     environment:
       NODE_ENV: development
       API_PORT: 3001
@@ -42,7 +46,7 @@ services:
       POSTGRES_USER: bonkey
       POSTGRES_PASSWORD: bong
     volumes:
-      - database_data:/var/lib/postgresql/dev_db
+      - .database_data:/var/lib/postgresql/dev_db
     ports:
       - 5432:5432
 

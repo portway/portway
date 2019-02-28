@@ -1,0 +1,53 @@
+.editor-text {
+  // Override the SimpleMDE styling
+  .CodeMirror {
+    border: none;
+
+    .CodeMirror-code {
+      .cm-header-1 {
+        font-size: 200%;
+        line-height: 200%;
+      }
+
+      .cm-header-2 {
+        font-size: 160%;
+        line-height: 160%;
+      }
+
+      .cm-header-3 {
+        font-size: 125%;
+        line-height: 125%;
+      }
+
+      .cm-header-4 {
+        font-size: 110%;
+        line-height: 110%;
+      }
+
+      .cm-comment {
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 2px;
+      }
+
+      .cm-link {
+        color: #7f8c8d;
+      }
+
+      .cm-url {
+        color: #aab2b3;
+      }
+
+      .cm-strikethrough {
+        text-decoration: line-through;
+      }
+
+      .CodeMirror-placeholder {
+        opacity: 0.5;
+      }
+
+      .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+        background: rgba(255, 0, 0, 0.15);
+      }
+    }
+  }
+}

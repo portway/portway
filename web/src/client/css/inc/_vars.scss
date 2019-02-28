@@ -7,3 +7,19 @@
 // Initial vars
 // Override any of these
 // https://github.com/jgthms/bulma/blob/master/sass/utilities/initial-variables.sass
+
+// http://screensiz.es/ipad-pro
+$breakpoints: (
+  small: 320px,
+  medium: 768px,
+  large: 1366px,
+  huge: 1920px
+);
+$padding: 0.25em 0.5em;
+
+// Colors
+$white: #fff;
+
+// Colors (from bulma)
+$white-ter: hsl(0, 0%, 96%);
+$link-active: hsl(0, 0%, 21%);
