@@ -4,85 +4,23 @@ import createError from 'http-errors'
 import { join } from 'path'
 import passport from 'passport'
 import logger from 'morgan'
+import cookieParser from 'cookie-parser'
 
 // Custom libraries
-import Constants from '../shared/constants'
 import { normalizePort } from './libs/express-utilities'
-
-// Un-auth'd Routes
-import indexRouter from './routes/index'
-
-// Auth'd Routes
-import appRouter from './routes/app'
-import billingRouter from './routes/billing'
+import controllerLoader from './controllers/loader'
+import aliasMiddleware from './libs/aliases'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
 const devMode = process.env.NODE_ENV !== 'production'
 
-// Set up the routes
-app.use('/', indexRouter)
-// Auth'd routes
-app.use(Constants.PATH_APP, appRouter)
-app.use(Constants.PATH_BILLING, billingRouter)
-
 // If we're in development mode, load the development Webpack config
 // and use the Webpack Express Middleware to run webpack when the server
 // starts.
 if (devMode) {
-  const webpackConfig = require('../../config/webpack.dev')
-  const webpack = require('webpack')
-  const webpackMiddleware = require('webpack-dev-middleware')
-  const webpackHotMiddleware = require('webpack-hot-middleware')
-
-  // Enable the Webpack middleware, with Webpack options
-  // const compiler = webpack(webpackConfig)
-  const compiler = webpack(webpackConfig)
-
-  // Get the files and dependent chunks for each bundle
-  compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
-    // Best way to find file extension of a string
-    // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
-    const fileExtReg = /(?:\.([^.]+))?$/
-    const webpackStats = stats.toJson('normal').chunks
-    const bundles = {}
-    webpackStats.forEach((bundle) => {
-      // Only if the bundle is an entryPoint in webpack config
-      if (bundle.entry) {
-        console.info(`Entrypoint: ${bundle.id}`)
-        const files = bundle.files
-        const cssFiles = files.filter(file => fileExtReg.exec(file)[1] === 'css')
-        const jsFiles = files.filter(file => fileExtReg.exec(file)[1] === 'js')
-        // If the entryPoint has siblings, get their bundle files
-        const siblingFiles = []
-        if (bundle.siblings.length > 0) {
-          const siblings = bundle.siblings
-          siblings.forEach((sibling) => {
-            // Will bundles always have one file?
-            siblingFiles.push(webpackStats.find(b => b.id === sibling).files[0])
-          })
-        }
-        bundles[`${bundle.id}`] = {
-          css: cssFiles,
-          js: jsFiles.concat(siblingFiles)
-        }
-      }
-    })
-    app.locals.bundles = bundles
-  })
-
-  // Use webpack middleware
-  app.use(
-    webpackMiddleware(compiler, {
-      noInfo: true,
-      publicPath: webpackConfig.output.publicPath,
-      mode: 'development',
-      stats: 'minimal'
-    })
-  )
-
-  // Enable Webpack hot reloading with Express
-  app.use(webpackHotMiddleware(compiler))
+  const webpackDevMiddleware = require('./libs/webpackDevMiddleware').default
+  webpackDevMiddleware(app)
 } else {
   // Using the WebpackAssetsManifest plugin output in production, store the
   // dynamic bundle names (hashed) in  JSON file for use in the Express views
@@ -102,8 +40,12 @@ if (devMode) {
   app.locals.bundles = bundles
 }
 
+// Middlewares
+app.use(aliasMiddleware)
+app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded())
+app.use(cookieParser())
 app.use(passport.initialize())
 
 // Set public directory for static assets
@@ -114,7 +56,10 @@ app.use(express.static(join(__dirname, './public')))
 app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.set('port', port)
-app.use(logger('dev'))
+
+const router = express.Router()
+controllerLoader(router)
+app.use(router)
 
 // Server Events
 const onListening = () => {
