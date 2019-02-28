@@ -35,6 +35,6 @@ export function loadModels() {
   }
 
   modelFilePaths.forEach((file) => {
-    connectedDb.import(path.join(__dirname, '../models', file))
+    connectedDb.import(path.join(__dirname, 'models', file))
   })
 }
