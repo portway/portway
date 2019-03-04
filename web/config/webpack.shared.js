@@ -16,14 +16,12 @@ const SharedConfig = {
     new FixStyleOnlyEntriesPlugin(),
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '../src/client/css/fonts'),
-        to: 'css/fonts/',
-        toType: 'dir',
-        force: true
-      },
-      {
         from: path.resolve(__dirname, '../src/client/images'),
         to: 'images'
+      },
+      {
+        from: path.resolve(__dirname, '../src/client/css/fonts'),
+        to: 'css/fonts/'
       },
       {
         from: path.resolve(__dirname, '../src/client/manifest.webmanifest'),
