@@ -1,12 +1,5 @@
 import { ActionTypes, Project } from './index'
-
-/**
- * Fetch projects for the user
- * @returns Promise with data
- */
-const getProjectsForUser = () => {
-  return true
-}
+import { fetch } from '../api'
 
 /**
  * Redux action
@@ -15,9 +8,9 @@ const getProjectsForUser = () => {
 export const listProjects = () => {
   return (dispatch) => {
     dispatch(Project.list())
-    return getProjectsForUser().then((data) => {
+    return fetch('projects').then((data) => {
       dispatch({
-        type: ActionTypes.LIST_PROJECTS,
+        type: ActionTypes.RECEIVE_PROJECTS,
         data
       })
     })

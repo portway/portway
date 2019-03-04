@@ -6,7 +6,7 @@ const initialState = {
     users: []
   },
   '2': {
-    name: 'Gates Performance Overview Tool',
+    name: 'Scenic Trails',
     users: []
   }
 }
