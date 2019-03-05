@@ -1,5 +1,4 @@
 @import 'inc/base';
-@import 'inc/theme';
 
 .StripeElement {
   // @extend .input;
@@ -18,7 +17,7 @@
 }
 
 .StripeElement--invalid {
-  @extend .is-danger;
+  // @extend .is-danger;
 }
 
 .StripeElement--webkit-autofill {

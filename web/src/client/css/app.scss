@@ -1,27 +1,16 @@
 @import 'inc/base';
-@import 'inc/theme';
 
-.app-container {
-  display: flex;
-  flex-direction: column-reverse;
-  height: 100vh;
+body {
+  font-size: 0.75em;
+}
 
-  div[role='main'] {
-    flex: 1 0;
-    overflow: hidden;
-    .scroll-container {
-      height: 100%;
-      overflow-y: auto;
-      overscroll-behavior-y: contain;
-      -webkit-overflow-scrolling: touch;
-    }
-  }
+p {
+  font-size: 1em;
+  line-height: 1.167em;
+  margin: 0.417em 0;
+}
 
-  .masthead {
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    width: 100vw;
-    z-index: 10;
-  }
+label {
+  font-weight: bold;
+  text-transform: uppercase;
 }
