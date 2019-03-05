@@ -8,7 +8,9 @@
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node",
     "test": "jest",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "migrate": "sequelize db:migrate",
+    "seed": "sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -46,6 +48,7 @@
     "pretty-quick": "^1.10.0"
   },
   "dependencies": {
+    "bcrypt": "^3.0.4",
     "express": "^4.16.4",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
@@ -55,6 +58,7 @@
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.42.0",
+    "sequelize-cli": "^5.4.0",
     "stripe": "^6.23.1"
   },
   "jest": {

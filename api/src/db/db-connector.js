@@ -1,4 +1,6 @@
 import Sequelize from 'sequelize'
+import path from 'path'
+import { modelFilePaths } from './models'
 
 let connectedDb
 
@@ -25,4 +27,14 @@ export function getDb() {
     throw new Error('You must call connect() before using db')
   }
   return connectedDb
+}
+
+export function loadModels() {
+  if (!connectedDb) {
+    throw new Error('Must have a connected db before loading models')
+  }
+
+  modelFilePaths.forEach((file) => {
+    connectedDb.import(path.join(__dirname, 'models', file))
+  })
 }

@@ -9,6 +9,8 @@ case $1 in
     npm test
     ;;
   devstart)
+    npm run migrate
+    npm run seed
     npm run serve
     ;;
 esac
