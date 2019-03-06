@@ -27,11 +27,19 @@ app.use((req, res, next) => {
   )
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
+    'Access-Control-Allow-Headers, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
   )
-  //and remove cacheing so we get the most recent comments
+  // remove caching to ensure fresh results
   res.setHeader('Cache-Control', 'no-cache')
-  next()
+
+  // Respond to OPTION requests before doing anything else
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Content-Length', '0')
+    res.statusCode = 204
+    res.end()
+  } else {
+    next()
+  }
 })
 
 app.use(passport.initialize())
