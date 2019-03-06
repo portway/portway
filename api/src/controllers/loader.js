@@ -6,7 +6,8 @@ import auth from '../libs/auth'
 
 // Controllers that uses default auth
 const AUTHENTICATED_CONTROLLERS = {
-  '/billing': 'billing'
+  '/billing': 'billing',
+  '/projects': 'projects'
 }
 
 // Define controllers with custom auth (must be implemented in the controller!)
