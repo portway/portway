@@ -11,8 +11,7 @@ make start
 make stop
 
 // Changed a dependency in package.json?
-make cleardev
-make builddev
+make rebuilddev
 make start
 
 // Production image build

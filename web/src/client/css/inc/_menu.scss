@@ -1,0 +1,25 @@
+@import '_vars';
+
+.menu {
+  background: $white;
+  border: thin solid $gray-dark;
+  border-radius: 2px;
+  padding: 14px 12px;
+  > ol,
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.menu__item {
+  padding: 3px 4px;
+  a {
+    color: $black-bis;
+    text-decoration: none;
+    &:hover {
+      background-color: $white-ter;
+    }
+  }
+}

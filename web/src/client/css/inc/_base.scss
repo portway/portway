@@ -2,6 +2,7 @@
 @import 'include-media';
 @import 'type';
 @import 'lists';
+@import 'buttons';
 @import 'hacks';
 
 html,
@@ -16,22 +17,33 @@ body {
   padding: 0;
 }
 
-h1 {
+h1,
+.h-first-level {
+  color: $primary;
   font-family: $serif;
   font-size: 1.867em;
+  font-weight: 700;
   line-height: 0.643em;
   letter-spacing: 0.003em;
+  a {
+    color: $primary;
+    text-decoration: none;
+  }
 }
 
-h2 {
+h2,
+.h-second-level {
   font-family: $serif;
   font-size: 1.6em;
+  font-weight: 700;
   line-height: 0.75em;
 }
 
-h3 {
+h3,
+.h-third-level {
   font-family: $serif;
   font-size: 1.2em;
+  font-weight: 400;
   line-height: 1em;
 }
 

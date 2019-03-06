@@ -2,6 +2,7 @@
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
   PRODUCT_ID: 'project-danger',
+  PRODUCT_LOGO: '/images/logo.svg',
   // Paths
   PATH_APP: '/d',
   PATH_BILLING: '/billing',

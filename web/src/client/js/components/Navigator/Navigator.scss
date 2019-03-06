@@ -1,0 +1,24 @@
+@import 'CSS/inc/_menu.scss';
+
+.navigator {
+  // &--projects {}
+  // &--project {}
+
+  &__title {
+    align-items: center;
+    display: flex;
+    margin: 0;
+    &:before {
+      background: url('/images/icon/arrow-down.svg') no-repeat 50% 50%;
+      background-size: 50%;
+      content: '';
+      display: inline-block;
+      height: 36px;
+      width: 36px;
+    }
+  }
+
+  &__menu {
+    @extend .menu;
+  }
+}

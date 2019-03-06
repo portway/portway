@@ -2,25 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import Header from 'Components/Header/Header'
 import ProjectsListComponent from 'Components/ProjectsList/ProjectsList'
-import BillingContainer from 'Components/Billing/BillingContainer'
 
 class DashboardContainer extends React.Component {
   render() {
     return (
-      <div role="main">
-        <div className="scroll-container section">
-          <h1>Dashboard</h1>
-          <ProjectsListComponent projects={this.props.projects} />
-          <p>This is a test to see if we can mount the billing component anywhere</p>
-          <BillingContainer />
+      <React.Fragment>
+        <Header path={this.props.match.path} />
+        <div role="main">
+          <div className="scroll-container section">
+            <h1>Dashboard</h1>
+            <ProjectsListComponent projects={this.props.projects} />
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }
 
 DashboardContainer.propTypes = {
+  match: PropTypes.object,
   projects: PropTypes.object
 }
 
