@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import { Link, NavLink } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
-import Navigator from '../Navigator/NavigatorContainer'
+import Navigator from 'Components/Navigator/NavigatorContainer'
+import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
+
 import './Header.scss'
 
 const brand = {
@@ -18,7 +20,7 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const Header = ({ path }) => {
+const Header = ({ path, params }) => {
   const section = path.split('/')[1]
   return (
     <header className="masthead" role="banner">
@@ -35,8 +37,10 @@ const Header = ({ path }) => {
             </h1>
           )}
           {`/${section}` !== Constants.PATH_DASHBOARD &&
-            `/${section}` !== Constants.PATH_SETTINGS && <Navigator section={section} />}
-          <input type="search" name="globalSearch" placeholder="Find anything..." />
+            `/${section}` !== Constants.PATH_SETTINGS && (
+            <Navigator section={section} params={params} />
+          )}
+          <GlobalSearchContainer params={params} />
         </div>
         <div className="navbar-user">
           <NavLink to={Constants.PATH_SETTINGS} className="navbar-settings-link">
@@ -49,7 +53,8 @@ const Header = ({ path }) => {
 }
 
 Header.propTypes = {
-  path: PropTypes.string
+  path: PropTypes.string,
+  params: PropTypes.object
 }
 
 export default Header

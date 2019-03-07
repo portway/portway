@@ -6,6 +6,7 @@ button {
   cursor: pointer;
   margin: 0;
   padding: 0;
+  -webkit-appearance: none;
   &:active {
     color: inherit;
   }

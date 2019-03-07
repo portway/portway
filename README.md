@@ -20,4 +20,4 @@ make build
 
 ## Documentation
 
-1. [Express and Webpack Build](docs/BUILD.md)
+1. [Express and Webpack Build](docs/WEB.md)

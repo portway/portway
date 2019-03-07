@@ -1,24 +1,71 @@
 @import 'CSS/inc/_menu.scss';
+@import 'CSS/animations/_rotateAndScale.scss';
 
 .navigator {
+  align-items: center;
+  display: flex;
+  position: relative;
+
   // &--projects {}
   // &--project {}
 
+  button[aria-expanded='true'] {
+    .navigator__title {
+      background: $white-ter;
+      border-top: thin solid $gray;
+      border-left: thin solid $gray;
+      border-right: thin solid $gray;
+      border-radius: 2px 2px;
+      &:before {
+        animation-fill-mode: forwards;
+        animation-duration: 0.2s;
+        animation-timing-function: ease;
+        animation-name: rotateAndScale;
+      }
+    }
+  }
+
   &__title {
     align-items: center;
+    border: thin solid transparent;
     display: flex;
     margin: 0;
+    padding-right: 16px;
     &:before {
       background: url('/images/icon/arrow-down.svg') no-repeat 50% 50%;
       background-size: 50%;
       content: '';
       display: inline-block;
       height: 36px;
+      transition: transform 0.2s ease-out;
       width: 36px;
+      will-change: transform, opacity;
     }
   }
 
   &__menu {
+    $animationLength: 0.3s;
     @extend .menu;
+    left: -16px;
+    position: absolute;
+    min-width: 136px;
+    top: 27px;
+    transition: visibility 0s linear, transform $animationLength ease;
+    will-change: visibility, transform, opacity;
+
+    &[hidden] {
+      display: block;
+      opacity: 0;
+      transform: translateY(0);
+      transition: visibility 0s ease 0.5s, transform $animationLength ease, opacity 0.2s ease;
+      visibility: hidden;
+    }
+
+    &:not([hidden]) {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+      opacity: 1;
+      transform: translateY(5px);
+      visibility: visible;
+    }
   }
 }
