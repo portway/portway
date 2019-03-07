@@ -1,10 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { fetchProjects } from 'Actions/project'
 
 import ProjectsListComponent from 'Components/ProjectsList/ProjectsList'
 
 class ProjectsContainer extends React.Component {
+  componentDidMount() {
+    this.props.fetchProjects()
+  }
+
   render() {
     return (
       <div role="main">
@@ -43,12 +49,8 @@ const mapStateToProps = (state) => {
   }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onSomeFunction: (id) => {
-//       dispatch(someAction(id))
-//     }
-//   }
-// }
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ fetchProjects }, dispatch)
+}
 
-export default connect(mapStateToProps)(ProjectsContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectsContainer)

@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
@@ -9,6 +10,7 @@ const SharedConfig = {
   resolvers: {
     Containers: path.resolve(__dirname, '../src/client/js/containers'),
     Components: path.resolve(__dirname, '../src/client/js/components'),
+    Actions: path.resolve(__dirname, '../src/client/js/actions'),
     Shared: path.resolve(__dirname, '../src/shared'),
     CSS: path.resolve(__dirname, '../src/client/css')
   },
@@ -41,7 +43,10 @@ const SharedConfig = {
       minify: true,
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
     }),
-    new WebpackAssetsManifest()
+    new WebpackAssetsManifest(),
+    new webpack.DefinePlugin({
+      VAR_API_URL: JSON.stringify(process.env.API_PUBLIC_URL)
+    })
   ],
   optimization: {
     splitChunks: {

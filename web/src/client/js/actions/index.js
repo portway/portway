@@ -3,6 +3,7 @@ import { makeActionCreator } from '../utilities/redux'
 export const ActionTypes = {
   // Projects
   LIST_PROJECTS: 'LIST_PROJECTS',
+  RECEIVE_PROJECTS: 'RECEIVE_PROJECTS',
   CREATE_PROJECT: 'CREATE_PROJECT',
   EDIT_PROJECT: 'EDIT_PROJECT',
   DELETE_PROJECT: 'DELETE_PROJECT',

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import ProjectsListComponent from 'Components/ProjectsList/ProjectsList'
+import ProjectsListContainer from 'Containers/Projects/Projects'
 import BillingContainer from 'Components/Billing/BillingContainer'
 
 class DashboardContainer extends React.Component {
@@ -11,7 +11,7 @@ class DashboardContainer extends React.Component {
       <div role="main">
         <div className="scroll-container section">
           <h1>Dashboard</h1>
-          <ProjectsListComponent projects={this.props.projects} />
+          <ProjectsListContainer />
           <p>This is a test to see if we can mount the billing component anywhere</p>
           <BillingContainer />
         </div>
@@ -25,9 +25,7 @@ DashboardContainer.propTypes = {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    projects: state.projects
-  }
+  return {}
 }
 
 export default connect(mapStateToProps)(DashboardContainer)
