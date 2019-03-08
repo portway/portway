@@ -8,6 +8,7 @@ import './Navigator.scss'
 class NavigatorComponent extends React.Component {
   constructor(props) {
     super(props)
+    this.timeOutId = null
     this.nodeRef = React.createRef()
     this.menuRef = React.createRef()
     this.state = {
@@ -40,10 +41,15 @@ class NavigatorComponent extends React.Component {
     const { match, projects } = this.props
     const section = match.path.split('/')[1]
     return (
-      <div className={`navigator navigator--${section}`} ref={this.nodeRef}>
+      <div
+        ref={this.nodeRef}
+        className={`navigator navigator--${section}`}
+        onBlur={this.onBlurHandler.bind(this)}
+        onFocus={this.onFocusHandler.bind(this)}>
         <button
           aria-expanded={this.state.expanded}
           aria-haspopup
+          aria-label="Select a project"
           onClick={this.expandMenu.bind(this)}>
           <h2 className="navigator__title h-third-level">{this.renderTitle()}</h2>
         </button>
@@ -58,6 +64,18 @@ class NavigatorComponent extends React.Component {
     this.setState({ expanded: !this.state.expanded }, () => {
       this.menuRef.current.hidden = !this.state.expanded
     })
+  }
+
+  onBlurHandler() {
+    this.timeOutId = setTimeout(() => {
+      this.setState({
+        expanded: false
+      })
+    })
+  }
+
+  onFocusHandler() {
+    clearTimeout(this.timeOutId)
   }
 
   mouseDownHandler(e) {
