@@ -1,4 +1,4 @@
-import { ActionTypes, Project } from './index'
+import { ActionTypes, Projects, Project } from './index'
 import { fetch } from '../api'
 
 /**
@@ -7,10 +7,22 @@ import { fetch } from '../api'
  */
 export const fetchProjects = () => {
   return (dispatch) => {
-    dispatch(Project.list())
+    dispatch(Projects.request())
     return fetch('projects').then((data) => {
       dispatch({
         type: ActionTypes.RECEIVE_PROJECTS,
+        data
+      })
+    })
+  }
+}
+
+export const fetchProject = (id) => {
+  return (dispatch) => {
+    dispatch(Project.request(id))
+    return fetch(`projects/${id}`).then((data) => {
+      dispatch({
+        type: ActionTypes.RECEIVE_PROJECT,
         data
       })
     })

@@ -1,0 +1,7 @@
+@import 'CSS/inc/_menu.scss';
+
+.navigator-item-list {
+  &__list-item {
+    @extend .menu__item;
+  }
+}

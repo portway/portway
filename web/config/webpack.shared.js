@@ -8,7 +8,7 @@ const Constants = require('../src/shared/constants')
 
 const SharedConfig = {
   resolvers: {
-    Containers: path.resolve(__dirname, '../src/client/js/containers'),
+    Sections: path.resolve(__dirname, '../src/client/js/sections'),
     Components: path.resolve(__dirname, '../src/client/js/components'),
     Actions: path.resolve(__dirname, '../src/client/js/actions'),
     Shared: path.resolve(__dirname, '../src/shared'),

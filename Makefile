@@ -4,8 +4,10 @@ build:
 builddev:
 	./build.sh && docker-compose build
 
+rebuilddev:
+	docker-compose down && ./build.sh && docker-compose build --no-cache
+
 cleardev:
-	# Erases the volumes, including node_modules. Run this if node_modules changes
 	docker-compose down
 
 start:

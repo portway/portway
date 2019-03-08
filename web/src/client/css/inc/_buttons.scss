@@ -1,0 +1,13 @@
+// Reset all buttons to blank
+button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  &:active {
+    color: inherit;
+  }
+}

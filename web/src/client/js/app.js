@@ -10,10 +10,9 @@ import registerServiceWorker from './utilities/registerServiceWorker'
 
 import Constants from 'Shared/constants'
 import rootReducer from './reducers'
-import ProjectContainer from 'Containers/Project/Project'
-import ProjectsContainer from 'Containers/Projects/Projects'
-import DashboardContainer from 'Containers/Dashboard/Dashboard'
-import Navigation from 'Components/Navigation/Navigation'
+import ProjectSection from 'Sections/Project/ProjectSection'
+import ProjectsSection from 'Sections/Projects/ProjectsSection'
+import DashboardSection from 'Sections/Dashboard/DashboardSection'
 
 const middlewares = [thunk]
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)))
@@ -23,10 +22,9 @@ const App = () => {
     <Provider store={store}>
       <Router basename={Constants.PATH_APP}>
         <div className="app-container">
-          <Navigation />
-          <Route exact path="/project/:projectId" component={ProjectContainer} />
-          <Route exact path="/projects" component={ProjectsContainer} />
-          <Route exact path="/dashboard" component={DashboardContainer} />
+          <Route exact path="/project/:projectId" component={ProjectSection} />
+          <Route exact path="/projects" component={ProjectsSection} />
+          <Route exact path="/dashboard" component={DashboardSection} />
         </div>
       </Router>
     </Provider>

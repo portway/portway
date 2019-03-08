@@ -1,0 +1,12 @@
+@keyframes rotateAndScale {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  50% {
+    transform: rotate(-90deg) scale(0.7);
+  }
+  100% {
+    opacity: 0.2;
+    transform: rotate(-180deg) scale(1);
+  }
+}

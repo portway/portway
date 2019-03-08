@@ -12,8 +12,7 @@ make sequelize db:seed:all
 make stop
 
 // Changed a dependency in package.json?
-make cleardev
-make builddev
+make rebuilddev
 make start
 
 // Production image build
@@ -22,4 +21,4 @@ make build
 
 ## Documentation
 
-1. [Express and Webpack Build](docs/BUILD.md)
+1. [Express and Webpack Build](docs/WEB.md)

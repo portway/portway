@@ -2,18 +2,15 @@ import { ActionTypes } from '../actions'
 
 const initialState = {}
 
-export const projects = (state = initialState, action) => {
+export const project = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.RECEIVE_PROJECTS:
-      return action.data.reduce((projectsById, project) => {
-        projectsById[project.id] = project
-        return projectsById
-      }, {})
+    // Project
+    case ActionTypes.REQUEST_PROJECT:
+      console.info('Requesting project', action.id)
+      return state
       break
-    case ActionTypes.LIST_PROJECTS:
-    case ActionTypes.CREATE_PROJECT:
-    case ActionTypes.EDIT_PROJECT:
-    case ActionTypes.DELETE_PROJECT:
+    case ActionTypes.RECEIVE_PROJECT:
+      return action.data
     default:
       return state
   }

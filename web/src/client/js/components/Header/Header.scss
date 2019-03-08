@@ -1,0 +1,55 @@
+@import 'CSS/inc/_vars.scss';
+
+.masthead {
+  border-top: 6px solid $highlight;
+
+  .navbar {
+    align-items: center;
+    border-bottom: thin solid $gray-light;
+    display: flex;
+
+    // Brand area is top left, with logo
+    .navbar-brand {
+      width: 64px;
+      .navbar-logo {
+        // the logo is a span with a background image applied from a database
+        background-size: 30%;
+        display: block;
+        height: 64px;
+        width: 64px;
+      }
+    }
+
+    // The middle of the content
+    .navbar-content {
+      align-items: center;
+      flex: 1 0 auto;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 12px 0 0;
+      .navbar-brand-name {
+        margin: 0;
+        // Default is our branding, we get a little special treatment
+        &.default {
+          margin-left: -10px;
+        }
+      }
+    }
+
+    // The right-most area with user related functions
+    .navbar-user {
+      align-items: center;
+      border-left: thin solid $gray-light;
+      display: flex;
+      height: 64px;
+      min-width: 64px;
+
+      .navbar-settings-link {
+        display: block;
+        height: 40px;
+        margin: auto;
+        width: 40px;
+      }
+    }
+  } // navbar
+}

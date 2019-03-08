@@ -31,10 +31,14 @@ const getProject = async function(req, res) {
   const db = getDb()
   let project
   try {
-    project = await db.model('Project').findOne({ where: { id } }, { raw: true })
+    project = await db
+      .model('Project')
+      .findOne({ where: { id } }, { raw: true })
   } catch (e) {
     console.error(e)
-    res.status(500).json({ error: `error fetching project with id ${id}` })
+    res
+      .status(500)
+      .json({ error: `error fetching project with id ${id}` })
   }
   res.json(project)
 }
@@ -44,7 +48,9 @@ const addProject = async function(req, res) {
   const { name } = req.body
   let project
   try {
-    project = await db.model('Project').create({ name }, { raw: true })
+    project = await db
+      .model('Project')
+      .create({ name }, { raw: true })
     res.json(project)
   } catch (e) {
     console.error(e)

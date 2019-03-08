@@ -1,0 +1,36 @@
+@import '_vars';
+
+.menu {
+  background: $white;
+  border: thin solid $gray-dark;
+  border-radius: 2px;
+  padding: 14px 12px;
+  > ol,
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.menu__item {
+  margin-bottom: 2px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  a {
+    border-radius: 2px;
+    color: $black-bis;
+    display: block;
+    padding: 3px 4px;
+    text-decoration: none;
+    max-width: 313px;
+    width: 313px;
+    &:hover {
+      background-color: $white-ter;
+    }
+    &.active {
+      background-color: $gray;
+    }
+  }
+}
