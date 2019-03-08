@@ -8,6 +8,7 @@ cp api/example.env api/.env
 cp web/src/server/example.env web/src/server/.env
 make builddev
 make start
+make sequelize db:seed:all
 make stop
 
 // Changed a dependency in package.json?
