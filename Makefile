@@ -5,7 +5,7 @@ builddev:
 	./build.sh && docker-compose build
 
 rebuilddev:
-	./build.sh && docker-compose build --no-cache
+	docker-compose down && ./build.sh && docker-compose build --no-cache
 
 cleardev:
 	docker-compose down
