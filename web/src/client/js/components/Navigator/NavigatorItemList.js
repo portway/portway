@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import './NavigatorItemList.scss'
 
 const NavigatorItemList = ({ items }) => {
+  if (!items) return null
   const itemKeys = Object.keys(items)
   const itemList = itemKeys.map((item) => {
     return (

@@ -6,7 +6,8 @@ import auth from '../libs/auth'
 
 // Controllers that uses default auth
 const AUTHENTICATED_CONTROLLERS = {
-  '/billing': 'billing'
+  '/billing': 'billing',
+  '/projects': 'projects'
 }
 
 // Define controllers with custom auth (must be implemented in the controller!)
@@ -15,7 +16,7 @@ const UNAUTHENTICATED_CONTROLLERS = {
 }
 
 const loadControllers = (router, controllers, middleware) => {
-  Object.keys(controllers).forEach((path) => {
+  Object.keys(controllers).forEach(path => {
     const controllerFileName = controllers[path]
     const controller = require(`./${controllerFileName}`).default
     const controllerRouter = express.Router()
@@ -28,7 +29,7 @@ const loadControllers = (router, controllers, middleware) => {
   })
 }
 
-const loader = (router) => {
+const loader = router => {
   loadControllers(router, AUTHENTICATED_CONTROLLERS, [
     auth.jwtMiddleware
   ])

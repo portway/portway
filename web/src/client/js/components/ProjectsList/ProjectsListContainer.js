@@ -1,9 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
+import { fetchProjects } from 'Actions/project'
 import ProjectsListItem from './ProjectsListItem'
 
-class ProjectsListComponent extends React.PureComponent {
+class ProjectsListContainer extends React.Component {
+  componentDidMount() {
+    this.props.fetchProjects()
+  }
+
   renderProjectList() {
     if (typeof this.props.projects !== 'undefined') {
       return Object.keys(this.props.projects).map((project, index) => {
@@ -27,8 +34,22 @@ class ProjectsListComponent extends React.PureComponent {
   }
 }
 
-ProjectsListComponent.propTypes = {
+ProjectsListContainer.propTypes = {
+  fetchProjects: PropTypes.func,
   projects: PropTypes.object
 }
 
-export default ProjectsListComponent
+const mapStateToProps = (state) => {
+  return {
+    projects: state.projects
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ fetchProjects }, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProjectsListContainer)
