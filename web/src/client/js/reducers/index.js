@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux'
-import { project, projects } from './projects'
+
+import { project } from './project'
+import { projects } from './projects'
 
 const App = combineReducers({
   project,
