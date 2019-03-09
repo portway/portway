@@ -1,42 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
+import useDataService from '../../hooks/useDataService'
 
-import { fetchProjects } from 'Actions/project'
 import ProjectsListItem from './ProjectsListItem'
 
-class ProjectsListContainer extends React.Component {
-  componentDidMount() {
-    this.props.fetchProjects()
-  }
+function ProjectsListContainer(props) {
+  useDataService('projects')
 
-  renderProjectList() {
-    if (typeof this.props.projects !== 'undefined') {
-      return Object.keys(this.props.projects).map((project, index) => {
-        return (
-          <ProjectsListItem
-            key={index}
-            projectId={project}
-            project={this.props.projects[project]}
-          />
-        )
-      })
-    }
-  }
-
-  render() {
+  const projectList = Object.keys(props.projects).map((projectId) => {
     return (
-      <div>
-        <ol>{this.renderProjectList()}</ol>
-      </div>
+      <ProjectsListItem key={projectId} projectId={projectId} project={props.projects[projectId]} />
     )
-  }
-}
+  })
 
-ProjectsListContainer.propTypes = {
-  fetchProjects: PropTypes.func,
-  projects: PropTypes.object
+  return (
+    <div>
+      <ol>{projectList}</ol>
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => {
@@ -45,11 +27,11 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ fetchProjects }, dispatch)
-}
+// const mapDispatchToProps = (dispatch) => {
+//   return bindActionCreators({ fetchProjects }, dispatch)
+// }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
+  // mapDispatchToProps
 )(ProjectsListContainer)
