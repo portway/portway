@@ -1,5 +1,6 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 import UserCoordinator from '../coordinators/user'
+import ono from 'ono'
 
 const options = {
   session: false,
@@ -14,7 +15,7 @@ export default function(passport) {
       try {
         user = await UserCoordinator.validateEmailPasswordCombo(email, password)
       } catch (err) {
-        done(new Error(`Invalid user/pass ${email}`))
+        done(ono(err, `Invalid user/pass ${email}`))
       }
 
       console.info('logging in ' + email)
