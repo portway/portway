@@ -1,17 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
-// import { bindActionCreators } from 'redux'
+
+import dataMapper from '../../libs/dataMapper'
 import useDataService from '../../hooks/useDataService'
 
 import ProjectsListItem from './ProjectsListItem'
 
 function ProjectsListContainer(props) {
-  useDataService('projects')
+  const projects = useDataService(dataMapper.projects.list())
 
-  const projectList = Object.keys(props.projects).map((projectId) => {
-    return (
-      <ProjectsListItem key={projectId} projectId={projectId} project={props.projects[projectId]} />
-    )
+  const projectList = Object.keys(projects).map((projectId) => {
+    return <ProjectsListItem key={projectId} projectId={projectId} project={projects[projectId]} />
   })
 
   return (
@@ -21,17 +19,4 @@ function ProjectsListContainer(props) {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    projects: state.projects
-  }
-}
-
-// const mapDispatchToProps = (dispatch) => {
-//   return bindActionCreators({ fetchProjects }, dispatch)
-// }
-
-export default connect(
-  mapStateToProps
-  // mapDispatchToProps
-)(ProjectsListContainer)
+export default ProjectsListContainer
