@@ -8,13 +8,9 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
 const NavigatorContainer = ({ match }) => {
-  // const projects = useDataService(dataMapper.projects.list(), [])
+  const { data: projects } = useDataService(dataMapper.projects.list())
   // const project = useDataService(dataMapper.project.id(match.params.id))
   const project = null
-  const projects = {
-    1: { name: 'BonkeyBong' },
-    2: { name: 'Scenic Trails' }
-  }
 
   return <NavigatorComponent projects={projects} project={project} match={match} />
 }

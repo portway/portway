@@ -32,21 +32,19 @@ export default function useDataService(
   dependencies
 ) {
   // Callback arg to useState() only runs once!
-  const [data, setData] = useState(() => {
+  const [exposedData, setData] = useState(() => {
     const state = Store.getState()
     return getDataFromState(state)
   })
-  const [loading, setLoading] = useState(() => {
+  const [exposedLoading, setLoading] = useState(() => {
     const state = Store.getState()
     return getLoadingStatusFromState(state)
   })
 
   useEffect(() => {
-    console.log('useEffect')
     const loading = getLoadingStatusFromState(Store.getState())
     setLoading(loading)
-    
-    // Catches null or undefined
+
     if (loading == null) {
       Store.dispatch(fetchAction)
     }
@@ -69,5 +67,5 @@ export default function useDataService(
     }
   }, dependencies)
 
-  return data
+  return { data: exposedData, loading: exposedLoading }
 }

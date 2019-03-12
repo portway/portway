@@ -6,7 +6,7 @@ import useDataService from '../../hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
 const ProjectContainer = ({ match }) => {
-  const project = useDataService(dataMapper.project.id(match.params.projectId), [
+  const { data: project } = useDataService(dataMapper.project.id(match.params.projectId), [
     match.params.projectId
   ])
 
