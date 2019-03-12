@@ -31,7 +31,6 @@ export default function useDataService(
   { getDataFromState, getLoadingStatusFromState, fetchAction },
   dependencies = []
 ) {
-  
   // Callback arg to useState() only runs once!
   const [exposedData, setData] = useState(() => {
     const state = Store.getState()
@@ -66,6 +65,7 @@ export default function useDataService(
     return () => {
       unsubsubscribeFn()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 
   return { data: exposedData, loading: exposedLoading }
