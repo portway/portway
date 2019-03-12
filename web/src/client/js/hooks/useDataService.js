@@ -50,7 +50,7 @@ export default function useDataService({
     return () => {
       unsubsubscribeFn()
     }
-  })
+  }, []) // 2nd empty array arg means only run on mount/unmount
 
   return data
 }
