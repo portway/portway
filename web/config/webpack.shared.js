@@ -11,6 +11,7 @@ const SharedConfig = {
     Sections: path.resolve(__dirname, '../src/client/js/sections'),
     Components: path.resolve(__dirname, '../src/client/js/components'),
     Actions: path.resolve(__dirname, '../src/client/js/actions'),
+    Hooks: path.resolve(__dirname, '../src/client/js/hooks'),
     Shared: path.resolve(__dirname, '../src/shared'),
     CSS: path.resolve(__dirname, '../src/client/css')
   },
