@@ -24,7 +24,6 @@ function menuReducer(state, action) {
 
 const NavigatorComponent = ({ match, project, projects }) => {
   const nodeRef = useRef()
-  const buttonRef = useRef()
   const [state, dispatch] = useReducer(menuReducer, initialState)
   const section = match.path.split('/')[1]
 
@@ -46,7 +45,6 @@ const NavigatorComponent = ({ match, project, projects }) => {
   return (
     <div ref={nodeRef} className={`navigator navigator--${section}`}>
       <button
-        ref={buttonRef}
         aria-expanded={state.expanded}
         aria-haspopup
         aria-label="Select a project"
