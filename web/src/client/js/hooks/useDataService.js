@@ -9,12 +9,14 @@
  *   [Function] getDataFromState(state): [Mixed] data
  *   [Function] getLoadingStatusFromState(state): [Boolean|Undefined|Null] status
  *   [Function] fetchAction: [Function] dispatchAction
- * @param [Boolean] returnLoadingStatus
- *   Optionally return data and loading status
- * @return [Mixed|Array] data
- *   Returns data from getDataFromState function. If returnLoadingStatus is true,
- *   returns an array with two values, data and loading status from getLoadingStatusFromState: [data, loadingStatus]
- * useDataService(dataFuncs[, returnLoadingStatus])
+ * @param [Array] dependencies
+ *   Optionally define dependencies for when data should be refetched, such as an id
+ * @return [Object] resourceData
+ *   [Mixed] data: result of getDataFromState func
+ *   [Mixed|Boolean] loading: current loading status result from getLoadingStatusFromState
+ * [Mixed|Array] data
+ *   Returns data from getDataFromState function
+ * useDataService(dataFuncs[, dependencies])
  *
  *
  * Example Usage in a React Component:
