@@ -29,8 +29,9 @@ import Store from '../reducers'
 
 export default function useDataService(
   { getDataFromState, getLoadingStatusFromState, fetchAction },
-  dependencies
+  dependencies = []
 ) {
+  
   // Callback arg to useState() only runs once!
   const [exposedData, setData] = useState(() => {
     const state = Store.getState()
