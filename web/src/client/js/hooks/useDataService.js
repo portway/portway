@@ -29,7 +29,7 @@ import Store from '../reducers'
 
 export default function useDataService(
   { getDataFromState, getLoadingStatusFromState, fetchAction },
-  returnLoadingStatus
+  dependencies
 ) {
   // Callback arg to useState() only runs once!
   const [data, setData] = useState(() => {
@@ -41,31 +41,33 @@ export default function useDataService(
     return getLoadingStatusFromState(state)
   })
 
-  // Catches null or undefined
-  if (loading == null) {
-    Store.dispatch(fetchAction())
-  }
-
-  function handleStateChange() {
-    const state = Store.getState()
-    const loading = getLoadingStatusFromState(state)
-    setLoading(loading)
-    if (loading === false) {
-      const data = getDataFromState(state)
-      setData(data)
-    }
-  }
-
   useEffect(() => {
+    const loading = getLoadingStatusFromState(Store.getState())
+
+    // Catches null or undefined
+    if (loading == null) {
+      Store.dispatch(fetchAction)
+    }
+
+    function handleStateChange() {
+      console.log('useDataService hook handle store update')
+      const state = Store.getState()
+      const loading = getLoadingStatusFromState(state)
+      setLoading(loading)
+      console.log({ loading })
+      if (loading === false) {
+        const data = getDataFromState(state)
+        setData(data)
+      }
+    }
+
     const unsubsubscribeFn = Store.subscribe(handleStateChange)
+    handleStateChange()
+
     return () => {
       unsubsubscribeFn()
     }
-  }, []) // 2nd empty array arg means only run on mount/unmount
+  }, [fetchAction, getDataFromState, getLoadingStatusFromState])
 
-  if (returnLoadingStatus) {
-    return [data, loading]
-  } else {
-    return data
-  }
+  return data
 }

@@ -1,12 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+
 import { withRouter } from 'react-router-dom'
-import { bindActionCreators } from 'redux'
 
-import { fetchProjects } from 'Actions/project'
 import NavigatorComponent from './NavigatorComponent'
+import useDataService from 'Hooks/useDataService'
+import dataMapper from '../../libs/dataMapper'
 
+const NavigatorContainer = ({ match }) => {
+  // const projects = useDataService(dataMapper.projects.list(), [])
+  // const project = useDataService(dataMapper.project.id(match.params.id))
+  const project = null
+  const projects = {
+    1: { name: 'BonkeyBong' },
+    2: { name: 'Scenic Trails' }
+  }
+
+  return <NavigatorComponent projects={projects} project={project} match={match} />
+}
+
+NavigatorContainer.propTypes = {
+  match: PropTypes.object.isRequired
+}
+
+export default withRouter(NavigatorContainer)
+
+/*
 class NavigatorContainer extends React.Component {
   constructor(props) {
     super(props)
@@ -53,3 +72,4 @@ export default withRouter(
     mapDispatchToProps
   )(NavigatorContainer)
 )
+*/

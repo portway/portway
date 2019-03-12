@@ -17,6 +17,7 @@
  * A view can optionally take arguments to the function, for instance to fetch a resource by id
  */
 import { fetchProjects } from 'Actions/project'
+import { fetchProject } from '../actions/project'
 
 export default {
   projects: {
@@ -28,6 +29,21 @@ export default {
         },
         getDataFromState: function(state) {
           return state.projects.projectsById
+        }
+      }
+    }
+  },
+  project: {
+    id: function(id) {
+      console.log('dataMapper project id ' + id)
+      return {
+        fetchAction: fetchProject(id), //(dispatch) => { dispatch(fetchProject(id)) },
+        getLoadingStatusFromState: (state) => {
+          return state.project.loading.byId[id]
+        },
+        getDataFromState: (state) => {
+          console.log('dataMapper project id getDataFromState')
+          return state.project.projectById[id]
         }
       }
     }

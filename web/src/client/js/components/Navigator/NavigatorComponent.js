@@ -8,7 +8,7 @@ import './Navigator.scss'
 
 const NavigatorComponent = ({ match, project, projects }) => {
   const nodeRef = useRef()
-  const [expanded, setExpanded] = useState()
+  const [expanded, setExpanded] = useState(false)
   const section = match.path.split('/')[1]
   const title = project && project.name ? project.name : 'Projects'
 
@@ -30,7 +30,7 @@ const NavigatorComponent = ({ match, project, projects }) => {
         aria-expanded={expanded}
         aria-haspopup
         aria-label="Select a project"
-        onClick={() => setExpanded(false)}>
+        onClick={() => setExpanded(true)}>
         <h2 className="navigator__title h-third-level">{title}</h2>
       </button>
       <div className="navigator__menu" hidden={!expanded}>
@@ -42,7 +42,7 @@ const NavigatorComponent = ({ match, project, projects }) => {
 
 NavigatorComponent.propTypes = {
   match: PropTypes.object.isRequired,
-  project: PropTypes.object.isRequired,
+  project: PropTypes.object,
   projects: PropTypes.object.isRequired
 }
 
