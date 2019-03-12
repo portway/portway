@@ -5,6 +5,18 @@
  *
  * To add a resource view, add it dataMapper
  *
+ * @param [Object] dataFuncs
+ *   [Function] getDataFromState(state): [Mixed] data
+ *   [Function] getLoadingStatusFromState(state): [Boolean|Undefined|Null] status
+ *   [Function] fetchAction: [Function] dispatchAction
+ * @param [Boolean] returnLoadingStatus
+ *   Optionally return data and loading status
+ * @return [Mixed|Array] data
+ *   Returns data from getDataFromState function. If returnLoadingStatus is true,
+ *   returns an array with two values, data and loading status from getLoadingStatusFromState: [data, loadingStatus]
+ * useDataService(dataFuncs[, returnLoadingStatus])
+ *
+ *
  * Example Usage in a React Component:
  * function MyComponent() {
  *   const data = useDataService(dataMapper.projects.list())
@@ -15,11 +27,10 @@
 import { useEffect, useState } from 'react'
 import Store from '../reducers'
 
-export default function useDataService({
-  getDataFromState,
-  getLoadingStatusFromState,
-  fetchAction
-}) {
+export default function useDataService(
+  { getDataFromState, getLoadingStatusFromState, fetchAction },
+  returnLoadingStatus
+) {
   // Callback arg to useState() only runs once!
   const [data, setData] = useState(() => {
     const state = Store.getState()
@@ -52,5 +63,9 @@ export default function useDataService({
     }
   }, []) // 2nd empty array arg means only run on mount/unmount
 
-  return data
+  if (returnLoadingStatus) {
+    return [data, loading]
+  } else {
+    return data
+  }
 }
