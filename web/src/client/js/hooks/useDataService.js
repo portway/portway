@@ -42,19 +42,19 @@ export default function useDataService(
   })
 
   useEffect(() => {
+    console.log('useEffect')
     const loading = getLoadingStatusFromState(Store.getState())
-
+    setLoading(loading)
+    
     // Catches null or undefined
     if (loading == null) {
       Store.dispatch(fetchAction)
     }
 
     function handleStateChange() {
-      console.log('useDataService hook handle store update')
       const state = Store.getState()
       const loading = getLoadingStatusFromState(state)
       setLoading(loading)
-      console.log({ loading })
       if (loading === false) {
         const data = getDataFromState(state)
         setData(data)
@@ -67,7 +67,7 @@ export default function useDataService(
     return () => {
       unsubsubscribeFn()
     }
-  }, [fetchAction, getDataFromState, getLoadingStatusFromState])
+  }, dependencies)
 
   return data
 }
