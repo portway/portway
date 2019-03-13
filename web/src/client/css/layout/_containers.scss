@@ -5,3 +5,7 @@
 [role='main'] {
   padding: 12px $sideGutterWidth;
 }
+
+.section {
+  padding: ($sideGutterWidth / 2) 0;
+}

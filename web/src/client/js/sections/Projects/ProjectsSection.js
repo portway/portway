@@ -1,19 +1,18 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-import Header from 'Components/Header/Header'
-import ProjectCreator from 'Components/ProjectForm/ProjectCreatorContainer'
+import Constants from 'Shared/constants'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
 
 class ProjectsContainer extends React.PureComponent {
   render() {
     return (
-      <React.Fragment>
-        <Header />
-        <div role="main">
-          <ProjectCreator />
-          <ProjectsListContainer />
-        </div>
-      </React.Fragment>
+      <div role="main">
+        <Link to={Constants.PATH_NEW_PROJECT} className="btn btn--blank btn--with-circular-icon">
+          <span className="icon icon-add" /> New
+        </Link>
+        <ProjectsListContainer />
+      </div>
     )
   }
 }

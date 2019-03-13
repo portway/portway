@@ -2,15 +2,24 @@ import React from 'react'
 
 import ProjectForm from './ProjectFormComponent'
 
+function submitHandler() {
+  console.info('Submitted')
+}
+
+function cancelHandler() {
+  console.info('Canceled')
+}
+
 const ProjectCreatorContainer = () => {
+  const formOptions = {
+    submitHandler: submitHandler,
+    cancelHandler: cancelHandler,
+    submitLabel: 'Create Project',
+    cancelLabel: 'Cancel'
+  }
   return (
     <div>
-      <button className="btn-blank --with-circular-icon">
-        <span className="icon icon-add" /> New Project
-      </button>
-      <div hidden>
-        <ProjectForm />
-      </div>
+      <ProjectForm options={formOptions} />
     </div>
   )
 }
