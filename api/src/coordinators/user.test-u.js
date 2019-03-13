@@ -28,27 +28,49 @@ describe('user coordinator', () => {
   })
 
   describe('validateEmailPasswordCombo', () => {
-    let returnVal
+    describe('when a valid email/password combo is passed', () => {
+      let returnVal
 
-    beforeAll(async() => {
-      returnVal = await userCoordinator.validateEmailPasswordCombo(email, password)
+      beforeAll(async() => {
+        returnVal = await userCoordinator.validateEmailPasswordCombo(email, password)
+      })
+
+      it('should call BusinessUser.findByEmail with the correct email', () => {
+        expect(BusinessUser.findByEmail.mock.calls.length).toBe(1)
+        expect(BusinessUser.findByEmail.mock.calls[0][0]).toBe(email)
+      })
+
+      it('should call passwords.validatePassword with the correct email and password', () => {
+        const mockUser = BusinessUser.findByEmail.mock.results[0].value
+        expect(passwords.validatePassword.mock.calls.length).toBe(1)
+        expect(passwords.validatePassword.mock.calls[0][0]).toBe(password)
+        expect(passwords.validatePassword.mock.calls[0][1]).toBe(mockUser.password)
+      })
+
+      it('should return the user object', () => {
+        const mockUser = BusinessUser.findByEmail.mock.results[0].value
+        expect(returnVal).toEqual(mockUser)
+      })
     })
 
-    it('should call BusinessUser.findByEmail with the correct email', () => {
-      expect(BusinessUser.findByEmail.mock.calls.length).toBe(1)
-      expect(BusinessUser.findByEmail.mock.calls[0][0]).toBe(email)
+    describe('when the user with provided email is not found', () => {
+      beforeAll(() => {
+        BusinessUser.findByEmail.mockResolvedValueOnce(undefined)
+      })
+
+      it('should throw an error', async() => {
+        await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
+      })
     })
 
-    it('should call passwords.validatePassword with the correct email and password', () => {
-      const mockUser = BusinessUser.findByEmail.mock.results[0].value
-      expect(passwords.validatePassword.mock.calls.length).toBe(1)
-      expect(passwords.validatePassword.mock.calls[0][0]).toBe(password)
-      expect(passwords.validatePassword.mock.calls[0][1]).toBe(mockUser.password)
-    })
+    describe('when the provided password does not match the user password', () => {
+      beforeAll(() => {
+        passwords.validatePassword.mockResolvedValueOnce(false)
+      })
 
-    it('should return the user object', () => {
-      const mockUser = BusinessUser.findByEmail.mock.results[0].value
-      expect(returnVal).toEqual(mockUser)
+      it('should throw an error', async() => {
+        await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
+      })
     })
   })
 })

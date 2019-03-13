@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node",
     "test": "jest",
+    "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
     "migrate": "sequelize db:migrate",
     "seed": "sequelize db:seed:all"
