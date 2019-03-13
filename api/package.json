@@ -51,6 +51,7 @@
   "dependencies": {
     "bcrypt": "^3.0.4",
     "express": "^4.16.4",
+    "faker": "^4.1.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
     "ono": "^5.0.1",
@@ -59,6 +60,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
+    "save-dev": "^2.0.0",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0",
     "stripe": "^6.23.1"

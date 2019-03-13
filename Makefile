@@ -19,6 +19,9 @@ stop:
 test-api:
 	docker-compose -f docker-compose.test.yml up --build --remove-orphans --exit-code-from api-testrunner
 
+cleartest:
+	docker-compose -f docker-compose.test.yml down
+
 # This is... wrong. But it works
 # https://stackoverflow.com/a/6273809/836205
 # Run any sequelize command in the container via `make sequelize COMMAND`
