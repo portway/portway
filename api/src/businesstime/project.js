@@ -14,9 +14,9 @@ async function findAll(id) {
   return await db.model(MODEL_NAME).findAll({}, { raw: true })
 }
 
-async function create(fields) {
+async function create(body) {
   const db = getDb()
-  return await db.model(MODEL_NAME).create(fields, { raw: true })
+  return await db.model(MODEL_NAME).create(body, { raw: true })
 }
 
 export default {
