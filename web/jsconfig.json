@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": "./",
+    "paths": {
+      "Sections/*": ["src/client/js/sections/*"],
+      "Components/*": ["src/client/js/components/*"],
+      "Actions/*": ["src/client/js/actions/*"],
+      "Shared/*": ["src/shared/*"],
+      "CSS/*": ["src/client/css/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
