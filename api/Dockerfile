@@ -20,10 +20,10 @@ COPY . .
 
 RUN npm run build
 
-RUN rm -rf node_modules/
-RUN rm -rf src/
+# RUN rm -rf node_modules/
+# RUN rm -rf src/
 
-ENV NODE_ENV production
-RUN npm install --only=production
+# ENV NODE_ENV production
+# RUN npm install --only=production
 
 ENTRYPOINT ["/bin/sh", "./run.sh"]
