@@ -2,6 +2,7 @@ import { getDb } from '../db/db-connector'
 import ono from 'ono'
 
 const MODEL_NAME = 'User'
+const EXCLUDED_RESPONSE_FIELDS = ['password']
 
 async function findByEmail(email) {
   const db = getDb()
@@ -20,7 +21,13 @@ async function updateByEmail(email, body) {
   return await user.update(body, { raw: true })
 }
 
+async function findAllSanitized(id) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findAll({ attributes: { exclude: EXCLUDED_RESPONSE_FIELDS } }, { raw: true })
+}
+
 export default {
   findByEmail,
-  updateByEmail,
+  findAllSanitized,
+  updateByEmail
 }
