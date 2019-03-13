@@ -24,10 +24,10 @@ export default {
     list: function() {
       return {
         fetchAction: fetchProjects,
-        getLoadingStatusFromState: function(state) {
+        getLoadingStatusFromState: (state) => {
           return state.projects.loading.list
         },
-        getDataFromState: function(state) {
+        getDataFromState: (state) => {
           return state.projects.projectsById
         }
       }
@@ -42,6 +42,19 @@ export default {
         },
         getDataFromState: (state) => {
           return state.project.projectById[id]
+        }
+      }
+    }
+  },
+  users: {
+    list: function() {
+      return {
+        fetchAction: fetchUsers,
+        getLoadingStatusFromState: (state) => {
+          return state.users.loading.list
+        },
+        getDataFromState: (state) => {
+          return state.users.usersById
         }
       }
     }
