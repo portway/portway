@@ -13,9 +13,14 @@ services:
     environment:
       NODE_ENV: test
       API_PORT: 3001
-    
+      DB_HOST: 'db-test'
+      DB_PORT: 5432
+      DB_USER: 'bonkey'
+      DB_PASSWORD: 'bong'
+      DB_NAME: 'test'
     depends_on:
       - db-test
+    tty: true
 
   db-test:
     image: postgres:11.2-alpine

@@ -6,6 +6,7 @@ case $1 in
     npm start
     ;;
   test)
+    npm run migrate
     npm test
     ;;
   devstart)

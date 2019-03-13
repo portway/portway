@@ -23,6 +23,7 @@ async function updateByEmail(email, body) {
 
 async function findAllSanitized(id) {
   const db = getDb()
+
   return await db.model(MODEL_NAME).findAll({ attributes: { exclude: EXCLUDED_RESPONSE_FIELDS } }, { raw: true })
 }
 

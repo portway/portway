@@ -1,8 +1,10 @@
 import UserBusiness from './user'
 import UserFactory from '../db/factories/user'
+import initializeTestDb from '../db/initialize-test-db'
 
 describe('UserBusiness', () => {
   beforeAll(async() => {
+    await initializeTestDb()
     await UserFactory.createMany(5)
   })
 
