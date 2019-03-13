@@ -7,6 +7,7 @@
       "Sections/*": ["src/client/js/sections/*"],
       "Components/*": ["src/client/js/components/*"],
       "Actions/*": ["src/client/js/actions/*"],
+      "Hooks/*": ["src/client/js/hooks/*"],
       "Shared/*": ["src/shared/*"],
       "CSS/*": ["src/client/css/*"]
     }

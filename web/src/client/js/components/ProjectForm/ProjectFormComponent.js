@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 
-const ProjectFormComponent = ({ options, name, description, users }) => {
+const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) => {
   return (
     <form className="project-form">
       <div className="form-field">
@@ -23,27 +24,31 @@ const ProjectFormComponent = ({ options, name, description, users }) => {
           value={description}
         />
       </div>
-      <div className="form-field">
-        <label htmlFor="projectUsers">Team (optional)</label>
-        <button
-          className="btn btn--white btn--with-icon"
-          type="button"
-          aria-haspopup
-          aria-expanded={false}>
-          <span className="icon icon-user" /> Add team members
-        </button>
-        <div hidden>I am a thing</div>
-      </div>
+      {teamOptions && (
+        <div className="form-field">
+          <label htmlFor="projectUsers">Team (optional)</label>
+          <DropdownComponent
+            button={{ className: 'btn--white', label: 'Add team members', icon: 'icon-user' }}
+            menu={{
+              isOpen: true,
+              multiSelect: true,
+              onChange: teamOptions.changeHandler,
+              options: teamOptions.users,
+              value: teamOptions.selectedUsers
+            }}
+          />
+        </div>
+      )}
       <div className="btn-group">
         <input
           type="submit"
           className="btn"
-          onClick={options.submitHandler}
-          value={options.submitLabel}
+          onClick={formOptions.submitHandler}
+          value={formOptions.submitLabel}
         />
-        {options.cancelHandler && (
-          <button className="btn btn--blank" onClick={options.cancelHandler}>
-            {options.cancelLabel || 'Cancel'}
+        {formOptions.cancelHandler && (
+          <button className="btn btn--blank" onClick={formOptions.cancelHandler}>
+            {formOptions.cancelLabel || 'Cancel'}
           </button>
         )}
       </div>
@@ -52,15 +57,29 @@ const ProjectFormComponent = ({ options, name, description, users }) => {
 }
 
 ProjectFormComponent.propTypes = {
-  options: PropTypes.shape({
+  name: PropTypes.string,
+  description: PropTypes.string,
+  formOptions: PropTypes.shape({
     submitLabel: PropTypes.string.isRequired,
     submitHandler: PropTypes.func.isRequired,
     cancelLabel: PropTypes.string,
     cancelHandler: PropTypes.func
   }),
-  name: PropTypes.string,
-  description: PropTypes.string,
-  users: PropTypes.object
+  teamOptions: PropTypes.shape({
+    users: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string,
+        label: PropTypes.string
+      })
+    ),
+    selectedUsers: PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.string,
+        label: PropTypes.string
+      })
+    ),
+    changeHandler: PropTypes.func
+  })
 }
 
 export default ProjectFormComponent
