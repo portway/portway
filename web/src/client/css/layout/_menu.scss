@@ -1,4 +1,4 @@
-@import '_vars';
+@import '../inc/vars';
 
 .menu {
   background: $white;
@@ -29,6 +29,7 @@
     &:hover {
       background-color: $white-ter;
     }
+    &:active,
     &.active {
       background-color: $gray;
     }

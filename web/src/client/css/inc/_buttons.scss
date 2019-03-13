@@ -1,13 +1,63 @@
+@import 'vars';
+
 // Reset all buttons to blank
-button {
-  background: transparent;
+button,
+.btn {
+  background-color: $action;
+  border-radius: 4px 4px;
   border: none;
-  color: inherit;
+  color: #fff;
+  font-family: $sansSerif;
+  font-weight: 500;
   cursor: pointer;
   margin: 0;
   padding: 0;
+  transition: transform 0.2s ease-in-out;
+  will-change: transform;
   -webkit-appearance: none;
+
+  &:hover {
+    background-color: $action-light;
+  }
+
   &:active {
-    color: inherit;
+    background-color: $action-dark;
+    color: #fff;
+    transform: translateY(0);
+  }
+
+  &-blank {
+    background-color: transparent;
+    border-radius: 0;
+    color: $black-bis;
+
+    &:hover,
+    &:active {
+      background-color: transparent;
+    }
+  }
+
+  &.--with-icon {
+    align-items: center;
+    display: flex;
+  }
+
+  &.--with-circular-icon {
+    @extend .--with-icon;
+    .icon {
+      background-color: $white-bis;
+      border-radius: 50% 50%;
+      margin-right: 8px;
+    }
+    &:hover {
+      .icon {
+        background-color: $white-ter;
+      }
+    }
+    &:active {
+      .icon {
+        background-color: $gray;
+      }
+    }
   }
 }

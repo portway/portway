@@ -1,4 +1,4 @@
-@import 'CSS/inc/_menu.scss';
+@import 'CSS/layout/_menu.scss';
 @import 'CSS/animations/_rotateAndScale.scss';
 
 .navigator {
@@ -44,14 +44,15 @@
   }
 
   &__menu {
-    $animationLength: 0.3s;
     @extend .menu;
+    $animationLength: 0.3s;
     left: -16px;
     position: absolute;
     min-width: 136px;
     top: 27px;
     transition: visibility 0s linear, transform $animationLength ease;
     will-change: visibility, transform, opacity;
+    z-index: 10;
 
     &[hidden] {
       display: block;

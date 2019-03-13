@@ -30,7 +30,8 @@ const NavigatorComponent = ({ match, project, projects }) => {
         aria-expanded={expanded}
         aria-haspopup
         aria-label="Select a project"
-        onClick={() => setExpanded(false)}>
+        className="btn btn-blank"
+        onClick={() => setExpanded(true)}>
         <h2 className="navigator__title h-third-level">{title}</h2>
       </button>
       <div className="navigator__menu" hidden={!expanded}>

@@ -1,0 +1,14 @@
+@import 'vars';
+
+.icon {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+
+  &-add {
+    background-image: url('/images/icon/add.svg');
+  }
+}
