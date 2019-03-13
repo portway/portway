@@ -1,6 +1,7 @@
 import BusinessUser from '../businesstime/user'
 
 const usersController = function(router) {
+  //TODO we don't want to actually fetch all users, needs to be converted to a fetch by organization id
   router.get('/', getUsers)
 }
 

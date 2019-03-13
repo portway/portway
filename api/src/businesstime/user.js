@@ -21,6 +21,7 @@ async function updateByEmail(email, body) {
   return await user.update(body, { raw: true })
 }
 
+// TODO convert to find all users within organization
 async function findAllSanitized(id) {
   const db = getDb()
 
