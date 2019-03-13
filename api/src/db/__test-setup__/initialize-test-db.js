@@ -1,4 +1,4 @@
-import { connect, loadModels, getDb } from './db-connector'
+import { connect, loadModels, getDb } from '../db-connector'
 
 afterAll(() => {
   const db = getDb()

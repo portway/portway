@@ -1,6 +1,6 @@
 import UserBusiness from './user'
-import UserFactory from '../db/factories/user'
-import initializeTestDb from '../db/initialize-test-db'
+import UserFactory from '../db/__test-setup__/factories/user'
+import initializeTestDb from '../db/__test-setup__/initialize-test-db'
 
 describe('UserBusiness', () => {
   beforeAll(async() => {

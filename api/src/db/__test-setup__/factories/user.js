@@ -1,5 +1,5 @@
 import faker from 'faker'
-import { getDb } from '../db-connector'
+import { getDb } from '../../db-connector'
 
 const getUserData = function(override = {}) {
   const defaultProps = {
