@@ -20,7 +20,7 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const Header = ({ match }) => {
+const Header = ({ match, currentUser }) => {
   const section = match.path.split('/')[1]
   return (
     <header className="masthead" role="banner">
@@ -38,6 +38,7 @@ const Header = ({ match }) => {
           )}
           {`/${section}` !== Constants.PATH_DASHBOARD &&
             `/${section}` !== Constants.PATH_SETTINGS && <Navigator />}
+          <h3>{currentUser && currentUser.firstName}</h3>
           <GlobalSearchContainer />
         </div>
         <div className="navbar-user">
@@ -51,7 +52,8 @@ const Header = ({ match }) => {
 }
 
 Header.propTypes = {
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  currentUser: PropTypes.object
 }
 
 export default withRouter(Header)

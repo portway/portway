@@ -4,10 +4,12 @@ import thunk from 'redux-thunk'
 
 import { project } from './project'
 import { projects } from './projects'
+import { users } from './users'
 
 const rootReducer = combineReducers({
   project,
-  projects
+  projects,
+  users
 })
 
 const middlewares = [thunk]

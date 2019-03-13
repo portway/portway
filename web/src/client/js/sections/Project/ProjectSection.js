@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Header from 'Components/Header/Header'
+import HeaderContainer from 'Components/Header/HeaderContainer'
 import ProjectContainer from 'Components/Project/ProjectContainer'
 
 class ProjectSection extends React.PureComponent {
   render() {
     return (
       <React.Fragment>
-        <Header />
+        <HeaderContainer />
         <div role="main">
           <div className="scroll-container section">
             <ProjectContainer />

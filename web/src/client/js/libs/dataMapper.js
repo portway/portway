@@ -16,8 +16,9 @@
  *
  * A view can optionally take arguments to the function, for instance to fetch a resource by id
  */
-import { fetchProjects } from 'Actions/project'
-import { fetchProject } from '../actions/project'
+import { fetchProject, fetchProjects } from 'Actions/project'
+import { fetchUsers } from 'Actions/user'
+
 
 export default {
   projects: {

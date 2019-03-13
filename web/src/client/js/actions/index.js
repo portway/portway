@@ -6,7 +6,8 @@ export const ActionTypes = {
   RECEIVE_PROJECTS: 'RECEIVE_PROJECTS',
   REQUEST_PROJECT: 'REQUEST_PROJECT',
   RECEIVE_PROJECT: 'RECEIVE_PROJECT',
-  REQUEST_USERS: 'REQUEST_USERS'
+  REQUEST_USERS: 'REQUEST_USERS',
+  RECEIVE_USERS: 'RECEIVE_USERS'
 }
 
 export const Projects = {
@@ -19,5 +20,5 @@ export const Project = {
 
 export const Users = {
   request: makeActionCreator(ActionTypes.REQUEST_USERS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'users')
+  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data')
 }
