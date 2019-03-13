@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   api-testrunner:
@@ -13,13 +13,12 @@ services:
     environment:
       NODE_ENV: test
       API_PORT: 3001
-    
+
     depends_on:
       - db-test
 
   db-test:
     image: postgres:11.2-alpine
-    restart: always
     environment:
       POSTGRES_DB: test
       POSTGRES_USER: bonkey

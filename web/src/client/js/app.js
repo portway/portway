@@ -1,23 +1,17 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
-import thunk from 'redux-thunk'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
+import store from './reducers'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
 import Constants from 'Shared/constants'
-import rootReducer from './reducers'
 import Header from 'Components/Header/Header'
 import ProjectSection from 'Sections/Project/ProjectSection'
 import ProjectNew from 'Sections/Project/ProjectNew'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import DashboardSection from 'Sections/Dashboard/DashboardSection'
-
-const middlewares = [thunk]
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)))
 
 const App = () => {
   return (

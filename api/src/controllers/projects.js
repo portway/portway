@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import validate from '../libs/payloadValidation'
-import { getDb } from '../db/db-connector'
+import BusinessProject from '../businesstime/project'
+import ono from 'ono'
 
 const projectsPayloadSchema = Joi.compile({
   body: Joi.object().keys({
@@ -8,54 +9,47 @@ const projectsPayloadSchema = Joi.compile({
   })
 })
 
-const projectController = function(router) {
+const projectsController = function(router) {
   router.post('/', validate(projectsPayloadSchema), addProject)
   router.get('/', getProjects)
   router.get('/:id', getProject)
 }
 
 const getProjects = async function(req, res) {
-  const db = getDb()
-  let projects
   try {
-    projects = await db.model('Project').findAll({}, { raw: true })
+    const projects = await BusinessProject.findAll()
     res.json(projects)
   } catch (e) {
-    console.error(e)
-    res.status(500).json({ error: 'Cannot fetch projects' })
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: 'Cannot fetch projects' })
   }
 }
 
 const getProject = async function(req, res) {
   const id = req.params.id
-  const db = getDb()
-  let project
+
   try {
-    project = await db
-      .model('Project')
-      .findOne({ where: { id } }, { raw: true })
+    const project = await BusinessProject.findById(id)
+    if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
+    res.json(project)
   } catch (e) {
-    console.error(e)
+    console.error(e.stack)
     res
-      .status(500)
+      .status(e.code || 500)
       .json({ error: `error fetching project with id ${id}` })
   }
-  res.json(project)
 }
 
 const addProject = async function(req, res) {
-  const db = getDb()
   const { name } = req.body
-  let project
+
   try {
-    project = await db
-      .model('Project')
-      .create({ name }, { raw: true })
-    res.json(project)
+    const project = await BusinessProject.create({ name })
+    res.status(201).json(project)
   } catch (e) {
-    console.error(e)
-    res.status(500).json({ error: 'Cannot create project' })
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: 'Cannot create project' })
   }
 }
 
-export default projectController
+export default projectsController

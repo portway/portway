@@ -1,47 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { withRouter } from 'react-router-dom'
 
-import { fetchProject } from 'Actions/project'
+import useDataService from '../../hooks/useDataService'
+import dataMapper from '../../libs/dataMapper'
 
-class ProjectContainer extends React.Component {
-  componentDidMount() {
-    this.props.fetchProject(this.props.match.params.projectId)
-  }
+const ProjectContainer = ({ match }) => {
+  const { data: project } = useDataService(dataMapper.project.id(match.params.projectId), [
+    match.params.projectId
+  ])
 
-  componentDidUpdate(prevProps) {
-    const { match, fetchProject } = this.props
-    if (prevProps.match.params.projectId !== match.params.projectId) {
-      fetchProject(match.params.projectId)
-    }
-  }
-
-  render() {
-    return <div className="project">{this.props.project.name}</div>
-  }
+  return <div className="project">{project ? project.name : null}</div>
 }
 
 ProjectContainer.propTypes = {
-  match: PropTypes.object.isRequired,
-  fetchProject: PropTypes.func.isRequired,
-  project: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired
 }
 
-const mapStateToProps = (state) => {
-  return {
-    project: state.project
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({ fetchProject }, dispatch)
-}
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ProjectContainer)
-)
+export default withRouter(ProjectContainer)

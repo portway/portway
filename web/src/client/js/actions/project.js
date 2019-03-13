@@ -5,16 +5,14 @@ import { fetch } from '../api'
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchProjects = () => {
-  return (dispatch) => {
-    dispatch(Projects.request())
-    return fetch('projects').then((data) => {
-      dispatch({
-        type: ActionTypes.RECEIVE_PROJECTS,
-        data
-      })
+export const fetchProjects = (dispatch) => {
+  dispatch(Projects.request())
+  return fetch('projects').then((data) => {
+    dispatch({
+      type: ActionTypes.RECEIVE_PROJECTS,
+      data
     })
-  }
+  })
 }
 
 export const fetchProject = (id) => {
