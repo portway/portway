@@ -1,24 +1,26 @@
 import { getDb } from '../db/db-connector'
-import passwords from '../libs/passwords'
+import ono from 'ono'
+
+const MODEL_NAME = 'User'
 
 async function findByEmail(email) {
   const db = getDb()
-  const user = await db.model('User').findOne({ where: { email } })
-  return user
+  const user = await db.model(MODEL_NAME).findOne({ where: { email } })
+
+  return user && user.get({ plain: true })
 }
 
-async function setPassword(user, password) {
-  const hashedPassword = await passwords.generateHash(password)
-  user.set('password', hashedPassword)
-}
+async function updateByEmail(email, body) {
+  const db = getDb()
 
-async function validatePassword(user, password) {
-  const valid = await passwords.validatePassword(password, user.get('password'))
-  return valid
+  const user = await db.model(MODEL_NAME).findOne({ where: { email } })
+
+  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with email: ${email}`)
+
+  return await user.update(body, { raw: true })
 }
 
 export default {
   findByEmail,
-  setPassword,
-  validatePassword
+  updateByEmail,
 }

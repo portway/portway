@@ -1,5 +1,6 @@
 import { Strategy as LocalStrategy } from 'passport-local'
-import BusinessUser from '../businesstime/user'
+import UserCoordinator from '../coordinators/user'
+import ono from 'ono'
 
 const options = {
   session: false,
@@ -9,18 +10,16 @@ const options = {
 export default function(passport) {
   passport.use(
     new LocalStrategy(options, async(email, password, done) => {
-      const user = await BusinessUser.findByEmail(email)
-      if (!user) {
-        done(new Error(`Invalid user/pass ${email}`))
-      }
-      const validPassword = await BusinessUser.validatePassword(user, password)
+      let user
 
-      if (validPassword) {
-        console.info('logging in ' + email)
-        return done(null, user)
-      } else {
-        return done(new Error(`Invalid user/pass ${email}`))
+      try {
+        user = await UserCoordinator.validateEmailPasswordCombo(email, password)
+      } catch (err) {
+        done(ono(err, `Invalid user/pass ${email}`))
       }
+
+      console.info('logging in ' + email)
+      return done(null, user)
     })
   )
 }
