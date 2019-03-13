@@ -1,14 +1,14 @@
 import passwords from '../libs/passwords'
-import userBusiness from '../businesstime/user'
+import BusinessUser from '../businesstime/user'
 import ono from 'ono'
 
-async function updatePassword(password) {
+async function updatePassword(email, password) {
   const hashedPassword = await passwords.generateHash(password)
-  await userBusiness.update({ password: hashedPassword })
+  await BusinessUser.updateByEmail(email, { password: hashedPassword })
 }
 
 async function validateEmailPasswordCombo(email, password) {
-  const user = await userBusiness.findByEmail(email)
+  const user = await BusinessUser.findByEmail(email)
 
   if (!user) throw ono(`No user found with email: ${email}`)
 

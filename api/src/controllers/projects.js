@@ -18,7 +18,6 @@ const projectsController = function(router) {
 const getProjects = async function(req, res) {
   try {
     const projects = await BusinessProject.findAll()
-    throw new Error('blarp')
     res.json(projects)
   } catch (e) {
     console.error(e.stack)
