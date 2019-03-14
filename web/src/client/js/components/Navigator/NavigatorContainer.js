@@ -11,7 +11,6 @@ import currentResource from '../../libs/currentResource'
 const NavigatorContainer = ({ match }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
   const { data: project } = useDataService(currentResource(match), [match])
-
   return <NavigatorComponent projects={projects} project={project} match={match} />
 }
 
