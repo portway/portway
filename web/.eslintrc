@@ -43,6 +43,7 @@
     "indent": [2, 2, { "MemberExpression": 1, "SwitchCase": 1 }],
     "key-spacing": [2, { "beforeColon": false, "afterColon": true, "mode": "strict" }],
     "keyword-spacing": [2, { "after": true }],
+    "max-len": ["error", { "code": 100 }],
     "no-array-constructor": 2,
     "no-bitwise": 2,
     "no-caller": 2,
