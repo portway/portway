@@ -10,7 +10,7 @@ describe('user coordinator', () => {
   const password = 'swordfish'
 
   describe('#updatePassword', () => {
-    beforeAll(async() => {
+    beforeAll(async () => {
       await userCoordinator.updatePassword(email, password)
     })
 
@@ -23,7 +23,9 @@ describe('user coordinator', () => {
       const mockHashedPassword = passwords.generateHash.mock.results[0].value
       expect(BusinessUser.updateByEmail.mock.calls.length).toBe(1)
       expect(BusinessUser.updateByEmail.mock.calls[0][0]).toBe(email)
-      expect(BusinessUser.updateByEmail.mock.calls[0][1]).toEqual({ password: mockHashedPassword })
+      expect(BusinessUser.updateByEmail.mock.calls[0][1]).toEqual({
+        password: mockHashedPassword
+      })
     })
   })
 
@@ -31,7 +33,7 @@ describe('user coordinator', () => {
     describe('when a valid email/password combo is passed', () => {
       let returnVal
 
-      beforeAll(async() => {
+      beforeAll(async () => {
         returnVal = await userCoordinator.validateEmailPasswordCombo(email, password)
       })
 
@@ -58,7 +60,7 @@ describe('user coordinator', () => {
         BusinessUser.findByEmail.mockResolvedValueOnce(undefined)
       })
 
-      it('should throw an error', async() => {
+      it('should throw an error', async () => {
         await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
       })
     })
@@ -68,7 +70,7 @@ describe('user coordinator', () => {
         passwords.validatePassword.mockResolvedValueOnce(false)
       })
 
-      it('should throw an error', async() => {
+      it('should throw an error', async () => {
         await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
       })
     })

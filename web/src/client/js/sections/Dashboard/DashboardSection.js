@@ -1,20 +1,21 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-import Header from 'Components/Header/Header'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
+import Constants from 'Shared/constants'
 
 class DashboardSection extends React.PureComponent {
   render() {
     return (
-      <React.Fragment>
-        <Header />
-        <div role="main">
-          <div className="scroll-container section">
-            <h1>Dashboard</h1>
-            <ProjectsListContainer />
-          </div>
+      <div role="main">
+        <div className="section">
+          <h1>FIRST NAME’s Projects</h1>
+          <Link to={Constants.PATH_PROJECTS} className="btn btn--blank">
+            All projects
+          </Link>
+          <ProjectsListContainer />
         </div>
-      </React.Fragment>
+      </div>
     )
   }
 }

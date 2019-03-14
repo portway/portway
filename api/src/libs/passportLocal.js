@@ -9,7 +9,7 @@ const options = {
 
 export default function(passport) {
   passport.use(
-    new LocalStrategy(options, async(email, password, done) => {
+    new LocalStrategy(options, async (email, password, done) => {
       let user
 
       try {

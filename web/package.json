@@ -82,6 +82,7 @@
     "pretty-quick": "^1.10.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
+    "react-select": "^2.4.2",
     "react-stripe-elements": "^2.0.3",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",

@@ -1,0 +1,33 @@
+@import '../inc/vars';
+
+form {
+  .form-field {
+    margin-bottom: 18px;
+    width: 300px;
+    &--large {
+      width: 600px;
+    }
+  }
+
+  label {
+    display: block;
+    padding: 4px 0;
+  }
+
+  input[type='text'],
+  input[type='email'] {
+    background: $white;
+    border: thin solid $gray-light;
+    border-radius: 1px;
+    padding: 8px;
+    width: 100%;
+    &::placeholder {
+      color: $gray;
+    }
+    &:focus {
+      border: thin solid $action;
+      box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
+      outline: none;
+    }
+  }
+}

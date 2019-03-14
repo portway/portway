@@ -4,7 +4,9 @@ import ono from 'ono'
 
 async function updatePassword(email, password) {
   const hashedPassword = await passwords.generateHash(password)
-  await BusinessUser.updateByEmail(email, { password: hashedPassword })
+  await BusinessUser.updateByEmail(email, {
+    password: hashedPassword
+  })
 }
 
 async function validateEmailPasswordCombo(email, password) {

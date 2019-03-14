@@ -8,6 +8,8 @@ module.exports = {
   PATH_BILLING: '/billing',
   PATH_DASHBOARD: '/dashboard',
   PATH_DOCUMENTS: '/documents',
+  PATH_NEW_PROJECT: '/project/new',
+  PATH_PROJECT: '/project',
   PATH_PROJECTS: '/projects',
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000' // 7 days

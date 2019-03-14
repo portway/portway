@@ -9,8 +9,10 @@ const NavigatorItemList = ({ items }) => {
   const itemKeys = Object.keys(items)
   const itemList = itemKeys.map((item) => {
     return (
-      <li key={item} className="navigator-item-list__list-item">
-        <NavLink to={`/project/${item}`}>{items[item].name}</NavLink>
+      <li key={item}>
+        <NavLink to={`/project/${item}`} className="navigator-item-list__list-item">
+          {items[item].name}
+        </NavLink>
       </li>
     )
   })
