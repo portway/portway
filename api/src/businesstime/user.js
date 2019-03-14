@@ -1,8 +1,9 @@
 import { getDb } from '../db/db-connector'
 import ono from 'ono'
+import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 
 const MODEL_NAME = 'User'
-const EXCLUDED_RESPONSE_FIELDS = ['password']
+const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email']
 
 async function findByEmail(email) {
   const db = getDb()
@@ -25,7 +26,7 @@ async function updateByEmail(email, body) {
 async function findAllSanitized(id) {
   const db = getDb()
 
-  return await db.model(MODEL_NAME).findAll({ attributes: { exclude: EXCLUDED_RESPONSE_FIELDS } }, { raw: true })
+  return await db.model(MODEL_NAME).findAll({ attributes: PUBLIC_FIELDS }, { raw: true })
 }
 
 export default {
