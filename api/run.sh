@@ -13,9 +13,4 @@ case $1 in
     npm run migrate
     npm run serve
     ;;
-  seeddev)
-    npm run seed
-    ;;
-  unseeddev)
-    npm run unseed-all
 esac
