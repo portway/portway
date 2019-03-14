@@ -17,7 +17,7 @@ stop:
 	docker-compose stop
 
 test-api:
-	docker-compose -f docker-compose.test.yml up --build --remove-orphans --exit-code-from api-testrunner
+	docker-compose -f docker-compose.test.yml up --build --exit-code-from api-testrunner
 
 rebuildtest:
 	docker-compose -f docker-compose.test.yml down && ./build.sh && docker-compose build --no-cache
