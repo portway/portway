@@ -1,3 +1,18 @@
+const TODAY = new Date()
+
+const bulkProjects = [
+  {
+    name: 'BonkeyBong',
+    createdAt: TODAY,
+    updatedAt: TODAY
+  },
+  {
+    name: 'Scenic Trails',
+    createdAt: TODAY,
+    updatedAt: TODAY
+  }
+]
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     /*
@@ -10,20 +25,7 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    const today = new Date()
-
-    return queryInterface.bulkInsert('Projects', [
-      {
-        name: 'BonkeyBong',
-        createdAt: today,
-        updatedAt: today
-      },
-      {
-        name: 'Scenic Trails',
-        createdAt: today,
-        updatedAt: today
-      }
-    ])
+    return queryInterface.bulkInsert('Projects', bulkProjects)
   },
 
   down: (queryInterface, Sequelize) => {
@@ -34,6 +36,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-    return queryInterface.bulkDelete('Projects', null, {})
+    return queryInterface.bulkDelete('Projects', { name: { $in: bulkProjects.map(project => project.name) } }, {})
   }
 }

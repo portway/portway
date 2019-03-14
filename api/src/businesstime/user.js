@@ -1,7 +1,9 @@
 import { getDb } from '../db/db-connector'
 import ono from 'ono'
+import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 
 const MODEL_NAME = 'User'
+const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email']
 
 async function findByEmail(email) {
   const db = getDb()
@@ -16,7 +18,15 @@ async function updateByEmail(email, body) {
   return await user.update(body, { raw: true })
 }
 
+// TODO convert to find all users within organization
+async function findAllSanitized(id) {
+  const db = getDb()
+
+  return await db.model(MODEL_NAME).findAll({ attributes: PUBLIC_FIELDS }, { raw: true })
+}
+
 export default {
   findByEmail,
+  findAllSanitized,
   updateByEmail
 }

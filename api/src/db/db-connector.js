@@ -2,6 +2,8 @@ import Sequelize from 'sequelize'
 import path from 'path'
 import { modelFilePaths } from './models'
 
+const LOG_DB_COMMANDS = process.env.LOG_DB_COMMANDS === 'true'
+
 let connectedDb
 
 export async function connect({ user, password, host, port, db }) {
@@ -9,7 +11,7 @@ export async function connect({ user, password, host, port, db }) {
 
   const dbUri = `postgres://${user}:${password}@${host}:${port}/${db}`
 
-  const sequelize = new Sequelize(dbUri)
+  const sequelize = new Sequelize(dbUri, { logging: LOG_DB_COMMANDS })
 
   try {
     await sequelize.authenticate()

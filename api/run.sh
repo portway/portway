@@ -6,11 +6,11 @@ case $1 in
     npm start
     ;;
   test)
+    npm run migrate
     npm test
     ;;
   devstart)
     npm run migrate
-    npm run seed
     npm run serve
     ;;
 esac

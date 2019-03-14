@@ -10,8 +10,7 @@
     "test": "jest",
     "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
-    "migrate": "sequelize db:migrate",
-    "seed": "sequelize db:seed:all"
+    "migrate": "sequelize db:migrate"
   },
   "repository": {
     "type": "git",
@@ -51,6 +50,7 @@
   "dependencies": {
     "bcrypt": "^3.0.4",
     "express": "^4.16.4",
+    "faker": "^4.1.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
     "ono": "^5.0.1",

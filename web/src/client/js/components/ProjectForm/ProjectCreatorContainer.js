@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom'
 
 import ProjectForm from './ProjectFormComponent'
 import Constants from 'Shared/constants'
+import useDataService from 'Hooks/useDataService'
+import dataMapper from '../../libs/dataMapper'
 
 const ProjectCreatorContainer = ({ history }) => {
   // Options for the Project Form
@@ -28,12 +30,17 @@ const ProjectCreatorContainer = ({ history }) => {
   }
   // Options for the Team which is completely optional
   // Though all properties are required.
+  const { data: users } = useDataService(dataMapper.users.list())
+
+  const userOptions = Object.values(users).map((user) => {
+    return {
+      value: String(user.id),
+      label: `${user.firstName} ${user.lastName}`
+    }
+  })
+
   const teamOptions = {
-    users: [
-      { value: '1', label: 'JJ Idt' },
-      { value: '2', label: 'Dirk Heniges' },
-      { value: '3', label: 'Jay Contonio' }
-    ],
+    users: userOptions,
     selectedUsers: selectedUsers,
     changeHandler: teamMemberHandler
   }

@@ -7,3 +7,4 @@ example.env
 (/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$
 **/*.test-(u|a|i).js
 **/__mocks__
+**/__testSetup__/
