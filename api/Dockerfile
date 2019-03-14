@@ -18,7 +18,7 @@ RUN npm install
 # .dockerignore ensures not everything is copied
 COPY . .
 
-RUN npm run build
+# RUN npm run build
 
 # RUN rm -rf node_modules/
 # RUN rm -rf src/
