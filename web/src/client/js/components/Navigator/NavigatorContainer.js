@@ -19,6 +19,7 @@ const NavigatorContainer = ({ match, history }) => {
     icon: 'icon-caret-down'
   }
   const menu = {
+    collapseOnChange: true,
     isOpen: true,
     hasAutoComplete: true,
     options: Object.values(projects).map((project) => {

@@ -21,6 +21,13 @@ const DropdownComponent = ({ button, menu }) => {
   }, [])
   useClickOutside(nodeRef, collapseCallback)
   useBlur(nodeRef, collapseCallback)
+  // When a menu item is selected
+  const changeHandler = () => {
+    if (menu.collapseOnChange) {
+      collapseCallback()
+    }
+    menu.onChange
+  }
   return (
     <div ref={nodeRef}>
       <button
@@ -43,7 +50,7 @@ const DropdownComponent = ({ button, menu }) => {
         <DropdownListComponent
           basePath={Constants.PATH_PROJECT}
           options={menu.options}
-          onChange={collapseCallback} />
+          onChange={changeHandler} />
         }
         {menu.hasAutoComplete &&
         <Select
@@ -53,7 +60,7 @@ const DropdownComponent = ({ button, menu }) => {
           defaultValue={menu && menu.value ? menu.value : null}
           isMulti={menu.multiSelect}
           menuIsOpen={menu.isOpen}
-          onChange={menu.onChange}
+          onChange={changeHandler}
           options={menu.options}
           tabSelectsValue={false}
         />
@@ -70,6 +77,7 @@ DropdownComponent.propTypes = {
     label: PropTypes.string.isRequired
   }),
   menu: PropTypes.shape({
+    collapseOnChange: PropTypes.bool,
     isOpen: PropTypes.bool,
     hasAutoComplete: PropTypes.bool,
     multiSelect: PropTypes.bool,
