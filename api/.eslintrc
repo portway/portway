@@ -11,9 +11,6 @@
       "impliedStrict": true
     }
   },
-  "plugins": [
-    "prettier"
-  ],
   "extends": [
     "prettier"
   ],

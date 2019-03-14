@@ -18,7 +18,6 @@
     "prettier"
   ],
   "plugins": [
-    "prettier",
     "react-hooks"
   ],
   "settings": {
