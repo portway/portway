@@ -11,7 +11,11 @@ case $1 in
     ;;
   devstart)
     npm run migrate
-    npm run seed
     npm run serve
     ;;
+  seeddev)
+    npm run seed
+    ;;
+  unseeddev)
+    npm run unseed-all
 esac

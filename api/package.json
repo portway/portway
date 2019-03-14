@@ -11,7 +11,8 @@
     "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
     "migrate": "sequelize db:migrate",
-    "seed": "sequelize db:seed:all"
+    "seed": "sequelize db:seed:all",
+    "unseed-all": "sequelize db:seed:undo:all"
   },
   "repository": {
     "type": "git",

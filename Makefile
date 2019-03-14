@@ -10,6 +10,12 @@ rebuilddev:
 cleardev:
 	docker-compose down
 
+seeddev:
+	docker-compose run api ./run.sh seeddev
+
+unseeddev:
+	docker-compose run api ./run.sh unseeddev
+
 start:
 	docker-compose up
 
