@@ -10,7 +10,9 @@
       "impliedStrict": true
     }
   },
-  "extends": ["prettier"],
+  "plugins": [
+    "prettier"
+  ],
   "rules": {
     "array-bracket-spacing": [2, "never"],
     "arrow-body-style": 0,
@@ -66,10 +68,15 @@
     "padded-blocks": [2, "never"],
     "prefer-arrow-callback": [2, { "allowNamedFunctions": true }],
     "prefer-const": 2,
+    "prettier/prettier": "error",
     "quotes": [2, "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
     "semi": [2, "never"],
     "space-before-blocks": 2,
-    "space-before-function-paren": [2, "never"],
+    "space-before-function-paren": ["error", {
+      "anonymous": "never",
+      "named": "never",
+      "asyncArrow": "always"
+    }],
     "space-infix-ops": 2,
     "space-unary-ops": [2, { "words": true, "nonwords": false }],
     "strict": [2, "global"],

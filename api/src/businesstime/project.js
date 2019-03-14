@@ -4,10 +4,7 @@ const MODEL_NAME = 'Project'
 
 async function findById(id) {
   const db = getDb()
-  const project = await db
-    .model(MODEL_NAME)
-    .findOne({ where: { id } })
-
+  const project = await db.model(MODEL_NAME).findOne({ where: { id } })
   return project && project.get({ plain: true })
 }
 

@@ -13,10 +13,7 @@ export default function(passport) {
       let user
 
       try {
-        user = await UserCoordinator.validateEmailPasswordCombo(
-          email,
-          password
-        )
+        user = await UserCoordinator.validateEmailPasswordCombo(email, password)
       } catch (err) {
         done(ono(err, `Invalid user/pass ${email}`))
       }

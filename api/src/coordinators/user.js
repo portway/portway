@@ -11,21 +11,11 @@ async function updatePassword(email, password) {
 
 async function validateEmailPasswordCombo(email, password) {
   const user = await BusinessUser.findByEmail(email)
-
-  if (!user)
+  if (!user) {
     throw ono({ code: 404 }, `No user found with email: ${email}`)
-
-  const valid = await passwords.validatePassword(
-    password,
-    user.password
-  )
-
-  if (!valid)
-    throw ono(
-      { code: 401 },
-      `Invalid Email/Password combination for email: ${email}`
-    )
-
+  }
+  const valid = await passwords.validatePassword(password, user.password)
+  if (!valid) throw ono({ code: 401 }, `Invalid Email/Password combination for email: ${email}`)
   return user
 }
 

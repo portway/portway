@@ -20,8 +20,7 @@ describe('user coordinator', () => {
     })
 
     it('should call BusinessUser.updateByEmail with the correct email and body', () => {
-      const mockHashedPassword =
-        passwords.generateHash.mock.results[0].value
+      const mockHashedPassword = passwords.generateHash.mock.results[0].value
       expect(BusinessUser.updateByEmail.mock.calls.length).toBe(1)
       expect(BusinessUser.updateByEmail.mock.calls[0][0]).toBe(email)
       expect(BusinessUser.updateByEmail.mock.calls[0][1]).toEqual({
@@ -35,10 +34,7 @@ describe('user coordinator', () => {
       let returnVal
 
       beforeAll(async () => {
-        returnVal = await userCoordinator.validateEmailPasswordCombo(
-          email,
-          password
-        )
+        returnVal = await userCoordinator.validateEmailPasswordCombo(email, password)
       })
 
       it('should call BusinessUser.findByEmail with the correct email', () => {
@@ -47,20 +43,14 @@ describe('user coordinator', () => {
       })
 
       it('should call passwords.validatePassword with the correct email and password', () => {
-        const mockUser =
-          BusinessUser.findByEmail.mock.results[0].value
+        const mockUser = BusinessUser.findByEmail.mock.results[0].value
         expect(passwords.validatePassword.mock.calls.length).toBe(1)
-        expect(passwords.validatePassword.mock.calls[0][0]).toBe(
-          password
-        )
-        expect(passwords.validatePassword.mock.calls[0][1]).toBe(
-          mockUser.password
-        )
+        expect(passwords.validatePassword.mock.calls[0][0]).toBe(password)
+        expect(passwords.validatePassword.mock.calls[0][1]).toBe(mockUser.password)
       })
 
       it('should return the user object', () => {
-        const mockUser =
-          BusinessUser.findByEmail.mock.results[0].value
+        const mockUser = BusinessUser.findByEmail.mock.results[0].value
         expect(returnVal).toEqual(mockUser)
       })
     })
@@ -71,9 +61,7 @@ describe('user coordinator', () => {
       })
 
       it('should throw an error', async () => {
-        await expect(
-          userCoordinator.validateEmailPasswordCombo(email, password)
-        ).rejects.toThrow()
+        await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
       })
     })
 
@@ -83,9 +71,7 @@ describe('user coordinator', () => {
       })
 
       it('should throw an error', async () => {
-        await expect(
-          userCoordinator.validateEmailPasswordCombo(email, password)
-        ).rejects.toThrow()
+        await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
       })
     })
   })
