@@ -1,0 +1,11 @@
+@import '../inc/vars';
+
+// Main content container for each section component
+// Based on a 640/768 ratio in Sketch file
+[role='main'] {
+  padding: 12px $sideGutterWidth;
+}
+
+.section {
+  padding: ($sideGutterWidth / 2) 0;
+}

@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   api-testrunner:
@@ -13,11 +13,15 @@ services:
     environment:
       NODE_ENV: test
       API_PORT: 3001
+<<<<<<< HEAD
       DB_HOST: 'db-test'
       DB_PORT: 5432
       DB_USER: 'bonkey'
       DB_PASSWORD: 'bong'
       DB_NAME: 'test'
+=======
+
+>>>>>>> master
     depends_on:
       - db-test
     tty: true

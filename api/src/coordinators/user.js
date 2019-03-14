@@ -4,18 +4,18 @@ import ono from 'ono'
 
 async function updatePassword(email, password) {
   const hashedPassword = await passwords.generateHash(password)
-  await BusinessUser.updateByEmail(email, { password: hashedPassword })
+  await BusinessUser.updateByEmail(email, {
+    password: hashedPassword
+  })
 }
 
 async function validateEmailPasswordCombo(email, password) {
   const user = await BusinessUser.findByEmail(email)
-
-  if (!user) throw ono({ code: 404 }, `No user found with email: ${email}`)
-
+  if (!user) {
+    throw ono({ code: 404 }, `No user found with email: ${email}`)
+  }
   const valid = await passwords.validatePassword(password, user.password)
-
   if (!valid) throw ono({ code: 401 }, `Invalid Email/Password combination for email: ${email}`)
-
   return user
 }
 

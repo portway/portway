@@ -10,13 +10,13 @@
 
     // Brand area is top left, with logo
     .navbar-brand {
-      width: 64px;
+      min-width: $sideGutterWidth;
       .navbar-logo {
         // the logo is a span with a background image applied from a database
         background-size: 30%;
         display: block;
-        height: 64px;
-        width: 64px;
+        height: $sideGutterWidth;
+        width: $sideGutterWidth;
       }
     }
 
@@ -41,8 +41,8 @@
       align-items: center;
       border-left: thin solid $gray-light;
       display: flex;
-      height: 64px;
-      min-width: 64px;
+      height: $sideGutterWidth;
+      min-width: $sideGutterWidth;
 
       .navbar-settings-link {
         display: block;

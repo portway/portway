@@ -10,7 +10,7 @@ describe('billing coordinator', () => {
     const email = 'test@bonkeybong.com'
     let resolvedValue
 
-    beforeAll(async() => {
+    beforeAll(async () => {
       resolvedValue = await billingCoordinator.subscribeCustomerToPlan(
         {
           token,

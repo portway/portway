@@ -1,0 +1,59 @@
+@import '../inc/vars';
+
+.menu {
+  $animationLength: 0.3s;
+  background: $white;
+  border: thin solid $gray-dark;
+  border-radius: 2px;
+  padding: 14px 12px;
+  transition: visibility 0s linear, transform $animationLength ease;
+  will-change: visibility, transform, opacity;
+  z-index: 10;
+  // remove any list padding / margin and style
+  > ol,
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &[hidden] {
+    display: block;
+    opacity: 0;
+    transform: translateY(0);
+    transition: visibility 0s ease 0.5s, transform $animationLength ease, opacity 0.2s ease;
+    visibility: hidden;
+  }
+
+  &:not([hidden]) {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    opacity: 1;
+    transform: translateY(5px);
+    visibility: visible;
+  }
+
+  &--dropdown {
+    padding: 0;
+  }
+}
+
+.menu__item {
+  border-radius: 2px;
+  color: $black-bis;
+  cursor: pointer;
+  display: block;
+  padding: 3px 4px;
+  text-decoration: none;
+  margin-bottom: 2px;
+  max-width: 313px;
+  width: 313px;
+  &:hover {
+    background-color: $white-ter;
+  }
+  &:active,
+  &.active {
+    background-color: $gray;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
