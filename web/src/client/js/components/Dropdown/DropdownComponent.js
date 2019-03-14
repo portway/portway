@@ -22,11 +22,11 @@ const DropdownComponent = ({ button, menu }) => {
   useClickOutside(nodeRef, collapseCallback)
   useBlur(nodeRef, collapseCallback)
   // When a menu item is selected
-  const changeHandler = () => {
+  const changeHandler = (value) => {
     if (menu.collapseOnChange) {
       collapseCallback()
     }
-    menu.onChange
+    menu.onChange(value)
   }
   return (
     <div ref={nodeRef}>
