@@ -30,13 +30,13 @@ const DropdownComponent = ({ button, menu }) => {
         aria-label={button.label}
         onClick={() => setExpanded(true)}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
-        {button.label} {menu.value.length > 0 ? ` (${menu.value.length})` : ''}
+        {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
       <div className="menu menu--dropdown" hidden={!expanded}>
         <Select
           className="react-select-container"
           classNamePrefix="react-select"
-          defaultValue={menu.value}
+          defaultValue={menu && menu.value ? menu.value : menu.options[0]}
           isMulti={menu.multiSelect}
           menuIsOpen={menu.isOpen}
           onChange={menu.onChange}

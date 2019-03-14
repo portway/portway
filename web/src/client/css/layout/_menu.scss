@@ -6,6 +6,7 @@
   border: thin solid $gray-dark;
   border-radius: 2px;
   padding: 14px 12px;
+  position: absolute;
   transition: visibility 0s linear, transform $animationLength ease;
   will-change: visibility, transform, opacity;
   z-index: 10;
