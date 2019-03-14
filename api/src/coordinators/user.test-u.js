@@ -31,7 +31,11 @@ describe('user coordinator', () => {
     describe('when a valid email/password combo is passed', () => {
       let returnVal
 
+<<<<<<< HEAD
       beforeAll(async() => {
+=======
+      beforeAll(async () => {
+>>>>>>> 0744eab... Fixing formatting; Installing prettier eslint plugin
         returnVal = await userCoordinator.validateEmailPasswordCombo(email, password)
       })
 
@@ -58,7 +62,11 @@ describe('user coordinator', () => {
         BusinessUser.findByEmail.mockResolvedValueOnce(undefined)
       })
 
+<<<<<<< HEAD
       it('should throw an error', async() => {
+=======
+      it('should throw an error', async () => {
+>>>>>>> 0744eab... Fixing formatting; Installing prettier eslint plugin
         await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
       })
     })
@@ -68,7 +76,11 @@ describe('user coordinator', () => {
         passwords.validatePassword.mockResolvedValueOnce(false)
       })
 
+<<<<<<< HEAD
       it('should throw an error', async() => {
+=======
+      it('should throw an error', async () => {
+>>>>>>> 0744eab... Fixing formatting; Installing prettier eslint plugin
         await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
       })
     })
