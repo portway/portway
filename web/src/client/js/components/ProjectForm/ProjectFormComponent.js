@@ -30,6 +30,7 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
           <DropdownComponent
             button={{ className: 'btn--white', label: 'Add team members', icon: 'icon-user' }}
             menu={{
+              hasAutoComplete: true,
               isOpen: true,
               multiSelect: true,
               onChange: teamOptions.changeHandler,

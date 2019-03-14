@@ -4,29 +4,38 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 // import NavigatorComponent from './NavigatorComponent'
+import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 import currentResource from '../../libs/currentResource'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 
-const NavigatorContainer = ({ match }) => {
+const NavigatorContainer = ({ match, history }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
   const { data: project } = useDataService(currentResource(match), [match])
-  const dropdownButton = { label: project ? project.name : 'Projects', className: 'btn--blank', icon: 'icon-caret-down' }
-  console.log(projects)
+  const dropdownButton = {
+    label: project ? project.name : 'Projects',
+    className: 'btn--blank h-third-level',
+    icon: 'icon-caret-down'
+  }
   const menu = {
     isOpen: true,
+    hasAutoComplete: true,
     options: Object.values(projects).map((project) => {
-      return { label: project.name, value: project.id }
+      return { label: project.name, value: String(project.id) }
     }),
-    onChange: value => console.log(value)
+    onChange: (value) => {
+      history.push({
+        pathname: `${Constants.PATH_PROJECT}/${value.value}`
+      })
+    }
   }
   return <DropdownComponent button={dropdownButton} menu={menu} />
-  // return <NavigatorComponent projects={projects} project={project} match={match} />
 }
 
 NavigatorContainer.propTypes = {
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 }
 
 export default withRouter(NavigatorContainer)

@@ -68,8 +68,7 @@
       outline: none;
     }
     // Regular React Select menu (not auto-open)
-    &__menu {
-    }
+    &__menu {}
     // React Select menu list
     &__menu-list {
       padding: 0;
@@ -77,9 +76,12 @@
     // React Select menu items
     &__option {
       @extend .menu__item;
-      width: auto;
+      // width: auto;
       &--is-focused {
         background-color: $white-ter;
+      }
+      &--is-selected {
+        background-color: $gray;
       }
     }
   }

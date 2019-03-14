@@ -2,8 +2,10 @@ import React, { useState, useRef, useCallback } from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 
+import Constants from 'Shared/constants'
 import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
+import DropdownListComponent from './DropdownListComponent'
 
 import './_react-select.scss'
 
@@ -11,6 +13,7 @@ const DropdownComponent = ({ button, menu }) => {
   // Menu is not collapsed by default
   const [expanded, setExpanded] = useState(false)
   const hasIcon = button.icon !== undefined
+  const selectRef = useRef()
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -28,21 +31,33 @@ const DropdownComponent = ({ button, menu }) => {
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
-        onClick={() => setExpanded(true)}>
+        onClick={() => {
+          setExpanded(true)
+          if (menu.hasAutoComplete) selectRef.current.focus()
+        }}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
         {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
-      <div className="menu menu--dropdown" hidden={!expanded}>
+      <div className={`menu ${menu.hasAutoComplete ? 'menu--with-select' : ''}`} hidden={!expanded}>
+        {!menu.hasAutoComplete &&
+        <DropdownListComponent
+          basePath={Constants.PATH_PROJECT}
+          options={menu.options}
+          onChange={collapseCallback} />
+        }
+        {menu.hasAutoComplete &&
         <Select
-          className="react-select-container"
+          ref={selectRef}
+          className={`react-select-container`}
           classNamePrefix="react-select"
-          defaultValue={menu && menu.value ? menu.value : menu.options[0]}
+          defaultValue={menu && menu.value ? menu.value : null}
           isMulti={menu.multiSelect}
           menuIsOpen={menu.isOpen}
           onChange={menu.onChange}
           options={menu.options}
           tabSelectsValue={false}
         />
+        }
       </div>
     </div>
   )
@@ -56,6 +71,7 @@ DropdownComponent.propTypes = {
   }),
   menu: PropTypes.shape({
     isOpen: PropTypes.bool,
+    hasAutoComplete: PropTypes.bool,
     multiSelect: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     options: PropTypes.arrayOf(
