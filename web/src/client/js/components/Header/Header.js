@@ -38,7 +38,6 @@ const Header = ({ match, currentUser }) => {
           )}
           {`/${section}` !== Constants.PATH_DASHBOARD &&
             `/${section}` !== Constants.PATH_SETTINGS && <Navigator />}
-          <h3>{currentUser && currentUser.firstName}</h3>
           <GlobalSearchContainer />
         </div>
         <div className="navbar-user">
