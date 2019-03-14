@@ -3,7 +3,8 @@ import { ActionTypes } from '../actions'
 const initialState = {
   usersById: {},
   loading: {
-    list: null
+    list: null,
+    byId: {}
   }
 }
 
