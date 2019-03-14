@@ -7,10 +7,9 @@ import dataMapper from '../../libs/dataMapper'
 import currentUserId from '../../libs/currentUserId'
 
 function HeaderContainer(props) {
-  const { data } = useDataService(dataMapper.users.id(currentUserId))
-  console.log(data)
+  const { data: currentUser } = useDataService(dataMapper.users.id(currentUserId))
 
-  return <Header />
+  return <Header currentUser={currentUser} />
 }
 
 export default HeaderContainer
