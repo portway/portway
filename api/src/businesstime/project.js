@@ -1,4 +1,4 @@
-import { getDb } from '../db/db-connector'
+import { getDb } from '../db/dbConnector'
 
 const MODEL_NAME = 'Project'
 
