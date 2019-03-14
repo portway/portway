@@ -11,10 +11,10 @@ cleardev:
 	docker-compose down
 
 seeddev:
-	docker-compose run api ./run.sh seeddev
+	docker-compose run api ./run.sh seeddev --rm
 
 unseeddev:
-	docker-compose run api ./run.sh unseeddev
+	docker-compose run api ./run.sh unseeddev --rm
 
 start:
 	docker-compose up
