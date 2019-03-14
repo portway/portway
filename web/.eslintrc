@@ -80,7 +80,6 @@
     "padded-blocks": [2, "never"],
     "prefer-arrow-callback": [2, { "allowNamedFunctions": true }],
     "prefer-const": 2,
-    "prettier/prettier": "error",
     "quotes": [2, "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
