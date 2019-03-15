@@ -23,8 +23,6 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
     setExpanded(!expanded)
     if (!expanded) {
       selectRef.current.focus()
-    } else {
-      selectRef.current.blur()
     }
   }, [expanded])
   useClickOutside(nodeRef, collapseCallback)
