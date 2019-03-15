@@ -7,11 +7,21 @@ import store from './reducers'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
 import Constants from 'Shared/constants'
+import AsyncComponent from 'Components/AsyncComponent/AsyncComponent'
 import Header from 'Components/Header/Header'
-import ProjectSection from 'Sections/Project/ProjectSection'
-import ProjectNew from 'Sections/Project/ProjectNew'
-import ProjectsSection from 'Sections/Projects/ProjectsSection'
-import DashboardSection from 'Sections/Dashboard/DashboardSection'
+
+const DashboardSection = AsyncComponent({
+  loader: () => import('Sections/Dashboard/DashboardSection')
+})
+const ProjectsSection = AsyncComponent({
+  loader: () => import('Sections/Projects/ProjectsSection')
+})
+const ProjectSection = AsyncComponent({
+  loader: () => import('Sections/Project/ProjectSection')
+})
+const ProjectNew = AsyncComponent({
+  loader: () => import('Sections/Project/ProjectNew')
+})
 
 const App = () => {
   return (

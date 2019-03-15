@@ -52,10 +52,11 @@ const SharedConfig = {
   optimization: {
     splitChunks: {
       chunks: 'all',
+      minChunks: 1,
       cacheGroups: {
         vendor: {
           name: 'vendor',
-          test: /[\\/]node_modules[\\/]/,
+          test: /[\\/]node_modules[\\/](bulma|react|react-dom|react-select|react-redux|react-router-dom|react-stripe-elements|redux|redux-thunk)[\\/]/,
           priority: -10
         },
         styles: {
@@ -71,6 +72,7 @@ const SharedConfig = {
     {
       loader: 'css-loader',
       options: {
+        minimize: true,
         sourceMap: true
       }
     },

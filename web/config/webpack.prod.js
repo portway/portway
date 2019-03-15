@@ -1,7 +1,11 @@
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const webpack = require('webpack')
 // Prod only plugs
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const CompressionPlugin = require('compression-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 // Custom stuff
 const SharedConfig = require('./webpack.shared')
 const entryPoints = require('./entryPoints.js')
@@ -16,9 +20,20 @@ module.exports = {
     publicPath: '/'
   },
   plugins: SharedConfig.plugins.concat([
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"'
+    }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css',
       chunkFilename: 'css/[id].[contenthash].css'
+    }),
+    new CompressionPlugin({
+      test: /\.(js|css|html|svg)$/
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: path.resolve(__dirname, '../webpack-report.html')
     })
   ]),
   resolve: {
@@ -26,7 +41,10 @@ module.exports = {
   },
   optimization: {
     splitChunks: SharedConfig.optimization.splitChunks,
-    minimizer: [new OptimizeCSSAssetsPlugin({})]
+    minimizer: [
+      new TerserPlugin({ parallel: true, sourceMap: true }),
+      new OptimizeCSSAssetsPlugin({})
+    ]
   },
   module: {
     rules: [

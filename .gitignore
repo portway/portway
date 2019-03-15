@@ -1,6 +1,7 @@
 # App Specific
 .DS_Store
 web/dist
+web/webpack-report.html
 api/dist
 
 # Logs
