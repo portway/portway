@@ -18,7 +18,6 @@
     padding: 0;
   }
   &[hidden] {
-    display: block;
     opacity: 0;
     transform: translateY(0);
     transition: visibility 0s ease 0.5s, transform $animationLength ease, opacity 0.2s ease;
@@ -56,5 +55,15 @@
   }
   &:last-child {
     margin-bottom: 0;
+  }
+}
+
+.menu__list {
+  li {
+    margin: 0;
+    padding: 0;
+  }
+  a, button {
+    @extend .menu__item;
   }
 }

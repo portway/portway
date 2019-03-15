@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Header from 'Components/Header/HeaderContainer'
+import HeaderContainer from 'Components/Header/HeaderContainer'
 import ProjectCreatorContainer from 'Components/ProjectForm/ProjectCreatorContainer'
 
 class ProjectNew extends React.PureComponent {
   render() {
     return (
       <>
-        <Header />
+        <HeaderContainer />
         <div role="main">
           <div className="section">
             <h1>Create a new project</h1>

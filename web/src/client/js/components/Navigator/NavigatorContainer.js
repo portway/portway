@@ -8,7 +8,9 @@ import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 import currentResource from '../../libs/currentResource'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import DropdownSelectComponent from 'Components/DropdownWithSelect/DropdownSelectComponent'
+
+import './Navigator.scss'
 
 const NavigatorContainer = ({ match, history }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
@@ -19,6 +21,7 @@ const NavigatorContainer = ({ match, history }) => {
     icon: 'icon-caret-down'
   }
   const menu = {
+    collapseOnChange: true,
     isOpen: true,
     hasAutoComplete: true,
     options: Object.values(projects).map((project) => {
@@ -30,7 +33,10 @@ const NavigatorContainer = ({ match, history }) => {
       })
     }
   }
-  return <DropdownComponent button={dropdownButton} menu={menu} />
+  return (
+    <DropdownSelectComponent
+      className="navigator" button={dropdownButton} menu={menu} shortcut="t" />
+  )
 }
 
 NavigatorContainer.propTypes = {
