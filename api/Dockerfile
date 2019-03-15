@@ -26,4 +26,4 @@ COPY . .
 # ENV NODE_ENV production
 # RUN npm install --only=production
 
-ENTRYPOINT ["/bin/sh", "./run.sh"]
+ENTRYPOINT ["/bin/sh", "-c"]
