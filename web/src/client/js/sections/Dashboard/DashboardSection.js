@@ -2,14 +2,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
-import Header from 'Components/Header/HeaderContainer'
+import HeaderContainer from 'Components/Header/HeaderContainer'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
 
 class DashboardSection extends React.PureComponent {
   render() {
     return (
       <>
-        <Header />
+        <HeaderContainer />
         <div role="main">
           <div className="section">
             <h1>FIRST NAME’s Projects</h1>
