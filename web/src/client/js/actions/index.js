@@ -23,6 +23,6 @@ export const Project = {
 export const Users = {
   request: makeActionCreator(ActionTypes.REQUEST_USERS),
   receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data'),
-  requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'data'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data')
 }
