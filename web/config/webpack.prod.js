@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 // Prod only plugs
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const CompressionPlugin = require('compression-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -29,11 +28,6 @@ module.exports = {
     }),
     new CompressionPlugin({
       test: /\.(js|css|html|svg)$/
-    }),
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      openAnalyzer: false,
-      reportFilename: path.resolve(__dirname, '../webpack-report.html')
     })
   ]),
   resolve: {
