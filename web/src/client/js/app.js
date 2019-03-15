@@ -16,10 +16,12 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router basename={Constants.PATH_APP}>
-        <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
-        <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
-        <Route exact path={Constants.PATH_PROJECT_CREATE} component={ProjectNew} />
-        <Route exact path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
+        <>
+          <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
+          <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
+          <Route exact path={Constants.PATH_PROJECT_CREATE} component={ProjectNew} />
+          <Route exact path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
+        </>
       </Router>
     </Provider>
   )
