@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import DropdownSelectComponent from 'Components/DropdownWithSelect/DropdownSelectComponent'
 
 const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) => {
   return (
@@ -27,9 +27,10 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
       {teamOptions && (
         <div className="form-field">
           <label htmlFor="projectUsers">Team (optional)</label>
-          <DropdownComponent
+          <DropdownSelectComponent
             button={{ className: 'btn--white', label: 'Add team members', icon: 'icon-user' }}
             menu={{
+              hasAutoComplete: true,
               isOpen: true,
               multiSelect: true,
               onChange: teamOptions.changeHandler,

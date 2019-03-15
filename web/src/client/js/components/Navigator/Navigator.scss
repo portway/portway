@@ -2,52 +2,16 @@
 @import 'CSS/animations/_rotateAndScale.scss';
 
 .navigator {
-  align-items: center;
-  display: flex;
-  position: relative;
-
-  // &--projects {}
-  // &--project {}
-
-  button[aria-expanded='true'] {
-    .navigator__title {
-      background: $white-ter;
-      border-top: thin solid $gray;
-      border-left: thin solid $gray;
-      border-right: thin solid $gray;
-      border-radius: 2px 2px;
-      &:before {
+  .btn {
+    transition: transform 0.2s ease-out;
+    will-change: transform, opacity;
+    &[aria-expanded="true"] {
+      .icon {
         animation-fill-mode: forwards;
         animation-duration: 0.2s;
         animation-timing-function: ease;
         animation-name: rotateAndScale;
       }
     }
-  }
-
-  &__title {
-    align-items: center;
-    border: thin solid transparent;
-    display: flex;
-    margin: 0;
-    padding-right: 16px;
-    &:before {
-      background: url('/images/icon/arrow-down.svg') no-repeat 50% 50%;
-      background-size: 50%;
-      content: '';
-      display: inline-block;
-      height: 36px;
-      transition: transform 0.2s ease-out;
-      width: 36px;
-      will-change: transform, opacity;
-    }
-  }
-
-  &__menu {
-    @extend .menu;
-    left: -16px;
-    position: absolute;
-    min-width: 136px;
-    top: 27px;
   }
 }

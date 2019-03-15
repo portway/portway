@@ -29,7 +29,7 @@ const App = () => {
         <>
           <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
           <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
-          <Route exact path={Constants.PATH_NEW_PROJECT} component={ProjectNew} />
+          <Route exact path={Constants.PATH_PROJECT_CREATE} component={ProjectNew} />
           <Route exact path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
         </>
       </Router>

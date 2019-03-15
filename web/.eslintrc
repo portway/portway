@@ -15,10 +15,10 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "prettier"
   ],
   "plugins": [
-    "prettier",
     "react-hooks"
   ],
   "settings": {
@@ -44,6 +44,7 @@
     "indent": [2, 2, { "MemberExpression": 1, "SwitchCase": 1 }],
     "key-spacing": [2, { "beforeColon": false, "afterColon": true, "mode": "strict" }],
     "keyword-spacing": [2, { "after": true }],
+    "max-len": ["error", { "code": 100 }],
     "no-array-constructor": 2,
     "no-bitwise": 2,
     "no-caller": 2,
@@ -81,7 +82,6 @@
     "padded-blocks": [2, "never"],
     "prefer-arrow-callback": [2, { "allowNamedFunctions": true }],
     "prefer-const": 2,
-    "prettier/prettier": "error",
     "quotes": [2, "single", { "allowTemplateLiterals": true, "avoidEscape": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
