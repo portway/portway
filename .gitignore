@@ -68,4 +68,4 @@ typings/
 .next
 
 # Dev database data
-.database_data
+.postgres-data/
