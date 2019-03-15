@@ -18,4 +18,9 @@ async function fetch(resource) {
   return res.data
 }
 
-export { fetch }
+async function post(resource, body) {
+  const res = await axiosInstance.post(resource, body)
+  return res.data
+}
+
+export { fetch, post }

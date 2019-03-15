@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+
+import { createProject } from 'Actions/project'
 
 import ProjectForm from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
-const ProjectCreatorContainer = ({ history }) => {
+const ProjectCreatorContainer = ({ history, dispatch }) => {
   // Options for the Project Form
   const formOptions = {
     cancelHandler: cancelHandler, // Optional
@@ -15,8 +18,11 @@ const ProjectCreatorContainer = ({ history }) => {
     submitHandler: submitHandler,
     submitLabel: 'Create Project'
   }
-  function submitHandler() {
-    console.info('Submitted')
+  function submitHandler(e) {
+    e.preventDefault()
+    const data = new FormData(event.target)
+    console.log(data)
+    dispatch(createProject({ name: 'blorp' }))
   }
   function cancelHandler() {
     history.push({ pathname: Constants.PATH_PROJECTS })
@@ -53,7 +59,8 @@ const ProjectCreatorContainer = ({ history }) => {
 }
 
 ProjectCreatorContainer.propTypes = {
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
-export default withRouter(ProjectCreatorContainer)
+export default connect()(withRouter(ProjectCreatorContainer))

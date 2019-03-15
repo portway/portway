@@ -4,7 +4,7 @@ import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 
 const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) => {
   return (
-    <form className="project-form">
+    <form className="project-form" onSubmit={formOptions.submitHandler}>
       <div className="form-field">
         <label htmlFor="projectName">Project Name</label>
         <input
@@ -40,12 +40,7 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
         </div>
       )}
       <div className="btn-group">
-        <input
-          type="submit"
-          className="btn"
-          onClick={formOptions.submitHandler}
-          value={formOptions.submitLabel}
-        />
+        <input type="submit" className="btn" value={formOptions.submitLabel} />
         {formOptions.cancelHandler && (
           <button className="btn btn--blank" onClick={formOptions.cancelHandler}>
             {formOptions.cancelLabel || 'Cancel'}

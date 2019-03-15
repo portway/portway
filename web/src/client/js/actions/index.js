@@ -6,6 +6,9 @@ export const ActionTypes = {
   RECEIVE_PROJECTS: 'RECEIVE_PROJECTS',
   REQUEST_PROJECT: 'REQUEST_PROJECT',
   RECEIVE_PROJECT: 'RECEIVE_PROJECT',
+  ADD_PROJECT: 'POST_PROJECT',
+  RECEIVE_CREATED_PROJECT: 'PROJECT_CREATED',
+  // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
@@ -13,11 +16,12 @@ export const ActionTypes = {
 }
 
 export const Projects = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS)
-}
-
-export const Project = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id')
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_PROJECT, 'data'),
+  addOne: makeActionCreator(ActionTypes.ADD_PROJECT, 'body'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT, 'data')
 }
 
 export const Users = {
