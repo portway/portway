@@ -8,6 +8,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull: false,
+        allowEmpty: false,
         type: Sequelize.STRING
       },
       createdAt: {
