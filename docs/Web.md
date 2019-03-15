@@ -5,6 +5,8 @@ The setup for Express and Webpack is quite complex. Here is an outline on what's
 
 **Bundles**
 
+For a report on bundle size, run `npm run build` in /web and check `webpack-report.html`.
+
 * Each individual bundle needs an entry in the `exportedEntrypoints` object in `web/config/entryPoints.js`
 * A vendor bundle is created for each entry point to reduce bundle size
 * In production, bundles are hashed based on their content for caching / performance purposes
