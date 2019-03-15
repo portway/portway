@@ -15,7 +15,8 @@ async function updateByEmail(email, body) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { email } })
   if (!user) throw ono({ code: 404 }, `Cannot update, user not found with email: ${email}`)
-  return await user.update(body, { raw: true })
+  const updatedUser = await user.update(body)
+  return updatedUser && updatedUser.get({ plain: true })
 }
 
 // TODO convert to find all users within organization
