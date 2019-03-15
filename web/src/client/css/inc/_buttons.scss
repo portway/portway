@@ -29,6 +29,9 @@ button,
 
   &:hover {
     background-color: $action-light;
+    border: thin solid transparent !important;
+    box-shadow: none !important;
+    outline: 0 !important;
   }
 
   &:focus {

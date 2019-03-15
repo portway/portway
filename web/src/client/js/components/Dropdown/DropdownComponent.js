@@ -39,7 +39,7 @@ const DropdownComponent = ({ button, menu }) => {
         aria-expanded={expanded}
         aria-label={button.label}
         onClick={() => {
-          setExpanded(true)
+          setExpanded(!expanded)
           if (menu.hasAutoComplete) selectRef.current.focus()
         }}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
