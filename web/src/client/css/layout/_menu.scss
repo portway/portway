@@ -57,3 +57,13 @@
     margin-bottom: 0;
   }
 }
+
+.menu__list {
+  li {
+    margin: 0;
+    padding: 0;
+  }
+  a, button {
+    @extend .menu__item;
+  }
+}

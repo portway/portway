@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 function useKeyboardShortcut(key, callback) {
   useEffect(() => {
+    if (typeof key === 'undefined') return
     function keyDownHandler(e) {
       if (e.ctrlKey && e.key === key) {
         callback()
