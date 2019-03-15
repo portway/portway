@@ -29,9 +29,19 @@ async function updateById(id, body) {
   return updatedProject.get({ plain: true })
 }
 
+async function deleteById(id) {
+  const db = getDb()
+  const project = await db.model(MODEL_NAME).findByPk(id)
+
+  if (!project) throw ono({ code: 404 }, `Cannot update, project not found with id: ${id}`)
+
+  await project.destroy()
+}
+
 export default {
   create,
   findById,
   findAll,
-  updateById
+  updateById,
+  deleteById
 }

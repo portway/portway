@@ -10,7 +10,7 @@ describe('UserBusiness', () => {
     factoryUsers = await UserFactory.createMany(5)
   })
 
-  describe('findAllSanitized', async() => {
+  describe('findAllSanitized', () => {
     let users
 
     beforeAll(async() => {
@@ -29,7 +29,7 @@ describe('UserBusiness', () => {
     })
   })
 
-  describe('findSanitizedById', async() => {
+  describe('findSanitizedById', () => {
     let targetUserId
     let user
 

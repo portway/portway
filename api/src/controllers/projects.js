@@ -21,6 +21,7 @@ const projectsController = function(router) {
   router.get('/:id', getProject)
   router.put('/:id', validate(projectsPayloadSchema), replaceProject)
   router.patch('/:id', validate(projectsPatchSchema), patchProject)
+  router.delete('/:id', deleteProject)
 }
 
 const getProjects = async function(req, res) {
@@ -82,6 +83,20 @@ const patchProject = async function (req, res) {
   try {
     const project = await BusinessProject.updateById(id, body)
     res.json(project)
+  } catch (e) {
+    console.error(e.stack)
+    res
+      .status(e.code || 500)
+      .json({ error: `error patching project with id ${id}` })
+  }
+}
+
+const deleteProject = async function (req, res) {
+  const { id } = req.params
+
+  try {
+    const project = await BusinessProject.deleteById(id)
+    res.status(204).send()
   } catch (e) {
     console.error(e.stack)
     res

@@ -1,13 +1,13 @@
 import ProjectBusiness from './project'
 import ProjectFactory from '../db/__testSetup__/factories/project'
-import initializeTestDb from '../db/__testSetup__/initializeTestDb'
+import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 
 describe('ProjectBusiness', () => {
   beforeAll(async() => {
     await initializeTestDb()
   })
 
-  describe('#create', async() => {
+  describe('#create', () => {
     const projectBody = { name: 'test-project' }
     let project
 
@@ -21,7 +21,7 @@ describe('ProjectBusiness', () => {
     })
   })
 
-  describe('#updateById', async() => {
+  describe('#updateById', () => {
     describe('when the target document is found', () => {
       let project
       const updateBody = { name: 'an-updated-name' }
@@ -48,14 +48,14 @@ describe('ProjectBusiness', () => {
     let factoryProjects
 
     beforeAll(async() => {
-      await initializeTestDb()
+      await clearDb()
       factoryProjects = await ProjectFactory.createMany(5)
     })
 
-    describe('#findAll', async () => {
+    describe('#findAll', () => {
       let projects
 
-      beforeAll(async () => {
+      beforeAll(async() => {
         projects = await ProjectBusiness.findAll()
       })
 
@@ -71,7 +71,7 @@ describe('ProjectBusiness', () => {
       })
     })
 
-    describe('#findById', async () => {
+    describe('#findById', () => {
       let targetProjectId
       let project
 
@@ -83,6 +83,23 @@ describe('ProjectBusiness', () => {
       it('should return a project as POJO', () => {
         expect(project.id).toBe(targetProjectId)
         expect(project.constructor).toBe(Object)
+      })
+    })
+
+    describe('#deleteById', () => {
+      let factoryProject
+
+      beforeAll(async () => {
+        factoryProjects = await ProjectFactory.createMany(1)
+        factoryProject = factoryProjects[0]
+      })
+
+      it('should not throw an error if the target document is found', async() => {
+        await expect(ProjectBusiness.deleteById(factoryProject.id)).resolves.toEqual(undefined)
+      })
+
+      it('should throw an error if the target document is not found', async() => {
+        await expect(ProjectBusiness.deleteById(86753098675309)).rejects.toThrow()
       })
     })
   })

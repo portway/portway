@@ -5,6 +5,12 @@ afterAll(() => {
   db && db.close()
 })
 
+export const clearDb = async function() {
+  const db = getDb()
+
+  await db.truncate()
+}
+
 export default async function() {
   await connect({
     user: process.env.DB_USER,
