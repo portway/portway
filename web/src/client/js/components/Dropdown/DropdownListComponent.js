@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 
-const NavigatorItemList = ({ basePath, onChange, options }) => {
+const DropdownListComponent = ({ basePath, onChange, options }) => {
   const listItems = options.map((item) => {
     return (
       <li key={item.value}>
@@ -15,7 +15,7 @@ const NavigatorItemList = ({ basePath, onChange, options }) => {
   return <ol className="menu__list">{listItems}</ol>
 }
 
-NavigatorItemList.propTypes = {
+DropdownListComponent.propTypes = {
   basePath: PropTypes.string,
   onChange: PropTypes.func,
   options: PropTypes.arrayOf(
@@ -26,4 +26,4 @@ NavigatorItemList.propTypes = {
   ).isRequired
 }
 
-export default NavigatorItemList
+export default DropdownListComponent
