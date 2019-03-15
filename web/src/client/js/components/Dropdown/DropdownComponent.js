@@ -16,8 +16,8 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
     setExpanded(false)
   }, [])
   const toggleCallback = useCallback(() => {
-    setExpanded(!expanded)
-  }, [expanded])
+    setExpanded(e => !e)
+  }, [])
   useClickOutside(nodeRef, collapseCallback)
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut(shortcut, toggleCallback)
