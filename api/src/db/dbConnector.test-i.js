@@ -1,4 +1,4 @@
-import { connect, getDb } from './db-connector'
+import { connect, getDb } from './dbConnector'
 import Sequelize from 'sequelize'
 
 describe('DBConnector', () => {
