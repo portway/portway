@@ -10,3 +10,11 @@ export const fetchUsers = async (dispatch) => {
   const users = await fetch('users')
   return dispatch(Users.receive(users))
 }
+
+export const fetchUser = (id) => {
+  return async (dispatch) => {
+    dispatch(Users.requestOne(id))
+    const user = await fetch(`users/${id}`)
+    return dispatch(Users.receiveOne(user))
+  }
+}

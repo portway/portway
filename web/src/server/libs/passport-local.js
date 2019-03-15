@@ -18,11 +18,13 @@ const authUserFunc = async function(email, password, done) {
 }
 
 export default function(passport) {
-  passport.use(new LocalStrategy(
-    {
-      usernameField: 'email',
-      session: false
-    },
-    authUserFunc
-  ))
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: 'email',
+        session: false
+      },
+      authUserFunc
+    )
+  )
 }
