@@ -6,5 +6,4 @@ const BillingController = function(router) {
   })
 }
 
-
 export default BillingController

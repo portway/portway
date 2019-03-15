@@ -1,5 +1,5 @@
 import app from './app'
-import { connect, loadModels } from './db/db-connector'
+import { connect, loadModels } from './db/dbConnector'
 
 const port = process.env.API_PORT
 
