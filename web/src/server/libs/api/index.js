@@ -13,9 +13,9 @@ const URL = urlLib.URL
 
 class DangerApi {
   constructor(opts) {
-    const url = (typeof opts === 'object') ? opts.url : opts
+    const url = typeof opts === 'object' ? opts.url : opts
 
-    if (typeof (url) !== 'string' || url.length < 1) {
+    if (typeof url !== 'string' || url.length < 1) {
       throw new Error('Must pass a url option to the DangerAPI constructor')
     }
 
@@ -59,6 +59,5 @@ class DangerApi {
     return await this.axiosInstance.request(config)
   }
 }
-
 
 export default DangerApi

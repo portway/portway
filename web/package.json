@@ -112,6 +112,7 @@
     "ejs": "~2.5.7",
     "express": "^4.16.4",
     "http-errors": "~1.6.2",
+    "jsonwebtoken": "^8.5.0",
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
     "passport-custom": "^1.0.5",
