@@ -6,6 +6,7 @@
   border: thin solid $gray-dark;
   border-radius: 2px;
   padding: 14px 12px;
+  position: absolute;
   transition: visibility 0s linear, transform $animationLength ease;
   will-change: visibility, transform, opacity;
   z-index: 10;
@@ -17,7 +18,6 @@
     padding: 0;
   }
   &[hidden] {
-    display: block;
     opacity: 0;
     transform: translateY(0);
     transition: visibility 0s ease 0.5s, transform $animationLength ease, opacity 0.2s ease;
@@ -31,7 +31,7 @@
     visibility: visible;
   }
 
-  &--dropdown {
+  &--with-select {
     padding: 0;
   }
 }
@@ -55,5 +55,15 @@
   }
   &:last-child {
     margin-bottom: 0;
+  }
+}
+
+.menu__list {
+  li {
+    margin: 0;
+    padding: 0;
+  }
+  a, button {
+    @extend .menu__item;
   }
 }
