@@ -3,8 +3,10 @@ import { useEffect } from 'react'
 function useClickOutside(ref, callback) {
   useEffect(() => {
     function mouseDownHandler(e) {
-      if (ref && ref.current && ref.current.contains(e.target)) {
-        return
+      if (ref && ref.current) {
+        if (ref.current.contains(e.target)) {
+          return
+        }
       }
       callback()
     }

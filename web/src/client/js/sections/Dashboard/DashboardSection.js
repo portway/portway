@@ -13,10 +13,10 @@ class DashboardSection extends React.PureComponent {
         <div role="main">
           <div className="section">
             <h1>FIRST NAME’s Projects</h1>
-            <Link to={Constants.PATH_PROJECTS} className="btn btn--blank">
-              All projects
-            </Link>
             <ProjectsListContainer />
+            <Link to={Constants.PATH_PROJECTS} className="btn btn--blank">
+              See all projects...
+            </Link>
           </div>
         </div>
       </>

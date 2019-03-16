@@ -10,24 +10,26 @@
 
     &__item {
       background-color: $white;
+      margin-bottom: 6px;
       outline: 0;
-      &:hover, &:focus {
-        background-color: $white-ter;
+      &--disabled {
+        opacity: .2;
       }
     }
 
-    // The icon, title, and last updated part
-    // The part that is visible without focusing on an item
     &__info {
-      align-items: center;
-      display: flex;
-      padding: 12px 12px 12px 0;
-      .icon-project {
-        background-size: 100%;
-        margin-right: 12px;
-      }
-      .project-list__item--disabled {
-        opacity: 20%;
+      @include focus(transparent);
+      // The icon, title, and last updated part
+      // The part that is visible without focusing on an item
+      // This is going to get an outline when its parent is focused (keyboard only)
+      .focus-content {
+        align-items: center;
+        display: flex;
+        padding: 12px 12px 12px 0;
+        .icon-project {
+          background-size: 100%;
+          margin-right: 12px;
+        }
       }
     }
     &__title {
@@ -47,6 +49,10 @@
       justify-content: space-between;
       margin-top: 8px;
       padding: 12px 12px 12px 0;
+
+      &[hidden] {
+        display: none;
+      }
 
       .btn--blank {
         color: $action;

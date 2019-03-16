@@ -10,18 +10,20 @@
   }
 }
 
+[role="button"] {
+  cursor: pointer;
+}
+
 button,
 .btn {
   background-color: $action;
   border-radius: 4px 4px;
   border: thin solid transparent;
   color: #fff;
+  cursor: pointer;
   display: inline-block;
   font-family: $sansSerif;
   font-weight: 500;
-  cursor: pointer;
-  // margin: 0 12px 0 0;
-  // min-width: 115px;
   padding: 10px 37px;
   text-decoration: none;
   transition: transform 0.2s ease-in-out;
