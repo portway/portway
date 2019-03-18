@@ -40,4 +40,4 @@ Alternatively, you can run `npm run analyze`, however note step #2.
 * Webpack creates a manifest file of hashed bundles using the `WebpackAssetsManifest` plugin, and puts it in the public directory.
 * Express ignores Webpack middleware all together in production, assigning the dynamically hashed bundles to `app.locals.bundles` via the manifest.
 * Hot reloading is completely ignored in production – see `entryFunction` and `entryPoints` in webpack.config.js
-* We are gzipping / minifying / and splitting code using react-loader
+* We are gzipping / minifying / and splitting code

@@ -45,9 +45,6 @@
       ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
     }
   },
-  "eslintIgnore": [
-    "node_modules/*"
-  ],
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
