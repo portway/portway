@@ -1,12 +1,18 @@
 version: '1.0'
+stages:
+  - Development Builds
+  - Tests
+  - Production Builds
 steps:
   hide_dockerignore:
+    stage: Development Builds
     image: alpine
     title: Hide Docker Ignore File
     commands:
       - mv api/.dockerignore ./apidockerignore
       - mv web/.dockerignore ./webdockerignore
   build_api_image:
+    stage: Development Builds
     title: Building API Docker Image
     type: build
     image_name: bonkeybong/projectdanger-api
@@ -14,6 +20,7 @@ steps:
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
   build_web_image:
+    stage: Development Builds
     title: Building Web Docker Image
     type: build
     image_name: bonkeybong/projectdanger-web
@@ -21,6 +28,7 @@ steps:
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
   run_api_tests:
+    stage: Tests
     title: Running API Tests
     type: composition
     composition:
@@ -49,12 +57,14 @@ steps:
           - DB_PORT=5432
           - DB_NAME=test
   replace_dockerignore:
+    stage: Production Builds
     image: alpine
     title: Replace Docker Ignore File
     commands:
       - mv ./apidockerignore api/.dockerignore
       - mv ./webdockerignore web/.dockerignore
   build_prod_api_image:
+    stage: Production Builds
     title: Building API Production Image
     type: build
     image_name: bonkeybong/project_danger-api
@@ -62,6 +72,7 @@ steps:
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile-prod
   build_prod_web_image:
+    stage: Production Builds
     title: Building Web Production Image
     type: build
     image_name: bonkeybong/project_danger-web
