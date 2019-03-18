@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 
-const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) => {
+const ProjectFormComponent = ({ formOptions, teamOptions }) => {
   return (
     <form className="project-form" onSubmit={formOptions.submitHandler}>
       <div className="form-field">
@@ -12,7 +12,8 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
           name="project[name]"
           id="projectName"
           placeholder="My new project"
-          value={name}
+          value={formOptions.values.projectName}
+          onChange={formOptions.changeHandler}
         />
       </div>
       <div className="form-field form-field--large">
@@ -21,7 +22,8 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
           type="text"
           name="project[description]"
           id="projectDescription"
-          value={description}
+          value={formOptions.values.projectDescription}
+          onChange={formOptions.changeHandler}
         />
       </div>
       {teamOptions && (

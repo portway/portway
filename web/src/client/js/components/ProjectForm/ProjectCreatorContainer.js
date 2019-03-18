@@ -11,21 +11,39 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
 const ProjectCreatorContainer = ({ history, dispatch }) => {
+  const [formValues, setFormValues] = useState({
+    projectName: '',
+    projectDescription: ''
+  })
+
+  function submitHandler(e) {
+    e.preventDefault()
+    dispatch(
+      createProject({
+        name: formValues.projectName,
+        description: formValues.projectDescription,
+        teamMemberIds: selectedUsers
+      })
+    )
+  }
+
+  function formChangeHandler(e) {
+    e.preventDefault()
+    setFormValues({ ...formValues, [e.target.id]: e.target.value })
+  }
+
+  function cancelHandler() {
+    history.push({ pathname: Constants.PATH_PROJECTS })
+  }
+
   // Options for the Project Form
   const formOptions = {
     cancelHandler: cancelHandler, // Optional
     cancelLabel: 'Cancel', // Optional
     submitHandler: submitHandler,
-    submitLabel: 'Create Project'
-  }
-  function submitHandler(e) {
-    e.preventDefault()
-    const data = new FormData(event.target)
-    console.log(data)
-    dispatch(createProject({ name: 'blorp' }))
-  }
-  function cancelHandler() {
-    history.push({ pathname: Constants.PATH_PROJECTS })
+    changeHandler: formChangeHandler,
+    submitLabel: 'Create Project',
+    values: formValues
   }
 
   // Selected users are team members on this project and only exposed
