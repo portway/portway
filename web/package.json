@@ -4,6 +4,7 @@
   "description": "Project Danger Web Client",
   "main": "src/server/app.js",
   "scripts": {
+    "analyze": "NODE_ENV=production webpack --env.production --config ./config/webpack.prod.js --profile --json > stats.json && ./node_modules/webpack-bundle-analyzer/lib/bin/analyzer.js stats.json",
     "serve": "NODE_ENV=development nodemon --watch ./src/server --exec babel-node -r node_modules/dotenv/config ./src/server/app.js dotenv_config_path=./src/server/.env",
     "build": "NODE_ENV=production webpack --env.production --config ./config/webpack.prod.js && babel ./src/server -d dist/server --copy-files && babel ./src/shared -d dist/shared --copy-files",
     "start": "NODE_ENV=production node ./dist/server/app.js",
@@ -44,6 +45,9 @@
       ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css"
     }
   },
+  "eslintIgnore": [
+    "node_modules/*"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
@@ -81,7 +85,6 @@
     "postcss-loader": "^3.0.0",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
-    "react-loadable": "^5.5.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.4.2",

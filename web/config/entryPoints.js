@@ -4,7 +4,6 @@ const exportedEntrypoints = {
   index: ['./src/client/css/index.scss'],
   billing: ['./src/client/js/billing.js', './src/client/css/billing.scss'],
   app: ['./src/client/js/app.js', './src/client/css/app.scss'],
-  AsyncComponent: ['./src/client/js/components/AsyncComponent/AsyncComponent.js'],
   DropdownSelectComponent: ['./src/client/js/components/DropdownSelect/DropdownSelectComponent.js'],
   DropdownComponent: ['./src/client/js/components/Dropdown/DropdownComponent.js']
 }

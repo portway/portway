@@ -1,11 +1,27 @@
 
 # Express and Webpack Build
 
-The setup for Express and Webpack is quite complex. Here is an outline on what's going on.
+The setup for Express and Webpack is quite complex. This document outlines what is going on with both the Express web server, and the Webpacked javascript bundles.
+
+* [Running a Bundle Analysis](#bundle-analysis)
+
+## Bundle Analysis
+
+You can run an analysis of the webpack bundle by running the following commands:
+
+1. Generate a Webpack stats file from **web**
+    ```bash
+    NODE_ENV=production webpack --env.production --config ./config/webpack.prod.js --profile --json > stats.json
+    ```
+1. Due to a bug in one of the webpack plugins, edit the stats.json file and remove the first lines, that are not JSON
+1. Use Webpack Bundle Analyzer to read the stats file, and generate a report
+    ```bash
+    ./node_modules/webpack-bundle-analyzer/lib/bin/analyzer.js stats.json
+    ```
+
+Alternatively, you can run `npm run analyze`, however note step #2.
 
 **Bundles**
-
-For a report on bundle size, run `npm run build` in /web and check `webpack-report.html`.
 
 * Each individual bundle needs an entry in the `exportedEntrypoints` object in `web/config/entryPoints.js`
 * A vendor bundle is created for each entry point to reduce bundle size
