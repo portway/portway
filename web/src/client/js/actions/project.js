@@ -1,5 +1,6 @@
 import { Projects } from './index'
 import { fetch, post } from '../api'
+import Constants from 'Shared/constants'
 
 /**
  * Redux action
@@ -19,10 +20,11 @@ export const fetchProject = (id) => {
   }
 }
 
-export const createProject = (body) => {
+export const createProject = (body, history) => {
   return async (dispatch) => {
     dispatch(Projects.addOne(body))
     const data = await post(`projects`, body)
     dispatch(Projects.receiveOneCreated(data))
+    history.push({ pathname: `${Constants.PATH_PROJECT}/${data.id}` })
   }
 }

@@ -19,11 +19,14 @@ const ProjectCreatorContainer = ({ history, dispatch }) => {
   function submitHandler(e) {
     e.preventDefault()
     dispatch(
-      createProject({
-        name: formValues.projectName,
-        description: formValues.projectDescription,
-        teamMemberIds: selectedUsers
-      })
+      createProject(
+        {
+          name: formValues.projectName,
+          description: formValues.projectDescription,
+          teamMemberIds: selectedUsers
+        },
+        history
+      )
     )
   }
 

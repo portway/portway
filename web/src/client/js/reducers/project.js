@@ -25,6 +25,12 @@ export const project = (state = initialState, action) => {
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, projectById, loading: { ...state.loading, byId: loadingById } }
     }
+    case ActionTypes.RECEIVE_CREATED_PROJECT: {
+      const id = action.data.id
+      const projectById = { ...state.projectById, [id]: action.data }
+      const loadingById = { ...state.loading.byId, [id]: false }
+      return { ...state, projectById, loading: { ...state.loading, byId: loadingById } }
+    }
     default:
       return state
   }
