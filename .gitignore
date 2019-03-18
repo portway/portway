@@ -10,7 +10,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Build data
 .vscode
+stats.json
 
 # Runtime data
 pids
