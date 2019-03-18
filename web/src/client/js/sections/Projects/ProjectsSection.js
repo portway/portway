@@ -7,16 +7,14 @@ import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer
 class ProjectsContainer extends React.PureComponent {
   render() {
     return (
-      <>
-        <div role="main">
-          <Link
-            to={Constants.PATH_PROJECT_CREATE}
-            className="btn btn--blank btn--with-circular-icon">
-            <span className="icon icon-add" /> New
-          </Link>
-          <ProjectsListContainer />
-        </div>
-      </>
+      <div role="main">
+        <Link
+          to={Constants.PATH_PROJECT_CREATE}
+          className="btn btn--blank btn--with-circular-icon">
+          <span className="icon icon-add" /> New
+        </Link>
+        <ProjectsListContainer />
+      </div>
     )
   }
 }

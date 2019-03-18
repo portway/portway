@@ -10,7 +10,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Build data
 .vscode
+stats.json
 
 # Runtime data
 pids
@@ -66,6 +68,3 @@ typings/
 
 # next.js build output
 .next
-
-# Dev database data
-.postgres-data/

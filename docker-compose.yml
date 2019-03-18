@@ -5,7 +5,6 @@ services:
   web:
     build:
       context: ./web
-      dockerfile: Dockerfile-dev
     volumes:
       - ./web:/web
       - /web/node_modules
@@ -17,11 +16,11 @@ services:
       - ./web/src/server/.env
     environment:
       NODE_ENV: development
+    container_name: danger-web
 
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile-dev
     volumes:
       - ./api:/api
       - /api/node_modules
@@ -47,6 +46,8 @@ services:
       POSTGRES_USER: bonkey
       POSTGRES_PASSWORD: bong
     volumes:
-      - ./.postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+volumes:
+  postgres-data:

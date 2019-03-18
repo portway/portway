@@ -3,6 +3,7 @@ FROM node:10.15.1-alpine
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
+ENV NODE_ENV development
 
 WORKDIR /web
 
@@ -12,13 +13,5 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-
-RUN npm run build
-RUN rm -rf node_modules/
-RUN rm -rf src/
-RUN rm -rf config/
-
-ENV NODE_ENV production
-RUN npm install --only=production
 
 ENTRYPOINT ["/bin/sh", "./run.sh"]
