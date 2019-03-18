@@ -31,7 +31,7 @@ steps:
     stage: Tests
     image: ${{build_web_image}}
     title: Running Web Tests
-    working_directory: ${{build_web_image}}
+    working_directory: ./web/
     cmd:
       - test
   run_api_tests:
