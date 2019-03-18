@@ -13,4 +13,7 @@ case $1 in
     npm run migrate
     npm run serve
     ;;
+  *)
+    exec "$@"
+    ;;
 esac

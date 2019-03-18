@@ -80,6 +80,8 @@
     "postcss-loader": "^3.0.0",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-select": "^2.4.2",
@@ -112,8 +114,6 @@
     "passport": "^0.4.0",
     "passport-custom": "^1.0.5",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "passport-local": "^1.0.0"
   }
 }

@@ -8,14 +8,14 @@ cp api/example.env api/.env
 cp web/src/server/example.env web/src/server/.env
 make builddev
 make start
-make sequelize db:seed:all
+make sequelize db:seed:all # Run in a separate shell _while_ app is running
 make stop
 ```
 
 #### Changed a dependency in package.json?
+While the app is running in docker (make start), run:
 ```
-make rebuilddev
-make start
+make install[service] # Service is "web" or "api" (eg "make installweb")
 ```
 
 ## Production
