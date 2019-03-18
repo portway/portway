@@ -1,0 +1,70 @@
+version: '1.0'
+steps:
+  hide_dockerignore:
+    image: alpine
+    title: Hide Docker Ignore File
+    commands:
+      - mv api/.dockerignore ./apidockerignore
+      - mv web/.dockerignore ./webdockerignore
+  build_api_image:
+    title: Building API Docker Image
+    type: build
+    image_name: bonkeybong/projectdanger-api
+    working_directory: ./api/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+  build_web_image:
+    title: Building Web Docker Image
+    type: build
+    image_name: bonkeybong/projectdanger-web
+    working_directory: ./web/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+  run_api_tests:
+    title: Running API Tests
+    type: composition
+    composition:
+      version: '2'
+      services:
+        db-test:
+          image: postgres:11.2-alpine
+          ports:
+            - 5432
+          environment:
+            POSTGRES_DB: test
+            POSTGRES_USER: bonkey
+            POSTGRES_PASSWORD: bong
+    composition_candidates:
+      api_service:
+        image: ${{build_api_image}}
+        command: "'./wait-for.sh db-test:5432 -- ./run.sh test'"
+        links:
+          - db-test
+        environment:
+          - API_ENV=test
+          - API_PORT=3001
+          - DB_USER=bonkey
+          - DB_PASSWORD=bong
+          - DB_HOST=db-test
+          - DB_PORT=5432
+          - DB_NAME=test
+  replace_dockerignore:
+    image: alpine
+    title: Replace Docker Ignore File
+    commands:
+      - mv ./apidockerignore api/.dockerignore
+      - mv ./webdockerignore web/.dockerignore
+  build_prod_api_image:
+    title: Building API Production Image
+    type: build
+    image_name: bonkeybong/project_danger-api
+    working_directory: ./api/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile-prod
+  build_prod_web_image:
+    title: Building Web Production Image
+    type: build
+    image_name: bonkeybong/project_danger-web
+    working_directory: ./web/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile-prod
