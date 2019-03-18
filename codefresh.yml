@@ -27,6 +27,12 @@ steps:
     working_directory: ./web/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
+  run_web_tests:
+    stage: Tests
+    image: ${{build_web_image}}
+    title: Running Web Tests
+    commands:
+      - test
   run_api_tests:
     stage: Tests
     title: Running API Tests
