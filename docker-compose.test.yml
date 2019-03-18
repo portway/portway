@@ -4,7 +4,6 @@ services:
   api-testrunner:
     build:
       context: ./api
-      dockerfile: Dockerfile-dev
     volumes:
       - ./api:/api
       - /api/node_modules
