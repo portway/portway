@@ -1,38 +1,43 @@
 // Get the current resource based on the url
-// Takes react-router's match obj as arg
+// Takes react-router's history path as arg, and produces params using matchPath
+// This is so components _outside_ of a Route still work
 //
 // useDataService compatible function
+import { matchPath } from 'react-router-dom'
 import dataMapper from './dataMapper'
 
-const urlToResource = [
-  {
-    regex: new RegExp('.*project/.*'),
-    func: dataMapper.project.id,
-    idName: 'projectId'
-  },
-  // Catch-all for empty current resource
-  // Must be last in array!
-  {
-    regex: new RegExp('.*'),
-    func: () => {
-      return {
-        fetchAction: () => {},
-        getLoadingStatusFromState: () => {},
-        getDataFromState: () => {}
-      }
-    },
-    idName: null
+function returnNull() {
+  return {
+    fetchAction: () => {},
+    getLoadingStatusFromState: () => {},
+    getDataFromState: () => {}
   }
-]
+}
 
-const currentResource = (match) => {
-  const path = match.path
-
-  const resource = urlToResource.find((resource) => {
-    return resource.regex.test(path)
-  })
-
-  return resource.func(match.params[resource.idName])
+/**
+ * @param resourceName {String} resource name for switch statement
+ * @param path {String} React Router history.location.pathname
+ * Marks a resource for fetch or return of cached redux state
+ * Returns an object of functions to be consumed by useDataService React Hook
+ */
+const currentResource = (resourceName, path) => {
+  let func
+  let matchResults
+  switch (resourceName) {
+    case 'project':
+      matchResults = matchPath(path, {
+        path: '/project/:id',
+        exact: true,
+        strict: false
+      })
+      func = dataMapper.project.id
+      break
+    default:
+      // Return empty functions
+      returnNull()
+      break
+  }
+  return matchResults && matchResults.params.id ? func(matchResults.params.id) : returnNull()
 }
 
 export default currentResource

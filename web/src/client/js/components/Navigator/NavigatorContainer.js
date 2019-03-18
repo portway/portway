@@ -12,9 +12,11 @@ import DropdownSelectComponent from 'Components/DropdownWithSelect/DropdownSelec
 
 import './Navigator.scss'
 
-const NavigatorContainer = ({ match, history }) => {
+const NavigatorContainer = ({ history }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
-  const { data: project } = useDataService(currentResource(match), [match])
+  const { data: project } = useDataService(
+    currentResource('project', history.location.pathname), [history.location.pathname]
+  )
   const dropdownButton = {
     label: project ? project.name : 'Projects',
     className: 'btn--blank h-third-level',
@@ -40,7 +42,6 @@ const NavigatorContainer = ({ match, history }) => {
 }
 
 NavigatorContainer.propTypes = {
-  match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 }
 
