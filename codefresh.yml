@@ -31,7 +31,7 @@ steps:
     stage: Tests
     image: ${{build_web_image}}
     title: Running Web Tests
-    commands:
+    cmd:
       - test
   run_api_tests:
     stage: Tests
