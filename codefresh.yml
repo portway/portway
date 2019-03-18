@@ -37,7 +37,7 @@ steps:
     composition_candidates:
       api_service:
         image: ${{build_api_image}}
-        command: "'./wait-for.sh db-test:5432 -- ./run.sh test'"
+        command: './wait-for.sh db-test:5432 -- ./run.sh test'
         links:
           - db-test
         environment:
