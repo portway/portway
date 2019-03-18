@@ -14,6 +14,7 @@ case $1 in
     npm run serve
     ;;
   *)
+    echo "$@"
     exec "$@"
     ;;
 esac
