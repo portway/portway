@@ -5,7 +5,7 @@ const MODEL_NAME = 'Project'
 
 async function create(body) {
   const db = getDb()
-  const createdProject = await db.model(MODEL_NAME).create(body, { raw: true })
+  const createdProject = await db.model(MODEL_NAME).create(body)
   return createdProject.get({ plain: true })
 }
 

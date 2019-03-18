@@ -5,13 +5,15 @@ import ono from 'ono'
 
 const projectsPayloadSchema = Joi.compile({
   body: Joi.object().keys({
-    name: Joi.string().required()
+    name: Joi.string().required(),
+    description: Joi.string()
   })
 })
 
 const projectsPatchSchema = Joi.compile({
   body: Joi.object().keys({
-    name: Joi.string()
+    name: Joi.string(),
+    description: Joi.string()
   })
 })
 
@@ -50,10 +52,10 @@ const getProject = async function(req, res) {
 }
 
 const addProject = async function(req, res) {
-  const { name } = req.body
+  const { body } = req
 
   try {
-    const project = await BusinessProject.create({ name })
+    const project = await BusinessProject.create(body)
     res.status(201).json(project)
   } catch (e) {
     console.error(e.stack)
