@@ -52,12 +52,20 @@ const SharedConfig = {
   optimization: {
     splitChunks: {
       chunks: 'all',
+      maxInitialRequests: Infinity,
       minChunks: 1,
+      minSize: 0,
       cacheGroups: {
         vendor: {
           name: 'vendor',
-          test: /[\\/]node_modules[\\/](bulma|react|react-dom|react-select|react-redux|react-router-dom|react-stripe-elements|redux|redux-thunk)[\\/]/,
-          priority: -10
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            // get the name. E.g. node_modules/packageName/not/this/part.js
+            // or node_modules/packageName
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+            // npm package names are URL-safe, but some servers don't like @ symbols
+            return `npm.${packageName.replace('@', '')}`
+          }
         },
         styles: {
           name: 'styles',

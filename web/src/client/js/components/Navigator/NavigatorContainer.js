@@ -8,7 +8,7 @@ import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 import currentResource from '../../libs/currentResource'
-import DropdownSelectComponent from 'Components/DropdownWithSelect/DropdownSelectComponent'
+import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
 import './Navigator.scss'
 
