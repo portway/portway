@@ -31,17 +31,15 @@ export default {
           return state.projects.projectsById
         }
       }
-    }
-  },
-  project: {
+    },
     id: function(id) {
       return {
         fetchAction: fetchProject(id), //(dispatch) => { dispatch(fetchProject(id)) },
         getLoadingStatusFromState: (state) => {
-          return state.project.loading.byId[id]
+          return state.projects.loading.byId[id]
         },
         getDataFromState: (state) => {
-          return state.project.projectById[id]
+          return state.projects.projectsById[id]
         }
       }
     }

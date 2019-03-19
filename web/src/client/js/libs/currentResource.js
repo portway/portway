@@ -7,7 +7,7 @@ import dataMapper from './dataMapper'
 const urlToResource = [
   {
     regex: new RegExp('.*project/.*'),
-    func: dataMapper.project.id,
+    func: dataMapper.projects.id,
     idName: 'projectId'
   },
   // Catch-all for empty current resource
