@@ -28,7 +28,6 @@ const App = () => {
   )
 }
 
-console.info('executing react app mount')
 render(<App />, document.getElementById('application'))
 
 registerServiceWorker()

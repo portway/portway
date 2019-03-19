@@ -31,7 +31,6 @@ class EntryPointPlugin {
 
             siblings.forEach((sibling) => {
               const siblingFullFile = webpackStats.find(b => b.id === sibling)
-              console.info(siblingFullFile)
               const siblingFile = siblingFullFile.files[0]
               if (CSS_REGEX_FUNC(siblingFile)) {
                 siblingCssFiles.push(siblingFile)
