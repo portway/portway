@@ -7,10 +7,11 @@ import store from './reducers'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
 import Constants from 'Shared/constants'
+
+import DashboardSection from 'Sections/Dashboard/DashboardSection'
+import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
 import ProjectNew from 'Sections/Project/ProjectNew'
-import ProjectsSection from 'Sections/Projects/ProjectsSection'
-import DashboardSection from 'Sections/Dashboard/DashboardSection'
 
 const App = () => {
   return (

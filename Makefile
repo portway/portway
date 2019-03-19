@@ -2,13 +2,19 @@ build:
 	./build.sh
 
 builddev:
-	./build.sh && docker-compose build
+	docker-compose build
 
 rebuilddev:
-	docker-compose down && ./build.sh && docker-compose build --no-cache
+	docker-compose down && docker volume rm project-danger_postgres-data && docker-compose build --no-cache
+
+installweb:
+	docker-compose exec web npm install
+
+installapi:
+	docker-compose exec api npm install
 
 cleardev:
-	docker-compose down
+	docker-compose down && docker volume rm project-danger_postgres-data
 
 start:
 	docker-compose up

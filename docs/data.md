@@ -15,3 +15,9 @@ Migrations are automatically run when `make start` is invoked. If a migration ha
 ## Sequelize
 
 The Makefile is setup to execute any sequelize commands in the running API container. Run `make sequelize COMMAND` to run commands, or `make sequelize` to see a list of available commands
+
+## Erase Database and Start Over
+
+`make cleardev`
+OR
+`make rebuilddev`

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DropdownSelectComponent from 'Components/DropdownWithSelect/DropdownSelectComponent'
+import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
 const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) => {
   return (
