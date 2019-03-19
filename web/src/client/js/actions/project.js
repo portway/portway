@@ -1,5 +1,5 @@
 import { Projects } from './index'
-import { fetch, post } from '../api'
+import { fetch, add, update, remove } from '../api'
 import Constants from 'Shared/constants'
 
 /**
@@ -22,9 +22,23 @@ export const fetchProject = (id) => {
 
 export const createProject = (body, history) => {
   return async (dispatch) => {
-    dispatch(Projects.addOne(body))
-    const data = await post(`projects`, body)
+    const data = await add('projects', body)
     dispatch(Projects.receiveOneCreated(data))
     history.push({ pathname: `${Constants.PATH_PROJECT}/${data.id}` })
+  }
+}
+
+export const updateProject = (id, body) => {
+  return async (dispatch) => {
+    dispatch(Projects.initiateUpdate())
+    const data = await update(`projects/${id}`, body)
+    dispatch(Projects.receiveOneUpdated(data))
+  }
+}
+
+export const removeProject = (id) => {
+  return async (dispatch) => {
+    await remove(`projects/${id}`)
+    dispatch(Projects.removeOne(id))
   }
 }
