@@ -13,12 +13,12 @@ RUN npm install
 COPY . .
 
 RUN npm run build
-# RUN rm -rf node_modules/
-# RUN rm -rf src/
-# RUN rm -rf config/
+RUN rm -rf node_modules/
+RUN rm -rf src/
+RUN rm -rf config/
 
 ENV NODE_ENV production
-# RUN npm install --only=production
+RUN npm install --only=production
 
 # Delete any tar or other files npm may have cached during install
 RUN npm cache clean --force
