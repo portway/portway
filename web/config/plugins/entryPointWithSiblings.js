@@ -10,6 +10,7 @@ class EntryPointPlugin {
     // Get the files and dependent chunks for each bundle
     compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
       // Best way to find file extension of a string
+      // eslint-disable-next-line max-len
       // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
       const webpackStats = stats.toJson('normal').chunks
       // DEBUG:
