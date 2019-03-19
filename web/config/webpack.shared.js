@@ -4,7 +4,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const Constants = require('../src/shared/constants')
-const EntryPointWithSiblings = require('./plugins/entryPointWithSiblings')
 
 const SharedConfig = {
   resolvers: {
@@ -46,8 +45,7 @@ const SharedConfig = {
     }),
     new webpack.DefinePlugin({
       VAR_API_URL: JSON.stringify(process.env.API_PUBLIC_URL)
-    }),
-    new EntryPointWithSiblings()
+    })
   ],
   optimization: {
     namedChunks: true,

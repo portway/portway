@@ -5,6 +5,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const EntryPointWithSiblings = require('./plugins/entryPointWithSiblings')
 // Custom stuff
 const SharedConfig = require('./webpack.shared')
 const entryPoints = require('./entryPoints.js')
@@ -28,6 +29,9 @@ module.exports = {
     }),
     new CompressionPlugin({
       test: /\.(js|css|html|svg)$/
+    }),
+    new EntryPointWithSiblings({
+      writeToDisk: true
     })
   ]),
   resolve: {

@@ -6,6 +6,9 @@ const CSS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'css'
 const JS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'js'
 
 class EntryPointPlugin {
+  constructor(options) {
+    this.writeFileToDisk = options.writeToDisk
+  }
   apply(compiler) {
     // Get the files and dependent chunks for each bundle
     compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
@@ -14,7 +17,7 @@ class EntryPointPlugin {
       // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
       const webpackStats = stats.toJson('normal').chunks
       // DEBUG:
-      // fs.writeFileSync('webpackstats.json', JSON.stringify(webpackStats, null, 2))
+      // fs.writeFileSync('webpackstats.json', JSON.stringify(stats.toJson('normal'), null, 2))
       const bundles = {}
       webpackStats.forEach((bundle) => {
         // Only if the bundle is an entryPoint in webpack config
@@ -47,8 +50,11 @@ class EntryPointPlugin {
           }
         }
       })
-      const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
-      fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2))
+      // Only write the file in production
+      if (this.writeFileToDisk) {
+        const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
+        fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2))
+      }
     })
   }
 }
