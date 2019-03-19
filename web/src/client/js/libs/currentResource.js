@@ -1,5 +1,5 @@
 // Get the current resource based on the url
-// Takes react-router's history path as arg, and produces params using matchPath
+// Takes react-router's location path as arg, and produces params using matchPath
 // This is so components _outside_ of a Route still work
 //
 // useDataService compatible function
@@ -9,14 +9,14 @@ import dataMapper from './dataMapper'
 function returnNull() {
   return {
     fetchAction: () => {},
-    getLoadingStatusFromState: () => {},
+    getLoadingStatusFromState: () => false,
     getDataFromState: () => {}
   }
 }
 
 /**
  * @param resourceName {String} resource name for switch statement
- * @param path {String} React Router history.location.pathname
+ * @param path {String} React Router location.pathname
  * Marks a resource for fetch or return of cached redux state
  * Returns an object of functions to be consumed by useDataService React Hook
  */

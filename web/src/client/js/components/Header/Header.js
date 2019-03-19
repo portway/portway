@@ -26,8 +26,7 @@ const Header = ({ brand, match }) => {
 
 Header.propTypes = {
   brand: PropTypes.object,
-  match: PropTypes.object,
-  history: PropTypes.object
+  match: PropTypes.object.isRequired
 }
 
 export default withRouter(Header)
