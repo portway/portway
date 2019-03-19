@@ -24,6 +24,10 @@
     visibility: hidden;
   }
 
+  &--right {
+    right: $sideGutterWidth;
+  }
+
   &:not([hidden]) {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     opacity: 1;
@@ -65,5 +69,6 @@
   }
   a, button {
     @extend .menu__item;
+    text-align: left;
   }
 }

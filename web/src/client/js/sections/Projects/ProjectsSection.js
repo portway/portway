@@ -20,12 +20,12 @@ class ProjectsContainer extends React.PureComponent {
   renderEnd() {
     const filterButton = {
       className: 'btn--blank',
-      icon: 'filter',
+      icon: 'icon-filter',
       label: 'Filter...'
     }
     const sortButton = {
       className: 'btn--blank',
-      icon: 'sort-by',
+      icon: 'icon-sort-by',
       label: 'Sort by...'
     }
     return (
@@ -39,7 +39,7 @@ class ProjectsContainer extends React.PureComponent {
         </DropdownComponent>
         <DropdownComponent button={sortButton}>
           <li className="menu__item">
-            <button className="btn btn--white">Title</button>
+            <button className="btn btn--blank">Title</button>
           </li>
         </DropdownComponent>
       </>

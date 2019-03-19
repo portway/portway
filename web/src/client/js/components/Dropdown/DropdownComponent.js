@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
 import useClickOutside from 'Hooks/useClickOutside'
@@ -9,7 +9,17 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
   // Menu is not collapsed by default
   const [expanded, setExpanded] = useState(menu && menu.isOpen || false)
   const hasIcon = button.icon !== undefined
-  const selectRef = useRef()
+  // Set position of menu depending on where it is on the screen
+  const [position, setPosition] = useState('left')
+  const buttonRef = useRef()
+  useEffect(() => {
+    if (buttonRef.current) {
+      const leftPos = buttonRef.current.getBoundingClientRect().x
+      if (leftPos) {
+        (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
+      }
+    }
+  })
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -31,14 +41,12 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
-        onClick={() => {
-          setExpanded(!expanded)
-          if (expanded) selectRef.current.focus()
-        }}>
+        onClick={() => { setExpanded(!expanded)}}
+        ref={buttonRef}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
         {button.label}
       </button>
-      <div className="menu" hidden={!expanded}>
+      <div className={`menu menu--${position}`} hidden={!expanded}>
         <ul className="menu__list">
           {children}
         </ul>
