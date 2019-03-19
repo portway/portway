@@ -1,4 +1,3 @@
-
 const fileExtReg = /(?:\.([^.]+))?$/
 const CSS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'css'
 const JS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'js'
@@ -8,14 +7,14 @@ class EntryPointPlugin {
     this.callback = options.callback
   }
   apply(compiler) {
+    console.info('entryPointWithSiblings apply compiler')
     // Get the files and dependent chunks for each bundle
     compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
       // Best way to find file extension of a string
       // eslint-disable-next-line max-len
       // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
       const webpackStats = stats.toJson('normal').chunks
-      // DEBUG:
-      // fs.writeFileSync('webpackstats.json', JSON.stringify(stats.toJson('normal'), null, 2))
+
       const bundles = {}
       webpackStats.forEach((bundle) => {
         // Only if the bundle is an entryPoint in webpack config

@@ -6,7 +6,6 @@ import { join } from 'path'
 import passport from 'passport'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
-import entrypointBundles from './entrypoints.json'
 
 // Custom libraries
 import { normalizePort } from './libs/express-utilities'
@@ -21,11 +20,13 @@ const devMode = process.env.NODE_ENV !== 'production'
 // and use the Webpack Express Middleware to run webpack when the server
 // starts.
 if (devMode) {
+  console.info('loading webpack dev middleware')
   const webpackDevMiddleware = require('./libs/webpackDevMiddleware').default
   webpackDevMiddleware(app)
+} else {
+  const entrypointBundles = require('./entrypoints.json')
+  app.locals.bundles = entrypointBundles
 }
-
-app.locals.bundles = entrypointBundles
 
 // Middlewares
 app.use(aliasMiddleware)
