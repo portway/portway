@@ -1,0 +1,16 @@
+.toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0 16px;
+
+  &__start {
+    align-items: center;
+    display: flex;
+  }
+  &__end {
+    align-items: center;
+    display: flex;
+  }
+
+}

@@ -7,7 +7,7 @@ import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
 const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
   // Menu is not collapsed by default
-  const [expanded, setExpanded] = useState(menu.isOpen || false)
+  const [expanded, setExpanded] = useState(menu && menu.isOpen || false)
   const hasIcon = button.icon !== undefined
   const selectRef = useRef()
   // Custom hooks
@@ -36,7 +36,7 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
           if (expanded) selectRef.current.focus()
         }}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
-        {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
+        {button.label}
       </button>
       <div className="menu" hidden={!expanded}>
         <ul className="menu__list">
@@ -53,7 +53,7 @@ DropdownComponent.propTypes = {
     icon: PropTypes.string,
     label: PropTypes.string.isRequired
   }),
-  children: PropTypes.array.isRequired,
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
   menu: PropTypes.shape({
     isOpen: PropTypes.bool
