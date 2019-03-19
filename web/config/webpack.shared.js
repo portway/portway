@@ -50,6 +50,7 @@ const SharedConfig = {
     new EntryPointWithSiblings()
   ],
   optimization: {
+    namedChunks: true,
     runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
