@@ -7,6 +7,7 @@ import store from './reducers'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
 import Constants from 'Shared/constants'
+import useDetectInputMode from 'Hooks/useDetectInputMode'
 
 import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
@@ -14,6 +15,7 @@ import ProjectSection from 'Sections/Project/ProjectSection'
 import ProjectNew from 'Sections/Project/ProjectNew'
 
 const App = () => {
+  useDetectInputMode()
   return (
     <Provider store={store}>
       <Router basename={Constants.PATH_APP}>
