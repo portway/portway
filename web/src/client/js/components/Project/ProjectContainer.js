@@ -4,17 +4,17 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import useDataService from '../../hooks/useDataService'
-import dataMapper from '../../libs/dataMapper'
+import currentResource from '../../libs/currentResource'
 import { removeProject } from 'Actions/project'
 
-const ProjectContainer = ({ match, dispatch }) => {
-  const { data: project } = useDataService(dataMapper.projects.id(match.params.projectId), [
-    match.params.projectId
-  ])
+const ProjectContainer = ({ history, location, dispatch }) => {
+  const { data: project } = useDataService(
+    currentResource('project', location.pathname), [location.pathname]
+  )
 
   const handleDelete = function(e) {
     e.preventDefault()
-    dispatch(removeProject(project.id))
+    dispatch(removeProject(project.id, history))
   }
 
   return (
@@ -28,7 +28,9 @@ const ProjectContainer = ({ match, dispatch }) => {
 }
 
 ProjectContainer.propTypes = {
-  match: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
 
 export default connect()(withRouter(ProjectContainer))

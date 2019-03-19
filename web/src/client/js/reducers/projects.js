@@ -42,7 +42,7 @@ export const projects = (state = initialState, action) => {
     case ActionTypes.INITIATE_PROJECT_UPDATE: {
       const id = action.id
       const loadingById = { ...state.loading.byId, [id]: true }
-      return { ...state, loading: { ...state.loading, byId: loadingById }}
+      return { ...state, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.RECEIVE_UPDATED_PROJECT: {
       const id = action.data.id
