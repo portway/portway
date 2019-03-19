@@ -6,14 +6,11 @@ import EntryPointWithSiblings from '../../../config/plugins/entryPointWithSiblin
 
 export default function(app) {
   // Enable the Webpack middleware, with Webpack options
-  // const compiler = webpack(webpackConfig)
   const compiler = webpack(webpackConfig)
 
   // Dynamically feed updated entrypoint data from webpack to app.locals.bundles
   const entryPointPlugin = new EntryPointWithSiblings({
     callback: (stats, bundles) => {
-      console.info('setting app.locals.bundles')
-      console.info(bundles)
       app.locals.bundles = bundles
     }
   })

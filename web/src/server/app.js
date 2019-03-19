@@ -20,7 +20,6 @@ const devMode = process.env.NODE_ENV !== 'production'
 // and use the Webpack Express Middleware to run webpack when the server
 // starts.
 if (devMode) {
-  console.info('loading webpack dev middleware')
   const webpackDevMiddleware = require('./libs/webpackDevMiddleware').default
   webpackDevMiddleware(app)
 } else {

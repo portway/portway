@@ -4,10 +4,12 @@ const JS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'js'
 
 class EntryPointPlugin {
   constructor(options) {
+    if (typeof options.callback !== 'function') {
+      throw new Error('EntryPointPlugin requires options.callback function arg')
+    }
     this.callback = options.callback
   }
   apply(compiler) {
-    console.info('entryPointWithSiblings apply compiler')
     // Get the files and dependent chunks for each bundle
     compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
       // Best way to find file extension of a string
@@ -19,7 +21,6 @@ class EntryPointPlugin {
       webpackStats.forEach((bundle) => {
         // Only if the bundle is an entryPoint in webpack config
         if (bundle.entry) {
-          console.info(`Entrypoint: ${bundle.id}`)
           const files = bundle.files
           const cssFiles = files.filter(CSS_REGEX_FUNC)
           const jsFiles = files.filter(JS_REGEX_FUNC)

@@ -49,7 +49,6 @@ const SharedConfig = {
   ],
   optimization: {
     namedChunks: true,
-    // runtimeChunk: 'single',
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
