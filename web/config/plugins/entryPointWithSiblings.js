@@ -12,7 +12,8 @@ class EntryPointPlugin {
       // Best way to find file extension of a string
       // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
       const webpackStats = stats.toJson('normal').chunks
-      fs.writeFileSync('webpackstats.json', JSON.stringify(webpackStats, null, 2))
+      // DEBUG:
+      // fs.writeFileSync('webpackstats.json', JSON.stringify(webpackStats, null, 2))
       const bundles = {}
       webpackStats.forEach((bundle) => {
         // Only if the bundle is an entryPoint in webpack config
@@ -46,10 +47,7 @@ class EntryPointPlugin {
         }
       })
       const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
-      fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2)) //, () => {
-      //   console.info('wrote info')
-      // })
-      // TODO: write file
+      fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2))
     })
   }
 }
