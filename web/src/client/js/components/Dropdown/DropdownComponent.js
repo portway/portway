@@ -19,7 +19,7 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
         (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
       }
     }
-  })
+  }, [])
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
