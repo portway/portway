@@ -6,6 +6,7 @@ import { join } from 'path'
 import passport from 'passport'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
+import entrypointBundles from './entrypoints.json'
 
 // Custom libraries
 import { normalizePort } from './libs/express-utilities'
@@ -22,24 +23,9 @@ const devMode = process.env.NODE_ENV !== 'production'
 if (devMode) {
   const webpackDevMiddleware = require('./libs/webpackDevMiddleware').default
   webpackDevMiddleware(app)
-} else {
-  // Using the WebpackAssetsManifest plugin output in production, store the
-  // dynamic bundle names (hashed) in  JSON file for use in the Express views
-  // Format it like dev bundle object
-  const fileNameReg = /([^\/]+)(?=\.\w+$)/
-  const manifest = require('./public/manifest.json')
-  const bundleKeys = Object.keys(manifest)
-  const bundles = {}
-  bundleKeys.forEach((key) => {
-    const bundleKey = key.match(fileNameReg)[0]
-    bundles[bundleKey] = { css: [], js: [] }
-    const css = manifest[`${bundleKey}.css`]
-    const js = manifest[`${bundleKey}.js`]
-    css && bundles[bundleKey].css.push(css)
-    js && bundles[bundleKey].js.push(js)
-  })
-  app.locals.bundles = bundles
 }
+
+app.locals.bundles = entrypointBundles
 
 // Middlewares
 app.use(aliasMiddleware)

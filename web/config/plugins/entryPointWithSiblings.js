@@ -1,0 +1,57 @@
+const fs = require('fs')
+const path = require('path')
+
+const fileExtReg = /(?:\.([^.]+))?$/
+const CSS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'css'
+const JS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'js'
+
+class EntryPointPlugin {
+  apply(compiler) {
+    // Get the files and dependent chunks for each bundle
+    compiler.hooks.done.tap('BundleBuilderPlugin', (stats) => {
+      // Best way to find file extension of a string
+      // https://stackoverflow.com/questions/680929/how-to-extract-extension-from-filename-string-in-javascript
+      const webpackStats = stats.toJson('normal').chunks
+      fs.writeFileSync('webpackstats.json', JSON.stringify(webpackStats, null, 2))
+      const bundles = {}
+      webpackStats.forEach((bundle) => {
+        // Only if the bundle is an entryPoint in webpack config
+        if (bundle.entry) {
+          console.info(`Entrypoint: ${bundle.id}`)
+          const files = bundle.files
+          const cssFiles = files.filter(CSS_REGEX_FUNC)
+          const jsFiles = files.filter(JS_REGEX_FUNC)
+          // If the entryPoint has siblings, get their bundle files
+          const siblingJsFiles = []
+          const siblingCssFiles = []
+          if (bundle.siblings.length > 0) {
+            const siblings = bundle.siblings
+
+            siblings.forEach((sibling) => {
+              const siblingFullFile = webpackStats.find(b => b.id === sibling)
+              console.info(siblingFullFile)
+              const siblingFile = siblingFullFile.files[0]
+              if (CSS_REGEX_FUNC(siblingFile)) {
+                siblingCssFiles.push(siblingFile)
+              } else if (JS_REGEX_FUNC(siblingFile)) {
+                siblingJsFiles.push(siblingFile)
+              }
+            })
+          }
+          const name = bundle.names[0]
+          bundles[name] = {
+            css: cssFiles.concat(siblingCssFiles),
+            js: jsFiles.concat(siblingJsFiles)
+          }
+        }
+      })
+      const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
+      fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2)) //, () => {
+      //   console.info('wrote info')
+      // })
+      // TODO: write file
+    })
+  }
+}
+
+module.exports = EntryPointPlugin

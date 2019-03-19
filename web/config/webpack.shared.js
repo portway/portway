@@ -1,10 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const WebpackAssetsManifest = require('webpack-assets-manifest')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const Constants = require('../src/shared/constants')
+const EntryPointWithSiblings = require('./plugins/entryPointWithSiblings')
 
 const SharedConfig = {
   resolvers: {
@@ -16,7 +16,7 @@ const SharedConfig = {
     CSS: path.resolve(__dirname, '../src/client/css')
   },
   plugins: [
-    new FixStyleOnlyEntriesPlugin(),
+    new FixStyleOnlyEntriesPlugin({ silent: true }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../src/client/images'),
@@ -44,29 +44,34 @@ const SharedConfig = {
       minify: true,
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
     }),
-    new WebpackAssetsManifest(),
     new webpack.DefinePlugin({
       VAR_API_URL: JSON.stringify(process.env.API_PUBLIC_URL)
-    })
+    }),
+    new EntryPointWithSiblings()
   ],
   optimization: {
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
-      minChunks: 1,
+      minChunks: 2,
       minSize: 0,
       cacheGroups: {
         vendor: {
           name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
-          name(module) {
-            // get the name. E.g. node_modules/packageName/not/this/part.js
-            // or node_modules/packageName
-            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
-            // npm package names are URL-safe, but some servers don't like @ symbols
-            return `npm.${packageName.replace('@', '')}`
-          }
+          priority: -10
         },
+        // vendor: {
+        //   name: 'vendor',
+        //   test: /[\\/]node_modules[\\/]/,
+        //   name(module) {
+        //     // get the name. E.g. node_modules/packageName/not/this/part.js
+        //     // or node_modules/packageName
+        //     const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+        //     // npm package names are URL-safe, but some servers don't like @ symbols
+        //     return `npm.${packageName.replace('@', '')}`
+        //   }
+        // },
         styles: {
           name: 'styles',
           test: /\.css$/,
