@@ -11,4 +11,10 @@ case $1 in
   devstart)
     npm run serve
     ;;
+  install)
+    npm install
+    ;;
+  *)
+    exec "$@"
+    ;;    
 esac

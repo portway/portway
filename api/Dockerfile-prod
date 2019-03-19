@@ -18,4 +18,15 @@ RUN npm install
 # .dockerignore ensures not everything is copied
 COPY . .
 
+RUN npm run build
+
+RUN rm -rf node_modules/
+RUN rm -rf src/
+
+ENV NODE_ENV production
+RUN npm install --only=production
+
+# Delete any tar or other files npm may have cached during install
+RUN npm cache clean --force
+
 ENTRYPOINT ["/bin/sh", "./run.sh"]

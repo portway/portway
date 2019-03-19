@@ -1,5 +1,0 @@
-FROM danger/web:latest
-
-ENV NODE_ENV development
-
-RUN npm install

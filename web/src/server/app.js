@@ -1,4 +1,5 @@
 import express, { json, urlencoded } from 'express'
+import gzipStatic from 'connect-gzip-static'
 import { createServer } from 'http'
 import createError from 'http-errors'
 import { join } from 'path'
@@ -50,7 +51,12 @@ app.use(passport.initialize())
 
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
-app.use(express.static(join(__dirname, './public')))
+if (devMode) {
+  app.use(express.static(join(__dirname, './public')))
+} else {
+  const oneDay = 86400000
+  app.use(gzipStatic(join(__dirname, './public'), { maxAge: oneDay }))
+}
 
 // Set up Express
 app.set('views', join(__dirname, 'views'))
