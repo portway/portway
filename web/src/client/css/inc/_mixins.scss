@@ -1,17 +1,18 @@
 @import 'vars';
 
 @mixin focus($bgColor) {
-  .focus-content {
-    border: thin solid transparent;
-    outline: none;
-  }
+  border: thin solid transparent;
+  outline: none;
   &:focus {
+    background-color: $bgColor;
+    border: thin solid $action;
+    box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
     outline: none;
-    > .focus-content {
-      background-color: $bgColor;
-      border: thin solid $action;
-      box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
-      outline: none;
+    > * { outline: none; }
+    .using-mouse & {
+      background-color: unset;
+      border: thin solid transparent;
+      box-shadow: unset;
     }
   }
 }

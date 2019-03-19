@@ -12,11 +12,10 @@ class DashboardSection extends React.PureComponent {
         <HeaderContainer />
         <div role="main">
           <div className="section">
-            <h1>FIRST NAME’s Projects</h1>
-            <ProjectsListContainer />
             <Link to={Constants.PATH_PROJECTS} className="btn btn--blank">
               See all projects...
             </Link>
+            <ProjectsListContainer />
           </div>
         </div>
       </>
