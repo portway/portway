@@ -1,5 +1,3 @@
-const fs = require('fs')
-const path = require('path')
 
 const fileExtReg = /(?:\.([^.]+))?$/
 const CSS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'css'
@@ -7,7 +5,7 @@ const JS_REGEX_FUNC = file => fileExtReg.exec(file)[1] === 'js'
 
 class EntryPointPlugin {
   constructor(options) {
-    this.writeFileToDisk = options.writeToDisk
+    this.callback = options.callback
   }
   apply(compiler) {
     // Get the files and dependent chunks for each bundle
@@ -50,11 +48,7 @@ class EntryPointPlugin {
           }
         }
       })
-      // Only write the file in production
-      if (this.writeFileToDisk) {
-        const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
-        fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2))
-      }
+      this.callback(stats, bundles)
     })
   }
 }

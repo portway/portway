@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
-// Prod only plugs
+const fs = require('fs')
+// Prod only plugins
 const CompressionPlugin = require('compression-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -31,7 +32,10 @@ module.exports = {
       test: /\.(js|css|html|svg)$/
     }),
     new EntryPointWithSiblings({
-      writeToDisk: true
+      callback: (stats, bundles) => {
+        const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
+        fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2))
+      }
     })
   ]),
   resolve: {
