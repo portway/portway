@@ -17,7 +17,7 @@ const getUsers = async function(req, res) {
   }
 }
 
-const getUser = async function (req, res) {
+const getUser = async function(req, res) {
   const id = req.params.id
 
   try {

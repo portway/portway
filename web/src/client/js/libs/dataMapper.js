@@ -18,6 +18,7 @@
  */
 import { fetchProject, fetchProjects } from 'Actions/project'
 import { fetchUser, fetchUsers } from 'Actions/user'
+import currentUserId from './currentUserId'
 
 export default {
   projects: {
@@ -64,6 +65,17 @@ export default {
         },
         getDataFromState: (state) => {
           return state.users.usersById[id]
+        }
+      }
+    },
+    current: function() {
+      return {
+        fetchAction: fetchUser(currentUserId),
+        getLoadingStatusFromState: (state) => {
+          return state.users.loading.byId[currentUserId]
+        },
+        getDataFromState: (state) => {
+          return state.users.usersById[currentUserId]
         }
       }
     }

@@ -11,6 +11,9 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
 const ProjectCreatorContainer = ({ history, dispatch }) => {
+  const { data: users } = useDataService(dataMapper.users.list())
+  const { data: currentUser } = useDataService(dataMapper.users.current())
+
   const [formValues, setFormValues] = useState({
     projectName: '',
     projectDescription: ''
@@ -23,7 +26,8 @@ const ProjectCreatorContainer = ({ history, dispatch }) => {
         {
           name: formValues.projectName,
           description: formValues.projectDescription,
-          teamMemberIds: selectedUsers
+          teamMemberIds: selectedUsers,
+          orgId: currentUser.orgId
         },
         history
       )
@@ -57,8 +61,6 @@ const ProjectCreatorContainer = ({ history, dispatch }) => {
   }
   // Options for the Team which is completely optional
   // Though all properties are required.
-  const { data: users } = useDataService(dataMapper.users.list())
-
   const userOptions = Object.values(users).map((user) => {
     return {
       value: String(user.id),
@@ -74,7 +76,7 @@ const ProjectCreatorContainer = ({ history, dispatch }) => {
 
   return (
     <div>
-      <ProjectForm formOptions={formOptions} teamOptions={teamOptions} />
+      <ProjectForm formOptions={formOptions} teamOptions={teamOptions} currentUser={currentUser} />
     </div>
   )
 }
