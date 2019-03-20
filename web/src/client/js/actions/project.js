@@ -38,6 +38,7 @@ export const updateProject = (id, body) => {
 
 export const removeProject = (id, history) => {
   return async (dispatch) => {
+    dispatch(Projects.initiateRemove())
     await remove(`projects/${id}`)
     dispatch(Projects.removeOne(id))
     history.push({ pathname: Constants.PATH_PROJECTS })

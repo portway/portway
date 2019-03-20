@@ -9,6 +9,7 @@ export const ActionTypes = {
   RECEIVE_CREATED_PROJECT: 'RECEIVE_CREATED_PROJECT',
   INITIATE_PROJECT_UPDATE: 'INITIATE_PROJECT_UPDATE',
   RECEIVE_UPDATED_PROJECT: 'RECEIVE_UPDATED_PROJECT',
+  INITIATE_PROJECT_REMOVE: 'INITIATE_PROJECT_REMOVE',
   REMOVE_PROJECT: 'REMOVE_PROJECT',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
@@ -25,6 +26,7 @@ export const Projects = {
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_UPDATE),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT, 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id')
 }
 

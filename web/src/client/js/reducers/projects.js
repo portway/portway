@@ -50,11 +50,14 @@ export const projects = (state = initialState, action) => {
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, projectsById, loading: { ...state.loading, byId: loadingById } }
     }
+    case ActionTypes.INITIATE_PROJECT_REMOVE: {
+      return { ...state, loading: { ...state.loading, list: true } }
+    }
     case ActionTypes.REMOVE_PROJECT: {
       const id = action.id
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...projectsById } = state.projectsById
-      return { ...state, projectsById }
+      return { ...state, projectsById, loading: { ...state.loading, list: false } }
     }
     default:
       return state
