@@ -23,29 +23,15 @@ if (devMode) {
   const webpackDevMiddleware = require('./libs/webpackDevMiddleware').default
   webpackDevMiddleware(app)
 } else {
-  // Using the WebpackAssetsManifest plugin output in production, store the
-  // dynamic bundle names (hashed) in  JSON file for use in the Express views
-  // Format it like dev bundle object
-  const fileNameReg = /([^\/]+)(?=\.\w+$)/
-  const manifest = require('./public/manifest.json')
-  const bundleKeys = Object.keys(manifest)
-  const bundles = {}
-  bundleKeys.forEach((key) => {
-    const bundleKey = key.match(fileNameReg)[0]
-    bundles[bundleKey] = { css: [], js: [] }
-    const css = manifest[`${bundleKey}.css`]
-    const js = manifest[`${bundleKey}.js`]
-    css && bundles[bundleKey].css.push(css)
-    js && bundles[bundleKey].js.push(js)
-  })
-  app.locals.bundles = bundles
+  const entrypointBundles = require('./entrypoints.json')
+  app.locals.bundles = entrypointBundles
 }
 
 // Middlewares
 app.use(aliasMiddleware)
 app.use(logger('dev'))
 app.use(json())
-app.use(urlencoded())
+app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(passport.initialize())
 

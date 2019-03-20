@@ -1,28 +1,24 @@
 import { useEffect } from 'react'
 
-function useClickOutside(ref, callback) {
+function useDetectInputMode() {
   useEffect(() => {
-    function mouseDownHandler(e) {
-      if (ref && ref.current) {
-        if (ref.current.contains(e.target)) {
-          return
-        }
-      }
-      callback()
+    function mouseDownHandler() {
+      document.body.classList.add('using-mouse')
     }
     function keyDownHandler(e) {
-      // Escape key should collapse things too
-      if (ref && ref.current && e.keyCode === 27) {
-        callback()
+      if (e.key.toLowerCase() !== 'meta') {
+        document.body.classList.remove('using-mouse')
       }
     }
+    document.addEventListener('touchstart', mouseDownHandler, false)
     document.addEventListener('mousedown', mouseDownHandler, false)
     document.addEventListener('keydown', keyDownHandler, false)
     return () => {
+      document.removeEventListener('touchstart', mouseDownHandler, false)
       document.removeEventListener('mousedown', mouseDownHandler, false)
       document.removeEventListener('keydown', keyDownHandler, false)
     }
-  }, [callback, ref])
+  }, [])
 }
 
-export default useClickOutside
+export default useDetectInputMode
