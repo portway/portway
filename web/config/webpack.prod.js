@@ -1,10 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
-// Prod only plugs
+const fs = require('fs')
+// Prod only plugins
 const CompressionPlugin = require('compression-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
+const EntryPointWithSiblings = require('./plugins/entryPointWithSiblings')
 // Custom stuff
 const SharedConfig = require('./webpack.shared')
 const entryPoints = require('./entryPoints.js')
@@ -28,6 +30,12 @@ module.exports = {
     }),
     new CompressionPlugin({
       test: /\.(js|css|html|svg)$/
+    }),
+    new EntryPointWithSiblings({
+      callback: (stats, bundles) => {
+        const outputPath = path.join(stats.toJson().outputPath, '../', 'entrypoints.json')
+        fs.writeFileSync(outputPath, JSON.stringify(bundles, null, 2))
+      }
     })
   ]),
   resolve: {

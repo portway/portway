@@ -4,6 +4,7 @@
 The setup for Express and Webpack is quite complex. This document outlines what is going on with both the Express web server, and the Webpacked javascript bundles.
 
 * [Running a Bundle Analysis](#bundle-analysis)
+* [Running the client in production, locally](#production-local)
 
 ## Bundle Analysis
 
@@ -20,6 +21,18 @@ You can run an analysis of the webpack bundle by running the following commands:
     ```
 
 Alternatively, you can run `npm run analyze`, however note step #2.
+
+## Production, local
+
+1. First, you'll want to run the API in its Docker container, using docker-compose.
+    ```bash
+    docker-compose run --service-ports api ./wait-for.sh db:5432 -- ./run.sh devstart
+    ```
+2. Then, build and run the client in production from /web:
+    ```bash
+    API_PUBLIC_URL=http://localhost:3001 npm run build && API_URL=http://localhost:3001 API_PUBLIC_URL=http://localhost:3001 JWT_SECRET=jwtauthsecret NODE_ENV=production node dist/server/app.js
+    ```
+
 
 **Bundles**
 
