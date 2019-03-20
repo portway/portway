@@ -7,7 +7,7 @@ import store from './reducers'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
 import Constants from 'Shared/constants'
-
+import HeaderContainer from 'Components/Header/HeaderContainer'
 import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
@@ -18,6 +18,7 @@ const App = () => {
     <Provider store={store}>
       <Router basename={Constants.PATH_APP}>
         <>
+          <HeaderContainer />
           <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
           <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
           <Route exact path={Constants.PATH_PROJECT_CREATE} component={ProjectNew} />
