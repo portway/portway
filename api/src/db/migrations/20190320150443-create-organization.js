@@ -1,24 +1,19 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Users', {
+    return queryInterface.createTable('Organizations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
+      name: {
         type: Sequelize.STRING
       },
-      lastName: {
-        type: Sequelize.STRING
-      },
-      email: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      orgId: {
-        allowNull: false,
+      ownerId: {
+        // org should always have an owner, but we have to create
+        // the org first, then create the user assigned to the org,
+        // then assign the org owner as the user
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -28,14 +23,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      password: {
-        allowNull: false,
-        type: Sequelize.STRING
       }
     })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Users')
+    return queryInterface.dropTable('Organizations')
   }
 }

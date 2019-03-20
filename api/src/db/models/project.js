@@ -3,12 +3,15 @@ export default function(sequelize, DataTypes) {
     'Project',
     {
       name: DataTypes.STRING,
-      description: DataTypes.STRING
+      description: DataTypes.STRING,
+      orgId: DataTypes.INTEGER
     },
     {}
   )
   Project.associate = function(models) {
-    // associations can be defined here
+    Project.belongsTo(models.Organization, {
+      foreignKey: 'orgId'
+    })
   }
   return Project
 }

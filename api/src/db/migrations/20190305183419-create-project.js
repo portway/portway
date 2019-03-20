@@ -17,6 +17,10 @@ module.exports = {
         allowEmpty: true,
         type: Sequelize.STRING
       },
+      orgId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
