@@ -1,4 +1,5 @@
 @import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
 
 .masthead {
   border-top: 6px solid $highlight;
@@ -30,6 +31,9 @@
       padding: 0 12px 0 0;
       .navbar-brand-name {
         margin: 0;
+        a {
+          @include focus(transparent);
+        }
         // Default is our branding, we get a little special treatment
         &.default {
           margin-left: -10px;
@@ -60,10 +64,16 @@
       min-width: $sideGutterWidth;
 
       .navbar__settings-link {
+        border-radius: 50% 50%;
         display: block;
         height: 40px;
         margin: auto;
         width: 40px;
+        @include focus(transparent);
+        img {
+          border-radius: 50% 50%;
+          display: block;
+        }
       }
     }
   } // navbar

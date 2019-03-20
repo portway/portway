@@ -1,15 +1,18 @@
 import React from 'react'
 
+import Constants from 'Shared/constants'
 import Header from './Header'
 
-import useDataService from 'Hooks/useDataService'
-import dataMapper from '../../libs/dataMapper'
-import currentUserId from '../../libs/currentUserId'
+const brand = {
+  logo: Constants.PRODUCT_LOGO,
+  name: Constants.PRODUCT_NAME,
+  default: true // if this is our branding
+}
 
-function HeaderContainer(props) {
-  const { data: currentUser } = useDataService(dataMapper.users.id(currentUserId))
-
-  return <Header currentUser={currentUser} />
+function HeaderContainer() {
+  return (
+    <Header brand={brand} />
+  )
 }
 
 export default HeaderContainer

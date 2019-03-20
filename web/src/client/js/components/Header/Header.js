@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, NavLink, withRouter } from 'react-router-dom'
+import { NavLink, Link, withRouter } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
 import Navigator from 'Components/Navigator/NavigatorContainer'
@@ -31,7 +31,7 @@ const renderProjectsItems = () => {
   )
 }
 
-const Header = ({ match, currentUser }) => {
+const Header = ({ match }) => {
   const section = match.path.split('/')[1]
   return (
     <header className="masthead" role="banner">
@@ -66,8 +66,8 @@ const Header = ({ match, currentUser }) => {
 }
 
 Header.propTypes = {
-  match: PropTypes.object.isRequired,
-  currentUser: PropTypes.object
+  brand: PropTypes.object,
+  match: PropTypes.object.isRequired
 }
 
 export default withRouter(Header)

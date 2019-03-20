@@ -28,7 +28,6 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
     setExpanded(false)
-    selectRef.current.blur()
   }, [])
   const toggleCallback = useCallback(() => {
     setExpanded(!expanded)

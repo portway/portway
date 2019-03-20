@@ -1,8 +1,10 @@
 import express from 'express'
 import constants from '../../shared/constants'
 import auth from '../libs/auth'
-// To add a controller, add the base path to mount it as a key and the controller filename as the value
-// Controllers can be added as unauthorized (custom auth or public controllers), or a regular authenticated controller
+// To add a controller, add the base path to mount it as a key and the controller
+// filename as the value
+// Controllers can be added as unauthorized (custom auth or public controllers),
+// or a regular authenticated controller
 
 // Controllers that uses default auth
 const AUTHENTICATED_CONTROLLERS = {
@@ -31,9 +33,7 @@ const loadControllers = (router, controllers, middleware) => {
 }
 
 const loader = (router) => {
-  loadControllers(router, AUTHENTICATED_CONTROLLERS, [
-    auth.jwtMiddleware
-  ])
+  loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware])
   loadControllers(router, UNAUTHENTICATED_CONTROLLERS)
 }
 

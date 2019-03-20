@@ -2,6 +2,9 @@ import axios from 'axios'
 import { getCookieValue } from '../utilities/cookieParser'
 
 const token = getCookieValue('token')
+
+// Webpack's DefinePlugin sets VAR_API_URL during build from
+// process.env.API_PUBLIC_URL
 // eslint-disable-next-line no-undef
 const baseURL = new URL('api/', VAR_API_URL)
 
