@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Projects', {
+    return queryInterface.createTable('Organizations', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,8 +10,10 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      orgId: {
-        allowNull: false,
+      ownerId: {
+        // org should always have an owner, but we have to create
+        // the org first, then create the user assigned to the org,
+        // then assign the org owner as the user
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -25,6 +27,6 @@ module.exports = {
     })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Projects')
+    return queryInterface.dropTable('Organizations')
   }
 }
