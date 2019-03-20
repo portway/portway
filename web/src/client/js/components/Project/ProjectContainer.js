@@ -5,24 +5,17 @@ import { connect } from 'react-redux'
 
 import useDataService from '../../hooks/useDataService'
 import currentResource from '../../libs/currentResource'
-import { removeProject } from 'Actions/project'
 
-const ProjectContainer = ({ history, location, dispatch }) => {
+const ProjectContainer = ({ location }) => {
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
-
-  const handleDelete = function(e) {
-    e.preventDefault()
-    dispatch(removeProject(project.id, history))
-  }
 
   return (
     <div className="project">
       <h3>{project ? project.name : null}</h3>
       <h4>Description:</h4>
       <div>{project ? project.description : null}</div>
-      <button onClick={handleDelete}>delete</button>
     </div>
   )
 }
