@@ -26,7 +26,7 @@ test-api:
 	docker-compose -f docker-compose.test.yml up --build --exit-code-from api-testrunner
 
 rebuildtest:
-	docker-compose -f docker-compose.test.yml down && ./build.sh && docker-compose build --no-cache
+	docker-compose -f docker-compose.test.yml down && docker-compose -f docker-compose.test.yml build --no-cache
 
 # This is... wrong. But it works
 # https://stackoverflow.com/a/6273809/836205
