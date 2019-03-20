@@ -12,7 +12,7 @@ const ProjectContainer = ({ location }) => {
     currentResource('project', location.pathname), [location.pathname]
   )
   return (
-    <ProjectComponent project={project} />
+    <ProjectComponent project={project ? project : {}} />
   )
 }
 
