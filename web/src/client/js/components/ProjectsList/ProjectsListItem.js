@@ -1,10 +1,9 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 
 const ProjectsListItem = ({ activeProjectId, animate, callback, projectId, project }) => {
-  const buttonRef = useRef()
   const [itemHeight, setItemHeight] = useState(null)
   // Set the width and height of the list item after render so that we can animate
   // these properties
@@ -35,10 +34,8 @@ const ProjectsListItem = ({ activeProjectId, animate, callback, projectId, proje
       style={{ height: `${projectHeight}`, width: `${projectWidth}` }}>
       <div
         className="project-list__info"
-        data-projectid={projectId}
-        onClick={() => callback(buttonRef)}
-        onKeyDown={(e) => { if (e.keyCode === 13) { callback(buttonRef) }}}
-        ref={buttonRef}
+        onClick={() => callback(projectId)}
+        onKeyDown={(e) => { if (e.keyCode === 13) { callback(projectId) }}}
         role="button"
         tabIndex="0">
         <span className="icon icon-project" />

@@ -14,12 +14,12 @@ function ProjectsListComponent({ projects }) {
   }, [])
   useClickOutside(nodeRef, collapseCallback)
 
-  function projectToggleHandler(itemRef) {
-    if (itemRef === null) {
+  function projectToggleHandler(projectId) {
+    if (projectId === null) {
       setActiveProjectId(null)
       return false
     }
-    setActiveProjectId(itemRef.current.getAttribute('data-projectid'))
+    setActiveProjectId(projectId)
   }
 
   const projectList = Object.keys(projects).map((projectId) => {

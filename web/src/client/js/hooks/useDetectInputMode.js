@@ -5,8 +5,10 @@ function useDetectInputMode() {
     function mouseDownHandler() {
       document.body.classList.add('using-mouse')
     }
-    function keyDownHandler() {
-      document.body.classList.remove('using-mouse')
+    function keyDownHandler(e) {
+      if (e.key.toLowerCase() !== 'meta') {
+        document.body.classList.remove('using-mouse')
+      }
     }
     document.addEventListener('touchstart', mouseDownHandler, false)
     document.addEventListener('mousedown', mouseDownHandler, false)
