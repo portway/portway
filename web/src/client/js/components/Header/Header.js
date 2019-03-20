@@ -20,17 +20,28 @@ const renderBrandLogo = (logo) => {
   }
 }
 
+const renderProjectsItems = () => {
+  return (
+    <div className="navbar__content-items">
+      <Link to={Constants.PATH_PROJECT_CREATE} className="btn btn--blank btn--with-circular-icon">
+        <span className="icon icon-add" />
+        New Project
+      </Link>
+    </div>
+  )
+}
+
 const Header = ({ match, currentUser }) => {
   const section = match.path.split('/')[1]
   return (
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
-        <div className="navbar-brand">
+        <div className="navbar__brand">
           <Link to={Constants.PATH_DASHBOARD}>
-            <span className="navbar-logo" style={renderBrandLogo(brand.logo)} />
+            <span className="navbar__logo" style={renderBrandLogo(brand.logo)} />
           </Link>
         </div>
-        <div className="navbar-content">
+        <div className="navbar__content">
           {`/${section}` === Constants.PATH_DASHBOARD && (
             <h1 className={`navbar-brand-name${brand.default ? ' default' : ''}`}>
               <NavLink to={Constants.PATH_DASHBOARD}>{Constants.PRODUCT_NAME}</NavLink>
@@ -38,10 +49,14 @@ const Header = ({ match, currentUser }) => {
           )}
           {`/${section}` !== Constants.PATH_DASHBOARD &&
             `/${section}` !== Constants.PATH_SETTINGS && <Navigator />}
+          {
+            `/${section}` === Constants.PATH_PROJECT &&
+            renderProjectsItems()
+          }
           <GlobalSearchContainer />
         </div>
-        <div className="navbar-user">
-          <NavLink to={Constants.PATH_SETTINGS} className="navbar-settings-link">
+        <div className="navbar__user">
+          <NavLink to={Constants.PATH_SETTINGS} className="navbar__settings-link">
             <img src="/images/icon/user-avatar.svg" width="40" height="40" alt="User profile" />
           </NavLink>
         </div>

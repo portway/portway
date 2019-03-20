@@ -5,12 +5,15 @@ import { withRouter } from 'react-router-dom'
 import useDataService from '../../hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
+import ProjectComponent from './ProjectComponent'
+
 const ProjectContainer = ({ match }) => {
   const { data: project } = useDataService(dataMapper.project.id(match.params.projectId), [
     match.params.projectId
   ])
-
-  return <div className="project">{project ? project.name : null}</div>
+  return (
+    <ProjectComponent project={project} />
+  )
 }
 
 ProjectContainer.propTypes = {

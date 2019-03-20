@@ -16,6 +16,11 @@
     background-image: url('/images/icon/arrow-down.svg');
   }
 
+  &-caret-up {
+    background-image: url('/images/icon/arrow-down.svg');
+    transform: rotate(180deg);
+  }
+
   &-user {
     background-image: url('/images/icon/user.svg');
   }

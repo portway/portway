@@ -1,0 +1,30 @@
+@import 'CSS/inc/_vars.scss';
+
+.project {
+
+  &__details {
+    h2 {
+      color: $primary;
+    }
+  }
+
+  &__expand {
+    background-color: $white-bis;
+    border-bottom: thin solid $white-ter;
+    color: $black-ter;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    width: 100vw;
+    &--details {
+      align-items: center;
+      display: flex;
+      padding: 8px $sideGutterWidth;
+      .icon {
+        height: 26px;
+        width: 26px;
+      }
+    }
+  }
+
+}
