@@ -31,7 +31,7 @@ if (devMode) {
 app.use(aliasMiddleware)
 app.use(logger('dev'))
 app.use(json())
-app.use(urlencoded())
+app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(passport.initialize())
 

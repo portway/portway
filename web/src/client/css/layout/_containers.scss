@@ -3,7 +3,10 @@
 // Main content container for each section component
 // Based on a 640/768 ratio in Sketch file
 [role='main'] {
-  padding: 12px $sideGutterWidth;
+  padding: 12px 24px;
+  @include media('>=medium') {
+    padding: 12px $sideGutterWidth;
+  }
 }
 
 .section {
