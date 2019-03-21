@@ -1,14 +1,14 @@
 import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
+import Store from '../../reducers'
 import { removeProject } from 'Actions/project'
 import useClickOutside from 'Hooks/useClickOutside'
 import ProjectsListItem from './ProjectsListItem'
 import './ProjectList.scss'
 
-function ProjectsListComponent({ projects, history, dispatch }) {
+function ProjectsListComponent({ projects, history }) {
   const [activeProjectId, setActiveProjectId] = useState(null)
 
   const nodeRef = useRef()
@@ -28,7 +28,7 @@ function ProjectsListComponent({ projects, history, dispatch }) {
   const projectList = Object.keys(projects).map((projectId) => {
     const handleDelete = (e) => {
       e.preventDefault()
-      dispatch(removeProject(projectId, history))
+      Store.dispatch(removeProject(projectId, history))
     }
 
     return <ProjectsListItem
@@ -48,8 +48,7 @@ function ProjectsListComponent({ projects, history, dispatch }) {
 
 ProjectsListComponent.propTypes = {
   projects: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  history: PropTypes.object.isRequired
 }
 
-export default connect()(withRouter(ProjectsListComponent))
+export default withRouter(ProjectsListComponent)

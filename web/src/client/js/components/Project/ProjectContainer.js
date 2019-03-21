@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
 
 import useDataService from '../../hooks/useDataService'
 import currentResource from '../../libs/currentResource'
@@ -22,8 +21,7 @@ const ProjectContainer = ({ location }) => {
 
 ProjectContainer.propTypes = {
   history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  location: PropTypes.object.isRequired
 }
 
-export default connect()(withRouter(ProjectContainer))
+export default withRouter(ProjectContainer)

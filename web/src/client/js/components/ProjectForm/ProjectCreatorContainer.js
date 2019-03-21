@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
 
+import Store from '../../reducers'
 import { createProject } from 'Actions/project'
-
 import ProjectForm from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
-const ProjectCreatorContainer = ({ history, dispatch }) => {
+const ProjectCreatorContainer = ({ history }) => {
   const { data: users } = useDataService(dataMapper.users.list())
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
@@ -21,7 +20,7 @@ const ProjectCreatorContainer = ({ history, dispatch }) => {
 
   function submitHandler(e) {
     e.preventDefault()
-    dispatch(
+    Store.dispatch(
       createProject(
         {
           name: formValues.projectName,
@@ -82,8 +81,7 @@ const ProjectCreatorContainer = ({ history, dispatch }) => {
 }
 
 ProjectCreatorContainer.propTypes = {
-  history: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  history: PropTypes.object.isRequired
 }
 
-export default connect()(withRouter(ProjectCreatorContainer))
+export default withRouter(ProjectCreatorContainer)
