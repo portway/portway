@@ -2,7 +2,7 @@ import BusinessUser from '../businesstime/user'
 import ono from 'ono'
 
 const usersController = function(router) {
-  //TODO we don't want to actually fetch all users, needs to be converted to a fetch by organization id
+  //TODO needs to be converted to a fetch by organization id
   router.get('/', getUsers)
   router.get('/:id', getUser)
 }
@@ -17,7 +17,7 @@ const getUsers = async function(req, res) {
   }
 }
 
-const getUser = async function (req, res) {
+const getUser = async function(req, res) {
   const id = req.params.id
 
   try {
@@ -26,9 +26,7 @@ const getUser = async function (req, res) {
     res.json(user)
   } catch (e) {
     console.error(e.stack)
-    res
-      .status(e.code || 500)
-      .json({ error: `error fetching user with id ${id}` })
+    res.status(e.code || 500).json({ error: `error fetching user with id ${id}` })
   }
 }
 
