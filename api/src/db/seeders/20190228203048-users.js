@@ -69,6 +69,10 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Users', { email: { $in: bulkUsers.map(user => user.email) } }, {})
+    return queryInterface.bulkDelete(
+      'Users',
+      { email: { $in: bulkUsers.map(user => user.email) } },
+      {}
+    )
   }
 }

@@ -5,7 +5,7 @@ import initializeTestDb from '../db/__testSetup__/initializeTestDb'
 describe('UserBusiness', () => {
   let factoryUsers
 
-  beforeAll(async() => {
+  beforeAll(async () => {
     await initializeTestDb()
     factoryUsers = await UserFactory.createMany(5)
   })
@@ -13,7 +13,7 @@ describe('UserBusiness', () => {
   describe('findAllSanitized', () => {
     let users
 
-    beforeAll(async() => {
+    beforeAll(async () => {
       users = await UserBusiness.findAllSanitized()
     })
 
@@ -33,7 +33,7 @@ describe('UserBusiness', () => {
     let targetUserId
     let user
 
-    beforeAll(async() => {
+    beforeAll(async () => {
       targetUserId = factoryUsers[0].get('id')
       user = await UserBusiness.findSanitizedById(targetUserId)
     })

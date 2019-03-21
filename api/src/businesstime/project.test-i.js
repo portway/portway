@@ -36,7 +36,7 @@ describe('ProjectBusiness', () => {
         expect(project.constructor).toBe(Object)
       })
     })
-    
+
     describe('when the target document is not found', () => {
       it('should throw an error', async () => {
         await expect(ProjectBusiness.updateById(8675309)).rejects.toThrow()

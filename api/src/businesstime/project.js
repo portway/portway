@@ -1,5 +1,5 @@
 import { getDb } from '../db/dbConnector'
-import ono from 'ono';
+import ono from 'ono'
 
 const MODEL_NAME = 'Project'
 
