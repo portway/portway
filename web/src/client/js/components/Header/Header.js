@@ -31,8 +31,8 @@ const renderProjectsItems = () => {
   )
 }
 
-const Header = ({ match }) => {
-  const section = match.path.split('/')[1]
+const Header = ({ location }) => {
+  const section = location.pathname.split('/')[1]
   return (
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -67,7 +67,7 @@ const Header = ({ match }) => {
 
 Header.propTypes = {
   brand: PropTypes.object,
-  match: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired
 }
 
 export default withRouter(Header)

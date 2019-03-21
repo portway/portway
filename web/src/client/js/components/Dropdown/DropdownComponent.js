@@ -5,6 +5,8 @@ import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
+import './Dropdown.scss'
+
 const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
   // Menu is not collapsed by default
   const [expanded, setExpanded] = useState(menu && menu.isOpen || false)
@@ -14,10 +16,12 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
   const buttonRef = useRef()
   useEffect(() => {
     if (buttonRef.current) {
-      const leftPos = buttonRef.current.getBoundingClientRect().x
-      if (leftPos) {
-        (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
-      }
+      setTimeout(() => {
+        const leftPos = buttonRef.current.getBoundingClientRect().x
+        if (leftPos) {
+          (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
+        }
+      }, 20)
     }
   }, [])
   // Custom hooks
@@ -32,7 +36,7 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut(shortcut, toggleCallback)
   return (
-    <div ref={nodeRef} className={className}>
+    <div ref={nodeRef} className={`dropdown ${className}`}>
       <button
         className={`btn ${button.className ? button.className : ''} ${
           hasIcon ? ' btn--with-icon' : ''

@@ -2,6 +2,7 @@
 @import 'CSS/animations/_rotateAndScale.scss';
 
 .navigator {
+  top: 2px; // fix weird lining up
   .btn {
     transition: transform 0.2s ease-out;
     will-change: transform, opacity;

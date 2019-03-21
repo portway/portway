@@ -6,6 +6,7 @@ import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
+import './DropdownSelect.scss'
 import './_react-select.scss'
 
 const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
@@ -18,10 +19,12 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
   const buttonRef = useRef()
   useEffect(() => {
     if (buttonRef.current) {
-      const leftPos = buttonRef.current.getBoundingClientRect().x
-      if (leftPos) {
-        (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
-      }
+      setTimeout(() => {
+        const leftPos = buttonRef.current.getBoundingClientRect().x
+        if (leftPos) {
+          (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
+        }
+      }, 20)
     }
   }, [])
   // Custom hooks
@@ -46,7 +49,7 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
     menu.onChange(value)
   }
   return (
-    <div ref={nodeRef} className={className}>
+    <div ref={nodeRef} className={`dropdown dropdown--with-select ${className}`}>
       <button
         className={`btn ${button.className ? button.className : ''} ${
           hasIcon ? ' btn--with-icon' : ''

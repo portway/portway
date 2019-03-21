@@ -1,24 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import FilterComponent from './FilterComponent'
+import SortComponent from './SortComponent'
+
 import './Toolbar.scss'
 
-const ToolbarComponent = ({ start, end }) => {
+const ToolbarComponent = ({ action, filter, sort }) => {
   return (
     <header className="toolbar">
       <div className="toolbar__start">
-        {start}
+        <button className="btn btn--blank btn--with-circular-icon" onClick={action.callback}>
+          <span className={`icon ${action.icon}`} />
+          {action.label}
+        </button>
       </div>
       <div className="toolbar__end">
-        {end}
+        {filter && <FilterComponent />}
+        {sort && <SortComponent />}
       </div>
     </header>
   )
 }
 
 ToolbarComponent.propTypes = {
-  start: PropTypes.node,
-  end: PropTypes.node,
+  action: PropTypes.object,
+  filter: PropTypes.bool,
+  sort: PropTypes.bool
 }
 
 export default ToolbarComponent
