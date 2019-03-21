@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
-const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) => {
+const ProjectFormComponent = ({ formOptions, teamOptions }) => {
   return (
-    <form className="project-form">
+    <form className="project-form" onSubmit={formOptions.submitHandler}>
       <div className="form-field">
         <label htmlFor="projectName">Project Name</label>
         <input
@@ -12,7 +12,8 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
           name="project[name]"
           id="projectName"
           placeholder="My new project"
-          value={name}
+          value={formOptions.values.projectName}
+          onChange={formOptions.changeHandler}
         />
       </div>
       <div className="form-field form-field--large">
@@ -21,7 +22,8 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
           type="text"
           name="project[description]"
           id="projectDescription"
-          value={description}
+          value={formOptions.values.projectDescription}
+          onChange={formOptions.changeHandler}
         />
       </div>
       {teamOptions && (
@@ -41,12 +43,7 @@ const ProjectFormComponent = ({ name, description, formOptions, teamOptions }) =
         </div>
       )}
       <div className="btn-group">
-        <input
-          type="submit"
-          className="btn"
-          onClick={formOptions.submitHandler}
-          value={formOptions.submitLabel}
-        />
+        <input type="submit" className="btn" value={formOptions.submitLabel} />
         {formOptions.cancelHandler && (
           <button className="btn btn--blank" onClick={formOptions.cancelHandler}>
             {formOptions.cancelLabel || 'Cancel'}

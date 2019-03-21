@@ -9,12 +9,12 @@ import bcrypt from 'bcrypt'
 
 const SALT_ROUNDS = 11
 
-const generateHash = async(password) => {
+const generateHash = async (password) => {
   const hash = await bcrypt.hash(password, SALT_ROUNDS)
   return hash
 }
 
-const validatePassword = async(password, hashedPassword) => {
+const validatePassword = async (password, hashedPassword) => {
   const match = await bcrypt.compare(password, hashedPassword)
   return match
 }

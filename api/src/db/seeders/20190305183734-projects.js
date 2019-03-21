@@ -50,6 +50,10 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('People', null, {});
     */
-    return queryInterface.bulkDelete('Projects', { name: { $in: bulkProjects.map(project => project.name) } }, {})
+    return queryInterface.bulkDelete(
+      'Projects',
+      { name: { $in: bulkProjects.map(project => project.name) } },
+      {}
+    )
   }
 }

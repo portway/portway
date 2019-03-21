@@ -14,9 +14,11 @@ import './Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
+
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
+
   const dropdownButton = {
     label: project ? project.name : 'Projects',
     className: 'btn--blank h-third-level',

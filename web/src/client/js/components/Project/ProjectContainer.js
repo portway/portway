@@ -10,10 +10,17 @@ const ProjectContainer = ({ location }) => {
     currentResource('project', location.pathname), [location.pathname]
   )
 
-  return <div className="project">{project ? project.name : null}</div>
+  return (
+    <div className="project">
+      <h3>{project ? project.name : null}</h3>
+      <h4>Description:</h4>
+      <div>{project ? project.description : null}</div>
+    </div>
+  )
 }
 
 ProjectContainer.propTypes = {
+  history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 }
 
