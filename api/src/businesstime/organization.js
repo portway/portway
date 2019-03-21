@@ -3,7 +3,14 @@ import ono from 'ono'
 import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 
 const MODEL_NAME = 'Organization'
-const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'name']
+const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'name', 'ownerId']
+
+async function create(body) {
+  const db = getDb()
+  const createdProject = await db.model(MODEL_NAME).create(body)
+  const plainOrg = createdProject.get({ plain: true })
+  return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainOrg[key] })))
+}
 
 async function findSanitizedById(id) {
   const db = getDb()
@@ -25,6 +32,7 @@ async function updateById(id, body) {
 }
 
 export default {
+  create,
   findSanitizedById,
   updateById
 }

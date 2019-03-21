@@ -8,7 +8,8 @@ import auth from '../libs/auth'
 const AUTHENTICATED_CONTROLLERS = {
   '/billing': 'billing',
   '/projects': 'projects',
-  '/users': 'users'
+  '/users': 'users',
+  '/signup': 'signup'
 }
 
 // Define controllers with custom auth (must be implemented in the controller!)
