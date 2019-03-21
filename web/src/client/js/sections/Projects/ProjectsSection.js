@@ -17,7 +17,7 @@ class ProjectsContainer extends React.PureComponent {
     }
     return (
       <div role="main">
-        <ToolbarComponent action={toolbarAction} />
+        <ToolbarComponent action={toolbarAction} filter sort />
         <ProjectsListContainer />
       </div>
     )
