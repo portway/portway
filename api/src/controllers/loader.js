@@ -10,13 +10,13 @@ import auth from '../libs/auth'
 const AUTHENTICATED_CONTROLLERS = {
   '/billing': 'billing',
   '/projects': 'projects',
-  '/users': 'users',
-  '/signup': 'signup'
+  '/users': 'users'
 }
 
 // Define controllers with custom auth (must be implemented in the controller!)
 const UNAUTHENTICATED_CONTROLLERS = {
-  '/login': 'login'
+  '/login': 'login',
+  '/signup': 'signup'
 }
 
 const loadControllers = (router, controllers, middleware) => {
