@@ -21,3 +21,97 @@
 // To help stay sane, look at the structure of the Bulma repo here for
 // the correct import paths. It doesn't match their documentation site perfectly
 // https://github.com/jgthms/bulma/tree/master/sass
+@import 'vars';
+
+// Links
+a {
+  color: $action;
+  text-decoration: underline;
+  &:hover {
+    color: lighten($action, 20%);
+  }
+  &:active {
+    color: $action-dark;
+  }
+  &:focus {
+    color: lighten($action, 20%);
+  }
+}
+
+// Navbar adjustments
+.navbar-brand {
+  .navbar-item {
+    a {
+      align-items: center;
+      display: flex;
+    }
+  }
+  .navbar-logo {
+    background: url('/images/logo.svg') no-repeat 50% 50%;
+    background-size: 30%;
+    display: inline-block;
+    height: $sideGutterWidth;
+    width: $sideGutterWidth;
+  }
+}
+
+
+// Bulma hero override
+.hero {
+  &.is-info {
+    background-color: $primary-light;
+    color: $black-ter;
+    .title {
+      color: $black-bis;
+    }
+  }
+  .hero-body {
+    > .container {
+      padding: 0 64px;
+    }
+  }
+}
+.hero-head {
+  .navbar {
+    background: $primary-light;
+    .navbar-start,
+    .navbar-brand {
+      a {
+        color: $primary;
+        font-family: $serif;
+      }
+    }
+  }
+}
+
+// Bulma button override
+.button {
+  background-color: $action;
+  &:hover, &:focus {
+    background-color: lighten($action, 10%);
+  }
+  &:active {
+    background-color: $action-dark;
+  }
+  &.is-primary {
+    background-color: $primary;
+    &:hover, &:focus {
+      background-color: lighten($primary, 10%);
+    }
+    &:active {
+      background-color: $primary-dark;
+    }
+  }
+}
+
+.section {
+  .container {
+    padding: 0 64px;
+  }
+}
+
+.field--with-space {
+  padding-top: 24px;
+}
+
+

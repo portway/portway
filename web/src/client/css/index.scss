@@ -1,35 +1,13 @@
-@import 'inc/base';
 @import 'inc/theme';
+@import 'inc/base';
 
 body.home {
-  background: $info;
-  .hero-head {
-    .navbar {
-      background: $info;
-      .navbar-start,
-      .navbar-brand {
-        a {
-          color: $white;
-          font-family: 'Aleo', Georgia, serif;
-        }
-      }
-    }
-  }
+  background: $primary-light;
 }
 
 .login-form {
   width: 400px;
-}
-
-.register-plan-section {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  .register-plan-item {
-    flex: 1;
-    margin: 0 1em 0 0;
-    &:last-child {
-      margin: 0;
-    }
+  label {
+    color: $black-bis;
   }
 }

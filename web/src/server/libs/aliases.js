@@ -1,7 +1,7 @@
-
 const ALIASES = {
-  '/sign-in': '/users/sign-in',
-  '/sign-up': '/users/sign-up'
+  // Removed these aliases because it's easier to have two separate controllers
+  // '/sign-in': '/users/sign-in',
+  // '/sign-up': '/users/sign-up'
 }
 
 const ALIAS_KEYS = Object.keys(ALIASES)
