@@ -30,7 +30,7 @@ const currentResource = (resourceName, path) => {
         exact: true,
         strict: false
       })
-      func = dataMapper.project.id
+      func = dataMapper.projects.id
       break
     default:
       // Return empty functions

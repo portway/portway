@@ -27,6 +27,7 @@ app.use((req, res, next) => {
   )
   res.setHeader(
     'Access-Control-Allow-Headers',
+    // eslint-disable-next-line max-len
     'Access-Control-Allow-Headers, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
   )
   // remove caching to ensure fresh results

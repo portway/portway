@@ -5,15 +5,15 @@ import initializeTestDb from '../db/__testSetup__/initializeTestDb'
 describe('UserBusiness', () => {
   let factoryUsers
 
-  beforeAll(async() => {
+  beforeAll(async () => {
     await initializeTestDb()
     factoryUsers = await UserFactory.createMany(5)
   })
 
-  describe('findAllSanitized', async() => {
+  describe('findAllSanitized', () => {
     let users
 
-    beforeAll(async() => {
+    beforeAll(async () => {
       users = await UserBusiness.findAllSanitized()
     })
 
@@ -24,12 +24,12 @@ describe('UserBusiness', () => {
     it('should return sanitized users as POJOs', () => {
       for (const user of users) {
         expect(user.password).toBe(undefined)
-        expect(user).toBeInstanceOf(Object)
+        expect(user.constructor).toBe(Object)
       }
     })
   })
 
-  describe('findSanitizedById', async () => {
+  describe('findSanitizedById', () => {
     let targetUserId
     let user
 
@@ -41,7 +41,7 @@ describe('UserBusiness', () => {
     it('should return a sanitized user as POJO', () => {
       expect(user.password).toBe(undefined)
       expect(user.id).toBe(targetUserId)
-      expect(user).toBeInstanceOf(Object)
+      expect(user.constructor).toBe(Object)
     })
   })
 })

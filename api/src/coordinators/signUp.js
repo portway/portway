@@ -15,10 +15,7 @@ async function signUp(firstName, lastName, email, password) {
     orgId: organization.id
   })
 
-  console.log(organization)
-
-  const updatedOrg = await BusinessOrganization.updateById(organization.id, { ownerId: createdUser.id })
-  console.log(updatedOrg)
+  await BusinessOrganization.updateById(organization.id, { ownerId: createdUser.id })
 }
 
 export default {
