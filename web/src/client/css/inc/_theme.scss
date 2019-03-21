@@ -72,8 +72,15 @@ a {
   }
 }
 .hero-head {
+  background-color: $white;
+  border-top: 6px solid $highlight;
+  .home & {
+    background-color: $primary-light;
+  }
   .navbar {
-    background: $primary-light;
+    .home & {
+      background-color: $primary-light;
+    }
     .navbar-start,
     .navbar-brand {
       a {
