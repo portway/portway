@@ -1,0 +1,33 @@
+<%- include('../partials/head', { title: title, permalink: permalink, robots: 'index, nofollow' }); %>
+<%- include('../partials/navigation'); %>
+<main class="section">
+  <div class="container">
+    <h1 class="title">Complete your registration</h1>
+    <p>You're almost there! Pick a strong password to finish the last step.</p>
+    <form class="login-form">
+      <div class="field">
+        <label class="label is-small" for="password">Password</label>
+        <div class="control">
+          <input class="input is-success" name="password" type="password" placeholder="" autocomplete="section-signup new-password">
+          <p class="help is-success">Nice password.</p>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label is-small" for="confirm-password">Confirm password</label>
+        <div class="control">
+          <input class="input is-danger" name="confirm-password" type="password" placeholder="" autocomplete="section-signup new-password">
+          <p class="help is-danger">Your passwords don't match</p>
+        </div>
+      </div>
+      <div class="field field--with-space">
+        <%
+          if (typeof button === 'undefined') {
+            var button = 'Save Password'
+          }
+        %>
+        <input type="submit" class="button is-primary" value="<%= button %>">
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('../partials/foot'); %>
