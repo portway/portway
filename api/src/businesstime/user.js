@@ -1,13 +1,23 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
 import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
+import { UniqueConstraintError } from 'sequelize'
 
 const MODEL_NAME = 'User'
 const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email', 'orgId']
 
 async function create(body) {
   const db = getDb()
-  const createdUser = await db.model(MODEL_NAME).create(body)
+  let createdUser
+  try {
+    createdUser = await db.model(MODEL_NAME).create(body)
+  } catch (err) {
+    if (err instanceof UniqueConstraintError) {
+      throw ono({ code: 409 }, 'Cannot create user, duplicate value error')
+    }
+    throw err
+  }
+
   const plainUser = createdUser.get({ plain: true })
   return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainUser[key] })))
 }
