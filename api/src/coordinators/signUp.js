@@ -1,5 +1,6 @@
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
+import tokenIntegrator from '../integrators/token'
 
 async function signUp(firstName, lastName, email, password) {
   const organizationName = `${firstName} ${lastName}'s Organization`
@@ -13,6 +14,9 @@ async function signUp(firstName, lastName, email, password) {
   })
 
   await BusinessOrganization.updateById(organization.id, { ownerId: createdUser.id })
+
+  const token = tokenIntegrator.generateToken(req.user.email, req.user.id)
+  return token
 }
 
 export default {

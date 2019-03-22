@@ -3,5 +3,6 @@ export default {
   passwordResetTokenSecret: process.env.PASSWORD_RESET_JWT_SECRET,
   issuer: 'bonkeybong',
   audience: 'projectdanger',
-  expiration: '7 days'
+  expiration: '7 days',
+  passwordResetExpiration: '1 days'
 }

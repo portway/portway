@@ -24,8 +24,8 @@ const signUp = async function(req, res) {
   const { firstName, lastName, email } = req.body
 
   try {
-    await signUpCoordinator.signUp(firstName, lastName, email)
-    res.status(204).send()
+    const token = await signUpCoordinator.signUp(firstName, lastName, email)
+    res.status(200).send({ token })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot sign up' })
