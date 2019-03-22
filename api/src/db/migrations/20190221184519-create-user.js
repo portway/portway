@@ -32,6 +32,9 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING
+      },
+      resetKey: {
+        type: Sequelize.STRING
       }
     })
   },

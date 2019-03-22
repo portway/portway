@@ -4,7 +4,8 @@ export default function(sequelize, DataTypes) {
     lastName: DataTypes.STRING,
     email: { type: DataTypes.STRING, unique: true },
     password: DataTypes.STRING,
-    orgId: DataTypes.INTEGER
+    orgId: DataTypes.INTEGER,
+    resetKey: DataTypes.STRING
   }, {})
   User.associate = function(models) {
     User.belongsTo(models.Organization, {
