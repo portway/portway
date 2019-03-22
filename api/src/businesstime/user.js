@@ -28,6 +28,11 @@ async function findByEmail(email) {
   return user && user.get({ plain: true })
 }
 
+async function findById(id) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findByPk(id, { raw: true })
+}
+
 // TODO convert to find all users within organization
 async function findAllSanitized() {
   const db = getDb()
@@ -47,10 +52,20 @@ async function updateByEmail(email, body) {
   return updatedUser && updatedUser.get({ plain: true })
 }
 
+async function updateById(id, body) {
+  const db = getDb()
+  const user = await db.model(MODEL_NAME).findByPk(id)
+  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
+  const updatedUser = await user.update(body)
+  return updatedUser && updatedUser.get({ plain: true })
+}
+
 export default {
   create,
   findByEmail,
+  findById,
   findAllSanitized,
   findSanitizedById,
-  updateByEmail
+  updateByEmail,
+  updateById
 }

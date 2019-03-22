@@ -1,6 +1,9 @@
 import Joi from 'joi'
+
 import validate from '../libs/payloadValidation'
 import signUpCoordinator from '../coordinators/signUp'
+import userCoordinator from '../coordinators/user'
+import auth from '../libs/auth'
 
 const signupPayloadSchema = Joi.compile({
   body: Joi.object().keys({
@@ -12,15 +15,28 @@ const signupPayloadSchema = Joi.compile({
 })
 
 const signupController = function(router) {
+  // TODO: currently no auth on this route
   router.post('/', validate(signupPayloadSchema), signUp)
+  router.post('/initialPassword', auth.jwtPasswordResetMiddleware, setInitialPassword)
 }
 
 const signUp = async function(req, res) {
-  const { firstName, lastName, email, password } = req.body
+  const { firstName, lastName, email } = req.body
 
   try {
-    await signUpCoordinator.signUp(firstName, lastName, email, password)
+    await signUpCoordinator.signUp(firstName, lastName, email)
     res.status(204).send()
+  } catch (e) {
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: 'Cannot sign up' })
+  }
+}
+
+const setInitialPassword = async function(req, res) {
+  const { userId, password } = req.body
+
+  try {
+    await userCoordinator.setInitialPassword(userId, password)
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot sign up' })
