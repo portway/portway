@@ -1,10 +1,11 @@
 import faker from 'faker'
 import { getDb } from '../../dbConnector'
+import constants from '../constants'
 
 const getProjectData = function(override = {}) {
   const defaultProps = {
     name: faker.random.word(),
-    orgId: 1
+    orgId: constants.ORG_ID
   }
   return { ...defaultProps, ...override }
 }

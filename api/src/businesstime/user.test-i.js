@@ -1,8 +1,9 @@
-import UserBusiness from './user'
+import BusinessUser from './user'
 import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb from '../db/__testSetup__/initializeTestDb'
+import constants from '../db/__testSetup__/constants'
 
-describe('UserBusiness', () => {
+describe('BusinessUser', () => {
   let factoryUsers
 
   beforeAll(async () => {
@@ -14,7 +15,7 @@ describe('UserBusiness', () => {
     let users
 
     beforeAll(async () => {
-      users = await UserBusiness.findAllSanitized()
+      users = await BusinessUser.findAllSanitized(constants.ORG_ID)
     })
 
     it('should return all users', () => {
@@ -25,6 +26,7 @@ describe('UserBusiness', () => {
       for (const user of users) {
         expect(user.password).toBe(undefined)
         expect(user.constructor).toBe(Object)
+        expect(user.orgId).toBe(constants.ORG_ID)
       }
     })
   })
@@ -35,13 +37,14 @@ describe('UserBusiness', () => {
 
     beforeAll(async () => {
       targetUserId = factoryUsers[0].get('id')
-      user = await UserBusiness.findSanitizedById(targetUserId)
+      user = await BusinessUser.findSanitizedById(targetUserId, constants.ORG_ID)
     })
 
     it('should return a sanitized user as POJO', () => {
       expect(user.password).toBe(undefined)
       expect(user.id).toBe(targetUserId)
       expect(user.constructor).toBe(Object)
+      expect(user.orgId).toBe(constants.ORG_ID)
     })
   })
 })
