@@ -8,6 +8,7 @@ jest.mock('../libs/passwords')
 describe('user coordinator', () => {
   const email = 'hughjackman@johntravolta.gov'
   const password = 'swordfish'
+  const userId = 1
 
   describe('#updatePassword', () => {
     beforeAll(async () => {
@@ -24,6 +25,47 @@ describe('user coordinator', () => {
       expect(BusinessUser.updateByEmail.mock.calls.length).toBe(1)
       expect(BusinessUser.updateByEmail.mock.calls[0][0]).toBe(email)
       expect(BusinessUser.updateByEmail.mock.calls[0][1]).toEqual({
+        password: mockHashedPassword
+      })
+    })
+  })
+
+  describe('#setInitialPassword', () => {
+    const mockUserWithoutPassword = {
+      id: 8675309,
+      firstName: 'not-a-real-first-name',
+      lastName: 'not-a-real-last-name',
+      email: 'not-a-real-email@email.com',
+      orgId: 666,
+      resetKey: 'not-a-real-reset-key'
+    }
+
+    beforeAll(async () => {
+      passwords.generateHash.mockReset()
+      BusinessUser.setFindByIdReturnValue(mockUserWithoutPassword)
+      await userCoordinator.setInitialPassword(userId, password)
+    })
+
+    afterAll(() => {
+      BusinessUser.resetFindByIdReturnValue()
+    })
+
+    it('should call BusinessUser.findById with the correct id', () => {
+      expect(BusinessUser.findById.mock.calls.length).toBe(1)
+      expect(BusinessUser.findById.mock.calls[0][0]).toBe(userId)
+    })
+
+    it('should call passwords.generateHash with the correct password', () => {
+      expect(passwords.generateHash.mock.calls.length).toBe(1)
+      expect(passwords.generateHash.mock.calls[0][0]).toBe(password)
+    })
+
+    it('should call BusinessUser.updateById with the correct id and body', () => {
+      const mockHashedPassword = passwords.generateHash.mock.results[0].value
+      const mockUserId = BusinessUser.findById.mock.results[0].value.id
+      expect(BusinessUser.updateById.mock.calls.length).toBe(1)
+      expect(BusinessUser.updateById.mock.calls[0][0]).toBe(mockUserId)
+      expect(BusinessUser.updateById.mock.calls[0][1]).toEqual({
         password: mockHashedPassword
       })
     })
@@ -72,6 +114,40 @@ describe('user coordinator', () => {
 
       it('should throw an error', async () => {
         await expect(userCoordinator.validateEmailPasswordCombo(email, password)).rejects.toThrow()
+      })
+    })
+  })
+
+  describe('validatePasswordResetKey', () => {
+    describe('when the target user is not found', () => {
+      beforeAll(async () => {
+        BusinessUser.setFindByIdReturnValue(null)
+      })
+
+      afterAll(() => {
+        BusinessUser.resetFindByIdReturnValue()
+      })
+
+      it('should throw an error', async () => {
+        // eslint-disable-next-line max-len
+        await expect(userCoordinator.validatePasswordResetKey(1, 'some-key-definitely-not-real')).rejects.toThrow()
+      })
+    })
+
+    describe('when the passed in reset key does not match the key stored on the user', () => {
+      beforeAll(async () => {
+        BusinessUser.setFindByIdReturnValue({
+          resetKey: 'this-one-wont-match'
+        })
+      })
+
+      afterAll(() => {
+        BusinessUser.resetFindByIdReturnValue()
+      })
+
+      it('should throw an error', async () => {
+        // eslint-disable-next-line max-len
+        await expect(userCoordinator.validatePasswordResetKey(1, 'some-key-definitely-not-real')).rejects.toThrow()
       })
     })
   })
