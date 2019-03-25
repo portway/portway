@@ -39,7 +39,7 @@ async function validatePasswordResetKey(userId, resetKey) {
   if (!user) {
     throw ono({ code: 404 }, `No user found with id: ${userId}`)
   }
-  if (user.passwordResetKey !== resetKey) {
+  if (user.resetKey !== resetKey) {
     throw ono({ code: 401 }, `Password reset key does not match user key`)
   }
   return user

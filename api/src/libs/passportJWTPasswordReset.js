@@ -12,7 +12,7 @@ const options = {
 
 export default function(passport) {
   passport.use(
-    'password-reset',
+    'jwt-password-reset',
     new JwtStrategy(options, async (payload, done) => {
       let user
 

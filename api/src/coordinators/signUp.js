@@ -1,13 +1,12 @@
-import uuidv1 from 'uuid/v1'
-
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
+import passwordResetKey from '../libs/passwordResetKey'
 
 async function signUp(firstName, lastName, email, password) {
   const organizationName = `${firstName} ${lastName}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
-  const resetKey = uuidv1()
+  const resetKey = passwordResetKey.generate()
 
   const createdUser = await BusinessUser.create({
     firstName,

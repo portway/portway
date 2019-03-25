@@ -9,8 +9,7 @@ const signupPayloadSchema = Joi.compile({
   body: Joi.object().keys({
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().required()
+    email: Joi.string().email().required()
   })
 })
 
@@ -33,7 +32,8 @@ const signUp = async function(req, res) {
 }
 
 const setInitialPassword = async function(req, res) {
-  const { userId, password } = req.body
+  const { password } = req.body
+  const { id: userId } = req.user
 
   try {
     await userCoordinator.setInitialPassword(userId, password)
@@ -41,6 +41,8 @@ const setInitialPassword = async function(req, res) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot sign up' })
   }
+
+  res.status(200).send()
 }
 
 export default signupController
