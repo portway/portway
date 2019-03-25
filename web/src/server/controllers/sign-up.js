@@ -45,7 +45,7 @@ const registerOrganization = async (req, res) => {
 const setInitialPassword = async (req, res) => {
   const { password, 'confirm-password': confirmPassword, token } = req.body
 
-  // TODO re render form with mismatch error message
+  // TODO re-render form with mismatch error message
   if (password !== confirmPassword) {
     return res.send(400)
   }
