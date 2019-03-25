@@ -9,6 +9,8 @@ describe('BusinessUser', () => {
   beforeAll(async () => {
     await initializeTestDb()
     factoryUsers = await UserFactory.createMany(5)
+    // Create users in another org that shouldn't get returned on this endpoint
+    await UserFactory.createMany(3, { orgId: constants.ORG_2_ID })
   })
 
   describe('findAllSanitized', () => {
