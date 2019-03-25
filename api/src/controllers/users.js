@@ -1,9 +1,9 @@
 import BusinessUser from '../businesstime/user'
 import ono from 'ono'
 import crudPerms from '../libs/middleware/reqCrudPerms'
-import resourceTypes from '../constants/resourceTypes'
+import RESOURCE_TYPES from '../constants/resourceTypes'
 
-const { readPerm, listPerm } = crudPerms(resourceTypes.USER, (req) => {
+const { readPerm, listPerm } = crudPerms(RESOURCE_TYPES.USER, (req) => {
   req.params.id
 })
 

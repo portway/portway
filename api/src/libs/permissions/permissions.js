@@ -1,5 +1,6 @@
 import projectAccess from './projects'
 import userAccess from './users'
+import RESOURCE_TYPES from '../../constants/resourceTypes'
 /*
   requestorInfo = {
     orgId: '123',
@@ -17,8 +18,8 @@ import userAccess from './users'
 */
 
 const resourceToHandler = {
-  project: projectAccess,
-  user: userAccess
+  [RESOURCE_TYPES.PROJECT]: projectAccess,
+  [RESOURCE_TYPES.USER]: userAccess
 }
 
 /**

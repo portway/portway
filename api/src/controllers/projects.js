@@ -3,10 +3,10 @@ import ono from 'ono'
 import validate from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
-import resourceTypes from '../constants/resourceTypes'
+import RESOURCE_TYPES from '../constants/resourceTypes'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
-  resourceTypes.PROJECT,
+  RESOURCE_TYPES.PROJECT,
   req => req.params.id
 )
 
