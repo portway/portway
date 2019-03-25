@@ -1,6 +1,6 @@
 import billingCoordinator from '../coordinators/billing'
 import Joi from 'joi'
-import validate from '../libs/payloadValidation'
+import validate from '../libs/middleware/payloadValidation'
 
 const billingPayloadSchema = Joi.compile({
   body: Joi.object().keys({

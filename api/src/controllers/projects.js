@@ -1,7 +1,13 @@
 import Joi from 'joi'
-import validate from '../libs/payloadValidation'
-import BusinessProject from '../businesstime/project'
 import ono from 'ono'
+import validate from '../libs/middleware/payloadValidation'
+import BusinessProject from '../businesstime/project'
+import crudPerms from '../libs/middleware/reqCrudPerms'
+
+const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
+  'project',
+  req => req.params.id
+)
 
 const projectsPayloadSchema = Joi.compile({
   body: Joi.object().keys({
@@ -11,16 +17,16 @@ const projectsPayloadSchema = Joi.compile({
 })
 
 const projectsController = function(router) {
-  router.post('/', validate(projectsPayloadSchema), addProject)
-  router.get('/', getProjects)
-  router.get('/:id', getProject)
-  router.put('/:id', validate(projectsPayloadSchema), replaceProject)
-  router.delete('/:id', deleteProject)
+  router.post('/', validate(projectsPayloadSchema), createPerm, addProject)
+  router.get('/', listPerm, getProjects)
+  router.get('/:id', readPerm, getProject)
+  router.put('/:id', validate(projectsPayloadSchema), updatePerm, replaceProject)
+  router.delete('/:id', deletePerm, deleteProject)
 }
 
 const getProjects = async function(req, res) {
   try {
-    const projects = await BusinessProject.findAll()
+    const projects = await BusinessProject.findAll(req.requestorInfo.orgId)
     res.json(projects)
   } catch (e) {
     console.error(e.stack)
@@ -32,7 +38,7 @@ const getProject = async function(req, res) {
   const { id } = req.params
 
   try {
-    const project = await BusinessProject.findById(id)
+    const project = await BusinessProject.findById(id, req.requestorInfo.orgId)
     if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
     res.json(project)
   } catch (e) {
