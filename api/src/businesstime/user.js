@@ -20,14 +20,18 @@ async function updateByEmail(email, body) {
 }
 
 // TODO convert to find all users within organization
-async function findAllSanitized() {
+async function findAllSanitized(orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({ attributes: PUBLIC_FIELDS, raw: true })
+  return await db.model(MODEL_NAME).findAll({
+    attributes: PUBLIC_FIELDS,
+    where: { orgId },
+    raw: true
+  })
 }
 
-async function findSanitizedById(id) {
+async function findSanitizedById(id, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findByPk(id, { attributes: PUBLIC_FIELDS, raw: true })
+  return await db.model(MODEL_NAME).findOne({ attributes: PUBLIC_FIELDS, where: { id, orgId }, raw: true })
 }
 
 export default {

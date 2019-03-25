@@ -1,5 +1,6 @@
 // Uses reqPermissionsMiddleware to build a reusable set of CRUD middlewares
 // for a given resource
+import actions from '../../constants/actions'
 import perms from './reqPermissionsMiddleware'
 
 export default (resourceType, idFunc) => {
@@ -10,44 +11,44 @@ export default (resourceType, idFunc) => {
     throw new Error('idFunc must be a function')
   }
 
-  const listPerm = perms(req => {
+  const listPerm = perms((req) => {
     return {
       resourceType,
-      action: 'list'
+      action: actions.LIST
     }
   })
 
-  const readPerm = perms(req => {
+  const readPerm = perms((req) => {
     return {
       resourceType,
-      action: 'read',
+      action: actions.READ,
       data: {
         id: idFunc(req)
       }
     }
   })
 
-  const createPerm = perms(req => {
+  const createPerm = perms((req) => {
     return {
       resourceType,
-      action: 'create'
+      action: actions.CREATE
     }
   })
 
-  const updatePerm = perms(req => {
+  const updatePerm = perms((req) => {
     return {
       resourceType,
-      action: 'write',
+      action: actions.UPDATE,
       data: {
         id: idFunc(req)
       }
     }
   })
 
-  const deletePerm = perms(req => {
+  const deletePerm = perms((req) => {
     return {
       resourceType,
-      action: 'write',
+      action: actions.DELETE,
       data: {
         id: idFunc(req)
       }

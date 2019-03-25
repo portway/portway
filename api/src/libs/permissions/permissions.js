@@ -16,6 +16,11 @@ import userAccess from './users'
   }
 */
 
+const resourceToHandler = {
+  project: projectAccess,
+  user: userAccess
+}
+
 /**
  * Identifies if the given requestor can perform the requested action
  *
@@ -24,14 +29,8 @@ import userAccess from './users'
  * @return Boolean
  */
 export default async (requestorInfo, requestedAction) => {
-  let resourceAccessHandler
-  switch (requestedAction.resourceType) {
-    case 'project':
-      resourceAccessHandler = projectAccess
-    case 'user': {
-      resourceAccessHandler = userAccess
-    }
-  }
+  const resourceAccessHandler = resourceToHandler[requestedAction.resourceType]
+
   if (resourceAccessHandler) {
     return resourceAccessHandler(requestorInfo, requestedAction)
   }

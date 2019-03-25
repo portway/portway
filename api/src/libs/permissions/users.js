@@ -5,7 +5,7 @@ const projectAccess = async (requestorInfo, requestedAction) => {
       return true
     case 'write':
       // User can only write itself
-      return requestorInfo.requestorType === 'user' && requestedAction.id === requestorInfo.id
+      return requestorInfo.requestorType === 'user' && requestedAction.data.id === requestorInfo.id
     case 'list':
       // Any user in an org can list other org users
       if (requestorInfo.requestorType === 'user') {

@@ -19,10 +19,8 @@ const projectAccess = async (requestorInfo, requestedAction) => {
       }
       return false
     case 'create':
-      console.info('project create perm')
       return true
     default:
-      console.info('default project perm')
       return false
   }
 }

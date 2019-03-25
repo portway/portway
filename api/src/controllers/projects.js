@@ -3,9 +3,10 @@ import ono from 'ono'
 import validate from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
+import resourceTypes from '../constants/resourceTypes'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
-  'project',
+  resourceTypes.PROJECT,
   req => req.params.id
 )
 
@@ -49,6 +50,8 @@ const getProject = async function(req, res) {
 
 const addProject = async function(req, res) {
   const { body } = req
+  // Overwrite orgId even if they passed anything in
+  body.orgId = req.requestorInfo.orgId
 
   try {
     const project = await BusinessProject.create(body)
@@ -62,6 +65,8 @@ const addProject = async function(req, res) {
 const replaceProject = async function(req, res) {
   const { id } = req.params
   const { body } = req
+
+  // TODO: don't let users change orgId
 
   try {
     const project = await BusinessProject.updateById(id, body)
