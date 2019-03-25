@@ -17,9 +17,7 @@ async function create(body) {
     }
     throw err
   }
-
-  const plainUser = createdUser.get({ plain: true })
-  return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainUser[key] })))
+  return createdUser && createdUser.get({ plain: true })
 }
 
 async function findByEmail(email) {

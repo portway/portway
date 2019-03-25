@@ -11,6 +11,10 @@ async function updatePassword(email, password) {
 }
 
 async function setInitialPassword(id, password) {
+  if (!password) {
+    throw ono({ code: 400 }, 'A valid password must be provided')
+  }
+
   const user = await BusinessUser.findById(id)
   if (!user) {
     throw ono({ code: 404 }, `No user found with id: ${id}`)

@@ -13,17 +13,28 @@ const signupPayloadSchema = Joi.compile({
   })
 })
 
+const initialPasswordPayloadSchema = Joi.compile({
+  body: Joi.object().keys({
+    password: Joi.string().required()
+  })
+})
+
 const signupController = function(router) {
-  // TODO: currently no auth on this route
+  // TODO: currently no auth on this route, whitelist to client server only?
   router.post('/', validate(signupPayloadSchema), signUp)
-  router.post('/initialPassword', auth.jwtPasswordResetMiddleware, setInitialPassword)
+  router.post(
+    '/initialPassword',
+    auth.jwtPasswordResetMiddleware,
+    validate(initialPasswordPayloadSchema),
+    setInitialPassword
+  )
 }
 
 const signUp = async function(req, res) {
   const { firstName, lastName, email } = req.body
 
   try {
-    const token = await signUpCoordinator.signUp(firstName, lastName, email)
+    const token = await signUpCoordinator.createUserAndOrganization(firstName, lastName, email)
     res.status(200).send({ token })
   } catch (e) {
     console.error(e.stack)

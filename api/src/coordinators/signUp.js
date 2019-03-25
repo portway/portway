@@ -3,7 +3,7 @@ import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 
-async function signUp(firstName, lastName, email, password) {
+async function createUserAndOrganization(firstName, lastName, email) {
   const organizationName = `${firstName} ${lastName}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
   const resetKey = passwordResetKey.generate()
@@ -23,5 +23,5 @@ async function signUp(firstName, lastName, email, password) {
 }
 
 export default {
-  signUp
+  createUserAndOrganization
 }
