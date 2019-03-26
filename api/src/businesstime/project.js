@@ -10,7 +10,6 @@ async function create(body) {
 }
 
 async function findAll(orgId) {
-  console.info({ orgId })
   const db = getDb()
   return await db.model(MODEL_NAME).findAll({ where: { orgId }, raw: true })
 }

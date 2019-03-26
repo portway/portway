@@ -33,7 +33,7 @@ function(req) {
  * @param actionBuilder Function Takes a single request arg to build a
  *                               requestedAction object
  */
-export default actionBuilder => {
+export default (actionBuilder) => {
   if (typeof actionBuilder !== 'function') {
     throw new Error('actionBuilder arg must be a function')
   }
@@ -43,7 +43,6 @@ export default actionBuilder => {
       if (hasPermission) {
         next()
       } else {
-        // TODO: convert to ono?
         throw new Error('Invalid Permissions')
       }
     } catch (e) {
