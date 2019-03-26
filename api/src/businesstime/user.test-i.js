@@ -27,7 +27,7 @@ describe('UserBusiness', () => {
   })
 
   describe('#updateById', () => {
-    describe('when the target document is found', () => {
+    describe('when the target user is found', () => {
       let user
       const updateBody = { firstName: 'an-updated-name' }
 
@@ -45,7 +45,7 @@ describe('UserBusiness', () => {
       })
     })
 
-    describe('when the target document is not found', () => {
+    describe('when the target user is not found', () => {
       it('should throw an error', async () => {
         await expect(UserBusiness.updateById(7878787)).rejects.toThrow()
       })
@@ -53,7 +53,7 @@ describe('UserBusiness', () => {
   })
 
   describe('#updateByEmail', () => {
-    describe('when the target document is found', () => {
+    describe('when the target user is found', () => {
       let user
       const updateBody = { firstName: 'an-updated-name' }
 
@@ -68,14 +68,14 @@ describe('UserBusiness', () => {
       })
     })
 
-    describe('when the target document is not found', () => {
+    describe('when the target user is not found', () => {
       it('should throw an error', async () => {
         await expect(UserBusiness.updateByEmail('notanemail@fake.net')).rejects.toThrow()
       })
     })
   })
 
-  describe('document fetching', () => {
+  describe('user fetching', () => {
     let factoryUsers
 
     beforeAll(async () => {

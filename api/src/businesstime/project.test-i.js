@@ -22,7 +22,7 @@ describe('ProjectBusiness', () => {
   })
 
   describe('#updateById', () => {
-    describe('when the target document is found', () => {
+    describe('when the target project is found', () => {
       let project
       const updateBody = { name: 'an-updated-name' }
 
@@ -37,14 +37,14 @@ describe('ProjectBusiness', () => {
       })
     })
 
-    describe('when the target document is not found', () => {
+    describe('when the target project is not found', () => {
       it('should throw an error', async () => {
         await expect(ProjectBusiness.updateById(8675309)).rejects.toThrow()
       })
     })
   })
 
-  describe('document fetching', () => {
+  describe('project fetching', () => {
     let factoryProjects
 
     beforeAll(async () => {
@@ -94,11 +94,11 @@ describe('ProjectBusiness', () => {
         factoryProject = factoryProjects[0]
       })
 
-      it('should not throw an error if the target document is found', async () => {
+      it('should not throw an error if the target project is found', async () => {
         await expect(ProjectBusiness.deleteById(factoryProject.id)).resolves.toEqual(undefined)
       })
 
-      it('should throw an error if the target document is not found', async () => {
+      it('should throw an error if the target project is not found', async () => {
         await expect(ProjectBusiness.deleteById(86753098675309)).rejects.toThrow()
       })
     })

@@ -22,7 +22,7 @@ describe('OrganizationBusiness', () => {
   })
 
   describe('#updateById', () => {
-    describe('when the target document is found', () => {
+    describe('when the target organization is found', () => {
       let organization
       const updateBody = { name: 'an-updated-name' }
 
@@ -37,14 +37,14 @@ describe('OrganizationBusiness', () => {
       })
     })
 
-    describe('when the target document is not found', () => {
+    describe('when the target organization is not found', () => {
       it('should throw an error', async () => {
         await expect(OrganizationBusiness.updateById(8675309)).rejects.toThrow()
       })
     })
   })
 
-  describe('document fetching', () => {
+  describe('organization fetching', () => {
     let factoryOrganizations
 
     beforeAll(async () => {
