@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-import validate from '../libs/payloadValidation'
+import validate from '../libs/middleware/payloadValidation'
 import signUpCoordinator from '../coordinators/signUp'
 import userCoordinator from '../coordinators/user'
 import auth from '../libs/auth'

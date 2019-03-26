@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import validate from '../libs/payloadValidation'
+import validate from '../libs/middleware/payloadValidation'
 import BusinessOrganization from '../businesstime/organization'
 import ono from 'ono'
 
