@@ -11,7 +11,7 @@ export default function(passport) {
   passport.use(
     new JwtStrategy(options, (payload, done) => {
       if (payload.email) {
-        done(null, { email: payload.email })
+        done(null, { email: payload.email, id: payload.id, orgId: payload.orgId })
       } else {
         done(null, false)
       }

@@ -9,14 +9,14 @@ async function create(body) {
   return createdProject.get({ plain: true })
 }
 
-async function findAll(id) {
+async function findAll(orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({ raw: true })
+  return await db.model(MODEL_NAME).findAll({ where: { orgId }, raw: true })
 }
 
-async function findById(id) {
+async function findById(id, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findByPk(id, { raw: true })
+  return await db.model(MODEL_NAME).findOne({ where: { id, orgId }, raw: true })
 }
 
 async function updateById(id, body) {

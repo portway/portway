@@ -1,5 +1,6 @@
 import express from 'express'
 import auth from '../libs/auth'
+import reqInfoExtractor from '../libs/middleware/reqInfoExtractorMiddleware'
 
 // To add a controller, add the base path to mount it as a key
 // and the controller filename as the value Controllers can be
@@ -34,7 +35,7 @@ const loadControllers = (router, controllers, middleware) => {
 }
 
 const loader = (router) => {
-  loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware])
+  loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware, reqInfoExtractor])
   loadControllers(router, UNAUTHENTICATED_CONTROLLERS)
 }
 
