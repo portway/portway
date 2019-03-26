@@ -1,23 +1,21 @@
 import { renderBundles } from '../libs/express-utilities'
-import auth from '../libs/auth'
-
 import DangerAPI from '../libs/api'
 
 const API = new DangerAPI(process.env.API_URL)
 
 const SignUpController = function(router) {
-  router.get('/processing', auth.jwtMiddleware, (req, res) => {
+  router.get('/processing', (req, res) => {
     res.render('user/processing', renderBundles(req, 'Processing', 'index'))
   })
 
-  router.post('/registration', auth.jwtMiddleware, registerOrganization)
+  router.post('/registration', registerOrganization)
 
-  router.get('/registration/password', auth.jwtMiddleware, async (req, res) => {
+  router.get('/registration/password', async (req, res) => {
     const { token } = req.query
     res.render('user/registration', { ...renderBundles(req, 'Registration', 'index'), token })
   })
 
-  router.post('/registration/password', auth.jwtMiddleware, setInitialPassword)
+  router.post('/registration/password', setInitialPassword)
 }
 
 const registerOrganization = async (req, res) => {
