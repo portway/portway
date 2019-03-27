@@ -27,7 +27,7 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete(
       'Organizations',
-      { name: { $in: bulkOrgs.map(org => org.name) } },
+      { name: { [Sequelize.Op.in]: bulkOrgs.map(org => org.name) } },
       {}
     )
   }

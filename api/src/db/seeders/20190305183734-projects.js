@@ -56,7 +56,7 @@ module.exports = {
     */
     return queryInterface.bulkDelete(
       'Projects',
-      { name: { $in: bulkProjects.map(project => project.name) } },
+      { name: { [Sequelize.Op.in]: bulkProjects.map(project => project.name) } },
       {}
     )
   }
