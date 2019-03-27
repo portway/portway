@@ -33,7 +33,7 @@ async function deleteById(id) {
   const db = getDb()
   const project = await db.model(MODEL_NAME).findByPk(id)
 
-  if (!project) throw ono({ code: 404 }, `Cannot update, project not found with id: ${id}`)
+  if (!project) throw ono({ code: 404 }, `Cannot delete, project not found with id: ${id}`)
 
   await project.destroy()
 }

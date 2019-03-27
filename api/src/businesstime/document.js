@@ -33,7 +33,7 @@ async function deleteById(id, orgId) {
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
 
-  if (!document) throw ono({ code: 404 }, `Cannot update, document not found with id: ${id}`)
+  if (!document) throw ono({ code: 404 }, `Cannot delete, document not found with id: ${id}`)
 
   await document.destroy()
 }
