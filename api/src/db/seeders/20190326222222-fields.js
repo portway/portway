@@ -5,6 +5,8 @@ const ORG_ID = seedIds.BONKEY_ORG_ID
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
+    // TODO: implement
+    return
     return queryInterface.bulkInsert(
       'Fields',
       [
@@ -27,6 +29,8 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
+    // TODO: implement
+    return
     return queryInterface.bulkDelete('Fields', null, {})
   }
 }
