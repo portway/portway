@@ -8,7 +8,7 @@ const loginController = function(router) {
 }
 
 const login = function(req, res) {
-  const token = tokenIntegrator.generateToken(req.user.email, req.user.id, req.user.orgId)
+  const token = tokenIntegrator.generateToken(req.user.id, req.user.orgId)
   res.json({
     token
   })
