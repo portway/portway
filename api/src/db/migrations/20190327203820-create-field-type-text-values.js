@@ -1,26 +1,21 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Documents', {
+    return queryInterface.createTable('FieldTypeTextValues', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
-      },
-      publishedVersionId: {
-        type: Sequelize.STRING
-      },
       orgId: {
-        allowNull: false,
         type: Sequelize.INTEGER
       },
-      projectId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+      value: {
+        type: Sequelize.TEXT
+      },
+      structuredValue: {
+        type: Sequelize.JSON
       },
       createdAt: {
         allowNull: false,
@@ -33,6 +28,6 @@ module.exports = {
     })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Documents')
+    return queryInterface.dropTable('FieldTypeTextValues')
   }
 }

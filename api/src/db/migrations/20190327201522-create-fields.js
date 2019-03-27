@@ -8,21 +8,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      orgId: {
+        type: Sequelize.INTEGER
+      },
       name: {
         type: Sequelize.STRING
+      },
+      docId: {
+        type: Sequelize.INTEGER
+      },
+      versionId: {
+        type: Sequelize.INTEGER
+      },
+      fieldValueId: {
+        type: Sequelize.INTEGER
       },
       type: {
         type: Sequelize.INTEGER
       },
-      value: {
-        type: Sequelize.TEXT
-      },
-      orgId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      documentId: {
-        allowNull: false,
+      order: {
         type: Sequelize.INTEGER
       },
       createdAt: {
