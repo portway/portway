@@ -14,7 +14,7 @@ export const fetchProjects = async (dispatch) => {
 
 export const fetchProject = (id) => {
   return async (dispatch) => {
-    dispatch(Projects.request(id))
+    dispatch(Projects.requestOne(id))
     const data = await fetch(`projects/${id}`)
     dispatch(Projects.receiveOne(data))
   }
