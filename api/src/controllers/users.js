@@ -31,9 +31,7 @@ const getUser = async function(req, res) {
     res.json(user)
   } catch (e) {
     console.error(e.stack)
-    res
-      .status(e.code || 500)
-      .json({ error: `error fetching user with id ${id}` })
+    res.status(e.code || 500).json({ error: `error fetching user with id ${id}` })
   }
 }
 

@@ -1,16 +1,18 @@
-
+const seedIds = require('../config/seedIds')
 
 const TODAY = new Date()
+const ORG_ID = seedIds.BONKEY_ORG_ID
+const PROJ_X_ORG_ID = seedIds.PROJEXT_X_ORG_ID
 
 const bulkOrgs = [
   {
-    id: 1,
+    id: ORG_ID,
     name: 'BonkeyBong',
     createdAt: TODAY,
     updatedAt: TODAY
   },
   {
-    id: 2,
+    id: PROJ_X_ORG_ID,
     name: 'Prestigious Company X',
     createdAt: TODAY,
     updatedAt: TODAY
