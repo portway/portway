@@ -15,7 +15,8 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       orgId: {
         allowNull: false,
@@ -30,7 +31,9 @@ module.exports = {
         type: Sequelize.DATE
       },
       password: {
-        allowNull: false,
+        type: Sequelize.STRING
+      },
+      resetKey: {
         type: Sequelize.STRING
       }
     })

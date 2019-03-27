@@ -1,29 +1,33 @@
+const seedIds = require('../config/seedIds')
+
 const TODAY = new Date()
+const ORG_ID = seedIds.BONKEY_ORG_ID
+const PROJ_X_ORG_ID = seedIds.PROJEXT_X_ORG_ID
 
 const bulkProjects = [
   {
     name: 'BonkeyBong',
     createdAt: TODAY,
     updatedAt: TODAY,
-    orgId: 1
+    orgId: ORG_ID
   },
   {
     name: 'Scenic Trails',
     createdAt: TODAY,
     updatedAt: TODAY,
-    orgId: 1
+    orgId: ORG_ID
   },
   {
     name: 'The Secret of Life',
     createdAt: TODAY,
     updatedAt: TODAY,
-    orgId: 2
+    orgId: PROJ_X_ORG_ID
   },
   {
     name: 'Element X',
     createdAt: TODAY,
     updatedAt: TODAY,
-    orgId: 2
+    orgId: PROJ_X_ORG_ID
   }
 ]
 

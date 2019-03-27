@@ -4,7 +4,7 @@
   <div class="container">
     <h1 class="title">Complete your registration</h1>
     <p>You're almost there! Pick a strong password to finish the last step.</p>
-    <form class="login-form">
+    <form class="login-form" action="/sign-up/registration/password" method="POST">
       <div class="field">
         <label class="label is-small" for="password">Password</label>
         <div class="control">
@@ -25,6 +25,7 @@
             var button = 'Save Password'
           }
         %>
+        <input type="hidden" id="email" name="token" value="<%= token %>">
         <input type="submit" class="button is-primary" value="<%= button %>">
       </div>
     </form>

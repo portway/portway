@@ -13,7 +13,7 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 const projectsPayloadSchema = Joi.compile({
   body: Joi.object().keys({
     name: Joi.string().required(),
-    description: Joi.string()
+    description: Joi.string().allow('')
   })
 })
 

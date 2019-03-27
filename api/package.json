@@ -7,7 +7,8 @@
     "build": "NODE_ENV=production babel ./src -d dist/ --copy-files",
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node",
-    "test": "jest",
+    "test": "npm run test-u && npm run test-i",
+    "test-i": "jest 'src/.*\\.test-(i)\\.js$' -i",
     "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
     "migrate": "sequelize db:migrate"
@@ -61,7 +62,8 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.42.0",
     "sequelize-cli": "^5.4.0",
-    "stripe": "^6.23.1"
+    "stripe": "^6.23.1",
+    "uuid": "^3.3.2"
   },
   "jest": {
     "testRegex": "src/.*\\.test-(u|a|i)\\.js$",

@@ -1,9 +1,24 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
 import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
+import { UniqueConstraintError } from 'sequelize'
 
 const MODEL_NAME = 'User'
 const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email', 'orgId']
+
+async function create(body) {
+  const db = getDb()
+  let createdUser
+  try {
+    createdUser = await db.model(MODEL_NAME).create(body)
+  } catch (err) {
+    if (err instanceof UniqueConstraintError) {
+      throw ono({ code: 409 }, 'Cannot create user, duplicate value error')
+    }
+    throw err
+  }
+  return createdUser && createdUser.get({ plain: true })
+}
 
 async function findByEmail(email) {
   const db = getDb()
@@ -11,12 +26,9 @@ async function findByEmail(email) {
   return user && user.get({ plain: true })
 }
 
-async function updateByEmail(email, body) {
+async function findById(id) {
   const db = getDb()
-  const user = await db.model(MODEL_NAME).findOne({ where: { email } })
-  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with email: ${email}`)
-  const updatedUser = await user.update(body)
-  return updatedUser && updatedUser.get({ plain: true })
+  return await db.model(MODEL_NAME).findByPk(id, { raw: true })
 }
 
 async function findAllSanitized(orgId) {
@@ -30,12 +42,33 @@ async function findAllSanitized(orgId) {
 
 async function findSanitizedById(id, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ attributes: PUBLIC_FIELDS, where: { id, orgId }, raw: true })
+  return await db
+    .model(MODEL_NAME)
+    .findOne({ attributes: PUBLIC_FIELDS, where: { id, orgId }, raw: true })
+}
+
+async function updateByEmail(email, body) {
+  const db = getDb()
+  const user = await db.model(MODEL_NAME).findOne({ where: { email } })
+  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with email: ${email}`)
+  const updatedUser = await user.update(body)
+  return updatedUser && updatedUser.get({ plain: true })
+}
+
+async function updateById(id, body) {
+  const db = getDb()
+  const user = await db.model(MODEL_NAME).findByPk(id)
+  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
+  const updatedUser = await user.update(body)
+  return updatedUser && updatedUser.get({ plain: true })
 }
 
 export default {
+  create,
   findByEmail,
+  findById,
   findAllSanitized,
   findSanitizedById,
-  updateByEmail
+  updateByEmail,
+  updateById
 }
