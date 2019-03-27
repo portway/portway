@@ -1,12 +1,12 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const DocumentVersions = sequelize.define('DocumentVersion', {
+  const DocumentVersion = sequelize.define('DocumentVersion', {
     versionNumber: DataTypes.INTEGER,
     docId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER
   }, {})
-  DocumentVersions.associate = function(models) {
+  DocumentVersion.associate = function(models) {
     // associations can be defined here
   }
-  return DocumentVersions
+  return DocumentVersion
 }

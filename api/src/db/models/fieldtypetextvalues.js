@@ -1,12 +1,12 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const FieldTypeTextValues = sequelize.define('FieldTypeTextValue', {
+  const FieldTypeTextValue = sequelize.define('FieldTypeTextValue', {
     orgId: DataTypes.INTEGER,
     value: DataTypes.TEXT,
     structuredValue: DataTypes.JSON
   }, {})
-  FieldTypeTextValues.associate = function(models) {
+  FieldTypeTextValue.associate = function(models) {
     // associations can be defined here
   }
-  return FieldTypeTextValues
+  return FieldTypeTextValue
 }

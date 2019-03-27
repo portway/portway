@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const Fields = sequelize.define('Field', {
+  const Field = sequelize.define('Field', {
     orgId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     docId: DataTypes.INTEGER,
@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.INTEGER,
     order: DataTypes.INTEGER
   }, {})
-  Fields.associate = function(models) {
+  Field.associate = function(models) {
     // associations can be defined here
   }
-  return Fields
+  return Field
 }
