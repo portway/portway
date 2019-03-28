@@ -10,5 +10,16 @@ module.exports = {
   BONKEY_DOC_1_ID: 120000,
   BONKEY_DOC_2_ID: 120001,
   BONKEY_DOC_3_ID: 120002,
-  SCENIC_DOC_1_ID: 120003
+  SCENIC_DOC_1_ID: 120003,
+  FIELDS: {
+    STRING_VALUES: {
+
+    },
+    NUMBER_VALUES: {
+
+    },
+    TEXT_VALUES: {
+
+    }
+  }
 }
