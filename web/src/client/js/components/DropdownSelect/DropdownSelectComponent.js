@@ -24,7 +24,7 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
         if (leftPos) {
           (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
         }
-      }, 20)
+      }, 50)
     }
   }, [])
   // Custom hooks

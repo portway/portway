@@ -5,6 +5,7 @@ import { NavLink, Link, withRouter } from 'react-router-dom'
 import Constants from 'Shared/constants'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
+import UserMenu from 'Components/UserMenu/UserMenu'
 
 import './Header.scss'
 
@@ -56,9 +57,7 @@ const Header = ({ location }) => {
           <GlobalSearchContainer />
         </div>
         <div className="navbar__user">
-          <NavLink to={Constants.PATH_SETTINGS} className="navbar__settings-link">
-            <img src="/images/icon/user-avatar.svg" width="40" height="40" alt="User profile" />
-          </NavLink>
+          <UserMenu />
         </div>
       </nav>
     </header>

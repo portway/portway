@@ -14,3 +14,13 @@ body {
   margin: 0;
   padding: 0;
 }
+
+a {
+  color: $action;
+  &:hover {
+    color: lighten($action, 20%);
+  }
+  &:active {
+    color: darken($action, 20%);
+  }
+}

@@ -98,6 +98,10 @@ p {
   padding: 1em 0;
 }
 
+input, textarea, keygen, select, button {
+  font-size: 1em;
+}
+
 input,
 textarea {
   font-family: $sansSerif;
