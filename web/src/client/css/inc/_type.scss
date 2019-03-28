@@ -38,19 +38,33 @@
     /* Safari, Android, iOS */ url('/css/fonts/aleo-v2-latin-700.svg#Aleo') format('svg'); /* Legacy iOS */
 }
 
+// https://vasilis.nl/nerd/code/emcalc/
 body {
   font-family: $sansSerif;
-  font-size: 0.938em;
+  font-size: 15px; // base font
 }
 
+.navbar-brand {
+  h1 {
+    font-size: 1.867rem; // 28px
+    font-weight: 700;
+    letter-spacing: 0.029em; // .8px
+    line-height: 0.643em; // 18px
+    span {
+      font-weight: 700;
+    }
+  }
+}
+
+// h1 is really h2 in the Sketch file
+// @todo change the sketch file then delete this comment
 h1,
 .h-first-level {
   color: $primary;
   font-family: $serif !important;
-  font-size: 1.867em;
+  font-size: 1.600rem; // 24px
   font-weight: 700;
-  line-height: 0.643em;
-  letter-spacing: 0.003em;
+  line-height: 0.750em; // 18pxs
   a {
     color: $primary;
     text-decoration: none;
@@ -60,25 +74,17 @@ h1,
 h2,
 .h-second-level {
   font-family: $serif !important;
-  font-size: 1.6em;
+  font-size: 1.2rem; // 18px
   font-weight: 700;
-  line-height: 0.75em;
+  line-height: 1em; //18px
 }
 
 h3,
 .h-third-level {
   font-family: $serif !important;
-  font-size: 1.2em;
+  font-size: 1.2rem; // 18px
   font-weight: 400;
-  line-height: 1em;
-}
-
-h6,
-.h-sixth-level {
-  font-family: $serif !important;
-  font-size: 1em;
-  font-style: italic;
-  line-height: 1.2em;
+  line-height: 1em; // 18px
 }
 
 .header--with-icon {
@@ -87,15 +93,31 @@ h6,
 }
 
 p {
-  font-size: 1em;
-  line-height: 1.2em;
-  padding: 1em 0;
+  font-size: 1rem; // 15px
+  line-height: 1.2em; // 18px
 }
 
 .small {
-  font-size: 0.75em;
-  line-height: 1em;
-  padding: 1em 0;
+  font-size: 0.800rem; // 12px
+  line-height: 1.167em; // 14px
+  padding: 0.417em 0; // 5px
+}
+
+b, strong {
+  font-weight: 700;
+}
+
+.note {
+  font-family: $serif !important;
+  font-size: 0.800rem; // 12px
+  font-style: italic;
+  letter-spacing: 0.012em; // .14px
+  line-height: 1em; // 12px
+  padding: 0.417em 0; // 5px
+}
+
+input, textarea, keygen, select, button {
+  font-size: 1rem; // 15px
 }
 
 input,

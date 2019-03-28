@@ -16,9 +16,9 @@ function ProjectComponent({ project }) {
   return (
     <div className="project">
       <header className="project__header">
-        <h2 className="header--with-icon">
+        <h1 className="header--with-icon">
           <ProjectIcon className="project__icon" /> {project.name}
-        </h2>
+        </h1>
         <DropdownComponent className="project__dropdown" button={settingsButton}>
           <li><button className="btn btn--blank">Settings</button></li>
           <li><button className="btn btn--blank">Duplicate...</button></li>
@@ -32,7 +32,7 @@ function ProjectComponent({ project }) {
             Created by by _USER_ | {moment(project.createdAt).format('MMM Mo h:mma')}
           </p>
         </div>
-        <div className="project__expand h-sixth-level">
+        <div className="project__expand note">
           <div className="project__expand--details">
             <span className="icon icon-caret-up" /> Show Less
           </div>
