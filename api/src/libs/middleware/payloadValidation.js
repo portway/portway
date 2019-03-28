@@ -1,10 +1,14 @@
 import Joi from 'joi'
 
-export default function validate(schema) {
+// Assumes validation occurs on req.body
+export default function validate(schema, options = {}) {
+  const defaultOptions = {
+    allowUnknown: false
+  }
+
+  const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { error } = Joi.validate(req, schema, {
-      allowUnknown: true
-    })
+    const { error } = Joi.validate(req.body, schema, mergedOptions)
 
     if (!error) {
       return next()

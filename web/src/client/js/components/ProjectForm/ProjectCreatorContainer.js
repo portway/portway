@@ -24,9 +24,8 @@ const ProjectCreatorContainer = ({ history }) => {
       createProject(
         {
           name: formValues.projectName,
-          description: formValues.projectDescription,
-          teamMemberIds: selectedUsers,
-          orgId: currentUser.orgId
+          description: formValues.projectDescription
+          // teamMemberIds: selectedUsers // TODO: when endpoint support has this, add back
         },
         history
       )
