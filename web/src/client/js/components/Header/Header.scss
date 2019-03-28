@@ -10,9 +10,9 @@
     display: flex;
 
     // Brand area is top left, with logo
-    .navbar-brand {
+    &__brand {
       min-width: $sideGutterWidth;
-      .navbar-logo {
+      .navbar__logo {
         // the logo is a span with a background image applied from a database
         background-size: 30%;
         display: block;
@@ -22,10 +22,11 @@
     }
 
     // The middle of the content
-    .navbar-content {
+    &__content {
       align-items: center;
       flex: 1 0 auto;
       display: flex;
+      height: $sideGutterWidth;
       justify-content: space-between;
       padding: 0 12px 0 0;
       .navbar-brand-name {
@@ -40,15 +41,29 @@
       }
     }
 
+    &__content-items {
+      align-items: center;
+      border-left: thin solid $gray-light;
+      display: flex;
+      flex: 1;
+      height: $sideGutterWidth;
+      margin-left: 16px;
+      padding-left: 16px;
+      .icon {
+        height: 30px;
+        width: 30px;
+      }
+    }
+
     // The right-most area with user related functions
-    .navbar-user {
+    &__user {
       align-items: center;
       border-left: thin solid $gray-light;
       display: flex;
       height: $sideGutterWidth;
       min-width: $sideGutterWidth;
 
-      .navbar-settings-link {
+      .navbar__settings-link {
         border-radius: 50% 50%;
         display: block;
         height: 40px;

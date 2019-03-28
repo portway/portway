@@ -24,6 +24,10 @@
     visibility: hidden;
   }
 
+  &--right {
+    right: 0;
+  }
+
   &:not([hidden]) {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     opacity: 1;
@@ -33,19 +37,21 @@
 
   &--with-select {
     padding: 0;
+    min-width: 339px;
   }
 }
 
 .menu__item {
   border-radius: 2px;
-  color: $black-bis;
+  // color: $black-bis;
   cursor: pointer;
   display: block;
   padding: 3px 4px;
   text-decoration: none;
   margin-bottom: 2px;
   max-width: 313px;
-  width: 313px;
+  min-width: 100px;
+  width: auto;
   &:hover {
     background-color: $white-ter;
   }
@@ -62,8 +68,27 @@
   li {
     margin: 0;
     padding: 0;
+    &.menu__divider {
+      padding-top: 14px;
+    }
   }
   a, button {
     @extend .menu__item;
+    text-align: left;
+  }
+}
+
+.menu__divider {
+  > button, > a {
+    margin-top: 14px;
+  }
+  &:before {
+    border-top: thin solid $gray;
+    content : '';
+    display: block;
+    left: 0;
+    padding-top: 10px;
+    position: absolute;
+    width: 100%;
   }
 }

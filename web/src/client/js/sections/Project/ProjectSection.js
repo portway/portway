@@ -6,9 +6,7 @@ class ProjectSection extends React.PureComponent {
   render() {
     return (
       <div role="main">
-        <div className="section">
-          <ProjectContainer />
-        </div>
+        <ProjectContainer />
       </div>
     )
   }

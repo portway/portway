@@ -73,9 +73,28 @@ h3,
   line-height: 1em;
 }
 
+h6,
+.h-sixth-level {
+  font-family: $serif !important;
+  font-size: 1em;
+  font-style: italic;
+  line-height: 1.2em;
+}
+
+.header--with-icon {
+  align-items: center;
+  display: flex;
+}
+
 p {
   font-size: 1em;
   line-height: 1.2em;
+  padding: 1em 0;
+}
+
+.small {
+  font-size: 0.75em;
+  line-height: 1em;
   padding: 1em 0;
 }
 

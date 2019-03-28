@@ -16,12 +16,28 @@
     background-image: url('/images/icon/arrow-down.svg');
   }
 
+  &-caret-up {
+    background-image: url('/images/icon/arrow-down.svg');
+    transform: rotate(180deg);
+  }
+
   &-user {
     background-image: url('/images/icon/user.svg');
+  }
+
+  &-filter {
+    background-image: url('/images/icon/filter.svg');
+  }
+
+  &-sort-by {
+    background-image: url('/images/icon/sort-by.svg');
   }
 
   &-project {
     background-image: url('/images/icon/project.svg');
   }
 
+  &-menu-more {
+    background-image: url('/images/icon/menu-more.svg');
+  }
 }

@@ -1,0 +1,58 @@
+@import 'CSS/inc/_vars.scss';
+
+.project {
+  // Header is the project name with icon, and more button...
+  &__header {
+    position: relative;
+    h2 {
+      color: $primary;
+      margin: 0;
+    }
+    p {
+      margin: 0;
+      padding: .25em 0;
+    }
+    .small {
+      color: $gray-dark;
+    }
+  }
+
+  &__icon {
+    height: 40px;
+    margin-right: 7px;
+    width: 40px;
+    path {
+      fill: $primary;
+    }
+  }
+
+  .dropdown.project__dropdown {
+    position: absolute;
+    right: 0;
+    top: 5px;
+  }
+
+  // Details is the project details that can expand / contract
+  &__details {
+    padding: 0 0 22px 47px;
+  }
+
+  &__expand {
+    background-color: $white-bis;
+    border-bottom: thin solid $white-ter;
+    color: $black-ter;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    width: 100vw;
+    &--details {
+      align-items: center;
+      display: flex;
+      padding: 8px $sideGutterWidth;
+      .icon {
+        height: 26px;
+        width: 26px;
+      }
+    }
+  }
+}
