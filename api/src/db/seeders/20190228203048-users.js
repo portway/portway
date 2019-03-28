@@ -1,4 +1,8 @@
+const seedIds = require('../config/seedIds')
+
 const TODAY = new Date()
+const ORG_ID = seedIds.BONKEY_ORG_ID
+const PROJ_X_ORG_ID = seedIds.PROJEXT_X_ORG_ID
 
 const bulkUsers = [
   {
@@ -9,7 +13,7 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: 1
+    orgId: ORG_ID
   },
   {
     firstName: 'Biddy',
@@ -19,7 +23,7 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: 1
+    orgId: ORG_ID
   },
   {
     firstName: 'Baddy',
@@ -29,7 +33,7 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: 1
+    orgId: ORG_ID
   },
   {
     firstName: 'Bixie',
@@ -39,7 +43,7 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: 1
+    orgId: ORG_ID
   },
   {
     firstName: 'Carol',
@@ -49,7 +53,7 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: 2
+    orgId: PROJ_X_ORG_ID
   },
   {
     firstName: 'Bob',
@@ -59,7 +63,7 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: 2
+    orgId: PROJ_X_ORG_ID
   }
 ]
 
@@ -69,6 +73,10 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('Users', { email: { $in: bulkUsers.map(user => user.email) } }, {})
+    return queryInterface.bulkDelete(
+      'Users',
+      { email: { [Sequelize.Op.in]: bulkUsers.map(user => user.email) } },
+      {}
+    )
   }
 }

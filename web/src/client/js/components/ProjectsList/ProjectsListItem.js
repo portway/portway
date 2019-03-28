@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 
-const ProjectsListItem = ({ activeProjectId, animate, callback, projectId, project }) => {
+const ProjectsListItem = ({
+  activeProjectId,
+  animate,
+  callback,
+  projectId,
+  project,
+  handleDelete
+}) => {
   const [itemHeight, setItemHeight] = useState(null)
   // Set the width and height of the list item after render so that we can animate
   // these properties
@@ -35,7 +42,11 @@ const ProjectsListItem = ({ activeProjectId, animate, callback, projectId, proje
       <div
         className="project-list__info"
         onClick={() => callback(projectId)}
-        onKeyDown={(e) => { if (e.keyCode === 13) { callback(projectId) }}}
+        onKeyDown={(e) => {
+          if (e.keyCode === 13) {
+            callback(projectId)
+          }
+        }}
         role="button"
         tabIndex="0">
         <span className="icon icon-project" />
@@ -46,7 +57,9 @@ const ProjectsListItem = ({ activeProjectId, animate, callback, projectId, proje
       </div>
       <div className="project-list__actions" hidden={activeProjectId !== projectId}>
         <div className="project-list__actions-start">
-          <button className="btn btn--blank btn--warning">Delete</button>
+          <button className="btn btn--blank btn--warning" onClick={handleDelete}>
+            Delete
+          </button>
         </div>
         <div className="project-list__actions-end">
           <button className="btn btn--blank">Duplicate</button>
@@ -65,7 +78,8 @@ ProjectsListItem.propTypes = {
   animate: PropTypes.bool,
   callback: PropTypes.func.isRequired,
   projectId: PropTypes.string.isRequired,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
+  handleDelete: PropTypes.func.isRequired
 }
 
 export default ProjectsListItem

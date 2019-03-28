@@ -1,0 +1,40 @@
+<form class="login-form" action="/sign-up/registration" method="post">
+  <h1 class="title">Create your free account</h1>
+  <div class="field">
+    <label class="label" for="firstName">Your name</label>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field is-narrow">
+        <div class="control">
+          <input class="input" type="text" name="firstName" id="firstName" placeholder="First name" autocomplete="section-signup given-name" />
+        </div>
+      </div>
+      <div class="field is-narrow">
+        <div class="control">
+          <input class="input" type="text" name="lastName" id="lastName" placeholder="Last name" autocomplete="section-signup family-name" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /name -->
+  <div class="field">
+    <label class="label" for="email">Email address</label>
+    <div class="control">
+      <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-signup username">
+      <p class="help">Your email address will be your username</p>
+    </div>
+  </div>
+  <div class="field field--with-space">
+    <%
+      if (typeof button === 'undefined') {
+        var button = 'Create my account'
+      }
+    %>
+    <input type="submit" class="button is-primary" value="<%= button %>">
+  </div>
+  <div class="field">
+    <p class="help">Already have an account? <a href="/sign-in">Sign in</a></p>
+  </div>
+</form>
+<!-- /login -->

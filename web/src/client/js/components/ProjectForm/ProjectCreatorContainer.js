@@ -2,24 +2,54 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
+import Store from '../../reducers'
+import { createProject } from 'Actions/project'
 import ProjectForm from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from '../../libs/dataMapper'
 
 const ProjectCreatorContainer = ({ history }) => {
+  const { data: users } = useDataService(dataMapper.users.list())
+  const { data: currentUser } = useDataService(dataMapper.users.current())
+
+  const [formValues, setFormValues] = useState({
+    projectName: '',
+    projectDescription: ''
+  })
+
+  function submitHandler(e) {
+    e.preventDefault()
+    Store.dispatch(
+      createProject(
+        {
+          name: formValues.projectName,
+          description: formValues.projectDescription,
+          teamMemberIds: selectedUsers,
+          orgId: currentUser.orgId
+        },
+        history
+      )
+    )
+  }
+
+  function formChangeHandler(e) {
+    e.preventDefault()
+    setFormValues({ ...formValues, [e.target.id]: e.target.value })
+  }
+
+  function cancelHandler() {
+    history.push({ pathname: Constants.PATH_PROJECTS })
+  }
+
   // Options for the Project Form
   const formOptions = {
     cancelHandler: cancelHandler, // Optional
     cancelLabel: 'Cancel', // Optional
     submitHandler: submitHandler,
-    submitLabel: 'Create Project'
-  }
-  function submitHandler() {
-    console.info('Submitted')
-  }
-  function cancelHandler() {
-    history.push({ pathname: Constants.PATH_PROJECTS })
+    changeHandler: formChangeHandler,
+    submitLabel: 'Create Project',
+    values: formValues
   }
 
   // Selected users are team members on this project and only exposed
@@ -30,8 +60,6 @@ const ProjectCreatorContainer = ({ history }) => {
   }
   // Options for the Team which is completely optional
   // Though all properties are required.
-  const { data: users } = useDataService(dataMapper.users.list())
-
   const userOptions = Object.values(users).map((user) => {
     return {
       value: String(user.id),
@@ -47,7 +75,7 @@ const ProjectCreatorContainer = ({ history }) => {
 
   return (
     <div>
-      <ProjectForm formOptions={formOptions} teamOptions={teamOptions} />
+      <ProjectForm formOptions={formOptions} teamOptions={teamOptions} currentUser={currentUser} />
     </div>
   )
 }

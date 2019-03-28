@@ -3,4 +3,4 @@ import jwt from 'jsonwebtoken'
 
 const token = getCookieValue('token')
 
-export default jwt.decode(token).id
+export default jwt.decode(token).userId

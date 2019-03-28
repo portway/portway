@@ -21,4 +21,19 @@ async function fetch(resource) {
   return res.data
 }
 
-export { fetch }
+async function add(resource, body) {
+  const res = await axiosInstance.post(resource, body)
+  return res.data
+}
+
+async function update(resource, body) {
+  const res = await axiosInstance.put(resource, body)
+  return res.data
+}
+
+async function remove(resource) {
+  const res = await axiosInstance.delete(resource)
+  return res.data
+}
+
+export { fetch, add, update, remove }

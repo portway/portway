@@ -2,6 +2,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import passport from 'passport'
+import logger from 'morgan'
 //libs
 import envVarValidation from './libs/envVarValidation'
 import auth from './libs/auth'
@@ -12,6 +13,9 @@ envVarValidation()
 
 //instances
 const app = express()
+
+//logging
+app.use(logger('dev'))
 
 //bodyparser
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -27,6 +31,7 @@ app.use((req, res, next) => {
   )
   res.setHeader(
     'Access-Control-Allow-Headers',
+    // eslint-disable-next-line max-len
     'Access-Control-Allow-Headers, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
   )
   // remove caching to ensure fresh results

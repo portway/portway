@@ -17,6 +17,7 @@ const ProjectContainer = ({ location }) => {
 }
 
 ProjectContainer.propTypes = {
+  history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 }
 

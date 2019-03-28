@@ -6,6 +6,12 @@ export const ActionTypes = {
   RECEIVE_PROJECTS: 'RECEIVE_PROJECTS',
   REQUEST_PROJECT: 'REQUEST_PROJECT',
   RECEIVE_PROJECT: 'RECEIVE_PROJECT',
+  RECEIVE_CREATED_PROJECT: 'RECEIVE_CREATED_PROJECT',
+  INITIATE_PROJECT_UPDATE: 'INITIATE_PROJECT_UPDATE',
+  RECEIVE_UPDATED_PROJECT: 'RECEIVE_UPDATED_PROJECT',
+  INITIATE_PROJECT_REMOVE: 'INITIATE_PROJECT_REMOVE',
+  REMOVE_PROJECT: 'REMOVE_PROJECT',
+  // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
@@ -13,11 +19,15 @@ export const ActionTypes = {
 }
 
 export const Projects = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS)
-}
-
-export const Project = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id')
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_PROJECT, 'data'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT, 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_UPDATE),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT, 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
+  removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id')
 }
 
 export const Users = {
