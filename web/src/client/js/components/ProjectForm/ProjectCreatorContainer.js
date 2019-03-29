@@ -8,6 +8,7 @@ import ProjectForm from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import currentUserId from 'Libs/currentUserId'
 
 const ProjectCreatorContainer = ({ history }) => {
   const { data: users } = useDataService(dataMapper.users.list())
@@ -60,7 +61,8 @@ const ProjectCreatorContainer = ({ history }) => {
   }
   // Options for the Team which is completely optional
   // Though all properties are required.
-  const userOptions = Object.values(users).map((user) => {
+  const usersWithoutMe = Object.values(users).filter(user => user.id !== currentUserId)
+  const userOptions = usersWithoutMe.map((user) => {
     return {
       value: String(user.id),
       label: `${user.firstName} ${user.lastName}`
