@@ -3,15 +3,15 @@ import ono from 'ono'
 
 const MODEL_NAME = 'Document'
 
-async function createForProject(body) {
+async function create(body) {
   const db = getDb()
   const { projectId, orgId } = body
 
-  const sequelizeProject = await db
+  const project = await db
     .model('Project')
     .findOne({ where: { id: projectId, orgId } })
 
-  if (!sequelizeProject) {
+  if (!project) {
     throw ono({ code: 404 }, `Cannot create document, project not found with id: ${projectId}`)
   }
 
@@ -29,8 +29,9 @@ async function findByIdForProject(id, projectId, orgId) {
   return await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId }, raw: true })
 }
 
-async function updateByIdForProject(id, projectId, orgId, body) {
+async function updateById(id, orgId, body) {
   const db = getDb()
+  const { projectId } = body
 
   const document = await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId } })
 
@@ -50,9 +51,9 @@ async function deleteByIdForProject(id, projectId, orgId) {
 }
 
 export default {
-  createForProject,
+  create,
+  updateById,
   findByIdForProject,
   findAllForProject,
-  updateByIdForProject,
   deleteByIdForProject
 }

@@ -15,7 +15,7 @@ const getUserData = function(override = {}) {
 
 const createMany = async function(numberOfUsers, override) {
   const db = getDb()
-  const users = Array(numberOfUsers).fill(numberOfUsers).map(() => getUserData(override))
+  const users = Array(numberOfUsers).fill().map(() => getUserData(override))
 
   return Promise.all(users.map(userData => db.model('User').create(userData)))
 }
