@@ -13,7 +13,7 @@ describe('BusinessDocument', () => {
     factoryProject = factoryProjects[0]
   })
 
-  describe('#create', () => {
+  describe('#createForProject', () => {
     const documentBody = {
       name: 'test-document',
       orgId: constants.ORG_ID
@@ -21,7 +21,7 @@ describe('BusinessDocument', () => {
     let document
 
     beforeAll(async () => {
-      document = await BusinessDocument.create({ ...documentBody, projectId: factoryProject.id })
+      document = await BusinessDocument.createForProject(factoryProject.id, { ...documentBody, projectId: factoryProject.id })
     })
 
     it('should return the saved document as a POJO', () => {
@@ -32,7 +32,18 @@ describe('BusinessDocument', () => {
 
     describe('when the parent project does not exist', () => {
       it('should throw an error', async () => {
-        await expect(BusinessDocument.create({ ...documentBody, projectId: 0 })).rejects.toThrow()
+        await expect(BusinessDocument.createForProject(factoryProject.id, { ...documentBody, projectId: 0 })).rejects.toThrow()
+      })
+    })
+
+    describe('when the passed in projectId does not match the body projectId', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessDocument.createForProject(factoryProject.id, {
+            ...documentBody,
+            projectId: 0
+          })
+        ).rejects.toThrow()
       })
     })
   })
@@ -94,6 +105,14 @@ describe('BusinessDocument', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, 0, updateBody)
+        ).rejects.toThrow()
+      })
+    })
+
+    describe('when the passed in projectId does not match the body projectId', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, orgId, { ...updateBody, projectId: 0 })
         ).rejects.toThrow()
       })
     })

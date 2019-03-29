@@ -61,11 +61,9 @@ const addProjectDocument = async function(req, res) {
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
   body.orgId = orgId
-  // Overwrite projectId from params even if they passed something in
-  body.projectId = projectId
 
   try {
-    const project = await BusinessDocument.createForProject(body)
+    const project = await BusinessDocument.createForProject(projectId, body)
     res.status(201).json(project)
   } catch (e) {
     console.error(e.stack)

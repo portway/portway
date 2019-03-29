@@ -3,9 +3,13 @@ import ono from 'ono'
 
 const MODEL_NAME = 'Document'
 
-async function create(body) {
+async function createForProject(projectId, body) {
   const db = getDb()
-  const { projectId, orgId } = body
+  const { orgId } = body
+
+  if (projectId !== body.projectId) {
+    throw ono({ code: 400 }, `Cannot create, project id param does not match projectId in body`)
+  }
 
   const project = await db.model('Project').findOne({ where: { id: projectId, orgId } })
 
@@ -52,7 +56,7 @@ async function deleteByIdForProject(id, projectId, orgId) {
 }
 
 export default {
-  create,
+  createForProject,
   updateByIdForProject,
   findByIdForProject,
   findAllForProject,
