@@ -43,13 +43,14 @@ button,
   }
 
   &--white {
+    @include focus($white);
     background-color: $white;
     border: thin solid $gray-light;
     color: inherit;
-    @include focus($white);
     &:hover {
       background-color: $white;
       border: thin solid $white-ter;
+      color: inherit;
     }
     &:active {
       background-color: $white;

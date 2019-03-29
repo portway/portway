@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 
+import { ProjectIcon } from 'Components/Icons'
+
 const ProjectsListItem = ({
   activeProjectId,
   animate,
@@ -49,7 +51,7 @@ const ProjectsListItem = ({
         }}
         role="button"
         tabIndex="0">
-        <span className="icon icon-project" />
+        <ProjectIcon className="icon-project" />
         <span>
           <h3 className="project-list__title">{project.name}</h3>
           <p className="project-list__item-meta">Last updated by _USER_</p>
