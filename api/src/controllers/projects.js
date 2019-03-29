@@ -85,7 +85,7 @@ const deleteProject = async function(req, res) {
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error patching project with id ${id}` })
+    res.status(e.code || 500).json({ error: `error deleting project with id ${id}` })
   }
 }
 
