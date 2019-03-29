@@ -6,24 +6,28 @@ const PROJ_X_ORG_ID = seedIds.PROJEXT_X_ORG_ID
 
 const bulkProjects = [
   {
+    id: seedIds.BONKEY_PROJECT_ID,
     name: 'BonkeyBong',
     createdAt: TODAY,
     updatedAt: TODAY,
     orgId: ORG_ID
   },
   {
+    id: seedIds.SCENIC_PROJECT_ID,
     name: 'Scenic Trails',
     createdAt: TODAY,
     updatedAt: TODAY,
     orgId: ORG_ID
   },
   {
+    id: seedIds.SECRET_PROJECT_ID,
     name: 'The Secret of Life',
     createdAt: TODAY,
     updatedAt: TODAY,
     orgId: PROJ_X_ORG_ID
   },
   {
+    id: seedIds.ELEMENT_X_PROJECT_ID,
     name: 'Element X',
     createdAt: TODAY,
     updatedAt: TODAY,
