@@ -14,7 +14,6 @@ import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
 import ProjectNew from 'Sections/Project/ProjectNew'
-import LogoutComponent from 'Components/Logout/LogoutComponent'
 
 const App = () => {
   useDetectInputMode()
@@ -27,7 +26,6 @@ const App = () => {
           <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
           <Route exact path={Constants.PATH_PROJECT_CREATE} component={ProjectNew} />
           <Route exact path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
-          <Route exact path={Constants.PATH_LOGOUT} component={LogoutComponent} />
         </>
       </Router>
     </Provider>

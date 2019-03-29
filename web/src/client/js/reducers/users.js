@@ -33,11 +33,6 @@ export const users = (state = initialState, action) => {
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, usersById, loading: { ...state.loading, byId: loadingById } }
     }
-    case ActionTypes.LOGOUT_USER: {
-      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/'
-      location.href = '/'
-      return { ...state }
-    }
     default: {
       return state
     }

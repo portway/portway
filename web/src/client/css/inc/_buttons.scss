@@ -34,6 +34,7 @@ button,
   @include focus($action);
   &:hover {
     background-color: $action-light;
+    color: #fff;
   }
   &:active {
     background-color: $action-dark;

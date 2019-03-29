@@ -36,5 +36,5 @@ export const Users = {
   receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
-  logout: makeActionCreator(ActionTypes.LOGOUT_USER)
+  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
 }

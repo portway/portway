@@ -6,6 +6,10 @@
 @import 'buttons';
 @import 'hacks';
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   overscroll-behavior-y: none;
