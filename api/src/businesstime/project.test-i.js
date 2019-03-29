@@ -41,7 +41,7 @@ describe('BusinessProject', () => {
 
     describe('when the target project is not found', () => {
       it('should throw an error', async () => {
-        await expect(BusinessProject.updateById(8675309)).rejects.toThrow()
+        await expect(BusinessProject.updateById(0)).rejects.toThrow()
       })
     })
   })
@@ -103,22 +103,22 @@ describe('BusinessProject', () => {
         })
       })
     })
+  })
 
-    describe('#deleteById', () => {
-      let factoryProject
+  describe('#deleteById', () => {
+    let factoryProject
 
-      beforeAll(async () => {
-        factoryProjects = await ProjectFactory.createMany(1)
-        factoryProject = factoryProjects[0]
-      })
+    beforeAll(async () => {
+      const factoryProjects = await ProjectFactory.createMany(1)
+      factoryProject = factoryProjects[0]
+    })
 
-      it('should not throw an error if the target project is found', async () => {
-        await expect(BusinessProject.deleteById(factoryProject.id)).resolves.toEqual(undefined)
-      })
+    it('should not throw an error if the target project is found', async () => {
+      await expect(BusinessProject.deleteById(factoryProject.id)).resolves.toEqual(undefined)
+    })
 
-      it('should throw an error if the target project is not found', async () => {
-        await expect(BusinessProject.deleteById(86753098675309)).rejects.toThrow()
-      })
+    it('should throw an error if the target project is not found', async () => {
+      await expect(BusinessProject.deleteById(0)).rejects.toThrow()
     })
   })
 })
