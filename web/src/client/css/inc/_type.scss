@@ -120,6 +120,10 @@ input, textarea, keygen, select, button {
   font-size: 1rem; // 15px
 }
 
+input, textarea, keygen, select, button {
+  font-size: 1em;
+}
+
 input,
 textarea {
   font-family: $sansSerif;

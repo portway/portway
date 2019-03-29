@@ -4,12 +4,13 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": "./",
     "paths": {
-      "Sections/*": ["src/client/js/sections/*"],
-      "Components/*": ["src/client/js/components/*"],
       "Actions/*": ["src/client/js/actions/*"],
+      "Components/*": ["src/client/js/components/*"],
+      "CSS/*": ["src/client/css/*"],
       "Hooks/*": ["src/client/js/hooks/*"],
+      "Libs/*": ["src/client/js/libs/*"],
+      "Sections/*": ["src/client/js/sections/*"],
       "Shared/*": ["src/shared/*"],
-      "CSS/*": ["src/client/css/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

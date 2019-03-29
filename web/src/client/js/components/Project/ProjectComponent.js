@@ -20,8 +20,8 @@ function ProjectComponent({ project }) {
           <ProjectIcon className="project__icon" /> {project.name}
         </h1>
         <DropdownComponent className="project__dropdown" button={settingsButton}>
-          <li><button className="btn btn--blank">Settings</button></li>
-          <li><button className="btn btn--blank">Duplicate...</button></li>
+          <li className="menu__item"><button className="btn btn--blank">Settings</button></li>
+          <li className="menu__item"><button className="btn btn--blank">Duplicate...</button></li>
           <li className="menu__divider">
             <button className="btn btn--blank btn--warning">Delete Project...</button>
           </li>

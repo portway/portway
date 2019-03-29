@@ -7,12 +7,13 @@ const Constants = require('../src/shared/constants')
 
 const SharedConfig = {
   resolvers: {
-    Sections: path.resolve(__dirname, '../src/client/js/sections'),
-    Components: path.resolve(__dirname, '../src/client/js/components'),
     Actions: path.resolve(__dirname, '../src/client/js/actions'),
+    Components: path.resolve(__dirname, '../src/client/js/components'),
+    CSS: path.resolve(__dirname, '../src/client/css'),
     Hooks: path.resolve(__dirname, '../src/client/js/hooks'),
+    Libs: path.resolve(__dirname, '../src/client/js/libs'),
+    Sections: path.resolve(__dirname, '../src/client/js/sections'),
     Shared: path.resolve(__dirname, '../src/shared'),
-    CSS: path.resolve(__dirname, '../src/client/css')
   },
   plugins: [
     new FixStyleOnlyEntriesPlugin({ silent: true }),
