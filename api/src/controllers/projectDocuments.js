@@ -45,7 +45,7 @@ const projectDocumentsController = function(router) {
 }
 
 const getProjectDocuments = async function(req, res) {
-  const projectId = Number(req.params.projectId)
+  const { projectId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
@@ -58,8 +58,7 @@ const getProjectDocuments = async function(req, res) {
 }
 
 const getProjectDocument = async function(req, res) {
-  const id = Number(req.params.id)
-  const projectId = Number(req.params.projectId)
+  const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
@@ -74,7 +73,7 @@ const getProjectDocument = async function(req, res) {
 
 const addProjectDocument = async function(req, res) {
   const { body } = req
-  const projectId = Number(req.params.projectId)
+  const { projectId } = req.params
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
   body.orgId = orgId
@@ -89,8 +88,7 @@ const addProjectDocument = async function(req, res) {
 }
 
 const replaceProjectDocument = async function(req, res) {
-  const id = Number(req.params.id)
-  const projectId = Number(req.params.projectId)
+  const { id, projectId } = req.params
   const { body } = req
   const { orgId } = req.requestorInfo
 
@@ -104,8 +102,7 @@ const replaceProjectDocument = async function(req, res) {
 }
 
 const deleteProjectDocument = async function(req, res) {
-  const id = Number(req.params.id)
-  const projectId = Number(req.params.projectId)
+  const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
   try {

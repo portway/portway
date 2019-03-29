@@ -8,9 +8,10 @@ export function validateBody(schema, options = {}) {
 
   const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { error } = Joi.validate(req.body, schema, mergedOptions)
+    const { value, error } = Joi.validate(req.body, schema, mergedOptions)
 
     if (!error) {
+      req.body = value
       return next()
     }
 
@@ -26,9 +27,10 @@ export function validateParams(schema, options = {}) {
 
   const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { error } = Joi.validate(req.params, schema, mergedOptions)
+    const { value, error } = Joi.validate(req.params, schema, mergedOptions)
 
     if (!error) {
+      req.params = value
       return next()
     }
 
