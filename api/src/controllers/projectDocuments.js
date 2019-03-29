@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
-import validate from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessDocument from '../businesstime/document'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -14,19 +14,34 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 // does it need its own, or will it always be the same?
 
 const documentsPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    name: Joi.string().required(),
-    projectId: Joi.number().required()
-  })
+  name: Joi.string().required(),
+  projectId: Joi.number().required()
+})
+
+const documentsParamSchema = Joi.compile({
+  projectId: Joi.number().required(),
+  id: Joi.number()
 })
 
 const projectDocumentsController = function(router) {
   // all routes are nested at projects/:projectId/documents and receive req.params.projectId
-  router.post('/', validate(documentsPayloadSchema), createPerm, addProjectDocument)
-  router.get('/', listPerm, getProjectDocuments)
-  router.get('/:id', readPerm, getProjectDocument)
-  router.put('/:id', validate(documentsPayloadSchema), updatePerm, replaceProjectDocument)
-  router.delete('/:id', deletePerm, deleteProjectDocument)
+  router.post(
+    '/',
+    validateParams(documentsParamSchema),
+    validateBody(documentsPayloadSchema),
+    createPerm,
+    addProjectDocument
+  )
+  router.get('/', validateParams(documentsParamSchema), listPerm, getProjectDocuments)
+  router.get('/:id', validateParams(documentsPayloadSchema), readPerm, getProjectDocument)
+  router.put(
+    '/:id',
+    validateParams(documentsParamSchema),
+    validateBody(documentsPayloadSchema),
+    updatePerm,
+    replaceProjectDocument
+  )
+  router.delete('/:id', validateParams(documentsParamSchema), deletePerm, deleteProjectDocument)
 }
 
 const getProjectDocuments = async function(req, res) {
@@ -43,6 +58,8 @@ const getProjectDocuments = async function(req, res) {
 }
 
 const getProjectDocument = async function(req, res) {
+  console.log(typeof req.params.id)
+  console.log(typeof req.params.projectId)
   const id = Number(req.params.id)
   const projectId = Number(req.params.projectId)
   const { orgId } = req.requestorInfo
