@@ -1,31 +1,29 @@
 import Joi from 'joi'
 
-import validate from '../libs/middleware/payloadValidation'
+import { validateBody } from '../libs/middleware/payloadValidation'
 import signUpCoordinator from '../coordinators/signUp'
 import userCoordinator from '../coordinators/user'
 import auth from '../libs/auth'
 
 const signupPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().email().required()
-  })
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  email: Joi.string()
+    .email()
+    .required()
 })
 
 const initialPasswordPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    password: Joi.string().required()
-  })
+  password: Joi.string().required()
 })
 
 const signupController = function(router) {
   // TODO: currently no auth on this route, whitelist to client server only?
-  router.post('/', validate(signupPayloadSchema), signUp)
+  router.post('/', validateBody(signupPayloadSchema), signUp)
   router.post(
     '/initialPassword',
     auth.jwtPasswordResetMiddleware,
-    validate(initialPasswordPayloadSchema),
+    validateBody(initialPasswordPayloadSchema),
     setInitialPassword
   )
 }

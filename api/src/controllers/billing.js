@@ -1,6 +1,6 @@
 import billingCoordinator from '../coordinators/billing'
 import Joi from 'joi'
-import validate from '../libs/middleware/payloadValidation'
+import { validateBody } from '../libs/middleware/payloadValidation'
 
 const billingPayloadSchema = Joi.compile({
   body: Joi.object().keys({
@@ -13,7 +13,7 @@ const billingPayloadSchema = Joi.compile({
 })
 
 const billingController = function(router) {
-  router.post('/billing', validate(billingPayloadSchema), addBilling)
+  router.post('/billing', validateBody(billingPayloadSchema), addBilling)
 
   router.get('/', getBilling)
 }

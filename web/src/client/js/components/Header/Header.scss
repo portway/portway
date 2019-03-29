@@ -61,20 +61,8 @@
       border-left: thin solid $gray-light;
       display: flex;
       height: $sideGutterWidth;
+      justify-content: center;
       min-width: $sideGutterWidth;
-
-      .navbar__settings-link {
-        border-radius: 50% 50%;
-        display: block;
-        height: 40px;
-        margin: auto;
-        width: 40px;
-        @include focus(transparent);
-        img {
-          border-radius: 50% 50%;
-          display: block;
-        }
-      }
     }
   } // navbar
 }

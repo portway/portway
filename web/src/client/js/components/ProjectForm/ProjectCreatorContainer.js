@@ -7,7 +7,7 @@ import { createProject } from 'Actions/project'
 import ProjectForm from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
-import dataMapper from '../../libs/dataMapper'
+import dataMapper from 'Libs/dataMapper'
 
 const ProjectCreatorContainer = ({ history }) => {
   const { data: users } = useDataService(dataMapper.users.list())
@@ -24,9 +24,8 @@ const ProjectCreatorContainer = ({ history }) => {
       createProject(
         {
           name: formValues.projectName,
-          description: formValues.projectDescription,
-          teamMemberIds: selectedUsers,
-          orgId: currentUser.orgId
+          description: formValues.projectDescription
+          // teamMemberIds: selectedUsers // TODO: when endpoint support has this, add back
         },
         history
       )

@@ -1,10 +1,14 @@
 import Joi from 'joi'
 
-export function validateBody(schema) {
+// validation occurs on req.body
+export function validateBody(schema, options = {}) {
+  const defaultOptions = {
+    allowUnknown: false
+  }
+
+  const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { error } = Joi.validate(req.body, schema.body, {
-      allowUnknown: true
-    })
+    const { error } = Joi.validate(req.body, schema, mergedOptions)
 
     if (!error) {
       return next()
@@ -14,11 +18,15 @@ export function validateBody(schema) {
   }
 }
 
-export function validateParams(schema) {
+// validation occurs on req.params
+export function validateParams(schema, options = {}) {
+  const defaultOptions = {
+    allowUnknown: false
+  }
+
+  const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { error } = Joi.validate(req.params, schema.params, {
-      allowUnknown: true
-    })
+    const { error } = Joi.validate(req.params, schema, mergedOptions)
 
     if (!error) {
       return next()

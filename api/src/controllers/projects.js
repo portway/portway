@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
-import validate from '../libs/middleware/payloadValidation'
+import { validateBody } from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -11,17 +11,15 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 )
 
 const projectsPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    name: Joi.string().required(),
-    description: Joi.string().allow('')
-  })
+  name: Joi.string().required(),
+  description: Joi.string().allow('')
 })
 
 const projectsController = function(router) {
-  router.post('/', validate(projectsPayloadSchema), createPerm, addProject)
+  router.post('/', validateBody(projectsPayloadSchema), createPerm, addProject)
   router.get('/', listPerm, getProjects)
   router.get('/:id', readPerm, getProject)
-  router.put('/:id', validate(projectsPayloadSchema), updatePerm, replaceProject)
+  router.put('/:id', validateBody(projectsPayloadSchema), updatePerm, replaceProject)
   router.delete('/:id', deletePerm, deleteProject)
 }
 
@@ -50,7 +48,6 @@ const getProject = async function(req, res) {
 
 const addProject = async function(req, res) {
   const { body } = req
-  // Overwrite orgId even if they passed anything in
   body.orgId = req.requestorInfo.orgId
 
   try {
@@ -66,7 +63,7 @@ const replaceProject = async function(req, res) {
   const { id } = req.params
   const { body } = req
 
-  // TODO: don't let users change orgId
+  body.orgId = req.requestorInfo.orgId
 
   try {
     const project = await BusinessProject.updateById(id, body)

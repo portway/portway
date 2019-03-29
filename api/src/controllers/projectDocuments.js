@@ -13,12 +13,12 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 // TODO: this is currently piggybacking off of project perms,
 // does it need its own, or will it always be the same?
 
-const documentsPayloadSchema = Joi.compile({
+const bodySchema = Joi.compile({
   name: Joi.string().required(),
   projectId: Joi.number().required()
 })
 
-const documentsParamSchema = Joi.compile({
+const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
   id: Joi.number()
 })
@@ -27,21 +27,21 @@ const projectDocumentsController = function(router) {
   // all routes are nested at projects/:projectId/documents and receive req.params.projectId
   router.post(
     '/',
-    validateParams(documentsParamSchema),
-    validateBody(documentsPayloadSchema),
+    validateParams(paramSchema),
+    validateBody(bodySchema),
     createPerm,
     addProjectDocument
   )
-  router.get('/', validateParams(documentsParamSchema), listPerm, getProjectDocuments)
-  router.get('/:id', validateParams(documentsPayloadSchema), readPerm, getProjectDocument)
+  router.get('/', validateParams(paramSchema), listPerm, getProjectDocuments)
+  router.get('/:id', validateParams(paramSchema), readPerm, getProjectDocument)
   router.put(
     '/:id',
-    validateParams(documentsParamSchema),
-    validateBody(documentsPayloadSchema),
+    validateParams(paramSchema),
+    validateBody(bodySchema),
     updatePerm,
     replaceProjectDocument
   )
-  router.delete('/:id', validateParams(documentsParamSchema), deletePerm, deleteProjectDocument)
+  router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectDocument)
 }
 
 const getProjectDocuments = async function(req, res) {
@@ -58,8 +58,6 @@ const getProjectDocuments = async function(req, res) {
 }
 
 const getProjectDocument = async function(req, res) {
-  console.log(typeof req.params.id)
-  console.log(typeof req.params.projectId)
   const id = Number(req.params.id)
   const projectId = Number(req.params.projectId)
   const { orgId } = req.requestorInfo
