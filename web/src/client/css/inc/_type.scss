@@ -44,15 +44,13 @@ body {
   font-size: 15px; // base font
 }
 
-.navbar-brand {
-  h1 {
-    font-size: 1.867rem; // 28px
+.navbar-brand h1, .navbar-brand-name {
+  font-size: 1.867rem; // 28px
+  font-weight: 700;
+  letter-spacing: 0.029em; // .8px
+  line-height: 0.643em; // 18px
+  span {
     font-weight: 700;
-    letter-spacing: 0.029em; // .8px
-    line-height: 0.643em; // 18px
-    span {
-      font-weight: 700;
-    }
   }
 }
 
