@@ -38,7 +38,7 @@ const Header = ({ location }) => {
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar__brand">
-          <Link to={Constants.PATH_DASHBOARD}>
+          <Link to={Constants.PATH_PROJECTS}>
             <span className="navbar__logo" style={renderBrandLogo(brand.logo)} />
           </Link>
         </div>
