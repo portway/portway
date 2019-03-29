@@ -11,10 +11,8 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 )
 
 const projectsPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    name: Joi.string().required(),
-    description: Joi.string().allow('')
-  })
+  name: Joi.string().required(),
+  description: Joi.string().allow('')
 })
 
 const projectsController = function(router) {
@@ -50,7 +48,6 @@ const getProject = async function(req, res) {
 
 const addProject = async function(req, res) {
   const { body } = req
-  // Overwrite orgId even if they passed anything in
   body.orgId = req.requestorInfo.orgId
 
   try {
@@ -66,7 +63,7 @@ const replaceProject = async function(req, res) {
   const { id } = req.params
   const { body } = req
 
-  // TODO: don't let users change orgId
+  body.orgId = req.requestorInfo.orgId
 
   try {
     const project = await BusinessProject.updateById(id, body)
