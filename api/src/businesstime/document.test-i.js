@@ -37,7 +37,7 @@ describe('BusinessDocument', () => {
     })
   })
 
-  describe('#updateById', () => {
+  describe('#updateByIdForProject', () => {
     let factoryDocument
     let orgId
     let projectId
@@ -57,10 +57,15 @@ describe('BusinessDocument', () => {
       let updatedDocument
 
       beforeAll(async () => {
-        updatedDocument = await BusinessDocument.updateById(factoryDocument.id, orgId, {
-          ...updateBody,
-          projectId
-        })
+        updatedDocument = await BusinessDocument.updateByIdForProject(
+          factoryDocument.id,
+          factoryProject.id,
+          orgId,
+          {
+            ...updateBody,
+            projectId
+          }
+        )
       })
 
       it('should return a POJO with updated body fields', () => {
@@ -71,14 +76,16 @@ describe('BusinessDocument', () => {
 
     describe('when the target document is not found', () => {
       it('should throw an error', async () => {
-        await expect(BusinessDocument.updateById(0, projectId, orgId, updateBody)).rejects.toThrow()
+        await expect(
+          BusinessDocument.updateByIdForProject(0, projectId, orgId, updateBody)
+        ).rejects.toThrow()
       })
     })
 
     describe('when the target project is not found', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessDocument.updateById(factoryDocument.id, 0, orgId, updateBody)
+          BusinessDocument.updateByIdForProject(factoryDocument.id, 0, orgId, updateBody)
         ).rejects.toThrow()
       })
     })
@@ -86,7 +93,7 @@ describe('BusinessDocument', () => {
     describe('when the target document does not belong to the organization', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessDocument.updateById(factoryDocument.id, projectId, 0, updateBody)
+          BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, 0, updateBody)
         ).rejects.toThrow()
       })
     })
