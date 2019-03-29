@@ -59,7 +59,7 @@ const ProjectsListItem = ({
       </div>
       <div className="project-list__actions" hidden={activeProjectId !== projectId}>
         <div className="project-list__actions-start">
-          <button className="btn btn--blank btn--warning" onClick={handleDelete}>
+          <button className="btn btn--blank btn--danger" onClick={handleDelete}>
             Delete
           </button>
         </div>

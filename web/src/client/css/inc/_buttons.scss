@@ -111,4 +111,11 @@ button,
     }
   }
 
+  &--danger {
+    color: $danger;
+    &:hover {
+      color: darken($danger, 20%);
+    }
+  }
+
 }
