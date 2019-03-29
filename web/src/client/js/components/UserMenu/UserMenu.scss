@@ -1,0 +1,20 @@
+@import 'CSS/inc/_mixins.scss';
+
+.user-menu {
+  &__dropdown {
+    border-radius: 50% 50%;
+  }
+  &__button {
+    background: url('/images/icon/user-avatar.svg') no-repeat 50% 50%;
+    border-radius: 50% 50%;
+    display: block;
+    height: 40px;
+    margin: auto;
+    overflow: hidden;
+    text-indent: -9000px;
+    width: 40px;
+    @include focus(transparent);
+  }
+}
+
+// /images/icon/user-avatar.svg
