@@ -6,6 +6,7 @@ import './Project.scss'
 import ProjectIcon from 'Components/Icons/ProjectIcon'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
+import DocumentContainer from 'Components/Document/DocumentContainer'
 
 function ProjectComponent({ project }) {
   const [expanded, setExpanded] = useState(false)
@@ -63,7 +64,12 @@ function ProjectComponent({ project }) {
         </div>
       </div>
       <div className="project__documents">
-        <DocumentsListContainer />
+        <div className="project__documents-list-container">
+          <DocumentsListContainer />
+        </div>
+        <div className="project__documents-document-container">
+          <DocumentContainer />
+        </div>
       </div>
     </div>
   )
