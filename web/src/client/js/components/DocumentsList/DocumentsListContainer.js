@@ -5,19 +5,20 @@ import { withRouter } from 'react-router-dom'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
-import ProjectComponent from './ProjectComponent'
+import DocumentsListComponent from './DocumentsListComponent'
 
-const ProjectContainer = ({ location }) => {
+const DocumentsListContainer = ({ location }) => {
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
+  if (!project) return null
   return (
-    <ProjectComponent project={project ? project : {}} />
+    <DocumentsListComponent projectName={project.name} />
   )
 }
 
-ProjectContainer.propTypes = {
+DocumentsListContainer.propTypes = {
   location: PropTypes.object.isRequired
 }
 
-export default withRouter(ProjectContainer)
+export default withRouter(DocumentsListContainer)

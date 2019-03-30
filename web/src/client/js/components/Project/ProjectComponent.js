@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import './Project.scss'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
-import ProjectDocuments from './ProjectDocuments'
 import ProjectIcon from 'Components/Icons/ProjectIcon'
+import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
 
 function ProjectComponent({ project }) {
   const settingsButton = {
@@ -38,7 +38,9 @@ function ProjectComponent({ project }) {
           </div>
         </div>
       </header>
-      <ProjectDocuments project={project} />
+      <div className="project__documents">
+        <DocumentsListContainer />
+      </div>
     </div>
   )
 }
