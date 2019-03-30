@@ -4,9 +4,7 @@ import BusinessOrganization from '../businesstime/organization'
 import ono from 'ono'
 
 const organizationsPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    name: Joi.string().required()
-  })
+  name: Joi.string().required()
 })
 
 const organizationsController = function(router) {
@@ -23,9 +21,7 @@ const getOrganization = async function(req, res) {
     res.json(org)
   } catch (e) {
     console.error(e.stack)
-    res
-      .status(e.code || 500)
-      .json({ error: `error fetching organization with id ${id}` })
+    res.status(e.code || 500).json({ error: `error fetching organization with id ${id}` })
   }
 }
 

@@ -11,7 +11,7 @@ const SignInController = function(router) {
 
   router.post('/', auth.loginMiddleware, (req, res) => {
     res.cookie('token', req.user.token, { maxAge: constants.MAX_COOKIE_AGE_MS })
-    res.redirect('/d/dashboard')
+    res.redirect('/d/projects')
   })
 
   router.get('/password-reset', auth.jwtMiddleware, (req, res) => {

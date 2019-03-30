@@ -1,16 +1,18 @@
 @import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
 
 .project {
   // Header is the project name with icon, and more button...
   &__header {
+    padding-bottom: 22px;
     position: relative;
-    h2 {
+    h1 {
       color: $primary;
       margin: 0;
     }
     p {
       margin: 0;
-      padding: .25em 0;
+      padding: 0 0 0.400rem 0; // 6px
     }
     .small {
       color: $gray-dark;
@@ -29,12 +31,16 @@
   .dropdown.project__dropdown {
     position: absolute;
     right: 0;
-    top: 5px;
+    top: 0;
   }
 
   // Details is the project details that can expand / contract
   &__details {
-    padding: 0 0 22px 47px;
+    padding: 0 0 0 47px;
+  }
+
+  &__statistics {
+    padding: 19px 0 0 0;
   }
 
   &__expand {
@@ -42,9 +48,11 @@
     border-bottom: thin solid $white-ter;
     color: $black-ter;
     left: 50%;
+    outline: none;
     position: relative;
     transform: translateX(-50%);
     width: 100vw;
+    @include focus($white-bis);
     &--details {
       align-items: center;
       display: flex;

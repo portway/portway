@@ -6,17 +6,15 @@ import userCoordinator from '../coordinators/user'
 import auth from '../libs/auth'
 
 const signupPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().email().required()
-  })
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  email: Joi.string()
+    .email()
+    .required()
 })
 
 const initialPasswordPayloadSchema = Joi.compile({
-  body: Joi.object().keys({
-    password: Joi.string().required()
-  })
+  password: Joi.string().required()
 })
 
 const signupController = function(router) {

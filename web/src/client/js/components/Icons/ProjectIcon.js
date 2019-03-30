@@ -17,7 +17,7 @@ ProjectIcon.propTypes = {
 }
 
 ProjectIcon.defaultProps = {
-  className: undefined,
+  className: 'icon',
   fill: '#000'
 }
 
