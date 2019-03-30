@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 
 import DocumentComponent from './DocumentComponent'
 
@@ -11,4 +12,4 @@ DocumentContainer.propTypes = {
   location: PropTypes.object.isRequired
 }
 
-export default DocumentContainer
+export default withRouter(DocumentContainer)
