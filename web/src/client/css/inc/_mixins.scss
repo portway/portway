@@ -10,7 +10,7 @@
     outline: none;
     > * { outline: none; }
     .using-mouse & {
-      background-color: unset;
+      background-color: $bgColor;
       border: thin solid transparent;
       box-shadow: unset;
     }
