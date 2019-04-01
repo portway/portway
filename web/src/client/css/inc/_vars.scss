@@ -32,7 +32,8 @@ $highlight: #f8963a;
 $action: #6ba5f2;
 $action-dark: #6095da;
 $action-light: #d2e0f2;
-$warning: #f26244;
+$warning: $highlight;
+$danger: #f26244;
 
 // Color Overrides (from bulma)
 $black-bis: #3b3d3e;
