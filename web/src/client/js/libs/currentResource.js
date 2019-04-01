@@ -25,7 +25,9 @@ const currentResource = (resourceName, path) => {
   let matchResults
   switch (resourceName) {
     case 'project':
-      matchResults = matchPath(path, {
+      // Specifically look at project here, as we may be looking at documents
+      const projectLocation = `/${path.split('/')[1]}/${path.split('/')[2]}`
+      matchResults = matchPath(projectLocation, {
         path: '/project/:id',
         exact: true,
         strict: false

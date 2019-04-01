@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import './Project.scss'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
-import ProjectDocuments from './ProjectDocuments'
 import ProjectIcon from 'Components/Icons/ProjectIcon'
+import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
+import DocumentContainer from 'Components/Document/DocumentContainer'
 
 function ProjectComponent({ project }) {
   const [expanded, setExpanded] = useState(false)
@@ -62,7 +63,14 @@ function ProjectComponent({ project }) {
           {renderExpandState()}
         </div>
       </div>
-      <ProjectDocuments project={project} />
+      <div className="project__documents">
+        <div className="project__documents-list-container">
+          <DocumentsListContainer />
+        </div>
+        <div className="project__documents-document-container">
+          <DocumentContainer />
+        </div>
+      </div>
     </div>
   )
 }

@@ -7,7 +7,7 @@ module.exports = {
   PATH_APP: '/d',
   PATH_BILLING: '/billing',
   PATH_DASHBOARD: '/dashboard',
-  PATH_DOCUMENTS: '/documents',
+  PATH_DOCUMENT: '/document',
   PATH_LOGOUT: '/logout',
   PATH_PROJECT: '/project',
   PATH_PROJECTS: '/projects',
