@@ -39,7 +39,7 @@ describe('OrganizationBusiness', () => {
 
     describe('when the target organization is not found', () => {
       it('should throw an error', async () => {
-        await expect(OrganizationBusiness.updateById(8675309)).rejects.toThrow()
+        await expect(OrganizationBusiness.updateById(0)).rejects.toThrow()
       })
     })
   })

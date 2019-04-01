@@ -48,7 +48,7 @@ describe('BusinessUser', () => {
 
     describe('when the target user is not found', () => {
       it('should throw an error', async () => {
-        await expect(BusinessUser.updateById(7878787)).rejects.toThrow()
+        await expect(BusinessUser.updateById(0)).rejects.toThrow()
       })
     })
   })

@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
-import validate from '../libs/middleware/payloadValidation'
+import { validateBody } from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -16,10 +16,10 @@ const projectsPayloadSchema = Joi.compile({
 })
 
 const projectsController = function(router) {
-  router.post('/', validate(projectsPayloadSchema), createPerm, addProject)
+  router.post('/', validateBody(projectsPayloadSchema), createPerm, addProject)
   router.get('/', listPerm, getProjects)
   router.get('/:id', readPerm, getProject)
-  router.put('/:id', validate(projectsPayloadSchema), updatePerm, replaceProject)
+  router.put('/:id', validateBody(projectsPayloadSchema), updatePerm, replaceProject)
   router.delete('/:id', deletePerm, deleteProject)
 }
 
@@ -82,7 +82,7 @@ const deleteProject = async function(req, res) {
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error patching project with id ${id}` })
+    res.status(e.code || 500).json({ error: `error deleting project with id ${id}` })
   }
 }
 

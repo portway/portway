@@ -11,9 +11,7 @@ const getOrganizationData = function(override = {}) {
 
 const createMany = async function(numberOfOrganizations, override) {
   const db = getDb()
-  const organizations = Array(numberOfOrganizations)
-    .fill(numberOfOrganizations)
-    .map(() => getOrganizationData(override))
+  const organizations = Array(numberOfOrganizations).fill().map(() => getOrganizationData(override))
 
   return Promise.all(organizations.map((organizationData) => {
     return db.model('Organization').create(organizationData)

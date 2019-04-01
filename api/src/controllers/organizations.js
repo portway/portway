@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import validate from '../libs/middleware/payloadValidation'
+import { validateBody } from '../libs/middleware/payloadValidation'
 import BusinessOrganization from '../businesstime/organization'
 import ono from 'ono'
 
@@ -8,7 +8,7 @@ const organizationsPayloadSchema = Joi.compile({
 })
 
 const organizationsController = function(router) {
-  router.post('/', validate(organizationsPayloadSchema), addOrganization)
+  router.post('/', validateBody(organizationsPayloadSchema), addOrganization)
   router.get('/:id', getOrganization)
 }
 
