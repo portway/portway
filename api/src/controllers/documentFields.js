@@ -1,7 +1,9 @@
 import Joi from 'joi'
 import ono from 'ono'
+
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessField from '../businesstime/field'
+import fieldCoordinator from '../coordinators/field'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import fieldTypes from '../constants/fieldTypes'
@@ -56,11 +58,11 @@ const getDocumentFields = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const projects = await BusinessField.findAllForDocument(projectId, documentId, orgId)
-    res.json(projects)
+    const fields = await BusinessField.findAllForDocument(documentId, orgId)
+    res.json(fields)
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch documents' })
+    res.status(e.code || 500).json({ error: 'Cannot fetch fields' })
   }
 }
 
@@ -69,9 +71,9 @@ const getDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessField.findByIdForDocument(id, projectId, documentId, orgId)
-    if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
-    res.json(project)
+    const field = await BusinessField.findByIdForDocument(id, documentId, orgId)
+    if (!field) throw ono({ code: 404 }, `No field with id ${id}`)
+    res.json(field)
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
@@ -79,18 +81,18 @@ const getDocumentField = async function(req, res) {
 }
 
 const addDocumentField = async function(req, res) {
-  const { body } = req
+  const { body: { value, ...fieldBody } } = req
   const { projectId, documentId } = req.params
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
-  body.orgId = orgId
+  fieldBody.orgId = orgId
 
   try {
-    const project = await BusinessField.createForProjectDocument(projectId, documentId, body)
-    res.status(201).json(project)
+    const field = await fieldCoordinator.addFieldAndValue(projectId, documentId, fieldBody, value)
+    res.status(201).json(field)
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create document' })
+    res.status(e.code || 500).json({ error: 'Cannot create field' })
   }
 }
 
@@ -100,14 +102,14 @@ const replaceDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessField.updateByIdForProjectDocument(
+    const field = await BusinessField.updateByIdForProjectDocument(
       id,
       projectId,
       documentId,
       orgId,
       body
     )
-    res.json(project)
+    res.json(field)
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error updating document with id ${id}` })
@@ -119,7 +121,7 @@ const deleteDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessField.deleteByIdForDocument(id, projectId, documentId, orgId)
+    await BusinessField.deleteByIdForDocument(id, documentId, orgId)
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)

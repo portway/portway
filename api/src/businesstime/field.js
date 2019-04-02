@@ -33,7 +33,10 @@ async function createForProjectDocument(projectId, docId, body) {
 
 async function findAllForDocument(docId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, raw: true })
+  console.log(db.models.FieldTypeStringValue)
+  return await db
+    .model(MODEL_NAME)
+    .findAll({ where: { docId, orgId }, include: [{ model: db.model('FieldTypeStringValue') }] })
 }
 
 async function findByIdForDocument(id, docId, orgId) {
@@ -43,10 +46,6 @@ async function findByIdForDocument(id, docId, orgId) {
 
 async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   const db = getDb()
-
-  if (docId !== body.docId) {
-    throw ono({ code: 400 }, `Cannot update field, document id param does not match docId in body`)
-  }
 
   const document = await db
     .model('Document')
@@ -59,7 +58,6 @@ async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
-
   const updatedField = await field.update(body)
   return updatedField.get({ plain: true })
 }
