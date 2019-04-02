@@ -12,6 +12,11 @@ export default function(sequelize, DataTypes) {
     Project.belongsTo(models.Organization, {
       foreignKey: 'orgId'
     })
+    // Project.belongsToMany(models.User, {
+    //   through: models.ProjectUser,
+    //   foreignKey: 'projectId',
+    //   otherKey: 'userId'
+    // })
   }
   return Project
 }

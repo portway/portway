@@ -3,8 +3,9 @@ import ono from 'ono'
 import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 import { UniqueConstraintError } from 'sequelize'
 
-const MODEL_NAME = 'User'
-const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email', 'orgId']
+export const MODEL_NAME = 'User'
+
+export const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email', 'orgId']
 
 async function create(body) {
   const db = getDb()
