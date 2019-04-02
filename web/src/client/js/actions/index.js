@@ -11,6 +11,9 @@ export const ActionTypes = {
   RECEIVE_UPDATED_PROJECT: 'RECEIVE_UPDATED_PROJECT',
   INITIATE_PROJECT_REMOVE: 'INITIATE_PROJECT_REMOVE',
   REMOVE_PROJECT: 'REMOVE_PROJECT',
+  // Documents
+  REQUEST_PROJECT_DOCUMENTS: 'REQUEST_PROJECT_DOCUMENTS',
+  RECEIVE_PROJECT_DOCUMENTS: 'RECEIVE_PROJECT_DOCUMENTS',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
@@ -29,6 +32,11 @@ export const Projects = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id')
+}
+
+export const ProjectDocuments = {
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECT_DOCUMENTS, 'id'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_DOCUMENTS, 'data')
 }
 
 export const Users = {

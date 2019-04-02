@@ -5,12 +5,7 @@ import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
 import './DocumentsList.scss'
 
-// Set up documents list
-// @todo switch this to use currentResource
-import documents from './DELETE_ME.json'
-// @todo delete to here
-
-const DocumentsListComponent = ({ projectName }) => {
+const DocumentsListComponent = ({ projectName, documents }) => {
   // Set up toolbar
   const toolbarAction = {
     callback: null,
@@ -28,20 +23,20 @@ const DocumentsListComponent = ({ projectName }) => {
     <div className="documents-list">
       <ToolbarComponent action={toolbarAction} filter sort />
       <nav>
-        <ol className="documents-list__list">
-          {renderDocumentsList()}
-        </ol>
+        <ol className="documents-list__list">{renderDocumentsList()}</ol>
       </nav>
     </div>
   )
 }
 
 DocumentsListComponent.propTypes = {
-  projectName: PropTypes.string.isRequired
+  projectName: PropTypes.string.isRequired,
+  documents: PropTypes.array.isRequired
 }
 
 DocumentsListComponent.defaultProps = {
-  projectName: ''
+  projectName: '',
+  documents: []
 }
 
 export default DocumentsListComponent
