@@ -31,24 +31,32 @@ async function createForProjectDocument(projectId, docId, body) {
   return createdDocument.get({ plain: true })
 }
 
-async function findAllForProjectDocument(projectId, docId, orgId) {
+async function findAllForDocument(docId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({ where: { projectId, docId, orgId }, raw: true })
+  return await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, raw: true })
 }
 
-async function findByIdForProjectDocument(id, projectId, docId, orgId) {
+async function findByIdForDocument(id, docId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ where: { id, projectId, docId, orgId }, raw: true })
+  return await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, raw: true })
 }
 
 async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   const db = getDb()
 
-  if (projectId !== body.projectId) {
-    throw ono({ code: 400 }, `Cannot update, project id param does not match projectId in body`)
+  if (docId !== body.docId) {
+    throw ono({ code: 400 }, `Cannot update field, document id param does not match docId in body`)
   }
 
-  const field = await db.model(MODEL_NAME).findOne({ where: { id, projectId, docId, orgId } })
+  const document = await db
+    .model('Document')
+    .findOne({ where: { id: docId, projectId, orgId }, raw: true })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot update field, document not found with id: ${docId}`)
+  }
+
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
@@ -56,9 +64,10 @@ async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   return updatedDocument.get({ plain: true })
 }
 
-async function deleteByIdForProjectDocument(id, projectId, docId, orgId) {
+async function deleteByIdForDocument(id, docId, orgId) {
+  console.log(id, docId, orgId)
   const db = getDb()
-  const field = await db.model(MODEL_NAME).findOne({ where: { id, projectId, docId, orgId } })
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
@@ -68,7 +77,7 @@ async function deleteByIdForProjectDocument(id, projectId, docId, orgId) {
 export default {
   createForProjectDocument,
   updateByIdForProjectDocument,
-  findByIdForProjectDocument,
-  findAllForProjectDocument,
-  deleteByIdForProjectDocument
+  findByIdForDocument,
+  findAllForDocument,
+  deleteByIdForDocument
 }
