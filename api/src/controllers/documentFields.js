@@ -30,7 +30,8 @@ const paramSchema = Joi.compile({
 })
 
 const projectDocumentsController = function(router) {
-  // all routes are nested at projects/:projectId/documents and receive req.params.projectId
+  // all routes are nested at projects/:projectId/documents/:documentId
+  // and receive req.params.projectId and req.params.documentId
   router.post(
     '/',
     validateParams(paramSchema),
@@ -55,7 +56,7 @@ const getDocumentFields = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const projects = await BusinessField.findAllForProjectDocument(projectId, documentId, orgId)
+    const projects = await BusinessField.findAllForDocument(projectId, documentId, orgId)
     res.json(projects)
   } catch (e) {
     console.error(e.stack)
@@ -68,7 +69,7 @@ const getDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessField.findByIdForProjectDocument(id, projectId, documentId, orgId)
+    const project = await BusinessField.findByIdForDocument(id, projectId, documentId, orgId)
     if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
     res.json(project)
   } catch (e) {
@@ -99,7 +100,13 @@ const replaceDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessField.updateByIdForProjectDocument(id, projectId, documentId, orgId, body)
+    const project = await BusinessField.updateByIdForProjectDocument(
+      id,
+      projectId,
+      documentId,
+      orgId,
+      body
+    )
     res.json(project)
   } catch (e) {
     console.error(e.stack)
@@ -112,7 +119,7 @@ const deleteDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessField.deleteByIdForProjectDocument(id, projectId, documentId, orgId)
+    await BusinessField.deleteByIdForDocument(id, projectId, documentId, orgId)
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)

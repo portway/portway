@@ -27,8 +27,8 @@ async function createForProjectDocument(projectId, docId, body) {
     throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
   }
 
-  const createdDocument = await db.model(MODEL_NAME).create(body)
-  return createdDocument.get({ plain: true })
+  const createdField = await db.model(MODEL_NAME).create(body)
+  return createdField.get({ plain: true })
 }
 
 async function findAllForDocument(docId, orgId) {
@@ -60,12 +60,11 @@ async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
 
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
-  const updatedDocument = await field.update(body)
-  return updatedDocument.get({ plain: true })
+  const updatedField = await field.update(body)
+  return updatedField.get({ plain: true })
 }
 
 async function deleteByIdForDocument(id, docId, orgId) {
-  console.log(id, docId, orgId)
   const db = getDb()
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
