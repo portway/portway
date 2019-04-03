@@ -43,4 +43,11 @@ export function loadModels() {
   modelFilePaths.forEach((file) => {
     connectedDb.import(path.join(__dirname, 'models', file))
   })
+
+  const models = connectedDb.models
+
+  Object.keys(models).forEach((modelName) => {
+    const model = connectedDb.model(modelName)
+    model.associate && model.associate(models)
+  })
 }
