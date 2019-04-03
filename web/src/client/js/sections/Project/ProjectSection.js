@@ -5,9 +5,9 @@ import ProjectContainer from 'Components/Project/ProjectContainer'
 class ProjectSection extends React.PureComponent {
   render() {
     return (
-      <div role="main">
+      <main>
         <ProjectContainer />
-      </div>
+      </main>
     )
   }
 }

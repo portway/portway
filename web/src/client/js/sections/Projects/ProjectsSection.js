@@ -16,10 +16,10 @@ class ProjectsContainer extends React.PureComponent {
       icon: 'icon-add'
     }
     return (
-      <div role="main">
+      <main>
         <ToolbarComponent action={toolbarAction} filter sort />
         <ProjectsListContainer />
-      </div>
+      </main>
     )
   }
 }
