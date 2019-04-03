@@ -11,20 +11,7 @@ async function create(body) {
 }
 
 async function findAllByProjectId(projectId, orgId) {
-  // TODO: sanitize input 100% here, or make sure Joi is doing it correctly
-  // Can't be inserting raw user input into sql queries #littlebobbytables
   const db = getDb()
-
-  // return db.model(MODEL_NAME).findAll({
-  //   where: { projectId, orgId },
-  //   include: [
-  //     {
-  //       model: db.model('User'),
-  //       attributes: USER_PUBLIC_FIELDS
-  //       // as: MODEL_NAME
-  //     }
-  //   ]
-  // })
 
   return db.model('User').findAll({
     attributes: USER_PUBLIC_FIELDS,
@@ -33,25 +20,16 @@ async function findAllByProjectId(projectId, orgId) {
         model: db.model(MODEL_NAME),
         where: { projectId, orgId },
         attributes: []
-        // as: MODEL_NAME
       }
-    ]
+    ],
+    raw: true
   })
-
-  // const selectAttributes = USER_PUBLIC_FIELDS.map(field => `u."${field}"`).join(',')
-
-  // const query = []
-  // query.push(`SELECT ${selectAttributes}`)
-  // query.push('FROM "ProjectsUsers" pu')
-  // query.push('LEFT JOIN "Users" u ON u.id = pu."userId"')
-  // query.push(`WHERE pu."projectId" = ${projectId} AND pu."orgId" = ${orgId}`)
-  // return await db.query(query.join(' '), { type: db.QueryTypes.SELECT })
 }
 
-async function findAllByUserId(userId, orgId) {
-  const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ where: { userId, orgId }, raw: true })
-}
+// async function findAllByUserId(userId, orgId) {
+//   const db = getDb()
+//   return await db.model(MODEL_NAME).findOne({ where: { userId, orgId }, raw: true })
+// }
 
 async function deleteByUserIdProjectId(userId, projectId, orgId) {
   const db = getDb()
@@ -70,6 +48,6 @@ async function deleteByUserIdProjectId(userId, projectId, orgId) {
 export default {
   create,
   findAllByProjectId,
-  findAllByUserId,
+  // findAllByUserId,
   deleteByUserIdProjectId
 }

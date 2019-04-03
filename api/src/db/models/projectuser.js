@@ -8,20 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
       },
-      projectId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Projects',
-          key: 'id'
-        }
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
-      },
+      projectId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
       orgId: DataTypes.INTEGER
     },
     {
