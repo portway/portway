@@ -1,0 +1,32 @@
+@import 'CSS/inc/_vars.scss';
+
+.document {
+
+  &__title {
+    border: none;
+    color: $primary;
+    font-family: $serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1em;
+    padding-bottom: $sideGutterWidth / 2;
+    width: 100%;
+    -webkit-appearance: none;
+  }
+
+  .field-button {
+    div {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    border-radius: 50% 50%;
+    bottom: $sideGutterWidth / 2;
+    height: 48px;
+    padding: 0;
+    position: absolute;
+    width: 48px;
+  }
+
+}

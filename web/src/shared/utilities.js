@@ -13,11 +13,11 @@ export const debounce = function(delay, fn) {
 
 export const throttle = function(action) {
   let isRunning = false
-  return function() {
+  return function(...args) {
     if (isRunning) return
     isRunning = true
     window.requestAnimationFrame(() => {
-      action()
+      action(...args)
       isRunning = false
     })
   }

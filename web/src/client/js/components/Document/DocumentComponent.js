@@ -1,12 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { AddIcon } from 'Components/Icons'
 import EditorComponent from 'Components/Editor/EditorComponent'
+
+import './Document.scss'
 
 const DocumentComponent = ({ document, nameChangeHandler }) => {
   return (
     <div className="document">
+      <header>
+        <input
+          className="document__title"
+          defaultValue="Contact page"
+          onChange={nameChangeHandler} />
+      </header>
       <EditorComponent />
+      {/* eslint-disable-next-line max-len */}
+      <button className="field-button" aria-label="Add a field" title="Add a field">
+        <div>
+          <AddIcon fill="#ffffff" />
+        </div>
+      </button>
+      {/* <!-- Loop for fields here --> */}
     </div>
   )
 }
