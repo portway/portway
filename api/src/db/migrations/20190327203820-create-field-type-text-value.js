@@ -17,6 +17,9 @@ module.exports = {
       structuredValue: {
         type: Sequelize.JSON
       },
+      fieldId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

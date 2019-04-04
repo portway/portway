@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
     Document.belongsTo(models.Project, {
       foreignKey: 'projectId'
     })
+    Document.hasMany(models.Field, {
+      foreignKey: 'docId'
+    })
   }
   return Document
 }

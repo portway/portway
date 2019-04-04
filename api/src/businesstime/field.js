@@ -1,8 +1,21 @@
 import ono from 'ono'
 
 import { getDb } from '../db/dbConnector'
+import fieldTypes from '../constants/fieldTypes'
+import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 
 const MODEL_NAME = 'Field'
+const PUBLIC_FIELDS = [
+  ...GLOBAL_PUBLIC_FIELDS,
+  'value',
+  'structuredValue',
+  'orgId',
+  'name',
+  'docId',
+  'versionId',
+  'type',
+  'order'
+]
 
 async function createForProjectDocument(projectId, docId, body) {
   const db = getDb()
@@ -19,24 +32,34 @@ async function createForProjectDocument(projectId, docId, body) {
     throw ono({ code: 400 }, `Cannot create field, document id param does not match docId in body`)
   }
 
-  const document = await db
-    .model('Document')
-    .findOne({ where: { id: docId, projectId, orgId }, raw: true })
+  const document = await db.model('Document').findOne({ where: { id: docId, projectId, orgId } })
 
   if (!document) {
     throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
   }
 
-  const createdField = await db.model(MODEL_NAME).create(body)
+  const createdField = await document.createField(body)
+
   return createdField.get({ plain: true })
 }
 
 async function findAllForDocument(docId, orgId) {
   const db = getDb()
-  console.log(db.models.FieldTypeStringValue)
-  return await db
+
+  const include = Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
+    return {
+      model: db.model(modelName)
+    }
+  })
+
+  const fields = await db
     .model(MODEL_NAME)
-    .findAll({ where: { docId, orgId }, include: [{ model: db.model('FieldTypeStringValue') }] })
+    .findAll({ where: { docId, orgId }, include })
+
+  return fields.map((field) => {
+    const plainField = field.get({ plain: true })
+    return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
+  })
 }
 
 async function findByIdForDocument(id, docId, orgId) {
