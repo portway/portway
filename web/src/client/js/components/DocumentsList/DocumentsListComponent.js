@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { AddIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
 import './DocumentsList.scss'
@@ -9,8 +10,9 @@ const DocumentsListComponent = ({ projectName, documents }) => {
   // Set up toolbar
   const toolbarAction = {
     callback: null,
-    label: `New Document in ${projectName}`,
-    icon: 'icon-add'
+    icon: <AddIcon width="16" height="16" />,
+    label: `New`,
+    title: 'Create a new document in this project'
   }
 
   function renderDocumentsList() {

@@ -114,6 +114,14 @@ b, strong {
   padding: 0.417em 0; // 5px
 }
 
+time {
+  font-family: $serif !important;
+  font-size: 0.800rem; // 12px
+  font-style: italic;
+  letter-spacing: 0.012em; // .14px
+  line-height: 1em; // 12px
+}
+
 input, textarea, keygen, select, button {
   font-size: 1rem; // 15px
 }

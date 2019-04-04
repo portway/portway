@@ -11,7 +11,7 @@ const DocumentsListItem = ({ document }) => {
     <li className="documents-list__item">
       {/* eslint-disable-next-line max-len */}
       <NavLink to={`${Constants.PATH_PROJECT}/${document.projectId}${Constants.PATH_DOCUMENT}/${document.id}`} className="btn btn--blank documents-list__button">
-        <p className="documents-list__name">{ document.name }</p>
+        <span className="documents-list__name">{ document.name }</span>
         <time className="documents-list__date" dateTime={document.updatedAt}>
           <TimeIcon />
           <span>{moment(document.updatedAt).fromNow()}</span>

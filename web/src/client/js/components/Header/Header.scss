@@ -3,6 +3,7 @@
 
 .masthead {
   border-top: 6px solid $highlight;
+  height: $headerHeight;
 
   .navbar {
     align-items: center;
@@ -43,11 +44,9 @@
 
     &__content-items {
       align-items: center;
-      border-left: thin solid $gray-light;
       display: flex;
       flex: 1;
       height: $sideGutterWidth;
-      margin-left: 16px;
       padding-left: 16px;
       .icon {
         height: 30px;

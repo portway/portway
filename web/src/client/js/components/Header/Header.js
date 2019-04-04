@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { NavLink, Link, withRouter } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
+import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenu from 'Components/UserMenu/UserMenu'
@@ -24,8 +25,11 @@ const renderBrandLogo = (logo) => {
 const renderProjectsItems = () => {
   return (
     <div className="navbar__content-items">
-      <Link to={Constants.PATH_PROJECT_CREATE} className="btn btn--blank btn--with-circular-icon">
-        <span className="icon icon-add" />
+      <Link
+        className="btn btn--blank btn--with-circular-icon"
+        title="Create a new project"
+        to={Constants.PATH_PROJECT_CREATE}>
+        <AddIcon width="16" height="16" />
         New Project
       </Link>
     </div>
