@@ -1,17 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const DocumentComponent = ({ document }) => {
+import EditorComponent from 'Components/Editor/EditorComponent'
+
+const DocumentComponent = ({ document, nameChangeHandler }) => {
   return (
     <div className="document">
-      <h1>I am a document</h1>
+      <EditorComponent />
     </div>
   )
 }
 
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
-  document: PropTypes.object.isRequired
+  document: PropTypes.object.isRequired,
+  nameChangeHandler: PropTypes.func.isRequired
 }
 
 export default DocumentComponent

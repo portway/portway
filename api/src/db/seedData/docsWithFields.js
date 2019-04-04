@@ -11,7 +11,7 @@ const BONKEY_ORG_ID = seedIds.BONKEY_ORG_ID
 
 const documents = [
   {
-    name: 'BonkeyDoc1',
+    name: 'Contact page',
     orgId: BONKEY_ORG_ID,
     projectId: BONKEY_PROJECT_ID,
     fields: [
@@ -37,12 +37,12 @@ const documents = [
     ]
   },
   {
-    name: 'BonkeyDoc2',
+    name: 'Sample of a document with a very long name for testing',
     orgId: BONKEY_ORG_ID,
     projectId: BONKEY_PROJECT_ID
   },
   {
-    name: 'BonkeyDoc3',
+    name: '🚀 New hotness',
     orgId: BONKEY_ORG_ID,
     projectId: BONKEY_PROJECT_ID
   },

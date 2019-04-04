@@ -9,7 +9,7 @@ const DocumentsListComponent = ({ projectName, documents }) => {
   // Set up toolbar
   const toolbarAction = {
     callback: null,
-    label: `New Document in ${projectName}`,
+    label: `New`,
     icon: 'icon-add'
   }
 

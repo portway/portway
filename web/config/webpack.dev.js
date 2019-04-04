@@ -34,7 +34,7 @@ module.exports = {
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        include: [path.resolve(__dirname, '../src/client/js/components')],
+        include: [path.resolve(__dirname, '../src/client/js')],
         use: ['style-loader', ...SharedConfig.styleLoaders]
       },
       ...SharedConfig.sharedLoaders

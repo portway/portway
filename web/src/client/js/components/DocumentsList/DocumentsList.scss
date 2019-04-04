@@ -8,17 +8,33 @@
     padding: 0;
   }
   &__item {
-    border-bottom: thin solid $white-ter;
+    border-top: thin solid $white-ter;
   }
   &__button {
     flex-direction: column;
-    padding: 6px;
+    padding: $sideGutterWidth / 4;
     width: 100%;
+    &.active {
+      background-color: $white-bis;
+      &:focus {
+        background-color: $white-bis;
+      }
+    }
+  }
+  &__name {
+    color: $black-ter;
+    padding-bottom: $sideGutterWidth / 4;
+    .active & {
+      color: $black-bis;
+    }
   }
   &__date {
     align-items: center;
     color: $gray;
     display: flex;
+    .active & {
+      color: $gray-dark;
+    }
     .time-icon {
       height: 16px;
       margin-right: 6px;
