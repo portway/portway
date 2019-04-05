@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 
@@ -13,19 +13,6 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
   const [expanded, setExpanded] = useState(false)
   const hasIcon = button.icon !== undefined
   const selectRef = useRef()
-  // Set position of menu depending on where it is on the screen
-  const [position, setPosition] = useState('left')
-  const buttonRef = useRef()
-  useEffect(() => {
-    if (buttonRef.current) {
-      setTimeout(() => {
-        const leftPos = buttonRef.current.getBoundingClientRect().x
-        if (leftPos) {
-          (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
-        }
-      }, 50)
-    }
-  }, [])
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -57,12 +44,11 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
-        onClick={toggleCallback}
-        ref={buttonRef}>
+        onClick={toggleCallback}>
         {button.icon && button.icon}
         {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
-      <div className={`menu menu--with-select menu--${position}`} hidden={!expanded}>
+      <div className={`menu menu--with-select`} hidden={!expanded}>
         <Select
           ref={selectRef}
           className={`react-select-container`}

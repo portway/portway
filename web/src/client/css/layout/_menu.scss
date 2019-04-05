@@ -1,12 +1,14 @@
 @import '../inc/vars';
 
-$animationLength: 0.3s;
+$menuAnimationLength: 0.3s;
+$menuBorderRadius: 8px;
 
 .menu {
   background: $white;
   border: thin solid $gray-dark;
-  border-radius: 2px;
-  padding: 14px 12px;
+  border-radius: $menuBorderRadius;
+  overflow: hidden;
+  padding: 0;
   position: absolute;
   will-change: visibility, transform, opacity;
   z-index: 10;
@@ -20,8 +22,13 @@ $animationLength: 0.3s;
   &[hidden] {
     opacity: 0;
     transform: translateY(0);
-    transition: visibility 0s linear, transform $animationLength ease, opacity 0.2s ease;
+    transition: visibility 0s linear, transform $menuAnimationLength ease, opacity 0.2s ease;
     visibility: hidden;
+  }
+
+  &--dark {
+    background: $black-bis;
+    border: thin solid transparent;
   }
 
   &--right {
@@ -29,10 +36,10 @@ $animationLength: 0.3s;
   }
 
   &:not([hidden]) {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     opacity: 1;
     transform: translateY(5px);
-    transition: visibility 0s ease 0.5s, transform $animationLength ease, opacity 0.2s ease;
+    transition: visibility 0s ease 0.5s, transform $menuAnimationLength ease, opacity 0.2s ease;
     visibility: visible;
   }
 
@@ -43,15 +50,12 @@ $animationLength: 0.3s;
 }
 
 .menu__item {
-  border-radius: 2px;
-  // color: $black-bis;
+  color: $black-bis;
   cursor: pointer;
   display: block;
-  padding: 3px 4px;
   text-decoration: none;
-  margin-bottom: 2px;
-  // max-width: 313px;
   min-width: 100px;
+  padding: 8px 14px;
   width: 100%;
   &:hover {
     background-color: $white-ter;
@@ -63,15 +67,24 @@ $animationLength: 0.3s;
   &:last-child {
     margin-bottom: 0;
   }
+
+  .menu--dark & {
+    color: $white;
+    padding: 0;
+    &:hover {
+      background-color: lighten($black-bis, 5%);
+    }
+  }
+
 }
 
 .menu__list {
   li {
     margin: 0;
     padding: 0;
-    &.menu__divider {
-      padding-top: 14px;
-    }
+    // &.menu__divider {
+    //   padding-top: 14px;
+    // }
   }
   a, button {
     @extend .menu__item;
@@ -80,15 +93,11 @@ $animationLength: 0.3s;
 }
 
 .menu__divider {
-  > button, > a {
-    margin-top: 14px;
-  }
   &:before {
     border-top: thin solid $gray;
     content : '';
     display: block;
     left: 0;
-    padding-top: 10px;
     position: absolute;
     width: 100%;
   }
