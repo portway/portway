@@ -14,11 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       getterMethods: {
         value() {
+    
           const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
           const fieldValueData = this.getDataValue(modelName)
           return fieldValueData && fieldValueData.get('value')
         },
         structuredValue() {
+    
           const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
           const fieldValueData = this.getDataValue(modelName)
           return fieldValueData && fieldValueData.get('structuredValue')

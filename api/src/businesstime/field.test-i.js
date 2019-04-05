@@ -5,7 +5,7 @@ import FieldFactory from '../db/__testSetup__/factories/field'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 
-describe('BusinessDocument', () => {
+describe('BusinessField', () => {
   let factoryProject
   let factoryDocument
 
@@ -18,22 +18,23 @@ describe('BusinessDocument', () => {
   })
 
   describe('#createForProjectDocument', () => {
-    const documentBody = {
+    const fieldBody = {
       name: 'test-field',
-      orgId: constants.ORG_ID
+      orgId: constants.ORG_ID,
+      type: 1
     }
     let field
 
     beforeAll(async () => {
       field = await BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
-        ...documentBody,
+        ...fieldBody,
         projectId: factoryProject.id,
         docId: factoryDocument.id
       })
     })
 
     it('should return the saved field as a POJO', () => {
-      expect(field).toEqual(expect.objectContaining(documentBody))
+      expect(field).toEqual(expect.objectContaining(fieldBody))
       expect(field.constructor).toBe(Object)
       expect(field.orgId).toBe(constants.ORG_ID)
     })
@@ -42,7 +43,7 @@ describe('BusinessDocument', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
-            ...documentBody,
+            ...fieldBody,
             projectId: factoryProject.id,
             docId: 0
           })
@@ -54,7 +55,7 @@ describe('BusinessDocument', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
-            ...documentBody,
+            ...fieldBody,
             projectId: 0,
             docId: factoryDocument.id
           })
@@ -66,7 +67,7 @@ describe('BusinessDocument', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
-            ...documentBody,
+            ...fieldBody,
             projectId: factoryProject.id,
             docId: 0
           })

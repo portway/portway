@@ -67,12 +67,22 @@ async function findByIdForDocument(id, docId, orgId) {
   const include = getInclude(db)
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, include })
+  if (!field) return field
+
   const plainField = field.get({ plain: true })
   return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
 }
 
 async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   const db = getDb()
+
+  if (docId !== body.docId) {
+    throw ono(
+      { code: 400 },
+      `Cannot create field, document id param does not match docId in body`
+    )
+  }
+
   const document = await db
     .model('Document')
     .findOne({ where: { id: docId, projectId, orgId }, raw: true })
