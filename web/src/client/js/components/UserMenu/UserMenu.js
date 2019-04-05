@@ -29,7 +29,7 @@ const UserMenu = () => {
     label: `${name}'s avatar`
   }
   return (
-    <DropdownComponent className="user-menu__dropdown" button={button}>
+    <DropdownComponent className="user-menu__dropdown" button={button} align="right">
       <li className="menu__item">
         <Link to={Constants.PATH_SETTINGS} className="btn btn--blank">Settings</Link>
       </li>

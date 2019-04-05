@@ -2,6 +2,12 @@
   // Override the SimpleMDE styling
   .CodeMirror {
     border: none;
+    padding: 0;
+    border-radius: 0;
+
+    pre {
+      padding: 0;
+    }
 
     .CodeMirror-code {
       .cm-header-1 {

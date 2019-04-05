@@ -1,7 +1,9 @@
 @import 'vars';
 
 @mixin focus($bgColor) {
+  border-color: transparent;
   border: thin inset transparent;
+  box-shadow: unset;
   outline: none;
   &:focus {
     background-color: $bgColor;

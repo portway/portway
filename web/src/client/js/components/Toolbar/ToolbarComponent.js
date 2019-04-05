@@ -10,8 +10,12 @@ const ToolbarComponent = ({ action, filter, sort }) => {
   return (
     <header className="toolbar">
       <div className="toolbar__start">
-        <button className="btn btn--blank btn--with-circular-icon" onClick={action.callback}>
-          <span className={`icon ${action.icon}`} />
+        <button
+          aria-label={action.title}
+          className="btn btn--blank btn--with-circular-icon"
+          onClick={action.callback}
+          title={action.title}>
+          {action.icon}
           {action.label}
         </button>
       </div>

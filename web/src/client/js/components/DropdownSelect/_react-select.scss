@@ -1,4 +1,5 @@
 @import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
 @import 'CSS/layout/_menu.scss';
 
 .react-select-container {
@@ -19,12 +20,7 @@
         &:hover {
           border-color: $gray-light;
         }
-        &:focus {
-          border: thin solid $action;
-          border-color: $action;
-          box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
-          outline: none;
-        }
+        @include focus($action);
         + .react-select__menu {
           @extend .menu;
           // border-top: none;
@@ -49,12 +45,7 @@
         }
       }
       &--is-focused {
-        border: thin solid $action;
-        box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
-        outline: none;
-        &:hover {
-          border-color: $action;
-        }
+        @include focus($action);
       }
     }
     &__placeholder {

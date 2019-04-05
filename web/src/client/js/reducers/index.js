@@ -3,11 +3,13 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import thunk from 'redux-thunk'
 
 import { projects } from './projects'
+import { projectDocuments } from './projectDocuments'
 import { users } from './users'
 
 const rootReducer = combineReducers({
   projects,
-  users
+  users,
+  projectDocuments
 })
 
 const middlewares = [thunk]

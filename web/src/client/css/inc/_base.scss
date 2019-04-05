@@ -1,4 +1,5 @@
 @import 'vars';
+@import 'mixins';
 @import 'include-media';
 @import 'type';
 @import 'lists';
@@ -26,5 +27,11 @@ a {
   }
   &:active {
     color: darken($action, 20%);
+  }
+}
+
+[contenteditable] {
+  &:focus {
+    outline: none;
   }
 }

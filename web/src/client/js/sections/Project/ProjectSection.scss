@@ -1,0 +1,23 @@
+@import 'CSS/inc/_vars.scss';
+
+.project {
+  padding: 0;
+
+  .toolbar__start {
+    padding-left: $sideGutterWidth / 4;
+  }
+
+  &__documents {
+    display: flex;
+    &-list-container {
+      border-right: thin solid $gray-light;
+      height: calc(100vh - #{$headerHeight});
+      overflow-y: auto;
+      width: calc(#{$sideGutterWidth} + 300px);
+    }
+    &-document-container {
+      flex: 1;
+      padding: 32px;
+    }
+  }
+}

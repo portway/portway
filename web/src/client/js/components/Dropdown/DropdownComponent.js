@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
 
 import useClickOutside from 'Hooks/useClickOutside'
@@ -7,23 +7,10 @@ import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
 import './Dropdown.scss'
 
-const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
+const DropdownComponent = ({ align, button, children, className, menu, shortcut }) => {
   // Menu is not collapsed by default
   const [expanded, setExpanded] = useState(menu && menu.isOpen || false)
   const hasIcon = button.icon !== undefined
-  // Set position of menu depending on where it is on the screen
-  const [position, setPosition] = useState('left')
-  const buttonRef = useRef()
-  useEffect(() => {
-    if (buttonRef.current) {
-      setTimeout(() => {
-        const leftPos = buttonRef.current.getBoundingClientRect().x
-        if (leftPos) {
-          (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
-        }
-      }, 50)
-    }
-  }, [])
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -36,7 +23,7 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut(shortcut, toggleCallback)
   return (
-    <div ref={nodeRef} className={`dropdown ${className}`}>
+    <div ref={nodeRef} className={`dropdown ${className ? className : ''}`}>
       <button
         className={`btn ${button.className ? button.className : ''} ${
           hasIcon ? ' btn--with-icon' : ''
@@ -45,12 +32,11 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
-        onClick={() => { setExpanded(!expanded)}}
-        ref={buttonRef}>
+        onClick={() => { setExpanded(!expanded)}}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
-        {button.label}
+        {button.label && button.label}
       </button>
-      <div className={`menu menu--${position}`} hidden={!expanded}>
+      <div className={`menu menu--${align}`} hidden={!expanded}>
         <ul className="menu__list">
           {children}
         </ul>
@@ -60,10 +46,11 @@ const DropdownComponent = ({ button, children, className, menu, shortcut }) => {
 }
 
 DropdownComponent.propTypes = {
+  align: PropTypes.string,
   button: PropTypes.shape({
     className: PropTypes.string,
     icon: PropTypes.string,
-    label: PropTypes.string.isRequired
+    label: PropTypes.string
   }),
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
@@ -71,6 +58,14 @@ DropdownComponent.propTypes = {
     isOpen: PropTypes.bool
   }),
   shortcut: PropTypes.string
+}
+
+DropdownComponent.defaultProps = {
+  align: 'left',
+  button: {
+    className: '',
+  },
+  className: ''
 }
 
 export default DropdownComponent

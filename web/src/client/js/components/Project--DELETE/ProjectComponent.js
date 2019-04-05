@@ -28,7 +28,7 @@ function ProjectComponent({ project }) {
         <h1 className="header--with-icon">
           <ProjectIcon className="project__icon" /> {project.name}
         </h1>
-        <DropdownComponent className="project__dropdown" button={settingsButton}>
+        <DropdownComponent className="project__dropdown" button={settingsButton} align="right">
           <li className="menu__item"><button className="btn btn--blank">Settings</button></li>
           <li className="menu__item"><button className="btn btn--blank">Duplicate...</button></li>
           <li className="menu__divider">
