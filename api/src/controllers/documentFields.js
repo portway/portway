@@ -3,7 +3,6 @@ import ono from 'ono'
 
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessField from '../businesstime/field'
-import fieldCoordinator from '../coordinators/field'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import fieldTypes from '../constants/fieldTypes'
@@ -50,7 +49,7 @@ const projectDocumentsController = function(router) {
     validateParams(paramSchema),
     validateBody(bodySchema),
     updatePerm,
-    replaceDocumentField
+    updateDocumentField
   )
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteDocumentField)
 }
@@ -98,7 +97,7 @@ const addDocumentField = async function(req, res) {
   }
 }
 
-const replaceDocumentField = async function(req, res) {
+const updateDocumentField = async function(req, res) {
   const { id, projectId, documentId } = req.params
   const { body } = req
   const { orgId } = req.requestorInfo
@@ -119,7 +118,7 @@ const replaceDocumentField = async function(req, res) {
 }
 
 const deleteDocumentField = async function(req, res) {
-  const { id, projectId, documentId } = req.params
+  const { id, documentId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
