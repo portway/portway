@@ -16,15 +16,15 @@ function AddIcon({ className, fill, height, width }) {
 AddIcon.propTypes = {
   className: PropTypes.string,
   fill: PropTypes.string,
-  height: PropTypes.number,
-  width: PropTypes.number
+  height: PropTypes.string,
+  width: PropTypes.string
 }
 
 AddIcon.defaultProps = {
   className: 'icon-add',
   fill: '#3b3d3e',
-  height: 36,
-  width: 36
+  height: '36',
+  width: '36'
 }
 
 export default AddIcon

@@ -1,3 +1,7 @@
 export { default as AddIcon } from './AddIcon'
+export { default as CaretIcon } from './CaretIcon'
+export { default as FilterIcon } from './FilterIcon'
 export { default as ProjectIcon } from './ProjectIcon'
+export { default as SortIcon } from './SortIcon'
 export { default as TimeIcon } from './TimeIcon'
+export { default as UserIcon } from './UserIcon'

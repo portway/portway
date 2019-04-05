@@ -7,7 +7,6 @@ import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
 import './DropdownSelect.scss'
-import './_react-select.scss'
 
 const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
   // Menu is not collapsed by default
@@ -60,7 +59,7 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
         aria-label={button.label}
         onClick={toggleCallback}
         ref={buttonRef}>
-        {hasIcon && <span className={`icon ${button.icon}`} />}
+        {button.icon && button.icon}
         {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
       <div className={`menu menu--with-select menu--${position}`} hidden={!expanded}>
@@ -68,11 +67,12 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
           ref={selectRef}
           className={`react-select-container`}
           classNamePrefix="react-select"
-          defaultValue={menu && menu.value ? menu.value : null}
+          components={menu.customComponents}
           isMulti={menu.multiSelect}
           menuIsOpen={menu.isOpen}
           onChange={changeHandler}
           options={menu.options}
+          placeholder="Filter..."
           tabSelectsValue={false}
         />
       </div>
@@ -83,12 +83,13 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
 DropdownSelectComponent.propTypes = {
   button: PropTypes.shape({
     className: PropTypes.string,
-    icon: PropTypes.string,
+    icon: PropTypes.element,
     label: PropTypes.string.isRequired
   }),
   className: PropTypes.string,
   menu: PropTypes.shape({
     collapseOnChange: PropTypes.bool,
+    customComponents: PropTypes.object,
     isOpen: PropTypes.bool,
     multiSelect: PropTypes.bool,
     onChange: PropTypes.func.isRequired,

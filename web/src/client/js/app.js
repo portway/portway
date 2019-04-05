@@ -15,6 +15,8 @@ import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
 import ProjectNew from 'Sections/Project/ProjectNew'
 
+import 'CSS/app.scss'
+
 const App = () => {
   useDetectInputMode()
   return (

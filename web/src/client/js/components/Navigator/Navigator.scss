@@ -10,35 +10,67 @@ $navigatorWidth: 300px;
   height: $sideGutterWidth;
   width: $navigatorWidth;
   .btn {
+    height: 100%;
     transition: transform 0.2s ease-out;
+    width: 100%;
     will-change: transform, opacity;
     &[aria-expanded="true"] {
+      background-color: $black-bis;
+      color: $gray;
       .icon {
         animation-fill-mode: forwards;
         animation-duration: 0.2s;
         animation-timing-function: ease;
         animation-name: rotateAndScale;
+        .icon-caret {
+          path {
+            fill: $gray-light;
+          }
+        }
       }
     }
   }
+
+  &__info {
+    background: $gray-dark;
+    border-bottom: thin solid $black-bis;
+    color: $gray-light;
+    font-size: 0.6rem;
+    padding: 6px 8px;
+    text-transform: uppercase;
+  }
+
   .menu {
-    background-color: $black-ter;
-    left: -52px;
-    top: 69px;
-    width: $navigatorWidth;
+    border: none;
+    border-radius: 0;
+    min-width: unset;
+    left: 0;
+    top: 59px;
+    width: $navigatorWidth - 1;
+
+    &__item {
+      align-items: center;
+      display: flex;
+    }
+
     .react-select-container {
-      background-color: $black-ter;
+      background-color: transparent;
+      padding: 0;
       .react-select {
         &__control {
           background-color: $black-ter;
-          border: thin solid $black-bis;
+          border-radius: 0;
+          border: none;
+          margin: 0;
         }
         &__menu {
-          background-color: $black-ter;
+          // background-color: $black-ter;
           border-top: thin solid $black-bis;
+          padding: 0;
+        }
+        &__menu-list {
         }
         &__option {
-          color: $white;
           &--is-focused {
             background-color: transparent;
           }

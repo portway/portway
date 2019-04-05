@@ -2,7 +2,7 @@
 @import 'CSS/inc/_mixins.scss';
 
 .masthead {
-  border-top: 6px solid $highlight;
+  border-top: $ribbonHeight solid $highlight;
   height: $headerHeight;
 
   .navbar {

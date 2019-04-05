@@ -2,7 +2,7 @@ const middlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&time
 
 const exportedEntrypoints = {
   index: ['./src/client/css/index.scss'],
-  app: ['./src/client/js/app.js', './src/client/css/app.scss']
+  app: ['./src/client/js/app.js']
 }
 
 if (process.env.NODE_ENV === 'development') {
