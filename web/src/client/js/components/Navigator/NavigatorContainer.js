@@ -54,7 +54,10 @@ const NavigatorContainer = ({ history, location }) => {
         <components.Option {...props} />
         <Link
           className="navigator__settings"
-          onClick={(e) => { e.stopPropagation() }}
+          onClick={(e) => {
+            e.stopPropagation()
+            collapseCallback()
+          }}
           to={`${Constants.PATH_PROJECT}/${data.value}/settings`}>
           Settings
         </Link>
