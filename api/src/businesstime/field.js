@@ -40,21 +40,25 @@ async function createForProjectDocument(projectId, docId, body) {
 
   const createdField = await document.createField(body)
 
-  return createdField.get({ plain: true })
+  if (body.value || body.structuredValue) {
+    const fieldValue = await createdField.addFieldValue({
+      value: body.value,
+      structuredValue: body.structuredValue,
+      orgId
+    })
+
+    await createdField.setFieldValue(fieldValue.id)
+  }
+
+  return await findByIdForDocument(createdField.id, docId, orgId)
 }
 
 async function findAllForDocument(docId, orgId) {
   const db = getDb()
 
-  const include = Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
-    return {
-      model: db.model(modelName)
-    }
-  })
+  const include = getInclude(db)
 
-  const fields = await db
-    .model(MODEL_NAME)
-    .findAll({ where: { docId, orgId }, include })
+  const fields = await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, include })
 
   return fields.map((field) => {
     const plainField = field.get({ plain: true })
@@ -64,7 +68,11 @@ async function findAllForDocument(docId, orgId) {
 
 async function findByIdForDocument(id, docId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, raw: true })
+  const include = getInclude(db)
+
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, include })
+  const plainField = field.get({ plain: true })
+  return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
 }
 
 async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
@@ -92,6 +100,14 @@ async function deleteByIdForDocument(id, docId, orgId) {
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
   await field.destroy()
+}
+
+function getInclude(db) {
+  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
+    return {
+      model: db.model(modelName)
+    }
+  })
 }
 
 export default {

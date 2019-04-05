@@ -19,6 +19,8 @@ const bodySchema = Joi.compile({
   docId: Joi.number().required(),
   projectId: Joi.number().required(),
   value: Joi.alternatives(Joi.string(), Joi.number()).required(),
+  // probably want a json parse validator on this one
+  structuredValue: Joi.string(),
   type: Joi.number()
     .valid(Object.values(fieldTypes.FIELD_TYPES))
     .required()
@@ -54,7 +56,7 @@ const projectDocumentsController = function(router) {
 }
 
 const getDocumentFields = async function(req, res) {
-  const { projectId, documentId } = req.params
+  const { documentId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
@@ -67,7 +69,7 @@ const getDocumentFields = async function(req, res) {
 }
 
 const getDocumentField = async function(req, res) {
-  const { id, projectId, documentId } = req.params
+  const { id, documentId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
@@ -81,14 +83,14 @@ const getDocumentField = async function(req, res) {
 }
 
 const addDocumentField = async function(req, res) {
-  const { body: { value, ...fieldBody } } = req
+  const { body } = req
   const { projectId, documentId } = req.params
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
-  fieldBody.orgId = orgId
+  body.orgId = orgId
 
   try {
-    const field = await fieldCoordinator.addFieldAndValue(projectId, documentId, fieldBody, value)
+    const field = await BusinessField.createForProjectDocument(projectId, documentId, body)
     res.status(201).json(field)
   } catch (e) {
     console.error(e.stack)

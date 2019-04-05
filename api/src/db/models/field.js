@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       docId: DataTypes.INTEGER,
       versionId: DataTypes.INTEGER,
-      fieldValueId: DataTypes.INTEGER,
       type: DataTypes.INTEGER,
       order: DataTypes.INTEGER
     },
@@ -35,38 +34,20 @@ module.exports = (sequelize, DataTypes) => {
       const modelName = fieldTypes.FIELD_TYPE_MODELS[typeNumber]
       const model = models[modelName]
       Field.hasOne(model, {
-        sourceKey: 'fieldValueId',
-        foreignKey: 'fieldId',
-        constraints: false
-      })
-      model.belongsTo(Field, {
-        foreignKey: 'fieldId',
-        constraints: false
+        foreignKey: 'fieldId'
       })
     })
   }
 
-  // Field.findAllPopulated = async function(options) {
-  //   // return await this.sequelize.query(
-  //   //   `SELECT * FROM "Fields" AS "Field", "FieldTypeStringValue"."orgId" AS "FieldTypeStringValue.orgId", "FieldTypeStringValue"."value" AS "FieldTypeStringValue.value", "FieldTypeStringValue"."createdAt" AS "FieldTypeStringValue.createdAt", "FieldTypeStringValue"."updatedAt" AS "FieldTypeStringValue.updatedAt", "FieldTypeStringValue"."fieldId" AS "FieldTypeStringValue.fieldId"
-  //   //   LEFT OUTER JOIN "FieldTypeStringValues" AS "FieldTypeStringValue" ON "Field"."id" = "FieldTypeStringValue"."fieldId"
-  //   //   LEFT OUTER JOIN "FieldTypeTextValues" AS "FieldTypeTextValue" ON "Field"."id" = "FieldTypeTextValue"."fieldId"
-  //   //   LEFT OUTER JOIN "FieldTypeNumberValues" AS "FieldTypeNumberValue" ON "Field"."id" = "FieldTypeNumberValue"."fieldId"
-  //   //   WHERE "Field"."docId" = ${docId} AND "Field"."orgId" = ${orgId};`,
-  //   //   {
-  //   //     model: Field,
-  //   //     mapToModel: true // pass true here if you have any mapped fields
-  //   //   }
-  //   // )
+  Field.prototype.addFieldValue = function(valueBody) {
+    const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
+    return this[`create${modelName}`](valueBody)
+  }
 
-  //   const include = Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
-  //     return {
-  //       model: this.sequelize.model(modelName)
-  //     }
-  //   })
-
-  //   return this.findAll({ ...options, include })
-  // }
+  Field.prototype.setFieldValue = function(fieldValue) {
+    const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
+    return this[`set${modelName}`](fieldValue)
+  }
 
   return Field
 }
