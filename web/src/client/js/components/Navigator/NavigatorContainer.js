@@ -53,8 +53,9 @@ const NavigatorContainer = ({ history, location }) => {
         <ProjectIcon fill="#d2e0f2" width="18" height="18" />
         <components.Option {...props} />
         <Link
-          to={`${Constants.PATH_PROJECT}/${data.value}/settings`}
-          className="navigator__settings">
+          className="navigator__settings"
+          onClick={(e) => { e.stopPropagation() }}
+          to={`${Constants.PATH_PROJECT}/${data.value}/settings`}>
           Settings
         </Link>
       </div>

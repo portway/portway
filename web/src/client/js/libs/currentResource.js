@@ -27,6 +27,10 @@ const currentResource = (resourceName, path) => {
     case 'project':
       // Specifically look at project here, as we may be looking at documents
       const projectLocation = `/${path.split('/')[1]}/${path.split('/')[2]}`
+      if (path.split('/')[2] === 'create') {
+        returnNull()
+        break
+      }
       matchResults = matchPath(projectLocation, {
         path: '/project/:id',
         exact: true,

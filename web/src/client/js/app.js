@@ -13,7 +13,6 @@ import HeaderContainer from 'Components/Header/HeaderContainer'
 import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
-import ProjectNew from 'Sections/Project/ProjectNew'
 
 import 'CSS/app.scss'
 
@@ -26,11 +25,7 @@ const App = () => {
           <HeaderContainer />
           <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
           <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
-          <Route exact path={Constants.PATH_PROJECT_CREATE} component={ProjectNew} />
           <Route path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
-          <Route
-            path={`${Constants.PATH_PROJECT}/:projectId/${Constants.PATH_DOCUMENT}/:documentId`}
-            component={ProjectSection} />
         </>
       </Router>
     </Provider>
