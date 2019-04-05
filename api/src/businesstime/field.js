@@ -40,24 +40,20 @@ async function createForProjectDocument(projectId, docId, body) {
 
   const createdField = await document.createField(body)
 
-  if (body.value || body.structuredValue) {
-    const fieldValue = await createdField.addFieldValue({
-      value: body.value,
-      structuredValue: body.structuredValue,
-      orgId
-    })
+  const fieldValue = await createdField.addFieldValue({
+    value: body.value,
+    structuredValue: body.structuredValue,
+    orgId
+  })
 
-    await createdField.setFieldValue(fieldValue.id)
-  }
+  await createdField.setFieldValue(fieldValue.id)
 
   return await findByIdForDocument(createdField.id, docId, orgId)
 }
 
 async function findAllForDocument(docId, orgId) {
   const db = getDb()
-
   const include = getInclude(db)
-
   const fields = await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, include })
 
   return fields.map((field) => {
@@ -77,7 +73,6 @@ async function findByIdForDocument(id, docId, orgId) {
 
 async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   const db = getDb()
-
   const document = await db
     .model('Document')
     .findOne({ where: { id: docId, projectId, orgId }, raw: true })
@@ -87,10 +82,12 @@ async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
   }
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
-
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
   const updatedField = await field.update(body)
-  return updatedField.get({ plain: true })
+  const fieldValue = await updatedField.getFieldValue()
+  await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
+
+  return await findByIdForDocument(field.id, docId, orgId)
 }
 
 async function deleteByIdForDocument(id, docId, orgId) {

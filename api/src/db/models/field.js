@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
       const modelName = fieldTypes.FIELD_TYPE_MODELS[typeNumber]
       const model = models[modelName]
       Field.hasOne(model, {
-        foreignKey: 'fieldId'
+        foreignKey: 'fieldId',
+        onDelete: 'cascade'
       })
     })
   }
@@ -47,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
   Field.prototype.setFieldValue = function(fieldValue) {
     const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
     return this[`set${modelName}`](fieldValue)
+  }
+
+  Field.prototype.getFieldValue = function(fieldValue) {
+    const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
+    return this[`get${modelName}`](fieldValue)
   }
 
   return Field
