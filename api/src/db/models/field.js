@@ -50,9 +50,9 @@ module.exports = (sequelize, DataTypes) => {
     return this[`set${modelName}`](fieldValue)
   }
 
-  Field.prototype.getFieldValue = function(fieldValue) {
+  Field.prototype.getFieldValue = function() {
     const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
-    return this[`get${modelName}`](fieldValue)
+    return this[`get${modelName}`]()
   }
 
   return Field
