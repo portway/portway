@@ -32,7 +32,8 @@ const documents = [
         value: '# Wee Bonkey \
                   a strapping young lass \
                   **a heart of gold** \
-                  _ah yes, wee bonkey_'
+                  _ah yes, wee bonkey_',
+        structuredValue: '{ "h1": "Wee Bonkey", "p": "a strapping young lass"}'
       }
     ]
   },
