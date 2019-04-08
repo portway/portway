@@ -11,8 +11,7 @@ const { listPerm, readPerm, updatePerm, deletePerm } = crudPerms(
   req => req.params.projectId
 )
 
-// TODO: this is currently piggybacking off of project perms,
-// does it need its own, or will it always be the same?
+// Uses project-level permissions
 
 const bodySchema = Joi.compile({
   users: Joi.array()
@@ -28,15 +27,22 @@ const paramSchema = Joi.compile({
 const projectUsersController = function(router) {
   // all routes are nested at projects/:projectId/users and receive req.params.projectId
   router.get('/', validateParams(paramSchema), listPerm, getProjectUsers)
-  router.get('/:id', validateParams(paramSchema), readPerm, getProjectUser)
   router.put(
-    '/:id',
+    '/',
     validateParams(paramSchema),
     validateBody(bodySchema),
     updatePerm,
     addProjectUsers
   )
-  router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectUsers)
+  router.delete(
+    '/',
+    validateParams(paramSchema),
+    validateBody(bodySchema),
+    deletePerm,
+    removeProjectUsers
+  )
+  router.get('/:id', validateParams(paramSchema), readPerm, getProjectUser)
+  router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectUser)
 }
 
 const getProjectUsers = async function(req, res) {
@@ -57,7 +63,7 @@ const getProjectUser = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessProjectUser.findByIdForProject(id, projectId, orgId)
+    const project = await BusinessProjectUser.findByUserIdForProject(id, projectId, orgId)
     if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
     res.json(project)
   } catch (e) {
@@ -71,27 +77,47 @@ const addProjectUsers = async function(req, res) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
-  body.orgId = orgId
+  body.users.forEach((user) => {
+    user.orgId = orgId
+  })
 
   try {
-    const project = await BusinessProjectUser.createForProject(projectId, body)
-    res.status(201).json(project)
+    await Promise.all(
+      body.users.map(u => BusinessProjectUser.addUserIdToProject(u.id, projectId, orgId))
+    )
+    res.status(201).json({})
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create document' })
+    res.status(e.code || 500).json({ error: 'Cannot assign users to project' })
   }
 }
 
-const deleteProjectUsers = async function(req, res) {
+const removeProjectUsers = async function(req, res) {
+  const { body } = req
+  const { projectId } = req.params
+  const { orgId } = req.requestorInfo
+
+  try {
+    await Promise.all(
+      body.users.map(u => BusinessProjectUser.deleteByUserIdForProject(u.id, projectId, orgId))
+    )
+    res.status(204).send()
+  } catch (e) {
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: 'Cannot remove users from project' })
+  }
+}
+
+const deleteProjectUser = async function(req, res) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessProjectUser.deleteByIdForProject(id, projectId, orgId)
+    await BusinessProjectUser.deleteByUserIdForProject(id, projectId, orgId)
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error deleting document with id ${id}` })
+    res.status(e.code || 500).json({ error: `Error removing user ${id} from project ${projectId}` })
   }
 }
 

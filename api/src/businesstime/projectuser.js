@@ -10,6 +10,40 @@ async function create(body) {
   return createdProjectUser.get({ plain: true })
 }
 
+async function addUserIdToProject(userId, projectId, orgId) {
+  const db = getDb()
+
+  const values = await Promise.all([
+    db.model('Project').findOne({ where: { id: projectId, orgId } }),
+    db.model('User').findOne({ where: { id: userId, orgId } })
+  ])
+
+  const project = values[0]
+  const user = values[1]
+
+  if (!project) {
+    throw ono(
+      { code: 404 },
+      `Project ${projectId} not found, cannot assign user ${userId}`
+    )
+  }
+
+  if (!user) {
+    throw ono(
+      { code: 404 },
+      `User id ${userId} not found, cannot assign project ${projectId}`
+    )
+  }
+
+  const result = await db.model(MODEL_NAME).findOrCreate({
+    where: { projectId, orgId, userId },
+    attributes: [],
+    raw: true
+  })
+  // findOrCreate returns [result, status]
+  return result[0]
+}
+
 async function findAllByProjectId(projectId, orgId) {
   const db = getDb()
 
@@ -26,12 +60,24 @@ async function findAllByProjectId(projectId, orgId) {
   })
 }
 
-// async function findAllByUserId(userId, orgId) {
-//   const db = getDb()
-//   return await db.model(MODEL_NAME).findOne({ where: { userId, orgId }, raw: true })
-// }
+async function findByUserIdForProject(userId, projectId, orgId) {
+  const db = getDb()
 
-async function deleteByUserIdProjectId(userId, projectId, orgId) {
+  return db.model('User').findOne({
+    attributes: USER_PUBLIC_FIELDS,
+    where: { id: userId, orgId },
+    include: [
+      {
+        model: db.model(MODEL_NAME),
+        where: { projectId, orgId },
+        attributes: []
+      }
+    ],
+    raw: true
+  })
+}
+
+async function deleteByUserIdForProject(userId, projectId, orgId) {
   const db = getDb()
   const projectUser = await db.model(MODEL_NAME).findOne({ where: { userId, projectId, orgId } })
 
@@ -47,7 +93,8 @@ async function deleteByUserIdProjectId(userId, projectId, orgId) {
 
 export default {
   create,
+  addUserIdToProject,
   findAllByProjectId,
-  // findAllByUserId,
-  deleteByUserIdProjectId
+  findByUserIdForProject,
+  deleteByUserIdForProject
 }
