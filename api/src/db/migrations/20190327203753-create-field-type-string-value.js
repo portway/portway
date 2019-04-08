@@ -14,6 +14,15 @@ module.exports = {
       value: {
         type: Sequelize.STRING
       },
+      fieldId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Fields',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
