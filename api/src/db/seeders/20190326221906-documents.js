@@ -52,8 +52,13 @@ seedDocsWithFields.forEach((doc) => {
       id: fieldStartId,
       value: field.value,
       orgId: doc.orgId,
+      fieldId: fieldStartId,
       createdAt: TODAY,
       updatedAt: TODAY
+    }
+
+    if (field.structuredValue) {
+      dbValue.structuredValue = field.structuredValue
     }
 
     fields.push(dbField)

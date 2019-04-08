@@ -8,7 +8,9 @@ afterAll(() => {
 export const clearDb = async function() {
   const db = getDb()
 
-  await db.truncate()
+  await Promise.all(Object.values(db.models).map((model) => {
+    return model.destroy({ truncate: true, cascade: true })
+  }))
 }
 
 export default async function() {
@@ -21,8 +23,5 @@ export default async function() {
   })
 
   await loadModels()
-
-  const db = getDb()
-
-  await db.truncate()
+  await clearDb()
 }
