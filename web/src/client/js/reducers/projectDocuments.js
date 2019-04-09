@@ -14,13 +14,25 @@ export const projectDocuments = (state = initialState, action) => {
       return { ...state, loading: { byId } }
     }
     case ActionTypes.RECEIVE_PROJECT_DOCUMENTS: {
-      console.log(action)
       const byId = { ...state.loading.byId, [action.projectId]: false }
       if (action.data.length === 0) {
         return { ...state, loading: { byId } }
       }
-      // const projectDocumentId = action.data[0].id
-      const documentsByProjectId = { ...state.documentsByProjectId, [action.projectId]: action.data }
+      const documentsById = action.data.reduce((object, doc) => {
+        object[doc.id] = doc
+        return object
+      }, {})
+      const documentsByProjectId = {
+        ...state.documentsByProjectId,
+        [action.projectId]: documentsById
+      }
+      return { ...state, documentsByProjectId, loading: { byId } }
+    }
+    case ActionTypes.RECEIVE_DOCUMENT: {
+      const byId = { ...state.loading.byId, [action.projectId]: false }
+      const documentsByProjectId = {
+        ...state.documentsByProjectId
+      }
       return { ...state, documentsByProjectId, loading: { byId } }
     }
     default:

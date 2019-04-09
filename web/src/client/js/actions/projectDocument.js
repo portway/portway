@@ -14,7 +14,7 @@ export const fetchProjectDocument = (projectId, documentId) => {
   return async (dispatch) => {
     dispatch(ProjectDocuments.requestOne(projectId, documentId))
     const data = await fetch(`projects/${projectId}/documents/${documentId}`)
-    dispatch(ProjectDocuments.receive(data))
+    dispatch(ProjectDocuments.receiveOne(data))
   }
 }
 

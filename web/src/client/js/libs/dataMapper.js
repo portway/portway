@@ -62,10 +62,10 @@ export default {
       return {
         fetchAction: fetchProjectDocument(projectId, documentId),
         getLoadingStatusFromState: (state) => {
-          return state.projectDocuments.loading.byId[projectId][documentId]
+          // return state.projectDocuments.loading.byId[projectId][documentId]
         },
         getDataFromState: (state) => {
-          return state.projectDocuments.documentsByProjectId[projectId][documentId]
+          // return state.projectDocuments.documentsByProjectId[projectId][documentId]
         }
       }
     }

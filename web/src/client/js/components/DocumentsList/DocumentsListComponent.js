@@ -39,8 +39,8 @@ const DocumentsListComponent = ({ projectName, documents }) => {
   }
 
   function renderDocumentsList() {
-    return documents.map((document, index) => {
-      return <DocumentsListItem key={`d-${document.id}-${index}`} document={document} />
+    return Object.keys(documents).map((key, index) => {
+      return <DocumentsListItem key={`d-${key}-${index}`} document={documents[key]} />
     })
   }
 
@@ -59,12 +59,12 @@ const DocumentsListComponent = ({ projectName, documents }) => {
 
 DocumentsListComponent.propTypes = {
   projectName: PropTypes.string.isRequired,
-  documents: PropTypes.array.isRequired
+  documents: PropTypes.object.isRequired
 }
 
 DocumentsListComponent.defaultProps = {
   projectName: '',
-  documents: []
+  documents: {}
 }
 
 export default DocumentsListComponent
