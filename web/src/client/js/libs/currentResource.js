@@ -48,7 +48,7 @@ const currentResource = (resourceName, path) => {
         exact: true,
         strict: false
       })
-      func = dataMapper.projectDocuments.id
+      func = dataMapper.documents.id
       if (matchResults) {
         if (matchResults.params.projectId && matchResults.params.documentId) {
           returnValue = func(matchResults.params.projectId, matchResults.params.documentId)

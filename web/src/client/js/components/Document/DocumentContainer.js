@@ -12,6 +12,8 @@ const DocumentContainer = ({ location }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+  console.log(document)
+
   if (!document) {
     return <div>No document</div>
   }

@@ -28,22 +28,6 @@ export const projectDocuments = (state = initialState, action) => {
       }
       return { ...state, documentsByProjectId, loading: { byId } }
     }
-    case ActionTypes.REQUEST_DOCUMENT: {
-      const byId = { ...state.loading.byId, [action.projectId]: true }
-      return { ...state, loading: { byId } }
-    }
-    case ActionTypes.RECEIVE_DOCUMENT: {
-      const byId = { ...state.loading.byId, [action.data.projectId]: false }
-      const documents = {
-        ...state.documentsByProjectId[action.data.projectId],
-        [action.data.id]: action.data
-      }
-      const documentsByProjectId = {
-        ...state.documentsByProjectId,
-        [action.data.projectId]: documents
-      }
-      return { ...state, documentsByProjectId, loading: { byId } }
-    }
     default:
       return state
   }
