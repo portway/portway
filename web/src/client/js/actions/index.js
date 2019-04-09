@@ -24,8 +24,12 @@ export const ActionTypes = {
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
   RECEIVE_USER: 'RECEIVE_USER',
-  LOGOUT_USER: 'LOGOUT_USER'
+  LOGOUT_USER: 'LOGOUT_USER',
+
+  STUPID_TEST_ACTION: 'STUPID_TEST_ACTION'
 }
+
+export const stupidAction = makeActionCreator(ActionTypes.STUPID_TEST_ACTION, 'id', 'data')
 
 export const Projects = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
@@ -46,7 +50,7 @@ export const ProjectDocuments = {
   create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'projectId', 'documentId'),
-  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data')
 }
 
 export const Users = {

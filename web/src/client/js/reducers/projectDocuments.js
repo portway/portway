@@ -9,6 +9,15 @@ const initialState = {
 
 export const projectDocuments = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.STUPID_TEST_ACTION: {
+      const doc = state.documentsByProjectId[110000][action.id]
+      const newDoc = { ...doc, name: action.data }
+      const project = { ...state.documentsByProjectId[110000], [action.id]: newDoc }
+      return {
+        ...state,
+        documentsByProjectId: { ...state.documentsByProjectId, [110000]: project }
+      }
+    }
     case ActionTypes.REQUEST_PROJECT_DOCUMENTS: {
       const byId = { ...state.loading.byId, [action.id]: true }
       return { ...state, loading: { byId } }

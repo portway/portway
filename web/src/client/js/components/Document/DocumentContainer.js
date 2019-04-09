@@ -8,6 +8,9 @@ import currentResource from 'Libs/currentResource'
 import { debounce } from 'Shared/utilities'
 import DocumentComponent from './DocumentComponent'
 
+import Store from '../../reducers/index'
+import { stupidAction } from 'Actions/index'
+
 const DocumentContainer = ({ location }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
@@ -18,6 +21,7 @@ const DocumentContainer = ({ location }) => {
 
   const nameChangeAction = debounce(1000, (e) => {
     console.info(`Change my name in redux: ${e.target.value}`)
+    Store.dispatch(stupidAction(document.id, e.target.value))
   })
 
   function nameChangeHandler(e) {
@@ -25,9 +29,7 @@ const DocumentContainer = ({ location }) => {
     nameChangeAction(e)
   }
 
-  return <DocumentComponent
-    nameChangeHandler={nameChangeHandler}
-    document={document} />
+  return <DocumentComponent nameChangeHandler={nameChangeHandler} document={document} />
 }
 
 DocumentContainer.propTypes = {

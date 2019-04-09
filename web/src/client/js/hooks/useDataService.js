@@ -52,6 +52,7 @@ export default function useDataService(
     }
 
     function handleStateChange() {
+      console.info('use data service state change handler')
       const state = Store.getState()
       const loading = getLoadingStatusFromState(state)
       setLoading(loading)
