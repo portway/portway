@@ -3,14 +3,10 @@ info:
   version: 1.0.0
   title: Project Danger API
   description: Public API spec for Project Danger
-  termsOfService: http://swagger.io/terms/
   contact:
     name: Project Danger Team
-    email: team@bonkeybong.com
+    email: info@bonkeybong.com
     url: http://www.bonkeybong.com
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: http://localhost:3001
 paths:
