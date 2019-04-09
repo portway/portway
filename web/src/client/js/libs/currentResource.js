@@ -55,6 +55,8 @@ const currentResource = (resourceName, path) => {
         } else {
           returnValue = returnNull()
         }
+      } else {
+        returnValue = returnNull()
       }
       break
     default:

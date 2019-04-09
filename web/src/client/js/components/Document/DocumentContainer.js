@@ -9,13 +9,13 @@ import { debounce } from 'Shared/utilities'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({ location }) => {
-  // const { data: document } = useDataService(currentResource('document', location.pathname), [
-  //   location.pathname
-  // ])
-  // console.log(document)
-  // if (!document) {
-  //   return <div>No document</div>
-  // }
+  const { data: document } = useDataService(currentResource('document', location.pathname), [
+    location.pathname
+  ])
+  console.log(document)
+  if (!document) {
+    return <div>No document</div>
+  }
 
   const nameChangeAction = debounce(1000, (e) => {
     console.info(`Change my name in redux: ${e.target.value}`)
