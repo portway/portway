@@ -6,15 +6,14 @@ import { withRouter } from 'react-router-dom'
 // import NavigatorComponent from './NavigatorComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
-import dataMapper from '../../libs/dataMapper'
-import currentResource from '../../libs/currentResource'
+import dataMapper from 'Libs/dataMapper'
+import currentResource from 'Libs/currentResource'
 import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
 import './Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
-
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )

@@ -14,9 +14,13 @@ export const projectDocuments = (state = initialState, action) => {
       return { ...state, loading: { byId } }
     }
     case ActionTypes.RECEIVE_PROJECT_DOCUMENTS: {
-      const projectId = action.data[0].projectId
-      const documentsByProjectId = { ...state.documentsByProjectId, [projectId]: action.data }
-      const byId = { ...state.loading.byId, [projectId]: false }
+      console.log(action)
+      const byId = { ...state.loading.byId, [action.projectId]: false }
+      if (action.data.length === 0) {
+        return { ...state, loading: { byId } }
+      }
+      // const projectDocumentId = action.data[0].id
+      const documentsByProjectId = { ...state.documentsByProjectId, [action.projectId]: action.data }
       return { ...state, documentsByProjectId, loading: { byId } }
     }
     default:

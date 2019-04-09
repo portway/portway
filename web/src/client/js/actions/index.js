@@ -17,6 +17,8 @@ export const ActionTypes = {
   RECEIVE_PROJECT_DOCUMENTS: 'RECEIVE_PROJECT_DOCUMENTS',
   CREATE_DOCUMENT: 'CREATE_DOCUMENT',
   RECEIVE_CREATED_DOCUMENT: 'RECEIVE_CREATED_DOCUMENT',
+  REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
+  RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
@@ -39,10 +41,12 @@ export const Projects = {
 }
 
 export const ProjectDocuments = {
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECT_DOCUMENTS, 'projectId'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_DOCUMENTS, 'projectId', 'data'),
   create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId'),
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECT_DOCUMENTS, 'id'),
-  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_DOCUMENTS, 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'projectId', 'documentId'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
 }
 
 export const Users = {

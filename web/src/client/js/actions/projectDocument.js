@@ -6,6 +6,14 @@ export const fetchProjectDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(ProjectDocuments.request(projectId))
     const data = await fetch(`projects/${projectId}/documents`)
+    dispatch(ProjectDocuments.receive(projectId, data))
+  }
+}
+
+export const fetchProjectDocument = (projectId, documentId) => {
+  return async (dispatch) => {
+    dispatch(ProjectDocuments.requestOne(projectId, documentId))
+    const data = await fetch(`projects/${projectId}/documents/${documentId}`)
     dispatch(ProjectDocuments.receive(data))
   }
 }

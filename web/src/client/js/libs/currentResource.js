@@ -23,23 +23,44 @@ function returnNull() {
 const currentResource = (resourceName, path) => {
   let func
   let matchResults
+  let returnValue
   switch (resourceName) {
     case 'project':
       // Specifically look at project here, as we may be looking at documents
-      const projectLocation = `/${path.split('/')[1]}/${path.split('/')[2]}`
-      matchResults = matchPath(projectLocation, {
-        path: '/project/:id',
+      matchResults = matchPath(path, {
+        path: '/project/:projectId',
         exact: true,
         strict: false
       })
       func = dataMapper.projects.id
+      if (matchResults) {
+        returnValue = matchResults.params.projectId ?
+          func(matchResults.params.projectId) : returnNull()
+      } else {
+        returnValue = returnNull()
+      }
+      break
+    case 'document':
+      matchResults = matchPath(path, {
+        path: '/project/:projectId/document/:documentId',
+        exact: true,
+        strict: false
+      })
+      func = dataMapper.projectDocuments.id
+      if (matchResults) {
+        if (matchResults.params.projectId && matchResults.params.documentId) {
+          returnValue = func(matchResults.params.projectId, matchResults.params.documentId)
+        } else {
+          returnValue = returnNull()
+        }
+      }
       break
     default:
       // Return empty functions
       returnNull()
       break
   }
-  return matchResults && matchResults.params.id ? func(matchResults.params.id) : returnNull()
+  return returnValue
 }
 
 export default currentResource

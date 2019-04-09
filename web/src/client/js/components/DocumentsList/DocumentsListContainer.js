@@ -13,7 +13,7 @@ const DocumentsListContainer = ({ location, match }) => {
     location.pathname
   ])
   const { data: documents } = useDataService(
-    dataMapper.projectDocuments.id(match.params.projectId),
+    dataMapper.projectDocuments.list(match.params.projectId),
     [match.params.projectId]
   )
 
