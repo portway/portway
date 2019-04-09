@@ -27,7 +27,9 @@ const currentResource = (resourceName, path) => {
   switch (resourceName) {
     case 'project':
       // Specifically look at project here, as we may be looking at documents
-      matchResults = matchPath(path, {
+      const projectPathArray = path.split('/')
+      const projectPath = `/${projectPathArray[1]}/${projectPathArray[2]}`
+      matchResults = matchPath(projectPath, {
         path: '/project/:projectId',
         exact: true,
         strict: false
