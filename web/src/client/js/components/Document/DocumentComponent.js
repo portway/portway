@@ -12,7 +12,7 @@ const DocumentComponent = ({ document, nameChangeHandler }) => {
       <header>
         <input
           className="document__title"
-          defaultValue="Contact page"
+          defaultValue={document.name}
           onChange={nameChangeHandler} />
       </header>
       <EditorComponent />
