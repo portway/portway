@@ -61,7 +61,7 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
         onClick={toggleCallback}
         ref={buttonRef}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
-        {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
+        <span className="label">{button.label}</span> {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
       <div className={`menu menu--with-select menu--${position}`} hidden={!expanded}>
         <Select
