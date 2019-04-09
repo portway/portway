@@ -1,0 +1,570 @@
+openapi: "3.0.2"
+info:
+  version: 1.0.0
+  title: Project Danger API
+  description: Public API spec for Project Danger
+  contact:
+    name: Project Danger Team
+    email: info@bonkeybong.com
+    url: http://www.bonkeybong.com
+servers:
+  - url: http://localhost:3001
+paths:
+  /projects:
+    get:
+      description: |
+        Returns all projects that the user has access to
+      operationId: findProjects
+      responses:
+        '200':
+          description: projects response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new project
+      operationId: addProject
+      requestBody:
+        description: Project to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProject'
+      responses:
+        '201':
+          description: project response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /projects/{id}:
+    get:
+      description: Returns a project based on a single ID
+      operationId: findProjectById
+      parameters:
+        - name: id
+          in: path
+          description: ID of project to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a project based on a single ID - full or partial update
+      operationId: updateProject
+      parameters:
+        - name: id
+          in: path
+          description: ID of project to fetch
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Project body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProject'
+      responses:
+        '200':
+          description: project response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    delete:
+      description: deletes a single project based on the ID supplied
+      operationId: deleteProject
+      parameters:
+        - name: id
+          in: path
+          description: ID of project to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: project deleted
+        default:
+          description: unexpbected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /projects/{projectId}/documents:
+    get:
+      description: |
+        Returns all documents that the user has access to for the given project id
+      operationId: findDocuments
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: documents response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new document
+      operationId: addDocument
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: document to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDocument'
+      responses:
+        '201':
+          description: document response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /projects/{id}/documents/{id}:
+    get:
+      description: Returns a document based on a single ID
+      operationId: findDocumentById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema: 
+            type: integer
+        - name: id
+          in: path
+          description: ID of document to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: document response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a project based on a single ID - full or partial update
+      operationId: updateProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema: 
+            type: integer
+        - name: id
+          in: path
+          description: ID of project to fetch
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Document body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDocument'
+      responses:
+        '200':
+          description: document response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: deletes a single document based on the ID supplied
+      operationId: deleteDocument
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema: 
+            type: integer
+        - name: id
+          in: path
+          description: ID of project to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: document deleted
+        default:
+          description: unexpbected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /projects/{projectId}/documents/{documentId}/fields:
+    get:
+      description: |
+        Returns all fields that the user has access to for the given project/document ids
+      operationId: findDocuments
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: fields response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new field
+      operationId: addField
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: field to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewField'
+      responses:
+        '201':
+          description: field response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /projects/{projectId}/documents/{documentId}/fields/{id}:
+    get:
+      description: Returns a field based on a single ID
+      operationId: findFieldById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema: 
+            type: integer
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema: 
+            type: integer
+        - name: id
+          in: path
+          description: ID of field to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a field based on a single ID - full or partial update
+      operationId: updateField
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema: 
+            type: integer
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema: 
+            type: integer
+        - name: id
+          in: path
+          description: ID of field to fetch
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Field body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewField'
+      responses:
+        '200':
+          description: field response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    delete:
+      description: deletes a single field based on the ID supplied
+      operationId: deleteField
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema: 
+            type: integer
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema: 
+            type: integer
+        - name: id
+          in: path
+          description: ID of field to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: field deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+components:
+  schemas:
+    Project:
+      allOf:
+        - $ref: '#/components/schemas/NewProject'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+  
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    NewProject:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        documentId:
+          type: integer
+
+    Document:
+      allOf:
+        - $ref: '#/components/schemas/NewDocument'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+  
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    NewDocument:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        projectId:
+          type: integer
+
+    Field:
+      allOf:
+        - $ref: '#/components/schemas/NewDocument'
+        - required:
+          - id
+          properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    NewField:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        projectId:
+          type: integer
+        docId:  
+          type: integer
+        value:
+          oneOf:
+            - type: string
+            - type: integer
+        structuredValue:
+          type: string
+        type:
+          type: integer
+
+
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
