@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 const TextField = ({ help, id, label, large, name, placeholder, value, onChange }) => {
-  console.log(large)
   const textFieldClasses = cx({
     'form-field': true,
     'form-field--large': large

@@ -34,6 +34,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           id="projectPrivacy"
           help={helpText}
           label="Make this project public"
+          name="project[privacy]"
           onChange={onUpdateHandler}
           value="checked"
         />
