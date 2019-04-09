@@ -9,6 +9,6 @@ main {
   }
 }
 
-.section {
-  padding: ($sideGutterWidth / 2) 0;
+.section, section {
+  padding: 0 0 ($sideGutterWidth / 2) 0;
 }

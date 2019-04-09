@@ -1,6 +1,5 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
-@import 'CSS/layout/_menu.scss';
 
 .react-select-container {
   background-color: $white-bis;
@@ -22,7 +21,6 @@
         }
         @include focus($action);
         + .react-select__menu {
-          @extend .menu;
           // border-top: none;
           border: none;
           border-top: thin solid $gray-light;
@@ -66,7 +64,6 @@
     }
     // React Select menu items
     &__option {
-      @extend .menu__item;
       // width: auto;
       &--is-focused {
         background-color: $white-ter;

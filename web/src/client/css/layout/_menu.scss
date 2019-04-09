@@ -50,6 +50,7 @@ $menuBorderRadius: 8px;
 }
 
 .menu__item {
+  background-color: $white;
   color: $black-bis;
   cursor: pointer;
   display: block;
@@ -69,6 +70,7 @@ $menuBorderRadius: 8px;
   }
 
   .menu--dark & {
+    background-color: $black-bis;
     color: $white;
     padding: 0;
     &:hover {

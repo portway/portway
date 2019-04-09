@@ -2,32 +2,26 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { UserIcon } from 'Components/Icons'
+import TextField from 'Components/Form/TextField'
 import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
 const ProjectFormComponent = ({ formOptions, teamOptions }) => {
   return (
     <form className="project-form" onSubmit={formOptions.submitHandler}>
-      <div className="form-field">
-        <label htmlFor="projectName">Project Name</label>
-        <input
-          type="text"
-          name="project[name]"
-          id="projectName"
-          placeholder="My new project"
-          value={formOptions.values.projectName}
-          onChange={formOptions.changeHandler}
-        />
-      </div>
-      <div className="form-field form-field--large">
-        <label htmlFor="projectDescription">Description (optional)</label>
-        <input
-          type="text"
-          name="project[description]"
-          id="projectDescription"
-          value={formOptions.values.projectDescription}
-          onChange={formOptions.changeHandler}
-        />
-      </div>
+      <TextField
+        id="projectName"
+        label="Project Name"
+        name="project[name]"
+        placeholder="My new project"
+        value={formOptions.values.projectName}
+        onChange={formOptions.changeHandler} />
+      <TextField
+        id="projectDescription"
+        label="Description (optional)"
+        large
+        name="project[description]"
+        value={formOptions.values.projectDescription}
+        onChange={formOptions.changeHandler} />
       {teamOptions && (
         <div className="form-field">
           <label htmlFor="projectUsers">Team (optional)</label>

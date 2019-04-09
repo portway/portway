@@ -3,15 +3,49 @@
 form {
   .form-field {
     margin-bottom: 18px;
-    width: 300px;
+
+    .field {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      width: 300px;
+    }
+
     &--large {
-      width: 600px;
+      .field {
+        width: 600px;
+      }
+    }
+
+    &--horizontal {
+      .field {
+        align-items: center;
+        flex-direction: row;
+      }
+    }
+
+    &--checkbox {
+      .field {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        input {
+          margin-right: 6px;
+        }
+      }
     }
   }
 
   label {
     display: block;
     padding: 4px 0;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    display: inline-block;
+    + label {
+      display: inline-block;
+    }
   }
 
   input[type='text'],
@@ -30,4 +64,5 @@ form {
       outline: none;
     }
   }
+
 }
