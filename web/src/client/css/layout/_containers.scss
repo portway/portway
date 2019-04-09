@@ -10,5 +10,5 @@ main {
 }
 
 .section, section {
-  padding: 0 0 ($sideGutterWidth / 2) 0;
+  padding: ($sideGutterWidth / 2) 0;
 }

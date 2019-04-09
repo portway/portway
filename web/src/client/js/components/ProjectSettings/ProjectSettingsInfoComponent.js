@@ -11,7 +11,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
   return (
     <form className="project-settings__info">
       <section>
-        <h2>Info</h2>
+        <h2>General information</h2>
         <TextField
           id="projectName"
           label="Project Name"
@@ -39,7 +39,6 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           value="checked"
         />
       </section>
-      <button>Save settings</button>
     </form>
   )
 }

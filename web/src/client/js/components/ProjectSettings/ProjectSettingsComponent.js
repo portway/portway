@@ -28,11 +28,11 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
     <div className="project-settings">
       <div className="project-settings__container">
         <nav className="project-settings__navigation">
-          <ul className="list-blank tabs">
-            <li><NavLink className="tabs__tab-item" to={`${settingsSectionPath}/info`}>Info</NavLink></li>
-            <li><NavLink className="tabs__tab-item" to={`${settingsSectionPath}/teams`}>Teams</NavLink></li>
-            <li><NavLink className="tabs__tab-item" to={`${settingsSectionPath}/endpoints`}>Endpoints</NavLink></li>
-            <li><NavLink className="tabs__tab-item" to={`${settingsSectionPath}/keys`}>Keys</NavLink></li>
+          <ul className="list-blank">
+            <li><NavLink to={`${settingsSectionPath}/info`}>Info</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/teams`}>Teams</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/endpoints`}>Endpoints</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/keys`}>Keys</NavLink></li>
           </ul>
         </nav>
         <div className="project-settings__panel">
