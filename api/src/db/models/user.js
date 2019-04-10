@@ -7,6 +7,7 @@ export default function(sequelize, DataTypes) {
       email: { type: DataTypes.STRING, unique: true },
       password: DataTypes.STRING,
       orgId: DataTypes.INTEGER,
+      orgRoleId: DataTypes.INTEGER,
       resetKey: DataTypes.STRING
     },
     {}

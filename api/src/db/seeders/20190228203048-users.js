@@ -14,7 +14,8 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: ORG_ID
+    orgId: ORG_ID,
+    orgRoleId: 1
   },
   {
     id: seedIds.BIDDY_USER_ID,
@@ -25,7 +26,8 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: ORG_ID
+    orgId: ORG_ID,
+    orgRoleId: 2
   },
   {
     id: seedIds.BADDY_USER_ID,
@@ -36,7 +38,8 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: ORG_ID
+    orgId: ORG_ID,
+    orgRoleId: 3
   },
   {
     id: seedIds.BIXIE_USER_ID,
@@ -47,7 +50,8 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: ORG_ID
+    orgId: ORG_ID,
+    orgRoleId: 3
   },
   {
     id: seedIds.CAROL_X_USER_ID,
@@ -58,7 +62,8 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: PROJ_X_ORG_ID
+    orgId: PROJ_X_ORG_ID,
+    orgRoleId: 1
   },
   {
     id: seedIds.BOB_X_USER_ID,
@@ -69,7 +74,8 @@ const bulkUsers = [
     updatedAt: TODAY,
     // password is "bonkeybong"
     password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
-    orgId: PROJ_X_ORG_ID
+    orgId: PROJ_X_ORG_ID,
+    orgRoleId: 3
   }
 ]
 
