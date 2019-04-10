@@ -18,14 +18,7 @@ export default function(sequelize, DataTypes) {
     User.hasMany(models.ProjectUser, {
       foreignKey: 'userId',
       constraints: false,
-      // as: 'ProjectUser'
     })
-    // User.belongsToMany(models.Project, {
-    //   as: 'Projects',
-    //   through: models.ProjectUser,
-    //   foreignKey: 'userId',
-    //   otherKey: 'projectId'
-    // })
   }
   return User
 }
