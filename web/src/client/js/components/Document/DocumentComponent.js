@@ -12,8 +12,8 @@ const DocumentComponent = ({ document, nameChangeHandler }) => {
       <header>
         <textarea
           className="document__title"
-          onChange={nameChangeHandler}>
-          {document.name}</textarea>
+          onChange={nameChangeHandler}
+          defaultValue={document.name} />
       </header>
       <EditorComponent />
       <button className="field-button" aria-label="Add a field" title="Add a field">
