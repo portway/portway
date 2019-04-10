@@ -16,6 +16,13 @@ const DocumentContainer = ({ location, ui, updateDocument }) => {
   ])
 
   /**
+   * If we're creating a document, render nothing
+   */
+  if (ui.documents.creating) {
+    return null
+  }
+
+  /**
    * If there is no document and we are not creating: true, then we render
    * a helpful message
    */

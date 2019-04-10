@@ -61,7 +61,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
 
   function renderDocumentsList() {
     return documents.map((doc, index) => {
-      return <DocumentsListItem key={`d-${doc.id}-${index}`} document={doc} />
+      return <DocumentsListItem disable={creating} key={`d-${doc.id}-${index}`} document={doc} />
     })
   }
 
