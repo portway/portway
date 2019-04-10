@@ -1,6 +1,7 @@
 import { ActionTypes } from '../actions'
 
 const initialState = {
+  // nested at { [documentId]: { [fieldId]: {} } }
   documentFieldsById: {},
   loading: {
     byId: {},
