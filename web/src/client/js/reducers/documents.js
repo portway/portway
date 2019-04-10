@@ -24,15 +24,6 @@ export const documents = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_DOCUMENTS: {
       const loadingList = { ...state.loading.list, [action.projectId]: false }
-      if (action.data.length === 0) {
-        return {
-          ...state,
-          loading: {
-            ...state.loading,
-            list: loadingList
-          }
-        }
-      }
       const documentsObject = action.data.reduce((object, doc) => {
         object[doc.id] = doc
         return object
