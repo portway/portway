@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { AddIcon } from 'Components/Icons'
@@ -6,14 +6,21 @@ import { AddIcon } from 'Components/Icons'
 import './Document.scss'
 
 const DocumentComponent = ({ document, nameChangeHandler }) => {
+  const titleRef = useRef()
   const docKey = document ? document.id : 0
   return (
     <div className="document" key={docKey}>
       <header>
         <textarea
           className="document__title"
-          onChange={nameChangeHandler}
-          defaultValue={document ? document.name : 'New document'} />
+          onKeyDown={(e) => {
+            if (e.key.toLowerCase() === 'enter') {
+              nameChangeHandler(e)
+              titleRef.current.blur()
+            }
+          }}
+          defaultValue={document.name}
+          ref={titleRef} />
       </header>
       {document &&
       <button className="field-button" aria-label="Add a field" title="Add a field">

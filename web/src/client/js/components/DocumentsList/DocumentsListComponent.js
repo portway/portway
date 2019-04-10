@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -8,7 +8,18 @@ import DocumentsListItem from './DocumentsListItem'
 import { RemoveIcon } from 'Components/Icons'
 import './DocumentsList.scss'
 
-const DocumentsListComponent = ({ creating, createCallback, documents }) => {
+const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
+  const nameRef = useRef()
+  useEffect(() => {
+    if (creating && nameRef.current) {
+      const range = document.createRange()
+      range.selectNodeContents(nameRef.current)
+      const sel = window.getSelection()
+      sel.removeAllRanges()
+      sel.addRange(range)
+    }
+  })
+
   // Set up toolbar
   const toolbarAction = {
     callback: () => { createCallback(true) },
@@ -22,7 +33,18 @@ const DocumentsListComponent = ({ creating, createCallback, documents }) => {
       return (
         <li className="documents-list__item documents-list__item--new">
           <div className="documents-list__button">
-            <span className="documents-list__name">New document</span>
+            <div contentEditable
+              ref={nameRef}
+              role="textbox"
+              tabIndex={0}
+              className="documents-list__name"
+              suppressContentEditableWarning
+              onKeyDown={(e) => {
+                if (e.key.toLowerCase() === 'enter') {
+                  e.preventDefault()
+                  createChangeHandler(e)
+                }
+              }}>New Document</div>
             <button
               className="btn btn--blank btn--with-circular-icon"
               onClick={() => { createCallback(false) }}>
@@ -35,8 +57,8 @@ const DocumentsListComponent = ({ creating, createCallback, documents }) => {
   }
 
   function renderDocumentsList() {
-    return Object.keys(documents).map((key, index) => {
-      return <DocumentsListItem key={`d-${key}-${index}`} document={documents[key]} />
+    return documents.map((doc, index) => {
+      return <DocumentsListItem key={`d-${doc.id}-${index}`} document={doc} />
     })
   }
 
@@ -59,9 +81,10 @@ const DocumentsListComponent = ({ creating, createCallback, documents }) => {
 }
 
 DocumentsListComponent.propTypes = {
+  createChangeHandler: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
   createCallback: PropTypes.func.isRequired,
-  documents: PropTypes.object.isRequired
+  documents: PropTypes.array.isRequired
 }
 
 DocumentsListComponent.defaultProps = {

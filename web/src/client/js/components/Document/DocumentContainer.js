@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Store from '../../reducers'
 import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
@@ -11,37 +10,34 @@ import currentResource from 'Libs/currentResource'
 import { debounce } from 'Shared/utilities'
 import DocumentComponent from './DocumentComponent'
 
-const DocumentContainer = ({ location, ui }) => {
+const DocumentContainer = ({ location, ui, updateDocument }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
 
-  function createDocumentHandler() {
-
-  }
-
-  if (ui.documents.creating) {
-    return <DocumentComponent
-      nameChangeHandler={createDocumentHandler}
-      document={null} />
-  }
-
+  /**
+   * If there is no document and we are not creating: true, then we render
+   * a helpful message
+   */
   if (!document) {
     return <div>No document</div>
   }
 
+  /**
+   * Otherwise we rendre the document, and update its values onChange
+   */
   const nameChangeAction = debounce(1000, (e) => {
-    Store.dispatch(updateDocument(document.id, document.projectId, {
-      name: e.target.value,
-      projectId: document.projectId
-    }))
+    if (e.target.value !== document.name) {
+      updateDocument(document.id, document.projectId, {
+        name: e.target.value,
+        projectId: document.projectId
+      })
+    }
   })
-
   function nameChangeHandler(e) {
     e.persist()
     nameChangeAction(e)
   }
-
   return <DocumentComponent
     nameChangeHandler={nameChangeHandler}
     document={document} />
@@ -49,7 +45,8 @@ const DocumentContainer = ({ location, ui }) => {
 
 DocumentContainer.propTypes = {
   location: PropTypes.object.isRequired,
-  ui: PropTypes.object.isRequired
+  ui: PropTypes.object.isRequired,
+  updateDocument: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -58,6 +55,10 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps = {
+  updateDocument
+}
+
 export default withRouter(
-  connect(mapStateToProps)(DocumentContainer)
+  connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
 )

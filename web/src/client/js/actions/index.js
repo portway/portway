@@ -45,7 +45,7 @@ export const Projects = {
 }
 
 export const Documents = {
-  create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId'),
+  create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId', 'data'),
   update: makeActionCreator(ActionTypes.UPDATE_DOCUMENT, 'projectId', 'documentId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),

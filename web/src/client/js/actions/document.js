@@ -18,12 +18,12 @@ export const fetchDocument = (projectId, documentId) => {
   }
 }
 
-export const createDocument = (projectId, body, history) => {
+export const createDocument = (projectId, history, body) => {
   return async (dispatch) => {
-    dispatch(Documents.create(projectId))
-    const data = await add('projectDocument', body)
+    dispatch(Documents.create(projectId, body))
+    const data = await add(`projects/${projectId}/documents`, body)
     dispatch(Documents.receiveOneCreated(data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}/documents/${data.id}` })
+    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}/document/${data.id}` })
   }
 }
 
