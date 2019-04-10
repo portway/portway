@@ -6,7 +6,8 @@ export default async (req, res, next) => {
   req.requestorInfo = {
     orgId: req.user.orgId,
     requestorType: RESOURCE_TYPES.USER,
-    requestorId: req.user.id
+    requestorId: req.user.id,
+    orgRoleId: req.user.orgRoleId
   }
   next()
 }

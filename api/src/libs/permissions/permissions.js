@@ -1,6 +1,9 @@
 import projectAccess from './projects'
 import userAccess from './users'
+import projectUserAccess from './projectUsers'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
+import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLES } from '../../constants/roles'
+
 /*
   requestorInfo = {
     orgId: '123',
@@ -17,9 +20,18 @@ import RESOURCE_TYPES from '../../constants/resourceTypes'
   }
 */
 
+function getOrganizationRole(requestorInfo) {
+  const roles = []
+  if (requestorInfo.orgRoleId) {
+    roles.push(ORGANIZATION_ROLES[requestorInfo.orgRoleId])
+  }
+  return roles
+}
+
 const resourceToHandler = {
   [RESOURCE_TYPES.PROJECT]: projectAccess,
-  [RESOURCE_TYPES.USER]: userAccess
+  [RESOURCE_TYPES.USER]: userAccess,
+  [RESOURCE_TYPES.PROJECT_USER]: projectUserAccess
 }
 
 /**
@@ -31,6 +43,8 @@ const resourceToHandler = {
  */
 export default async (requestorInfo, requestedAction) => {
   const resourceAccessHandler = resourceToHandler[requestedAction.resourceType]
+  // TODO: do this here? Maybe access handlers don't care?
+  requestorInfo.roles = getOrganizationRole(requestorInfo)
 
   if (resourceAccessHandler) {
     return resourceAccessHandler(requestorInfo, requestedAction)
