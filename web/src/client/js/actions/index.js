@@ -14,6 +14,12 @@ export const ActionTypes = {
   // Documents
   REQUEST_PROJECT_DOCUMENTS: 'REQUEST_PROJECT_DOCUMENTS',
   RECEIVE_PROJECT_DOCUMENTS: 'RECEIVE_PROJECT_DOCUMENTS',
+  // Fields
+  RECEIVE_CREATED_DOCUMENT_FIELD: 'RECEIVE_CREATED_FIELD',
+  INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
+  RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
+  INITIATE_FIELD_REMOVE: 'INITIATE_FIELD_REMOVE',
+  REMOVE_FIELD: 'REMOVE_FIELD',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
@@ -37,6 +43,14 @@ export const Projects = {
 export const ProjectDocuments = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECT_DOCUMENTS, 'id'),
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_DOCUMENTS, 'data')
+}
+
+export const Fields = {
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT_FIELD, 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
+  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'id', 'docId')
 }
 
 export const Users = {
