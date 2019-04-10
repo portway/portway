@@ -16,7 +16,9 @@
       border-right: thin solid $gray-light;
       height: calc(100vh - #{$ribbonHeight + $headerHeight});
       overflow-y: auto;
+      overscroll-behavior: contain;
       width: calc(#{$sideGutterWidth} + 300px);
+      -webkit-overflow-scrolling: touch;
     }
     &-document-container {
       flex: 1;
