@@ -17,7 +17,7 @@ const DocumentsListComponent = ({ projectName, documents }) => {
       setIsAddingDocument(true)
     },
     icon: <AddIcon width="16" height="16" />,
-    label: `New`,
+    label: `New Document`,
     title: 'Create a new document in this project'
   }
 

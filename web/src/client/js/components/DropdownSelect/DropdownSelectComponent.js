@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
 
@@ -7,26 +7,12 @@ import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
 import './DropdownSelect.scss'
-import './_react-select.scss'
 
 const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
   // Menu is not collapsed by default
   const [expanded, setExpanded] = useState(false)
   const hasIcon = button.icon !== undefined
   const selectRef = useRef()
-  // Set position of menu depending on where it is on the screen
-  const [position, setPosition] = useState('left')
-  const buttonRef = useRef()
-  useEffect(() => {
-    if (buttonRef.current) {
-      setTimeout(() => {
-        const leftPos = buttonRef.current.getBoundingClientRect().x
-        if (leftPos) {
-          (leftPos > window.innerWidth / 2) ? setPosition('right') : setPosition('left')
-        }
-      }, 50)
-    }
-  }, [])
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -58,21 +44,21 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
-        onClick={toggleCallback}
-        ref={buttonRef}>
+        onClick={toggleCallback}>
         {hasIcon && <span className={`icon ${button.icon}`} />}
         <span className="label">{button.label}</span> {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
-      <div className={`menu menu--with-select menu--${position}`} hidden={!expanded}>
+      <div className={`menu menu--with-select`} hidden={!expanded}>
         <Select
           ref={selectRef}
           className={`react-select-container`}
           classNamePrefix="react-select"
-          defaultValue={menu && menu.value ? menu.value : null}
+          components={menu.customComponents}
           isMulti={menu.multiSelect}
           menuIsOpen={menu.isOpen}
           onChange={changeHandler}
           options={menu.options}
+          placeholder="Filter..."
           tabSelectsValue={false}
         />
       </div>
@@ -83,12 +69,13 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
 DropdownSelectComponent.propTypes = {
   button: PropTypes.shape({
     className: PropTypes.string,
-    icon: PropTypes.string,
+    icon: PropTypes.element,
     label: PropTypes.string.isRequired
   }),
   className: PropTypes.string,
   menu: PropTypes.shape({
     collapseOnChange: PropTypes.bool,
+    customComponents: PropTypes.object,
     isOpen: PropTypes.bool,
     multiSelect: PropTypes.bool,
     onChange: PropTypes.func.isRequired,

@@ -33,7 +33,7 @@ const DropdownComponent = ({ align, button, children, className, menu, shortcut 
         aria-expanded={expanded}
         aria-label={button.label}
         onClick={() => { setExpanded(!expanded)}}>
-        {hasIcon && <span className={`icon ${button.icon}`} />}
+        {button.icon && button.icon}
         {button.label && button.label}
       </button>
       <div className={`menu menu--${align}`} hidden={!expanded}>
@@ -49,7 +49,7 @@ DropdownComponent.propTypes = {
   align: PropTypes.string,
   button: PropTypes.shape({
     className: PropTypes.string,
-    icon: PropTypes.string,
+    icon: PropTypes.element,
     label: PropTypes.string
   }),
   children: PropTypes.node.isRequired,

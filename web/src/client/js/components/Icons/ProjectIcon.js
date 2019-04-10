@@ -16,15 +16,15 @@ function ProjectIcon({ className, fill, height, width }) {
 ProjectIcon.propTypes = {
   className: PropTypes.string,
   fill: PropTypes.string,
-  height: PropTypes.number,
-  width: PropTypes.number
+  height: PropTypes.string,
+  width: PropTypes.string
 }
 
 ProjectIcon.defaultProps = {
   className: 'icon-project',
   fill: '#3b3d3e',
-  height: 36,
-  width: 36
+  height: '36',
+  width: '36'
 }
 
 export default ProjectIcon

@@ -1,4 +1,5 @@
 @import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
 
 .document {
 
@@ -14,6 +15,7 @@
     resize: none;
     width: 100%;
     -webkit-appearance: none;
+    @include focus(transparent);
   }
 
   .field-button {

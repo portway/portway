@@ -29,7 +29,7 @@ const renderProjectsItems = () => {
         className="btn btn--blank btn--with-circular-icon"
         title="Create a new project"
         to={Constants.PATH_PROJECT_CREATE}>
-        <AddIcon width="16" height="16" />
+        <AddIcon width="12" height="12" />
         New Project
       </Link>
     </div>
