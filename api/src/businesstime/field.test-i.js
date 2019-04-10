@@ -17,7 +17,7 @@ describe('BusinessField', () => {
     factoryDocument = factoryDocuments[0]
   })
 
-  describe('#createForProjectDocument', () => {
+  describe('#createForDocument', () => {
     const fieldBody = {
       name: 'test-field',
       orgId: constants.ORG_ID,
@@ -26,9 +26,8 @@ describe('BusinessField', () => {
     let field
 
     beforeAll(async () => {
-      field = await BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
+      field = await BusinessField.createForDocument(factoryDocument.id, {
         ...fieldBody,
-        projectId: factoryProject.id,
         docId: factoryDocument.id
       })
     })
@@ -42,22 +41,9 @@ describe('BusinessField', () => {
     describe('when the parent document does not exist', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
+          BusinessField.createForDocument(factoryDocument.id, {
             ...fieldBody,
-            projectId: factoryProject.id,
             docId: 0
-          })
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in projectId does not match the body projectId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
-            ...fieldBody,
-            projectId: 0,
-            docId: factoryDocument.id
           })
         ).rejects.toThrow()
       })
@@ -66,9 +52,8 @@ describe('BusinessField', () => {
     describe('when the passed in docId does not match the body docId', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.createForProjectDocument(factoryProject.id, factoryDocument.id, {
+          BusinessField.createForDocument(factoryDocument.id, {
             ...fieldBody,
-            projectId: factoryProject.id,
             docId: 0
           })
         ).rejects.toThrow()
@@ -76,11 +61,10 @@ describe('BusinessField', () => {
     })
   })
 
-  describe('#updateByIdForProjectDocument', () => {
+  describe('#updateByIdForDocument', () => {
     let factoryField
     let fieldId
     let orgId
-    let projectId
     let docId
 
     const updateBody = {
@@ -92,7 +76,6 @@ describe('BusinessField', () => {
       factoryField = factoryFields[0]
       fieldId = factoryField.id
       orgId = factoryField.orgId
-      projectId = factoryProject.id
       docId = factoryField.docId
     })
 
@@ -100,9 +83,8 @@ describe('BusinessField', () => {
       let updatedField
 
       beforeAll(async () => {
-        updatedField = await BusinessField.updateByIdForProjectDocument(
+        updatedField = await BusinessField.updateByIdForDocument(
           factoryField.id,
-          projectId,
           docId,
           orgId,
           {
@@ -121,7 +103,7 @@ describe('BusinessField', () => {
     describe('when the target field is not found', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.updateByIdForProjectDocument(0, projectId, docId, orgId, updateBody)
+          BusinessField.updateByIdForDocument(0, docId, orgId, updateBody)
         ).rejects.toThrow()
       })
     })
@@ -129,7 +111,7 @@ describe('BusinessField', () => {
     describe('when the target document is not found', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.updateByIdForProjectDocument(fieldId, projectId, 0, orgId, updateBody)
+          BusinessField.updateByIdForDocument(fieldId, 0, orgId, updateBody)
         ).rejects.toThrow()
       })
     })
@@ -137,7 +119,7 @@ describe('BusinessField', () => {
     describe('when the target field does not belong to the organization', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.updateByIdForProjectDocument(fieldId, projectId, docId, 0, updateBody)
+          BusinessField.updateByIdForDocument(fieldId, docId, 0, updateBody)
         ).rejects.toThrow()
       })
     })
@@ -145,9 +127,8 @@ describe('BusinessField', () => {
     describe('when the passed in docId does not match the body docId', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.updateByIdForProjectDocument(fieldId, projectId, docId, orgId, {
+          BusinessField.updateByIdForDocument(fieldId, docId, orgId, {
             ...updateBody,
-            projectId,
             docId: 0
           })
         ).rejects.toThrow()
@@ -216,23 +197,7 @@ describe('BusinessField', () => {
           targetFieldId = factoryFields[0].id
           field = await BusinessField.findByIdForDocument(
             targetFieldId,
-            factoryProject.id,
             constants.ORG_ID_2
-          )
-        })
-
-        it('should return null', () => {
-          expect(field).toBe(null)
-        })
-      })
-
-      describe('when the target field does not have the passed in projectId', () => {
-        beforeAll(async () => {
-          targetFieldId = factoryFields[0].id
-          field = await BusinessField.findByIdForDocument(
-            targetFieldId,
-            0,
-            constants.ORG_ID
           )
         })
 

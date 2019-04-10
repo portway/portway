@@ -47,10 +47,21 @@ async function deleteByIdForProject(id, projectId, orgId) {
   await document.destroy()
 }
 
+async function findParentProjectByDocumentId(id, orgId) {
+  const db = getDb()
+
+  const document = await db
+    .model(MODEL_NAME)
+    .findOne({ where: { id, orgId }, include: [{ model: db.model('Project') }] })
+
+  return document.Project && document.Project.get({ plain: true })
+}
+
 export default {
   createForProject,
   updateByIdForProject,
   findByIdForProject,
   findAllForProject,
-  deleteByIdForProject
+  deleteByIdForProject,
+  findParentProjectByDocumentId
 }

@@ -8,33 +8,30 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import fieldTypes from '../constants/fieldTypes'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
-  RESOURCE_TYPES.PROJECT,
-  req => req.params.projectId
+  RESOURCE_TYPES.DOCUMENT,
+  req => req.params.documentId
 )
 
-// TODO: this is currently piggybacking off of project perms
 const bodySchema = Joi.compile({
   name: Joi.string().required(),
-  docId: Joi.number().required(),
-  projectId: Joi.number().required(),
+  docId: Joi.number(),
   value: Joi.alternatives(Joi.string(), Joi.number()).required(),
-  // probably want a json parse validator on this one
+  // TODO: probably want a json parse validator on this one
   structuredValue: Joi.string(),
   type: Joi.number()
     .valid(Object.values(fieldTypes.FIELD_TYPES))
     .required()
-  // TODO order: need to decide how to handle this
+  // TODO: order: need to decide how to handle this
 })
 
 const paramSchema = Joi.compile({
-  projectId: Joi.number().required(),
   documentId: Joi.number().required(),
   id: Joi.number()
 })
 
 const projectDocumentsController = function(router) {
-  // all routes are nested at projects/:projectId/documents/:documentId
-  // and receive req.params.projectId and req.params.documentId
+  // all routes are nested at documents/:documentId
+  // and receive req.params.documentId
   router.post(
     '/',
     validateParams(paramSchema),
@@ -83,13 +80,13 @@ const getDocumentField = async function(req, res) {
 
 const addDocumentField = async function(req, res) {
   const { body } = req
-  const { projectId, documentId } = req.params
+  const { documentId } = req.params
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
   body.orgId = orgId
 
   try {
-    const field = await BusinessField.createForProjectDocument(projectId, documentId, body)
+    const field = await BusinessField.createForDocument(documentId, body)
     res.status(201).json(field)
   } catch (e) {
     console.error(e.stack)
@@ -98,14 +95,13 @@ const addDocumentField = async function(req, res) {
 }
 
 const updateDocumentField = async function(req, res) {
-  const { id, projectId, documentId } = req.params
+  const { id, documentId } = req.params
   const { body } = req
   const { orgId } = req.requestorInfo
 
   try {
-    const field = await BusinessField.updateByIdForProjectDocument(
+    const field = await BusinessField.updateByIdForDocument(
       id,
-      projectId,
       documentId,
       orgId,
       body

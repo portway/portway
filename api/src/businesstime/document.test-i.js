@@ -197,6 +197,7 @@ describe('BusinessDocument', () => {
     let factoryDocument
 
     beforeAll(async () => {
+      await clearDb()
       const factoryDocuments = await DocumentFactory.createMany(1, { projectId: factoryProject.id })
       factoryDocument = factoryDocuments[0]
     })
@@ -231,6 +232,30 @@ describe('BusinessDocument', () => {
           constants.ORG_ID_2
         )
       ).rejects.toThrow()
+    })
+  })
+
+  describe('#findParentProjectByDocumentId', () => {
+    let factoryDocument
+    let project
+
+    beforeAll(async () => {
+      await clearDb()
+      const factoryProjects = await ProjectFactory.createMany(1)
+      factoryProject = factoryProjects[0]
+      const factoryDocuments = await DocumentFactory.createMany(1, {
+        projectId: factoryProject.id
+      })
+      factoryDocument = factoryDocuments[0]
+
+      project = await BusinessDocument.findParentProjectByDocumentId(
+        factoryDocument.id,
+        constants.ORG_ID
+      )
+    })
+
+    it('should return the parent project of passed in document', () => {
+      expect(project.id).toEqual(factoryProject.id)
     })
   })
 })

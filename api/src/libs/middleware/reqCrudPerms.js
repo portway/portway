@@ -14,7 +14,10 @@ export default (resourceType, idFunc) => {
   const listPerm = perms((req) => {
     return {
       resourceType,
-      action: actions.LIST
+      action: actions.LIST,
+      data: {
+        id: idFunc(req)
+      }
     }
   })
 
@@ -31,7 +34,10 @@ export default (resourceType, idFunc) => {
   const createPerm = perms((req) => {
     return {
       resourceType,
-      action: actions.CREATE
+      action: actions.CREATE,
+      data: {
+        id: idFunc(req)
+      }
     }
   })
 
