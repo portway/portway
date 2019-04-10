@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+// eslint-disable-next-line max-len
+// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
 // Test via a getter in the options object to see if the passive property is accessed
 let supportsPassive = false
 try {
