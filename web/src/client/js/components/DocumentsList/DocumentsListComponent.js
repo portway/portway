@@ -2,19 +2,21 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { AddIcon } from 'Components/Icons'
+import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
-import { RemoveIcon } from 'Components/Icons'
+
 import './DocumentsList.scss'
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
   const nameRef = useRef()
+
+  // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
     if (creating && nameRef.current) {
       const range = document.createRange()
       range.selectNodeContents(nameRef.current)
-      const sel = window.getSelection()
+      const sel = document.getSelection()
       sel.removeAllRanges()
       sel.addRange(range)
     }
@@ -25,6 +27,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
     callback: () => { createCallback(true) },
     icon: <AddIcon width="16" height="16" />,
     label: `New Document`,
+    shortcut: 'n',
     title: 'Create a new document in this project'
   }
 
