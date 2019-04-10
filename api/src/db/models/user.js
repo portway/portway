@@ -15,6 +15,10 @@ export default function(sequelize, DataTypes) {
     User.belongsTo(models.Organization, {
       foreignKey: 'orgId'
     })
+    User.hasMany(models.ProjectUser, {
+      foreignKey: 'userId',
+      constraints: false,
+    })
   }
   return User
 }

@@ -6,6 +6,7 @@ const PROJ_X_ORG_ID = seedIds.PROJEXT_X_ORG_ID
 
 const bulkUsers = [
   {
+    id: seedIds.BONKEY_USER_ID,
     firstName: 'Bonkey Jr.',
     lastName: 'Bong',
     email: 'bonkey@bong.com',
@@ -16,6 +17,7 @@ const bulkUsers = [
     orgId: ORG_ID
   },
   {
+    id: seedIds.BIDDY_USER_ID,
     firstName: 'Biddy',
     lastName: 'Bong',
     email: 'biddy@bong.com',
@@ -26,6 +28,7 @@ const bulkUsers = [
     orgId: ORG_ID
   },
   {
+    id: seedIds.BADDY_USER_ID,
     firstName: 'Baddy',
     lastName: 'Bong',
     email: 'baddy@bong.com',
@@ -36,6 +39,7 @@ const bulkUsers = [
     orgId: ORG_ID
   },
   {
+    id: seedIds.BIXIE_USER_ID,
     firstName: 'Bixie',
     lastName: 'Bong',
     email: 'bixie@bong.com',
@@ -46,6 +50,7 @@ const bulkUsers = [
     orgId: ORG_ID
   },
   {
+    id: seedIds.CAROL_X_USER_ID,
     firstName: 'Carol',
     lastName: 'X',
     email: 'carolx@bong.com',
@@ -56,6 +61,7 @@ const bulkUsers = [
     orgId: PROJ_X_ORG_ID
   },
   {
+    id: seedIds.BOB_X_USER_ID,
     firstName: 'Bob',
     lastName: 'X',
     email: 'bobx@bong.com',
