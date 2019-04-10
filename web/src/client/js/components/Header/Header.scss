@@ -2,8 +2,8 @@
 @import 'CSS/inc/_mixins.scss';
 
 .masthead {
-  border-top: 6px solid $highlight;
-  height: $headerHeight;
+  border-top: $ribbonHeight solid $highlight;
+  height: $headerHeight + $ribbonHeight;
 
   .navbar {
     align-items: center;
@@ -49,8 +49,8 @@
       height: $sideGutterWidth;
       padding-left: 16px;
       .icon {
-        height: 30px;
-        width: 30px;
+        height: 24px;
+        width: 24px;
       }
     }
 

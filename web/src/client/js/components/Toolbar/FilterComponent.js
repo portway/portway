@@ -1,11 +1,12 @@
 import React from 'react'
 
+import { FilterIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 
 function FilterComponent() {
   const filterButton = {
     className: 'btn--blank',
-    icon: 'icon-filter'
+    icon: <FilterIcon width="18" height="18" />
   }
   return (
     <DropdownComponent button={filterButton} align="right">

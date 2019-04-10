@@ -1,50 +1,124 @@
-@import 'CSS/layout/_menu.scss';
+@import 'CSS/inc/_vars.scss';
 @import 'CSS/animations/_rotateAndScale.scss';
 
 $navigatorWidth: 300px;
+$navigatorPlaceholderWidth: 56px;
 
 .navigator {
-  align-items: center;
-  border-right: thin solid $gray-light;
-  display: flex;
-  height: $sideGutterWidth;
-  width: $navigatorWidth;
+  position: relative;
+
   .btn {
-    transition: transform 0.2s ease-out;
-    will-change: transform, opacity;
+    .icon {
+      height: 24px;
+      width: 24px;
+    }
     &[aria-expanded="true"] {
       .icon {
         animation-fill-mode: forwards;
         animation-duration: 0.2s;
         animation-timing-function: ease;
         animation-name: rotateAndScale;
+        background-color: $black-bis;
+        svg {
+          path {
+            fill: $gray-light;
+          }
+        }
       }
     }
   }
+
+  // Overwriting some values from _menu.scss
   .menu {
-    background-color: $black-ter;
-    left: -52px;
-    top: 69px;
+    padding: 0;
     width: $navigatorWidth;
-    .react-select-container {
-      background-color: $black-ter;
-      .react-select {
-        &__control {
-          background-color: $black-ter;
-          border: thin solid $black-bis;
+    &__item {
+      align-items: center;
+      display: flex;
+      padding: 4px 14px;
+      &--is-focused {
+        background-color: lighten($black-bis, 5%);
+      }
+      .icon {
+        flex: 1;
+        margin-right: 6px;
+      }
+    }
+  }
+
+  &__settings {
+    font-size: 0.800rem;
+  }
+
+  // The React Select container
+  &__select {
+    background-color: transparent;
+    padding: 0;
+
+    // Overriding React-Select styles (fuck you Emotion!)
+    // We're doing some specific stuff here to center the input
+    // value, and using a fixed width of $placeholderWidth to position
+    // the initial cursor placement at the beginning of the placeholder word
+    .react-select {
+      &__control {
+        background-color: transparent;
+        border-radius: 0;
+        border: none;
+        color: $gray-light;
+        margin: 0;
+        min-height: unset;
+        &--is-focused {
+          border: none;
+          box-shadow: unset;
         }
-        &__menu {
-          background-color: $black-ter;
-          border-top: thin solid $black-bis;
+      }
+      &__input {
+        color: $gray-light;
+        display: block !important;
+        text-align: center;
+        min-width: $navigatorPlaceholderWidth;
+        input {
+          caret-color: $action;
+          position: relative;
+          z-index: 2;
+          min-width: $navigatorPlaceholderWidth;
         }
-        &__option {
-          color: $white;
-          &--is-focused {
-            background-color: transparent;
-          }
-          &--is-selected {
-            background-color: $black-bis;
-          }
+      }
+      &__value-container {
+        display: flex;
+        justify-content: center;
+        padding: 0;
+      }
+      &__placeholder {
+        color: $black-ter;
+        text-align: center;
+        z-index: 1;
+      }
+      &__indicator-separator {
+        display: none;
+      }
+      &__indicator {
+        display: none;
+      }
+      &__menu {
+        background-color: transparent;
+        box-shadow: unset;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      &__menu-list {
+        padding: 0;
+      }
+      &__option {
+        background-color: transparent !important; // I hate React-Select
+        cursor: pointer;
+        padding: 6px 0;
+        &--is-focused {
+          background-color: transparent;
+        }
+        &--is-selected {
+          background-color: $black-bis;
         }
       }
     }

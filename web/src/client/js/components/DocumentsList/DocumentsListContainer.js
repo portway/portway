@@ -12,15 +12,14 @@ const DocumentsListContainer = ({ location, match }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
-  const { data: documents } = useDataService(
-    dataMapper.projectDocuments.id(match.params.projectId),
-    [match.params.projectId]
-  )
+
+  const { data: documents } = useDataService(dataMapper.documents.list(match.params.projectId), [
+    match.params.projectId
+  ])
 
   if (!project) return null
-  const loadedDocs = documents || []
 
-  return <DocumentsListComponent projectName={project.name} documents={loadedDocs} />
+  return <DocumentsListComponent projectName={project.name} documents={documents} />
 }
 
 DocumentsListContainer.propTypes = {

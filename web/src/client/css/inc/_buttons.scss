@@ -25,6 +25,8 @@ button,
   display: inline-flex;
   font-family: $sansSerif;
   font-weight: 500;
+  margin-bottom: 0;
+  margin-top: 0;
   padding: 10px 37px;
   text-decoration: none;
   transition: transform 0.2s ease-in-out;
@@ -80,17 +82,21 @@ button,
   &--with-icon {
     align-items: center;
     display: inline-flex;
-    padding: 0 12px 0 0;
+    .label {
+      padding: 0 12px 0 0;
+    }
   }
 
   &--with-circular-icon {
     align-items: center;
     display: inline-flex;
-    padding: 0 12px 0 0;
     .icon {
       background-color: $white-bis;
       border-radius: 50% 50%;
       margin-right: 8px;
+    }
+    .label {
+      padding: 0 12px 0 0;
     }
     &:hover {
       .icon {

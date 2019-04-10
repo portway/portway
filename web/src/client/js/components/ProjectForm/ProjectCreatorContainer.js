@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 
 import Store from '../../reducers'
 import { createProject } from 'Actions/project'
-import ProjectForm from './ProjectFormComponent'
+import ProjectFormComponent from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -76,7 +76,10 @@ const ProjectCreatorContainer = ({ history }) => {
 
   return (
     <div>
-      <ProjectForm formOptions={formOptions} teamOptions={teamOptions} currentUser={currentUser} />
+      <ProjectFormComponent
+        formOptions={formOptions}
+        teamOptions={teamOptions}
+        currentUser={currentUser} />
     </div>
   )
 }

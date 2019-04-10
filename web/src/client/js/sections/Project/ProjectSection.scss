@@ -6,12 +6,15 @@
   .toolbar__start {
     padding-left: $sideGutterWidth / 4;
   }
+  .toolbar__end {
+    padding-right: $sideGutterWidth / 6;
+  }
 
   &__documents {
     display: flex;
     &-list-container {
       border-right: thin solid $gray-light;
-      height: calc(100vh - #{$headerHeight});
+      height: calc(100vh - #{$ribbonHeight + $headerHeight});
       overflow-y: auto;
       width: calc(#{$sideGutterWidth} + 300px);
     }

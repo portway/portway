@@ -22,6 +22,7 @@ export const fetchProject = (id) => {
 
 export const createProject = (body, history) => {
   return async (dispatch) => {
+    dispatch(Projects.create())
     const data = await add('projects', body)
     dispatch(Projects.receiveOneCreated(data))
     history.push({ pathname: `${Constants.PATH_PROJECT}/${data.id}` })

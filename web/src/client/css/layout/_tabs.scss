@@ -1,0 +1,36 @@
+@import 'CSS/inc/_mixins.scss';
+
+$tabColor: $action;
+
+.tabs {
+  align-items: center;
+  border: thin solid $tabColor;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  width: auto;
+  &__tab-item {
+    background-color: $white;
+    color: $tabColor;
+    cursor: pointer;
+    display: block;
+    font-size: 0.800rem; // 12px
+    min-width: 100px;
+    padding: 8px 24px;
+    text-align: center;
+    text-decoration: none;
+    @include focus(transparent);
+    &:hover {
+      background-color: transparent;
+    }
+    &:active {
+      // background-color: $action;
+    }
+    &.active {
+      background-color: $tabColor;
+      color: $white;
+      font-weight: 700;
+    }
+  }
+}

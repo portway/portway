@@ -1,5 +1,6 @@
 @import 'vars';
 
+// @todo - generally replace these with react components
 .icon {
   align-items: center;
   background-position: 50% 50%;
@@ -10,25 +11,8 @@
   justify-content: center;
   width: 36px;
 
-  &-caret-down {
-    background-image: url('/images/icon/arrow-down.svg');
-  }
-
-  &-caret-up {
-    background-image: url('/images/icon/arrow-down.svg');
-    transform: rotate(180deg);
-  }
-
   &-user {
     background-image: url('/images/icon/user.svg');
-  }
-
-  &-filter {
-    background-image: url('/images/icon/filter.svg');
-  }
-
-  &-sort-by {
-    background-image: url('/images/icon/sort-by.svg');
   }
 
   &-menu-more {

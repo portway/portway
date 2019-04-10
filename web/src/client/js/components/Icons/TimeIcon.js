@@ -19,15 +19,15 @@ function TimeIcon({ className, fill, height, width }) {
 TimeIcon.propTypes = {
   className: PropTypes.string,
   fill: PropTypes.string,
-  height: PropTypes.number,
-  width: PropTypes.number
+  height: PropTypes.string,
+  width: PropTypes.string
 }
 
 TimeIcon.defaultProps = {
   className: 'icon-time',
   fill: '#3b3d3e',
-  height: 36,
-  width: 36
+  height: '36',
+  width: '36'
 }
 
 export default TimeIcon
