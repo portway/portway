@@ -67,7 +67,11 @@ export const documents = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_UPDATED_DOCUMENT:
       const listDoc = state.list[action.data.projectId][action.data.id]
-      const updatedDoc = { ...listDoc, name: action.data.name }
+      const updatedDoc = {
+        ...listDoc,
+        name: action.data.name,
+        updatedAt: action.data.updatedAt
+      }
       const project = {
         ...state.list[action.data.projectId],
         [action.data.id]: updatedDoc
