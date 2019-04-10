@@ -10,10 +10,10 @@ const DocumentComponent = ({ document, nameChangeHandler }) => {
   return (
     <div className="document" key={document.id}>
       <header>
-        <input
+        <textarea
           className="document__title"
-          defaultValue={document.name}
-          onChange={nameChangeHandler} />
+          onChange={nameChangeHandler}>
+          {document.name}</textarea>
       </header>
       <EditorComponent />
       <button className="field-button" aria-label="Add a field" title="Add a field">
