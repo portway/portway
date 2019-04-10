@@ -11,7 +11,7 @@ const DocumentsListComponent = ({ projectName, documents }) => {
   const toolbarAction = {
     callback: null,
     icon: <AddIcon width="16" height="16" />,
-    label: `New`,
+    label: `New Document`,
     title: 'Create a new document in this project'
   }
 

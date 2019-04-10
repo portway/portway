@@ -1,4 +1,5 @@
 @import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
 
 .document {
 
@@ -12,6 +13,7 @@
     padding-bottom: $sideGutterWidth / 2;
     width: 100%;
     -webkit-appearance: none;
+    @include focus(transparent);
   }
 
   .field-button {

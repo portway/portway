@@ -11,7 +11,7 @@ module.exports = {
   PATH_LOGOUT: '/logout',
   PATH_PROJECT: '/project',
   PATH_PROJECTS: '/projects',
-  PATH_PROJECT_CREATE: '/create/project',
+  PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000' // 7 days
 }
