@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
+import Store from '../../reducers'
+import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
@@ -12,14 +14,16 @@ const DocumentContainer = ({ location }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  console.log(document)
 
   if (!document) {
     return <div>No document</div>
   }
 
   const nameChangeAction = debounce(1000, (e) => {
-    console.info(`Change my name in redux: ${e.target.value}`)
+    Store.dispatch(updateDocument(document.id, document.projectId, {
+      name: e.target.value,
+      projectId: document.projectId
+    }))
   })
 
   function nameChangeHandler(e) {

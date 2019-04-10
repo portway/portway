@@ -13,10 +13,9 @@ const DocumentsListContainer = ({ location, match }) => {
     location.pathname
   ])
 
-  const { data: documents } = useDataService(
-    dataMapper.projectDocuments.list(match.params.projectId),
-    [match.params.projectId]
-  )
+  const { data: documents } = useDataService(dataMapper.documents.list(match.params.projectId), [
+    match.params.projectId
+  ])
 
   if (!project) return null
 

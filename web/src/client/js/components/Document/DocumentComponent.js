@@ -8,7 +8,7 @@ import './Document.scss'
 
 const DocumentComponent = ({ document, nameChangeHandler }) => {
   return (
-    <div className="document">
+    <div className="document" key={document.id}>
       <header>
         <input
           className="document__title"
@@ -16,7 +16,6 @@ const DocumentComponent = ({ document, nameChangeHandler }) => {
           onChange={nameChangeHandler} />
       </header>
       <EditorComponent />
-      {/* eslint-disable-next-line max-len */}
       <button className="field-button" aria-label="Add a field" title="Add a field">
         <div>
           <AddIcon fill="#ffffff" />

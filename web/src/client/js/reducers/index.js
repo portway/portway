@@ -4,13 +4,11 @@ import thunk from 'redux-thunk'
 
 import { documents } from './documents'
 import { projects } from './projects'
-import { projectDocuments } from './projectDocuments'
 import { users } from './users'
 
 const rootReducer = combineReducers({
   documents,
   projects,
-  projectDocuments,
   users
 })
 
