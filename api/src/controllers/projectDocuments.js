@@ -15,7 +15,7 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 
 const bodySchema = Joi.compile({
   name: Joi.string().required(),
-  projectId: Joi.number().required()
+  projectId: Joi.number()
 })
 
 const paramSchema = Joi.compile({

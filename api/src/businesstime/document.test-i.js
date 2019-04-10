@@ -36,18 +36,7 @@ describe('BusinessDocument', () => {
     describe('when the parent project does not exist', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessDocument.createForProject(factoryProject.id, { ...documentBody, projectId: 0 })
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in projectId does not match the body projectId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessDocument.createForProject(factoryProject.id, {
-            ...documentBody,
-            projectId: 0
-          })
+          BusinessDocument.createForProject(0, { ...documentBody })
         ).rejects.toThrow()
       })
     })
@@ -110,17 +99,6 @@ describe('BusinessDocument', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, 0, updateBody)
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in projectId does not match the body projectId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, orgId, {
-            ...updateBody,
-            projectId: 0
-          })
         ).rejects.toThrow()
       })
     })
