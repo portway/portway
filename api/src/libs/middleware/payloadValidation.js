@@ -14,7 +14,7 @@ export function validateBody(schema, options = {}) {
       req.body = value
       return next()
     }
-
+    console.error(error)
     res.status(400).send('Invalid request payload input')
   }
 }

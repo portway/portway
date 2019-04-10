@@ -45,8 +45,9 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
         aria-expanded={expanded}
         aria-label={button.label}
         onClick={toggleCallback}>
-        {button.icon && button.icon}
-        {button.label} {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
+        {hasIcon && button.icon}
+        {button.label && <span className="label">{button.label}</span>}
+        {menu.value && menu.value.length > 0 ? ` (${menu.value.length})` : ''}
       </button>
       <div className={`menu menu--with-select`} hidden={!expanded}>
         <Select

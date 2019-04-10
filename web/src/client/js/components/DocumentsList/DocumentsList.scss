@@ -9,6 +9,13 @@
   }
   &__item {
     border-top: thin solid $white-ter;
+    // New item is a fake list item
+    &--new {
+      // background-color: $white-bis;
+      &:focus {
+        background-color: $white-bis;
+      }
+    }
   }
   &__button {
     flex-direction: column;
@@ -20,12 +27,32 @@
         background-color: $white-bis;
       }
     }
+    .documents-list__item--new & {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      height: 85.5px;
+      justify-content: space-between;
+      .btn--with-circular-icon {
+        padding: 0;
+        .icon {
+          height: 30px;
+          margin-right: 0;
+          width: 30px;
+        }
+      }
+    }
   }
   &__name {
     color: $black-ter;
     padding-bottom: $sideGutterWidth / 4;
     .active & {
       color: $black-bis;
+    }
+    .documents-list__item--new & {
+      color: $gray;
+      font-style: italic;
+      padding: 0;
     }
   }
   &__date {

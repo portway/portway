@@ -6,6 +6,9 @@
   .toolbar__start {
     padding-left: $sideGutterWidth / 4;
   }
+  .toolbar__end {
+    padding-right: $sideGutterWidth / 6;
+  }
 
   &__documents {
     display: flex;
