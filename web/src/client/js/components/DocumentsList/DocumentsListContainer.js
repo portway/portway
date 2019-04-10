@@ -1,30 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import useDataService from 'Hooks/useDataService'
-import currentResource from 'Libs/currentResource'
 import dataMapper from 'Libs/dataMapper'
 
+import { documentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
 
-const DocumentsListContainer = ({ location, match }) => {
-  const { data: project } = useDataService(currentResource('project', location.pathname), [
-    location.pathname
-  ])
-
+const DocumentsListContainer = ({ documentCreate, ui, match }) => {
   const { data: documents } = useDataService(dataMapper.documents.list(match.params.projectId), [
     match.params.projectId
   ])
 
-  if (!project) return null
+  function createDocumentHandler(value) {
+    documentCreate(value)
+  }
 
-  return <DocumentsListComponent projectName={project.name} documents={documents} />
+  return (
+    <DocumentsListComponent
+      createCallback={createDocumentHandler}
+      creating={ui.documents.creating}
+      documents={documents} />
+  )
 }
 
 DocumentsListContainer.propTypes = {
-  location: PropTypes.object.isRequired,
+  documentCreate: PropTypes.func.isRequired,
+  ui: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 }
 
-export default withRouter(DocumentsListContainer)
+const mapStateToProps = (state) => {
+  return {
+    ui: state.ui
+  }
+}
+
+const mapDispatchToProps = { documentCreate }
+
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DocumentsListContainer)
+)

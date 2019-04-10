@@ -71,4 +71,18 @@
       }
     }
   }
+
+  // When we're creating a new document, override the active styling
+  // that may exist if we were looking at a document when clicking New
+  &--creating {
+    .documents-list__button {
+      &.active {
+        background-color: transparent;
+        .documents-list__name {
+          color: $black-ter
+        }
+      }
+    }
+  }
+
 }

@@ -5,11 +5,13 @@ import thunk from 'redux-thunk'
 import { documents } from './documents'
 import { projects } from './projects'
 import { users } from './users'
+import { ui } from './ui'
 
 const rootReducer = combineReducers({
   documents,
   projects,
-  users
+  users,
+  ui
 })
 
 const middlewares = [thunk]

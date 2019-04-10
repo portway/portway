@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import { AddIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
@@ -7,29 +8,24 @@ import DocumentsListItem from './DocumentsListItem'
 import { RemoveIcon } from 'Components/Icons'
 import './DocumentsList.scss'
 
-const DocumentsListComponent = ({ projectName, documents }) => {
-  // New item visible or not
-  const [isAddingDocument, setIsAddingDocument] = useState(false)
-
+const DocumentsListComponent = ({ creating, createCallback, documents }) => {
   // Set up toolbar
   const toolbarAction = {
-    callback: () => {
-      setIsAddingDocument(true)
-    },
+    callback: () => { createCallback(true) },
     icon: <AddIcon width="16" height="16" />,
     label: `New Document`,
     title: 'Create a new document in this project'
   }
 
   function renderNewDocument() {
-    if (isAddingDocument) {
+    if (creating) {
       return (
         <li className="documents-list__item documents-list__item--new">
           <div className="documents-list__button">
             <span className="documents-list__name">New document</span>
             <button
               className="btn btn--blank btn--with-circular-icon"
-              onClick={() => { setIsAddingDocument(false) }}>
+              onClick={() => { createCallback(false) }}>
               <RemoveIcon width="18" height="18" />
             </button>
           </div>
@@ -44,8 +40,13 @@ const DocumentsListComponent = ({ projectName, documents }) => {
     })
   }
 
+  const classes = cx({
+    'documents-list': true,
+    'documents-list--creating': creating
+  })
+
   return (
-    <div className="documents-list">
+    <div className={classes}>
       <ToolbarComponent action={toolbarAction} filter sort />
       <nav>
         <ol className="documents-list__list">
@@ -58,7 +59,8 @@ const DocumentsListComponent = ({ projectName, documents }) => {
 }
 
 DocumentsListComponent.propTypes = {
-  projectName: PropTypes.string.isRequired,
+  creating: PropTypes.bool.isRequired,
+  createCallback: PropTypes.func.isRequired,
   documents: PropTypes.object.isRequired
 }
 
