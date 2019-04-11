@@ -10,7 +10,6 @@ $menuBorderRadius: 8px;
   overflow: hidden;
   padding: 0;
   position: absolute;
-  will-change: visibility, transform, opacity;
   z-index: 10;
   // remove any list padding / margin and style
   > ol,
