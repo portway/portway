@@ -35,7 +35,7 @@ export const updateDocument = (projectId, documentId, body) => {
   }
 }
 
-export const deleteDocument = (projectId, documentId) => {
+export const deleteDocument = (projectId, documentId, history) => {
   return async (dispatch) => {
     dispatch(Documents.delete(projectId, documentId))
     const data = await remove(`projects/${projectId}/documents/${documentId}`, {
@@ -43,5 +43,6 @@ export const deleteDocument = (projectId, documentId) => {
       id: documentId
     })
     dispatch(Documents.deleted(projectId, documentId, data))
+    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}` })
   }
 }

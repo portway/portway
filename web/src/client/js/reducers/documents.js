@@ -114,24 +114,18 @@ export const documents = (state = initialState, action) => {
     }
     case ActionTypes.DOCUMENT_REMOVED: {
       const { documentId, projectId } = action
-      // Set loading to false
       const byId = { ...state.loading.byId, [documentId]: false }
-      const listLoading = { ...state.loading.byProject, [projectId]: false }
-      // Remove from list
+      const byProject = { ...state.loading.byProject, [projectId]: false }
       // create new object with [documentId] item left out - assigned to throwaway __ const
       // eslint-disable-next-line no-unused-vars
       const { [documentId]: ___, ...restDocumentList } = state.projectDocumentsById[projectId]
-      const list = { ...state.projectDocumentsById, [projectId]: restDocumentList }
-      // Remove from documentsById
-      // eslint-disable-next-line no-unused-vars
-      const { [documentId]: __, documentsById } = state.documentsById
+      const projectDocumentsById = { ...state.projectDocumentsById, [projectId]: restDocumentList }
       return {
         ...state,
-        list,
-        documentsById,
+        projectDocumentsById,
         loading: {
           ...state.loading,
-          list: listLoading,
+          byProject,
           byId
         }
       }

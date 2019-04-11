@@ -41,7 +41,8 @@ export default {
           return state.documents.loading.byId[documentId]
         },
         getDataFromState: (state) => {
-          return state.documents.projectDocumentsById[projectId][documentId]
+          return state.documents.projectDocumentsById[projectId] &&
+            state.documents.projectDocumentsById[projectId][documentId]
         }
       }
     }

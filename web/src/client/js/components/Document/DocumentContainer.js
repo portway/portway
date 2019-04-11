@@ -9,7 +9,7 @@ import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
 
-const DocumentContainer = ({ deleteDocument, location, ui, updateDocument }) => {
+const DocumentContainer = ({ deleteDocument, history, location, ui, updateDocument }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -33,7 +33,6 @@ const DocumentContainer = ({ deleteDocument, location, ui, updateDocument }) => 
    * Otherwise we render the document, and update its values onChange
    */
   function nameChangeHandler(e) {
-    console.log(document)
     if (e.target.textContent !== document.name) {
       updateDocument(document.projectId, document.id, {
         name: e.target.textContent,
@@ -42,7 +41,7 @@ const DocumentContainer = ({ deleteDocument, location, ui, updateDocument }) => 
     }
   }
   function removeDocumentHandler() {
-    deleteDocument(document.projectId, document.id)
+    deleteDocument(document.projectId, document.id, history)
   }
   return <DocumentComponent
     nameChangeHandler={nameChangeHandler}
@@ -52,6 +51,7 @@ const DocumentContainer = ({ deleteDocument, location, ui, updateDocument }) => 
 
 DocumentContainer.propTypes = {
   deleteDocument: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired
