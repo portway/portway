@@ -22,7 +22,7 @@ const ToolbarComponent = ({ action, filter, sort }) => {
           onClick={action.callback}
           title={action.title}>
           {action.icon}
-          {action.label}
+          {action.label && <span className="label">{action.label}</span>}
         </button>
       </div>
       <div className="toolbar__end">

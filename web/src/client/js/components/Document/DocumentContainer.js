@@ -3,14 +3,13 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { updateDocument } from 'Actions/document'
+import { updateDocument, deleteDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
-import { debounce } from 'Shared/utilities'
 import DocumentComponent from './DocumentComponent'
 
-const DocumentContainer = ({ location, ui, updateDocument }) => {
+const DocumentContainer = ({ deleteDocument, location, ui, updateDocument }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -31,26 +30,28 @@ const DocumentContainer = ({ location, ui, updateDocument }) => {
   }
 
   /**
-   * Otherwise we rendre the document, and update its values onChange
+   * Otherwise we render the document, and update its values onChange
    */
-  const nameChangeAction = debounce(1000, (e) => {
-    if (e.target.value !== document.name) {
-      updateDocument(document.id, document.projectId, {
-        name: e.target.value,
+  function nameChangeHandler(e) {
+    console.log(document)
+    if (e.target.textContent !== document.name) {
+      updateDocument(document.projectId, document.id, {
+        name: e.target.textContent,
         projectId: document.projectId
       })
     }
-  })
-  function nameChangeHandler(e) {
-    e.persist()
-    nameChangeAction(e)
+  }
+  function removeDocumentHandler() {
+    deleteDocument(document.projectId, document.id)
   }
   return <DocumentComponent
     nameChangeHandler={nameChangeHandler}
+    removeDocumentHandler={removeDocumentHandler}
     document={document} />
 }
 
 DocumentContainer.propTypes = {
+  deleteDocument: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired
@@ -63,6 +64,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
+  deleteDocument,
   updateDocument
 }
 

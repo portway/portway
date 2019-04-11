@@ -55,7 +55,7 @@ $menuBorderRadius: 8px;
   cursor: pointer;
   display: block;
   text-decoration: none;
-  min-width: 100px;
+  min-width: 210px;
   padding: 8px 14px;
   width: 100%;
   &:hover {
@@ -91,6 +91,12 @@ $menuBorderRadius: 8px;
   a, button {
     @extend .menu__item;
     text-align: left;
+    &.btn--warning {
+      color: $warning;
+    }
+    &.btn--danger {
+      color: $danger;
+    }
   }
 }
 

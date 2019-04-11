@@ -3,6 +3,12 @@
 
 .document {
 
+  header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
   &__title {
     border: none;
     color: $primary;
@@ -11,7 +17,6 @@
     font-weight: 700;
     line-height: 1em;
     outline: none;
-    padding-bottom: $sideGutterWidth / 2;
     resize: none;
     width: 100%;
     -webkit-appearance: none;

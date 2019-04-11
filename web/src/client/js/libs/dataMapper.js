@@ -27,10 +27,10 @@ export default {
       return {
         fetchAction: fetchDocuments(projectId),
         getLoadingStatusFromState: (state) => {
-          return state.documents.loading.list[projectId]
+          return state.documents.loading.byProject[projectId]
         },
         getDataFromState: (state) => {
-          return state.documents.list[projectId]
+          return state.documents.projectDocumentsById[projectId]
         }
       }
     },
@@ -41,7 +41,7 @@ export default {
           return state.documents.loading.byId[documentId]
         },
         getDataFromState: (state) => {
-          return state.documents.documentsById[documentId]
+          return state.documents.projectDocumentsById[projectId][documentId]
         }
       }
     }

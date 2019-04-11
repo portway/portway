@@ -1,26 +1,54 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { AddIcon } from 'Components/Icons'
+import { debounce } from 'Shared/utilities'
+import { AddIcon, MoreIcon } from 'Components/Icons'
+import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, nameChangeHandler }) => {
+const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
+  const dropdownButton = {
+    className: 'btn btn--blank btn--with-circular-icon',
+    icon: <MoreIcon width="18" height="18" />
+  }
+  const changeHandlerAction = debounce(500, (e) => {
+    nameChangeHandler(e)
+  })
   return (
     <div className="document" key={docKey}>
       <header>
-        <textarea
+        <div
+          contentEditable
           className="document__title"
+          onInput={(e) => {
+            e.persist()
+            changeHandlerAction(e)
+          }}
           onKeyDown={(e) => {
             if (e.key.toLowerCase() === 'enter') {
               nameChangeHandler(e)
               titleRef.current.blur()
             }
           }}
-          defaultValue={document.name}
-          ref={titleRef} />
+          ref={titleRef}
+          role="textbox"
+          suppressContentEditableWarning
+          tabIndex={0}>
+          {document.name}
+        </div>
+        <DropdownComponent
+          align="right"
+          button={dropdownButton}
+          className="document__document-dropdown">
+          <li>
+            <button className="menu__item btn--danger" onClick={removeDocumentHandler}>
+              Delete document...
+            </button>
+          </li>
+        </DropdownComponent>
       </header>
       {document &&
       <button className="field-button" aria-label="Add a field" title="Add a field">
@@ -37,7 +65,8 @@ const DocumentComponent = ({ document, nameChangeHandler }) => {
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
-  nameChangeHandler: PropTypes.func.isRequired
+  nameChangeHandler: PropTypes.func.isRequired,
+  removeDocumentHandler: PropTypes.func.isRequired
 }
 
 export default DocumentComponent

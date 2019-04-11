@@ -73,7 +73,7 @@ const NavigatorContainer = ({ history, location }) => {
         className="btn btn--blank btn--with-circular-icon"
         onClick={toggleCallback}>
         <CaretIcon width="12" height="12" />
-        {project ? project.name : 'Projects'}
+        <span className="label">{project ? project.name : 'Projects'}</span>
       </button>
       <div className="menu menu--dark" hidden={!expanded}>
         <Select
