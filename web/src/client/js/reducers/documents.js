@@ -65,6 +65,32 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
+      const byId = { ...state.loading.byId, [action.data.id]: false }
+      const currentDocumentId = action.data.id
+      const documentsById = {
+        ...state.documentsById,
+        [action.data.id]: action.data
+      }
+      // Adjust the documents list
+      const project = {
+        ...state.list[action.data.projectId],
+        [action.data.id]: action.data
+      }
+      return {
+        ...state,
+        currentDocumentId,
+        documentsById,
+        list: {
+          ...state.list,
+          [action.data.projectId]: project
+        },
+        loading: {
+          ...state.loading,
+          byId
+        }
+      }
+    }
     case ActionTypes.RECEIVE_UPDATED_DOCUMENT:
       const listDoc = state.list[action.data.projectId][action.data.id]
       const updatedDoc = {
