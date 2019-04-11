@@ -36,18 +36,7 @@ describe('BusinessDocument', () => {
     describe('when the parent project does not exist', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessDocument.createForProject(factoryProject.id, { ...documentBody, projectId: 0 })
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in projectId does not match the body projectId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessDocument.createForProject(factoryProject.id, {
-            ...documentBody,
-            projectId: 0
-          })
+          BusinessDocument.createForProject(0, { ...documentBody })
         ).rejects.toThrow()
       })
     })
@@ -110,17 +99,6 @@ describe('BusinessDocument', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, 0, updateBody)
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in projectId does not match the body projectId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessDocument.updateByIdForProject(factoryDocument.id, projectId, orgId, {
-            ...updateBody,
-            projectId: 0
-          })
         ).rejects.toThrow()
       })
     })
@@ -219,6 +197,7 @@ describe('BusinessDocument', () => {
     let factoryDocument
 
     beforeAll(async () => {
+      await clearDb()
       const factoryDocuments = await DocumentFactory.createMany(1, { projectId: factoryProject.id })
       factoryDocument = factoryDocuments[0]
     })
@@ -253,6 +232,30 @@ describe('BusinessDocument', () => {
           constants.ORG_ID_2
         )
       ).rejects.toThrow()
+    })
+  })
+
+  describe('#findParentProjectByDocumentId', () => {
+    let factoryDocument
+    let project
+
+    beforeAll(async () => {
+      await clearDb()
+      const factoryProjects = await ProjectFactory.createMany(1)
+      factoryProject = factoryProjects[0]
+      const factoryDocuments = await DocumentFactory.createMany(1, {
+        projectId: factoryProject.id
+      })
+      factoryDocument = factoryDocuments[0]
+
+      project = await BusinessDocument.findParentProjectByDocumentId(
+        factoryDocument.id,
+        constants.ORG_ID
+      )
+    })
+
+    it('should return the parent project of passed in document', () => {
+      expect(project.id).toEqual(factoryProject.id)
     })
   })
 })

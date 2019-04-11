@@ -1,4 +1,5 @@
 import projectAccess from './projects'
+import documentAccess from './documents'
 import userAccess from './users'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
 /*
@@ -18,6 +19,7 @@ import RESOURCE_TYPES from '../../constants/resourceTypes'
 */
 
 const resourceToHandler = {
+  [RESOURCE_TYPES.DOCUMENT]: documentAccess,
   [RESOURCE_TYPES.PROJECT]: projectAccess,
   [RESOURCE_TYPES.USER]: userAccess
 }

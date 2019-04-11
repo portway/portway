@@ -17,22 +17,15 @@ const PUBLIC_FIELDS = [
   'order'
 ]
 
-async function createForProjectDocument(projectId, docId, body) {
+async function createForDocument(docId, body) {
   const db = getDb()
   const { orgId } = body
-
-  if (projectId !== body.projectId) {
-    throw ono(
-      { code: 400 },
-      `Cannot create field, project id param does not match projectId in body`
-    )
-  }
 
   if (docId !== body.docId) {
     throw ono({ code: 400 }, `Cannot create field, document id param does not match docId in body`)
   }
 
-  const document = await db.model('Document').findOne({ where: { id: docId, projectId, orgId } })
+  const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
   if (!document) {
     throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
@@ -73,7 +66,7 @@ async function findByIdForDocument(id, docId, orgId) {
   return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
 }
 
-async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
+async function updateByIdForDocument(id, docId, orgId, body) {
   const db = getDb()
 
   if (docId !== body.docId) {
@@ -85,7 +78,7 @@ async function updateByIdForProjectDocument(id, projectId, docId, orgId, body) {
 
   const document = await db
     .model('Document')
-    .findOne({ where: { id: docId, projectId, orgId }, raw: true })
+    .findOne({ where: { id: docId, orgId }, raw: true })
 
   if (!document) {
     throw ono({ code: 404 }, `Cannot update field, document not found with id: ${docId}`)
@@ -118,8 +111,8 @@ function getInclude(db) {
 }
 
 export default {
-  createForProjectDocument,
-  updateByIdForProjectDocument,
+  createForDocument,
+  updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
   deleteByIdForDocument
