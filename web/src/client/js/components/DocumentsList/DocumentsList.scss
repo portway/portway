@@ -12,6 +12,31 @@
     transition: opacity 0.2s ease-in-out;
     // New item is a fake list item
     &--new {
+      .documents-list__button {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        .btn--with-circular-icon {
+          padding: 0;
+          .icon {
+            background-color: $white-ter;
+            height: 30px;
+            margin-right: 0;
+            width: 30px;
+          }
+        }
+      }
+      .documents-list__name {
+        background-color: transparent;
+        flex: 1;
+        line-height: 1em;
+        outline: none;
+        padding-bottom: 0;
+        padding-top: 8px;
+        resize: none;
+      }
       &:focus {
         background-color: $white-bis;
       }
@@ -27,22 +52,6 @@
         background-color: $white-bis;
       }
     }
-    .documents-list__item--new & {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      height: 85.5px;
-      justify-content: space-between;
-      .btn--with-circular-icon {
-        padding: 0;
-        .icon {
-          background-color: $white-ter;
-          height: 30px;
-          margin-right: 0;
-          width: 30px;
-        }
-      }
-    }
   }
   &__name {
     border: 0;
@@ -50,14 +59,6 @@
     padding-bottom: $sideGutterWidth / 4;
     .active & {
       color: $black-bis;
-    }
-    // the textarea we're typing in
-    .documents-list__item--new & {
-      flex: 1;
-      line-height: 1em;
-      outline: none;
-      padding: 24px 0;
-      resize: none;
     }
   }
   &__date {
