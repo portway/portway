@@ -31,6 +31,8 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
       status: false,
       toolbar: false
     }))
+  // We're disabling the dependency warning here because anything other than []
+  // causes problems. We only want setEditor to run once
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
@@ -41,6 +43,8 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
       })
       editor.codemirror.on('change', debouncedChangeHandler)
     }
+  // We're disavling the dependency here because adding field.id or onChange here
+  // will cause a bunch of API hits
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor])
   return (
