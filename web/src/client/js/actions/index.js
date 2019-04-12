@@ -32,7 +32,9 @@ export const ActionTypes = {
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
   RECEIVE_USER: 'RECEIVE_USER',
-  LOGOUT_USER: 'LOGOUT_USER'
+  LOGOUT_USER: 'LOGOUT_USER',
+  // UI
+  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE'
 }
 
 export const Projects = {
@@ -49,7 +51,7 @@ export const Projects = {
 }
 
 export const Documents = {
-  create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId'),
+  create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId', 'data'),
   update: makeActionCreator(ActionTypes.UPDATE_DOCUMENT, 'projectId', 'documentId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
@@ -73,4 +75,8 @@ export const Users = {
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
+}
+
+export const UI = {
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
 }

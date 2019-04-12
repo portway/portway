@@ -7,17 +7,13 @@ async function createForProject(projectId, body) {
   const db = getDb()
   const { orgId } = body
 
-  if (projectId !== body.projectId) {
-    throw ono({ code: 400 }, `Cannot create, project id param does not match projectId in body`)
-  }
-
   const project = await db.model('Project').findOne({ where: { id: projectId, orgId } })
 
   if (!project) {
     throw ono({ code: 404 }, `Cannot create document, project not found with id: ${projectId}`)
   }
 
-  const createdDocument = await db.model(MODEL_NAME).create(body)
+  const createdDocument = await db.model(MODEL_NAME).create({ ...body, projectId })
   return createdDocument.get({ plain: true })
 }
 
@@ -33,10 +29,6 @@ async function findByIdForProject(id, projectId, orgId) {
 
 async function updateByIdForProject(id, projectId, orgId, body) {
   const db = getDb()
-
-  if (projectId !== body.projectId) {
-    throw ono({ code: 400 }, `Cannot update, project id param does not match projectId in body`)
-  }
 
   const document = await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId } })
 
@@ -55,10 +47,21 @@ async function deleteByIdForProject(id, projectId, orgId) {
   await document.destroy()
 }
 
+async function findParentProjectByDocumentId(id, orgId) {
+  const db = getDb()
+
+  const document = await db
+    .model(MODEL_NAME)
+    .findOne({ where: { id, orgId }, include: [{ model: db.model('Project') }] })
+
+  return document.Project && document.Project.get({ plain: true })
+}
+
 export default {
   createForProject,
   updateByIdForProject,
   findByIdForProject,
   findAllForProject,
-  deleteByIdForProject
+  deleteByIdForProject,
+  findParentProjectByDocumentId
 }

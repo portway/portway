@@ -15,7 +15,7 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 
 const bodySchema = Joi.compile({
   name: Joi.string().required(),
-  projectId: Joi.number().required()
+  projectId: Joi.number()
 })
 
 const paramSchema = Joi.compile({
@@ -49,8 +49,8 @@ const getProjectDocuments = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const projects = await BusinessDocument.findAllForProject(projectId, orgId)
-    res.json(projects)
+    const documents = await BusinessDocument.findAllForProject(projectId, orgId)
+    res.json({ data: documents })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot fetch documents' })
@@ -62,9 +62,9 @@ const getProjectDocument = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessDocument.findByIdForProject(id, projectId, orgId)
-    if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
-    res.json(project)
+    const document = await BusinessDocument.findByIdForProject(id, projectId, orgId)
+    if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
+    res.json({ data: document })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
@@ -79,8 +79,8 @@ const addProjectDocument = async function(req, res) {
   body.orgId = orgId
 
   try {
-    const project = await BusinessDocument.createForProject(projectId, body)
-    res.status(201).json(project)
+    const document = await BusinessDocument.createForProject(projectId, body)
+    res.status(201).json({ data: document })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot create document' })
@@ -93,8 +93,8 @@ const replaceProjectDocument = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessDocument.updateByIdForProject(id, projectId, orgId, body)
-    res.json(project)
+    const document = await BusinessDocument.updateByIdForProject(id, projectId, orgId, body)
+    res.json({ data: document })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error updating document with id ${id}` })

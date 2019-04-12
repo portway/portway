@@ -18,7 +18,7 @@ const getOrganization = async function(req, res) {
   try {
     const org = await BusinessOrganization.findById(id)
     if (!org) throw ono({ code: 404 }, `No organization with id ${id}`)
-    res.json(org)
+    res.json({ data: org })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching organization with id ${id}` })
@@ -30,7 +30,7 @@ const addOrganization = async function(req, res) {
 
   try {
     const org = await BusinessOrganization.create({ name })
-    res.status(201).json(org)
+    res.status(201).json({ data: org })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot create organization' })

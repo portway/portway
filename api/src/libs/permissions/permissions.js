@@ -1,4 +1,5 @@
 import projectAccess from './projects'
+import documentAccess from './documents'
 import userAccess from './users'
 import projectUserAccess from './projectUsers'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
@@ -30,6 +31,7 @@ function getOrganizationRole(requestorInfo) {
 }
 
 const resourceToHandler = {
+  [RESOURCE_TYPES.DOCUMENT]: documentAccess,
   [RESOURCE_TYPES.PROJECT]: projectAccess,
   [RESOURCE_TYPES.USER]: userAccess,
   [RESOURCE_TYPES.PROJECT_USER]: projectUserAccess

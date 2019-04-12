@@ -26,7 +26,7 @@ const projectsController = function(router) {
 const getProjects = async function(req, res) {
   try {
     const projects = await BusinessProject.findAll(req.requestorInfo.orgId)
-    res.json(projects)
+    res.json({ data: projects })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot fetch projects' })
@@ -39,7 +39,7 @@ const getProject = async function(req, res) {
   try {
     const project = await BusinessProject.findById(id, req.requestorInfo.orgId)
     if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
-    res.json(project)
+    res.json({ data: project })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching project with id ${id}` })
@@ -52,7 +52,7 @@ const addProject = async function(req, res) {
 
   try {
     const project = await BusinessProject.create(body)
-    res.status(201).json(project)
+    res.status(201).json({ data: project })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot create project' })
@@ -67,7 +67,7 @@ const replaceProject = async function(req, res) {
 
   try {
     const project = await BusinessProject.updateById(id, body)
-    res.json(project)
+    res.json({ data: project })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error updating project with id ${id}` })

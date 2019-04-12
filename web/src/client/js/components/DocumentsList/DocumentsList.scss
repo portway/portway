@@ -9,9 +9,9 @@
   }
   &__item {
     border-top: thin solid $white-ter;
+    transition: opacity 0.2s ease-in-out;
     // New item is a fake list item
     &--new {
-      // background-color: $white-bis;
       &:focus {
         background-color: $white-bis;
       }
@@ -36,6 +36,7 @@
       .btn--with-circular-icon {
         padding: 0;
         .icon {
+          background-color: $white-ter;
           height: 30px;
           margin-right: 0;
           width: 30px;
@@ -44,15 +45,19 @@
     }
   }
   &__name {
+    border: 0;
     color: $black-ter;
     padding-bottom: $sideGutterWidth / 4;
     .active & {
       color: $black-bis;
     }
+    // the textarea we're typing in
     .documents-list__item--new & {
-      color: $gray;
-      font-style: italic;
-      padding: 0;
+      flex: 1;
+      line-height: 1em;
+      outline: none;
+      padding: 24px 0;
+      resize: none;
     }
   }
   &__date {
@@ -71,4 +76,25 @@
       }
     }
   }
+
+  // When we're creating a new document, override the active styling
+  // that may exist if we were looking at a document when clicking New
+  &--creating {
+    .documents-list__item {
+      opacity: 0.2;
+      &--new {
+        background-color: $white-bis;
+        opacity: 1;
+      }
+    }
+    .documents-list__button {
+      &.active {
+        background-color: transparent;
+        .documents-list__name {
+          color: $black-ter;
+        }
+      }
+    }
+  }
+
 }
