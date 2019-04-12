@@ -78,7 +78,7 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
-    case ActionTypes.INITIATE_UPDATE_DOCUMENT: {
+    case ActionTypes.INITIATE_DOCUMENT_UPDATE: {
       const byId = { ...state.loading.byId, [action.documentId]: true }
       const byProject = { ...state.loading.byProject, [action.projectId]: true }
       return {
@@ -111,7 +111,7 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
-    case ActionTypes.DOCUMENT_REMOVED: {
+    case ActionTypes.REMOVE_DOCUMENT: {
       const { documentId, projectId } = action
       const byId = { ...state.loading.byId, [documentId]: false }
       const byProject = { ...state.loading.byProject, [projectId]: false }
