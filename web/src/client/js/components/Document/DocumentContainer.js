@@ -33,9 +33,9 @@ const DocumentContainer = ({ deleteDocument, history, location, ui, updateDocume
    * Otherwise we render the document, and update its values onChange
    */
   function nameChangeHandler(e) {
-    if (e.target.textContent !== document.name) {
+    if (e.target.value !== document.name) {
       updateDocument(document.projectId, document.id, {
-        name: e.target.textContent,
+        name: e.target.value,
         projectId: document.projectId
       })
     }

@@ -20,10 +20,10 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
   return (
     <div className="document" key={docKey}>
       <header>
-        <div
-          contentEditable
+        <textarea
           className="document__title"
-          onInput={(e) => {
+          defaultValue={document.name}
+          onChange={(e) => {
             e.persist()
             changeHandlerAction(e)
           }}
@@ -33,12 +33,7 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
               titleRef.current.blur()
             }
           }}
-          ref={titleRef}
-          role="textbox"
-          suppressContentEditableWarning
-          tabIndex={0}>
-          {document.name}
-        </div>
+          ref={titleRef} />
         <DropdownComponent
           align="right"
           button={dropdownButton}
