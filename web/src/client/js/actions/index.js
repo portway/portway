@@ -16,12 +16,12 @@ export const ActionTypes = {
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
-  INITIATE_CREATE_DOCUMENT: 'INITIATE_CREATE_DOCUMENT',
+  INITIATE_DOCUMENT_CREATE: 'INITIATE_DOCUMENT_CREATE',
   RECEIVE_CREATED_DOCUMENT: 'RECEIVE_CREATED_DOCUMENT',
-  INITIATE_UPDATE_DOCUMENT: 'INITIATE_UPDATE_DOCUMENT',
+  INITIATE_DOCUMENT_UPDATE: 'INITIATE_UPDATE_DOCUMENT',
   RECEIVE_UPDATED_DOCUMENT: 'RECEIVE_UPDATED_DOCUMENT',
   INITIATE_DOCUMENT_REMOVE: 'INITIATE_DOCUMENT_REMOVE',
-  DOCUMENT_REMOVED: 'DOCUMENT_REMOVED',
+  REMOVE_DOCUMENT: 'REMOVE_DOCUMENT',
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   // Fields
@@ -54,12 +54,12 @@ export const Projects = {
 }
 
 export const Documents = {
-  create: makeActionCreator(ActionTypes.INITIATE_CREATE_DOCUMENT, 'projectId', 'data'),
+  create: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_CREATE, 'projectId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
-  update: makeActionCreator(ActionTypes.INITIATE_UPDATE_DOCUMENT, 'projectId', 'documentId', 'data'),
+  update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
-  deleted: makeActionCreator(ActionTypes.DOCUMENT_REMOVED, 'projectId', 'documentId'),
+  deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'projectId', 'documentId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
