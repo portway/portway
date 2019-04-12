@@ -16,16 +16,11 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
     match.params.projectId
   ])
 
-  const createDocumentAction = (e) => {
+  function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
-      name: e.target.value,
+      name: value,
       projectId: match.params.projectId
     })
-  }
-
-  function createChangeHandler(e) {
-    e.persist()
-    createDocumentAction(e)
   }
 
   function createDocumentHandler(value) {
@@ -46,7 +41,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
   return (
     <DocumentsListComponent
       createCallback={createDocumentHandler}
-      createChangeHandler={createChangeHandler}
+      createChangeHandler={createDocumentAction}
       creating={ui.documents.creating}
       documents={sortedDocuments} />
   )

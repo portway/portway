@@ -9,6 +9,7 @@ import DocumentsListItem from './DocumentsListItem'
 import './DocumentsList.scss'
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
+  const listItemRef = useRef()
   const nameRef = useRef()
 
   // Select the contents of the contentEditable div (new document name)
@@ -27,21 +28,36 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
     title: 'Create a new document in this project'
   }
 
-  useClickOutside(nameRef, () => { if (creating) { createCallback(false) } }, { preventEscapeFunctionality: true })
+  function createDocument() {
+    if (nameRef.current.value !== 'New Document') {
+      createChangeHandler(nameRef.current.value)
+    } else {
+      createCallback(false)
+    }
+  }
+  useClickOutside(
+    listItemRef,
+    () => { if (creating) { createDocument() } },
+    { preventEscapeFunctionality: true }
+  )
 
   function renderNewDocument() {
     if (creating) {
       return (
-        <li className="documents-list__item documents-list__item--new">
+        <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
           <div className="documents-list__button">
             <textarea
               ref={nameRef}
               className="documents-list__name"
               defaultValue="New Document"
               onKeyDown={(e) => {
+                if (e.keyCode === 27) {
+                  e.preventDefault()
+                  createCallback(false)
+                }
                 if (e.key.toLowerCase() === 'enter') {
                   e.preventDefault()
-                  createChangeHandler(e)
+                  createChangeHandler(e.target.value)
                 }
               }} />
             <button

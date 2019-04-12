@@ -52,7 +52,7 @@ const currentResource = (resourceName, path) => {
         exact: true,
         strict: false
       })
-      if (matchResults.params.documentId === 'new') {
+      if (matchResults && matchResults.params.documentId === 'new') {
         returnValue = returnNull()
         break
       }
