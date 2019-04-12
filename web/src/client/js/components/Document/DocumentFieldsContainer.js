@@ -1,18 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import Constants from 'Shared/constants'
+import { updateField } from 'Actions/field'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
-const DocumentFieldsContainer = ({ fields }) => {
-  function fieldChangeHandler(e) {
-    console.log({ e })
-  }
+const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
   function fieldDestroyHandler(e) {
-    console.log('Destroy!')
-    console.log({ e })
+    // console.log('Destroy!')
+    // console.log({ e })
   }
-  const fieldMap = fields.map((field) => {
+  function fieldChangeHandler(fieldId, value) {
+    // left this console in to make sure we're not hammering the API because of useEffect
+    console.info(`Field: ${fieldId} trigger changeHandler`)
+    updateField(documentId, fieldId, {
+      docId: documentId,
+      id: fieldId,
+      value: value
+    })
+  }
+  const fieldMap = Object.keys(fields).map((fieldId) => {
+    const field = fields[fieldId]
     switch (field.type) {
       case Constants.FIELD_TYPES.STRING: {
         return <span key={field.id}>String!</span>
@@ -33,11 +42,20 @@ const DocumentFieldsContainer = ({ fields }) => {
 }
 
 DocumentFieldsContainer.propTypes = {
-  fields: PropTypes.array.isRequired
+  documentId: PropTypes.number.isRequired,
+  fields: PropTypes.object.isRequired,
+  updateField: PropTypes.func.isRequired
 }
 
 DocumentFieldsContainer.defaultProps = {
-  fields: []
+  documentId: -1,
+  fields: {}
 }
 
-export default DocumentFieldsContainer
+const mapStateToProps = (state) => {
+  return {}
+}
+
+const mapDispatchToProps = { updateField }
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

@@ -74,7 +74,7 @@ export const Fields = {
   requestList: makeActionCreator(ActionTypes.REQUEST_FIELDS, 'documentId'),
   receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
-  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'id', 'docId')

@@ -17,15 +17,15 @@ export const createField = (documentId, body) => {
   }
 }
 
-export const updateField = (id, documentId, body) => {
+export const updateField = (documentId, fieldId, body) => {
   return async (dispatch) => {
-    dispatch(Fields.initiateUpdate())
-    const { data } = await update(`documents/${documentId}/fields/${id}`, body)
+    dispatch(Fields.initiateUpdate(fieldId))
+    const { data } = await update(`documents/${documentId}/fields/${fieldId}`, body)
     dispatch(Fields.receiveOneUpdated(data))
   }
 }
 
-export const removeField = (id, documentId) => {
+export const removeField = (documentId, id) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())
     await remove(`documents/${documentId}/fields`)

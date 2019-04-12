@@ -1,4 +1,7 @@
 .field--text {
+  align-items: center;
+  display: flex;
+
   // Override the SimpleMDE styling
   .CodeMirror {
     border: none;

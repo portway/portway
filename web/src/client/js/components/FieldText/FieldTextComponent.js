@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SimpleMDE from 'simplemde'
 
+import { debounce } from 'Shared/utilities'
 import { RemoveIcon } from 'Components/Icons'
 import './SimpleMDE.scss'
 import './FieldText.scss'
 
 const FieldTextComponent = ({ field, onChange, onDestroy }) => {
   const textRef = useRef()
-  // eslint-disable-next-line no-unused-vars
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
   useEffect(() => {
@@ -16,8 +16,7 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
       autoDownloadFontAwesome: false,
       autofocus: true,
       autosave: {
-        enabled: true,
-        uniqueId: field.id
+        enabled: false
       },
       element: textRef.current,
       initialValue: field.value,
@@ -32,15 +31,18 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
       status: false,
       toolbar: false
     }))
-  }, [field.id, field.value])
-  // On Change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   useEffect(() => {
     if (editor) {
-      editor.codemirror.on('change', () => {
-        onChange(editor.value())
+      // On Change
+      const debouncedChangeHandler = debounce(1000, () => {
+        onChange(field.id, editor.value())
       })
+      editor.codemirror.on('change', debouncedChangeHandler)
     }
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor])
   return (
     <div className="field field--text">
       <textarea ref={textRef} />

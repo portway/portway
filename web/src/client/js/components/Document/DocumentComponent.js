@@ -54,7 +54,7 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
         </div>
       </button>
       }
-      <DocumentFieldsContainer fields={fields} />
+      <DocumentFieldsContainer documentId={document.id} fields={fields} />
     </div>
   )
 }
@@ -62,7 +62,7 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
-  fields: PropTypes.array.isRequired,
+  fields: PropTypes.object.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }
@@ -71,7 +71,7 @@ DocumentComponent.defaultProps = {
   document: {
     name: ''
   },
-  fields: []
+  fields: {}
 }
 
 export default DocumentComponent
