@@ -1,6 +1,6 @@
 import Constants from 'Shared/constants'
 import { Documents } from './index'
-import { add, fetch, update } from '../api'
+import { add, fetch, update, remove } from '../api'
 
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
@@ -27,10 +27,22 @@ export const createDocument = (projectId, history, body) => {
   }
 }
 
-export const updateDocument = (documentId, projectId, body) => {
+export const updateDocument = (projectId, documentId, body) => {
   return async (dispatch) => {
-    dispatch(Documents.update(documentId))
+    dispatch(Documents.update(projectId, documentId, body))
     const { data } = await update(`projects/${projectId}/documents/${documentId}`, body)
     dispatch(Documents.receiveOneUpdated(data))
+  }
+}
+
+export const deleteDocument = (projectId, documentId, history) => {
+  return async (dispatch) => {
+    dispatch(Documents.delete(projectId, documentId))
+    const data = await remove(`projects/${projectId}/documents/${documentId}`, {
+      projectId: projectId,
+      id: documentId
+    })
+    dispatch(Documents.deleted(projectId, documentId, data))
+    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}` })
   }
 }

@@ -30,7 +30,6 @@
           margin: 0;
           position: relative;
           transition: none;
-          will-change: unset;
           // Override default .menu stuff
           &:not([hidden]) {
             box-shadow: none;
