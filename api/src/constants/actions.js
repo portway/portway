@@ -1,9 +1,9 @@
 const ACTIONS = {
-  READ: 'read',
-  LIST: 'list',
-  UPDATE: 'write',
-  DELETE: 'write',
-  CREATE: 'create'
+  READ: 'READ',
+  LIST: 'LIST',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  CREATE: 'CREATE'
 }
 
 export default ACTIONS

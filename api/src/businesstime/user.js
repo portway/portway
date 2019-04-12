@@ -5,7 +5,8 @@ import { UniqueConstraintError } from 'sequelize'
 
 export const MODEL_NAME = 'User'
 
-export const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'firstName', 'lastName', 'email', 'orgId']
+export const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS,
+  'firstName', 'lastName', 'email', 'orgRoleId', 'orgId']
 
 async function create(body) {
   const db = getDb()

@@ -3,6 +3,7 @@ import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/organization')
@@ -42,7 +43,8 @@ describe('signUp coordinator', () => {
         lastName,
         email,
         orgId: mockOrgId,
-        resetKey: mockResetKey
+        resetKey: mockResetKey,
+        orgRoleId: ORGANIZATION_ROLE_IDS.OWNER
       })
     })
 

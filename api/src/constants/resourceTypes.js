@@ -1,7 +1,8 @@
 const RESOURCE_TYPES = {
-  USER: 'user',
-  PROJECT: 'project',
-  DOCUMENT: 'document'
+  USER: 'USER',
+  PROJECT: 'PROJECT',
+  DOCUMENT: 'DOCUMENT',
+  PROJECT_USER: 'PROJECT_USER'
 }
 
 export default RESOURCE_TYPES

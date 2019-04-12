@@ -2,6 +2,7 @@ import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 
 async function createUserAndOrganization(firstName, lastName, email) {
   const organizationName = `${firstName} ${lastName}'s Organization`
@@ -13,6 +14,7 @@ async function createUserAndOrganization(firstName, lastName, email) {
     lastName,
     email,
     orgId: organization.id,
+    orgRoleId: ORGANIZATION_ROLE_IDS.OWNER,
     resetKey
   })
 
