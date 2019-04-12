@@ -1,6 +1,7 @@
 import faker from 'faker'
 import { getDb } from '../../dbConnector'
 import { ORG_ID } from '../constants'
+import { ORGANIZATION_ROLE_IDS } from '../../../constants/roles'
 
 const getUserData = function(override = {}) {
   const defaultProps = {
@@ -8,7 +9,8 @@ const getUserData = function(override = {}) {
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     password: faker.internet.password(),
-    orgId: ORG_ID
+    orgId: ORG_ID,
+    orgRoleId: ORGANIZATION_ROLE_IDS.USER
   }
   return { ...defaultProps, ...override }
 }
