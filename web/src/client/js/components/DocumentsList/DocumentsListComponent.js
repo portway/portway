@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import useClickOutside from 'Hooks/useClickOutside'
 import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
@@ -30,6 +31,12 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
     shortcut: 'n',
     title: 'Create a new document in this project'
   }
+
+  useClickOutside(nameRef, () => {
+    if (creating) {
+      createCallback(false)
+    }
+  })
 
   function renderNewDocument() {
     if (creating) {
