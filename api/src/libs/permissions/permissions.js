@@ -75,8 +75,9 @@ PROJECT_RESOURCE_TYPES.forEach((type) => {
  * @return Boolean
  */
 export default async (requestorInfo, requestedAction) => {
+  const orgRoles = getOrganizationRole(requestorInfo)
   const hasOrgPermission = checkRolePermissions(
-    getOrganizationRole(requestorInfo),
+    orgRoles,
     requestedAction.resourceType,
     requestedAction.action
   )
@@ -89,7 +90,7 @@ export default async (requestorInfo, requestedAction) => {
   const resourceAccessHandler = resourceToHandler[requestedAction.resourceType]
 
   if (resourceAccessHandler) {
-    return await resourceAccessHandler(requestorInfo, requestedAction)
+    return await resourceAccessHandler(requestorInfo, requestedAction, orgRoles)
   }
 
   return false

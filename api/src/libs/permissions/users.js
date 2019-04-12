@@ -1,12 +1,13 @@
 import ACTIONS from '../../constants/actions'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
 
-const projectAccess = async (requestorInfo, requestedAction) => {
+const projectAccess = async (requestorInfo, requestedAction, orgRoles) => {
   switch (requestedAction.action) {
     case ACTIONS.READ:
       // allow any user to read any other org user
       return true
     case ACTIONS.UPDATE:
+      // TODO: Check if org admin, can update anyone but org owner
       // User can only write itself
       return requestorInfo.requestorType === RESOURCE_TYPES.USER &&
         requestedAction.data.id === requestorInfo.requestorId

@@ -37,7 +37,9 @@ export const ORGANIZATION_ROLES = {
     [resourceTypes.USER]: {
       [actions.LIST]: true,
       [actions.CREATE]: true,
-      [actions.READ]: true
+      [actions.READ]: true,
+      [actions.UPDATE]: true,
+      [actions.DELETE]: true
     }
   },
   [rIds.ADMIN]: {
@@ -49,9 +51,7 @@ export const ORGANIZATION_ROLES = {
     [resourceTypes.USER]: {
       [actions.LIST]: true,
       [actions.CREATE]: true,
-      [actions.READ]: true,
-      [actions.DELETE]: true,
-      [actions.UPDATE]: true
+      [actions.READ]: true
     },
     [resourceTypes.PROJECT_USER]: {
       [actions.UPDATE]: true,
