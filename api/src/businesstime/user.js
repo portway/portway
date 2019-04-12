@@ -65,6 +65,14 @@ async function updateById(id, body) {
   return updatedUser && updatedUser.get({ plain: true })
 }
 
+async function updateOrgRole(id, orgRoleId, orgId) {
+  const db = getDb()
+  const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
+  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
+  const updatedUser = await user.update({ orgRoleId })
+  return updatedUser && updatedUser.get({ plain: true })
+}
+
 export default {
   create,
   findByEmail,
@@ -72,5 +80,6 @@ export default {
   findAllSanitized,
   findSanitizedById,
   updateByEmail,
-  updateById
+  updateById,
+  updateOrgRole
 }
