@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { ActionTypes } from '../actions'
 
 const initialState = {

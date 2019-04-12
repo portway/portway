@@ -9,7 +9,6 @@ import { TimeIcon } from 'Components/Icons'
 const DocumentsListItem = ({ disable, document }) => {
   return (
     <li className="documents-list__item">
-      {/* eslint-disable-next-line max-len */}
       <NavLink to={`${Constants.PATH_PROJECT}/${document.projectId}${Constants.PATH_DOCUMENT}/${document.id}`}
         className="btn btn--blank documents-list__button"
         onClick={(e) => { if (disable) { e.preventDefault() } }}>

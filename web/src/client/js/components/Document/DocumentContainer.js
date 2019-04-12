@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
 
-const DocumentContainer = ({ deleteDocument, history, location, ui, updateDocument }) => {
+const DocumentContainer = ({
+  deleteDocument, history, location, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -41,7 +43,12 @@ const DocumentContainer = ({ deleteDocument, history, location, ui, updateDocume
     }
   }
   function removeDocumentHandler() {
-    deleteDocument(document.projectId, document.id, history)
+    const message = (
+      <span> Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
+    )
+    const confirmedLabel = `Yes, delete this document`
+    const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
+    uiConfirm({ message, confirmedAction, confirmedLabel })
   }
   return <DocumentComponent
     nameChangeHandler={nameChangeHandler}
@@ -54,7 +61,8 @@ DocumentContainer.propTypes = {
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
-  updateDocument: PropTypes.func.isRequired
+  updateDocument: PropTypes.func.isRequired,
+  uiConfirm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -65,7 +73,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   deleteDocument,
-  updateDocument
+  updateDocument,
+  uiConfirm,
+
 }
 
 export default withRouter(

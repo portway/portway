@@ -44,7 +44,8 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
           button={dropdownButton}
           className="document__document-dropdown">
           <li>
-            <button className="menu__item btn--danger" onClick={removeDocumentHandler}>
+            <button
+              className="menu__item btn btn--white btn--danger" onClick={removeDocumentHandler}>
               Delete document...
             </button>
           </li>

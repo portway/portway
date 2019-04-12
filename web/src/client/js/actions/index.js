@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { makeActionCreator } from '../utilities/redux'
 
 export const ActionTypes = {
@@ -37,7 +36,10 @@ export const ActionTypes = {
   RECEIVE_USER: 'RECEIVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   // UI
-  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE'
+  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
+  UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
+  UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
+  UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION'
 }
 
 export const Projects = {
@@ -83,5 +85,8 @@ export const Users = {
 }
 
 export const UI = {
+  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
+  cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
+  completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
 }

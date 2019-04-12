@@ -6,7 +6,6 @@ import Checkbox from 'Components/Form/Checkbox'
 
 const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
   if (!project) return null
-  // eslint-disable-next-line max-len
   const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
   return (
     <form className="project-settings__info">
