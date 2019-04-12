@@ -30,7 +30,7 @@ const renderProjectsItems = () => {
         title="Create a new project"
         to={Constants.PATH_PROJECT_CREATE}>
         <AddIcon width="12" height="12" />
-        New Project
+        <span className="label">New Project</span>
       </Link>
     </div>
   )

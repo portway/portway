@@ -18,7 +18,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
 
   const createDocumentAction = (e) => {
     createDocument(match.params.projectId, history, {
-      name: e.target.textContent,
+      name: e.target.value,
       projectId: match.params.projectId
     })
   }

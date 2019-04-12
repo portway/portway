@@ -6,7 +6,6 @@ import useClickOutside from 'Hooks/useClickOutside'
 import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
-
 import './DocumentsList.scss'
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
@@ -15,11 +14,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
     if (creating && nameRef.current) {
-      const range = document.createRange()
-      range.selectNodeContents(nameRef.current)
-      const sel = document.getSelection()
-      sel.removeAllRanges()
-      sel.addRange(range)
+      nameRef.current.select()
     }
   })
 
@@ -39,18 +34,16 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
       return (
         <li className="documents-list__item documents-list__item--new">
           <div className="documents-list__button">
-            <div contentEditable
+            <textarea
               ref={nameRef}
-              role="textbox"
-              tabIndex={0}
               className="documents-list__name"
-              suppressContentEditableWarning
+              defaultValue="New Document"
               onKeyDown={(e) => {
                 if (e.key.toLowerCase() === 'enter') {
                   e.preventDefault()
                   createChangeHandler(e)
                 }
-              }}>New Document</div>
+              }} />
             <button
               className="btn btn--blank btn--with-circular-icon"
               onClick={() => { createCallback(false) }}>

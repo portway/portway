@@ -29,8 +29,6 @@ button,
   margin-top: 0;
   padding: 10px 37px;
   text-decoration: none;
-  transition: transform 0.2s ease-in-out;
-  will-change: transform;
   -webkit-appearance: none;
 
   @include focus($action);
@@ -41,7 +39,6 @@ button,
   &:active {
     background-color: $action-dark;
     color: #fff;
-    transform: translateY(0);
   }
 
   &--white {
@@ -93,9 +90,9 @@ button,
     .icon {
       background-color: $white-bis;
       border-radius: 50% 50%;
-      margin-right: 8px;
     }
     .label {
+      margin-left: 8px;
       padding: 0 12px 0 0;
     }
     &:hover {
