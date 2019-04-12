@@ -3,6 +3,7 @@ import userAccess from './users'
 import projectUserAccess from './projectUsers'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
 import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLES } from '../../constants/roles'
+import checkRolePermissions from './checkRolePermissions'
 
 /*
   requestorInfo = {
@@ -43,8 +44,18 @@ const resourceToHandler = {
  */
 export default async (requestorInfo, requestedAction) => {
   const resourceAccessHandler = resourceToHandler[requestedAction.resourceType]
-  // TODO: do this here? Maybe access handlers don't care?
-  requestorInfo.roles = getOrganizationRole(requestorInfo)
+  const hasOrgPermission = checkRolePermissions(
+    getOrganizationRole(requestorInfo),
+    requestedAction.resourceType,
+    requestedAction.action
+  )
+  // If requestor has org permission for the action
+  // let them proceed
+  if (hasOrgPermission) {
+    return true
+  }
+
+  // Now see if they have project access?
 
   if (resourceAccessHandler) {
     return resourceAccessHandler(requestorInfo, requestedAction)
