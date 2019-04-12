@@ -6,15 +6,18 @@ const projectAccess = async (requestorInfo, requestedAction) => {
     case ACTIONS.READ:
       // allow any user to read any other org user
       return true
-    case ACTIONS.WRITE:
+    case ACTIONS.UPDATE:
       // User can only write itself
       return requestorInfo.requestorType === RESOURCE_TYPES.USER &&
-        requestedAction.data.id === requestorInfo.id
+        requestedAction.data.id === requestorInfo.requestorId
     case ACTIONS.LIST:
       // Any user in an org can list other org users
       if (requestorInfo.requestorType === RESOURCE_TYPES.USER) {
         return true
       }
+      return false
+    case ACTIONS.DELETE:
+      // TODO: let org admins delete anyone but the org owner
       return false
     default:
       return false

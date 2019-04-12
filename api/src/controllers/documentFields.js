@@ -9,7 +9,7 @@ import fieldTypes from '../constants/fieldTypes'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  req => req.params.documentId
+  (req) => { return { documentId: req.params.documentId } }
 )
 
 const bodySchema = Joi.compile({

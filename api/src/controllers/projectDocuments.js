@@ -6,8 +6,8 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
-  RESOURCE_TYPES.PROJECT,
-  req => req.params.projectId
+  RESOURCE_TYPES.DOCUMENT,
+  (req) => { return { projectId: req.params.projectId }}
 )
 
 // TODO: this is currently piggybacking off of project perms,

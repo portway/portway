@@ -7,7 +7,8 @@ const projectUsers = [
     orgId: BONKEY_ORG_ID,
     createdAt: TODAY,
     projectId: BONKEY_PROJECT_ID,
-    userId: BONKEY_USER_ID
+    userId: BONKEY_USER_ID,
+    roleId: 1
   }
 ]
 
