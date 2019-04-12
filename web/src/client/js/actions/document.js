@@ -30,7 +30,7 @@ export const createDocument = (projectId, history, body) => {
 export const updateDocument = (projectId, documentId, body) => {
   return async (dispatch) => {
     dispatch(Documents.update(projectId, documentId, body))
-    const data = await update(`projects/${projectId}/documents/${documentId}`, body)
+    const { data } = await update(`projects/${projectId}/documents/${documentId}`, body)
     dispatch(Documents.receiveOneUpdated(data))
   }
 }
