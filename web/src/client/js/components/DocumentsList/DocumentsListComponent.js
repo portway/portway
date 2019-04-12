@@ -32,11 +32,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
     title: 'Create a new document in this project'
   }
 
-  useClickOutside(nameRef, () => {
-    if (creating) {
-      createCallback(false)
-    }
-  })
+  useClickOutside(nameRef, () => { if (creating) { createCallback(false) } }, { preventEscapeFunctionality: true })
 
   function renderNewDocument() {
     if (creating) {
