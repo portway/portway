@@ -1,11 +1,9 @@
-import RESOURCE_TYPES, { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
+import { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
 import { ORGANIZATION_ROLES, PROJECT_ROLES } from '../../constants/roles'
 import checkRolePermissions from './checkRolePermissions'
 import projectPermissionGenerator from './projectPermissionGenerator'
-import resourceToProjectId from '../resourceToProjectId'
+import resourceToProject from '../resourceToProject'
 import BusinessProjectUser from '../../businesstime/projectuser'
-
-import userAccess from './users'
 
 /*
   requestorInfo = {
@@ -33,12 +31,12 @@ function getOrganizationRole(requestorInfo) {
 
 async function getProjectRoles(requestorInfo, requestedAction) {
   const projectRoles = []
-  const projectId = await resourceToProjectId(requestedAction, requestorInfo.orgId)
-  const defaultProjectAccess = projectPermissionGenerator(projectId, requestorInfo.orgId)
+  const project = await resourceToProject(requestedAction, requestorInfo.orgId)
+  const defaultProjectAccess = projectPermissionGenerator(project, requestorInfo.orgId)
   projectRoles.push(defaultProjectAccess)
   const projectUser = await BusinessProjectUser.getProjectUserAssignment(
     requestorInfo.requestorId,
-    projectId,
+    project.id,
     requestorInfo.orgId
   )
   if (projectUser) {
@@ -59,13 +57,10 @@ async function projectResourceHandler(requestorInfo, requestedAction) {
   return hasProjectPermission
 }
 
-const resourceToHandler = {
-  [RESOURCE_TYPES.USER]: userAccess
-}
-
-PROJECT_RESOURCE_TYPES.forEach((type) => {
-  resourceToHandler[type] = projectResourceHandler
-})
+const projectResourceHandlers = PROJECT_RESOURCE_TYPES.reduce((typeHandlers, type) => {
+  typeHandlers[type] = projectResourceHandler
+  return typeHandlers
+}, {})
 
 /**
  * Identifies if the given requestor can perform the requested action
@@ -87,10 +82,10 @@ export default async (requestorInfo, requestedAction) => {
     return true
   }
 
-  const resourceAccessHandler = resourceToHandler[requestedAction.resourceType]
+  const projectResourceAccessHandler = projectResourceHandlers[requestedAction.resourceType]
 
-  if (resourceAccessHandler) {
-    return await resourceAccessHandler(requestorInfo, requestedAction, orgRoles)
+  if (projectResourceAccessHandler) {
+    return await projectResourceAccessHandler(requestorInfo, requestedAction)
   }
 
   return false

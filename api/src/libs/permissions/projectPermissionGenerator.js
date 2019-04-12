@@ -1,12 +1,6 @@
-import BusinessProject from '../../businesstime/project'
-import resourceTypes from '../../constants/resourceTypes'
-import actions from '../../constants/actions'
+import { PROJECT_SETTINGS_ROLE_IDS, PROJECT_SETTINGS_ROLES } from '../../constants/roles'
 
-export default async function(projectId, orgId) {
-  const project = await BusinessProject.findById(
-    projectId,
-    orgId
-  )
+export default async function(project, orgId) {
   // If there's no project, there are no permissions
   if (!project) {
     return {}
@@ -19,32 +13,10 @@ export default async function(projectId, orgId) {
 
   switch (project.accessLevel) {
     case 'read': {
-      return {
-        [resourceTypes.PROJECT]: {
-          [actions.READ]: true,
-          [actions.LIST]: true
-        },
-        [resourceTypes.DOCUMENT]: {
-          [actions.READ]: true,
-          [actions.LIST]: true
-        }
-      }
+      return PROJECT_SETTINGS_ROLES[PROJECT_SETTINGS_ROLE_IDS.READER]
     }
     case 'write': {
-      return {
-        [resourceTypes.PROJECT]: {
-          [actions.READ]: true,
-          [actions.LIST]: true,
-          [actions.UPDATE]: true
-        },
-        [resourceTypes.DOCUMENT]: {
-          [actions.READ]: true,
-          [actions.LIST]: true,
-          [actions.CREATE]: true,
-          [actions.DELETE]: true,
-          [actions.UPDATE]: true
-        }
-      }
+      return PROJECT_SETTINGS_ROLES[PROJECT_SETTINGS_ROLE_IDS.CONTRIBUTOR]
     }
     default:
       return {}

@@ -13,6 +13,14 @@ export const PROJECT_ROLE_IDS = {
   READER: 3
 }
 
+// These are the access roles given to a user
+// based on the project settings
+// Currently tied to PROJECT_ROLE_IDS but can be decoupled
+export const PROJECT_SETTINGS_ROLE_IDS = {
+  CONTRIBUTOR: PROJECT_ROLE_IDS.CONTRIBUTOR,
+  READER: PROJECT_ROLE_IDS.READER
+}
+
 const rIds = ORGANIZATION_ROLE_IDS
 
 // Any permission granted to an org role
@@ -68,17 +76,12 @@ export const ORGANIZATION_ROLES = {
 }
 
 // All project roles are permissions _for an individual project_,
-// except the LIST action. Project Role permissions only apply to
+// Project Role permissions only apply to
 // a user explicitly assigned the role on an individual project!
-//
-// The PROJECT LIST endpoint will filter projects based on a variety
-// of access checks (eg user is assigned to the project, project
-// has public read access in the org, etc.)
 export const PROJECT_ROLES = {
   [PROJECT_ROLE_IDS.ADMIN]: {
     [resourceTypes.PROJECT]: {
       [actions.READ]: true,
-      [actions.LIST]: true,
       [actions.CREATE]: true,
       [actions.DELETE]: true,
       [actions.UPDATE]: true
@@ -101,7 +104,6 @@ export const PROJECT_ROLES = {
   [PROJECT_ROLE_IDS.CONTRIBUTOR]: {
     [resourceTypes.PROJECT]: {
       [actions.READ]: true,
-      [actions.LIST]: true,
       [actions.UPDATE]: true
     },
     [resourceTypes.DOCUMENT]: {
@@ -122,4 +124,11 @@ export const PROJECT_ROLES = {
       [actions.LIST]: true
     }
   }
+}
+
+// Project settings roles currently mirror the corresponding project roles
+// but this can be changed at any point with no other code changes
+export const PROJECT_SETTINGS_ROLES = {
+  [PROJECT_SETTINGS_ROLE_IDS.CONTRIBUTOR]: PROJECT_ROLES[PROJECT_ROLE_IDS.CONTRIBUTOR],
+  [PROJECT_SETTINGS_ROLE_IDS.READER]: PROJECT_ROLES[PROJECT_ROLE_IDS.READER]
 }
