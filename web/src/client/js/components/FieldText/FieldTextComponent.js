@@ -28,6 +28,7 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
         toggleSideBySide: null,
         toggleFullScreen: null
       },
+      spellChecker: false,
       status: false,
       toolbar: false
     }))
