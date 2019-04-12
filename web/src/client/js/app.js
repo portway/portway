@@ -9,6 +9,7 @@ import registerServiceWorker from './utilities/registerServiceWorker'
 import Constants from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
 
+import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import HeaderContainer from 'Components/Header/HeaderContainer'
 import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
@@ -22,6 +23,7 @@ const App = () => {
     <Provider store={store}>
       <Router basename={Constants.PATH_APP}>
         <>
+          <ConfirmationContainer />
           <HeaderContainer />
           <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
           <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />

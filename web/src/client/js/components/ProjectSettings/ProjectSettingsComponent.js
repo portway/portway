@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink, Redirect } from 'react-router-dom'

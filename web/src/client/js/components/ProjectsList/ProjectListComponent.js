@@ -1,14 +1,11 @@
 import React, { useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 
-import Store from '../../reducers'
-import { removeProject } from 'Actions/project'
 import useClickOutside from 'Hooks/useClickOutside'
 import ProjectsListItem from './ProjectsListItem'
 import './ProjectList.scss'
 
-function ProjectsListComponent({ projects, history }) {
+function ProjectsListComponent({ deleteHandler, projects }) {
   const [activeProjectId, setActiveProjectId] = useState(null)
 
   const nodeRef = useRef()
@@ -26,11 +23,6 @@ function ProjectsListComponent({ projects, history }) {
   }
 
   const projectList = Object.keys(projects).map((projectId) => {
-    const handleDelete = (e) => {
-      e.preventDefault()
-      Store.dispatch(removeProject(projectId, history))
-    }
-
     return <ProjectsListItem
       activeProjectId={activeProjectId}
       animate={true}
@@ -38,7 +30,7 @@ function ProjectsListComponent({ projects, history }) {
       key={projectId}
       projectId={projectId}
       project={projects[projectId]}
-      handleDelete={handleDelete}/>
+      handleDelete={() => { deleteHandler(projectId) }} />
   })
 
   return (
@@ -47,8 +39,8 @@ function ProjectsListComponent({ projects, history }) {
 }
 
 ProjectsListComponent.propTypes = {
-  projects: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  deleteHandler: PropTypes.func.isRequired,
+  projects: PropTypes.object.isRequired
 }
 
-export default withRouter(ProjectsListComponent)
+export default ProjectsListComponent
