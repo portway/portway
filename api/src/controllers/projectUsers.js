@@ -51,7 +51,7 @@ const getProjectUsers = async function(req, res) {
 
   try {
     const projectUsers = await BusinessProjectUser.findAllByProjectId(projectId, orgId)
-    res.json(projectUsers)
+    res.json({ data: projectUsers })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot fetch project users' })
@@ -63,9 +63,9 @@ const getProjectUser = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const project = await BusinessProjectUser.findByUserIdForProject(id, projectId, orgId)
-    if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
-    res.json(project)
+    const user = await BusinessProjectUser.findByUserIdForProject(id, projectId, orgId)
+    if (!user) throw ono({ code: 404 }, `No user with id ${id}`)
+    res.json({ data: user })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })

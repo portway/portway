@@ -57,7 +57,7 @@ const getDocumentFields = async function(req, res) {
 
   try {
     const fields = await BusinessField.findAllForDocument(documentId, orgId)
-    res.json(fields)
+    res.json({ data: fields })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot fetch fields' })
@@ -71,10 +71,10 @@ const getDocumentField = async function(req, res) {
   try {
     const field = await BusinessField.findByIdForDocument(id, documentId, orgId)
     if (!field) throw ono({ code: 404 }, `No field with id ${id}`)
-    res.json(field)
+    res.json({ data: field })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
+    res.status(e.code || 500).json({ error: `error fetching field with id ${id}` })
   }
 }
 
@@ -87,7 +87,7 @@ const addDocumentField = async function(req, res) {
 
   try {
     const field = await BusinessField.createForDocument(documentId, body)
-    res.status(201).json(field)
+    res.status(201).json({ data: field })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot create field' })
@@ -106,10 +106,10 @@ const updateDocumentField = async function(req, res) {
       orgId,
       body
     )
-    res.json(field)
+    res.status(200).json({ data: field })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error updating document with id ${id}` })
+    res.status(e.code || 500).json({ error: `error updating field with id ${id}` })
   }
 }
 
@@ -122,7 +122,7 @@ const deleteDocumentField = async function(req, res) {
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error deleting document with id ${id}` })
+    res.status(e.code || 500).json({ error: `error deleting field with id ${id}` })
   }
 }
 
