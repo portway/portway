@@ -8,14 +8,14 @@ import Constants from 'Shared/constants'
  */
 export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
-  const data = await fetch('projects')
+  const { data } = await fetch('projects')
   dispatch(Projects.receive(data))
 }
 
 export const fetchProject = (id) => {
   return async (dispatch) => {
     dispatch(Projects.requestOne(id))
-    const data = await fetch(`projects/${id}`)
+    const { data } = await fetch(`projects/${id}`)
     dispatch(Projects.receiveOne(data))
   }
 }
@@ -23,7 +23,7 @@ export const fetchProject = (id) => {
 export const createProject = (body, history) => {
   return async (dispatch) => {
     dispatch(Projects.create())
-    const data = await add('projects', body)
+    const { data } = await add('projects', body)
     dispatch(Projects.receiveOneCreated(data))
     history.push({ pathname: `${Constants.PATH_PROJECT}/${data.id}` })
   }
@@ -32,7 +32,7 @@ export const createProject = (body, history) => {
 export const updateProject = (id, body) => {
   return async (dispatch) => {
     dispatch(Projects.initiateUpdate())
-    const data = await update(`projects/${id}`, body)
+    const { data } = await update(`projects/${id}`, body)
     dispatch(Projects.receiveOneUpdated(data))
   }
 }

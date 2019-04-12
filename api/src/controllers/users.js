@@ -15,7 +15,7 @@ const usersController = function(router) {
 const getUsers = async function(req, res) {
   try {
     const users = await BusinessUser.findAllSanitized(req.requestorInfo.orgId)
-    res.json(users)
+    res.json({ data: users })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot fetch users' })
@@ -28,7 +28,7 @@ const getUser = async function(req, res) {
   try {
     const user = await BusinessUser.findSanitizedById(id, req.requestorInfo.orgId)
     if (!user) throw ono({ code: 404 }, `No user with id ${id}`)
-    res.json(user)
+    res.json({ data: user })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching user with id ${id}` })

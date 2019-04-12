@@ -17,23 +17,23 @@ const axiosInstance = axios.create({
 })
 
 async function fetch(resource) {
-  const res = await axiosInstance.get(resource)
-  return res.data
+  const { data } = await axiosInstance.get(resource)
+  return data
 }
 
 async function add(resource, body) {
-  const res = await axiosInstance.post(resource, body)
-  return res.data
+  const { data } = await axiosInstance.post(resource, body)
+  return data
 }
 
 async function update(resource, body) {
-  const res = await axiosInstance.put(resource, body)
-  return res.data
+  const { data } = await axiosInstance.put(resource, body)
+  return data
 }
 
 async function remove(resource) {
-  const res = await axiosInstance.delete(resource)
-  return res.data
+  const { data } = await axiosInstance.delete(resource)
+  return data
 }
 
 export { fetch, add, update, remove }
