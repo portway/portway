@@ -2,8 +2,8 @@ import { Fields } from './index'
 import { add, fetch, update, remove } from '../api'
 
 export const fetchFields = (documentId) => {
-  console.log(documentId) // logs a handful of times
   return async (dispatch) => {
+    if (!documentId) return
     dispatch(Fields.requestList(documentId)) // only happens on initial page load
     const { data } = await fetch(`documents/${documentId}/fields`)
     dispatch(Fields.receiveList(documentId, data))

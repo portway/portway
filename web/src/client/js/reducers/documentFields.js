@@ -12,7 +12,6 @@ const initialState = {
 export const documentFields = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_FIELDS: {
-      console.log('triggered')
       const { documentId } = action
       const byDocument = { ...state.loading.byDocument, [documentId]: true }
       return { ...state, loading: { ...state.loading, byDocument } }
