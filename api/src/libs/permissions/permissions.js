@@ -2,7 +2,7 @@ import projectAccess from './projects'
 import userAccess from './users'
 import projectUserAccess from './projectUsers'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
-import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLES } from '../../constants/roles'
+import { ORGANIZATION_ROLES } from '../../constants/roles'
 import checkRolePermissions from './checkRolePermissions'
 
 /*
@@ -55,7 +55,7 @@ export default async (requestorInfo, requestedAction) => {
     return true
   }
 
-  // Now see if they have project access?
+  // TODO: Now see if they have project access
 
   if (resourceAccessHandler) {
     return resourceAccessHandler(requestorInfo, requestedAction)

@@ -14,7 +14,7 @@ async function createUserAndOrganization(firstName, lastName, email) {
     lastName,
     email,
     orgId: organization.id,
-    orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN,
+    orgRoleId: ORGANIZATION_ROLE_IDS.OWNER,
     resetKey
   })
 

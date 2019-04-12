@@ -2,6 +2,7 @@ import BusinessUser from './user'
 import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 
 describe('BusinessUser', () => {
   beforeAll(async () => {
@@ -13,7 +14,8 @@ describe('BusinessUser', () => {
       firstName: 'first-name',
       lastName: 'last-name',
       email: 'user@email.com',
-      orgId: 1
+      orgId: 1,
+      orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN
     }
     let user
 
