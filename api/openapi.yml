@@ -21,9 +21,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+                  
         default:
           description: unexpected error
           content:
@@ -46,7 +50,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -71,7 +78,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -102,7 +112,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -150,9 +163,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Document'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
         default:
           description: unexpected error
           content:
@@ -183,7 +199,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -214,7 +233,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -251,7 +273,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Document'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -311,9 +336,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
@@ -351,7 +379,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
@@ -388,7 +419,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
@@ -431,7 +465,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
@@ -564,7 +601,5 @@ components:
         - code
         - message
       properties:
-        code:
-          type: integer
-        message:
+        error:
           type: string
