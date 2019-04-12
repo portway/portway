@@ -4,10 +4,13 @@ import PropTypes from 'prop-types'
 import Constants from 'Shared/constants'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
-const DocumentFieldsComponent = ({ fields }) => {
-  function fieldChangeHandler() {
+const DocumentFieldsContainer = ({ fields }) => {
+  function fieldChangeHandler(e) {
+    console.log({ e })
   }
-  function fieldDestroyHandler() {
+  function fieldDestroyHandler(e) {
+    console.log('Destroy!')
+    console.log({ e })
   }
   const fieldMap = fields.map((field) => {
     switch (field.type) {
@@ -29,12 +32,12 @@ const DocumentFieldsComponent = ({ fields }) => {
   )
 }
 
-DocumentFieldsComponent.propTypes = {
+DocumentFieldsContainer.propTypes = {
   fields: PropTypes.array.isRequired
 }
 
-DocumentFieldsComponent.defaultProps = {
+DocumentFieldsContainer.defaultProps = {
   fields: []
 }
 
-export default DocumentFieldsComponent
+export default DocumentFieldsContainer
