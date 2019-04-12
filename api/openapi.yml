@@ -1,4 +1,4 @@
-openapi: "3.0.2"
+openapi: '3.0.2'
 info:
   version: 1.0.0
   title: Project Danger API
@@ -21,9 +21,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+                  
         default:
           description: unexpected error
           content:
@@ -46,7 +50,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -71,7 +78,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -84,7 +94,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: ID of project to fetch
+          description: ID of project to update
           required: true
           schema:
             type: integer
@@ -102,14 +112,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    
+
     delete:
       description: deletes a single project based on the ID supplied
       operationId: deleteProject
@@ -130,7 +143,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
+
   /projects/{projectId}/documents:
     get:
       description: |
@@ -150,9 +163,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Document'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
         default:
           description: unexpected error
           content:
@@ -183,14 +199,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /projects/{id}/documents/{id}:
+  /projects/{projectId}/documents/{id}:
     get:
       description: Returns a document based on a single ID
       operationId: findDocumentById
@@ -199,7 +218,7 @@ paths:
           in: path
           description: ID of parent project
           required: true
-          schema: 
+          schema:
             type: integer
         - name: id
           in: path
@@ -214,7 +233,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -229,11 +251,11 @@ paths:
           in: path
           description: ID of parent project
           required: true
-          schema: 
+          schema:
             type: integer
         - name: id
           in: path
-          description: ID of project to fetch
+          description: ID of project to update
           required: true
           schema:
             type: integer
@@ -251,7 +273,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Document'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Project'
         default:
           description: unexpected error
           content:
@@ -266,7 +291,7 @@ paths:
           in: path
           description: ID of parent project
           required: true
-          schema: 
+          schema:
             type: integer
         - name: id
           in: path
@@ -284,20 +309,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
-  /projects/{projectId}/documents/{documentId}/fields:
+
+  /documents/{documentId}/fields:
     get:
       description: |
         Returns all fields that the user has access to for the given project/document ids
       operationId: findDocuments
       parameters:
-        - name: projectId
-          in: path
-          description: ID of parent project
-          required: true
-          schema:
-            type: integer
-
         - name: documentId
           in: path
           description: ID of parent document
@@ -311,9 +329,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
@@ -324,13 +345,6 @@ paths:
       description: Creates a new field
       operationId: addField
       parameters:
-        - name: projectId
-          in: path
-          description: ID of parent project
-          required: true
-          schema:
-            type: integer
-
         - name: documentId
           in: path
           description: ID of parent document
@@ -351,29 +365,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /projects/{projectId}/documents/{documentId}/fields/{id}:
+  /documents/{documentId}/fields/{id}:
     get:
       description: Returns a field based on a single ID
       operationId: findFieldById
       parameters:
-        - name: projectId
-          in: path
-          description: ID of parent project
-          required: true
-          schema: 
-            type: integer
         - name: documentId
           in: path
           description: ID of parent document
           required: true
-          schema: 
+          schema:
             type: integer
         - name: id
           in: path
@@ -388,7 +399,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
@@ -399,21 +413,15 @@ paths:
       description: Update a field based on a single ID - full or partial update
       operationId: updateField
       parameters:
-        - name: projectId
-          in: path
-          description: ID of parent project
-          required: true
-          schema: 
-            type: integer
         - name: documentId
           in: path
           description: ID of parent document
           required: true
-          schema: 
+          schema:
             type: integer
         - name: id
           in: path
-          description: ID of field to fetch
+          description: ID of field to update
           required: true
           schema:
             type: integer
@@ -431,33 +439,30 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Field'
+                type: object
+                properties:
+                  data: 
+                    $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    
+
     delete:
       description: deletes a single field based on the ID supplied
       operationId: deleteField
       parameters:
-        - name: projectId
-          in: path
-          description: ID of parent project
-          required: true
-          schema: 
-            type: integer
         - name: documentId
           in: path
           description: ID of parent document
           required: true
-          schema: 
+          schema:
             type: integer
         - name: id
           in: path
-          description: ID of field to fetch
+          description: ID of field to delete
           required: true
           schema:
             type: integer
@@ -471,18 +476,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
+
 components:
   schemas:
     Project:
       allOf:
         - $ref: '#/components/schemas/NewProject'
         - required:
-          - id
+            - id
           properties:
             id:
               type: integer
-  
             createdAt:
               type: string
               format: date-time
@@ -496,18 +500,17 @@ components:
       properties:
         name:
           type: string
-        documentId:
-          type: integer
 
     Document:
       allOf:
         - $ref: '#/components/schemas/NewDocument'
         - required:
-          - id
+            - id
           properties:
             id:
               type: integer
-  
+            projectId:
+              type: integer
             createdAt:
               type: string
               format: date-time
@@ -521,17 +524,21 @@ components:
       properties:
         name:
           type: string
-        projectId:
-          type: integer
 
     Field:
       allOf:
-        - $ref: '#/components/schemas/NewDocument'
+        - $ref: '#/components/schemas/NewField'
         - required:
-          - id
+            - id
           properties:
             id:
               type: integer
+            docId:
+              type: integer
+            type:
+              type: integer
+            value:
+              type: string
             createdAt:
               type: string
               format: date-time
@@ -540,31 +547,59 @@ components:
               format: date-time
 
     NewField:
+      oneOf:
+        - $ref: '#/components/schemas/StringField'
+        - $ref: '#/components/schemas/TextField'
+        - $ref: '#/components/schemas/NumberField'
+
+    StringField:
       required:
-        - name
+          - name
+          - type
+          - value
       properties:
         name:
           type: string
-        projectId:
+        type:
           type: integer
-        docId:  
-          type: integer
+          enum: [1]
         value:
-          oneOf:
-            - type: string
-            - type: integer
-        structuredValue:
+          type: string
+
+    TextField:
+      required:
+        - name
+        - type
+        - value
+      properties:
+        name:
           type: string
         type:
           type: integer
+          enum: [2]
+        value:
+          type: string
+        structuredValue:
+          type: string
 
+    NumberField:
+      required:
+          - name
+          - type
+          - value
+      properties:
+        name:
+          type: string
+        type:
+          type: integer
+          enum: [3]
+        value:
+          type: integer
 
     Error:
       required:
         - code
         - message
       properties:
-        code:
-          type: integer
-        message:
+        error:
           type: string
