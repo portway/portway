@@ -4,10 +4,11 @@ import PropTypes from 'prop-types'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, MoreIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const dropdownButton = {
@@ -53,7 +54,7 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
         </div>
       </button>
       }
-      {/* <!-- Loop for fields here --> */}
+      <DocumentFieldsComponent fields={fields} />
     </div>
   )
 }
@@ -61,6 +62,7 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
+  fields: PropTypes.array.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }

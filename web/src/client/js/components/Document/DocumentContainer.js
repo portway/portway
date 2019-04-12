@@ -6,15 +6,17 @@ import { connect } from 'react-redux'
 import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
+import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument, history, location, ui, updateDocument, uiConfirm }) => {
+  deleteDocument, history, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   /**
    * If we're creating a document, render nothing
@@ -51,15 +53,17 @@ const DocumentContainer = ({
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
   return <DocumentComponent
+    document={document}
+    fields={fields}
     nameChangeHandler={nameChangeHandler}
-    removeDocumentHandler={removeDocumentHandler}
-    document={document} />
+    removeDocumentHandler={removeDocumentHandler} />
 }
 
 DocumentContainer.propTypes = {
   deleteDocument: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
@@ -67,7 +71,8 @@ DocumentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    ui: state.ui
+    ui: state.ui,
+    documentFields: state.documentFields[document.id]
   }
 }
 
@@ -75,7 +80,6 @@ const mapDispatchToProps = {
   deleteDocument,
   updateDocument,
   uiConfirm,
-
 }
 
 export default withRouter(

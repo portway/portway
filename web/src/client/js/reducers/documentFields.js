@@ -11,6 +11,18 @@ const initialState = {
 
 export const documentFields = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.REQUEST_FIELDS: {
+      console.log('triggered')
+      const { documentId } = action
+      const byDocument = { ...state.loading.byDocument, [documentId]: true }
+      return { ...state, loading: { ...state.loading, byDocument } }
+    }
+    case ActionTypes.RECEIVE_FIELDS: {
+      const documentId = action.documentId
+      const byDocument = { ...state.loading.byDocument, [documentId]: false }
+      const documentFieldsById = { ...state.documentFieldsById, [documentId]: action.data }
+      return { ...state, documentFieldsById, loading: { ...state.loading, byDocument } }
+    }
     case ActionTypes.RECEIVE_CREATED_FIELD: {
       const { id, docId } = action.data
       const documentFields = this.state.documentFieldsById[docId] || {}
