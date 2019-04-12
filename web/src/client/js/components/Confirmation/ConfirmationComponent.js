@@ -13,9 +13,9 @@ const ConfirmationComponent = ({ cancelAction, confirmedAction, confirmedLabel, 
         <p className="confirmation__message">{message}</p>
         <div className="confirmation__actions">
           {cancelAction &&
-          <button className="btn btn--white" onClick={cancelAction}>Cancel</button>
+          <button className="btn btn--white confirmation__cancel" onClick={cancelAction}>Cancel</button>
           }
-          <button className="btn btn--white btn--danger" onClick={confirmedAction}>{confirmedLabel}</button>
+          <button className="btn btn--white btn--danger confirmation__confirm" onClick={confirmedAction}>{confirmedLabel}</button>
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@ ConfirmationComponent.propTypes = {
   cancelAction: PropTypes.func,
   confirmedAction: PropTypes.func.isRequired,
   confirmedLabel: PropTypes.string,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.element.isRequired
 }
 
 ConfirmationComponent.defaultProps = {

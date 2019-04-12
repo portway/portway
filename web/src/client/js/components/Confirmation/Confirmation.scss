@@ -30,9 +30,23 @@
     padding-top: 24px;
   }
 
+  &__confirm {
+    font-weight: 700;
+  }
+
+  &__cancel {
+    color: $gray-dark;
+  }
+
   .highlight {
     color: $black-bis;
     font-weight: 700;
+    &.danger {
+      color: $danger;
+    }
+    &.warning {
+      color: $warning;
+    }
   }
 
 }

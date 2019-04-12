@@ -114,6 +114,13 @@ b, strong {
   padding: 0.417em 0; // 5px
 }
 
+.danger {
+  color: $danger;
+}
+.warning {
+  color: $warning;
+}
+
 time {
   font-family: $serif !important;
   font-size: 0.800rem; // 12px
