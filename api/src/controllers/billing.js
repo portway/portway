@@ -33,10 +33,10 @@ const addBilling = async function(req, res) {
     })
 
     res.send('successfully subscribed user to plan')
-  } catch (err) {
-    console.error(err)
+  } catch (e) {
+    console.error(e.stack)
     const message = 'unable to add billing information'
-    res.status(err.statusCode || 500).send(message)
+    res.status(e.statusCode || 500).send({ error: message })
   }
 }
 
