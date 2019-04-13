@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import Constants from 'Shared/constants'
-import { updateField } from 'Actions/field'
+import { createField, updateField } from 'Actions/field'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
-const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
+const DocumentFieldsContainer = ({ createField, creating, documentId, fields, fieldType, updateField }) => {
   function fieldDestroyHandler(e) {
     // console.log('Destroy!')
     // console.log({ e })
@@ -19,6 +19,26 @@ const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
       id: fieldId,
       value: value
     })
+  }
+  function renderCreateNewFieldWithName() {
+    return (
+      <div className="document__field-create-input">
+        <label htmlFor="create-field-name">First, name your field</label>
+        <input
+          type="text"
+          name="create-field-name"
+          onKeyDown={(e) => {
+            if (e.key.toLowerCase() === 'enter') {
+              createField(documentId, {
+                docId: documentId,
+                name: e.target.value,
+                type: fieldType,
+                value: ''
+              })
+            }
+          }} />
+      </div>
+    )
   }
   const fieldMap = Object.keys(fields).map((fieldId) => {
     const field = fields[fieldId]
@@ -35,15 +55,21 @@ const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
     }
   })
   return (
-    <div className="document-fields">
+    <div className="document__fields">
       {fieldMap}
+      {creating && fieldType !== -1 &&
+      renderCreateNewFieldWithName()
+      }
     </div>
   )
 }
 
 DocumentFieldsContainer.propTypes = {
+  creating: PropTypes.bool,
+  createField: PropTypes.func.isRequired,
   documentId: PropTypes.number.isRequired,
   fields: PropTypes.object.isRequired,
+  fieldType: PropTypes.number,
   updateField: PropTypes.func.isRequired
 }
 
@@ -53,9 +79,12 @@ DocumentFieldsContainer.defaultProps = {
 }
 
 const mapStateToProps = (state) => {
-  return {}
+  return {
+    creating: state.ui.fields.creating,
+    fieldType: state.ui.fields.type
+  }
 }
 
-const mapDispatchToProps = { updateField }
+const mapDispatchToProps = { createField, updateField }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

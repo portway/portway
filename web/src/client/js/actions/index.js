@@ -39,6 +39,8 @@ export const ActionTypes = {
   LOGOUT_USER: 'LOGOUT_USER',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
+  UI_FIELD_CREATE: 'UI_FIELD_CREATE',
+  UI_FIELD_MODE_CHANGE: 'UI_FIELD_MODE_CHANGE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION'
@@ -92,5 +94,7 @@ export const UI = {
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
-  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
+  fieldCreate: makeActionCreator(ActionTypes.UI_FIELD_CREATE, 'fieldType'),
+  fieldModeSet: makeActionCreator(ActionTypes.UI_FIELD_MODE_CHANGE, 'mode'),
 }

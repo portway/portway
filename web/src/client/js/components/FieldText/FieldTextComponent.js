@@ -19,7 +19,7 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
         enabled: false
       },
       element: textRef.current,
-      initialValue: field.value,
+      initialValue: field ? field.value : '',
       placeholder: 'Your ideas here...',
       shortcuts: {
         toggleHeadingSmaller: null,
@@ -40,7 +40,7 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
     if (editor) {
       // On Change
       const debouncedChangeHandler = debounce(1000, () => {
-        onChange(field.id, editor.value())
+        onChange(field ? field.id : -1, editor.value())
       })
       editor.codemirror.on('change', debouncedChangeHandler)
     }
@@ -51,17 +51,19 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
   return (
     <div className="field field--text">
       <textarea ref={textRef} />
+      {onDestroy &&
       <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
         <RemoveIcon />
       </button>
+      }
     </div>
   )
 }
 
 FieldTextComponent.propTypes = {
-  field: PropTypes.object.isRequired,
+  field: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  onDestroy: PropTypes.func.isRequired
+  onDestroy: PropTypes.func
 }
 
 export default FieldTextComponent

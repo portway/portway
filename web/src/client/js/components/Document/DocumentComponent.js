@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
+import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, MoreIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
@@ -8,7 +9,7 @@ import DocumentFieldsContainer from './DocumentFieldsContainer'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, fields, fieldAddModeHandler, fieldAddMode, fieldCreateHandler, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const dropdownButton = {
@@ -20,7 +21,7 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
   })
   return (
     <div className="document" key={docKey}>
-      <header>
+      <header className="document__header">
         <textarea
           className="document__title"
           defaultValue={document.name}
@@ -47,14 +48,28 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
           </li>
         </DropdownComponent>
       </header>
-      {document &&
-      <button className="field-button" aria-label="Add a field" title="Add a field">
-        <div>
-          <AddIcon fill="#ffffff" />
-        </div>
-      </button>
-      }
       <DocumentFieldsContainer documentId={document.id} fields={fields} />
+      <footer className="document__footer">
+        <button className="btn btn--blank btn--with-circular-icon"
+          aria-label="Add a field"
+          aria-haspopup
+          aria-expanded={fieldAddMode}
+          title="Add a field"
+          onClick={fieldAddModeHandler}>
+          <div>
+            <AddIcon width="18" height="18" />
+          </div>
+        </button>
+        {fieldAddMode &&
+        <div className="document__field-menu">
+          <ul>
+            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.TEXT) }}>Text area</button></li>
+            <li><button className="btn btn--blank"onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.STRING) }}>Text field</button></li>
+            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.NUMBER) }}>Number</button></li>
+          </ul>
+        </div>
+        }
+      </footer>
     </div>
   )
 }
@@ -63,6 +78,9 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
 DocumentComponent.propTypes = {
   document: PropTypes.object,
   fields: PropTypes.object.isRequired,
+  fieldAddMode: PropTypes.bool.isRequired,
+  fieldAddModeHandler: PropTypes.func.isRequired,
+  fieldCreateHandler: PropTypes.func.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }
