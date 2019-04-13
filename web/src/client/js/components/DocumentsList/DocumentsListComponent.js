@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import Constants from 'Shared/constants'
 import useClickOutside from 'Hooks/useClickOutside'
 import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
@@ -23,13 +24,13 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   const toolbarAction = {
     callback: () => { createCallback(true) },
     icon: <AddIcon width="16" height="16" />,
-    label: `New Document`,
+    label: 'New Document',
     shortcut: 'n',
     title: 'Create a new document in this project'
   }
 
   function createDocument() {
-    if (nameRef.current.value !== 'New Document') {
+    if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
       createChangeHandler(nameRef.current.value)
     } else {
       createCallback(false)
@@ -49,7 +50,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
             <textarea
               ref={nameRef}
               className="documents-list__name"
-              defaultValue="New Document"
+              defaultValue={Constants.LABEL_NEW_DOCUMENT}
               onKeyDown={(e) => {
                 if (e.keyCode === 27) {
                   e.preventDefault()
