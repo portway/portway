@@ -1,6 +1,6 @@
 import { PROJECT_SETTINGS_ROLE_IDS, PROJECT_SETTINGS_ROLES } from '../../constants/roles'
 
-export default async function(project, orgId) {
+export default function(project) {
   // If there's no project, there are no permissions
   if (!project) {
     return {}

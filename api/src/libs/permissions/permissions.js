@@ -38,7 +38,7 @@ export async function getProjectRoles(requestorInfo, requestedAction) {
     permissionsDebug(`project not found`)
     return projectRoles
   }
-  const defaultProjectAccess = projectPermissionGenerator(project, requestorInfo.orgId)
+  const defaultProjectAccess = projectPermissionGenerator(project)
   projectRoles.push(defaultProjectAccess)
   const projectUser = await BusinessProjectUser.getProjectUserAssignment(
     requestorInfo.requestorId,

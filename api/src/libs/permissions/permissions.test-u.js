@@ -1,186 +1,63 @@
-import permissions, { getOrganizationRole } from './permissions'
-import ProjectFactory from '../../db/__testSetup__/factories/project'
-import UserFactory from '../../db/__testSetup__/factories/user'
-import { ORGANIZATION_ROLE_IDS, PROJECT_ROLE_IDS } from '../../constants/roles'
-import resourceType from '../../constants/resourceTypes'
-import ACTIONS from '../../constants/actions'
-import initializeTestDb from '../../db/__testSetup__/initializeTestDb'
-import { getDb } from '../../db/dbConnector'
-import BusinessProjectUser from '../../businesstime/projectuser'
+import { getOrganizationRole } from './permissions'
 
-describe('Permissions', () => {
-  beforeAll(async () => {
-    await initializeTestDb()
-  })
-
-  describe('function', () => {
-    let requestorInfo
-    let project
-    beforeAll(async () => {
-      const user = (await UserFactory.createMany(1, { orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN }))[0]
-      requestorInfo = {
-        orgId: user.orgId,
+describe('getOrganizationRole', () => {
+  describe('with an orgRoleId', () => {
+    let orgRoles
+    beforeAll(() => {
+      const requestorInfo = {
+        requestorId: 1,
         requestorType: 'user',
-        requestorId: user.id,
-        orgRoleId: user.orgRoleId
+        orgId: 1,
+        orgRoleId: 1
       }
-      project = (await ProjectFactory.createMany(1, { orgId: user.orgId }))[0]
+      orgRoles = getOrganizationRole(requestorInfo)
     })
 
-    describe('requestor has org role', () => {
-      describe('and requests non-project resource', () => {
-        let requestStatus
-        let requestedAction
-        beforeAll(async () => {
-          requestedAction = {
-            resourceType: resourceType.USER,
-            action: ACTIONS.LIST,
-            data: {}
-          }
-          requestStatus = await permissions(requestorInfo, requestedAction)
-        })
-        it('should return true with permission', () => {
-          expect(requestStatus).toBe(true)
-        })
-        it('should return false without permission', async () => {
-          const noPerm = { ...requestorInfo, orgRoleId: ORGANIZATION_ROLE_IDS.USER }
-          const result = await permissions(noPerm, requestedAction)
-          expect(result).toBe(false)
-        })
-      })
-      describe('and requests a project resource', () => {
-        let requestedAction
-        let requestStatus
-        beforeAll(async () => {
-          requestedAction = {
-            resourceType: resourceType.PROJECT,
-            action: ACTIONS.READ,
-            data: {
-              id: project.id
-            }
-          }
-          requestStatus = await permissions(requestorInfo, requestedAction)
-        })
-
-        it('with permission should be true', () => {
-          expect(requestStatus).toBe(true)
-        })
-
-        it('without permission should return false', async () => {
-          const noPerm = { ...requestorInfo, orgRoleId: ORGANIZATION_ROLE_IDS.USER }
-          const result = await permissions(noPerm, requestedAction)
-          expect(result).toBe(false)
-        })
-      })
+    it('should expose a function', () => {
+      expect(typeof getOrganizationRole).toBe('function')
     })
 
-    describe('requestor has project role', () => {
-      let requestedAction
-      beforeAll(async () => {
-        requestedAction = {
-          resourceType: resourceType.PROJECT,
-          action: ACTIONS.DELETE,
-          data: {
-            id: project.id
-          }
-        }
-      })
-      describe('with project permission', () => {
-        let requestStatus
-        beforeAll(async () => {
-          const db = getDb()
-          await db.model('ProjectUser').truncate()
-          await BusinessProjectUser.create({
-            orgId: project.orgId,
-            projectId: project.id,
-            userId: requestorInfo.requestorId,
-            roleId: PROJECT_ROLE_IDS.ADMIN
-          })
-          requestStatus = await permissions(requestorInfo, requestedAction)
-        })
-        it('should return true', () => {
-          expect(requestStatus).toBe(true)
-        })
-      })
-      describe('without project permission', () => {
-        let requestStatus
-        beforeAll(async () => {
-          const db = getDb()
-          await db.model('ProjectUser').truncate()
-          await BusinessProjectUser.create({
-            orgId: project.orgId,
-            projectId: project.id,
-            userId: requestorInfo.requestorId,
-            roleId: PROJECT_ROLE_IDS.CONTRIBUTOR
-          })
-          requestStatus = await permissions(requestorInfo, requestedAction)
-        })
-        it('should return false', () => {
-          expect(requestStatus).toBe(false)
-        })
-      })
+    it('should return a role', () => {
+      expect(orgRoles.length).toBe(1)
+    })
+
+    it('should return a role with permissions', () => {
+      expect(Object.keys(orgRoles[0]).length).toBeGreaterThan(0)
     })
   })
 
-  describe('getOrganizationRole', () => {
-    describe('with an orgRoleId', () => {
-      let orgRoles
-      beforeAll(async () => {
-        const requestorInfo = {
-          requestorId: 1,
-          requestorType: 'user',
-          orgId: 1,
-          orgRoleId: 1
-        }
-        orgRoles = getOrganizationRole(requestorInfo)
-      })
-
-      it('should expose a function', () => {
-        expect(typeof getOrganizationRole).toBe('function')
-      })
-
-      it('should return a role', () => {
-        expect(orgRoles.length).toBe(1)
-      })
-
-      it('should return a role with permissions', () => {
-        expect(Object.keys(orgRoles[0]).length).toBeGreaterThan(0)
-      })
+  describe('without an orgRoleId', () => {
+    let orgRoles
+    beforeAll(() => {
+      const requestorInfo = {
+        requestorId: 1,
+        requestorType: 'api',
+        orgId: 1
+      }
+      orgRoles = getOrganizationRole(requestorInfo)
     })
-
-    describe('without an orgRoleId', () => {
-      let orgRoles
-      beforeAll(async () => {
-        const requestorInfo = {
-          requestorId: 1,
-          requestorType: 'api',
-          orgId: 1
-        }
-        orgRoles = getOrganizationRole(requestorInfo)
-      })
-      it('should return an array', () => {
-        expect(Array.isArray(orgRoles)).toBe(true)
-      })
-      it('should be an empty array', () => {
-        expect(orgRoles.length).toBe(0)
-      })
+    it('should return an array', () => {
+      expect(Array.isArray(orgRoles)).toBe(true)
     })
+    it('should be an empty array', () => {
+      expect(orgRoles.length).toBe(0)
+    })
+  })
 
-    describe('with bad requestorInfo input data', () => {
-      let orgRoles
-      beforeAll(async () => {
-        const requestorInfo = {
-          thisPropertyIsMeaningless: 'ok',
-          definitelyNotanOrgId: 234
-        }
-        orgRoles = getOrganizationRole(requestorInfo)
-      })
-      it('should return an array', () => {
-        expect(Array.isArray(orgRoles)).toBe(true)
-      })
-      it('should be an empty array', () => {
-        expect(orgRoles.length).toBe(0)
-      })
+  describe('with bad requestorInfo input data', () => {
+    let orgRoles
+    beforeAll(async () => {
+      const requestorInfo = {
+        thisPropertyIsMeaningless: 'ok',
+        definitelyNotanOrgId: 234
+      }
+      orgRoles = getOrganizationRole(requestorInfo)
+    })
+    it('should return an array', () => {
+      expect(Array.isArray(orgRoles)).toBe(true)
+    })
+    it('should be an empty array', () => {
+      expect(orgRoles.length).toBe(0)
     })
   })
 })
