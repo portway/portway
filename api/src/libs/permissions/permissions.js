@@ -4,12 +4,14 @@ import checkRolePermissions from './checkRolePermissions'
 import projectPermissionGenerator from './projectPermissionGenerator'
 import resourceToProject from '../resourceToProject'
 import BusinessProjectUser from '../../businesstime/projectuser'
+import { permissions as permissionsDebug } from '../debugLoggers'
 
 /*
   requestorInfo = {
     orgId: '123',
     requestorType: 'user',
-    requestorId: '234'
+    requestorId: '234',
+    [orgRoleId: 123]
   }
 
   requestedAction = {
@@ -21,7 +23,7 @@ import BusinessProjectUser from '../../businesstime/projectuser'
   }
 */
 
-function getOrganizationRole(requestorInfo) {
+export function getOrganizationRole(requestorInfo) {
   const roles = []
   if (requestorInfo.orgRoleId) {
     roles.push(ORGANIZATION_ROLES[requestorInfo.orgRoleId])
@@ -29,9 +31,13 @@ function getOrganizationRole(requestorInfo) {
   return roles
 }
 
-async function getProjectRoles(requestorInfo, requestedAction) {
+export async function getProjectRoles(requestorInfo, requestedAction) {
   const projectRoles = []
   const project = await resourceToProject(requestedAction, requestorInfo.orgId)
+  if (!project) {
+    permissionsDebug(`project not found`)
+    return projectRoles
+  }
   const defaultProjectAccess = projectPermissionGenerator(project, requestorInfo.orgId)
   projectRoles.push(defaultProjectAccess)
   const projectUser = await BusinessProjectUser.getProjectUserAssignment(
@@ -48,6 +54,7 @@ async function getProjectRoles(requestorInfo, requestedAction) {
 
 async function projectResourceHandler(requestorInfo, requestedAction) {
   const projectRoles = await getProjectRoles(requestorInfo, requestedAction)
+  permissionsDebug(`project roles: ${JSON.stringify(projectRoles)}`)
   const hasProjectPermission = checkRolePermissions(
     projectRoles,
     requestedAction.resourceType,
@@ -70,12 +77,16 @@ const projectResourceHandlers = PROJECT_RESOURCE_TYPES.reduce((typeHandlers, typ
  * @return Boolean
  */
 export default async (requestorInfo, requestedAction) => {
+  permissionsDebug(`requestorInfo: ${JSON.stringify(requestorInfo)}`)
+  permissionsDebug(`requestedAction: ${JSON.stringify(requestedAction)}`)
   const orgRoles = getOrganizationRole(requestorInfo)
+  permissionsDebug(`organization roles: ${JSON.stringify(orgRoles)}`)
   const hasOrgPermission = checkRolePermissions(
     orgRoles,
     requestedAction.resourceType,
     requestedAction.action
   )
+  permissionsDebug(`organization access: ${hasOrgPermission}`)
   // If requestor has org permission for the action
   // let them proceed
   if (hasOrgPermission) {
@@ -85,8 +96,11 @@ export default async (requestorInfo, requestedAction) => {
   const projectResourceAccessHandler = projectResourceHandlers[requestedAction.resourceType]
 
   if (projectResourceAccessHandler) {
-    return await projectResourceAccessHandler(requestorInfo, requestedAction)
+    const projectAccess = await projectResourceAccessHandler(requestorInfo, requestedAction)
+    permissionsDebug(`project access: ${projectAccess}`)
+    return projectAccess
   }
 
+  permissionsDebug(`access denied`)
   return false
 }

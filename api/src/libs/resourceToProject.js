@@ -1,13 +1,12 @@
 import resourceTypes, { PROJECT_RESOURCE_TYPES } from '../constants/resourceTypes'
 import BusinessDocument from '../businesstime/document'
 import BusinessProject from '../businesstime/project'
-import ono from 'ono'
 
 /**
  * Finds the project for a requestedAction
  * @param {Object} requestedAction
  * @param {String} orgId
- * @return {Object} project
+ * @return {Object|undefined} project
  */
 export default async function(requestedAction, orgId) {
   if (!PROJECT_RESOURCE_TYPES.includes(requestedAction.resourceType)) {
@@ -31,7 +30,7 @@ export default async function(requestedAction, orgId) {
 
   if (projectId) {
     project = await BusinessProject.findById(
-      requestedAction.data.projectId,
+      projectId,
       orgId
     )
   } else if (requestedAction.data.documentId) {
@@ -41,8 +40,5 @@ export default async function(requestedAction, orgId) {
     )
   }
 
-  if (!project) {
-    throw ono({ code: 404 }, `Project ${projectId} not found`)
-  }
   return project
 }
