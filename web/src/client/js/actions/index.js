@@ -77,7 +77,7 @@ export const Fields = {
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
-  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'id', 'docId')
+  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'documentId', 'fieldId')
 }
 
 export const Users = {

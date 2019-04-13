@@ -8,8 +8,6 @@ import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
 const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
   function fieldDestroyHandler(e) {
-    // console.log('Destroy!')
-    // console.log({ e })
   }
   function fieldChangeHandler(fieldId, value) {
     // left this console in to make sure we're not hammering the API because of useEffect
