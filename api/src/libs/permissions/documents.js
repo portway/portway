@@ -15,7 +15,6 @@ const documentAccess = async (requestorInfo, requestedAction) => {
         requestedAction.data.id,
         requestorInfo.orgId
       )
-      console.log(project)
 
       const hasProjectAccess = project && project.orgId === requestorInfo.orgId
       return Boolean(hasProjectAccess)
