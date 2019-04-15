@@ -3,18 +3,23 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import Constants from 'Shared/constants'
+import { groupBy } from 'Shared/utilities'
 import { uiConfirm, uiFieldCreate } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
+import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
+import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm, uiFieldCreate }) => {
+  createField, deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm, uiFieldCreate }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   /**
    * If we're creating a document, render nothing
@@ -29,6 +34,23 @@ const DocumentContainer = ({
    */
   if (typeof match.params.documentId === 'undefined') {
     return <div>No document</div>
+  }
+
+  /**
+   * If we have fields, break them up by type for field names
+   */
+  let fieldsByType
+  if (fields) {
+    fieldsByType = groupBy(fields, 'type')
+  }
+  function fieldCreationHandler(fieldType) {
+    const typeFieldsInDocument = fieldsByType[fieldType]
+    const newName = Constants.FIELD_LABELS[fieldType] + Number(typeFieldsInDocument.length + 1)
+    createField(document.id, {
+      name: newName,
+      type: fieldType
+    })
+    uiFieldCreate(fieldType)
   }
 
   /**
@@ -50,9 +72,7 @@ const DocumentContainer = ({
     const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
-  function fieldCreationHandler(fieldType) {
-    uiFieldCreate(fieldType)
-  }
+
   return <DocumentComponent
     document={document}
     fieldCreationHandler={fieldCreationHandler}
@@ -61,6 +81,7 @@ const DocumentContainer = ({
 }
 
 DocumentContainer.propTypes = {
+  createField: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
@@ -80,6 +101,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
+  createField,
   deleteDocument,
   updateDocument,
   uiConfirm,

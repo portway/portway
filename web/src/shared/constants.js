@@ -14,6 +14,11 @@ module.exports = {
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  FIELD_LABELS: {
+    1: 'text-field-',
+    2: 'text-area-',
+    3: 'number-'
+  },
   FIELD_TYPES: {
     STRING: 1,
     TEXT: 2,

@@ -22,3 +22,15 @@ export const throttle = function(action) {
     })
   }
 }
+
+export const groupBy = function(list, property) {
+  if (!list.reduce) { list = Object.values(list) }
+  return list.reduce((object, listItem) => {
+    const key = listItem[property]
+    if (!object[key]) {
+      object[key] = []
+    }
+    object[key].push(listItem)
+    return object
+  }, {})
+}
