@@ -438,7 +438,8 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateField'
             example:
-              value: "update value"
+              name: "new name"
+              value: "new value"
       responses:
         '200':
           description: field response
@@ -489,8 +490,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewProject'
         - required:
-            - id
-          properties:
+          - id
+        - properties:
             id:
               type: integer
             createdAt:
@@ -520,8 +521,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewDocument'
         - required:
-            - id
-          properties:
+          - id
+          - projectId
+        - properties:
             id:
               type: integer
             projectId:
@@ -549,15 +551,22 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewField'
         - required:
-            - id
-          properties:
+          - id
+          - name
+          - docId
+          - type
+        - properties:
             id:
               type: integer
+            name:
+              type: string
             docId:
               type: integer
             type:
               type: integer
             value:
+              type: string
+            structuredValue:
               type: string
             createdAt:
               type: string
@@ -574,6 +583,8 @@ components:
 
     UpdateField:
       properties:
+        name:
+          type: string
         value:
           oneOf:
             - type: string
@@ -583,7 +594,6 @@ components:
       required:
           - name
           - type
-          - value
       properties:
         name:
           type: string
@@ -597,7 +607,6 @@ components:
       required:
         - name
         - type
-        - value
       properties:
         name:
           type: string
@@ -613,7 +622,6 @@ components:
       required:
           - name
           - type
-          - value
       properties:
         name:
           type: string
