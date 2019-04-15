@@ -18,8 +18,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
 
   function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
-      name: value,
-      projectId: match.params.projectId
+      name: value
     })
   }
 
