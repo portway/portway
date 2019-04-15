@@ -8,7 +8,7 @@ import DocumentFieldsContainer from './DocumentFieldsContainer'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const dropdownButton = {
@@ -54,7 +54,7 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
         </div>
       </button>
       }
-      <DocumentFieldsContainer documentId={document.id} fields={fields} />
+      <DocumentFieldsContainer />
     </div>
   )
 }
@@ -62,7 +62,6 @@ const DocumentComponent = ({ document, fields, nameChangeHandler, removeDocument
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
-  fields: PropTypes.object.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }

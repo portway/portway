@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
-import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
@@ -16,7 +15,6 @@ const DocumentContainer = ({
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   /**
    * If we're creating a document, render nothing
@@ -54,7 +52,6 @@ const DocumentContainer = ({
   }
   return <DocumentComponent
     document={document}
-    fields={fields}
     nameChangeHandler={nameChangeHandler}
     removeDocumentHandler={removeDocumentHandler} />
 }

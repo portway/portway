@@ -1,22 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
+import Store from '../../reducers'
+import useDataService from 'Hooks/useDataService'
+import dataMapper from 'Libs/dataMapper'
 import { updateField } from 'Actions/field'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
-const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
+const DocumentFieldsContainer = ({ match }) => {
+  const { documentId } = match.params
+  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
+  if (!fields) return null
+
   function fieldDestroyHandler(e) {
   }
   function fieldChangeHandler(fieldId, value) {
     // left this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
-    updateField(documentId, fieldId, {
-      docId: documentId,
+    Store.dispatch(updateField(documentId, fieldId, {
+      docId: Number(documentId),
       id: fieldId,
       value: value
-    })
+    }))
   }
   const fieldMap = Object.keys(fields).map((fieldId) => {
     const field = fields[fieldId]
@@ -40,20 +47,7 @@ const DocumentFieldsContainer = ({ documentId, fields, updateField }) => {
 }
 
 DocumentFieldsContainer.propTypes = {
-  documentId: PropTypes.number.isRequired,
-  fields: PropTypes.object.isRequired,
-  updateField: PropTypes.func.isRequired
+  match: PropTypes.object.isRequired
 }
 
-DocumentFieldsContainer.defaultProps = {
-  documentId: -1,
-  fields: {}
-}
-
-const mapStateToProps = (state) => {
-  return {}
-}
-
-const mapDispatchToProps = { updateField }
-
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
+export default withRouter(DocumentFieldsContainer)
