@@ -1,4 +1,5 @@
 @import '../inc/vars';
+@import '../inc/mixins';
 
 $menuAnimationLength: 0.3s;
 $menuBorderRadius: 8px;
@@ -90,6 +91,7 @@ $menuBorderRadius: 8px;
   }
   a, button {
     @extend .menu__item;
+    @include focus(transparent);
     text-align: left;
     &.btn--warning {
       color: $warning;
