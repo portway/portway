@@ -3,20 +3,18 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { uiConfirm, uiFieldModeChange, uiFieldCreate } from 'Actions/ui'
+import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
-import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm, uiFieldCreate, uiFieldModeChange }) => {
+  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   /**
    * If we're creating a document, render nothing
@@ -52,18 +50,8 @@ const DocumentContainer = ({
     const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
-  function fieldCreateHandler(fieldType) {
-    uiFieldCreate(fieldType)
-  }
-  function fieldAddModeHandler() {
-    uiFieldModeChange(!ui.fields.creating)
-  }
   return <DocumentComponent
     document={document}
-    fields={fields}
-    fieldAddMode={ui.fields.creating}
-    fieldAddModeHandler={fieldAddModeHandler}
-    fieldCreateHandler={fieldCreateHandler}
     nameChangeHandler={nameChangeHandler}
     removeDocumentHandler={removeDocumentHandler} />
 }
@@ -76,9 +64,7 @@ DocumentContainer.propTypes = {
   match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired,
-  uiFieldCreate: PropTypes.func.isRequired,
-  uiFieldModeChange: PropTypes.func.isRequired
+  uiConfirm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -91,9 +77,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   deleteDocument,
   updateDocument,
-  uiConfirm,
-  uiFieldCreate,
-  uiFieldModeChange
+  uiConfirm
 }
 
 export default withRouter(

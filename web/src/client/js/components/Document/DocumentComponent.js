@@ -1,15 +1,14 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { AddIcon, MoreIcon } from 'Components/Icons'
+import { MoreIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
 import DocumentFieldsContainer from './DocumentFieldsContainer'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, fields, fieldAddModeHandler, fieldAddMode, fieldCreateHandler, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const dropdownButton = {
@@ -48,28 +47,7 @@ const DocumentComponent = ({ document, fields, fieldAddModeHandler, fieldAddMode
           </li>
         </DropdownComponent>
       </header>
-      <DocumentFieldsContainer documentId={document.id} fields={fields} />
-      <footer className="document__footer">
-        <button className="btn btn--blank btn--with-circular-icon"
-          aria-label="Add a field"
-          aria-haspopup
-          aria-expanded={fieldAddMode}
-          title="Add a field"
-          onClick={fieldAddModeHandler}>
-          <div>
-            <AddIcon width="18" height="18" />
-          </div>
-        </button>
-        {fieldAddMode &&
-        <div className="document__field-menu">
-          <ul>
-            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.TEXT) }}>Text area</button></li>
-            <li><button className="btn btn--blank"onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.STRING) }}>Text field</button></li>
-            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.NUMBER) }}>Number</button></li>
-          </ul>
-        </div>
-        }
-      </footer>
+      <DocumentFieldsContainer />
     </div>
   )
 }
@@ -77,10 +55,6 @@ const DocumentComponent = ({ document, fields, fieldAddModeHandler, fieldAddMode
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
-  fields: PropTypes.object.isRequired,
-  fieldAddMode: PropTypes.bool.isRequired,
-  fieldAddModeHandler: PropTypes.func.isRequired,
-  fieldCreateHandler: PropTypes.func.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }
@@ -89,7 +63,6 @@ DocumentComponent.defaultProps = {
   document: {
     name: ''
   },
-  fields: {}
 }
 
 export default DocumentComponent

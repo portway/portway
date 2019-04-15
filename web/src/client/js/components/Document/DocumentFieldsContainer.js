@@ -1,15 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import Constants from 'Shared/constants'
+import useDataService from 'Hooks/useDataService'
+import dataMapper from 'Libs/dataMapper'
 import { createField, updateField } from 'Actions/field'
+import { uiFieldCreate, uiFieldModeChange } from 'Actions/ui'
+
+import { AddIcon } from 'Components/Icons'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
-const DocumentFieldsContainer = ({ createField, creating, documentId, fields, fieldType, updateField }) => {
+const DocumentFieldsContainer = ({ match, createField, updateField, ui, uiFieldCreate, uiFieldModeChange }) => {
+  const { documentId } = match.params
+  const uiState = ui.fields
+  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
+  if (!fields) return null
+
+  function fieldCreateHandler(fieldType) {
+    uiFieldCreate(fieldType)
+  }
+  function fieldAddModeHandler() {
+    uiFieldModeChange(!uiState.creating)
+  }
   function fieldDestroyHandler(e) {
-    // console.log('Destroy!')
-    // console.log({ e })
   }
   function fieldChangeHandler(fieldId, value) {
     // left this console in to make sure we're not hammering the API because of useEffect
@@ -32,7 +47,7 @@ const DocumentFieldsContainer = ({ createField, creating, documentId, fields, fi
               createField(documentId, {
                 docId: documentId,
                 name: e.target.value,
-                type: fieldType,
+                type: uiState.type,
                 value: ''
               })
             }
@@ -55,36 +70,55 @@ const DocumentFieldsContainer = ({ createField, creating, documentId, fields, fi
     }
   })
   return (
-    <div className="document__fields">
-      {fieldMap}
-      {creating && fieldType !== -1 &&
-      renderCreateNewFieldWithName()
-      }
-    </div>
+    <>
+      <div className="document__fields">
+        {fieldMap}
+        {uiState.creating && uiState.type !== -1 &&
+        renderCreateNewFieldWithName()
+        }
+      </div>
+      <footer className="document__footer">
+        <button className="btn btn--blank btn--with-circular-icon"
+          aria-label="Add a field"
+          aria-haspopup
+          aria-expanded={uiState.creating}
+          title="Add a field"
+          onClick={fieldAddModeHandler}>
+          <div>
+            <AddIcon width="18" height="18" />
+          </div>
+        </button>
+        {uiState.creating &&
+        <div className="document__field-menu">
+          <ul>
+            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.TEXT) }}>Text area</button></li>
+            <li><button className="btn btn--blank"onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.STRING) }}>Text field</button></li>
+            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.NUMBER) }}>Number</button></li>
+          </ul>
+        </div>
+        }
+      </footer>
+    </>
   )
 }
 
 DocumentFieldsContainer.propTypes = {
-  creating: PropTypes.bool,
+  match: PropTypes.object.isRequired,
   createField: PropTypes.func.isRequired,
-  documentId: PropTypes.number.isRequired,
-  fields: PropTypes.object.isRequired,
-  fieldType: PropTypes.number,
-  updateField: PropTypes.func.isRequired
-}
-
-DocumentFieldsContainer.defaultProps = {
-  documentId: -1,
-  fields: {}
+  updateField: PropTypes.func.isRequired,
+  ui: PropTypes.object.isRequired,
+  uiFieldCreate: PropTypes.func.isRequired,
+  uiFieldModeChange: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    creating: state.ui.fields.creating,
-    fieldType: state.ui.fields.type
+    ui: state.ui
   }
 }
 
-const mapDispatchToProps = { createField, updateField }
+const mapDispatchToProps = { createField, updateField, uiFieldCreate, uiFieldModeChange }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
+)
