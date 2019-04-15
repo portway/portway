@@ -20,7 +20,7 @@ const DocumentFieldsContainer = ({ match }) => {
     // left this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
     Store.dispatch(updateField(documentId, fieldId, {
-      docId: Number(documentId),
+      docId: documentId,
       id: fieldId,
       value: value
     }))
