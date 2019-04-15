@@ -105,7 +105,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewProject'
+              $ref: '#/components/schemas/UpdateProject'
       responses:
         '200':
           description: project response
@@ -266,7 +266,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewDocument'
+              $ref: '#/components/schemas/UpdateDocument'
       responses:
         '200':
           description: document response
@@ -359,6 +359,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NewField'
+            example:
+              name: field name
+              value: 808
+              type: 3
       responses:
         '201':
           description: field response
@@ -432,7 +436,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewField'
+              $ref: '#/components/schemas/UpdateField'
+            example:
+              value: "update value"
       responses:
         '200':
           description: field response
@@ -500,6 +506,15 @@ components:
       properties:
         name:
           type: string
+        description:
+          type: string
+
+    UpdateProject:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
 
     Document:
       allOf:
@@ -521,6 +536,11 @@ components:
     NewDocument:
       required:
         - name
+      properties:
+        name:
+          type: string
+
+    UpdateDocument:
       properties:
         name:
           type: string
@@ -551,6 +571,13 @@ components:
         - $ref: '#/components/schemas/StringField'
         - $ref: '#/components/schemas/TextField'
         - $ref: '#/components/schemas/NumberField'
+
+    UpdateField:
+      properties:
+        value:
+          oneOf:
+            - type: string
+            - type: number
 
     StringField:
       required:

@@ -3,7 +3,6 @@ import fieldTypes from '../../constants/fieldTypes'
 
 export const rawSchema = {
   name: Joi.string(),
-  docId: Joi.number(),
   value: Joi.alternatives(Joi.string(), Joi.number()).allow(null),
   // TODO: probably want a shared json parse validator on structuredValue
   structuredValue: Joi.string().allow(null),
