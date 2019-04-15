@@ -6,18 +6,14 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 
-const { listPerm, readPerm, updatePerm, deletePerm } = crudPerms(
+const { listPerm, readPerm, updatePerm, deletePerm, createPerm } = crudPerms(
   RESOURCE_TYPES.PROJECT_USER,
   (req) => { return { projectId: req.params.projectId } }
 )
 
-// Uses project-level permissions
-
-const bodySchema = Joi.compile({
-  users: Joi.array()
-    .required()
-    .items(requiredFields('user', 'id'))
-})
+const bodySchema = Joi.compile(
+  requiredFields(RESOURCE_TYPES.PROJECT_USER, 'userId', 'projectId', 'roleId')
+)
 
 const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
@@ -27,6 +23,13 @@ const paramSchema = Joi.compile({
 const projectUsersController = function(router) {
   // all routes are nested at projects/:projectId/users and receive req.params.projectId
   router.get('/', validateParams(paramSchema), listPerm, getProjectUsers)
+  router.post(
+    '/',
+    validateParams(paramSchema),
+    validateBody(bodySchema),
+    createPerm,
+    createProjectUser
+  )
   router.put(
     '/',
     validateParams(paramSchema),
@@ -69,6 +72,24 @@ const getProjectUser = async function(req, res) {
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
+  }
+}
+
+const createProjectUser = async (req, res) => {
+  const { body } = req
+  const { orgId } = req.requestorInfo
+
+  try {
+    const projectUser = await BusinessProjectUser.addUserIdToProject(
+      body.userId,
+      body.projectId,
+      body.roleId,
+      orgId
+    )
+    res.status(201).json({ data: projectUser })
+  } catch (e) {
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: 'Cannot assign user to project' })
   }
 }
 

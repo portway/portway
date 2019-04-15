@@ -1,8 +1,11 @@
 import Joi from 'joi'
+import RESOURCE_TYPES from '../../constants/resourceTypes'
 import * as user from './user'
+import * as projectUser from './projectUser'
 
 const resourceToSchema = {
-  user
+  [RESOURCE_TYPES.USER]: user,
+  [RESOURCE_TYPES.PROJECT_USER]: projectUser
 }
 
 /**
