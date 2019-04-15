@@ -15,13 +15,20 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 const bodySchema = Joi.compile({
   name: Joi.string().required(),
   docId: Joi.number(),
-  value: Joi.alternatives(Joi.string(), Joi.number()).required(),
-  // TODO: probably want a json parse validator on this one
-  structuredValue: Joi.string(),
+  value: Joi.alternatives(Joi.string(), Joi.number()).allow(null),
+  // TODO: probably want a shared json parse validator on structuredValue
+  structuredValue: Joi.string().allow(null),
   type: Joi.number()
     .valid(Object.values(fieldTypes.FIELD_TYPES))
     .required()
   // TODO: order: need to decide how to handle this
+})
+
+const bodyUpdateSchema = Joi.compile({
+  name: Joi.string(),
+  value: Joi.alternatives(Joi.string(), Joi.number()).allow(null),
+  // TODO: probably want a shared json parse validator on structuredValue
+  structuredValue: Joi.string().allow(null)
 })
 
 const paramSchema = Joi.compile({
@@ -44,7 +51,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(bodyUpdateSchema),
     updatePerm,
     updateDocumentField
   )

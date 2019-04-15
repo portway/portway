@@ -48,17 +48,6 @@ describe('BusinessField', () => {
         ).rejects.toThrow()
       })
     })
-
-    describe('when the passed in docId does not match the body docId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessField.createForDocument(factoryDocument.id, {
-            ...fieldBody,
-            docId: 0
-          })
-        ).rejects.toThrow()
-      })
-    })
   })
 
   describe('#updateByIdForDocument', () => {
@@ -120,17 +109,6 @@ describe('BusinessField', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.updateByIdForDocument(fieldId, docId, 0, updateBody)
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in docId does not match the body docId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessField.updateByIdForDocument(fieldId, docId, orgId, {
-            ...updateBody,
-            docId: 0
-          })
         ).rejects.toThrow()
       })
     })
