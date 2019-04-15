@@ -44,7 +44,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    // validateBody(bodySchema), // this shouldn't validate bodySchema
+    // validateBody(bodySchema), // TODO: update body schema for PUT request. All fields should not be required on PUT
     updatePerm,
     updateDocumentField
   )
