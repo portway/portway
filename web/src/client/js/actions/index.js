@@ -96,5 +96,4 @@ export const UI = {
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
   fieldCreate: makeActionCreator(ActionTypes.UI_FIELD_CREATE, 'fieldType'),
-  fieldModeSet: makeActionCreator(ActionTypes.UI_FIELD_MODE_CHANGE, 'mode'),
 }

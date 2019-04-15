@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { uiConfirm } from 'Actions/ui'
+import { uiConfirm, uiFieldCreate } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
@@ -11,7 +11,7 @@ import currentResource from 'Libs/currentResource'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
+  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm, uiFieldCreate }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -50,8 +50,12 @@ const DocumentContainer = ({
     const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
+  function fieldCreationHandler(fieldType) {
+    uiFieldCreate(fieldType)
+  }
   return <DocumentComponent
     document={document}
+    fieldCreationHandler={fieldCreationHandler}
     nameChangeHandler={nameChangeHandler}
     removeDocumentHandler={removeDocumentHandler} />
 }
@@ -64,7 +68,8 @@ DocumentContainer.propTypes = {
   match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired
+  uiConfirm: PropTypes.func.isRequired,
+  uiFieldCreate: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -77,7 +82,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   deleteDocument,
   updateDocument,
-  uiConfirm
+  uiConfirm,
+  uiFieldCreate
 }
 
 export default withRouter(

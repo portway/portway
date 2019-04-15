@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import SimpleMDE from 'simplemde'
 
 import { debounce } from 'Shared/utilities'
-import { RemoveIcon } from 'Components/Icons'
 import './SimpleMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ field, onChange, onDestroy }) => {
+const FieldTextComponent = ({ field, onChange }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
@@ -49,21 +48,13 @@ const FieldTextComponent = ({ field, onChange, onDestroy }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor])
   return (
-    <div className="field field--text">
-      <textarea ref={textRef} />
-      {onDestroy &&
-      <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
-        <RemoveIcon />
-      </button>
-      }
-    </div>
+    <textarea ref={textRef} />
   )
 }
 
 FieldTextComponent.propTypes = {
   field: PropTypes.object,
-  onChange: PropTypes.func.isRequired,
-  onDestroy: PropTypes.func
+  onChange: PropTypes.func.isRequired
 }
 
 export default FieldTextComponent

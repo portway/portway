@@ -22,11 +22,13 @@ export const ui = (state = initialState, action) => {
     case ActionTypes.UI_DOCUMENT_CREATE: {
       return { ...state, documents: { ...state.documents, creating: action.value } }
     }
-    case ActionTypes.UI_FIELD_MODE_CHANGE: {
-      return { ...state, fields: { ...state.fields, creating: action.mode } }
-    }
     case ActionTypes.UI_FIELD_CREATE: {
-      return { ...state, fields: { ...state.fields, type: action.fieldType } }
+      // Tell everyone we're creating a field, and what type
+      return { ...state, fields: { ...state.fields, creating: true, type: action.fieldType } }
+    }
+    case ActionTypes.RECEIVE_CREATED_FIELD: {
+      // Reset fields when a field is created
+      return { ...state, fields: initialState.fields }
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }

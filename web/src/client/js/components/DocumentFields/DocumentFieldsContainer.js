@@ -3,31 +3,24 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import { createField, updateField } from 'Actions/field'
-import { uiFieldCreate, uiFieldModeChange } from 'Actions/ui'
+import { updateField, removeField } from 'Actions/field'
 
-import { AddIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
-const DocumentFieldsContainer = ({ match, createField, updateField, ui, uiFieldCreate, uiFieldModeChange }) => {
+const DocumentFieldsContainer = ({ match, removeField, updateField, ui }) => {
   const { documentId } = match.params
   const uiState = ui.fields
   const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
   if (!fields) return null
 
-  function fieldCreateHandler(fieldType) {
-    uiFieldCreate(fieldType)
-  }
-  function fieldAddModeHandler() {
-    uiFieldModeChange(!uiState.creating)
-  }
-  function fieldDestroyHandler(e) {
+  function fieldDestroyHandler(fieldId) {
+    console.info(`Remove ${fieldId} when you can add them...`) // I just can't add them yet and this is our only field
+    // removeField(documentId, fieldId)
   }
   function fieldChangeHandler(fieldId, value) {
-    // left this console in to make sure we're not hammering the API because of useEffect
+    // leave this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
     updateField(documentId, fieldId, {
       docId: documentId,
@@ -40,40 +33,15 @@ const DocumentFieldsContainer = ({ match, createField, updateField, ui, uiFieldC
     return fields[fieldId]
   })
   return (
-    <>
-      <DocumentFieldsComponent fields={fieldMap} fieldChangeHandler={fieldChangeHandler} fieldDestroyHandler={fieldDestroyHandler} />
-      <footer className="document__footer">
-        <button className="btn btn--blank btn--with-circular-icon"
-          aria-label="Add a field"
-          aria-haspopup
-          aria-expanded={uiState.creating}
-          title="Add a field"
-          onClick={fieldAddModeHandler}>
-          <div>
-            <AddIcon width="18" height="18" />
-          </div>
-        </button>
-        {uiState.creating &&
-        <div className="document__field-menu">
-          <ul>
-            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.TEXT) }}>Text area</button></li>
-            <li><button className="btn btn--blank"onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.STRING) }}>Text field</button></li>
-            <li><button className="btn btn--blank" onClick={() => { fieldCreateHandler(Constants.FIELD_TYPES.NUMBER) }}>Number</button></li>
-          </ul>
-        </div>
-        }
-      </footer>
-    </>
+    <DocumentFieldsComponent creating={uiState.creating} fields={fieldMap} fieldChangeHandler={fieldChangeHandler} fieldDestroyHandler={fieldDestroyHandler} />
   )
 }
 
 DocumentFieldsContainer.propTypes = {
   match: PropTypes.object.isRequired,
-  createField: PropTypes.func.isRequired,
+  removeField: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   ui: PropTypes.object.isRequired,
-  uiFieldCreate: PropTypes.func.isRequired,
-  uiFieldModeChange: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -82,7 +50,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { createField, updateField, uiFieldCreate, uiFieldModeChange }
+const mapDispatchToProps = { removeField, updateField }
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

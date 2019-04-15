@@ -80,6 +80,8 @@ button,
     align-items: center;
     display: inline-flex;
     .label {
+      flex: 1;
+      flex-wrap: nowrap;
       padding: 0 12px 0 0;
     }
   }
@@ -92,6 +94,8 @@ button,
       border-radius: 50% 50%;
     }
     .label {
+      flex: 1;
+      flex-wrap: nowrap;
       margin-left: 8px;
       padding: 0 12px 0 0;
     }

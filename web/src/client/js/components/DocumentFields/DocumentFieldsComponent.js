@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Constants from 'Shared/constants'
+import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
 const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandler }) => {
@@ -10,7 +11,11 @@ const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandl
     fields.forEach((field) => {
       switch (field.type) {
         case Constants.FIELD_TYPES.TEXT: {
-          fieldArray.push(<FieldTextComponent key={field.id} field={field} onChange={fieldChangeHandler} onDestroy={fieldDestroyHandler} />)
+          fieldArray.push(
+            <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
+              <FieldTextComponent field={field} onChange={fieldChangeHandler} />
+            </DocumentFieldComponent>
+          )
         }
       }
     })

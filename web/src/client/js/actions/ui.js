@@ -8,11 +8,6 @@ export const uiDocumentCreate = (value) => {
     dispatch(UI.documentCreate(value))
   }
 }
-export const uiFieldModeChange = (mode) => {
-  return async (dispatch) => {
-    dispatch(UI.fieldModeSet(mode))
-  }
-}
 export const uiFieldCreate = (fieldType) => {
   return async (dispatch) => {
     dispatch(UI.fieldCreate(fieldType))

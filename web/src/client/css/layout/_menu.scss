@@ -50,6 +50,7 @@ $menuBorderRadius: 8px;
 
 .menu__item {
   background-color: $white;
+  border-radius: 0;
   color: $black-bis;
   cursor: pointer;
   display: block;

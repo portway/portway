@@ -15,6 +15,7 @@
   &__title {
     border: none;
     color: $primary;
+    flex: 1;
     font-family: $serif;
     font-size: 1.2rem;
     font-weight: 700;
@@ -22,7 +23,6 @@
     padding-top: 8px;
     outline: none;
     resize: none;
-    width: 100%;
     -webkit-appearance: none;
   }
 

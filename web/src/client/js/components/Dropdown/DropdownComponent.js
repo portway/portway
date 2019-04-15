@@ -10,7 +10,6 @@ import './Dropdown.scss'
 const DropdownComponent = ({ align, button, children, className, menu, shortcut }) => {
   // Menu is not collapsed by default
   const [expanded, setExpanded] = useState(menu && menu.isOpen || false)
-  const hasIcon = button.icon !== undefined
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -25,16 +24,14 @@ const DropdownComponent = ({ align, button, children, className, menu, shortcut 
   return (
     <div ref={nodeRef} className={`dropdown ${className ? className : ''}`}>
       <button
-        className={`btn ${button.className ? button.className : ''} ${
-          hasIcon ? ' btn--with-icon' : ''
-        }`}
+        className={`btn ${button.className ? button.className : ''}`}
         type="button"
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
         onClick={() => { setExpanded(!expanded)}}>
         {button.icon && button.icon}
-        {button.label && button.label}
+        {button.label && <div className="label">{button.label}</div>}
       </button>
       <div className={`menu menu--${align}`} hidden={!expanded}>
         <ul className="menu__list">
