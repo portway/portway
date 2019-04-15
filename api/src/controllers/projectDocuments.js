@@ -14,8 +14,7 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 // does it need its own, or will it always be the same?
 
 const bodySchema = Joi.compile({
-  name: Joi.string().required(),
-  projectId: Joi.number()
+  name: Joi.string().required()
 })
 
 const paramSchema = Joi.compile({

@@ -41,9 +41,8 @@ describe('BusinessField', () => {
     describe('when the parent document does not exist', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.createForDocument(factoryDocument.id, {
-            ...fieldBody,
-            docId: 0
+          BusinessField.createForDocument(0, {
+            ...fieldBody
           })
         ).rejects.toThrow()
       })
