@@ -10,7 +10,7 @@ import { createField, updateField } from 'Actions/field'
 import { uiFieldCreate, uiFieldModeChange } from 'Actions/ui'
 
 import { AddIcon } from 'Components/Icons'
-import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
+import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({ match, createField, updateField, ui, uiFieldCreate, uiFieldModeChange }) => {
   const { documentId } = match.params
@@ -35,48 +35,13 @@ const DocumentFieldsContainer = ({ match, createField, updateField, ui, uiFieldC
       value: value
     })
   }
-  function renderCreateNewFieldWithName() {
-    return (
-      <div className="document__field-create-input">
-        <label htmlFor="create-field-name">First, name your field</label>
-        <input
-          type="text"
-          name="create-field-name"
-          onKeyDown={(e) => {
-            if (e.key.toLowerCase() === 'enter') {
-              createField(documentId, {
-                docId: documentId,
-                name: e.target.value,
-                type: uiState.type,
-                value: ''
-              })
-            }
-          }} />
-      </div>
-    )
-  }
+  // Convert fields object to an array for rendering
   const fieldMap = Object.keys(fields).map((fieldId) => {
-    const field = fields[fieldId]
-    switch (field.type) {
-      case Constants.FIELD_TYPES.STRING: {
-        return <span key={field.id}>String!</span>
-      }
-      case Constants.FIELD_TYPES.TEXT: {
-        return <FieldTextComponent key={field.id} field={field} onChange={fieldChangeHandler} onDestroy={fieldDestroyHandler} />
-      }
-      case Constants.FIELD_TYPES.NUMBER: {
-        return <span key={field.id}>Number!</span>
-      }
-    }
+    return fields[fieldId]
   })
   return (
     <>
-      <div className="document__fields">
-        {fieldMap}
-        {uiState.creating && uiState.type !== -1 &&
-        renderCreateNewFieldWithName()
-        }
-      </div>
+      <DocumentFieldsComponent fields={fieldMap} fieldChangeHandler={fieldChangeHandler} fieldDestroyHandler={fieldDestroyHandler} />
       <footer className="document__footer">
         <button className="btn btn--blank btn--with-circular-icon"
           aria-label="Add a field"

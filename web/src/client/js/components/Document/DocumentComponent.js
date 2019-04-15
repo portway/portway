@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { debounce } from 'Shared/utilities'
 import { MoreIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
-import DocumentFieldsContainer from './DocumentFieldsContainer'
+import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './Document.scss'
 
