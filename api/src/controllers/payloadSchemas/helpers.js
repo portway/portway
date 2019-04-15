@@ -1,8 +1,10 @@
 import Joi from 'joi'
 import * as user from './user'
+import * as project from './project'
 
 const resourceToSchema = {
-  user
+  user,
+  project
 }
 
 /**
