@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SimpleMDE from 'simplemde'
 
-import { debounce } from 'Shared/utilities'
 import './SimpleMDE.scss'
 import './FieldText.scss'
 
@@ -37,11 +36,7 @@ const FieldTextComponent = ({ field, onChange }) => {
   }, [])
   useEffect(() => {
     if (editor) {
-      // On Change
-      const debouncedChangeHandler = debounce(1000, () => {
-        onChange(field.id, { value: editor.value() })
-      })
-      editor.codemirror.on('change', debouncedChangeHandler)
+      editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
     }
   // We're disavling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits

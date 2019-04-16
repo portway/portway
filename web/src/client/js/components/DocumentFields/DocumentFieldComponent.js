@@ -1,19 +1,13 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { debounce } from 'Shared/utilities'
 import Constants from 'Shared/constants'
 import { RemoveIcon } from 'Components/Icons'
 
 import './DocumentField.scss'
 
 const DocumentFieldComponent = ({ children, field, showName, onDestroy, onRename }) => {
-  // field name change
-  const nameRef = useRef()
-  const debouncedNameChangeHandler = debounce(1000, (e) => {
-    onRename(field.id, { name: nameRef.current.value })
-  })
   const fieldClasses = cx({
     'field': true,
     'field--text': field.type === Constants.FIELD_TYPES.TEXT,
@@ -26,10 +20,9 @@ const DocumentFieldComponent = ({ children, field, showName, onDestroy, onRename
         {children}
         {showName &&
         <input
-          ref={nameRef}
           className="field__name"
           defaultValue={field.name}
-          onChange={debouncedNameChangeHandler}
+          onChange={(e) => { onRename(field.id, e.target.value) }}
           onFocus={(e) => { e.target.select() }}
           type="text" />
         }

@@ -7,7 +7,7 @@ import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 
-const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandler }) => {
+const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldRenameHandler, fieldDestroyHandler }) => {
   const showFieldName = fields.length > 1
   function renderFieldType(field) {
     let fieldTypeComponent
@@ -25,7 +25,7 @@ const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandl
         break
     }
     return (
-      <DocumentFieldComponent key={field.id} field={field} showName={showFieldName} onRename={fieldChangeHandler} onDestroy={() => { fieldDestroyHandler(field.id) }}>
+      <DocumentFieldComponent key={field.id} field={field} showName={showFieldName} onRename={fieldRenameHandler} onDestroy={() => { fieldDestroyHandler(field.id) }}>
         {fieldTypeComponent}
       </DocumentFieldComponent>
     )
@@ -47,6 +47,7 @@ const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandl
 DocumentFieldsComponent.propTypes = {
   fields: PropTypes.array.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
+  fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired
 }
 

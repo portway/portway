@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import { debounce } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { updateField, removeField } from 'Actions/field'
@@ -14,6 +15,7 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField }) 
   const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
   if (!fields) return null
 
+  // Actions
   function fieldDestroyHandler(fieldId) {
     console.info(`Remove ${fieldId} when you can add them...`) // I just can't add them yet and this is our only field
     // removeField(documentId, fieldId)
@@ -23,12 +25,26 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField }) 
     console.info(`Field: ${fieldId} trigger changeHandler`)
     updateField(documentId, fieldId, body)
   }
+
+  // Prop handler
+  const debouncedValueChangeHandler = debounce(1000, (fieldId, value) => {
+    fieldChangeHandler(fieldId, { value: value })
+  })
+  const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
+    fieldChangeHandler(fieldId, { name: value })
+  })
+
   // Convert fields object to an array for rendering
   const fieldMap = Object.keys(fields).map((fieldId) => {
     return fields[fieldId]
   })
   return (
-    <DocumentFieldsComponent creating={creating} fields={fieldMap} fieldChangeHandler={fieldChangeHandler} fieldDestroyHandler={fieldDestroyHandler} />
+    <DocumentFieldsComponent
+      creating={creating}
+      fields={fieldMap}
+      fieldChangeHandler={debouncedValueChangeHandler}
+      fieldRenameHandler={debouncedNameChangeHandler}
+      fieldDestroyHandler={fieldDestroyHandler} />
   )
 }
 
