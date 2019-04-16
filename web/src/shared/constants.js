@@ -1,3 +1,9 @@
+const FIELD_TYPES = {
+  STRING: 1,
+  TEXT: 2,
+  NUMBER: 3
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
@@ -17,13 +23,9 @@ module.exports = {
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
   FIELD_LABELS: {
-    1: 'text-field-',
-    2: 'text-area-',
-    3: 'number-'
+    [FIELD_TYPES.STRING]: 'text-field-',
+    [FIELD_TYPES.TEXT]: 'text-area-',
+    [FIELD_TYPES.NUMBER]: 'number-'
   },
-  FIELD_TYPES: {
-    STRING: 1,
-    TEXT: 2,
-    NUMBER: 3
-  }
+  FIELD_TYPES: FIELD_TYPES
 }
