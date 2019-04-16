@@ -41,20 +41,8 @@ describe('BusinessField', () => {
     describe('when the parent document does not exist', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.createForDocument(factoryDocument.id, {
-            ...fieldBody,
-            docId: 0
-          })
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in docId does not match the body docId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessField.createForDocument(factoryDocument.id, {
-            ...fieldBody,
-            docId: 0
+          BusinessField.createForDocument(0, {
+            ...fieldBody
           })
         ).rejects.toThrow()
       })
@@ -120,17 +108,6 @@ describe('BusinessField', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.updateByIdForDocument(fieldId, docId, 0, updateBody)
-        ).rejects.toThrow()
-      })
-    })
-
-    describe('when the passed in docId does not match the body docId', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessField.updateByIdForDocument(fieldId, docId, orgId, {
-            ...updateBody,
-            docId: 0
-          })
         ).rejects.toThrow()
       })
     })
