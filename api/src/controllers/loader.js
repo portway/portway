@@ -23,7 +23,12 @@ const AUTHENTICATED_CONTROLLERS = {
     fileName: 'documents',
     childRoutes: { '/:documentId/fields': { fileName: 'documentFields' } }
   },
-  '/users': { fileName: 'users' }
+  '/users': {
+    fileName: 'users',
+    childRoutes: {
+      '/:userId/orgrole': { fileName: 'userOrgrole' }
+    }
+  }
 }
 
 // Define controllers with custom auth (must be implemented in the controller!)

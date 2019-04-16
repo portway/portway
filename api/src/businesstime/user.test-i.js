@@ -169,4 +169,26 @@ describe('BusinessUser', () => {
       })
     })
   })
+
+  describe('#updateOrgRole', () => {
+    describe('when the target user is found', () => {
+      let user
+
+      beforeAll(async () => {
+        const factoryUsers = await UserFactory.createMany(1)
+        user = await BusinessUser.updateOrgRole(factoryUsers[0].id, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)
+      })
+
+      it('should update the user', () => {
+        expect(user.orgRoleId).toEqual(ORGANIZATION_ROLE_IDS.ADMIN)
+        expect(user.constructor).toBe(Object)
+      })
+    })
+
+    describe('when the target user is not found', () => {
+      it('should throw an error', async () => {
+        await expect(BusinessUser.updateOrgRole(0, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)).rejects.toThrow()
+      })
+    })
+  })
 })
