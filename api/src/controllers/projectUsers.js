@@ -101,7 +101,7 @@ const updateProjectUser = async (req, res) => {
       body.roleId,
       orgId
     )
-    res.status(201).json({ data: projectUser })
+    res.status(200).json({ data: projectUser })
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: 'Cannot assign user to project' })

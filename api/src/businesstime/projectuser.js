@@ -3,6 +3,8 @@ import ono from 'ono'
 
 const MODEL_NAME = 'ProjectUser'
 
+export const PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId']
+
 async function create(body) {
   const db = getDb()
   const createdProjectUser = await db.model(MODEL_NAME).create(body)
@@ -36,7 +38,7 @@ async function addUserIdToProject(userId, projectId, roleId, orgId) {
 
   const result = await db.model(MODEL_NAME).findOrCreate({
     where: { projectId, orgId, userId, roleId },
-    attributes: [],
+    attributes: PUBLIC_FIELDS,
     raw: true
   })
   // findOrCreate returns [result, status]
@@ -50,15 +52,16 @@ async function updateProjectUserById(id, roleId, orgId) {
   if (!projectUser) {
     throw ono({ code: 404 }, `Project user assignment id ${id} not found`)
   }
-  return await projectUser.update({
+  return (await projectUser.update({
     roleId
-  })
+  })).get({ plain: true })
 }
 
 async function findAllByProjectId(projectId, orgId) {
   const db = getDb()
 
   return db.model(MODEL_NAME).findAll({
+    attributes: PUBLIC_FIELDS,
     where: {
       orgId,
       projectId
@@ -71,7 +74,9 @@ async function findByIdAndProject(id, projectId, orgId) {
   const db = getDb()
 
   const projectUser = await db.model(MODEL_NAME).findOne({
-    where: { id, orgId, projectId }
+    attributes: PUBLIC_FIELDS,
+    where: { id, orgId, projectId },
+    raw: true
   })
 
   if (!projectUser) {

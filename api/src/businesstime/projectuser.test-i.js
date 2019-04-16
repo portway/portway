@@ -1,11 +1,8 @@
-import BusinessProjectUser from './projectuser'
+import BusinessProjectUser, { PUBLIC_FIELDS } from './projectuser'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
-
-// TODO: in BusinessTime, define and filter by public fields somewhere
-const PUBLIC_FIELDS = ['roleId', 'projectId', 'userId']
 
 describe('BusinessProjectUser', () => {
   beforeAll(async () => {
