@@ -11,20 +11,17 @@ import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 
 const DocumentFieldsContainer = ({ match }) => {
   const { documentId } = match.params
-  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [
-    match.params.documentId
-  ])
+  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
   if (!fields) return null
 
-  function fieldDestroyHandler(e) {}
+  function fieldDestroyHandler(e) {
+  }
   function fieldChangeHandler(fieldId, value) {
     // left this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
-    Store.dispatch(
-      updateField(documentId, fieldId, {
-        value: value
-      })
-    )
+    Store.dispatch(updateField(documentId, fieldId, {
+      value: value
+    }))
   }
   const fieldMap = Object.keys(fields).map((fieldId) => {
     const field = fields[fieldId]
@@ -33,21 +30,18 @@ const DocumentFieldsContainer = ({ match }) => {
         return <span key={field.id}>String!</span>
       }
       case Constants.FIELD_TYPES.TEXT: {
-        return (
-          <FieldTextComponent
-            key={field.id}
-            field={field}
-            onChange={fieldChangeHandler}
-            onDestroy={fieldDestroyHandler}
-          />
-        )
+        return <FieldTextComponent key={field.id} field={field} onChange={fieldChangeHandler} onDestroy={fieldDestroyHandler} />
       }
       case Constants.FIELD_TYPES.NUMBER: {
         return <span key={field.id}>Number!</span>
       }
     }
   })
-  return <div className="document-fields">{fieldMap}</div>
+  return (
+    <div className="document-fields">
+      {fieldMap}
+    </div>
+  )
 }
 
 DocumentFieldsContainer.propTypes = {

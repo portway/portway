@@ -2,6 +2,7 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+
   header {
     align-items: flex-start;
     display: flex;
@@ -36,4 +37,5 @@
     position: absolute;
     width: 48px;
   }
+
 }

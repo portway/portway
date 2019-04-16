@@ -20,8 +20,7 @@ const ConfirmationContainer = ({ confirmation, uiConfirmCancel, uiConfirmComplet
           confirmation.confirmedAction()
           uiConfirmComplete()
         }}
-        confirmedLabel={confirmation.confirmedLabel}
-      />
+        confirmedLabel={confirmation.confirmedLabel} />
     )
   } else {
     return null
@@ -42,7 +41,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { uiConfirmCancel, uiConfirmComplete }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ConfirmationContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmationContainer)

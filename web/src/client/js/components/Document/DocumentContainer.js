@@ -11,15 +11,7 @@ import currentResource from 'Libs/currentResource'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument,
-  history,
-  loading,
-  location,
-  match,
-  ui,
-  updateDocument,
-  uiConfirm
-}) => {
+  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -52,25 +44,16 @@ const DocumentContainer = ({
   }
   function removeDocumentHandler() {
     const message = (
-      <span>
-        {' '}
-        Delete the document <span className="highlight">{document.name}</span> and all of its
-        fields?
-      </span>
+      <span> Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
     )
     const confirmedLabel = `Yes, delete this document`
-    const confirmedAction = () => {
-      deleteDocument(document.projectId, document.id, history)
-    }
+    const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
-  return (
-    <DocumentComponent
-      document={document}
-      nameChangeHandler={nameChangeHandler}
-      removeDocumentHandler={removeDocumentHandler}
-    />
-  )
+  return <DocumentComponent
+    document={document}
+    nameChangeHandler={nameChangeHandler}
+    removeDocumentHandler={removeDocumentHandler} />
 }
 
 DocumentContainer.propTypes = {
@@ -94,12 +77,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   deleteDocument,
   updateDocument,
-  uiConfirm
+  uiConfirm,
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(DocumentContainer)
+  connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
 )

@@ -17,9 +17,7 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
         const updateInfoHandler = (e) => {
           projectUpdateHandler('info', e)
         }
-        return (
-          <ProjectSettingsInfoComponent project={project} onUpdateHandler={updateInfoHandler} />
-        )
+        return <ProjectSettingsInfoComponent project={project} onUpdateHandler={updateInfoHandler} />
       default:
         return <Redirect to={`${settingsSectionPath}/info`} />
     }
@@ -30,21 +28,15 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
       <div className="project-settings__container">
         <nav className="project-settings__navigation">
           <ul className="list-blank">
-            <li>
-              <NavLink to={`${settingsSectionPath}/info`}>Info</NavLink>
-            </li>
-            <li>
-              <NavLink to={`${settingsSectionPath}/teams`}>Teams</NavLink>
-            </li>
-            <li>
-              <NavLink to={`${settingsSectionPath}/endpoints`}>Endpoints</NavLink>
-            </li>
-            <li>
-              <NavLink to={`${settingsSectionPath}/keys`}>Keys</NavLink>
-            </li>
+            <li><NavLink to={`${settingsSectionPath}/info`}>Info</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/teams`}>Teams</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/endpoints`}>Endpoints</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/keys`}>Keys</NavLink></li>
           </ul>
         </nav>
-        <div className="project-settings__panel">{renderProjectSettingPanel()}</div>
+        <div className="project-settings__panel">
+          {renderProjectSettingPanel()}
+        </div>
       </div>
     </div>
   )

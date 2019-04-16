@@ -22,9 +22,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
 
   // Set up toolbar
   const toolbarAction = {
-    callback: () => {
-      createCallback(true)
-    },
+    callback: () => { createCallback(true) },
     icon: <AddIcon width="16" height="16" />,
     label: 'New Document',
     shortcut: 'n',
@@ -40,11 +38,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   }
   useClickOutside(
     listItemRef,
-    () => {
-      if (creating) {
-        createDocument()
-      }
-    },
+    () => { if (creating) { createDocument() } },
     { preventEscapeFunctionality: true }
   )
 
@@ -66,13 +60,10 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
                   e.preventDefault()
                   createChangeHandler(e.target.value)
                 }
-              }}
-            />
+              }} />
             <button
               className="btn btn--blank btn--with-circular-icon"
-              onClick={() => {
-                createCallback(false)
-              }}>
+              onClick={() => { createCallback(false) }}>
               <RemoveIcon width="18" height="18" />
             </button>
           </div>

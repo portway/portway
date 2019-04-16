@@ -23,25 +23,18 @@ function ProjectsListComponent({ deleteHandler, projects }) {
   }
 
   const projectList = Object.keys(projects).map((projectId) => {
-    return (
-      <ProjectsListItem
-        activeProjectId={activeProjectId}
-        animate={true}
-        callback={projectToggleHandler}
-        key={projectId}
-        projectId={projectId}
-        project={projects[projectId]}
-        handleDelete={() => {
-          deleteHandler(projectId)
-        }}
-      />
-    )
+    return <ProjectsListItem
+      activeProjectId={activeProjectId}
+      animate={true}
+      callback={projectToggleHandler}
+      key={projectId}
+      projectId={projectId}
+      project={projects[projectId]}
+      handleDelete={() => { deleteHandler(projectId) }} />
   })
 
   return (
-    <ol className="project-list" ref={nodeRef}>
-      {projectList}
-    </ol>
+    <ol className="project-list" ref={nodeRef}>{projectList}</ol>
   )
 }
 

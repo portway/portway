@@ -26,10 +26,7 @@ export const documents = (state = initialState, action) => {
         object[doc.id] = doc
         return object
       }, {})
-      const projectDocumentsById = {
-        ...state.projectDocumentsById,
-        [action.projectId]: documentsObject
-      }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.projectId]: documentsObject }
       return {
         ...state,
         projectDocumentsById,
@@ -52,14 +49,8 @@ export const documents = (state = initialState, action) => {
     case ActionTypes.RECEIVE_DOCUMENT: {
       const byId = { ...state.loading.byId, [action.data.id]: false }
       const currentDocumentId = action.data.id
-      const project = {
-        ...state.projectDocumentsById[action.data.projectId],
-        [action.data.id]: action.data
-      }
-      const projectDocumentsById = {
-        ...state.projectDocumentsById,
-        [action.data.projectId]: project
-      }
+      const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: action.data }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
       return {
         ...state,
         currentDocumentId,
@@ -74,14 +65,8 @@ export const documents = (state = initialState, action) => {
       const byId = { ...state.loading.byId, [action.data.id]: false }
       const byProject = { ...state.loading.byProject, [action.projectId]: false }
       const currentDocumentId = action.data.id
-      const project = {
-        ...state.projectDocumentsById[action.data.projectId],
-        [action.data.id]: action.data
-      }
-      const projectDocumentsById = {
-        ...state.projectDocumentsById,
-        [action.data.projectId]: project
-      }
+      const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: action.data }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
       return {
         ...state,
         currentDocumentId,
@@ -114,14 +99,8 @@ export const documents = (state = initialState, action) => {
         name: action.data.name,
         updatedAt: action.data.updatedAt
       }
-      const project = {
-        ...state.projectDocumentsById[action.data.projectId],
-        [action.data.id]: updatedDoc
-      }
-      const projectDocumentsById = {
-        ...state.projectDocumentsById,
-        [action.data.projectId]: project
-      }
+      const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
       return {
         ...state,
         projectDocumentsById,

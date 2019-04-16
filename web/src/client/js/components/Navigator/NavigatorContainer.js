@@ -20,9 +20,9 @@ import './Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
-  const { data: project } = useDataService(currentResource('project', location.pathname), [
-    location.pathname
-  ])
+  const { data: project } = useDataService(
+    currentResource('project', location.pathname), [location.pathname]
+  )
 
   const [expanded, setExpanded] = useState(false)
   const selectRef = useRef()
@@ -45,8 +45,7 @@ const NavigatorContainer = ({ history, location }) => {
     // eslint-disable-next-line react/prop-types
     const { data, innerRef, innerProps, isFocused } = props
     const classnames = cx({
-      // eslint-disable-next-line camelcase
-      menu__item: true,
+      'menu__item': true,
       'menu__item--is-focused': isFocused
     })
     return (
@@ -92,8 +91,7 @@ const NavigatorContainer = ({ history, location }) => {
           options={Object.values(projects).map((project) => {
             return { label: project.name, value: String(project.id) }
           })}
-          value={null}
-        />
+          value={null} />
       </div>
     </div>
   )

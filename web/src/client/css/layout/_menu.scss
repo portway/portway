@@ -76,6 +76,7 @@ $menuBorderRadius: 8px;
       background-color: lighten($black-bis, 5%);
     }
   }
+
 }
 
 .menu__list {
@@ -86,8 +87,7 @@ $menuBorderRadius: 8px;
     //   padding-top: 14px;
     // }
   }
-  a,
-  button {
+  a, button {
     @extend .menu__item;
     text-align: left;
     &.btn--warning {
@@ -102,7 +102,7 @@ $menuBorderRadius: 8px;
 .menu__divider {
   &:before {
     border-top: thin solid $gray;
-    content: '';
+    content : '';
     display: block;
     left: 0;
     position: absolute;

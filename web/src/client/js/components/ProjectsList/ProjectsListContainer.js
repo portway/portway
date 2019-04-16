@@ -14,16 +14,9 @@ const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
   const handleDelete = (projectId) => {
     const message = (
-      <span>
-        Delete this project?{' '}
-        <span className="highlight danger">
-          WARNING: This will delete <i>everything</i>!
-        </span>
-      </span>
+      <span>Delete this project? <span className="highlight danger">WARNING: This will delete <i>everything</i>!</span></span>
     )
-    const confirmedAction = () => {
-      removeProject(projectId, history)
-    }
+    const confirmedAction = () => { removeProject(projectId, history) }
     const confirmedLabel = 'Yes, delete this project'
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
@@ -46,8 +39,5 @@ const mapStateToProps = () => {
 const mapDispatchToProps = { removeProject, uiConfirm }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ProjectsListContainer)
+  connect(mapStateToProps, mapDispatchToProps)(ProjectsListContainer)
 )

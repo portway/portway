@@ -60,12 +60,7 @@ export const Projects = {
 export const Documents = {
   create: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_CREATE, 'projectId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
-  update: makeActionCreator(
-    ActionTypes.INITIATE_DOCUMENT_UPDATE,
-    'projectId',
-    'documentId',
-    'data'
-  ),
+  update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
   deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
@@ -94,13 +89,7 @@ export const Users = {
 }
 
 export const UI = {
-  initiateConfirm: makeActionCreator(
-    ActionTypes.UI_INITIATE_CONFIRMATION,
-    'message',
-    'cancelAction',
-    'confirmedAction',
-    'confirmedLabel'
-  ),
+  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')

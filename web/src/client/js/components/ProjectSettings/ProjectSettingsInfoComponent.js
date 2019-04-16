@@ -6,8 +6,7 @@ import Checkbox from 'Components/Form/Checkbox'
 
 const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
   if (!project) return null
-  const helpText =
-    "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
+  const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
   return (
     <form className="project-settings__info">
       <section>
@@ -18,8 +17,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           name="project[name]"
           onChange={onUpdateHandler}
           placeholder="My project"
-          value={project.name}
-        />
+          value={project.name} />
         <TextField
           id="projectDescription"
           label="Description (optional)"
@@ -27,8 +25,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           name="project[description]"
           onChange={onUpdateHandler}
           placeholder=""
-          value={project.description}
-        />
+          value={project.description} />
       </section>
       <section>
         <h2>Privacy</h2>

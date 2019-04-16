@@ -42,10 +42,8 @@ export default {
           return state.documents.loading.byId[documentId]
         },
         getDataFromState: (state) => {
-          return (
-            state.documents.projectDocumentsById[projectId] &&
+          return state.documents.projectDocumentsById[projectId] &&
             state.documents.projectDocumentsById[projectId][documentId]
-          )
         }
       }
     }
@@ -61,7 +59,7 @@ export default {
           return state.documentFields.documentFieldsById[documentId]
         }
       }
-    }
+    },
   },
   projects: {
     list: function() {

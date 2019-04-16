@@ -34,28 +34,26 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
               titleRef.current.blur()
             }
           }}
-          ref={titleRef}
-        />
+          ref={titleRef} />
         <DropdownComponent
           align="right"
           button={dropdownButton}
           className="document__document-dropdown">
           <li>
             <button
-              className="menu__item btn btn--white btn--danger"
-              onClick={removeDocumentHandler}>
+              className="menu__item btn btn--white btn--danger" onClick={removeDocumentHandler}>
               Delete document...
             </button>
           </li>
         </DropdownComponent>
       </header>
-      {document && (
-        <button className="field-button" aria-label="Add a field" title="Add a field">
-          <div>
-            <AddIcon fill="#ffffff" />
-          </div>
-        </button>
-      )}
+      {document &&
+      <button className="field-button" aria-label="Add a field" title="Add a field">
+        <div>
+          <AddIcon fill="#ffffff" />
+        </div>
+      </button>
+      }
       <DocumentFieldsContainer />
     </div>
   )

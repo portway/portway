@@ -25,17 +25,13 @@ function useDetectInputMode() {
       }
     }
     document.addEventListener(
-      'touchstart',
-      mouseDownHandler,
-      supportsPassive ? { passive: true } : false
+      'touchstart', mouseDownHandler, supportsPassive ? { passive: true } : false
     )
     document.addEventListener('mousedown', mouseDownHandler, false)
     document.addEventListener('keydown', keyDownHandler, false)
     return () => {
       document.removeEventListener(
-        'touchstart',
-        mouseDownHandler,
-        supportsPassive ? { passive: true } : false
+        'touchstart', mouseDownHandler, supportsPassive ? { passive: true } : false
       )
       document.removeEventListener('mousedown', mouseDownHandler, false)
       document.removeEventListener('keydown', keyDownHandler, false)
