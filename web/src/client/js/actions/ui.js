@@ -8,11 +8,6 @@ export const uiDocumentCreate = (value) => {
     dispatch(UI.documentCreate(value))
   }
 }
-export const uiFieldCreate = (fieldType) => {
-  return async (dispatch) => {
-    dispatch(UI.fieldCreate(fieldType))
-  }
-}
 
 /**
  * Confirmation system

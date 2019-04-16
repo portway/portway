@@ -26,6 +26,7 @@ export const ActionTypes = {
   // Fields
   REQUEST_FIELDS: 'REQUEST_FIELDS',
   RECEIVE_FIELDS: 'RECEIVE_FIELDS',
+  INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
   INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
   RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
@@ -39,8 +40,6 @@ export const ActionTypes = {
   LOGOUT_USER: 'LOGOUT_USER',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
-  UI_FIELD_CREATE: 'UI_FIELD_CREATE',
-  UI_FIELD_MODE_CHANGE: 'UI_FIELD_MODE_CHANGE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION'
@@ -75,6 +74,7 @@ export const Documents = {
 export const Fields = {
   requestList: makeActionCreator(ActionTypes.REQUEST_FIELDS, 'documentId'),
   receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
+  initiateCreate: makeActionCreator(ActionTypes.INITIATE_FIELD_CREATE, 'documentId', 'fieldType'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
@@ -94,6 +94,5 @@ export const UI = {
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
-  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
-  fieldCreate: makeActionCreator(ActionTypes.UI_FIELD_CREATE, 'fieldType'),
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
 }

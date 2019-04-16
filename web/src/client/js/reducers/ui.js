@@ -22,7 +22,7 @@ export const ui = (state = initialState, action) => {
     case ActionTypes.UI_DOCUMENT_CREATE: {
       return { ...state, documents: { ...state.documents, creating: action.value } }
     }
-    case ActionTypes.UI_FIELD_CREATE: {
+    case ActionTypes.INITIATE_FIELD_CREATE: {
       // Tell everyone we're creating a field, and what type
       return { ...state, fields: { ...state.fields, creating: true, type: action.fieldType } }
     }

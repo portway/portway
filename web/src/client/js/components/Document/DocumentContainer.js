@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import Constants from 'Shared/constants'
 import { groupBy } from 'Shared/utilities'
-import { uiConfirm, uiFieldCreate } from 'Actions/ui'
+import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
@@ -15,7 +15,7 @@ import currentResource from 'Libs/currentResource'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm, uiFieldCreate }) => {
+  createField, deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -47,11 +47,10 @@ const DocumentContainer = ({
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
     const newName = Constants.FIELD_LABELS[fieldType] + (value + 1)
-    createField(document.id, {
+    createField(document.id, fieldType, {
       name: newName,
       type: fieldType
     })
-    uiFieldCreate(fieldType)
   }
 
   /**
@@ -89,8 +88,7 @@ DocumentContainer.propTypes = {
   match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired,
-  uiFieldCreate: PropTypes.func.isRequired
+  uiConfirm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -104,8 +102,7 @@ const mapDispatchToProps = {
   createField,
   deleteDocument,
   updateDocument,
-  uiConfirm,
-  uiFieldCreate
+  uiConfirm
 }
 
 export default withRouter(
