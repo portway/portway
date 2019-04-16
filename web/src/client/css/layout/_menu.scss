@@ -10,7 +10,6 @@ $menuBorderRadius: 8px;
   overflow: hidden;
   padding: 0;
   position: absolute;
-  will-change: visibility, transform, opacity;
   z-index: 10;
   // remove any list padding / margin and style
   > ol,
@@ -55,7 +54,7 @@ $menuBorderRadius: 8px;
   cursor: pointer;
   display: block;
   text-decoration: none;
-  min-width: 100px;
+  min-width: 210px;
   padding: 8px 14px;
   width: 100%;
   &:hover {
@@ -77,7 +76,6 @@ $menuBorderRadius: 8px;
       background-color: lighten($black-bis, 5%);
     }
   }
-
 }
 
 .menu__list {
@@ -88,16 +86,23 @@ $menuBorderRadius: 8px;
     //   padding-top: 14px;
     // }
   }
-  a, button {
+  a,
+  button {
     @extend .menu__item;
     text-align: left;
+    &.btn--warning {
+      color: $warning;
+    }
+    &.btn--danger {
+      color: $danger;
+    }
   }
 }
 
 .menu__divider {
   &:before {
     border-top: thin solid $gray;
-    content : '';
+    content: '';
     display: block;
     left: 0;
     position: absolute;

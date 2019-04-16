@@ -65,7 +65,9 @@ const ProjectsListItem = ({
         </div>
         <div className="project-list__actions-end">
           <button className="btn btn--blank">Duplicate</button>
-          <button className="btn btn--blank">Settings</button>
+          <Link to={`/project/${projectId}/settings`} className="btn btn--blank">
+            Settings
+          </Link>
           <Link to={`/project/${projectId}`} className="btn" role="button" tabIndex="0">
             Open
           </Link>

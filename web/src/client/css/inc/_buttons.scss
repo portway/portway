@@ -11,12 +11,13 @@
   }
 }
 
-[role="button"] {
+[role='button'] {
   cursor: pointer;
 }
 
 button,
-.btn, .button {
+.btn,
+.button {
   background-color: $action;
   border-radius: 4px 4px;
   border: thin solid transparent;
@@ -29,8 +30,6 @@ button,
   margin-top: 0;
   padding: 10px 37px;
   text-decoration: none;
-  transition: transform 0.2s ease-in-out;
-  will-change: transform;
   -webkit-appearance: none;
 
   @include focus($action);
@@ -41,7 +40,6 @@ button,
   &:active {
     background-color: $action-dark;
     color: #fff;
-    transform: translateY(0);
   }
 
   &--white {
@@ -58,7 +56,7 @@ button,
       background-color: $white;
       color: inherit;
     }
-    &[aria-expanded="true"] {
+    &[aria-expanded='true'] {
       background-color: $white-ter;
     }
   }
@@ -93,9 +91,9 @@ button,
     .icon {
       background-color: $white-bis;
       border-radius: 50% 50%;
-      margin-right: 8px;
     }
     .label {
+      margin-left: 8px;
       padding: 0 12px 0 0;
     }
     &:hover {
@@ -123,5 +121,4 @@ button,
       color: darken($danger, 20%);
     }
   }
-
 }

@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
-    <title>icon/menu-more</title>
-    <desc>Created with Sketch.</desc>
-    <g id="icon/menu-more" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M18,21 C16.3431458,21 15,19.6568542 15,18 C15,16.3431458 16.3431458,15 18,15 C19.6568542,15 21,16.3431458 21,18 C21,19.6568542 19.6568542,21 18,21 Z M28,21 C26.3431458,21 25,19.6568542 25,18 C25,16.3431458 26.3431458,15 28,15 C29.6568542,15 31,16.3431458 31,18 C31,19.6568542 29.6568542,21 28,21 Z M8,21 C6.34314575,21 5,19.6568542 5,18 C5,16.3431458 6.34314575,15 8,15 C9.65685425,15 11,16.3431458 11,18 C11,19.6568542 9.65685425,21 8,21 Z" id="Combined-Shape" fill="#3B3D3E"></path>
-    </g>
-</svg>
+<svg height="36" viewBox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg"><path d="m18 21c-1.6568542 0-3-1.3431458-3-3s1.3431458-3 3-3 3 1.3431458 3 3-1.3431458 3-3 3zm10 0c-1.6568542 0-3-1.3431458-3-3s1.3431458-3 3-3 3 1.3431458 3 3-1.3431458 3-3 3zm-20 0c-1.65685425 0-3-1.3431458-3-3s1.34314575-3 3-3 3 1.3431458 3 3-1.34314575 3-3 3z" fill="#3b3d3e" fill-rule="evenodd"/></svg>

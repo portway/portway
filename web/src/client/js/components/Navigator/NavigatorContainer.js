@@ -20,9 +20,9 @@ import './Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
-  const { data: project } = useDataService(
-    currentResource('project', location.pathname), [location.pathname]
-  )
+  const { data: project } = useDataService(currentResource('project', location.pathname), [
+    location.pathname
+  ])
 
   const [expanded, setExpanded] = useState(false)
   const selectRef = useRef()
@@ -45,7 +45,8 @@ const NavigatorContainer = ({ history, location }) => {
     // eslint-disable-next-line react/prop-types
     const { data, innerRef, innerProps, isFocused } = props
     const classnames = cx({
-      'menu__item': true,
+      // eslint-disable-next-line camelcase
+      menu__item: true,
       'menu__item--is-focused': isFocused
     })
     return (
@@ -73,7 +74,7 @@ const NavigatorContainer = ({ history, location }) => {
         className="btn btn--blank btn--with-circular-icon"
         onClick={toggleCallback}>
         <CaretIcon width="12" height="12" />
-        {project ? project.name : 'Projects'}
+        <span className="label">{project ? project.name : 'Projects'}</span>
       </button>
       <div className="menu menu--dark" hidden={!expanded}>
         <Select
@@ -91,7 +92,8 @@ const NavigatorContainer = ({ history, location }) => {
           options={Object.values(projects).map((project) => {
             return { label: project.name, value: String(project.id) }
           })}
-          value={null} />
+          value={null}
+        />
       </div>
     </div>
   )

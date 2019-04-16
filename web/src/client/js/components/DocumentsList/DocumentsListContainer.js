@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
@@ -15,19 +16,14 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
     match.params.projectId
   ])
 
-  const createDocumentAction = (e) => {
+  function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
-      name: e.target.textContent,
-      projectId: match.params.projectId
+      name: value
     })
   }
 
-  function createChangeHandler(e) {
-    e.persist()
-    createDocumentAction(e)
-  }
-
   function createDocumentHandler(value) {
+    history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}/document/new` })
     uiDocumentCreate(value)
   }
 
@@ -44,9 +40,10 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
   return (
     <DocumentsListComponent
       createCallback={createDocumentHandler}
-      createChangeHandler={createChangeHandler}
+      createChangeHandler={createDocumentAction}
       creating={ui.documents.creating}
-      documents={sortedDocuments} />
+      documents={sortedDocuments}
+    />
   )
 }
 
@@ -66,7 +63,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { createDocument, uiDocumentCreate }
 
-
 export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(DocumentsListContainer)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(DocumentsListContainer)
 )

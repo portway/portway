@@ -1,26 +1,29 @@
-import Joi from 'joi'
 import ono from 'ono'
 import { validateBody } from '../libs/middleware/payloadValidation'
 import projectCoordinator from '../coordinators/projectCrud'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
+import { requiredFields } from './payloadSchemas/helpers'
+import projectSchema from './payloadSchemas/project'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.PROJECT,
-  (req) => { return { id: req.params.id } }
+  req => {
+    return { id: req.params.id }
+  }
 )
 
-const projectsPayloadSchema = Joi.compile({
-  name: Joi.string().required(),
-  description: Joi.string().allow('')
-})
-
 const projectsController = function(router) {
-  router.post('/', validateBody(projectsPayloadSchema), createPerm, addProject)
+  router.post(
+    '/',
+    validateBody(requiredFields(RESOURCE_TYPES.PROJECT, 'name')),
+    createPerm,
+    addProject
+  )
   router.get('/', listPerm, getProjects)
   router.get('/:id', readPerm, getProject)
-  router.put('/:id', validateBody(projectsPayloadSchema), updatePerm, replaceProject)
+  router.put('/:id', validateBody(projectSchema), updatePerm, replaceProject)
   router.delete('/:id', deletePerm, deleteProject)
 }
 

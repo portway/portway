@@ -2,6 +2,11 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+  header {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+  }
 
   &__title {
     border: none;
@@ -10,8 +15,8 @@
     font-size: 1.2rem;
     font-weight: 700;
     line-height: 1em;
+    padding-top: 8px;
     outline: none;
-    padding-bottom: $sideGutterWidth / 2;
     resize: none;
     width: 100%;
     -webkit-appearance: none;
@@ -31,5 +36,4 @@
     position: absolute;
     width: 48px;
   }
-
 }

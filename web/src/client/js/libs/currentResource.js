@@ -40,8 +40,9 @@ const currentResource = (resourceName, path) => {
       })
       func = dataMapper.projects.id
       if (matchResults) {
-        returnValue = matchResults.params.projectId ?
-          func(matchResults.params.projectId) : returnNull()
+        returnValue = matchResults.params.projectId
+          ? func(matchResults.params.projectId)
+          : returnNull()
       } else {
         returnValue = returnNull()
       }
@@ -52,6 +53,10 @@ const currentResource = (resourceName, path) => {
         exact: true,
         strict: false
       })
+      if (matchResults && matchResults.params.documentId === 'new') {
+        returnValue = returnNull()
+        break
+      }
       func = dataMapper.documents.id
       if (matchResults && matchResults.params.projectId && matchResults.params.documentId) {
         returnValue = func(matchResults.params.projectId, matchResults.params.documentId)

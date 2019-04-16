@@ -3,6 +3,8 @@ module.exports = {
   PRODUCT_NAME: 'Project Danger',
   PRODUCT_ID: 'project-danger',
   PRODUCT_LOGO: '/images/logo.svg',
+  // Default text strings
+  LABEL_NEW_DOCUMENT: 'New Document',
   // Paths
   PATH_APP: '/d',
   PATH_BILLING: '/billing',
@@ -13,5 +15,10 @@ module.exports = {
   PATH_PROJECTS: '/projects',
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
-  MAX_COOKIE_AGE_MS: '604800000' // 7 days
+  MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  FIELD_TYPES: {
+    STRING: 1,
+    TEXT: 2,
+    NUMBER: 3
+  }
 }

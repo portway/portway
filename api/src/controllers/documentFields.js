@@ -5,24 +5,14 @@ import { validateBody, validateParams } from '../libs/middleware/payloadValidati
 import BusinessField from '../businesstime/field'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
-import fieldTypes from '../constants/fieldTypes'
+import { requiredFields, partialFields } from './payloadSchemas/helpers'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  (req) => { return { documentId: req.params.documentId } }
+  req => {
+    return { documentId: req.params.documentId }
+  }
 )
-
-const bodySchema = Joi.compile({
-  name: Joi.string().required(),
-  docId: Joi.number(),
-  value: Joi.alternatives(Joi.string(), Joi.number()).required(),
-  // TODO: probably want a json parse validator on this one
-  structuredValue: Joi.string(),
-  type: Joi.number()
-    .valid(Object.values(fieldTypes.FIELD_TYPES))
-    .required()
-  // TODO: order: need to decide how to handle this
-})
 
 const paramSchema = Joi.compile({
   documentId: Joi.number().required(),
@@ -35,7 +25,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type')),
     createPerm,
     addDocumentField
   )
@@ -44,7 +34,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue')),
     updatePerm,
     updateDocumentField
   )
@@ -100,12 +90,7 @@ const updateDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const field = await BusinessField.updateByIdForDocument(
-      id,
-      documentId,
-      orgId,
-      body
-    )
+    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, body)
     res.status(200).json({ data: field })
   } catch (e) {
     console.error(e.stack)

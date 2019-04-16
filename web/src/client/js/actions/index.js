@@ -15,13 +15,17 @@ export const ActionTypes = {
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
-  CREATE_DOCUMENT: 'CREATE_DOCUMENT',
-  UPDATE_DOCUMENT: 'UPDATE_DOCUMENT',
+  INITIATE_DOCUMENT_CREATE: 'INITIATE_DOCUMENT_CREATE',
   RECEIVE_CREATED_DOCUMENT: 'RECEIVE_CREATED_DOCUMENT',
+  INITIATE_DOCUMENT_UPDATE: 'INITIATE_UPDATE_DOCUMENT',
   RECEIVE_UPDATED_DOCUMENT: 'RECEIVE_UPDATED_DOCUMENT',
+  INITIATE_DOCUMENT_REMOVE: 'INITIATE_DOCUMENT_REMOVE',
+  REMOVE_DOCUMENT: 'REMOVE_DOCUMENT',
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   // Fields
+  REQUEST_FIELDS: 'REQUEST_FIELDS',
+  RECEIVE_FIELDS: 'RECEIVE_FIELDS',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
   INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
   RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
@@ -34,7 +38,10 @@ export const ActionTypes = {
   RECEIVE_USER: 'RECEIVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   // UI
-  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE'
+  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
+  UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
+  UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
+  UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION'
 }
 
 export const Projects = {
@@ -51,10 +58,17 @@ export const Projects = {
 }
 
 export const Documents = {
-  create: makeActionCreator(ActionTypes.CREATE_DOCUMENT, 'projectId', 'data'),
-  update: makeActionCreator(ActionTypes.UPDATE_DOCUMENT, 'projectId', 'documentId', 'data'),
+  create: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_CREATE, 'projectId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
+  update: makeActionCreator(
+    ActionTypes.INITIATE_DOCUMENT_UPDATE,
+    'projectId',
+    'documentId',
+    'data'
+  ),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
+  delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
+  deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'projectId', 'documentId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
@@ -62,11 +76,13 @@ export const Documents = {
 }
 
 export const Fields = {
+  requestList: makeActionCreator(ActionTypes.REQUEST_FIELDS, 'documentId'),
+  receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
-  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
-  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'id', 'docId')
+  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'documentId', 'fieldId')
 }
 
 export const Users = {
@@ -78,5 +94,14 @@ export const Users = {
 }
 
 export const UI = {
+  initiateConfirm: makeActionCreator(
+    ActionTypes.UI_INITIATE_CONFIRMATION,
+    'message',
+    'cancelAction',
+    'confirmedAction',
+    'confirmedLabel'
+  ),
+  cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
+  completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
 }

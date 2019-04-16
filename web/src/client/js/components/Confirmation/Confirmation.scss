@@ -1,0 +1,51 @@
+@import 'CSS/inc/_vars.scss';
+
+.confirmation {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 15;
+
+  &__dialog {
+    background-color: $white;
+    border: thin solid $gray;
+    border-radius: 4px 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    padding: 24px;
+    width: 50vw;
+  }
+
+  &__message {
+    color: $gray-dark;
+  }
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 24px;
+  }
+
+  &__confirm {
+    font-weight: 700;
+  }
+
+  &__cancel {
+    color: $gray-dark;
+  }
+
+  .highlight {
+    color: $black-bis;
+    font-weight: 700;
+    &.danger {
+      color: $danger;
+    }
+    &.warning {
+      color: $warning;
+    }
+  }
+}

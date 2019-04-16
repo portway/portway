@@ -44,7 +44,8 @@ body {
   font-size: 15px; // base font
 }
 
-.navbar-brand h1, .navbar-brand-name {
+.navbar-brand h1,
+.navbar-brand-name {
   font-size: 1.867rem; // 28px
   font-weight: 700;
   letter-spacing: 0.029em; // .8px
@@ -60,9 +61,9 @@ h1,
 .h-first-level {
   color: $primary;
   font-family: $serif !important;
-  font-size: 1.600rem; // 24px
+  font-size: 1.6rem; // 24px
   font-weight: 700;
-  line-height: 0.750em; // 18pxs
+  line-height: 0.75em; // 18pxs
   a {
     color: $primary;
     text-decoration: none;
@@ -96,37 +97,53 @@ p {
 }
 
 .small {
-  font-size: 0.800rem; // 12px
+  font-size: 0.8rem; // 12px
   line-height: 1.167em; // 14px
   padding: 0.417em 0; // 5px
 }
 
-b, strong {
+b,
+strong {
   font-weight: 700;
 }
 
 .note {
   font-family: $serif !important;
-  font-size: 0.800rem; // 12px
+  font-size: 0.8rem; // 12px
   font-style: italic;
   letter-spacing: 0.012em; // .14px
   line-height: 1em; // 12px
   padding: 0.417em 0; // 5px
 }
 
+.danger {
+  color: $danger;
+}
+.warning {
+  color: $warning;
+}
+
 time {
   font-family: $serif !important;
-  font-size: 0.800rem; // 12px
+  font-size: 0.8rem; // 12px
   font-style: italic;
   letter-spacing: 0.012em; // .14px
   line-height: 1em; // 12px
 }
 
-input, textarea, keygen, select, button {
+input,
+textarea,
+keygen,
+select,
+button {
   font-size: 1rem; // 15px
 }
 
-input, textarea, keygen, select, button {
+input,
+textarea,
+keygen,
+select,
+button {
   font-size: 1em;
 }
 

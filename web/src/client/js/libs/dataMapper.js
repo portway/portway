@@ -17,6 +17,7 @@
  * A view can optionally take arguments to the function, for instance to fetch a resource by id
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
+import { fetchFields } from 'Actions/field'
 import { fetchProject, fetchProjects } from 'Actions/project'
 import { fetchUser, fetchUsers } from 'Actions/user'
 import currentUserId from './currentUserId'
@@ -27,10 +28,10 @@ export default {
       return {
         fetchAction: fetchDocuments(projectId),
         getLoadingStatusFromState: (state) => {
-          return state.documents.loading.list[projectId]
+          return state.documents.loading.byProject[projectId]
         },
         getDataFromState: (state) => {
-          return state.documents.list[projectId]
+          return state.documents.projectDocumentsById[projectId]
         }
       }
     },
@@ -41,7 +42,23 @@ export default {
           return state.documents.loading.byId[documentId]
         },
         getDataFromState: (state) => {
-          return state.documents.documentsById[documentId]
+          return (
+            state.documents.projectDocumentsById[projectId] &&
+            state.documents.projectDocumentsById[projectId][documentId]
+          )
+        }
+      }
+    }
+  },
+  fields: {
+    list: function(documentId) {
+      return {
+        fetchAction: fetchFields(documentId),
+        getLoadingStatusFromState: (state) => {
+          return state.documentFields.loading.byDocument[documentId]
+        },
+        getDataFromState: (state) => {
+          return state.documentFields.documentFieldsById[documentId]
         }
       }
     }

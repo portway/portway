@@ -30,7 +30,7 @@ const renderProjectsItems = () => {
         title="Create a new project"
         to={Constants.PATH_PROJECT_CREATE}>
         <AddIcon width="12" height="12" />
-        New Project
+        <span className="label">New Project</span>
       </Link>
     </div>
   )
@@ -54,10 +54,7 @@ const Header = ({ location }) => {
           )}
           {`/${section}` !== Constants.PATH_DASHBOARD &&
             `/${section}` !== Constants.PATH_SETTINGS && <Navigator />}
-          {
-            `/${section}` === Constants.PATH_PROJECT &&
-            renderProjectsItems()
-          }
+          {`/${section}` === Constants.PATH_PROJECT && renderProjectsItems()}
           <GlobalSearchContainer />
         </div>
         <div className="navbar__user">

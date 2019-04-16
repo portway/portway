@@ -9,11 +9,17 @@ import { TimeIcon } from 'Components/Icons'
 const DocumentsListItem = ({ disable, document }) => {
   return (
     <li className="documents-list__item">
-      {/* eslint-disable-next-line max-len */}
-      <NavLink to={`${Constants.PATH_PROJECT}/${document.projectId}${Constants.PATH_DOCUMENT}/${document.id}`}
+      <NavLink
+        to={`${Constants.PATH_PROJECT}/${document.projectId}${Constants.PATH_DOCUMENT}/${
+          document.id
+        }`}
         className="btn btn--blank documents-list__button"
-        onClick={(e) => { if (disable) { e.preventDefault() } }}>
-        <span className="documents-list__name">{ document.name }</span>
+        onClick={(e) => {
+          if (disable) {
+            e.preventDefault()
+          }
+        }}>
+        <span className="documents-list__name">{document.name}</span>
         <time className="documents-list__date" dateTime={document.updatedAt}>
           <TimeIcon />
           <span>{moment(document.updatedAt).fromNow()}</span>

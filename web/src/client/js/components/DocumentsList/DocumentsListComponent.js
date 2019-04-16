@@ -2,55 +2,77 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import Constants from 'Shared/constants'
+import useClickOutside from 'Hooks/useClickOutside'
 import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
-
 import './DocumentsList.scss'
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
+  const listItemRef = useRef()
   const nameRef = useRef()
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
     if (creating && nameRef.current) {
-      const range = document.createRange()
-      range.selectNodeContents(nameRef.current)
-      const sel = document.getSelection()
-      sel.removeAllRanges()
-      sel.addRange(range)
+      nameRef.current.select()
     }
   })
 
   // Set up toolbar
   const toolbarAction = {
-    callback: () => { createCallback(true) },
+    callback: () => {
+      createCallback(true)
+    },
     icon: <AddIcon width="16" height="16" />,
-    label: `New Document`,
+    label: 'New Document',
     shortcut: 'n',
     title: 'Create a new document in this project'
   }
 
+  function createDocument() {
+    if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
+      createChangeHandler(nameRef.current.value)
+    } else {
+      createCallback(false)
+    }
+  }
+  useClickOutside(
+    listItemRef,
+    () => {
+      if (creating) {
+        createDocument()
+      }
+    },
+    { preventEscapeFunctionality: true }
+  )
+
   function renderNewDocument() {
     if (creating) {
       return (
-        <li className="documents-list__item documents-list__item--new">
+        <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
           <div className="documents-list__button">
-            <div contentEditable
+            <textarea
               ref={nameRef}
-              role="textbox"
-              tabIndex={0}
               className="documents-list__name"
-              suppressContentEditableWarning
+              defaultValue={Constants.LABEL_NEW_DOCUMENT}
               onKeyDown={(e) => {
+                if (e.keyCode === 27) {
+                  e.preventDefault()
+                  createCallback(false)
+                }
                 if (e.key.toLowerCase() === 'enter') {
                   e.preventDefault()
-                  createChangeHandler(e)
+                  createChangeHandler(e.target.value)
                 }
-              }}>New Document</div>
+              }}
+            />
             <button
               className="btn btn--blank btn--with-circular-icon"
-              onClick={() => { createCallback(false) }}>
+              onClick={() => {
+                createCallback(false)
+              }}>
               <RemoveIcon width="18" height="18" />
             </button>
           </div>

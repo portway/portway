@@ -30,7 +30,6 @@
           margin: 0;
           position: relative;
           transition: none;
-          will-change: unset;
           // Override default .menu stuff
           &:not([hidden]) {
             box-shadow: none;
@@ -57,7 +56,8 @@
       outline: none;
     }
     // Regular React Select menu (not auto-open)
-    &__menu {}
+    &__menu {
+    }
     // React Select menu list
     &__menu-list {
       padding: 0;
