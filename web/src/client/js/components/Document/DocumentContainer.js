@@ -48,7 +48,8 @@ const DocumentContainer = ({
     const newName = Constants.FIELD_LABELS[fieldType] + Number(typeFieldsInDocument.length + 1)
     createField(document.id, {
       name: newName,
-      type: fieldType
+      type: fieldType,
+      value: ''
     })
     uiFieldCreate(fieldType)
   }

@@ -5,10 +5,13 @@ import cx from 'classnames'
 import Constants from 'Shared/constants'
 import { RemoveIcon } from 'Components/Icons'
 
+import './DocumentField.scss'
+
 const DocumentFieldComponent = ({ children, type, onDestroy }) => {
   const fieldClasses = cx({
     'field': true,
-    'field--text': type === Constants.FIELD_TYPES.TEXT
+    'field--text': type === Constants.FIELD_TYPES.TEXT,
+    'field--number': type === Constants.FIELD_TYPES.NUMBER
   })
   return (
     <div className={fieldClasses}>

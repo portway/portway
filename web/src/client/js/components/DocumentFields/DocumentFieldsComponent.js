@@ -4,18 +4,30 @@ import PropTypes from 'prop-types'
 import Constants from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
+import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 
 const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandler }) => {
   function renderFields() {
     const fieldArray = []
+    const showFieldName = fields.length > 1
     fields.forEach((field) => {
       switch (field.type) {
         case Constants.FIELD_TYPES.TEXT: {
-          fieldArray.push(
+          return fieldArray.push(
             <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
-              <FieldTextComponent field={field} onChange={fieldChangeHandler} />
+              <FieldTextComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
             </DocumentFieldComponent>
           )
+        }
+        case Constants.FIELD_TYPES.NUMBER: {
+          return fieldArray.push(
+            <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
+              <FieldNumberComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+            </DocumentFieldComponent>
+          )
+        }
+        default: {
+          break
         }
       }
     })

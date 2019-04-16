@@ -19,14 +19,10 @@ const DocumentFieldsContainer = ({ match, removeField, updateField, ui }) => {
     console.info(`Remove ${fieldId} when you can add them...`) // I just can't add them yet and this is our only field
     // removeField(documentId, fieldId)
   }
-  function fieldChangeHandler(fieldId, value) {
+  function fieldChangeHandler(fieldId, body) {
     // leave this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
-    updateField(documentId, fieldId, {
-      docId: documentId,
-      id: fieldId,
-      value: value
-    })
+    updateField(documentId, fieldId, body)
   }
   // Convert fields object to an array for rendering
   const fieldMap = Object.keys(fields).map((fieldId) => {

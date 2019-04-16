@@ -28,44 +28,7 @@
 
   &__fields {
     flex: 1;
-    .field {
-      border-bottom: thin solid $gray-light;
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-
-  &__field-create-input {
-    padding: 1em 0;
-    label {
-      margin-right: 1em;
-    }
-    input {
-      background: $gray;
-      border: 0;
-      border-radius: 4px 4px;
-      padding: 6px;
-    }
-  }
-
-  &__field-menu {
-    padding-left: 1rem;
-    ul {
-      display: flex;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    li {
-      margin-right: 1rem;
-    }
-  }
-
-  &__footer {
-    align-items: center;
-    background-color: $white;
-    display: flex;
+    padding: ($brandWidth / 2) 0;
   }
 
 }
