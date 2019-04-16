@@ -45,7 +45,8 @@ const DocumentContainer = ({
   }
   function fieldCreationHandler(fieldType) {
     const typeFieldsInDocument = fieldsByType[fieldType]
-    const newName = Constants.FIELD_LABELS[fieldType] + Number(typeFieldsInDocument.length + 1)
+    const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
+    const newName = Constants.FIELD_LABELS[fieldType] + (value + 1)
     createField(document.id, {
       name: newName,
       type: fieldType
