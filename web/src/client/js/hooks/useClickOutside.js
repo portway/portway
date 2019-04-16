@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-function useClickOutside(ref, callback) {
+function useClickOutside(ref, callback, options = {}) {
   useEffect(() => {
     function mouseDownHandler(e) {
       if (ref && ref.current) {
@@ -17,12 +17,16 @@ function useClickOutside(ref, callback) {
       }
     }
     document.addEventListener('mousedown', mouseDownHandler, false)
-    document.addEventListener('keydown', keyDownHandler, false)
+    if (!options.preventEscapeFunctionality) {
+      document.addEventListener('keydown', keyDownHandler, false)
+    }
     return () => {
       document.removeEventListener('mousedown', mouseDownHandler, false)
-      document.removeEventListener('keydown', keyDownHandler, false)
+      if (!options.preventEscapeFunctionality) {
+        document.removeEventListener('keydown', keyDownHandler, false)
+      }
     }
-  }, [callback, ref])
+  }, [callback, ref, options])
 }
 
 export default useClickOutside
