@@ -6,12 +6,7 @@ import { debounce } from 'Shared/utilities'
 import './SimpleMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ field, onChange, showName }) => {
-  // field name change
-  const nameRef = useRef()
-  const debouncedNameChangeHandler = debounce(1000, (e) => {
-    onChange(field.id, { name: nameRef.current.value })
-  })
+const FieldTextComponent = ({ field, onChange }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
@@ -53,25 +48,13 @@ const FieldTextComponent = ({ field, onChange, showName }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor])
   return (
-    <>
     <textarea ref={textRef} />
-    {showName &&
-    <input
-      ref={nameRef}
-      className="field__name"
-      defaultValue={field.name}
-      onChange={debouncedNameChangeHandler}
-      onFocus={(e) => { e.target.select() }}
-      type="text" />
-    }
-    </>
   )
 }
 
 FieldTextComponent.propTypes = {
-  field: PropTypes.object,
-  onChange: PropTypes.func.isRequired,
-  showName: PropTypes.bool
+  field: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 }
 
 export default FieldTextComponent

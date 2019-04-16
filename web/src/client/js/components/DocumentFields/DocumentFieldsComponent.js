@@ -13,19 +13,21 @@ const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandl
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} />
         break
       case Constants.FIELD_TYPES.NUMBER:
-        fieldTypeComponent = <FieldNumberComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+        fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />
         break
       case Constants.FIELD_TYPES.STRING:
-        fieldTypeComponent = <FieldStringComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+        fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
         break
       default:
         break
     }
     return (
-      <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>{fieldTypeComponent}</DocumentFieldComponent>
+      <DocumentFieldComponent key={field.id} field={field} showName={showFieldName} onRename={fieldChangeHandler} onDestroy={() => { fieldDestroyHandler(field.id) }}>
+        {fieldTypeComponent}
+      </DocumentFieldComponent>
     )
   }
   function renderFields() {
