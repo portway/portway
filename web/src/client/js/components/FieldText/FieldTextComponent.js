@@ -18,7 +18,7 @@ const FieldTextComponent = ({ field, onChange, showName }) => {
   useEffect(() => {
     setEditor(new SimpleMDE({
       autoDownloadFontAwesome: false,
-      autofocus: true,
+      autofocus: false,
       autosave: {
         enabled: false
       },
