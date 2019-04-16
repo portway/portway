@@ -1,0 +1,29 @@
+@import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
+@import 'CSS/inc/_type.scss';
+
+.field {
+  border-bottom: thin solid $white-ter;
+  display: flex;
+  padding: ($brandWidth / 2) 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__component {
+    display: flex;
+    flex: 1;
+    flex-direction: column-reverse;
+  }
+
+  &__name {
+    @extend .note;
+    border: none;
+    border-left: 2px solid $gray;
+    color: $gray-dark;
+    padding-left: 6px;
+    outline: none;
+  }
+
+}

@@ -10,8 +10,9 @@ export const fetchFields = (documentId) => {
   }
 }
 
-export const createField = (documentId, body) => {
+export const createField = (documentId, fieldType, body) => {
   return async (dispatch) => {
+    dispatch(Fields.initiateCreate(documentId, fieldType))
     const { data } = await add(`documents/${documentId}/fields`, body)
     dispatch(Fields.receiveOneCreated(data))
   }

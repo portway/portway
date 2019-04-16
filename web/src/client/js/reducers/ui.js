@@ -10,6 +10,10 @@ const initialState = {
   },
   documents: {
     creating: false
+  },
+  fields: {
+    creating: false,
+    type: -1
   }
 }
 
@@ -17,6 +21,14 @@ export const ui = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.UI_DOCUMENT_CREATE: {
       return { ...state, documents: { ...state.documents, creating: action.value } }
+    }
+    case ActionTypes.INITIATE_FIELD_CREATE: {
+      // Tell everyone we're creating a field, and what type
+      return { ...state, fields: { ...state.fields, creating: true, type: action.fieldType } }
+    }
+    case ActionTypes.RECEIVE_CREATED_FIELD: {
+      // Reset fields when a field is created
+      return { ...state, fields: initialState.fields }
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }

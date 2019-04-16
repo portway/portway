@@ -2,8 +2,11 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
-  header {
+  &__header {
     align-items: flex-start;
     display: flex;
     justify-content: space-between;
@@ -12,6 +15,7 @@
   &__title {
     border: none;
     color: $primary;
+    flex: 1;
     font-family: $serif;
     font-size: 1.2rem;
     font-weight: 700;
@@ -19,23 +23,12 @@
     padding-top: 8px;
     outline: none;
     resize: none;
-    width: 100%;
     -webkit-appearance: none;
   }
 
-  .field-button {
-    div {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-    border-radius: 50% 50%;
-    bottom: $sideGutterWidth / 2;
-    height: 48px;
-    padding: 0;
-    position: absolute;
-    width: 48px;
+  &__fields {
+    flex: 1;
+    padding: ($brandWidth / 2) 0;
   }
 
 }

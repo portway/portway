@@ -1,16 +1,22 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
+import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, MoreIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
-import DocumentFieldsContainer from './DocumentFieldsContainer'
+import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
+  const fieldDropdownButton = {
+    className: 'btn btn--blank btn--with-circular-icon',
+    icon: <AddIcon width="18" height="18" />,
+    label: 'Add field'
+  }
   const dropdownButton = {
     className: 'btn btn--blank btn--with-circular-icon',
     icon: <MoreIcon width="18" height="18" />
@@ -20,7 +26,7 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
   })
   return (
     <div className="document" key={docKey}>
-      <header>
+      <header className="document__header">
         <textarea
           className="document__title"
           defaultValue={document.name}
@@ -35,25 +41,23 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
             }
           }}
           ref={titleRef} />
-        <DropdownComponent
-          align="right"
-          button={dropdownButton}
-          className="document__document-dropdown">
+        <DropdownComponent align="right" button={fieldDropdownButton} className="document__field-dropdown">
+          <li><button onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }}>Text area</button></li>
+          <li><button onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }}>Text field</button></li>
+          <li><button onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }}>Number</button></li>
+        </DropdownComponent>
+        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
           <li>
+            <button>Duplicate document</button>
+          </li>
+          <li className="menu__divider">
             <button
-              className="menu__item btn btn--white btn--danger" onClick={removeDocumentHandler}>
+              className="btn--danger" onClick={removeDocumentHandler}>
               Delete document...
             </button>
           </li>
         </DropdownComponent>
       </header>
-      {document &&
-      <button className="field-button" aria-label="Add a field" title="Add a field">
-        <div>
-          <AddIcon fill="#ffffff" />
-        </div>
-      </button>
-      }
       <DocumentFieldsContainer />
     </div>
   )
@@ -62,6 +66,7 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
+  fieldCreationHandler: PropTypes.func.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }
@@ -70,7 +75,6 @@ DocumentComponent.defaultProps = {
   document: {
     name: ''
   },
-  fields: {}
 }
 
 export default DocumentComponent

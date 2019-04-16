@@ -10,8 +10,8 @@ function SortComponent() {
   }
   return (
     <DropdownComponent button={sortButton} align="right">
-      <li className="menu__item">
-        <button className="btn btn--blank">Title</button>
+      <li>
+        <button>Title</button>
       </li>
     </DropdownComponent>
   )
