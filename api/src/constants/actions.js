@@ -3,7 +3,8 @@ const ACTIONS = {
   LIST: 'LIST',
   UPDATE: 'UPDATE',
   DELETE: 'DELETE',
-  CREATE: 'CREATE'
+  CREATE: 'CREATE',
+  UPDATE_ORG_ROLE: 'UPDATE_ORG_ROLE'
 }
 
 export default ACTIONS

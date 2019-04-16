@@ -3,12 +3,13 @@ import checkPermission from '../permissions/permissions'
 requestorInfo = {
   orgId: '123',
   requestorType: 'user',
-  requestorId: '234'
+  requestorId: '234',
+  orgRoleId: 1
 }
 
 requestedAction = {
   resourceType: 'project',
-  action: 'read',
+  action: 'READ',
   data: {
     id: '123'
   }
@@ -19,7 +20,7 @@ requestedAction = {
 function(req) {
   return {
     resourceType: 'project',
-    action: 'read',
+    action: 'READ',
     data: {
       id: req.params.id
     }
