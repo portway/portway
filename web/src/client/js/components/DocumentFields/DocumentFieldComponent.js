@@ -11,7 +11,8 @@ const DocumentFieldComponent = ({ children, type, onDestroy }) => {
   const fieldClasses = cx({
     'field': true,
     'field--text': type === Constants.FIELD_TYPES.TEXT,
-    'field--number': type === Constants.FIELD_TYPES.NUMBER
+    'field--number': type === Constants.FIELD_TYPES.NUMBER,
+    'field--string': type === Constants.FIELD_TYPES.STRING,
   })
   return (
     <div className={fieldClasses}>

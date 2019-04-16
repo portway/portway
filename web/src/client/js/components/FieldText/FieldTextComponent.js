@@ -8,8 +8,9 @@ import './FieldText.scss'
 
 const FieldTextComponent = ({ field, onChange, showName }) => {
   // field name change
-  const debouncedNameChangeHandler = debounce(1000, (body) => {
-    onChange(field.id, body)
+  const nameRef = useRef()
+  const debouncedNameChangeHandler = debounce(1000, (e) => {
+    onChange(field.id, { name: nameRef.current.value })
   })
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
@@ -55,9 +56,13 @@ const FieldTextComponent = ({ field, onChange, showName }) => {
     <>
     <textarea ref={textRef} />
     {showName &&
-    <input className="field__name" type="text" defaultValue={field.name} onChange={(e) => {
-      debouncedNameChangeHandler(field.id, { name: e.target.value })
-    }} />
+    <input
+      ref={nameRef}
+      className="field__name"
+      defaultValue={field.name}
+      onChange={debouncedNameChangeHandler}
+      onFocus={(e) => { e.target.select() }}
+      type="text" />
     }
     </>
   )

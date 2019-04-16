@@ -5,6 +5,7 @@ import Constants from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
+import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 
 const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandler }) => {
   function renderFields() {
@@ -23,6 +24,13 @@ const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandl
           return fieldArray.push(
             <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
               <FieldNumberComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+            </DocumentFieldComponent>
+          )
+        }
+        case Constants.FIELD_TYPES.STRING: {
+          return fieldArray.push(
+            <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
+              <FieldStringComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
             </DocumentFieldComponent>
           )
         }

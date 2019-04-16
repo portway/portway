@@ -2,9 +2,9 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { debounce } from 'Shared/utilities'
-import './FieldNumber.scss'
+import './FieldString.scss'
 
-const FieldNumberComponent = ({ field, onChange, showName }) => {
+const FieldStringComponent = ({ field, onChange, showName }) => {
   // field name change
   const nameRef = useRef()
   const debouncedNameChangeHandler = debounce(1000, (e) => {
@@ -18,11 +18,11 @@ const FieldNumberComponent = ({ field, onChange, showName }) => {
   return (
     <>
     <input
-      className="h-second-level"
+      className="string h-second-level"
       defaultValue={field.value}
       onChange={debouncedValueChangeHandler}
       onFocus={(e) => { e.target.select() }}
-      type="number"
+      type="text"
       ref={valueRef} />
     {showName &&
     <input
@@ -37,10 +37,10 @@ const FieldNumberComponent = ({ field, onChange, showName }) => {
   )
 }
 
-FieldNumberComponent.propTypes = {
+FieldStringComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   showName: PropTypes.bool
 }
 
-export default FieldNumberComponent
+export default FieldStringComponent

@@ -48,8 +48,7 @@ const DocumentContainer = ({
     const newName = Constants.FIELD_LABELS[fieldType] + Number(typeFieldsInDocument.length + 1)
     createField(document.id, {
       name: newName,
-      type: fieldType,
-      value: ''
+      type: fieldType
     })
     uiFieldCreate(fieldType)
   }
@@ -60,8 +59,7 @@ const DocumentContainer = ({
   function nameChangeHandler(e) {
     if (e.target.value !== document.name) {
       updateDocument(document.projectId, document.id, {
-        name: e.target.value,
-        projectId: document.projectId
+        name: e.target.value
       })
     }
   }
