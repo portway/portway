@@ -2,12 +2,15 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import Constants from 'Shared/constants'
+import useClickOutside from 'Hooks/useClickOutside'
 import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
 import './DocumentsList.scss'
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
+  const listItemRef = useRef()
   const nameRef = useRef()
 
   // Select the contents of the contentEditable div (new document name)
@@ -21,24 +24,41 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   const toolbarAction = {
     callback: () => { createCallback(true) },
     icon: <AddIcon width="16" height="16" />,
-    label: `New Document`,
+    label: 'New Document',
     shortcut: 'n',
     title: 'Create a new document in this project'
   }
 
+  function createDocument() {
+    if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
+      createChangeHandler(nameRef.current.value)
+    } else {
+      createCallback(false)
+    }
+  }
+  useClickOutside(
+    listItemRef,
+    () => { if (creating) { createDocument() } },
+    { preventEscapeFunctionality: true }
+  )
+
   function renderNewDocument() {
     if (creating) {
       return (
-        <li className="documents-list__item documents-list__item--new">
+        <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
           <div className="documents-list__button">
             <textarea
               ref={nameRef}
               className="documents-list__name"
-              defaultValue="New Document"
+              defaultValue={Constants.LABEL_NEW_DOCUMENT}
               onKeyDown={(e) => {
+                if (e.keyCode === 27) {
+                  e.preventDefault()
+                  createCallback(false)
+                }
                 if (e.key.toLowerCase() === 'enter') {
                   e.preventDefault()
-                  createChangeHandler(e)
+                  createChangeHandler(e.target.value)
                 }
               }} />
             <button
