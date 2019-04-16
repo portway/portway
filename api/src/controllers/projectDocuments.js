@@ -4,19 +4,15 @@ import { validateBody, validateParams } from '../libs/middleware/payloadValidati
 import BusinessDocument from '../businesstime/document'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
+import { requiredFields } from './payloadSchemas/helpers'
+import documentSchema from './payloadSchemas/document'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
-  RESOURCE_TYPES.PROJECT,
-  req => req.params.projectId
+  RESOURCE_TYPES.DOCUMENT,
+  (req) => { return { projectId: req.params.projectId }}
 )
 
-// TODO: this is currently piggybacking off of project perms,
-// does it need its own, or will it always be the same?
-
-const bodySchema = Joi.compile({
-  name: Joi.string().required(),
-  projectId: Joi.number()
-})
+// TODO: this is currently piggybacking off of project perms
 
 const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
@@ -28,7 +24,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(requiredFields('document', 'name')),
     createPerm,
     addProjectDocument
   )
@@ -37,7 +33,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(documentSchema),
     updatePerm,
     replaceProjectDocument
   )

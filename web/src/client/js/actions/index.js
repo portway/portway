@@ -24,6 +24,8 @@ export const ActionTypes = {
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   // Fields
+  REQUEST_FIELDS: 'REQUEST_FIELDS',
+  RECEIVE_FIELDS: 'RECEIVE_FIELDS',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
   INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
   RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
@@ -69,11 +71,13 @@ export const Documents = {
 }
 
 export const Fields = {
+  requestList: makeActionCreator(ActionTypes.REQUEST_FIELDS, 'documentId'),
+  receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
-  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
-  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'id', 'docId')
+  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'documentId', 'fieldId')
 }
 
 export const Users = {

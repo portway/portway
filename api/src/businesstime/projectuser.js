@@ -10,7 +10,7 @@ async function create(body) {
   return createdProjectUser.get({ plain: true })
 }
 
-async function addUserIdToProject(userId, projectId, orgId) {
+async function addUserIdToProject(userId, projectId, roleId, orgId) {
   const db = getDb()
 
   const values = await Promise.all([
@@ -36,7 +36,7 @@ async function addUserIdToProject(userId, projectId, orgId) {
   }
 
   const result = await db.model(MODEL_NAME).findOrCreate({
-    where: { projectId, orgId, userId },
+    where: { projectId, orgId, userId, roleId },
     attributes: [],
     raw: true
   })
@@ -91,10 +91,22 @@ async function deleteByUserIdForProject(userId, projectId, orgId) {
   await projectUser.destroy()
 }
 
+async function removeAllUsersFromProject(projectId, orgId) {
+  const db = getDb()
+  await db.model(MODEL_NAME).destroy({ where: { projectId, orgId } })
+}
+
+async function getProjectUserAssignment(userId, projectId, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findOne({ where: { userId, projectId, orgId } })
+}
+
 export default {
   create,
   addUserIdToProject,
   findAllByProjectId,
   findByUserIdForProject,
-  deleteByUserIdForProject
+  deleteByUserIdForProject,
+  removeAllUsersFromProject,
+  getProjectUserAssignment
 }

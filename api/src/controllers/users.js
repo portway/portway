@@ -3,9 +3,10 @@ import ono from 'ono'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 
-const { readPerm, listPerm } = crudPerms(RESOURCE_TYPES.USER, (req) => {
-  req.params.id
-})
+const { readPerm, listPerm } = crudPerms(
+  RESOURCE_TYPES.USER,
+  (req) => { return { id: req.params.id } }
+)
 
 const usersController = function(router) {
   router.get('/', listPerm, getUsers)

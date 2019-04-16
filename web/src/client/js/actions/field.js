@@ -1,25 +1,34 @@
 import { Fields } from './index'
-import { add, update, remove } from '../api'
+import { add, fetch, update, remove } from '../api'
 
-export const createField = (docId, body) => {
+export const fetchFields = (documentId) => {
   return async (dispatch) => {
-    const { data } = await add(`documents/${docId}/fields`, body)
+    if (!documentId) return
+    dispatch(Fields.requestList(documentId)) // only happens on initial page load
+    const { data } = await fetch(`documents/${documentId}/fields`)
+    dispatch(Fields.receiveList(documentId, data))
+  }
+}
+
+export const createField = (documentId, body) => {
+  return async (dispatch) => {
+    const { data } = await add(`documents/${documentId}/fields`, body)
     dispatch(Fields.receiveOneCreated(data))
   }
 }
 
-export const updateField = (id, docId, body) => {
+export const updateField = (documentId, fieldId, body) => {
   return async (dispatch) => {
-    dispatch(Fields.initiateUpdate())
-    const { data } = await update(`documents/${docId}/fields/${id}`, body)
+    dispatch(Fields.initiateUpdate(fieldId))
+    const { data } = await update(`documents/${documentId}/fields/${fieldId}`, body)
     dispatch(Fields.receiveOneUpdated(data))
   }
 }
 
-export const removeField = (id, docId) => {
+export const removeField = (documentId, fieldId) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())
-    await remove(`documents/${docId}/fields`)
-    dispatch(Fields.removeOne(id, docId))
+    await remove(`documents/${documentId}/fields`)
+    dispatch(Fields.removeOne(documentId, fieldId))
   }
 }

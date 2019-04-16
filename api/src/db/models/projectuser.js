@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       projectId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
-      orgId: DataTypes.INTEGER
+      orgId: DataTypes.INTEGER,
+      roleId: DataTypes.INTEGER
     },
     {
       updatedAt: false, // don't use updatedAt timestamp

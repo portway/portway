@@ -11,7 +11,7 @@ import currentResource from 'Libs/currentResource'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument, history, location, ui, updateDocument, uiConfirm }) => {
+  deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -27,7 +27,7 @@ const DocumentContainer = ({
    * If there is no document and we are not creating: true, then we render
    * a helpful message
    */
-  if (!document) {
+  if (typeof match.params.documentId === 'undefined') {
     return <div>No document</div>
   }
 
@@ -51,15 +51,17 @@ const DocumentContainer = ({
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
   return <DocumentComponent
+    document={document}
     nameChangeHandler={nameChangeHandler}
-    removeDocumentHandler={removeDocumentHandler}
-    document={document} />
+    removeDocumentHandler={removeDocumentHandler} />
 }
 
 DocumentContainer.propTypes = {
   deleteDocument: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
+  loading: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
@@ -67,7 +69,8 @@ DocumentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    ui: state.ui
+    ui: state.ui,
+    loading: state.documents.loading
   }
 }
 
@@ -75,7 +78,6 @@ const mapDispatchToProps = {
   deleteDocument,
   updateDocument,
   uiConfirm,
-
 }
 
 export default withRouter(

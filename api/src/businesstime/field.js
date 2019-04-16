@@ -7,10 +7,10 @@ import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 const MODEL_NAME = 'Field'
 const PUBLIC_FIELDS = [
   ...GLOBAL_PUBLIC_FIELDS,
+  'name',
   'value',
   'structuredValue',
   'orgId',
-  'name',
   'docId',
   'versionId',
   'type',
@@ -20,10 +20,6 @@ const PUBLIC_FIELDS = [
 async function createForDocument(docId, body) {
   const db = getDb()
   const { orgId } = body
-
-  if (docId !== body.docId) {
-    throw ono({ code: 400 }, `Cannot create field, document id param does not match docId in body`)
-  }
 
   const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
@@ -46,7 +42,7 @@ async function createForDocument(docId, body) {
 
 async function findAllForDocument(docId, orgId) {
   const db = getDb()
-  const include = getInclude(db)
+  const include = getFieldValueInclude(db)
   const fields = await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, include })
 
   return fields.map((field) => {
@@ -57,7 +53,7 @@ async function findAllForDocument(docId, orgId) {
 
 async function findByIdForDocument(id, docId, orgId) {
   const db = getDb()
-  const include = getInclude(db)
+  const include = getFieldValueInclude(db)
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, include })
   if (!field) return field
@@ -69,13 +65,6 @@ async function findByIdForDocument(id, docId, orgId) {
 async function updateByIdForDocument(id, docId, orgId, body) {
   const db = getDb()
 
-  if (docId !== body.docId) {
-    throw ono(
-      { code: 400 },
-      `Cannot create field, document id param does not match docId in body`
-    )
-  }
-
   const document = await db
     .model('Document')
     .findOne({ where: { id: docId, orgId }, raw: true })
@@ -86,6 +75,7 @@ async function updateByIdForDocument(id, docId, orgId, body) {
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
+
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
@@ -102,7 +92,7 @@ async function deleteByIdForDocument(id, docId, orgId) {
   await field.destroy()
 }
 
-function getInclude(db) {
+function getFieldValueInclude(db) {
   return Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
     return {
       model: db.model(modelName)

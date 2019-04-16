@@ -28,11 +28,9 @@ const documents = [
       {
         type: FIELD_TYPES.TEXT,
         name: 'Bonkey Field Text',
-        // eslint-disable-next-line no-multi-str
-        value: '# Wee Bonkey \
-                  a strapping young lass \
-                  **a heart of gold** \
-                  _ah yes, wee bonkey_',
+        value: `# Wee Bonkey\n\n
+a strapping young lass with **a heart of gold**, _ah yes, wee bonkey_\n\n
+Dirk is that wee [Bonkey!](https://bonkeybong.com/)`,
         structuredValue: '{ "h1": "Wee Bonkey", "p": "a strapping young lass"}'
       }
     ]

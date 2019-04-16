@@ -17,11 +17,11 @@ const userOrgRoleController = function(router) {
     '/',
     validateParams(paramSchema),
     validateBody(bodySchema),
-    updateUserOrgrole
+    updateUserOrgRole
   )
 }
 
-const updateUserOrgrole = async function(req, res) {
+const updateUserOrgRole = async function(req, res) {
   const { orgRoleId } = req.body
   const { userId } = req.params
   const { orgId } = req.requestorInfo
