@@ -9,9 +9,8 @@ import { updateField, removeField } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
-const DocumentFieldsContainer = ({ match, removeField, updateField, ui }) => {
+const DocumentFieldsContainer = ({ creating, match, removeField, updateField }) => {
   const { documentId } = match.params
-  const uiState = ui.fields
   const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
   if (!fields) return null
 
@@ -29,20 +28,20 @@ const DocumentFieldsContainer = ({ match, removeField, updateField, ui }) => {
     return fields[fieldId]
   })
   return (
-    <DocumentFieldsComponent creating={uiState.creating} fields={fieldMap} fieldChangeHandler={fieldChangeHandler} fieldDestroyHandler={fieldDestroyHandler} />
+    <DocumentFieldsComponent creating={creating} fields={fieldMap} fieldChangeHandler={fieldChangeHandler} fieldDestroyHandler={fieldDestroyHandler} />
   )
 }
 
 DocumentFieldsContainer.propTypes = {
+  creating: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
-  updateField: PropTypes.func.isRequired,
-  ui: PropTypes.object.isRequired,
+  updateField: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    ui: state.ui
+    creating: state.ui.fields.creating
   }
 }
 
