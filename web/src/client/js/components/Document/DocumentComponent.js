@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, MoreIcon } from 'Components/Icons'
 import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import DocumentFieldsContainer from './DocumentFieldsContainer'
 
 import './Document.scss'
 
@@ -53,7 +54,7 @@ const DocumentComponent = ({ document, nameChangeHandler, removeDocumentHandler 
         </div>
       </button>
       }
-      {/* <!-- Loop for fields here --> */}
+      <DocumentFieldsContainer />
     </div>
   )
 }
@@ -63,6 +64,13 @@ DocumentComponent.propTypes = {
   document: PropTypes.object,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
+}
+
+DocumentComponent.defaultProps = {
+  document: {
+    name: ''
+  },
+  fields: {}
 }
 
 export default DocumentComponent
