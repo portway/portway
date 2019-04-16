@@ -8,8 +8,8 @@ import { requiredFields } from './payloadSchemas/helpers'
 import documentSchema from './payloadSchemas/document'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
-  RESOURCE_TYPES.PROJECT,
-  req => req.params.projectId
+  RESOURCE_TYPES.DOCUMENT,
+  (req) => { return { projectId: req.params.projectId }}
 )
 
 // TODO: this is currently piggybacking off of project perms

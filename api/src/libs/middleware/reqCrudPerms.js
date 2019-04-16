@@ -3,21 +3,19 @@
 import actions from '../../constants/actions'
 import perms from './reqPermissionsMiddleware'
 
-export default (resourceType, idFunc) => {
+export default (resourceType, dataFunc) => {
   if (typeof resourceType !== 'string') {
     throw new Error('resourceType must be a string')
   }
-  if (typeof idFunc !== 'function') {
-    throw new Error('idFunc must be a function')
+  if (typeof dataFunc !== 'function') {
+    throw new Error('dataFunc must be a function')
   }
 
   const listPerm = perms((req) => {
     return {
       resourceType,
       action: actions.LIST,
-      data: {
-        id: idFunc(req)
-      }
+      data: dataFunc(req)
     }
   })
 
@@ -25,9 +23,7 @@ export default (resourceType, idFunc) => {
     return {
       resourceType,
       action: actions.READ,
-      data: {
-        id: idFunc(req)
-      }
+      data: dataFunc(req)
     }
   })
 
@@ -35,9 +31,7 @@ export default (resourceType, idFunc) => {
     return {
       resourceType,
       action: actions.CREATE,
-      data: {
-        id: idFunc(req)
-      }
+      data: dataFunc(req)
     }
   })
 
@@ -45,9 +39,7 @@ export default (resourceType, idFunc) => {
     return {
       resourceType,
       action: actions.UPDATE,
-      data: {
-        id: idFunc(req)
-      }
+      data: dataFunc(req)
     }
   })
 
@@ -55,9 +47,7 @@ export default (resourceType, idFunc) => {
     return {
       resourceType,
       action: actions.DELETE,
-      data: {
-        id: idFunc(req)
-      }
+      data: dataFunc(req)
     }
   })
 

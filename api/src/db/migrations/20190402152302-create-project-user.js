@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       projectId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Projects',
@@ -16,9 +17,15 @@ module.exports = {
         }
       },
       userId: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       orgId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      roleId: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {
