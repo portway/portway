@@ -29,7 +29,7 @@ export const updateField = (documentId, fieldId, body) => {
 export const removeField = (documentId, fieldId) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())
-    await remove(`documents/${documentId}/fields`)
+    await remove(`documents/${documentId}/fields/${fieldId}`)
     dispatch(Fields.removeOne(documentId, fieldId))
   }
 }

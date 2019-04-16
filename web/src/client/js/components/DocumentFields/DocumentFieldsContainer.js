@@ -6,19 +6,22 @@ import { connect } from 'react-redux'
 import { debounce } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import { uiConfirm } from 'Actions/ui'
 import { updateField, removeField } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
-const DocumentFieldsContainer = ({ creating, match, removeField, updateField }) => {
+const DocumentFieldsContainer = ({ creating, match, removeField, updateField, uiConfirm }) => {
   const { documentId } = match.params
   const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
   if (!fields) return null
 
   // Actions
   function fieldDestroyHandler(fieldId) {
-    console.info(`Remove ${fieldId} when you can add them...`) // I just can't add them yet and this is our only field
-    // removeField(documentId, fieldId)
+    const message = <span>Are you sure you want to delete <span className="highlight">{fields[fieldId].name}</span>?</span>
+    const confirmedLabel = 'Yes, delete it.'
+    const confirmedAction = () => { removeField(documentId, fieldId) }
+    uiConfirm({ message, confirmedAction, confirmedLabel })
   }
   function fieldChangeHandler(fieldId, body) {
     // leave this console in to make sure we're not hammering the API because of useEffect
@@ -52,7 +55,8 @@ DocumentFieldsContainer.propTypes = {
   creating: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
-  updateField: PropTypes.func.isRequired
+  updateField: PropTypes.func.isRequired,
+  uiConfirm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -61,7 +65,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { removeField, updateField }
+const mapDispatchToProps = { removeField, updateField, uiConfirm }
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

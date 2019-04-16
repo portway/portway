@@ -56,12 +56,13 @@ export const documentFields = (state = initialState, action) => {
       return { ...state, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.REMOVE_FIELD: {
-      const { id, docId } = action
-      const { documentFields } = state.documentFieldsById[docId] || {}
+      const { documentId, fieldId } = action
+      const documentFields = state.documentFieldsById[documentId] || {}
       // eslint-disable-next-line no-unused-vars
-      const { [id]: __, ...restDocumentFields } = documentFields
-      const loadingById = { ...state.loading.byId, [id]: false }
-      return { ...state, restDocumentFields, loading: { ...state.loading, byId: loadingById } }
+      const { [fieldId]: __, ...restDocumentFields } = documentFields
+      const loadingById = { ...state.loading.byId, [fieldId]: false }
+      const documentFieldsById = { ...state.documentFieldsById, [documentId]: restDocumentFields }
+      return { ...state, documentFieldsById, loading: { ...state.loading, byId: loadingById } }
     }
     default:
       return state
