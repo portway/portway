@@ -8,36 +8,30 @@ import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 
 const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldDestroyHandler }) => {
+  const showFieldName = fields.length > 1
+  function renderFieldType(field) {
+    let fieldTypeComponent
+    switch (field.type) {
+      case Constants.FIELD_TYPES.TEXT:
+        fieldTypeComponent = <FieldTextComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+        break
+      case Constants.FIELD_TYPES.NUMBER:
+        fieldTypeComponent = <FieldNumberComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+        break
+      case Constants.FIELD_TYPES.STRING:
+        fieldTypeComponent = <FieldStringComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
+        break
+      default:
+        break
+    }
+    return (
+      <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>{fieldTypeComponent}</DocumentFieldComponent>
+    )
+  }
   function renderFields() {
     const fieldArray = []
-    const showFieldName = fields.length > 1
     fields.forEach((field) => {
-      switch (field.type) {
-        case Constants.FIELD_TYPES.TEXT: {
-          return fieldArray.push(
-            <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
-              <FieldTextComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
-            </DocumentFieldComponent>
-          )
-        }
-        case Constants.FIELD_TYPES.NUMBER: {
-          return fieldArray.push(
-            <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
-              <FieldNumberComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
-            </DocumentFieldComponent>
-          )
-        }
-        case Constants.FIELD_TYPES.STRING: {
-          return fieldArray.push(
-            <DocumentFieldComponent key={field.id} type={field.type} onDestroy={() => { fieldDestroyHandler(field.id) }}>
-              <FieldStringComponent field={field} showName={showFieldName} onChange={fieldChangeHandler} />
-            </DocumentFieldComponent>
-          )
-        }
-        default: {
-          break
-        }
-      }
+      fieldArray.push(renderFieldType(field))
     })
     return fieldArray
   }
