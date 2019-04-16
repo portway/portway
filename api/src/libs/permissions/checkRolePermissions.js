@@ -4,7 +4,7 @@ import resourceTypes from '../../constants/resourceTypes'
 export default function(roles, resourceType, action) {
   if (!resourceTypes[resourceType]) {
     throw new Error(
-      `ResourceType ${resourceType} does not exist.` +
+      `ResourceType ${resourceType} does not exist. ` +
       'Define resource types in constants/resourceTypes'
     )
   }
