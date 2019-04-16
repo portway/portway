@@ -18,8 +18,6 @@ The Makefile is setup to execute any sequelize commands in the running API conta
 
 ## Erase Database and Start Over
 
-```
-make sequelize db:migrate:undo:all
-make sequelize db:migrate
-make sequelize db:seed:all
-```
+`make cleardev`
+OR
+`make rebuilddev`
