@@ -71,15 +71,10 @@ describe('BusinessField', () => {
       let updatedField
 
       beforeAll(async () => {
-        updatedField = await BusinessField.updateByIdForDocument(
-          factoryField.id,
-          docId,
-          orgId,
-          {
-            ...updateBody,
-            docId
-          }
-        )
+        updatedField = await BusinessField.updateByIdForDocument(factoryField.id, docId, orgId, {
+          ...updateBody,
+          docId
+        })
       })
 
       it('should return a POJO with updated body fields', () => {
@@ -172,10 +167,7 @@ describe('BusinessField', () => {
       describe('when the target field does not have the passed in orgId', () => {
         beforeAll(async () => {
           targetFieldId = factoryFields[0].id
-          field = await BusinessField.findByIdForDocument(
-            targetFieldId,
-            constants.ORG_ID_2
-          )
+          field = await BusinessField.findByIdForDocument(targetFieldId, constants.ORG_ID_2)
         })
 
         it('should return null', () => {
@@ -195,11 +187,7 @@ describe('BusinessField', () => {
 
     it('should not throw an error if the target document is found', async () => {
       await expect(
-        BusinessField.deleteByIdForDocument(
-          factoryField.id,
-          factoryDocument.id,
-          constants.ORG_ID
-        )
+        BusinessField.deleteByIdForDocument(factoryField.id, factoryDocument.id, constants.ORG_ID)
       ).resolves.toEqual(undefined)
     })
 
@@ -217,11 +205,7 @@ describe('BusinessField', () => {
 
     it('should throw an error if the document does not have the passed in orgId', async () => {
       await expect(
-        BusinessField.deleteByIdForDocument(
-          factoryField.id,
-          factoryDocument.id,
-          constants.ORG_ID_2
-        )
+        BusinessField.deleteByIdForDocument(factoryField.id, factoryDocument.id, constants.ORG_ID_2)
       ).rejects.toThrow()
     })
   })

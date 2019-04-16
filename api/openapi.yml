@@ -27,7 +27,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Project'
-                  
+
         default:
           description: unexpected error
           content:
@@ -371,7 +371,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  data: 
+                  data:
                     $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
@@ -405,7 +405,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  data: 
+                  data:
                     $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
@@ -438,8 +438,8 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateField'
             example:
-              name: "new name"
-              value: "new value"
+              name: 'new name'
+              value: 'new value'
       responses:
         '200':
           description: field response
@@ -448,7 +448,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  data: 
+                  data:
                     $ref: '#/components/schemas/Field'
         default:
           description: unexpected error
@@ -490,7 +490,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewProject'
         - required:
-          - id
+            - id
         - properties:
             id:
               type: integer
@@ -521,8 +521,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewDocument'
         - required:
-          - id
-          - projectId
+            - id
+            - projectId
         - properties:
             id:
               type: integer
@@ -551,10 +551,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/NewField'
         - required:
-          - id
-          - name
-          - docId
-          - type
+            - id
+            - name
+            - docId
+            - type
         - properties:
             id:
               type: integer
@@ -592,8 +592,8 @@ components:
 
     StringField:
       required:
-          - name
-          - type
+        - name
+        - type
       properties:
         name:
           type: string
@@ -620,8 +620,8 @@ components:
 
     NumberField:
       required:
-          - name
-          - type
+        - name
+        - type
       properties:
         name:
           type: string

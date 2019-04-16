@@ -15,7 +15,7 @@ const AUTHENTICATED_CONTROLLERS = {
   '/projects': {
     fileName: 'projects',
     childRoutes: {
-      '/:projectId/users': { fileName: 'projectUsers' },
+      '/:projectId/assignments': { fileName: 'projectUsers' },
       '/:projectId/documents': { fileName: 'projectDocuments' }
     }
   },

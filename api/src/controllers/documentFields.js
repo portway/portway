@@ -9,7 +9,9 @@ import { requiredFields, partialFields } from './payloadSchemas/helpers'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  (req) => { return { documentId: req.params.documentId } }
+  req => {
+    return { documentId: req.params.documentId }
+  }
 )
 
 const paramSchema = Joi.compile({
@@ -23,7 +25,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(requiredFields('field', 'name', 'type')),
+    validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type')),
     createPerm,
     addDocumentField
   )
@@ -32,7 +34,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(partialFields('field', 'name', 'value', 'structuredValue')),
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue')),
     updatePerm,
     updateDocumentField
   )
@@ -88,12 +90,7 @@ const updateDocumentField = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const field = await BusinessField.updateByIdForDocument(
-      id,
-      documentId,
-      orgId,
-      body
-    )
+    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, body)
     res.status(200).json({ data: field })
   } catch (e) {
     console.error(e.stack)

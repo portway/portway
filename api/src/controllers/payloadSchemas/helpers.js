@@ -1,14 +1,16 @@
 import Joi from 'joi'
+import RESOURCE_TYPES from '../../constants/resourceTypes'
 import * as user from './user'
+import * as projectUser from './projectUser'
 import * as project from './project'
 import * as field from './field'
 import * as document from './document'
-
 const resourceToSchema = {
-  user,
-  project,
-  field,
-  document
+  [RESOURCE_TYPES.USER]: user,
+  [RESOURCE_TYPES.PROJECT_USER]: projectUser,
+  [RESOURCE_TYPES.DOCUMENT]: document,
+  [RESOURCE_TYPES.FIELD]: field,
+  [RESOURCE_TYPES.PROJECT]: project
 }
 
 /**
@@ -23,7 +25,7 @@ const requiredFields = (resource, ...fields) => {
 
   const rawSchema = resourceToSchema[resource].rawSchema
   const schema = { ...rawSchema }
-  fields.forEach((field) => {
+  fields.forEach(field => {
     if (schema.hasOwnProperty(field)) {
       schema[field] = schema[field].required()
     } else {
@@ -56,7 +58,7 @@ const partialFields = (resource, ...fields) => {
   return Joi.compile(schema)
 }
 
-const verifyResource = (resource) => {
+const verifyResource = resource => {
   if (!resourceToSchema.hasOwnProperty(resource)) {
     throw new Error(
       `Resource ${resource} does not have a defined payloadSchema.` +
@@ -65,7 +67,4 @@ const verifyResource = (resource) => {
   }
 }
 
-export {
-  requiredFields,
-  partialFields
-}
+export { requiredFields, partialFields }

@@ -1,9 +1,8 @@
-import BusinessProjectUser from './projectuser'
+import BusinessProjectUser, { PUBLIC_FIELDS } from './projectuser'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
-import { PUBLIC_FIELDS as USER_PUBLIC_FIELDS } from './user'
 
 describe('BusinessProjectUser', () => {
   beforeAll(async () => {
@@ -127,15 +126,15 @@ describe('BusinessProjectUser', () => {
     })
 
     describe('when users are assigned to a project', () => {
-      it('should return users', () => {
+      it('should return project user assignments', () => {
         expect(projectUsers.length).toEqual(4)
-        const user = projectUsers[0]
-        expect(Object.keys(user)).toEqual(expect.arrayContaining(USER_PUBLIC_FIELDS))
+        const projectUser = projectUsers[0]
+        expect(Object.keys(projectUser)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
       })
 
       it('should return POJO users', () => {
-        const user = projectUsers[0]
-        expect(user.constructor).toBe(Object)
+        const projectUser = projectUsers[0]
+        expect(projectUser.constructor).toBe(Object)
       })
     })
 
@@ -153,55 +152,7 @@ describe('BusinessProjectUser', () => {
     })
   })
 
-  describe('#findByUserIdForProject', () => {
-    let userId
-    let projectId
-
-    beforeAll(async () => {
-      await clearDb()
-      projectId = (await ProjectFactory.createMany(1, { orgId: constants.ORG_ID }))[0].id
-      userId = (await UserFactory.createMany(1, { orgId: constants.ORG_ID }))[0].id
-      await BusinessProjectUser.create({
-        userId,
-        orgId: constants.ORG_ID,
-        roleId: 2,
-        projectId
-      })
-    })
-
-    describe('when the project user assignment exists', () => {
-      let user
-      beforeAll(async () => {
-        user = await BusinessProjectUser.findByUserIdForProject(
-          userId,
-          projectId,
-          constants.ORG_ID
-        )
-      })
-
-      it('should return a user', () => {
-        expect(Object.keys(user)).toEqual(expect.arrayContaining(USER_PUBLIC_FIELDS))
-      })
-    })
-
-    describe('when a project user assignment does not exist', () => {
-      let user
-      beforeAll(async () => {
-        userId = (await UserFactory.createMany(1, { orgId: constants.ORG_ID }))[0].id
-        user = await BusinessProjectUser.findByUserIdForProject(
-          userId,
-          projectId,
-          constants.ORG_ID
-        )
-      })
-
-      it('should return null', () => {
-        expect(user).toBe(null)
-      })
-    })
-  })
-
-  describe('#deleteByUserIdProjectId', () => {
+  describe('#deleteByIdForProject', () => {
     let projectUsers
     let project
 
@@ -219,24 +170,66 @@ describe('BusinessProjectUser', () => {
           })
         )
       )
-      projectUsers = (await BusinessProjectUser.findAllByProjectId(project.id, constants.ORG_ID))
+      projectUsers = await BusinessProjectUser.findAllByProjectId(project.id, constants.ORG_ID)
     })
 
     it('should delete a user project assignment', async () => {
-      const user = projectUsers[0]
+      const projectUser = projectUsers[0]
       expect(projectUsers.length).toBe(2)
-      expect(Object.keys(user)).toEqual(expect.arrayContaining(USER_PUBLIC_FIELDS))
+      expect(Object.keys(projectUser)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
 
       await expect(
-        BusinessProjectUser.deleteByUserIdForProject(user.id, project.id, constants.ORG_ID)
+        BusinessProjectUser.deleteByIdForProject(projectUser.id, project.id, constants.ORG_ID)
       ).resolves.toEqual(undefined)
 
-      const usersAfterDelete = await BusinessProjectUser.findAllByProjectId(
+      const projectUsersAfterDelete = await BusinessProjectUser.findAllByProjectId(
         project.id,
         constants.ORG_ID
       )
-      expect(usersAfterDelete.length).toBe(1)
-      expect(usersAfterDelete[0].id).not.toBe(user.id)
+      expect(projectUsersAfterDelete.length).toBe(1)
+      expect(projectUsersAfterDelete[0].id).not.toBe(projectUser.id)
+    })
+  })
+
+  describe('#updateProjectUserById', () => {
+    describe('with valid data', () => {
+      const roleId = 1
+      const updatedRoleId = 2
+      let projectUser
+      beforeAll(async () => {
+        await clearDb()
+        const project = (await ProjectFactory.createMany(1, { orgId: constants.ORG_ID }))[0]
+        const user = (await UserFactory.createMany(1, { orgId: constants.ORG_ID }))[0]
+
+        const newProjUser = await BusinessProjectUser.create({
+          userId: user.id,
+          orgId: constants.ORG_ID,
+          roleId,
+          projectId: project.id
+        })
+
+        projectUser = await BusinessProjectUser.updateProjectUserById(
+          newProjUser.id,
+          updatedRoleId,
+          constants.ORG_ID
+        )
+      })
+      it("should update a user's project role", () => {
+        expect(projectUser.roleId).toBe(updatedRoleId)
+      })
+    })
+    describe('with invalid data', () => {
+      describe('id', () => {
+        it('missing should throw an error', async () => {
+          await expect(
+            BusinessProjectUser.updateProjectUserById(undefined, 2, constants.orgId)
+          ).rejects.toThrow()
+        })
+        it('incorrect should throw an error', async () => {
+          await expect(BusinessProjectUser.updateProjectUserById(1234, 2, constants.orgId)
+          ).rejects.toThrow()
+        })
+      })
     })
   })
 })

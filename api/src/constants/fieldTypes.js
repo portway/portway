@@ -1,4 +1,3 @@
-
 // @todo move this to /Shared/constants? web and API should use the same ones
 const FIELD_TYPES = {
   STRING: 1,

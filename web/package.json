@@ -34,11 +34,6 @@
       ]
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "jest": {
     "transform": {
       "^.+\\.js$": "babel-jest",

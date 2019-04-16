@@ -6,8 +6,7 @@ export const rawSchema = {
   value: Joi.alternatives(Joi.string(), Joi.number()).allow(null),
   // TODO: probably want a shared json parse validator on structuredValue
   structuredValue: Joi.string().allow(null),
-  type: Joi.number()
-    .valid(Object.values(fieldTypes.FIELD_TYPES))
+  type: Joi.number().valid(Object.values(fieldTypes.FIELD_TYPES))
   // TODO: order: need to decide how to handle this
 }
 

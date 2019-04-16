@@ -1,8 +1,9 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
-import { PUBLIC_FIELDS as USER_PUBLIC_FIELDS } from './user'
 
 const MODEL_NAME = 'ProjectUser'
+
+export const PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId']
 
 async function create(body) {
   const db = getDb()
@@ -37,54 +38,62 @@ async function addUserIdToProject(userId, projectId, roleId, orgId) {
 
   const result = await db.model(MODEL_NAME).findOrCreate({
     where: { projectId, orgId, userId, roleId },
-    attributes: [],
+    attributes: PUBLIC_FIELDS,
     raw: true
   })
   // findOrCreate returns [result, status]
   return result[0]
 }
 
+async function updateProjectUserById(id, roleId, orgId) {
+  const db = getDb()
+
+  const projectUser = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
+  if (!projectUser) {
+    throw ono({ code: 404 }, `Project user assignment id ${id} not found`)
+  }
+  return (await projectUser.update({
+    roleId
+  })).get({ plain: true })
+}
+
 async function findAllByProjectId(projectId, orgId) {
   const db = getDb()
 
-  return db.model('User').findAll({
-    attributes: USER_PUBLIC_FIELDS,
-    include: [
-      {
-        model: db.model(MODEL_NAME),
-        where: { projectId, orgId },
-        attributes: []
-      }
-    ],
+  return db.model(MODEL_NAME).findAll({
+    attributes: PUBLIC_FIELDS,
+    where: {
+      orgId,
+      projectId
+    },
     raw: true
   })
 }
 
-async function findByUserIdForProject(userId, projectId, orgId) {
+async function findByIdAndProject(id, projectId, orgId) {
   const db = getDb()
 
-  return db.model('User').findOne({
-    attributes: USER_PUBLIC_FIELDS,
-    where: { id: userId, orgId },
-    include: [
-      {
-        model: db.model(MODEL_NAME),
-        where: { projectId, orgId },
-        attributes: []
-      }
-    ],
+  const projectUser = await db.model(MODEL_NAME).findOne({
+    attributes: PUBLIC_FIELDS,
+    where: { id, orgId, projectId },
     raw: true
   })
+
+  if (!projectUser) {
+    throw ono({ code: 404 }, `Project user assignment id ${id} not found for project ${projectId}`)
+  }
+
+  return projectUser
 }
 
-async function deleteByUserIdForProject(userId, projectId, orgId) {
+async function deleteByIdForProject(id, projectId, orgId) {
   const db = getDb()
-  const projectUser = await db.model(MODEL_NAME).findOne({ where: { userId, projectId, orgId } })
+  const projectUser = await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId } })
 
   if (!projectUser) {
     throw ono(
       { code: 404 },
-      `Cannot delete, projectUser not found with user id ${userId} and project id ${projectId}`
+      `Cannot delete, projectUser not found with id ${id} and project ${projectId}`
     )
   }
 
@@ -105,8 +114,9 @@ export default {
   create,
   addUserIdToProject,
   findAllByProjectId,
-  findByUserIdForProject,
-  deleteByUserIdForProject,
+  findByIdAndProject,
+  deleteByIdForProject,
   removeAllUsersFromProject,
-  getProjectUserAssignment
+  getProjectUserAssignment,
+  updateProjectUserById
 }

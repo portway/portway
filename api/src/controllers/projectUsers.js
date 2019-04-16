@@ -6,17 +6,17 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 
-const { listPerm, readPerm, updatePerm, deletePerm } = crudPerms(
+const { listPerm, readPerm, updatePerm, deletePerm, createPerm } = crudPerms(
   RESOURCE_TYPES.PROJECT_USER,
   (req) => { return { projectId: req.params.projectId } }
 )
 
-// Uses project-level permissions
+const bodySchema = Joi.compile(
+  requiredFields(RESOURCE_TYPES.PROJECT_USER, 'userId', 'projectId', 'roleId')
+)
 
-const bodySchema = Joi.compile({
-  users: Joi.array()
-    .required()
-    .items(requiredFields('user', 'id'))
+const bodyUpdateSchema = Joi.compile({
+  roleId: Joi.number()
 })
 
 const paramSchema = Joi.compile({
@@ -25,23 +25,23 @@ const paramSchema = Joi.compile({
 })
 
 const projectUsersController = function(router) {
-  // all routes are nested at projects/:projectId/users and receive req.params.projectId
+  // all routes are nested at projects/:projectId/assignments and receive req.params.projectId
   router.get('/', validateParams(paramSchema), listPerm, getProjectUsers)
-  router.put(
+  router.post(
     '/',
     validateParams(paramSchema),
     validateBody(bodySchema),
-    updatePerm,
-    addProjectUsers
-  )
-  router.delete(
-    '/',
-    validateParams(paramSchema),
-    validateBody(bodySchema),
-    deletePerm,
-    removeProjectUsers
+    createPerm,
+    createProjectUser
   )
   router.get('/:id', validateParams(paramSchema), readPerm, getProjectUser)
+  router.put(
+    '/:id',
+    validateParams(paramSchema),
+    validateBody(bodyUpdateSchema),
+    updatePerm,
+    updateProjectUser
+  )
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectUser)
 }
 
@@ -63,7 +63,7 @@ const getProjectUser = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const user = await BusinessProjectUser.findByUserIdForProject(id, projectId, orgId)
+    const user = await BusinessProjectUser.findByIdAndProject(id, projectId, orgId)
     if (!user) throw ono({ code: 404 }, `No user with id ${id}`)
     res.json({ data: user })
   } catch (e) {
@@ -72,39 +72,39 @@ const getProjectUser = async function(req, res) {
   }
 }
 
-const addProjectUsers = async function(req, res) {
+const createProjectUser = async (req, res) => {
   const { body } = req
-  const { projectId } = req.params
   const { orgId } = req.requestorInfo
-  // Overwrite orgId even if they passed anything in
-  body.users.forEach((user) => {
-    user.orgId = orgId
-  })
 
   try {
-    await Promise.all(
-      body.users.map(u => BusinessProjectUser.addUserIdToProject(u.id, projectId, orgId))
+    const projectUser = await BusinessProjectUser.addUserIdToProject(
+      body.userId,
+      body.projectId,
+      body.roleId,
+      orgId
     )
-    res.status(201).json({})
+    res.status(201).json({ data: projectUser })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot assign users to project' })
+    res.status(e.code || 500).json({ error: 'Cannot assign user to project' })
   }
 }
 
-const removeProjectUsers = async function(req, res) {
+const updateProjectUser = async (req, res) => {
   const { body } = req
-  const { projectId } = req.params
+  const { id } = req.params.id
   const { orgId } = req.requestorInfo
 
   try {
-    await Promise.all(
-      body.users.map(u => BusinessProjectUser.deleteByUserIdForProject(u.id, projectId, orgId))
+    const projectUser = await BusinessProjectUser.updateProjectUserById(
+      id,
+      body.roleId,
+      orgId
     )
-    res.status(204).send()
+    res.status(200).json({ data: projectUser })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot remove users from project' })
+    res.status(e.code || 500).json({ error: 'Cannot assign user to project' })
   }
 }
 
@@ -113,7 +113,7 @@ const deleteProjectUser = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessProjectUser.deleteByUserIdForProject(id, projectId, orgId)
+    await BusinessProjectUser.deleteByIdForProject(id, projectId, orgId)
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)

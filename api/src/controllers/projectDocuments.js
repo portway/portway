@@ -9,7 +9,9 @@ import documentSchema from './payloadSchemas/document'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  (req) => { return { projectId: req.params.projectId }}
+  req => {
+    return { projectId: req.params.projectId }
+  }
 )
 
 // TODO: this is currently piggybacking off of project perms
@@ -24,7 +26,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(requiredFields('document', 'name')),
+    validateBody(requiredFields(RESOURCE_TYPES.DOCUMENT, 'name')),
     createPerm,
     addProjectDocument
   )

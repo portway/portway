@@ -9,11 +9,18 @@ import projectSchema from './payloadSchemas/project'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.PROJECT,
-  (req) => { return { id: req.params.id } }
+  req => {
+    return { id: req.params.id }
+  }
 )
 
 const projectsController = function(router) {
-  router.post('/', validateBody(requiredFields('project', 'name')), createPerm, addProject)
+  router.post(
+    '/',
+    validateBody(requiredFields(RESOURCE_TYPES.PROJECT, 'name')),
+    createPerm,
+    addProject
+  )
   router.get('/', listPerm, getProjects)
   router.get('/:id', readPerm, getProject)
   router.put('/:id', validateBody(projectSchema), updatePerm, replaceProject)
