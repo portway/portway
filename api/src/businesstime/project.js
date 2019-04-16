@@ -19,9 +19,9 @@ async function findById(id, orgId) {
   return await db.model(MODEL_NAME).findOne({ where: { id, orgId }, raw: true })
 }
 
-async function updateById(id, body) {
+async function updateById(id, body, orgId) {
   const db = getDb()
-  const project = await db.model(MODEL_NAME).findByPk(id)
+  const project = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
 
   if (!project) throw ono({ code: 404 }, `Cannot update, project not found with id: ${id}`)
 
@@ -29,9 +29,9 @@ async function updateById(id, body) {
   return updatedProject.get({ plain: true })
 }
 
-async function deleteById(id) {
+async function deleteById(id, orgId) {
   const db = getDb()
-  const project = await db.model(MODEL_NAME).findByPk(id)
+  const project = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
 
   if (!project) throw ono({ code: 404 }, `Cannot delete, project not found with id: ${id}`)
 

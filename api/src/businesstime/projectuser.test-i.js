@@ -21,7 +21,8 @@ describe('BusinessProjectUser', () => {
       projectUserBody = {
         orgId: constants.ORG_ID,
         userId: user.id,
-        projectId: project.id
+        projectId: project.id,
+        roleId: 2
       }
 
       projectUser = await BusinessProjectUser.create(projectUserBody)
@@ -49,6 +50,7 @@ describe('BusinessProjectUser', () => {
         projectUser = await BusinessProjectUser.addUserIdToProject(
           users[0].id,
           projectId,
+          2,
           constants.ORG_ID
         )
       })
@@ -69,12 +71,12 @@ describe('BusinessProjectUser', () => {
       })
 
       it('on the user should throw an error', async () => {
-        await expect(BusinessProjectUser.addUserIdToProject(user.id, projectId, constants.ORG_ID))
+        await expect(BusinessProjectUser.addUserIdToProject(user.id, projectId, 2, constants.ORG_ID))
           .rejects.toThrow()
       })
 
       it('on the project should throw an error', async () => {
-        await expect(BusinessProjectUser.addUserIdToProject(user.id, projectId, constants.ORG_2_ID))
+        await expect(BusinessProjectUser.addUserIdToProject(user.id, projectId, 2, constants.ORG_2_ID))
           .rejects.toThrow()
       })
     })
@@ -86,21 +88,21 @@ describe('BusinessProjectUser', () => {
       })
 
       it('should throw an error', async () => {
-        await expect(BusinessProjectUser.addUserIdToProject(user.id, projectId, constants.ORG_ID))
+        await expect(BusinessProjectUser.addUserIdToProject(user.id, projectId, 2, constants.ORG_ID))
           .rejects.toThrow()
       })
     })
 
     describe('assign user to non-existent project', () => {
       it('should throw an error', async () => {
-        await expect(BusinessProjectUser.addUserIdToProject(users[1].id, 0, constants.ORG_ID))
+        await expect(BusinessProjectUser.addUserIdToProject(users[1].id, 0, 2, constants.ORG_ID))
           .rejects.toThrow()
       })
     })
 
     describe('assign non-existent user to project', () => {
       it('should throw an error', async () => {
-        await expect(BusinessProjectUser.addUserIdToProject(0, projectId, constants.ORG_ID))
+        await expect(BusinessProjectUser.addUserIdToProject(0, projectId, 2, constants.ORG_ID))
           .rejects.toThrow()
       })
     })
@@ -117,6 +119,7 @@ describe('BusinessProjectUser', () => {
       await Promise.all(users.slice(0, 4).map(u => BusinessProjectUser.create({
         userId: u.id,
         orgId: constants.ORG_ID,
+        roleId: 3,
         projectId
       })))
 
@@ -161,6 +164,7 @@ describe('BusinessProjectUser', () => {
       await BusinessProjectUser.create({
         userId,
         orgId: constants.ORG_ID,
+        roleId: 2,
         projectId
       })
     })
@@ -210,6 +214,7 @@ describe('BusinessProjectUser', () => {
           BusinessProjectUser.create({
             userId: u.id,
             orgId: constants.ORG_ID,
+            roleId: 1,
             projectId: project.id
           })
         )

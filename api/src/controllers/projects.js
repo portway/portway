@@ -1,5 +1,6 @@
 import ono from 'ono'
 import { validateBody } from '../libs/middleware/payloadValidation'
+import projectCoordinator from '../coordinators/projectCrud'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -8,7 +9,7 @@ import projectSchema from './payloadSchemas/project'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.PROJECT,
-  req => req.params.id
+  (req) => { return { id: req.params.id } }
 )
 
 const projectsController = function(router) {
@@ -45,9 +46,12 @@ const getProject = async function(req, res) {
 const addProject = async function(req, res) {
   const { body } = req
   body.orgId = req.requestorInfo.orgId
-
   try {
-    const project = await BusinessProject.create(body)
+    const project = await projectCoordinator.createProject(
+      body,
+      req.requestorInfo.requestorId,
+      body.orgId
+    )
     res.status(201).json({ data: project })
   } catch (e) {
     console.error(e.stack)
@@ -62,7 +66,7 @@ const replaceProject = async function(req, res) {
   body.orgId = req.requestorInfo.orgId
 
   try {
-    const project = await BusinessProject.updateById(id, body)
+    const project = await BusinessProject.updateById(id, body, req.requestorInfo.orgId)
     res.json({ data: project })
   } catch (e) {
     console.error(e.stack)
@@ -74,7 +78,7 @@ const deleteProject = async function(req, res) {
   const { id } = req.params
 
   try {
-    await BusinessProject.deleteById(id)
+    await projectCoordinator.deleteById(id, req.requestorInfo.orgId)
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)

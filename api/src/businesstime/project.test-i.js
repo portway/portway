@@ -30,7 +30,11 @@ describe('BusinessProject', () => {
 
       beforeAll(async () => {
         const factoryProjects = await ProjectFactory.createMany(1)
-        project = await BusinessProject.updateById(factoryProjects[0].id, updateBody)
+        project = await BusinessProject.updateById(
+          factoryProjects[0].id,
+          updateBody,
+          factoryProjects[0].orgId
+        )
       })
 
       it('should return a POJO with updated body fields', () => {
@@ -114,7 +118,7 @@ describe('BusinessProject', () => {
     })
 
     it('should not throw an error if the target project is found', async () => {
-      await expect(BusinessProject.deleteById(factoryProject.id)).resolves.toEqual(undefined)
+      await expect(BusinessProject.deleteById(factoryProject.id, factoryProject.orgId)).resolves.toEqual(undefined)
     })
 
     it('should throw an error if the target project is not found', async () => {

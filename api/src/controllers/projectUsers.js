@@ -7,8 +7,8 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 
 const { listPerm, readPerm, updatePerm, deletePerm } = crudPerms(
-  RESOURCE_TYPES.PROJECT,
-  req => req.params.projectId
+  RESOURCE_TYPES.PROJECT_USER,
+  (req) => { return { projectId: req.params.projectId } }
 )
 
 // Uses project-level permissions
