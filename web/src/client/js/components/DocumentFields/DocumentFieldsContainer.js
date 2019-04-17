@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -12,9 +12,25 @@ import { updateField, removeField } from 'Actions/field'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({ creating, match, removeField, updateField, uiConfirm }) => {
+  const [orderedFields, setOrderedFields] = useState([])
+  const [draggingElement, setDraggingElement] = useState(null)
   const { documentId } = match.params
   const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
-  if (!fields) return null
+
+  // Convert fields object to a sorted array for rendering
+  useEffect(() => {
+    if (!fields) return
+    const fieldMap = Object.keys(fields).map((fieldId) => {
+      return fields[fieldId]
+    })
+    fieldMap.sort((a, b) => {
+      return a.order - b.order
+    })
+    if (fieldMap.length > 0) {
+      setOrderedFields(fieldMap)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields])
 
   // Actions
   function fieldDestroyHandler(fieldId) {
@@ -29,22 +45,61 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
     updateField(documentId, fieldId, body)
   }
 
+  // Drag and drop
+  function dragStartHandler(e) {
+    setDraggingElement(e.currentTarget)
+    e.currentTarget.classList.add('field--dragging')
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/html', e.target)
+  }
+  function dragEnterHandler(e) {
+    e.currentTarget.classList.add('field--dragged-over')
+  }
+  function dragLeaveHandler(e) {
+    e.currentTarget.classList.remove('field--dragged-over')
+  }
+  function dragOverHandler(e) {
+    if (e.preventDefault) {
+      e.preventDefault()
+    }
+    return false
+  }
+  function dragEndHandler(e) {
+    e.currentTarget.classList.remove('field--dragging')
+  }
+  function dropHandler(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation()
+    }
+    const from = Number(draggingElement.dataset.order)
+    const to = Number(e.currentTarget.dataset.order)
+    e.currentTarget.classList.remove('field--dragging', 'field--dragged-over')
+    if (to === from) { return }
+    const fieldData = orderedFields
+    fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
+    setOrderedFields(fieldData)
+    setDraggingElement(null)
+  }
+
   // Prop handler
   const debouncedValueChangeHandler = debounce(1000, (fieldId, value) => {
     fieldChangeHandler(fieldId, { value: value })
   })
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
+    if (value === '') return
     fieldChangeHandler(fieldId, { name: value })
   })
 
-  // Convert fields object to an array for rendering
-  const fieldMap = Object.keys(fields).map((fieldId) => {
-    return fields[fieldId]
-  })
   return (
     <DocumentFieldsComponent
       creating={creating}
-      fields={fieldMap}
+      dragStartHandler={dragStartHandler}
+      dragEndHandler={dragEndHandler}
+      dragEnterHandler={dragEnterHandler}
+      dragLeaveHandler={dragLeaveHandler}
+      dragOverHandler={dragOverHandler}
+      dropHandler={dropHandler}
+      fields={orderedFields}
       fieldChangeHandler={debouncedValueChangeHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
       fieldDestroyHandler={fieldDestroyHandler} />

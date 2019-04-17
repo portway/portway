@@ -3,8 +3,8 @@
 .field--string {
   .string {
     border: none;
+    outline: 0;
     padding: 8px 0;
     width: 100%;
-    @include focus(transparent);
   }
 }
