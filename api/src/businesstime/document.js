@@ -71,10 +71,9 @@ async function findParentProjectByDocumentId(id, orgId) {
     .model(MODEL_NAME)
     .findOne({ where: { id, orgId }, include: [{ model: db.model('Project') }] })
 
-  //TODO: figure out how to get this project to just return public fields
-  // I don't want business layers to require each other, that's asking for
-  // circular funtime requires
-  return document.Project && document.Project.get({ plain: true })
+  const project = document.Project && document.Project.get({ plain: true })
+
+  return pick(project, resourcePublicFields[resourceTypes.PROJECT])
 }
 
 export default {
