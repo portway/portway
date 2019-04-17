@@ -3,6 +3,7 @@ import ono from 'ono'
 import { getDb } from '../db/dbConnector'
 import fieldTypes from '../constants/fieldTypes'
 import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
+import apiErrorTypes from '../constants/apiErrorTypes'
 
 const MODEL_NAME = 'Field'
 const PUBLIC_FIELDS = [
@@ -120,7 +121,7 @@ function validateFieldValueByType(fieldValue, type) {
 
   if (!isValid) {
     const message = `field with type ${type} cannot have a ${typeof fieldValue} value`
-    throw ono({ code: 400, message }, message)
+    throw ono({ code: 400, message, errorType: apiErrorTypes.FieldValueIncorrectTypeError }, message)
   }
 }
 

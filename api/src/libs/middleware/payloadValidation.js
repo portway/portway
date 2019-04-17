@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { isContext } from 'vm';
+import apiErrorTypes from '../../constants/apiErrorTypes';
 
 // validation occurs on req.body
 export function validateBody(schema, options = {}) {
@@ -21,7 +21,8 @@ export function validateBody(schema, options = {}) {
     const errorPayload = { error: 'Invalid request payload input' }
 
     if (error.name === 'ValidationError') {
-      errorPayload.details = error.details.map((detail) => { return { message: detail.message, key: detail.context.key }})
+      errorPayload.errorDetails = error.details.map((detail) => { return { message: detail.message, key: detail.context.key }})
+      errorPayload.errorType = apiErrorTypes.ValidationError
     }
 
     res.status(400).send(errorPayload)
