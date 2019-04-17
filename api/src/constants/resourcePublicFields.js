@@ -26,5 +26,5 @@ export default {
   [resourceTypes.PROJECT]: PROJECT_PUBLIC_FIELDS,
   [resourceTypes.FIELD]: FIELD_PUBLIC_FIELDS,
   [resourceTypes.PROJECT_USER]: PROJECT_USERS_PUBLIC_FIELDS,
-  [resourceTypes.PROJECT_USER]: USER_PUBLIC_FIELDS
+  [resourceTypes.USER]: USER_PUBLIC_FIELDS
 }
