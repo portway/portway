@@ -22,16 +22,21 @@
   &--dragging {
     cursor: grabbing;
     opacity: 0.05;
+    * {
+      pointer-events: none;
+    }
   }
 
   &--dragged-over {
     opacity: 0.5;
+    * {
+      pointer-events: none;
+    }
   }
 
   &__name {
     display: inline-block;
     text-align: center;
-    pointer-events: none;
     input {
       @extend .note;
       background-color: $highlight;
@@ -54,13 +59,11 @@
   }
 
   &__component {
-    pointer-events: none;
   }
 
   &__tools {
     display: flex;
     justify-content: flex-end;
-    pointer-events: none;
   }
 
   &__tool-options {
