@@ -9,7 +9,7 @@ import documentSchema from './payloadSchemas/document'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  req => {
+  (req) => {
     return { projectId: req.params.projectId }
   }
 )

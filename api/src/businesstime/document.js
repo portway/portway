@@ -1,7 +1,16 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+import { pick } from '../libs/utils'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
 
 const MODEL_NAME = 'Document'
+
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.DOCUMENT]
+
+const publicFields = (instance) => {
+  return pick(instance, PUBLIC_FIELDS)
+}
 
 async function createForProject(projectId, body) {
   const db = getDb()
@@ -14,17 +23,25 @@ async function createForProject(projectId, body) {
   }
 
   const createdDocument = await db.model(MODEL_NAME).create({ ...body, projectId })
-  return createdDocument.get({ plain: true })
+  return publicFields(createdDocument)
 }
 
 async function findAllForProject(projectId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({ where: { projectId, orgId }, raw: true })
+  return await db.model(MODEL_NAME).findAll({
+    attributes: PUBLIC_FIELDS,
+    where: { projectId, orgId },
+    raw: true
+  })
 }
 
 async function findByIdForProject(id, projectId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId }, raw: true })
+  return await db.model(MODEL_NAME).findOne({
+    where: { id, projectId, orgId },
+    raw: true,
+    attributes: PUBLIC_FIELDS
+  })
 }
 
 async function updateByIdForProject(id, projectId, orgId, body) {
@@ -35,7 +52,7 @@ async function updateByIdForProject(id, projectId, orgId, body) {
   if (!document) throw ono({ code: 404 }, `Cannot update, document not found with id: ${id}`)
 
   const updatedDocument = await document.update(body)
-  return updatedDocument.get({ plain: true })
+  return publicFields(updatedDocument)
 }
 
 async function deleteByIdForProject(id, projectId, orgId) {
@@ -54,6 +71,9 @@ async function findParentProjectByDocumentId(id, orgId) {
     .model(MODEL_NAME)
     .findOne({ where: { id, orgId }, include: [{ model: db.model('Project') }] })
 
+  //TODO: figure out how to get this project to just return public fields
+  // I don't want business layers to require each other, that's asking for
+  // circular funtime requires
   return document.Project && document.Project.get({ plain: true })
 }
 

@@ -16,21 +16,21 @@ describe('BusinessDocument', () => {
   describe('#createForProject', () => {
     const documentBody = {
       name: 'test-document',
-      orgId: constants.ORG_ID
+      orgId: constants.ORG_ID,
     }
     let document
 
     beforeAll(async () => {
       document = await BusinessDocument.createForProject(factoryProject.id, {
-        ...documentBody,
-        projectId: factoryProject.id
+        ...documentBody
       })
     })
 
     it('should return the saved document as a POJO', () => {
-      expect(document).toEqual(expect.objectContaining(documentBody))
+      // eslint-disable-next-line no-unused-vars
+      const { orgId, ...expectedBody } = documentBody
+      expect(document).toEqual(expect.objectContaining(expectedBody))
       expect(document.constructor).toBe(Object)
-      expect(document.orgId).toBe(constants.ORG_ID)
     })
 
     describe('when the parent project does not exist', () => {
@@ -135,7 +135,7 @@ describe('BusinessDocument', () => {
         for (const document of documents) {
           expect(document.password).toBe(undefined)
           expect(document.constructor).toBe(Object)
-          expect(document.orgId).toBe(constants.ORG_ID)
+          expect(typeof document.projectId).toBe('number')
         }
       })
     })
@@ -157,7 +157,7 @@ describe('BusinessDocument', () => {
         it('should return a document as POJO', () => {
           expect(document.id).toBe(targetDocumentId)
           expect(document.constructor).toBe(Object)
-          expect(document.orgId).toBe(constants.ORG_ID)
+          expect(document.projectId).toBe(factoryProject.id)
         })
       })
 

@@ -6,6 +6,7 @@ const projectUsers = [
   {
     orgId: BONKEY_ORG_ID,
     createdAt: TODAY,
+    updatedAt: TODAY,
     projectId: BONKEY_PROJECT_ID,
     userId: BONKEY_USER_ID,
     roleId: 1
