@@ -80,7 +80,8 @@ const addDocumentField = async function(req, res) {
     res.status(201).json({ data: field })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create field' })
+    const message = e.message || 'Cannot create field'
+    res.status(e.code || 500).json({ error: message })
   }
 }
 
@@ -94,7 +95,8 @@ const updateDocumentField = async function(req, res) {
     res.status(200).json({ data: field })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error updating field with id ${id}` })
+    const message = e.message || `error updating field with id ${id}`
+    res.status(e.code || 500).json({ error: message })
   }
 }
 

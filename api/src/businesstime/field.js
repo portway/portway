@@ -21,6 +21,8 @@ async function createForDocument(docId, body) {
   const db = getDb()
   const { orgId } = body
 
+  validateFieldValueByType(body.value, body.type)
+
   const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
   if (!document) {
@@ -74,6 +76,8 @@ async function updateByIdForDocument(id, docId, orgId, body) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
+  validateFieldValueByType(body.value, field.type)
+
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
@@ -96,6 +100,28 @@ function getFieldValueInclude(db) {
       model: db.model(modelName)
     }
   })
+}
+
+function validateFieldValueByType(fieldValue, type) {
+  let isValid = false
+
+  // we're allowing null or undefined values for all types
+  if (fieldValue == null) return
+
+  switch (type) {
+    case 1:
+    case 2:
+      isValid = typeof fieldValue === 'string'
+      break
+    case 3:
+      isValid = typeof fieldValue === 'number'
+      break
+  }
+
+  if (!isValid) {
+    const message = `field with type ${type} cannot have a ${typeof fieldValue} value`
+    throw ono({ code: 400, message }, message)
+  }
 }
 
 export default {
