@@ -9,7 +9,7 @@ import { requiredFields, partialFields } from './payloadSchemas/helpers'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  req => {
+  (req) => {
     return { documentId: req.params.documentId }
   }
 )
@@ -25,7 +25,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type')),
+    validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type'), { includeDetails: true }),
     createPerm,
     addDocumentField
   )
@@ -34,7 +34,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue')),
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), { includeDetails: true }),
     updatePerm,
     updateDocumentField
   )
