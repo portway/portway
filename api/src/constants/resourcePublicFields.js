@@ -16,8 +16,15 @@ const FIELD_PUBLIC_FIELDS = [
   'order'
 ].concat(globalPublicFields)
 
+const PROJECT_USERS_PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId'].concat(globalPublicFields)
+
+const USER_PUBLIC_FIELDS = ['firstName', 'lastName', 'email', 'orgRoleId'].concat(globalPublicFields)
+
+
 export default {
   [resourceTypes.DOCUMENT]: DOCUMENT_PUBLIC_FIELDS,
   [resourceTypes.PROJECT]: PROJECT_PUBLIC_FIELDS,
-  [resourceTypes.FIELD]: FIELD_PUBLIC_FIELDS
+  [resourceTypes.FIELD]: FIELD_PUBLIC_FIELDS,
+  [resourceTypes.PROJECT_USER]: PROJECT_USERS_PUBLIC_FIELDS,
+  [resourceTypes.PROJECT_USER]: USER_PUBLIC_FIELDS
 }
