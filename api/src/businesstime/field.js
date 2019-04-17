@@ -45,7 +45,7 @@ async function findAllForDocument(docId, orgId) {
   const include = getFieldValueInclude(db)
   const fields = await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, include })
 
-  return fields.map(field => {
+  return fields.map((field) => {
     const plainField = field.get({ plain: true })
     return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
   })
@@ -91,7 +91,7 @@ async function deleteByIdForDocument(id, docId, orgId) {
 }
 
 function getFieldValueInclude(db) {
-  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map(modelName => {
+  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
     return {
       model: db.model(modelName)
     }
