@@ -61,6 +61,7 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
     if (e.preventDefault) {
       e.preventDefault()
     }
+    e.dataTransfer.dropEffect = 'move'
     return false
   }
   function dragEndHandler(e) {
