@@ -29,7 +29,6 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
     if (fieldMap.length > 0) {
       setOrderedFields(fieldMap)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields])
 
   // Actions
