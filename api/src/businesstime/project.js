@@ -32,7 +32,8 @@ async function findById(id, orgId) {
   return await db.model(MODEL_NAME).findOne({
     attributes: PUBLIC_FIELDS,
     where: { id, orgId },
-    raw: true })
+    raw: true
+  })
 }
 
 async function updateById(id, body, orgId) {
