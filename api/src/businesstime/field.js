@@ -1,7 +1,8 @@
 import ono from 'ono'
+import { BigNumber } from 'bignumber.js'
 
 import { getDb } from '../db/dbConnector'
-import { FIELD_TYPE_MODELS, FIELD_TYPES } from '../constants/fieldTypes'
+import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
 import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
@@ -100,7 +101,7 @@ function getFieldValueInclude(db) {
 }
 
 function validateFieldValueByType(fieldValue, type) {
-  let isValid = false
+  let isValidType = false
 
   // we're allowing null or undefined values for all types
   if (fieldValue == null) return
@@ -108,16 +109,25 @@ function validateFieldValueByType(fieldValue, type) {
   switch (type) {
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.TEXT:
-      isValid = typeof fieldValue === 'string'
+      isValidType = typeof fieldValue === 'string'
       break
     case FIELD_TYPES.NUMBER:
-      isValid = typeof fieldValue === 'number'
+      isValidType = typeof fieldValue === 'number'
+      isValidType && validateNumberPrecision(fieldValue)
       break
   }
 
-  if (!isValid) {
+  if (!isValidType) {
     const message = `field with type ${type} cannot have a ${typeof fieldValue} value`
     throw ono({ code: 400, message, errorType: apiErrorTypes.FieldValueIncorrectTypeError }, message)
+  }
+}
+
+function validateNumberPrecision(value) {
+  // validate that the number value's precision is 15 or less, allowing storage as DOUBLE
+  if (BigNumber(value).precision(true) > MAX_NUMBER_PRECISION) {
+    const message = `number value exceeds maximum of ${MAX_NUMBER_PRECISION} significant digits`
+    throw ono({ code: 400, message, errorType: apiErrorTypes.ValidationError }, message)
   }
 }
 
