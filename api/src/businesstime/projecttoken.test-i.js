@@ -8,7 +8,7 @@ import resourcePublicFields from '../constants/resourcePublicFields'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT_TOKEN]
 
-describe('BusinessProjectUser', () => {
+describe('BusinessProjectToken', () => {
   beforeAll(async () => {
     await initializeTestDb()
   })
