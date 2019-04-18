@@ -13,6 +13,9 @@
     </div>
   </div>
   <% } %>
+  <% if (flash) { %>
+  <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+  <% } %>
   <div class="field field--with-space">
     <%
       if (typeof button === 'undefined') {
