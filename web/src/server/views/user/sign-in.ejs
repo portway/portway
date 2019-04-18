@@ -3,7 +3,7 @@
 <main class="section">
   <div class="container">
     <h1 class="title">Log in</h1>
-    <%- include('../partials/login'); %>
+    <%- include('../partials/login', { flash: flash }); %>
     <p class="help">
       <a href="/">Sign up</a> <a href="/sign-in/password-reset">Forgot password</a>
     </p>
