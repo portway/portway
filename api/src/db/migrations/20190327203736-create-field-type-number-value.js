@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       value: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DOUBLE
       },
       fieldId: {
         type: Sequelize.INTEGER,
