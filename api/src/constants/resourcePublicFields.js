@@ -20,7 +20,7 @@ const PROJECT_USERS_PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId'].conc
 
 const USER_PUBLIC_FIELDS = ['firstName', 'lastName', 'email', 'orgRoleId'].concat(globalPublicFields)
 
-const PROJECT_TOKEN_PUBLIC_FIELDS = ['name', 'projectId', 'roleId'].concat(globalPublicFields)
+const PROJECT_TOKEN_PUBLIC_FIELDS = ['token', 'name', 'projectId', 'roleId'].concat(globalPublicFields)
 
 
 export default {

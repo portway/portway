@@ -1,14 +1,15 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const ApiKey = sequelize.define('ApiKey', {
+  const ProjectToken = sequelize.define('ProjectToken', {
     name: DataTypes.STRING,
     secret: DataTypes.STRING,
+    token: DataTypes.STRING,
     orgId: DataTypes.INTEGER,
     projectId: DataTypes.INTEGER,
     roleId: DataTypes.INTEGER
   }, {})
-  ApiKey.associate = function(models) {
+  ProjectToken.associate = function(models) {
     // associations can be defined here
   }
-  return ApiKey
+  return ProjectToken
 }

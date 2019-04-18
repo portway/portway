@@ -1,7 +1,7 @@
 import BusinessProjectToken from './projecttoken'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import TokenFactory from '../db/__testSetup__/factories/token'
-import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
+import initializeTestDb from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
@@ -26,7 +26,8 @@ describe('BusinessProjectUser', () => {
         roleId: 1,
         orgId: project.orgId,
         name: 'Mobile App API key',
-        secret: 'whoa bro so secret'
+        secret: 'whoa bro so secret',
+        token: '123893284asdfakl;na;sd23802zaasdfajkls;fnma,.w323ioljlkasdjlf;dgjhk;ldefinitelyarealtoken'
       }
 
       token = await BusinessProjectToken.create(tokenBody)

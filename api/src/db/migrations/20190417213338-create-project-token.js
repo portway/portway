@@ -1,7 +1,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('ApiKeys', {
+    return queryInterface.createTable('ProjectTokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,6 +13,10 @@ module.exports = {
         allowNull: false
       },
       secret: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      token: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -39,6 +43,6 @@ module.exports = {
     })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('ApiKeys')
+    return queryInterface.dropTable('ProjectTokens')
   }
 }

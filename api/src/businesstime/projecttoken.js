@@ -4,7 +4,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 
-const MODEL_NAME = 'ApiKey'
+const MODEL_NAME = 'ProjectToken'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT_TOKEN]
 
