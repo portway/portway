@@ -53,6 +53,7 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
   }
   function dragEnterHandler(e) {
     e.currentTarget.classList.add('field--dragged-over')
+    e.dataTransfer.dropEffect = 'move'
   }
   function dragLeaveHandler(e) {
     e.currentTarget.classList.remove('field--dragged-over')
@@ -75,7 +76,7 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
     const to = Number(e.currentTarget.dataset.order)
     e.currentTarget.classList.remove('field--dragging', 'field--dragged-over')
     if (to === from) { return }
-    const fieldData = orderedFields
+    const fieldData = [...orderedFields]
     fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
     setOrderedFields(fieldData)
     setDraggingElement(null)
