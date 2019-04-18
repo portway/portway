@@ -31,11 +31,11 @@ const DocumentFieldComponent = ({
   }, [isNewField])
 
   const fieldClasses = cx({
-    'field': true,
-    'field--new': isNewField,
-    'field--text': field.type === Constants.FIELD_TYPES.TEXT,
-    'field--number': field.type === Constants.FIELD_TYPES.NUMBER,
-    'field--string': field.type === Constants.FIELD_TYPES.STRING,
+    'document-field': true,
+    'document-field--new': isNewField,
+    'document-field--text': field.type === Constants.FIELD_TYPES.TEXT,
+    'document-field--number': field.type === Constants.FIELD_TYPES.NUMBER,
+    'document-field--string': field.type === Constants.FIELD_TYPES.STRING,
   })
 
   // Field name handling
@@ -59,9 +59,9 @@ const DocumentFieldComponent = ({
       onDragLeave={dragLeaveHandler}
       onDragOver={dragOverHandler}
       onDrop={dropHandler}>
-      <div className="field__component">
+      <div className="document-field__component">
         {showName &&
-        <div className="field__name">
+        <div className="document-field__name">
           <input
             defaultValue={field.name}
             maxLength={fieldNameMaxLength}
@@ -81,8 +81,8 @@ const DocumentFieldComponent = ({
         }
         {children}
       </div>
-      <div className="field__tools">
-        <div className="field__tool-options">
+      <div className="document-field__tools">
+        <div className="document-field__tool-options">
           {onDestroy &&
           <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
             <TrashIcon width="18" height="18" />

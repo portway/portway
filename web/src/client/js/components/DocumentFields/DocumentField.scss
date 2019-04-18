@@ -2,7 +2,7 @@
 @import 'CSS/inc/_mixins.scss';
 @import 'CSS/inc/_type.scss';
 
-.field {
+.document-field {
   background-color: $white;
   border: thin solid $gray-light;
   cursor: grab;
@@ -23,10 +23,10 @@
     background-color: $white-bis;
     border: thin solid $gray;
     box-shadow: 0 1px 4px 0px rgba($gray, .8);
-    input, textarea {
+    input, textarea, .CodeMirror {
       background-color: $white-bis;
     }
-    .field__name {
+    .document-field__name {
       input {
         background-color: $primary-light;
         color: $primary-dark;
