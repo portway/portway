@@ -17,13 +17,13 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 const projectsController = function(router) {
   router.post(
     '/',
-    validateBody(requiredFields(RESOURCE_TYPES.PROJECT, 'name')),
+    validateBody(requiredFields(RESOURCE_TYPES.PROJECT, 'name'), { includeDetails: true }),
     createPerm,
     addProject
   )
   router.get('/', listPerm, getProjects)
   router.get('/:id', readPerm, getProject)
-  router.put('/:id', validateBody(projectSchema), updatePerm, replaceProject)
+  router.put('/:id', validateBody(projectSchema, { includeDetails: true }), updatePerm, replaceProject)
   router.delete('/:id', deletePerm, deleteProject)
 }
 

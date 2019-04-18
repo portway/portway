@@ -51,6 +51,29 @@ describe('BusinessField', () => {
         ).rejects.toThrow()
       })
     })
+
+    describe('when the field is set to a string type but receives a number value', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.createForDocument(0, {
+            ...fieldBody,
+            value: 30
+          })
+        ).rejects.toThrow()
+      })
+    })
+
+    describe('when the field is set to a number type but receives a string value', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.createForDocument(0, {
+            ...fieldBody,
+            type: 3,
+            value: 'some test string'
+          })
+        ).rejects.toThrow()
+      })
+    })
   })
 
   describe('#updateByIdForDocument', () => {
@@ -64,7 +87,7 @@ describe('BusinessField', () => {
     }
 
     beforeAll(async () => {
-      const factoryFields = await FieldFactory.createMany(1, { docId: factoryDocument.id })
+      const factoryFields = await FieldFactory.createMany(1, { docId: factoryDocument.id, type: 1 })
       factoryField = factoryFields[0]
       fieldId = factoryField.id
       orgId = factoryField.orgId
@@ -107,6 +130,14 @@ describe('BusinessField', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.updateByIdForDocument(fieldId, docId, 0, updateBody)
+        ).rejects.toThrow()
+      })
+    })
+
+    describe('when the update value is not acceptable for the saved field type', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.updateByIdForDocument(fieldId, docId, orgId, { ...updateBody, value: 99 })
         ).rejects.toThrow()
       })
     })

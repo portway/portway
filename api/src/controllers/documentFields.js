@@ -25,7 +25,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type')),
+    validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type'), { includeDetails: true }),
     createPerm,
     addDocumentField
   )
@@ -34,7 +34,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue')),
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), { includeDetails: true }),
     updatePerm,
     updateDocumentField
   )
@@ -80,7 +80,8 @@ const addDocumentField = async function(req, res) {
     res.status(201).json({ data: field })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create field' })
+    const message = e.message || 'Cannot create field'
+    res.status(e.code || 500).json({ error: message, errorType: e.errorType })
   }
 }
 
@@ -94,7 +95,8 @@ const updateDocumentField = async function(req, res) {
     res.status(200).json({ data: field })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error updating field with id ${id}` })
+    const message = e.message || `error updating field with id ${id}`
+    res.status(e.code || 500).json({ error: message, errorType: e.errorType })
   }
 }
 

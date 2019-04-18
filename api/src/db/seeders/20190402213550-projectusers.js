@@ -14,6 +14,7 @@ const projectUsers = [
   {
     orgId: BONKEY_ORG_ID,
     createdAt: TODAY,
+    updatedAt: TODAY,
     projectId: BONKEY_PROJECT_ID,
     userId: seedIds.BIDDY_USER_ID,
     roleId: 1
@@ -21,6 +22,7 @@ const projectUsers = [
   {
     orgId: BONKEY_ORG_ID,
     createdAt: TODAY,
+    updatedAt: TODAY,
     projectId: SCENIC_PROJECT_ID,
     userId: seedIds.BADDY_USER_ID,
     roleId: 2
@@ -28,6 +30,7 @@ const projectUsers = [
   {
     orgId: BONKEY_ORG_ID,
     createdAt: TODAY,
+    updatedAt: TODAY,
     projectId: SCENIC_PROJECT_ID,
     userId: seedIds.BIXIE_USER_ID,
     roleId: 3
@@ -35,6 +38,7 @@ const projectUsers = [
   {
     orgId: PROJEXT_X_ORG_ID,
     createdAt: TODAY,
+    updatedAt: TODAY,
     projectId: ELEMENT_X_PROJECT_ID,
     userId: seedIds.BOB_X_USER_ID,
     roleId: 3

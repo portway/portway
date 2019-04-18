@@ -1,7 +1,8 @@
 import ono from 'ono'
 
 import { getDb } from '../db/dbConnector'
-import fieldTypes from '../constants/fieldTypes'
+import { FIELD_TYPE_MODELS, FIELD_TYPES } from '../constants/fieldTypes'
+import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
@@ -17,6 +18,8 @@ const publicFields = (instance) => {
 async function createForDocument(docId, body) {
   const db = getDb()
   const { orgId } = body
+
+  validateFieldValueByType(body.value, body.type)
 
   const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
@@ -70,6 +73,8 @@ async function updateByIdForDocument(id, docId, orgId, body) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
+  validateFieldValueByType(body.value, field.type)
+
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
@@ -87,11 +92,33 @@ async function deleteByIdForDocument(id, docId, orgId) {
 }
 
 function getFieldValueInclude(db) {
-  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
+  return Object.values(FIELD_TYPE_MODELS).map((modelName) => {
     return {
       model: db.model(modelName)
     }
   })
+}
+
+function validateFieldValueByType(fieldValue, type) {
+  let isValid = false
+
+  // we're allowing null or undefined values for all types
+  if (fieldValue == null) return
+
+  switch (type) {
+    case FIELD_TYPES.STRING:
+    case FIELD_TYPES.TEXT:
+      isValid = typeof fieldValue === 'string'
+      break
+    case FIELD_TYPES.NUMBER:
+      isValid = typeof fieldValue === 'number'
+      break
+  }
+
+  if (!isValid) {
+    const message = `field with type ${type} cannot have a ${typeof fieldValue} value`
+    throw ono({ code: 400, message, errorType: apiErrorTypes.FieldValueIncorrectTypeError }, message)
+  }
 }
 
 export default {

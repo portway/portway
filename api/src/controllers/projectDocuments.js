@@ -26,7 +26,7 @@ const projectDocumentsController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(requiredFields(RESOURCE_TYPES.DOCUMENT, 'name')),
+    validateBody(requiredFields(RESOURCE_TYPES.DOCUMENT, 'name'), { includeDetails: true }),
     createPerm,
     addProjectDocument
   )
@@ -35,7 +35,7 @@ const projectDocumentsController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(documentSchema),
+    validateBody(documentSchema, { includeDetails: true }),
     updatePerm,
     replaceProjectDocument
   )
