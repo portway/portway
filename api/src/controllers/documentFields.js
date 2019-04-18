@@ -9,7 +9,7 @@ import { requiredFields, partialFields } from './payloadSchemas/helpers'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
-  req => {
+  (req) => {
     return { documentId: req.params.documentId }
   }
 )

@@ -2,6 +2,10 @@ import BusinessProject from './project'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT]
 
 describe('BusinessProject', () => {
   beforeAll(async () => {
@@ -17,9 +21,10 @@ describe('BusinessProject', () => {
     })
 
     it('should return the saved project as a POJO', () => {
-      expect(project).toEqual(expect.objectContaining(projectBody))
+      // eslint-disable-next-line no-unused-vars
+      const { orgId, ...expectedBody } = projectBody
+      expect(project).toEqual(expect.objectContaining(expectedBody))
       expect(project.constructor).toBe(Object)
-      expect(project.orgId).toBe(constants.ORG_ID)
     })
   })
 
@@ -74,7 +79,7 @@ describe('BusinessProject', () => {
         for (const project of projects) {
           expect(project.password).toBe(undefined)
           expect(project.constructor).toBe(Object)
-          expect(project.orgId).toBe(constants.ORG_ID)
+          expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
         }
       })
     })
@@ -92,7 +97,7 @@ describe('BusinessProject', () => {
         it('should return a project as POJO', () => {
           expect(project.id).toBe(targetProjectId)
           expect(project.constructor).toBe(Object)
-          expect(project.orgId).toBe(constants.ORG_ID)
+          expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
         })
       })
 

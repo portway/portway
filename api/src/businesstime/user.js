@@ -1,12 +1,17 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
-import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
 import { UniqueConstraintError } from 'sequelize'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+import { pick } from '../libs/utils'
 
 export const MODEL_NAME = 'User'
 
-export const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS,
-  'firstName', 'lastName', 'email', 'orgRoleId', 'orgId']
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
+
+const publicFields = (instance) => {
+  return pick(instance, PUBLIC_FIELDS)
+}
 
 async function create(body) {
   const db = getDb()
@@ -19,12 +24,14 @@ async function create(body) {
     }
     throw err
   }
-  return createdUser && createdUser.get({ plain: true })
+  return createdUser && publicFields(createdUser)
 }
 
 async function findByEmail(email) {
   const db = getDb()
-  const user = await db.model(MODEL_NAME).findOne({ where: { email } })
+  const user = await db.model(MODEL_NAME).findOne({
+    where: { email }
+  })
   return user && user.get({ plain: true })
 }
 
@@ -54,7 +61,7 @@ async function updateByEmail(email, body) {
   const user = await db.model(MODEL_NAME).findOne({ where: { email } })
   if (!user) throw ono({ code: 404 }, `Cannot update, user not found with email: ${email}`)
   const updatedUser = await user.update(body)
-  return updatedUser && updatedUser.get({ plain: true })
+  return updatedUser && publicFields(updatedUser)
 }
 
 async function updateById(id, body) {
@@ -62,7 +69,7 @@ async function updateById(id, body) {
   const user = await db.model(MODEL_NAME).findByPk(id)
   if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
   const updatedUser = await user.update(body)
-  return updatedUser && updatedUser.get({ plain: true })
+  return updatedUser && publicFields(updatedUser)
 }
 
 async function updateOrgRole(id, orgRoleId, orgId) {
@@ -70,7 +77,7 @@ async function updateOrgRole(id, orgRoleId, orgId) {
   const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
   if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
   const updatedUser = await user.update({ orgRoleId })
-  return updatedUser && updatedUser.get({ plain: true })
+  return updatedUser && publicFields(updatedUser)
 }
 
 export default {

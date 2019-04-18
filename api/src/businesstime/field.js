@@ -2,20 +2,17 @@ import ono from 'ono'
 
 import { getDb } from '../db/dbConnector'
 import fieldTypes from '../constants/fieldTypes'
-import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+import { pick } from '../libs/utils'
 
 const MODEL_NAME = 'Field'
-const PUBLIC_FIELDS = [
-  ...GLOBAL_PUBLIC_FIELDS,
-  'name',
-  'value',
-  'structuredValue',
-  'orgId',
-  'docId',
-  'versionId',
-  'type',
-  'order'
-]
+
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.FIELD]
+
+const publicFields = (instance) => {
+  return pick(instance, PUBLIC_FIELDS)
+}
 
 async function createForDocument(docId, body) {
   const db = getDb()
@@ -43,12 +40,12 @@ async function createForDocument(docId, body) {
 async function findAllForDocument(docId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
-  const fields = await db.model(MODEL_NAME).findAll({ where: { docId, orgId }, include })
-
-  return fields.map(field => {
-    const plainField = field.get({ plain: true })
-    return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
+  const fields = await db.model(MODEL_NAME).findAll({
+    where: { docId, orgId },
+    include
   })
+
+  return fields.map(publicFields)
 }
 
 async function findByIdForDocument(id, docId, orgId) {
@@ -58,8 +55,7 @@ async function findByIdForDocument(id, docId, orgId) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, include })
   if (!field) return field
 
-  const plainField = field.get({ plain: true })
-  return Object.assign({}, ...PUBLIC_FIELDS.map(key => ({ [key]: plainField[key] })))
+  return publicFields(field)
 }
 
 async function updateByIdForDocument(id, docId, orgId, body) {
@@ -91,7 +87,7 @@ async function deleteByIdForDocument(id, docId, orgId) {
 }
 
 function getFieldValueInclude(db) {
-  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map(modelName => {
+  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
     return {
       model: db.model(modelName)
     }
