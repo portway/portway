@@ -18,7 +18,7 @@ describe('BusinessDocument', () => {
   describe('#createForProject', () => {
     const documentBody = {
       name: 'test-document',
-      orgId: constants.ORG_ID,
+      orgId: constants.ORG_ID
     }
     let document
 

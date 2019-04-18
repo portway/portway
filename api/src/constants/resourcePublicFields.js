@@ -22,9 +22,9 @@ const USER_PUBLIC_FIELDS = ['firstName', 'lastName', 'email', 'orgRoleId'].conca
 
 
 export default {
-  [resourceTypes.DOCUMENT]: DOCUMENT_PUBLIC_FIELDS,
-  [resourceTypes.PROJECT]: PROJECT_PUBLIC_FIELDS,
-  [resourceTypes.FIELD]: FIELD_PUBLIC_FIELDS,
-  [resourceTypes.PROJECT_USER]: PROJECT_USERS_PUBLIC_FIELDS,
-  [resourceTypes.USER]: USER_PUBLIC_FIELDS
+  [resourceTypes.DOCUMENT]: Object.freeze(DOCUMENT_PUBLIC_FIELDS),
+  [resourceTypes.PROJECT]: Object.freeze(PROJECT_PUBLIC_FIELDS),
+  [resourceTypes.FIELD]: Object.freeze(FIELD_PUBLIC_FIELDS),
+  [resourceTypes.PROJECT_USER]: Object.freeze(PROJECT_USERS_PUBLIC_FIELDS),
+  [resourceTypes.USER]: Object.freeze(USER_PUBLIC_FIELDS)
 }
