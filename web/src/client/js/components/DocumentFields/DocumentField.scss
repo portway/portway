@@ -19,6 +19,29 @@
     }
   }
 
+  &--new {
+    background-color: $white-bis;
+    border: thin solid $gray;
+    box-shadow: 0 1px 4px 0px rgba($gray, .8);
+    input, textarea {
+      background-color: $white-bis;
+    }
+    .field__name {
+      input {
+        background-color: $primary-light;
+        color: $primary-dark;
+        text-shadow: 0px 1px 0px rgba($white, .5);
+        &::selection {
+          background-color: lighten($primary-light, 80%);
+          color: $black-bis;
+        }
+        &:focus {
+          background-color: darken($primary-light, 20%);
+        }
+      }
+    }
+  }
+
   &--dragging {
     cursor: grabbing;
     opacity: 0.05;
@@ -44,6 +67,7 @@
       // background-color: transparent;
       border: none;
       color: #fff;
+      text-shadow: 0px 1px 0px rgba($black-ter, .4);
       min-width: 100px; // change this in DocumentFieldComponent.js as well
       outline: none;
       text-align: center;

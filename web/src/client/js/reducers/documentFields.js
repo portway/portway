@@ -3,6 +3,7 @@ import { ActionTypes } from '../actions'
 const initialState = {
   // nested at { [documentId]: { [fieldId]: {} } }
   documentFieldsById: {},
+  lastCreatedField: null,
   loading: {
     byId: {},
     byDocument: {}
@@ -33,7 +34,8 @@ export const documentFields = (state = initialState, action) => {
         ...state.documentFieldsById,
         [docId]: { ...documentFields, [id]: action.data }
       }
-      return { ...state, documentFieldsById }
+      const lastCreatedField = id
+      return { ...state, documentFieldsById, lastCreatedField }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
       const { fieldId } = action
@@ -47,8 +49,9 @@ export const documentFields = (state = initialState, action) => {
         ...state.documentFieldsById,
         [docId]: { ...documentFields, [id]: action.data }
       }
+      const lastCreatedField = initialState.lastCreatedField
       const loadingById = { ...state.loading.byId, [id]: false }
-      return { ...state, documentFieldsById, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, documentFieldsById, lastCreatedField, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.INITIATE_FIELD_REMOVE: {
       const { id } = action
@@ -61,8 +64,9 @@ export const documentFields = (state = initialState, action) => {
       // eslint-disable-next-line no-unused-vars
       const { [fieldId]: __, ...restDocumentFields } = documentFields
       const loadingById = { ...state.loading.byId, [fieldId]: false }
+      const lastCreatedField = initialState.lastCreatedField
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: restDocumentFields }
-      return { ...state, documentFieldsById, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, documentFieldsById, lastCreatedField, loading: { ...state.loading, byId: loadingById } }
     }
     default:
       return state

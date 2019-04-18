@@ -8,6 +8,7 @@ import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 
 const DocumentFieldsComponent = ({
+  createdFieldId,
   dragStartHandler,
   dragEndHandler,
   dragEnterHandler,
@@ -39,6 +40,7 @@ const DocumentFieldsComponent = ({
       <DocumentFieldComponent
         key={field.id}
         index={index}
+        isNewField={createdFieldId === field.id}
         field={field}
         dragStartHandler={dragStartHandler}
         dragEndHandler={dragEndHandler}
@@ -68,6 +70,7 @@ const DocumentFieldsComponent = ({
 }
 
 DocumentFieldsComponent.propTypes = {
+  createdFieldId: PropTypes.number,
   dragStartHandler: PropTypes.func.isRequired,
   dragEndHandler: PropTypes.func.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,

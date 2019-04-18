@@ -23,6 +23,9 @@
     &-document-container {
       background-color: $white-bis;
       flex: 1;
+      height: calc(100vh - #{$ribbonHeight + $headerHeight});
+      overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 32px;
     }
   }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -17,12 +17,22 @@ const DocumentFieldComponent = ({
   dropHandler,
   field,
   index,
+  isNewField,
   showName,
   onDestroy,
   onRename
 }) => {
+  const nameRef = useRef()
+  useEffect(() => {
+    if (isNewField && nameRef.current) {
+      nameRef.current.scrollIntoView({ behavior: 'smooth' })
+      nameRef.current.focus()
+    }
+  }, [isNewField])
+
   const fieldClasses = cx({
     'field': true,
+    'field--new': isNewField,
     'field--text': field.type === Constants.FIELD_TYPES.TEXT,
     'field--number': field.type === Constants.FIELD_TYPES.NUMBER,
     'field--string': field.type === Constants.FIELD_TYPES.STRING,
@@ -64,6 +74,7 @@ const DocumentFieldComponent = ({
             }}
             onChange={(e) => { onRename(field.id, e.target.value) }}
             onFocus={(e) => { e.target.select() }}
+            ref={nameRef}
             style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
             type="text" />
         </div>
@@ -93,6 +104,7 @@ DocumentFieldComponent.propTypes = {
   dropHandler: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  isNewField: PropTypes.bool.isRequired,
   showName: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired
