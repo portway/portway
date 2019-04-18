@@ -1,7 +1,7 @@
 import ono from 'ono'
 
 import { getDb } from '../db/dbConnector'
-import fieldTypes from '../constants/fieldTypes'
+import { FIELD_TYPE_MODELS, FIELD_TYPES } from '../constants/fieldTypes'
 import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
@@ -92,7 +92,7 @@ async function deleteByIdForDocument(id, docId, orgId) {
 }
 
 function getFieldValueInclude(db) {
-  return Object.values(fieldTypes.FIELD_TYPE_MODELS).map((modelName) => {
+  return Object.values(FIELD_TYPE_MODELS).map((modelName) => {
     return {
       model: db.model(modelName)
     }
@@ -106,11 +106,11 @@ function validateFieldValueByType(fieldValue, type) {
   if (fieldValue == null) return
 
   switch (type) {
-    case 1:
-    case 2:
+    case FIELD_TYPES.STRING:
+    case FIELD_TYPES.TEXT:
       isValid = typeof fieldValue === 'string'
       break
-    case 3:
+    case FIELD_TYPES.NUMBER:
       isValid = typeof fieldValue === 'number'
       break
   }
