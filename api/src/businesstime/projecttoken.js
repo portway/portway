@@ -1,15 +1,15 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+import { pick } from '../libs/utils'
 
 const MODEL_NAME = 'ApiKey'
 
-const PUBLIC_FIELDS = ['name', 'projectId', 'roleId']
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT_TOKEN]
 
 const publicFields = (instance) => {
-  return PUBLIC_FIELDS.reduce((obj, field) => {
-    obj[field] = instance[field]
-    return obj
-  }, {})
+  return pick(instance, PUBLIC_FIELDS)
 }
 
 async function create(body) {
@@ -24,7 +24,7 @@ async function findAllByProjectId(projectId, orgId) {
     attributes: PUBLIC_FIELDS,
     where: { projectId, orgId }
   })
-  return tokens
+  return tokens.map(publicFields)
 }
 
 async function updateNameById(id, updatedName, orgId) {
