@@ -14,12 +14,7 @@ passport.deserializeUser((id, done) => {
 localAuth(passport)
 JWTAuth(passport)
 
-const passportResponse = {
-  session: false,
-  failureRedirect: '/sign-in?message=login'
-}
-
 export default {
-  loginMiddleware: passport.authenticate('local', passportResponse),
-  jwtMiddleware: passport.authenticate('jwt', passportResponse)
+  loginMiddleware: passport.authenticate('local', { session: false, failureRedirect: '/sign-in?message=login' }),
+  jwtMiddleware: passport.authenticate('jwt', { session: false })
 }
