@@ -1,50 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Select from 'react-select'
 
-import TextField from 'Components/Form/TextField'
-import Checkbox from 'Components/Form/Checkbox'
-
-const ProjectSettingsTeamsComponent = ({ project, onUpdateHandler }) => {
+const ProjectSettingsTeamsComponent = ({ project, users, currentUser, onUpdateHandler }) => {
   if (!project) return null
-  const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
+  const usersWithoutMe = Object.values(users).filter(user => user.id !== currentUser.id)
+  const userOptions = usersWithoutMe.map((user) => {
+    return {
+      value: String(user.id),
+      label: `${user.firstName} ${user.lastName}`
+    }
+  })
   return (
     <form className="project-settings__info">
       <section>
-        <h2>General information</h2>
-        <TextField
-          id="projectName"
-          label="Project Name"
-          name="project[name]"
-          onChange={onUpdateHandler}
-          placeholder="My project"
-          value={project.name} />
-        <TextField
-          id="projectDescription"
-          label="Description (optional)"
-          large
-          name="project[description]"
-          onChange={onUpdateHandler}
-          placeholder=""
-          value={project.description} />
-      </section>
-      <section>
-        <h2>Privacy</h2>
-        <Checkbox
-          id="projectPrivacy"
-          help={helpText}
-          label="Make this project public"
-          name="project[privacy]"
-          onChange={onUpdateHandler}
-          value="checked"
-        />
+        <h2>Team access</h2>
+        <Select options={userOptions} />
       </section>
     </form>
   )
 }
 
 ProjectSettingsTeamsComponent.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   project: PropTypes.object.isRequired,
-  onUpdateHandler: PropTypes.func.isRequired
+  onUpdateHandler: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired
 }
 
 export default ProjectSettingsTeamsComponent

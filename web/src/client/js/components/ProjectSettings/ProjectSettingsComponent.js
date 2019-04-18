@@ -15,7 +15,7 @@ const SETTINGS_PATHS = {
   KEYS: 'keys'
 }
 
-const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHandler }) => {
+const ProjectSettingsComponent = ({ projectId, project, setting, users, currentUser, projectUpdateHandler }) => {
   if (!project || !projectId) return null
   const settingsSectionPath = `${Constants.PATH_PROJECT}/${projectId}/settings`
 
@@ -31,7 +31,7 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
         const updateInfoHandler = (e) => {
           projectUpdateHandler(SETTINGS_PATHS.TEAMS, e)
         }
-        return <ProjectSettingsTeamsComponent project={project} onUpdateHandler={updateInfoHandler} />
+        return <ProjectSettingsTeamsComponent project={project} users={users} currentUser={currentUser} onUpdateHandler={updateInfoHandler} />
       }
       default:
         return <Redirect to={`${settingsSectionPath}/info`} />
@@ -58,10 +58,12 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
 }
 
 ProjectSettingsComponent.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   projectId: PropTypes.string.isRequired,
   project: PropTypes.object.isRequired,
   projectUpdateHandler: PropTypes.func,
-  setting: PropTypes.string
+  setting: PropTypes.string,
+  users: PropTypes.object.isRequired
 }
 
 ProjectSettingsComponent.defaultProps = {
