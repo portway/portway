@@ -1,8 +1,12 @@
-import BusinessProjectUser, { PUBLIC_FIELDS } from './projectuser'
+import BusinessProjectUser from './projectuser'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT_USER]
 
 describe('BusinessProjectUser', () => {
   beforeAll(async () => {

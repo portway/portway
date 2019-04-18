@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       roleId: DataTypes.INTEGER
     },
     {
-      updatedAt: false, // don't use updatedAt timestamp
       freezeTableName: true,
       tableName: 'ProjectsUsers'
     }

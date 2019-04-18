@@ -3,6 +3,8 @@ import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
 
 describe('BusinessUser', () => {
   beforeAll(async () => {
@@ -24,7 +26,9 @@ describe('BusinessUser', () => {
     })
 
     it('should return the saved user as a POJO', () => {
-      expect(user).toEqual(expect.objectContaining(userBody))
+      // eslint-disable-next-line no-unused-vars
+      const { orgId, ...expectedBody } = userBody
+      expect(user).toEqual(expect.objectContaining(expectedBody))
       expect(user.constructor).toBe(Object)
     })
   })
@@ -153,7 +157,7 @@ describe('BusinessUser', () => {
           expect(user.password).toBe(undefined)
           expect(user.id).toBe(targetUserId)
           expect(user.constructor).toBe(Object)
-          expect(user.orgId).toBe(constants.ORG_ID)
+          expect(Object.keys(user)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.USER]))
         })
       })
 

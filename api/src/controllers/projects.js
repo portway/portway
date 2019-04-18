@@ -9,7 +9,7 @@ import projectSchema from './payloadSchemas/project'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.PROJECT,
-  req => {
+  (req) => {
     return { id: req.params.id }
   }
 )
