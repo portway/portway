@@ -3,42 +3,96 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import Constants from 'Shared/constants'
-import { RemoveIcon } from 'Components/Icons'
+import { TrashIcon } from 'Components/Icons'
 
 import './DocumentField.scss'
 
-const DocumentFieldComponent = ({ children, field, showName, onDestroy, onRename }) => {
+const DocumentFieldComponent = ({
+  children,
+  dragStartHandler,
+  dragEndHandler,
+  dragEnterHandler,
+  dragLeaveHandler,
+  dragOverHandler,
+  dropHandler,
+  field,
+  index,
+  showName,
+  onDestroy,
+  onRename
+}) => {
   const fieldClasses = cx({
     'field': true,
     'field--text': field.type === Constants.FIELD_TYPES.TEXT,
     'field--number': field.type === Constants.FIELD_TYPES.NUMBER,
     'field--string': field.type === Constants.FIELD_TYPES.STRING,
   })
+
+  // Field name handling
+  const fieldLengthFactor = 6.5
+  const fieldNameMaxLength = 50
+  const fieldMinimumWidth = 100
+  function returnInitialNameLength(length) {
+    if (length > fieldNameMaxLength) {
+      return
+    }
+    return length * fieldLengthFactor > fieldMinimumWidth ? length * fieldLengthFactor : fieldMinimumWidth
+  }
   return (
-    <div className={fieldClasses}>
+    <li
+      className={fieldClasses}
+      data-order={index}
+      draggable="true"
+      onDragStart={dragStartHandler}
+      onDragEnd={dragEndHandler}
+      onDragEnter={dragEnterHandler}
+      onDragLeave={dragLeaveHandler}
+      onDragOver={dragOverHandler}
+      onDrop={dropHandler}>
       <div className="field__component">
-        {children}
         {showName &&
-        <input
-          className="field__name"
-          defaultValue={field.name}
-          onChange={(e) => { onRename(field.id, e.target.value) }}
-          onFocus={(e) => { e.target.select() }}
-          type="text" />
+        <div className="field__name">
+          <input
+            defaultValue={field.name}
+            maxLength={fieldNameMaxLength}
+            onKeyDown={(e) => {
+              if (e.key.toLowerCase() === 'escape') {
+                e.target.blur()
+                return
+              }
+              e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
+            }}
+            onChange={(e) => { onRename(field.id, e.target.value) }}
+            onFocus={(e) => { e.target.select() }}
+            style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
+            type="text" />
+        </div>
         }
+        {children}
       </div>
-      {onDestroy &&
-      <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
-        <RemoveIcon />
-      </button>
-      }
-    </div>
+      <div className="field__tools">
+        <div className="field__tool-options">
+          {onDestroy &&
+          <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
+            <TrashIcon width="18" height="18" />
+          </button>
+          }
+        </div>
+      </div>
+    </li>
   )
 }
 
 DocumentFieldComponent.propTypes = {
   children: PropTypes.element.isRequired,
+  dragStartHandler: PropTypes.func.isRequired,
+  dragEndHandler: PropTypes.func.isRequired,
+  dragEnterHandler: PropTypes.func.isRequired,
+  dragLeaveHandler: PropTypes.func.isRequired,
+  dragOverHandler: PropTypes.func.isRequired,
+  dropHandler: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
   showName: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired

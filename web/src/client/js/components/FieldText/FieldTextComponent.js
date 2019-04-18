@@ -37,6 +37,7 @@ const FieldTextComponent = ({ field, onChange }) => {
   useEffect(() => {
     if (editor) {
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
+      editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
     }
   // We're disavling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits
