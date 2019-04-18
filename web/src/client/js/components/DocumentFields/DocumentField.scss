@@ -3,27 +3,77 @@
 @import 'CSS/inc/_type.scss';
 
 .field {
-  border-bottom: thin solid $white-ter;
-  display: flex;
-  padding: ($brandWidth / 2) 0;
+  background-color: $white;
+  border: thin solid $gray-light;
+  cursor: grab;
+  margin-bottom: ($brandWidth / 2);
+  outline: 0;
+  padding: ($brandWidth / 2) ($brandWidth / 2) ($brandWidth / 4) ($brandWidth / 2);
 
-  &:last-child {
-    border-bottom: none;
+  &:focus, &:focus-within {
+    border: thin solid $action;
+    box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
+    .using-mouse & {
+      border: thin solid $gray;
+      box-shadow: 0 1px 4px 0px rgba($gray, .8);
+    }
   }
 
-  &__component {
-    display: flex;
-    flex: 1;
-    flex-direction: column-reverse;
+  &--dragging {
+    cursor: grabbing;
+    opacity: 0.05;
+    * {
+      pointer-events: none;
+    }
+  }
+
+  &--dragged-over {
+    opacity: 0.5;
+    * {
+      pointer-events: none;
+    }
   }
 
   &__name {
-    @extend .note;
-    border: none;
-    border-left: 2px solid $gray;
-    color: $gray-dark;
-    padding-left: 6px;
-    outline: none;
+    display: inline-block;
+    text-align: center;
+    input {
+      @extend .note;
+      background-color: $highlight;
+      border-radius: 8px;
+      // background-color: transparent;
+      border: none;
+      color: #fff;
+      min-width: 100px; // change this in DocumentFieldComponent.js as well
+      outline: none;
+      text-align: center;
+      transition: width 0.25s;
+      &::selection {
+        background-color: lighten($highlight, 80%);
+        color: $black-bis;
+      }
+      &:focus {
+        background-color: darken($highlight, 20%);
+      }
+    }
+  }
+
+  &__component {
+  }
+
+  &__tools {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__tool-options {
+    visibility: hidden;
+  }
+
+  &:hover, &:focus, &:focus-within {
+    .field__tool-options {
+      visibility: visible;
+    }
   }
 
 }

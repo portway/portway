@@ -7,9 +7,20 @@ import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 
-const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldRenameHandler, fieldDestroyHandler }) => {
+const DocumentFieldsComponent = ({
+  dragStartHandler,
+  dragEndHandler,
+  dragEnterHandler,
+  dragLeaveHandler,
+  dragOverHandler,
+  dropHandler,
+  fields,
+  fieldChangeHandler,
+  fieldRenameHandler,
+  fieldDestroyHandler
+}) => {
   const showFieldName = fields.length > 1
-  function renderFieldType(field) {
+  function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
@@ -25,26 +36,44 @@ const DocumentFieldsComponent = ({ fields, fieldChangeHandler, fieldRenameHandle
         break
     }
     return (
-      <DocumentFieldComponent key={field.id} field={field} showName={showFieldName} onRename={fieldRenameHandler} onDestroy={() => { fieldDestroyHandler(field.id) }}>
+      <DocumentFieldComponent
+        key={field.id}
+        index={index}
+        field={field}
+        dragStartHandler={dragStartHandler}
+        dragEndHandler={dragEndHandler}
+        dragEnterHandler={dragEnterHandler}
+        dragLeaveHandler={dragLeaveHandler}
+        dragOverHandler={dragOverHandler}
+        dropHandler={dropHandler}
+        showName={showFieldName}
+        onRename={fieldRenameHandler}
+        onDestroy={() => { fieldDestroyHandler(field.id) }}>
         {fieldTypeComponent}
       </DocumentFieldComponent>
     )
   }
   function renderFields() {
     const fieldArray = []
-    fields.forEach((field) => {
-      fieldArray.push(renderFieldType(field))
+    fields.forEach((field, index) => {
+      fieldArray.push(renderFieldType(field, index))
     })
     return fieldArray
   }
   return (
-    <div className="document__fields">
+    <ol className="document__fields">
       {renderFields()}
-    </div>
+    </ol>
   )
 }
 
 DocumentFieldsComponent.propTypes = {
+  dragStartHandler: PropTypes.func.isRequired,
+  dragEndHandler: PropTypes.func.isRequired,
+  dragEnterHandler: PropTypes.func.isRequired,
+  dragLeaveHandler: PropTypes.func.isRequired,
+  dragOverHandler: PropTypes.func.isRequired,
+  dropHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,

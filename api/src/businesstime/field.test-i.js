@@ -4,6 +4,8 @@ import DocumentFactory from '../db/__testSetup__/factories/document'
 import FieldFactory from '../db/__testSetup__/factories/field'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
 
 describe('BusinessField', () => {
   let factoryProject
@@ -33,9 +35,11 @@ describe('BusinessField', () => {
     })
 
     it('should return the saved field as a POJO', () => {
-      expect(field).toEqual(expect.objectContaining(fieldBody))
+      // eslint-disable-next-line no-unused-vars
+      const { orgId, ...expectedBody } = fieldBody
+      expect(field).toEqual(expect.objectContaining(expectedBody))
       expect(field.constructor).toBe(Object)
-      expect(field.orgId).toBe(constants.ORG_ID)
+      expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
     })
 
     describe('when the parent document does not exist', () => {
@@ -43,6 +47,29 @@ describe('BusinessField', () => {
         await expect(
           BusinessField.createForDocument(0, {
             ...fieldBody
+          })
+        ).rejects.toThrow()
+      })
+    })
+
+    describe('when the field is set to a string type but receives a number value', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.createForDocument(0, {
+            ...fieldBody,
+            value: 30
+          })
+        ).rejects.toThrow()
+      })
+    })
+
+    describe('when the field is set to a number type but receives a string value', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.createForDocument(0, {
+            ...fieldBody,
+            type: 3,
+            value: 'some test string'
           })
         ).rejects.toThrow()
       })
@@ -60,7 +87,7 @@ describe('BusinessField', () => {
     }
 
     beforeAll(async () => {
-      const factoryFields = await FieldFactory.createMany(1, { docId: factoryDocument.id })
+      const factoryFields = await FieldFactory.createMany(1, { docId: factoryDocument.id, type: 1 })
       factoryField = factoryFields[0]
       fieldId = factoryField.id
       orgId = factoryField.orgId
@@ -106,6 +133,14 @@ describe('BusinessField', () => {
         ).rejects.toThrow()
       })
     })
+
+    describe('when the update value is not acceptable for the saved field type', () => {
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.updateByIdForDocument(fieldId, docId, orgId, { ...updateBody, value: 99 })
+        ).rejects.toThrow()
+      })
+    })
   })
 
   describe('field fetching', () => {
@@ -138,7 +173,7 @@ describe('BusinessField', () => {
       it('should return fields as POJOs', () => {
         for (const field of fields) {
           expect(field.constructor).toBe(Object)
-          expect(field.orgId).toBe(constants.ORG_ID)
+          expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
         }
       })
     })
@@ -160,7 +195,7 @@ describe('BusinessField', () => {
         it('should return a field as POJO', () => {
           expect(field.id).toBe(targetFieldId)
           expect(field.constructor).toBe(Object)
-          expect(field.orgId).toBe(constants.ORG_ID)
+          expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
         })
       })
 

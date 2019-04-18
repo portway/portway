@@ -13,6 +13,7 @@
   }
 
   &__title {
+    background-color: transparent;
     border: none;
     color: $primary;
     flex: 1;
@@ -28,7 +29,9 @@
 
   &__fields {
     flex: 1;
+    list-style: none;
     padding: ($brandWidth / 2) 0;
+    margin: 0;
   }
 
 }

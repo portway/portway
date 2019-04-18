@@ -1,9 +1,16 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+import { pick } from '../libs/utils'
 
 const MODEL_NAME = 'ProjectUser'
 
-export const PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId']
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT_USER]
+
+const publicFields = (instance) => {
+  return pick(instance, PUBLIC_FIELDS)
+}
 
 async function create(body) {
   const db = getDb()
@@ -52,9 +59,9 @@ async function updateProjectUserById(id, roleId, orgId) {
   if (!projectUser) {
     throw ono({ code: 404 }, `Project user assignment id ${id} not found`)
   }
-  return (await projectUser.update({
+  return publicFields(await projectUser.update({
     roleId
-  })).get({ plain: true })
+  }))
 }
 
 async function findAllByProjectId(projectId, orgId) {
@@ -107,7 +114,10 @@ async function removeAllUsersFromProject(projectId, orgId) {
 
 async function getProjectUserAssignment(userId, projectId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ where: { userId, projectId, orgId } })
+  return await db.model(MODEL_NAME).findOne({
+    attributes: PUBLIC_FIELDS,
+    where: { userId, projectId, orgId }
+  })
 }
 
 export default {
