@@ -6,6 +6,7 @@ import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import apiErrorTypes from '../constants/apiErrorTypes'
 
 describe('BusinessField', () => {
   let factoryProject
@@ -55,23 +56,51 @@ describe('BusinessField', () => {
     describe('when the field is set to a string type but receives a number value', () => {
       it('should throw an error', async () => {
         await expect(
-          BusinessField.createForDocument(0, {
+          BusinessField.createForDocument(factoryDocument.id, {
             ...fieldBody,
             value: 30
           })
-        ).rejects.toThrow()
+        ).rejects.toEqual(expect.objectContaining({ code: 400, errorType: apiErrorTypes.FieldValueIncorrectTypeError }))
       })
     })
 
-    describe('when the field is set to a number type but receives a string value', () => {
-      it('should throw an error', async () => {
-        await expect(
-          BusinessField.createForDocument(0, {
-            ...fieldBody,
-            type: 3,
-            value: 'some test string'
-          })
-        ).rejects.toThrow()
+    describe('when the field is set to a number type', () => {
+      describe('and receives a string value', () => {
+        it('should throw an error', async () => {
+          await expect(
+            BusinessField.createForDocument(factoryDocument.id, {
+              ...fieldBody,
+              type: 3,
+              value: 'some test string'
+            })
+          ).rejects.toEqual(expect.objectContaining({ code: 400, errorType: apiErrorTypes.FieldValueIncorrectTypeError }))
+        })
+      })
+
+      describe(`and receives a number with less than 15 significant digits`, () => {
+        it('should not throw an error', async () => {
+          const createdNumberField = await BusinessField.createForDocument(
+            factoryDocument.id,
+            {
+              ...fieldBody,
+              type: 3,
+              value: 1111111111.99999
+            }
+          )
+          expect(createdNumberField.constructor).toBe(Object)
+        })
+      })
+
+      describe(`and receives a number with greater than 15 significant digits`, () => {
+        it('should throw an error', async () => {
+          await expect(
+            BusinessField.createForDocument(factoryDocument.id, {
+              ...fieldBody,
+              type: 3,
+              value: 1111111111.999999
+            })
+          ).rejects.toEqual(expect.objectContaining({ code: 400, errorType: apiErrorTypes.ValidationError }))
+        })
       })
     })
   })
