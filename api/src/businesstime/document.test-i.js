@@ -3,6 +3,8 @@ import ProjectFactory from '../db/__testSetup__/factories/project'
 import DocumentFactory from '../db/__testSetup__/factories/document'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
 
 describe('BusinessDocument', () => {
   let factoryProject
@@ -22,15 +24,15 @@ describe('BusinessDocument', () => {
 
     beforeAll(async () => {
       document = await BusinessDocument.createForProject(factoryProject.id, {
-        ...documentBody,
-        projectId: factoryProject.id
+        ...documentBody
       })
     })
 
     it('should return the saved document as a POJO', () => {
-      expect(document).toEqual(expect.objectContaining(documentBody))
+      // eslint-disable-next-line no-unused-vars
+      const { orgId, ...expectedBody } = documentBody
+      expect(document).toEqual(expect.objectContaining(expectedBody))
       expect(document.constructor).toBe(Object)
-      expect(document.orgId).toBe(constants.ORG_ID)
     })
 
     describe('when the parent project does not exist', () => {
@@ -135,7 +137,7 @@ describe('BusinessDocument', () => {
         for (const document of documents) {
           expect(document.password).toBe(undefined)
           expect(document.constructor).toBe(Object)
-          expect(document.orgId).toBe(constants.ORG_ID)
+          expect(typeof document.projectId).toBe('number')
         }
       })
     })
@@ -157,7 +159,7 @@ describe('BusinessDocument', () => {
         it('should return a document as POJO', () => {
           expect(document.id).toBe(targetDocumentId)
           expect(document.constructor).toBe(Object)
-          expect(document.orgId).toBe(constants.ORG_ID)
+          expect(document.projectId).toBe(factoryProject.id)
         })
       })
 
@@ -256,6 +258,7 @@ describe('BusinessDocument', () => {
 
     it('should return the parent project of passed in document', () => {
       expect(project.id).toEqual(factoryProject.id)
+      expect(Object.keys(project)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT]))
     })
   })
 })

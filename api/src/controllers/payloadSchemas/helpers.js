@@ -25,7 +25,7 @@ const requiredFields = (resource, ...fields) => {
 
   const rawSchema = resourceToSchema[resource].rawSchema
   const schema = { ...rawSchema }
-  fields.forEach(field => {
+  fields.forEach((field) => {
     if (schema.hasOwnProperty(field)) {
       schema[field] = schema[field].required()
     } else {
@@ -58,7 +58,7 @@ const partialFields = (resource, ...fields) => {
   return Joi.compile(schema)
 }
 
-const verifyResource = resource => {
+const verifyResource = (resource) => {
   if (!resourceToSchema.hasOwnProperty(resource)) {
     throw new Error(
       `Resource ${resource} does not have a defined payloadSchema.` +
