@@ -3,7 +3,7 @@ import { ActionTypes } from '../actions'
 const initialState = {
   // nested at { [documentId]: { [fieldId]: {} } }
   documentFieldsById: {},
-  lastCreatedField: null,
+  lastCreatedFieldId: null,
   loading: {
     byId: {},
     byDocument: {}
@@ -34,8 +34,8 @@ export const documentFields = (state = initialState, action) => {
         ...state.documentFieldsById,
         [docId]: { ...documentFields, [id]: action.data }
       }
-      const lastCreatedField = id
-      return { ...state, documentFieldsById, lastCreatedField }
+      const lastCreatedFieldId = id
+      return { ...state, documentFieldsById, lastCreatedFieldId }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
       const { fieldId } = action
@@ -49,9 +49,9 @@ export const documentFields = (state = initialState, action) => {
         ...state.documentFieldsById,
         [docId]: { ...documentFields, [id]: action.data }
       }
-      const lastCreatedField = initialState.lastCreatedField
+      const lastCreatedFieldId = initialState.lastCreatedFieldId
       const loadingById = { ...state.loading.byId, [id]: false }
-      return { ...state, documentFieldsById, lastCreatedField, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.INITIATE_FIELD_REMOVE: {
       const { id } = action
@@ -64,9 +64,9 @@ export const documentFields = (state = initialState, action) => {
       // eslint-disable-next-line no-unused-vars
       const { [fieldId]: __, ...restDocumentFields } = documentFields
       const loadingById = { ...state.loading.byId, [fieldId]: false }
-      const lastCreatedField = initialState.lastCreatedField
+      const lastCreatedFieldId = initialState.lastCreatedFieldId
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: restDocumentFields }
-      return { ...state, documentFieldsById, lastCreatedField, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
     }
     default:
       return state

@@ -120,7 +120,7 @@ DocumentFieldsContainer.propTypes = {
 const mapStateToProps = (state) => {
   return {
     creating: state.ui.fields.creating,
-    createdFieldId: state.documentFields.lastCreatedField
+    createdFieldId: state.documentFields.lastCreatedFieldId
   }
 }
 
