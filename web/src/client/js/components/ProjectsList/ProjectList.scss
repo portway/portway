@@ -30,7 +30,7 @@ $horizontalPadding: 1.3%;
         // This is the selected project, and it is open
         &[aria-expanded="true"] {
           border: thin solid $gray-light;
-          border-radius: 2px;
+          border-radius: $borderRadius;
           margin: 24px 0;
           .project-list__info {
             padding: 14px $horizontalPadding;

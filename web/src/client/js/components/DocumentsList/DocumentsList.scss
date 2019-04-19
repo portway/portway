@@ -43,8 +43,10 @@
     }
   }
   &__button {
+    align-items: flex-start;
     flex-direction: column;
     padding: $sideGutterWidth / 4;
+    white-space: normal;
     width: 100%;
     &.active {
       background-color: $white-bis;

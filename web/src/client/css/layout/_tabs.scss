@@ -5,7 +5,7 @@ $tabColor: $action;
 .tabs {
   align-items: center;
   border: thin solid $tabColor;
-  border-radius: 8px;
+  border-radius: $borderRadius;
   display: flex;
   justify-content: center;
   overflow: hidden;

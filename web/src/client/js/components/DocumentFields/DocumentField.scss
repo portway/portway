@@ -40,7 +40,7 @@
     input {
       @extend .note;
       background-color: $highlight;
-      border-radius: 8px;
+      border-radius: $borderRadius;
       // background-color: transparent;
       border: none;
       color: #fff;

@@ -1,21 +1,79 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
-.react-select-container {
+.react-select-button {
   background-color: $white-bis;
   padding: 14px 0 0;
+  min-width: 300px;
+}
 
+.react-select-container {
+  min-width: 300px;
+}
+
+form {
+  .react-select__input {
+    input[type="text"]:focus {
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+  }
+}
+
+.react-select-container {
+  .react-select {
+    &__control {
+      border: thin solid $gray-light;
+      border-radius: $borderRadius;
+      cursor: text;
+      &--menu-is-open {
+        border-radius: $borderRadius;
+      }
+      &--is-focused {
+        border: thin solid $action;
+        box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
+      }
+    }
+    // Text field
+    &__input {
+      outline: none;
+      input {
+        box-shadow: none;
+        outline: none;
+      }
+    }
+    &__indicators {
+      display: none;
+    }
+    &__placeholder {
+      color: $gray;
+      + div {
+        outline: none;
+      }
+    }
+    &__menu {
+      border-radius: $borderRadius;
+      margin: 2px 0 0;
+    }
+    &__menu-list {
+      padding: 0;
+    }
+  }
+}
+
+.react-select-button {
   .react-select {
     &__control {
       // Mimic the inputs from _forms.scss
       border: thin solid $gray-light;
-      border-radius: 1px;
+      border-radius: $borderRadius;
       cursor: text;
       // When menuIsOpen == true, we format this to look like a list with an
       // autocomplete search at the top
       &--menu-is-open {
         margin: 0 12px 12px;
-        border-radius: 1px;
+        border-radius: $borderRadius;
         &:hover {
           border-color: $gray-light;
         }
