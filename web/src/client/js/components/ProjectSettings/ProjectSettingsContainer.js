@@ -14,6 +14,8 @@ const ProjectSettingsContainer = ({ match, location }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
+  if (!currentUser || !users || !project) return null
+
   const updateHandler = (type, event) => {
     console.info(type, event)
   }
