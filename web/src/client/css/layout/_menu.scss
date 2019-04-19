@@ -92,6 +92,7 @@ $menuAnimationLength: 0.3s;
     @extend .menu__item;
     @include focus(transparent);
     text-align: left;
+    white-space: normal;
     &.btn--warning {
       color: $warning;
     }
