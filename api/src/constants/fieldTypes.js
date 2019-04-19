@@ -11,4 +11,6 @@ export const FIELD_TYPE_MODELS = {
   [FIELD_TYPES.NUMBER]: 'FieldTypeNumberValue'
 }
 
+export const MAX_NUMBER_PRECISION = 15
+
 export default { FIELD_TYPES, FIELD_TYPE_MODELS }
