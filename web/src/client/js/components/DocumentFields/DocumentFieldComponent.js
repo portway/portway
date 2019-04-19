@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -17,15 +17,25 @@ const DocumentFieldComponent = ({
   dropHandler,
   field,
   index,
+  isNewField,
   showName,
   onDestroy,
   onRename
 }) => {
+  const nameRef = useRef()
+  useEffect(() => {
+    if (isNewField && nameRef.current) {
+      nameRef.current.scrollIntoView({ behavior: 'smooth' })
+      nameRef.current.focus()
+    }
+  }, [isNewField])
+
   const fieldClasses = cx({
-    'field': true,
-    'field--text': field.type === Constants.FIELD_TYPES.TEXT,
-    'field--number': field.type === Constants.FIELD_TYPES.NUMBER,
-    'field--string': field.type === Constants.FIELD_TYPES.STRING,
+    'document-field': true,
+    'document-field--new': isNewField,
+    'document-field--text': field.type === Constants.FIELD_TYPES.TEXT,
+    'document-field--number': field.type === Constants.FIELD_TYPES.NUMBER,
+    'document-field--string': field.type === Constants.FIELD_TYPES.STRING,
   })
 
   // Field name handling
@@ -49,9 +59,9 @@ const DocumentFieldComponent = ({
       onDragLeave={dragLeaveHandler}
       onDragOver={dragOverHandler}
       onDrop={dropHandler}>
-      <div className="field__component">
+      <div className="document-field__component">
         {showName &&
-        <div className="field__name">
+        <div className="document-field__name">
           <input
             defaultValue={field.name}
             maxLength={fieldNameMaxLength}
@@ -64,14 +74,15 @@ const DocumentFieldComponent = ({
             }}
             onChange={(e) => { onRename(field.id, e.target.value) }}
             onFocus={(e) => { e.target.select() }}
+            ref={nameRef}
             style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
             type="text" />
         </div>
         }
         {children}
       </div>
-      <div className="field__tools">
-        <div className="field__tool-options">
+      <div className="document-field__tools">
+        <div className="document-field__tool-options">
           {onDestroy &&
           <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
             <TrashIcon width="18" height="18" />
@@ -93,6 +104,7 @@ DocumentFieldComponent.propTypes = {
   dropHandler: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  isNewField: PropTypes.bool.isRequired,
   showName: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired
