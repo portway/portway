@@ -8,7 +8,7 @@ const authUserFunc = async function(email, password, done) {
   try {
     token = await API.authenticate(email, password)
   } catch (error) {
-    console.info(error.toString())
+    console.error(error.toString())
   }
   if (token) {
     done(null, { email, token })

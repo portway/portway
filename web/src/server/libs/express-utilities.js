@@ -3,8 +3,22 @@ import constants from '../../shared/constants'
 const apiUrl = process.env.API_URL
 
 export const renderBundles = (req, pageTitle, bundleKey) => {
+  let flash
+  if (req.query.message) {
+    switch (req.query.message) {
+      case 'login':
+        flash = {
+          type: 'danger',
+          message: 'Invalid username or password'
+        }
+        break
+      default:
+        break
+    }
+  }
   return {
     title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
+    flash: flash,
     permalink: makePermalinkWithString(pageTitle),
     css: req.app.locals.bundles[bundleKey].css,
     js: req.app.locals.bundles[bundleKey].js,

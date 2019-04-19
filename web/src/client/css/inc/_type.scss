@@ -105,6 +105,15 @@ b, strong {
   font-weight: 700;
 }
 
+.flash {
+  font-size: 0.800rem; // 12px
+  line-height: 1.167em; // 14px
+  padding: 0.417em 0; // 5px
+  &--danger {
+    color: $danger;
+  }
+}
+
 .note {
   font-family: $serif !important;
   font-size: 0.800rem; // 12px
