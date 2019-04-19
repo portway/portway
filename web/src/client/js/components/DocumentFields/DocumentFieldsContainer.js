@@ -11,7 +11,7 @@ import { updateField, removeField } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
-const DocumentFieldsContainer = ({ creating, match, removeField, updateField, uiConfirm }) => {
+const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField, updateField, uiConfirm }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
   const { documentId } = match.params
@@ -94,6 +94,7 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
   return (
     <DocumentFieldsComponent
       creating={creating}
+      createdFieldId={createdFieldId}
       dragStartHandler={dragStartHandler}
       dragEndHandler={dragEndHandler}
       dragEnterHandler={dragEnterHandler}
@@ -109,6 +110,7 @@ const DocumentFieldsContainer = ({ creating, match, removeField, updateField, ui
 
 DocumentFieldsContainer.propTypes = {
   creating: PropTypes.bool.isRequired,
+  createdFieldId: PropTypes.number,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
@@ -117,7 +119,8 @@ DocumentFieldsContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    creating: state.ui.fields.creating
+    creating: state.ui.fields.creating,
+    createdFieldId: state.documentFields.lastCreatedFieldId
   }
 }
 
