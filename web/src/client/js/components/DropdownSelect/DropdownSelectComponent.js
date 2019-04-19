@@ -52,7 +52,7 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
       <div className={`menu menu--with-select`} hidden={!expanded}>
         <Select
           ref={selectRef}
-          className={`react-select-container`}
+          className={`react-select-button`}
           classNamePrefix="react-select"
           components={menu.customComponents}
           isMulti={menu.multiSelect}

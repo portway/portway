@@ -30,4 +30,30 @@
       }
     }
   }
+
+  // Section specific
+  &__team {}
+  &__teammate-field {
+    justify-content: space-between;
+    .react-select-container {
+      flex: 1;
+      margin-right: 16px;
+    }
+  }
+  &__teammate-menu {
+    margin-right: 16px;
+    .menu {
+      width: 500px;
+    }
+  }
+  &__team-list {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  &__teammate {
+    align-items: center;
+    .project-settings__teammate-name { flex: 1; }
+  }
+
 }

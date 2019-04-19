@@ -2,12 +2,11 @@
 @import '../inc/mixins';
 
 $menuAnimationLength: 0.3s;
-$menuBorderRadius: 8px;
 
 .menu {
   background: $white;
   border: thin solid $gray-dark;
-  border-radius: $menuBorderRadius;
+  border-radius: $borderRadius;
   overflow: hidden;
   padding: 0;
   position: absolute;
@@ -93,6 +92,7 @@ $menuBorderRadius: 8px;
     @extend .menu__item;
     @include focus(transparent);
     text-align: left;
+    white-space: normal;
     &.btn--warning {
       color: $warning;
     }

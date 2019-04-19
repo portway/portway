@@ -4,20 +4,35 @@ import { NavLink, Redirect } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
 import ProjectSettingsInfoComponent from './ProjectSettingsInfoComponent'
+import ProjectSettingsTeamsComponent from './ProjectSettingsTeamsComponent'
 
 import './ProjectSettings.scss'
 
-const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHandler }) => {
+const SETTINGS_PATHS = {
+  INFO: 'info',
+  TEAMS: 'teams',
+  ENDPOINTS: 'endpoints',
+  KEYS: 'keys'
+}
+
+const ProjectSettingsComponent = ({ projectId, project, setting, users, currentUser, projectUpdateHandler }) => {
   if (!project || !projectId) return null
   const settingsSectionPath = `${Constants.PATH_PROJECT}/${projectId}/settings`
 
   function renderProjectSettingPanel() {
     switch (setting) {
-      case 'info':
+      case SETTINGS_PATHS.INFO: {
         const updateInfoHandler = (e) => {
-          projectUpdateHandler('info', e)
+          projectUpdateHandler(SETTINGS_PATHS.INFO, e)
         }
         return <ProjectSettingsInfoComponent project={project} onUpdateHandler={updateInfoHandler} />
+      }
+      case SETTINGS_PATHS.TEAMS: {
+        const updateInfoHandler = (e) => {
+          projectUpdateHandler(SETTINGS_PATHS.TEAMS, e)
+        }
+        return <ProjectSettingsTeamsComponent project={project} users={users} currentUser={currentUser} onUpdateHandler={updateInfoHandler} />
+      }
       default:
         return <Redirect to={`${settingsSectionPath}/info`} />
     }
@@ -28,10 +43,10 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
       <div className="project-settings__container">
         <nav className="project-settings__navigation">
           <ul className="list-blank">
-            <li><NavLink to={`${settingsSectionPath}/info`}>Info</NavLink></li>
-            <li><NavLink to={`${settingsSectionPath}/teams`}>Teams</NavLink></li>
-            <li><NavLink to={`${settingsSectionPath}/endpoints`}>Endpoints</NavLink></li>
-            <li><NavLink to={`${settingsSectionPath}/keys`}>Keys</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`}>Info</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.ENDPOINTS}`}>Endpoints</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>Keys</NavLink></li>
           </ul>
         </nav>
         <div className="project-settings__panel">
@@ -43,10 +58,12 @@ const ProjectSettingsComponent = ({ projectId, project, setting, projectUpdateHa
 }
 
 ProjectSettingsComponent.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   projectId: PropTypes.string.isRequired,
   project: PropTypes.object.isRequired,
   projectUpdateHandler: PropTypes.func,
-  setting: PropTypes.string
+  setting: PropTypes.string,
+  users: PropTypes.object.isRequired
 }
 
 ProjectSettingsComponent.defaultProps = {

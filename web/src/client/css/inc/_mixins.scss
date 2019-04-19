@@ -1,6 +1,6 @@
 @import 'vars';
 
-@mixin focus($bgColor) {
+@mixin focus($bgColor, $borderColor: transparent) {
   border-color: transparent;
   border: thin inset transparent;
   box-shadow: unset;
@@ -13,7 +13,7 @@
     > * { outline: none; }
     .using-mouse & {
       background-color: $bgColor;
-      border: thin solid transparent;
+      border: thin solid $borderColor;
       box-shadow: unset;
     }
   }
