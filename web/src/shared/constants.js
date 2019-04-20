@@ -4,6 +4,12 @@ const FIELD_TYPES = {
   NUMBER: 3
 }
 
+const ROLE_NAMES = {
+  READ: 'Reader',
+  WRITE: 'Contributor',
+  ADMIN: 'Admin'
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
@@ -27,5 +33,6 @@ module.exports = {
     [FIELD_TYPES.TEXT]: 'text-area-',
     [FIELD_TYPES.NUMBER]: 'number-'
   },
-  FIELD_TYPES: FIELD_TYPES
+  FIELD_TYPES: FIELD_TYPES,
+  ROLE_NAMES: ROLE_NAMES
 }

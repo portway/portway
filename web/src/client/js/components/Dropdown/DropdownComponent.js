@@ -7,9 +7,8 @@ import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
 import './Dropdown.scss'
 
-const DropdownComponent = ({ align, button, children, className, menu, shortcut }) => {
-  // Menu is not collapsed by default
-  const [expanded, setExpanded] = useState(menu && menu.isOpen || false)
+const DropdownComponent = ({ align, autoCollapse = true, button, children, className, shortcut }) => {
+  const [expanded, setExpanded] = useState(false)
   // Custom hooks
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -22,9 +21,9 @@ const DropdownComponent = ({ align, button, children, className, menu, shortcut 
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut(shortcut, toggleCallback)
   return (
-    <div ref={nodeRef} className={`dropdown ${className ? className : ''}`}>
+    <div ref={nodeRef} className={`dropdown${className ? ' ' + className : ''}`}>
       <button
-        className={`btn ${button.className ? button.className : ''}`}
+        className={`btn${button.className ? ' ' + button.className : ''}`}
         type="button"
         aria-haspopup
         aria-expanded={expanded}
@@ -34,7 +33,7 @@ const DropdownComponent = ({ align, button, children, className, menu, shortcut 
         {button.label && <div className="label">{button.label}</div>}
       </button>
       <div className={`menu menu--${align}`} hidden={!expanded}>
-        <ul className="menu__list">
+        <ul className="menu__list" onClick={() => { if (autoCollapse) { collapseCallback() } }}>
           {children}
         </ul>
       </div>
@@ -44,25 +43,23 @@ const DropdownComponent = ({ align, button, children, className, menu, shortcut 
 
 DropdownComponent.propTypes = {
   align: PropTypes.string,
+  autoCollapse: PropTypes.bool,
   button: PropTypes.shape({
     className: PropTypes.string,
     icon: PropTypes.element,
+    iconPlacement: PropTypes.string,
     label: PropTypes.string
   }),
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
-  menu: PropTypes.shape({
-    isOpen: PropTypes.bool
-  }),
   shortcut: PropTypes.string
 }
 
 DropdownComponent.defaultProps = {
   align: 'left',
   button: {
-    className: '',
-  },
-  className: ''
+    iconPlacement: 'left',
+  }
 }
 
 export default DropdownComponent
