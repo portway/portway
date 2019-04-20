@@ -5,12 +5,15 @@ import * as projectUser from './projectUser'
 import * as project from './project'
 import * as field from './field'
 import * as document from './document'
+import * as fieldOrder from './fieldOrder'
+
 const resourceToSchema = {
   [RESOURCE_TYPES.USER]: user,
   [RESOURCE_TYPES.PROJECT_USER]: projectUser,
   [RESOURCE_TYPES.DOCUMENT]: document,
   [RESOURCE_TYPES.FIELD]: field,
-  [RESOURCE_TYPES.PROJECT]: project
+  [RESOURCE_TYPES.PROJECT]: project,
+  [RESOURCE_TYPES.FIELD_ORDER]: fieldOrder
 }
 
 /**

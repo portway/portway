@@ -92,6 +92,36 @@ async function deleteByIdForDocument(id, docId, orgId) {
   await field.destroy()
 }
 
+async function updateOrderById(id, docId, orgId, newPosition) {
+  const db = getDb()
+
+  const document = await db.model('Document').findOne({ where: { id: docId, orgId }, raw: true })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot update field order, document not found with id: ${docId}`)
+  }
+
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
+  if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
+
+  const currentPosition = field.order
+
+  // moving up
+  await db.query(`UPDATE "Fields" SET "order" = - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`)
+  await db.query(`UPDATE "Fields" SET "order" = + 1 WHERE "order" > ${newPosition};`)
+  await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`)
+
+  // manual sql query here
+  // update table
+  // set order = order - 1
+  // where order >= 2 and order <= 5;
+
+  // update table
+  // set order = 5
+  // where song = 'Beat It'
+  return findAllForDocument(docId, orgId)
+}
+
 function getFieldValueInclude(db) {
   return Object.values(FIELD_TYPE_MODELS).map((modelName) => {
     return {
@@ -136,5 +166,6 @@ export default {
   updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
-  deleteByIdForDocument
+  deleteByIdForDocument,
+  updateOrderById
 }
