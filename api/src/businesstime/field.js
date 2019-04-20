@@ -106,19 +106,26 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
   const currentPosition = field.order
 
-  // moving up
-  await db.query(`UPDATE "Fields" SET "order" = - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`)
-  await db.query(`UPDATE "Fields" SET "order" = + 1 WHERE "order" > ${newPosition};`)
-  await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`)
+  const currentMax = await db.model(MODEL_NAME).max('order', { where: { docId, orgId } })
 
-  // manual sql query here
-  // update table
-  // set order = order - 1
-  // where order >= 2 and order <= 5;
+  if (newPosition > currentMax + 1) {
+    const message = `Cannot update order, position: ${newPosition} is beyond maximum order position: ${currentMax + 1}`
+    throw ono({ code: 409, message }, message)
+  }
 
-  // update table
-  // set order = 5
-  // where song = 'Beat It'
+  if (newPosition === currentPosition) {
+    // no position change, do nothing
+  } else if (newPosition > currentPosition) {
+    // moving to a higher order position
+    await db.query(`UPDATE "Fields" SET "order" = "order" - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`)
+    await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" > ${newPosition};`)
+    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`)
+  } else if (newPosition < currentPosition) {
+    // moving to a lower order position
+    await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" >= ${newPosition} and "order" < ${currentPosition};`)
+    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`)
+  }
+
   return findAllForDocument(docId, orgId)
 }
 

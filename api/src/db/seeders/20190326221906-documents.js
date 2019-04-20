@@ -17,8 +17,9 @@ const fieldValuesByType = {
 let docStartId = 120000
 let fieldStartId = 130000
 
-seedDocsWithFields.forEach((doc) => {
+seedDocsWithFields.forEach((doc, index) => {
   docStartId += 1
+
   const dbDoc = {
     id: docStartId,
     name: doc.name,
