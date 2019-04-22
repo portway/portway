@@ -11,6 +11,8 @@ const DropdownItem = ({ children, label, onClick, href, type }) => {
     case 'link':
       elementType = <Link to={href} onClick={onClick}>{label}{children}</Link>
       break
+    case 'submenu':
+      elementType = <span className="menu__sub-item">{label}{children}</span>
     default:
       break
   }
@@ -22,9 +24,11 @@ const DropdownItem = ({ children, label, onClick, href, type }) => {
 }
 
 DropdownItem.propTypes = {
+  children: PropTypes.node,
+  href: PropTypes.string,
   label: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  type: PropTypes.oneOf(['button', 'link'])
+  type: PropTypes.oneOf(['button', 'link', 'submenu'])
 }
 
 DropdownItem.defaultProps = {

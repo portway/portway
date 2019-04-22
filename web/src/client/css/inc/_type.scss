@@ -39,7 +39,7 @@
 }
 
 // https://vasilis.nl/nerd/code/emcalc/
-body {
+html, body {
   font-family: $sansSerif;
   font-size: 15px; // base font
 }
@@ -142,7 +142,7 @@ input, textarea, keygen, select, button {
 }
 
 input, textarea, keygen, select, button {
-  font-size: 1em;
+  font-size: 1rem;
 }
 
 input,

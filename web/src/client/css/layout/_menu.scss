@@ -7,7 +7,7 @@ $menuAnimationLength: 0.3s;
   background: $white;
   border: thin solid $gray-dark;
   border-radius: $borderRadius;
-  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
   padding: 0;
   position: absolute;
   z-index: 10;
@@ -35,7 +35,6 @@ $menuAnimationLength: 0.3s;
   }
 
   &:not([hidden]) {
-    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     opacity: 1;
     transform: translateY(5px);
     transition: visibility 0s ease 0.5s, transform $menuAnimationLength ease, opacity 0.2s ease;
@@ -57,6 +56,7 @@ $menuAnimationLength: 0.3s;
   text-decoration: none;
   min-width: 210px;
   padding: 8px 14px;
+  position: relative;
   width: 100%;
   &:hover {
     background-color: $white-ter;
@@ -77,20 +77,43 @@ $menuAnimationLength: 0.3s;
       background-color: lighten($black-bis, 5%);
     }
   }
+}
 
+.menu__sub-item {
+  @extend .menu__item;
+  @include focus(transparent);
+  font-weight: 500;
+  &:hover, &:focus {
+    .menu__submenu {
+      display: block;
+    }
+  }
+}
+
+.menu__submenu {
+  display: none;
+  position: absolute;
+  top: 0;
+  z-index: 11;
+  &--left {
+    left: 99%;
+    right: auto;
+  }
+  &--right {
+    left: auto;
+    right: 99%;
+  }
 }
 
 .menu__list {
   li {
     margin: 0;
     padding: 0;
-    // &.menu__divider {
-    //   padding-top: 14px;
-    // }
   }
   a, button {
     @extend .menu__item;
     @include focus(transparent);
+    position: relative;
     text-align: left;
     white-space: normal;
     &.btn--warning {
