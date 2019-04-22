@@ -18,6 +18,15 @@ async function create(body) {
   return publicFields(createdToken)
 }
 
+async function findById(id, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findOne({
+    attributes: PUBLIC_FIELDS,
+    where: { orgId, id },
+    raw: true
+  })
+}
+
 async function findAllByProjectId(projectId, orgId) {
   const db = getDb()
   const tokens = await db.model(MODEL_NAME).findAll({
@@ -39,6 +48,17 @@ async function updateNameById(id, updatedName, orgId) {
   return publicFields(updatedToken)
 }
 
+async function addTokenStringById(id, tokenString, orgId) {
+  const db = getDb()
+  const token = await db.model(MODEL_NAME).findOne({
+    where: { orgId, id }
+  })
+  const updatedToken = await token.update({
+    token: tokenString
+  })
+  return publicFields(updatedToken)
+}
+
 async function deleteById(id, orgId) {
   const db = getDb()
   const token = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
@@ -55,7 +75,9 @@ async function deleteById(id, orgId) {
 
 export default {
   create,
+  findById,
   findAllByProjectId,
   updateNameById,
+  addTokenStringById,
   deleteById
 }
