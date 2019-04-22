@@ -16,5 +16,5 @@ JWTAuth(passport)
 
 export default {
   loginMiddleware: passport.authenticate('local', { session: false, failureRedirect: '/sign-in?message=login' }),
-  jwtMiddleware: passport.authenticate('jwt', { session: false })
+  jwtMiddleware: passport.authenticate('jwt', { session: false, failureRedirect: '/sign-in' })
 }
