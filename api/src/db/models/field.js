@@ -9,7 +9,12 @@ module.exports = (sequelize, DataTypes) => {
       docId: DataTypes.INTEGER,
       versionId: DataTypes.INTEGER,
       type: DataTypes.INTEGER,
-      order: DataTypes.INTEGER
+      order: {
+        type: DataTypes.INTEGER,
+        validate: {
+          min: 0
+        }
+      }
     },
     {
       getterMethods: {

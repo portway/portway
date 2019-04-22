@@ -95,6 +95,11 @@ async function deleteByIdForDocument(id, docId, orgId) {
 async function updateOrderById(id, docId, orgId, newPosition) {
   const db = getDb()
 
+  if (newPosition < 0) {
+    const message = `Cannot update order, minimum order position is 0`
+    throw ono({ code: 400, message }, message)
+  }
+
   const document = await db.model('Document').findOne({ where: { id: docId, orgId }, raw: true })
 
   if (!document) {
@@ -106,27 +111,27 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
   const currentPosition = field.order
 
-  const currentMax = await db.model(MODEL_NAME).max('order', { where: { docId, orgId } })
+  // no order position change, do nothing
+  if (newPosition === currentPosition) return
 
-  if (newPosition > currentMax + 1) {
-    const message = `Cannot update order, position: ${newPosition} is beyond maximum order position: ${currentMax + 1}`
+  const currentMax = (await db.model(MODEL_NAME).count({ where: { docId, orgId } })) - 1
+
+  if (newPosition > currentMax) {
+    const message = `Cannot update order, the final field order position for this document is ${currentMax}`
     throw ono({ code: 409, message }, message)
   }
 
-  if (newPosition === currentPosition) {
-    // no position change, do nothing
-  } else if (newPosition > currentPosition) {
-    // moving to a higher order position
-    await db.query(`UPDATE "Fields" SET "order" = "order" - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`)
-    await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" > ${newPosition};`)
-    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`)
-  } else if (newPosition < currentPosition) {
-    // moving to a lower order position
-    await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" >= ${newPosition} and "order" < ${currentPosition};`)
-    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`)
-  }
-
-  return findAllForDocument(docId, orgId)
+  await db.transaction(async (transaction) => {
+    if (newPosition > currentPosition) {
+      // moving to a higher order position
+      await db.query(`UPDATE "Fields" SET "order" = "order" - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`, { transaction })
+      // await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" > ${newPosition};`, { transaction })
+    } else if (newPosition < currentPosition) {
+      // moving to a lower order position
+      await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" >= ${newPosition} and "order" < ${currentPosition};`, { transaction })
+    }
+    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`, { transaction })
+  })
 }
 
 function getFieldValueInclude(db) {

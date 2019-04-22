@@ -36,8 +36,8 @@ const updateFieldOrder = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const field = await BusinessField.updateOrderById(fieldId, documentId, orgId, order)
-    res.status(200).json({ data: field })
+    await BusinessField.updateOrderById(fieldId, documentId, orgId, order)
+    res.status(204).send()
   } catch (e) {
     console.error(e.stack)
     const message = e.message || `error updating field order with id ${fieldId}`
