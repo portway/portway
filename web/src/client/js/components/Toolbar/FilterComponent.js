@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { FilterIcon } from 'Components/Icons'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 
 function FilterComponent() {
   const filterButton = {
@@ -10,11 +10,11 @@ function FilterComponent() {
   }
   return (
     <DropdownComponent button={filterButton} align="right">
-      <li className="menu__item">
+      <DropdownItem>
         <div className="form-item">
           <label><input type="radio" name="some-filter" /> Some filter</label>
         </div>
-      </li>
+      </DropdownItem>
     </DropdownComponent>
   )
 }

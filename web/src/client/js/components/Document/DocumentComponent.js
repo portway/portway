@@ -63,15 +63,8 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
           </DropdownItem>
         </DropdownComponent>
         <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-          <li>
-            <button>Duplicate document</button>
-          </li>
-          <li className="menu__divider">
-            <button
-              className="btn--danger" onClick={removeDocumentHandler}>
-              Delete document...
-            </button>
-          </li>
+          <DropdownItem label="Duplicate document" type="button" />
+          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
       </header>
       <DocumentFieldsContainer />

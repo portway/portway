@@ -58,6 +58,19 @@ $menuAnimationLength: 0.3s;
   padding: 8px 14px;
   position: relative;
   width: 100%;
+
+  &--divider {
+    &:before {
+      border-top: thin solid $gray;
+      content : '';
+      display: block;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      z-index: 12;
+    }
+  }
+
   &:hover {
     background-color: $white-ter;
   }
@@ -122,16 +135,5 @@ $menuAnimationLength: 0.3s;
     &.btn--danger {
       color: $danger;
     }
-  }
-}
-
-.menu__divider {
-  &:before {
-    border-top: thin solid $gray;
-    content : '';
-    display: block;
-    left: 0;
-    position: absolute;
-    width: 100%;
   }
 }
