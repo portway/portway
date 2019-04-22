@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 
+import Constants from 'Shared/constants'
 import { CaretIcon, RemoveIcon } from 'Components/Icons'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 
 const ProjectSettingsTeamsComponent = ({ project, users, currentUser, onUpdateHandler }) => {
-  const [permissionMenuLabel, setPermissionMenuLabel] = useState('Reader')
+  const [permissionMenuLabel, setPermissionMenuLabel] = useState(Constants.ROLE_NAMES.READ)
   if (!project) return null
   const usersWithoutMe = Object.values(users).filter(user => user.id !== currentUser.id)
   const userOptions = usersWithoutMe.map((user) => {
@@ -34,25 +35,16 @@ const ProjectSettingsTeamsComponent = ({ project, users, currentUser, onUpdateHa
                 className="react-select-container"
                 options={userOptions}
                 placeholder="Add a person..." />
-              <DropdownComponent align="right" button={roleSelectorButton} className="project-settings__teammate-menu">
-                <li className="menu__item">
-                  <button type="button" className="btn btn--blank" onClick={() => { setPermissionMenuLabel('Reader') }}>
-                    <b className="small">Reader</b>
-                    <p className="small">Project Readers can view all of the documents in this project, but that is all.</p>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" className="btn btn--blank" onClick={() => { setPermissionMenuLabel('Contributor') }}>
-                    <b className="small">Contributor</b>
-                    <p className="small">Project Contributors can create, edit, publish, and delete documents within this project. They can also view API data.</p>
-                  </button>
-                </li>
-                <li>
-                  <button type="button" className="btn btn--blank" onClick={() => { setPermissionMenuLabel('Admin') }}>
-                    <b className="small">Admin</b>
-                    <p className="small">Project Admins can manage everything within a project – this includes project access, project deletion, etc.</p>
-                  </button>
-                </li>
+              <DropdownComponent align="right" autoCollapse={true} button={roleSelectorButton} className="project-settings__teammate-menu">
+                <DropdownItem label={Constants.ROLE_NAMES.READ} onClick={() => setPermissionMenuLabel(Constants.ROLE_NAMES.READ) }>
+                  <p className="small">Project Readers can view all of the documents in this project, but that is all.</p>
+                </DropdownItem>
+                <DropdownItem label={Constants.ROLE_NAMES.WRITE} onClick={() => setPermissionMenuLabel(Constants.ROLE_NAMES.WRITE) }>
+                  <p className="small">Project Contributors can create, edit, publish, and delete documents within this project. They can also view API data.</p>
+                </DropdownItem>
+                <DropdownItem label={Constants.ROLE_NAMES.ADMIN} onClick={() => setPermissionMenuLabel(Constants.ROLE_NAMES.ADMIN) }>
+                  <p className="small">Project Contributors can create, edit, publish, and delete documents within this project. They can also view API data.</p>
+                </DropdownItem>
               </DropdownComponent>
               <button className="btn">Add teammate</button>
             </div>
