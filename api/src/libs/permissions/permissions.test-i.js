@@ -37,7 +37,7 @@ describe('Permissions', () => {
 
           requestedAction = {
             resourceType: resourceType.USER,
-            action: ACTIONS.LIST,
+            action: ACTIONS.READ,
             data: {}
           }
           requestStatus = await permissions(requestorInfo, requestedAction)

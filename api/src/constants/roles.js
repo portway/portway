@@ -73,6 +73,9 @@ export const ORGANIZATION_ROLES = {
   [rIds.USER]: {
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true
+    },
+    [resourceTypes.USER]: {
+      [actions.LIST]: true
     }
   }
 }
