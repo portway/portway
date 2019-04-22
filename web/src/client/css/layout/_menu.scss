@@ -1,8 +1,6 @@
 @import '../inc/vars';
 @import '../inc/mixins';
 
-$menuAnimationLength: 0.3s;
-
 .menu {
   background: $white;
   border: thin solid $gray-dark;
@@ -18,12 +16,6 @@ $menuAnimationLength: 0.3s;
     margin: 0;
     padding: 0;
   }
-  &[hidden] {
-    opacity: 0;
-    transform: translateY(0);
-    transition: visibility 0s linear, transform $menuAnimationLength ease, opacity 0.2s ease;
-    visibility: hidden;
-  }
 
   &--dark {
     background: $black-bis;
@@ -35,10 +27,7 @@ $menuAnimationLength: 0.3s;
   }
 
   &:not([hidden]) {
-    opacity: 1;
     transform: translateY(5px);
-    transition: visibility 0s ease 0.5s, transform $menuAnimationLength ease, opacity 0.2s ease;
-    visibility: visible;
   }
 
   &--with-select {
