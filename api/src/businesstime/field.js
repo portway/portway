@@ -100,12 +100,6 @@ async function updateOrderById(id, docId, orgId, newPosition) {
     throw ono({ code: 400, message }, message)
   }
 
-  const document = await db.model('Document').findOne({ where: { id: docId, orgId }, raw: true })
-
-  if (!document) {
-    throw ono({ code: 404 }, `Cannot update field order, document not found with id: ${docId}`)
-  }
-
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
 
@@ -121,7 +115,11 @@ async function updateOrderById(id, docId, orgId, newPosition) {
     throw ono({ code: 409, message }, message)
   }
 
-  await db.transaction(async (transaction) => {
+  let transaction
+
+  try {
+    transaction = await db.transaction()
+
     if (newPosition > currentPosition) {
       // moving to a higher order position
       await db.query(`UPDATE "Fields" SET "order" = "order" - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`, { transaction })
@@ -131,7 +129,12 @@ async function updateOrderById(id, docId, orgId, newPosition) {
       await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" >= ${newPosition} and "order" < ${currentPosition};`, { transaction })
     }
     await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`, { transaction })
-  })
+
+    await transaction.commit()
+  } catch (err) {
+    // Rollback transaction if any errors were encountered
+    await transaction.rollback()
+  }
 }
 
 function getFieldValueInclude(db) {
