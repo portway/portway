@@ -99,6 +99,53 @@ describe('BusinessProjectToken', () => {
     })
   })
 
+  describe('#findById', () => {
+    let token
+    beforeAll(async () => {
+      const factoryToken = (await TokenFactory.createMany(1, {
+        projectId: 123,
+        orgId: constants.ORG_ID
+      }))[0]
+
+      token = await BusinessProjectToken.findById(factoryToken.id, factoryToken.orgId)
+    })
+
+    it('should return public fields', () => {
+      expect(Object.keys(token)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+    })
+
+    it('should not return the secret', () => {
+      expect(token.secret).toBe(undefined)
+    })
+  })
+
+  describe('#addTokenStringById', () => {
+    let updatedTokenString
+    let updatedToken
+    beforeAll(async () => {
+      updatedTokenString = 'asdf123asdf123.23423480atotallyrealtoken'
+
+      const token = (await TokenFactory.createMany(1, {
+        projectId: 123,
+        orgId: constants.ORG_ID
+      }))[0]
+
+      updatedToken = await BusinessProjectToken.addTokenStringById(token.id, updatedTokenString, token.orgId)
+    })
+
+    it('should update the token string', () => {
+      expect(updatedToken.token).toBe(updatedTokenString)
+    })
+
+    it('should return public fields', () => {
+      expect(Object.keys(updatedToken)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+    })
+
+    it('should not return the secret', () => {
+      expect(updatedToken.secret).toBe(undefined)
+    })
+  })
+
   describe('#deleteById', () => {
     let token
     beforeAll(async () => {

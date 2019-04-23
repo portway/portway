@@ -17,8 +17,7 @@ module.exports = {
         allowNull: false
       },
       token: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       },
       orgId: {
         type: Sequelize.INTEGER,

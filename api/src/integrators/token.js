@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import tokenSettings from '../libs/tokenSettings'
 
+// TODO: make these asynchronous
+
 const generateToken = (userId, orgRoleId, orgId) => {
   return jwt.sign(
     {
@@ -30,7 +32,21 @@ const generatePasswordResetToken = (id, resetKey) => {
   )
 }
 
+const generateProjectToken = (id, secret, orgId) => {
+  return jwt.sign(
+    {
+      id,
+      orgId
+    },
+    secret,
+    {
+      issuer: tokenSettings.issuer
+    }
+  )
+}
+
 export default {
   generateToken,
-  generatePasswordResetToken
+  generatePasswordResetToken,
+  generateProjectToken
 }
