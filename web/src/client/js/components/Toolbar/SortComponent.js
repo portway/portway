@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { SortIcon } from 'Components/Icons'
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 
 function SortComponent() {
   const sortButton = {
@@ -10,9 +10,7 @@ function SortComponent() {
   }
   return (
     <DropdownComponent button={sortButton} align="right">
-      <li>
-        <button>Title</button>
-      </li>
+      <DropdownItem label="Title" type="button" />
     </DropdownComponent>
   )
 }

@@ -273,4 +273,113 @@ describe('BusinessField', () => {
       ).rejects.toThrow()
     })
   })
+
+  describe('#updateOrderById', () => {
+    let factoryField
+
+    beforeAll(async () => {
+      await clearDb()
+      factoryField = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
+    })
+
+    it('should throw an error if passed an order value below zero', async () => {
+      await expect(
+        BusinessField.updateOrderById(factoryField, factoryDocument.id, constants.ORG_ID, -1)
+      ).rejects.toEqual(expect.objectContaining({ code: 400 }))
+    })
+
+    it('should throw an error when the field does not exist', async () => {
+      await expect(
+        BusinessField.updateOrderById(0, factoryDocument.id, constants.ORG_ID, 0)
+      ).rejects.toEqual(expect.objectContaining({ code: 404 }))
+    })
+
+    it('should resolve if the order position is not changing', async () => {
+      await expect(
+        BusinessField.updateOrderById(factoryField.id, factoryDocument.id, constants.ORG_ID, 0)
+      ).resolves.toEqual(undefined)
+    })
+
+    it('should throw an error if the order position is set to a value greater than the document field count - 1', async () => {
+      await expect(
+        BusinessField.updateOrderById(factoryField.id, factoryDocument.id, constants.ORG_ID, 3)
+      ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+    })
+
+    describe('order re-assignment', async () => {
+      let fieldA
+      let fieldB
+      let fieldC
+
+      beforeAll(async () => {
+        await clearDb()
+      })
+
+      beforeEach(async () => {
+        fieldA = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
+        fieldB = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 1 }))[0]
+        fieldC = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 2 }))[0]
+      })
+
+      it('should successfully move lowest item to the highest order position', async () => {
+        await BusinessField.updateOrderById(fieldA.id, factoryDocument.id, constants.ORG_ID, 2)
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldB = await fieldB.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(2)
+        expect(updatedFieldB.order).toEqual(0)
+        expect(updatedFieldC.order).toEqual(1)
+      })
+
+      it('should successfully move lowest item to the middle order position', async () => {
+        await BusinessField.updateOrderById(fieldA.id, factoryDocument.id, constants.ORG_ID, 1)
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldB = await fieldB.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(1)
+        expect(updatedFieldB.order).toEqual(0)
+        expect(updatedFieldC.order).toEqual(2)
+      })
+
+      it('should successfully move middle item to lowest order position', async () => {
+        await BusinessField.updateOrderById(fieldB.id, factoryDocument.id, constants.ORG_ID, 0)
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldB = await fieldB.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(1)
+        expect(updatedFieldB.order).toEqual(0)
+        expect(updatedFieldC.order).toEqual(2)
+      })
+
+      it('should successfully move middle item to highest order position', async () => {
+        await BusinessField.updateOrderById(fieldB.id, factoryDocument.id, constants.ORG_ID, 2)
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldB = await fieldB.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(0)
+        expect(updatedFieldB.order).toEqual(2)
+        expect(updatedFieldC.order).toEqual(1)
+      })
+
+      it('should successfully move last item to first order position', async () => {
+        await BusinessField.updateOrderById(fieldC.id, factoryDocument.id, constants.ORG_ID, 0)
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldB = await fieldB.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(1)
+        expect(updatedFieldB.order).toEqual(2)
+        expect(updatedFieldC.order).toEqual(0)
+      })
+
+      it('should successfully move last item to middle order position', async () => {
+        await BusinessField.updateOrderById(fieldC.id, factoryDocument.id, constants.ORG_ID, 1)
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldB = await fieldB.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(0)
+        expect(updatedFieldB.order).toEqual(2)
+        expect(updatedFieldC.order).toEqual(1)
+      })
+    })
+  })
 })

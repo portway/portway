@@ -22,7 +22,14 @@ const AUTHENTICATED_CONTROLLERS = {
   },
   '/documents': {
     fileName: 'documents',
-    childRoutes: { '/:documentId/fields': { fileName: 'documentFields' } }
+    childRoutes: {
+      '/:documentId/fields': {
+        fileName: 'documentFields',
+        childRoutes: {
+          '/:fieldId/order': { fileName: 'documentFieldOrder' }
+        }
+      }
+    }
   },
   '/users': {
     fileName: 'users',

@@ -7,7 +7,6 @@ export const rawSchema = {
   // TODO: probably want a shared json parse validator on structuredValue
   structuredValue: Joi.string().allow(null),
   type: Joi.number().valid(Object.values(fieldTypes.FIELD_TYPES))
-  // TODO: order: need to decide how to handle this
 }
 
 export default Joi.compile(rawSchema)

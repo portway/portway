@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
 
@@ -9,7 +8,7 @@ import dataMapper from 'Libs/dataMapper'
 import currentUserId from 'Libs/currentUserId'
 import { logoutUser } from '../../actions/user'
 
-import DropdownComponent from 'Components/Dropdown/DropdownComponent'
+import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 
 import './UserMenu.scss'
 
@@ -30,12 +29,8 @@ const UserMenu = () => {
   }
   return (
     <DropdownComponent className="user-menu__dropdown" button={button} align="right">
-      <li className="menu__item">
-        <Link to={Constants.PATH_SETTINGS} className="btn btn--blank">Settings</Link>
-      </li>
-      <li className="menu__divider">
-        <button className="btn btn--blank" onClick={logoutAction}>Sign out</button>
-      </li>
+      <DropdownItem label="Settings" type="link" href={Constants.PATH_SETTINGS} />
+      <DropdownItem label="Sign out" type="button" divider onClick={() => { logoutAction() }} />
     </DropdownComponent>
   )
 }

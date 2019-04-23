@@ -34,6 +34,8 @@ button,
   white-space: nowrap;
   -webkit-appearance: none;
 
+  p { color: $gray-dark; margin: 0; }
+
   @include focus($action);
   &:hover {
     background-color: $action-light;
@@ -86,11 +88,22 @@ button,
     .icon {
       height: 28px;
       width: 28px;
+      .icon-caret {
+        transition: transform 0.2s ease-in-out;
+      }
     }
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      padding: 0 12px 0 0;
+      padding: 2px 12px 2px 0;
+    }
+    &[aria-expanded="true"] {
+      .icon-caret {
+        transform: rotate(-180deg);
+      }
+      .label {
+        color: $gray;
+      }
     }
   }
 
@@ -104,8 +117,7 @@ button,
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      margin-left: 8px;
-      padding: 0 12px 0 0;
+      padding: 2px 8px 2px 8px;
     }
     &:hover {
       .icon {
@@ -115,6 +127,14 @@ button,
     &:active {
       .icon {
         background-color: $gray;
+      }
+    }
+    &[aria-expanded="true"] {
+      .icon {
+        background-color: $gray-light;
+      }
+      .label {
+        color: $gray-dark;
       }
     }
   }
