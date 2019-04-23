@@ -92,6 +92,51 @@ async function deleteByIdForDocument(id, docId, orgId) {
   await field.destroy()
 }
 
+async function updateOrderById(id, docId, orgId, newPosition) {
+  const db = getDb()
+
+  if (newPosition < 0) {
+    const message = `Cannot update order, minimum order position is 0`
+    throw ono({ code: 400, message }, message)
+  }
+
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
+  if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
+
+  const currentPosition = field.order
+
+  // no order position change, do nothing
+  if (newPosition === currentPosition) return
+
+  const currentMax = (await db.model(MODEL_NAME).count({ where: { docId, orgId } })) - 1
+
+  if (newPosition > currentMax) {
+    const message = `Cannot update order, the final field order position for this document is ${currentMax}`
+    throw ono({ code: 409, message }, message)
+  }
+
+  let transaction
+
+  try {
+    transaction = await db.transaction()
+
+    if (newPosition > currentPosition) {
+      // moving to a higher order position
+      await db.query(`UPDATE "Fields" SET "order" = "order" - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`, { transaction })
+      // await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" > ${newPosition};`, { transaction })
+    } else if (newPosition < currentPosition) {
+      // moving to a lower order position
+      await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" >= ${newPosition} and "order" < ${currentPosition};`, { transaction })
+    }
+    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`, { transaction })
+
+    await transaction.commit()
+  } catch (err) {
+    // Rollback transaction if any errors were encountered
+    await transaction.rollback()
+  }
+}
+
 function getFieldValueInclude(db) {
   return Object.values(FIELD_TYPE_MODELS).map((modelName) => {
     return {
@@ -136,5 +181,6 @@ export default {
   updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
-  deleteByIdForDocument
+  deleteByIdForDocument,
+  updateOrderById
 }

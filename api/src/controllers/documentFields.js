@@ -19,7 +19,7 @@ const paramSchema = Joi.compile({
   id: Joi.number()
 })
 
-const projectDocumentsController = function(router) {
+const documentFields = function(router) {
   // all routes are nested at documents/:documentId
   // and receive req.params.documentId
   router.post(
@@ -113,4 +113,4 @@ const deleteDocumentField = async function(req, res) {
   }
 }
 
-export default projectDocumentsController
+export default documentFields
