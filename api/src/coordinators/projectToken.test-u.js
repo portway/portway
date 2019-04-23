@@ -23,6 +23,7 @@ describe('projectToken coordinator', () => {
 
     it('should call BusinessProjectToken.create', () => {
       expect(BusinessProjectToken.create.mock.calls.length).toBe(1)
+      expect(BusinessProjectToken.create.mock.calls[0][0].secret).toEqual(randomStringGenerator.mock.results[0].value)
     })
 
     it('should call randomStringGenerator', () => {
@@ -31,10 +32,12 @@ describe('projectToken coordinator', () => {
 
     it('should call tokenGenerator.generateProjectToken', () => {
       expect(tokenGenerator.generateProjectToken.mock.calls.length).toBe(1)
+      expect(tokenGenerator.generateProjectToken.mock.calls[0][1]).toBe(randomStringGenerator.mock.results[0].value)
     })
 
     it('should call BusinessProjectToken.addTokenStringById', () => {
       expect(BusinessProjectToken.addTokenStringById.mock.calls.length).toBe(1)
+      expect(BusinessProjectToken.addTokenStringById.mock.calls[0][1]).toBe(tokenGenerator.generateProjectToken.mock.results[0].value)
     })
 
     it('should return a token', () => {
