@@ -2,6 +2,7 @@ import Joi from 'joi'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
 import * as user from './user'
 import * as projectUser from './projectUser'
+import * as projectToken from './projectToken'
 import * as project from './project'
 import * as field from './field'
 import * as document from './document'
@@ -10,7 +11,8 @@ const resourceToSchema = {
   [RESOURCE_TYPES.PROJECT_USER]: projectUser,
   [RESOURCE_TYPES.DOCUMENT]: document,
   [RESOURCE_TYPES.FIELD]: field,
-  [RESOURCE_TYPES.PROJECT]: project
+  [RESOURCE_TYPES.PROJECT]: project,
+  [RESOURCE_TYPES.PROJECT_TOKEN]: projectToken
 }
 
 /**
