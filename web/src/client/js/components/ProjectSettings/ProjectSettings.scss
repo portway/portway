@@ -53,7 +53,15 @@
   }
   &__teammate {
     align-items: center;
-    .project-settings__teammate-name { flex: 1; }
+    &-name { flex: 1; }
+    &-is-you {
+      background-color: $highlight;
+      border-radius: $borderRadius;
+      color: $white;
+      font-size: 80%;
+      margin-left: .5rem;
+      padding: 1px 6px;
+    }
   }
 
 }

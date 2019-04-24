@@ -18,7 +18,7 @@
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchFields } from 'Actions/field'
-import { fetchProject, fetchProjects } from 'Actions/project'
+import { fetchProject, fetchProjects, fetchProjectAssignees } from 'Actions/project'
 import { fetchUser, fetchUsers } from 'Actions/user'
 import currentUserId from './currentUserId'
 
@@ -73,14 +73,25 @@ export default {
         }
       }
     },
-    id: function(id) {
+    id: function(projectId) {
       return {
-        fetchAction: fetchProject(id),
+        fetchAction: fetchProject(projectId),
         getLoadingStatusFromState: (state) => {
-          return state.projects.loading.byId[id]
+          return state.projects.loading.byId[projectId]
         },
         getDataFromState: (state) => {
-          return state.projects.projectsById[id]
+          return state.projects.projectsById[projectId]
+        }
+      }
+    },
+    assignments: function(projectId) {
+      return {
+        fetchAction: fetchProjectAssignees(projectId),
+        getLoadingStatusFromState: (state) => {
+          return state.projectAssignments.loading.assignmentsByProjectId[projectId]
+        },
+        getDataFromState: (state) => {
+          return state.projectAssignments.assignmentsByProjectId[projectId]
         }
       }
     }

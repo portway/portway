@@ -4,10 +4,16 @@ const FIELD_TYPES = {
   NUMBER: 3
 }
 
+const ROLE_IDS = {
+  ADMIN: 1,
+  CONTRIBUTOR: 2,
+  READER: 3
+}
+
 const ROLE_NAMES = {
-  READ: 'Reader',
-  WRITE: 'Contributor',
-  ADMIN: 'Admin'
+  [ROLE_IDS.ADMIN]: 'Admin',
+  [ROLE_IDS.CONTRIBUTOR]: 'Contributor',
+  [ROLE_IDS.READER]: 'Reader'
 }
 
 // Note: This is so we can use this webpack as well, don't convert this to ES6
@@ -34,5 +40,6 @@ module.exports = {
     [FIELD_TYPES.NUMBER]: 'number-'
   },
   FIELD_TYPES: FIELD_TYPES,
+  ROLE_IDS: ROLE_IDS,
   ROLE_NAMES: ROLE_NAMES
 }

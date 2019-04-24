@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { NavLink, Redirect } from 'react-router-dom'
 
 import Constants from 'Shared/constants'
-import ProjectSettingsInfoComponent from './ProjectSettingsInfoComponent'
-import ProjectSettingsTeamsComponent from './ProjectSettingsTeamsComponent'
+import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
+import ProjectSettingsTeamsContainer from './ProjectSettingsTeams/ProjectSettingsTeamsContainer'
 
 import './ProjectSettings.scss'
 
@@ -15,23 +15,17 @@ const SETTINGS_PATHS = {
   KEYS: 'keys'
 }
 
-const ProjectSettingsComponent = ({ projectId, project, setting, users, currentUser, projectUpdateHandler }) => {
-  if (!project || !projectId) return null
+const ProjectSettingsComponent = ({ projectId, setting }) => {
+  if (!projectId) return null
   const settingsSectionPath = `${Constants.PATH_PROJECT}/${projectId}/settings`
 
   function renderProjectSettingPanel() {
     switch (setting) {
       case SETTINGS_PATHS.INFO: {
-        const updateInfoHandler = (e) => {
-          projectUpdateHandler(SETTINGS_PATHS.INFO, e)
-        }
-        return <ProjectSettingsInfoComponent project={project} onUpdateHandler={updateInfoHandler} />
+        return <ProjectSettingsInfoContainer />
       }
       case SETTINGS_PATHS.TEAMS: {
-        const updateInfoHandler = (e) => {
-          projectUpdateHandler(SETTINGS_PATHS.TEAMS, e)
-        }
-        return <ProjectSettingsTeamsComponent project={project} users={users} currentUser={currentUser} onUpdateHandler={updateInfoHandler} />
+        return <ProjectSettingsTeamsContainer />
       }
       default:
         return <Redirect to={`${settingsSectionPath}/info`} />
@@ -58,17 +52,12 @@ const ProjectSettingsComponent = ({ projectId, project, setting, users, currentU
 }
 
 ProjectSettingsComponent.propTypes = {
-  currentUser: PropTypes.object.isRequired,
   projectId: PropTypes.string.isRequired,
-  project: PropTypes.object.isRequired,
-  projectUpdateHandler: PropTypes.func,
-  setting: PropTypes.string,
-  users: PropTypes.object.isRequired
+  setting: PropTypes.string
 }
 
 ProjectSettingsComponent.defaultProps = {
   projectId: '',
-  project: {},
   setting: ''
 }
 
