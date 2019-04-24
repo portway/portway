@@ -80,8 +80,8 @@ const createProjectUser = async (req, res) => {
   try {
     const projectUser = await BusinessProjectUser.addUserIdToProject(
       body.userId,
-      body.roleId,
       projectId,
+      body.roleId,
       orgId
     )
     res.status(201).json({ data: projectUser })
