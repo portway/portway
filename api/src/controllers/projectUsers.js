@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import ono from 'ono'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
-import { requiredFields } from './payloadSchemas/helpers'
+import { partialFields, requiredFields } from './payloadSchemas/helpers'
 import BusinessProjectUser from '../businesstime/projectuser'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -11,13 +11,7 @@ const { listPerm, readPerm, updatePerm, deletePerm, createPerm } = crudPerms(
   (req) => { return { projectId: req.params.projectId } }
 )
 
-const bodySchema = Joi.compile(
-  requiredFields(RESOURCE_TYPES.PROJECT_USER, 'userId', 'roleId')
-)
-
-const bodyUpdateSchema = Joi.compile({
-  roleId: Joi.number()
-})
+const bodySchema = requiredFields(RESOURCE_TYPES.PROJECT_USER, 'userId', 'roleId')
 
 const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
@@ -38,7 +32,8 @@ const projectUsersController = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(bodyUpdateSchema),
+    validateBody(requiredFields(RESOURCE_TYPES.PROJECT_USER, 'roleId')),
+    validateBody(partialFields(RESOURCE_TYPES.PROJECT_USER, 'roleId')),
     updatePerm,
     updateProjectUser
   )
