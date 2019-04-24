@@ -53,7 +53,11 @@
   }
   &__teammate {
     align-items: center;
+    margin-bottom: 6px;
     &-name { flex: 1; }
+    &-role {
+      width: 200px;
+    }
     &-is-you {
       background-color: $highlight;
       border-radius: $borderRadius;

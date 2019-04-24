@@ -18,7 +18,6 @@ const ProjectSettingsInfoContainer = ({ location }) => {
   if (!project) return null
 
   const debouncedUpdateHandler = debounce(1000, (body) => {
-    console.info('update project', body)
     Store.dispatch(updateProject(project.id, body))
   })
 

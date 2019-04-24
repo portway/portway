@@ -5,11 +5,11 @@ import Constants from 'Shared/constants'
 import { CaretIcon } from 'Components/Icons'
 import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 
-const ProjectRolesDropdown = ({ defaultValue, disabled, onChange }) => {
+const ProjectRolesDropdown = ({ buttonStyle, defaultValue, disabled, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(Constants.ROLE_NAMES[defaultValue])
   const roleSelectorButton = {
     label: permissionMenuLabel,
-    className: 'btn--white btn--with-icon',
+    className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
     icon: <CaretIcon width="14" height="14" />
   }
   const adjustRoleHandler = (roleId) => {
@@ -32,12 +32,14 @@ const ProjectRolesDropdown = ({ defaultValue, disabled, onChange }) => {
 }
 
 ProjectRolesDropdown.propTypes = {
+  buttonStyle: PropTypes.oneOf(['normal', 'blank']),
   defaultValue: PropTypes.number.isRequired,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired
 }
 
 ProjectRolesDropdown.defaultProps = {
+  buttonStyle: 'normal',
   projectRoleId: 3 // READ is default
 }
 

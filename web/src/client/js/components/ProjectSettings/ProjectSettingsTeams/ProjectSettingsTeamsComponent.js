@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
 
@@ -7,6 +7,7 @@ import ProjectRolesDropdown from './ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 
 const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
+  const selectRef = useRef()
   const [newUserId, setNewUserId] = useState()
   const [newUserRole, setNewUserRole] = useState(Constants.ROLE_IDS.READER)
 
@@ -22,11 +23,19 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
               <Select
                 classNamePrefix="react-select"
                 className="react-select-container"
+                noOptionsMessage={() => { return 'Your entire team is on the project' }}
                 options={users}
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
-                placeholder="Add a person..." />
+                placeholder="Add a person..."
+                ref={selectRef} />
               <ProjectRolesDropdown defaultValue={newUserRole} onChange={(newRoleId) => { setNewUserRole(newRoleId) }} />
-              <button type="button" className="btn" onClick={() => { createAssignmentHandler(newUserId, newUserRole) }}>Add teammate</button>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  createAssignmentHandler(newUserId, newUserRole)
+                  selectRef.current.onChange('', 'clear')
+                }}>Add teammate</button>
             </div>
           </div>
         </div>
