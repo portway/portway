@@ -37,13 +37,16 @@ button,
   p { color: $gray-dark; margin: 0; }
 
   @include focus($action);
-  &:hover {
-    background-color: $action-light;
-    color: #fff;
-  }
-  &:active {
-    background-color: $action-dark;
-    color: #fff;
+
+  &:not([disabled]) {
+    &:hover {
+      background-color: $action-light;
+      color: #fff;
+    }
+    &:active {
+      background-color: $action-dark;
+      color: #fff;
+    }
   }
 
   &--white {
@@ -51,14 +54,16 @@ button,
     background-color: $white;
     border: thin solid $gray-light;
     color: inherit;
-    &:hover {
-      background-color: $white;
-      border: thin solid $white-ter;
-      color: inherit;
-    }
-    &:active {
-      background-color: $white;
-      color: inherit;
+    &:not([disabled]) {
+      &:hover {
+        background-color: $white;
+        border: thin solid $white-ter;
+        color: inherit;
+      }
+      &:active {
+        background-color: $white;
+        color: inherit;
+      }
     }
     &[aria-expanded="true"] {
       background-color: $white-ter;
@@ -71,13 +76,15 @@ button,
     color: inherit;
     padding: 0;
     @include focus(transparent);
-    &:hover,
-    &:active {
-      background-color: transparent;
-      border: thin solid transparent !important;
-      box-shadow: none !important;
-      color: inherit;
-      outline: 0 !important;
+    &:not([disabled]) {
+      &:hover,
+      &:active {
+        background-color: transparent;
+        border: thin solid transparent !important;
+        box-shadow: none !important;
+        color: inherit;
+        outline: 0 !important;
+      }
     }
   }
 
@@ -120,13 +127,17 @@ button,
       padding: 2px 8px 2px 8px;
     }
     &:hover {
-      .icon {
-        background-color: $white-ter;
+      &:not([disabled]) {
+        .icon {
+          background-color: $white-ter;
+        }
       }
     }
     &:active {
-      .icon {
-        background-color: $gray;
+      &:not([disabled]) {
+        .icon {
+          background-color: $gray;
+        }
       }
     }
     &[aria-expanded="true"] {
@@ -151,6 +162,11 @@ button,
     &:hover {
       color: darken($danger, 20%);
     }
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.2;
   }
 
 }

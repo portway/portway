@@ -8,7 +8,7 @@ import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
 import './Dropdown.scss'
 
-const DropdownComponent = ({ align, autoCollapse = true, button, children, className, open = false, shortcut }) => {
+const DropdownComponent = ({ align, autoCollapse = true, button, children, className, disabled = false, open = false, shortcut }) => {
   const [expanded, setExpanded] = useState(open)
   // Custom hooks
   const nodeRef = useRef()
@@ -25,6 +25,7 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
     <div ref={nodeRef} className={`dropdown${className ? ' ' + className : ''}`}>
       <button
         className={`btn${button.className ? ' ' + button.className : ''}`}
+        disabled={disabled}
         type="button"
         aria-haspopup
         aria-expanded={expanded}
@@ -57,6 +58,7 @@ DropdownComponent.propTypes = {
   }),
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
   open: PropTypes.bool,
   shortcut: PropTypes.string
 }
