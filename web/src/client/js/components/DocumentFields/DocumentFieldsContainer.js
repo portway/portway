@@ -7,11 +7,11 @@ import { debounce } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
-import { updateField, removeField } from 'Actions/field'
+import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
-const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField, updateField, uiConfirm }) => {
+const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField, updateField, updateFieldOrder, uiConfirm }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
   const { documentId } = match.params
@@ -72,6 +72,7 @@ const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField,
     if (e.stopPropagation) {
       e.stopPropagation()
     }
+    const fieldIdToUpdate = draggingElement.dataset.id
     const from = Number(draggingElement.dataset.order)
     const to = Number(e.currentTarget.dataset.order)
     e.currentTarget.classList.remove('field--dragging', 'field--dragged-over')
@@ -80,6 +81,8 @@ const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField,
     fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
     setOrderedFields(fieldData)
     setDraggingElement(null)
+    // Trigger action with documentId, fieldId
+    updateFieldOrder(documentId, fieldIdToUpdate, to)
   }
 
   // Prop handler
@@ -114,6 +117,7 @@ DocumentFieldsContainer.propTypes = {
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
+  updateFieldOrder: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
 }
 
@@ -124,7 +128,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { removeField, updateField, uiConfirm }
+const mapDispatchToProps = { removeField, updateField, updateFieldOrder, uiConfirm }
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

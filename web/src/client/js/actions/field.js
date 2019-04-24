@@ -26,6 +26,13 @@ export const updateField = (documentId, fieldId, body) => {
   }
 }
 
+export const updateFieldOrder = (documentId, fieldId, newOrder) => {
+  return async (dispatch) => {
+    dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
+    await update(`documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
+  }
+}
+
 export const removeField = (documentId, fieldId) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())

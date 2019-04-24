@@ -30,6 +30,7 @@ export const ActionTypes = {
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
   INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
   RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
+  INITIATE_FIELD_ORDER: 'INITIATE_FIELD_ORDER',
   INITIATE_FIELD_REMOVE: 'INITIATE_FIELD_REMOVE',
   REMOVE_FIELD: 'REMOVE_FIELD',
   // Users
@@ -76,6 +77,7 @@ export const Fields = {
   receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
   initiateCreate: makeActionCreator(ActionTypes.INITIATE_FIELD_CREATE, 'documentId', 'fieldType'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
+  initiateOrderUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_ORDER, 'documentId', 'fieldId', 'newOrder'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),

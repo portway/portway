@@ -23,6 +23,15 @@ export const throttle = function(action) {
   }
 }
 
+export const filterObject = (obj, predicate) => {
+  return Object.keys(obj)
+    .filter( key => predicate(obj[key]) )
+    .reduce( (res, key) => {
+      res[key] = obj[key]
+      return res
+    }, {} )
+}
+
 export const groupBy = function(list, property) {
   if (!list.reduce) { list = Object.values(list) }
   return list.reduce((object, listItem) => {

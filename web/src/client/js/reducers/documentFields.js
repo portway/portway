@@ -1,4 +1,5 @@
 import { ActionTypes } from '../actions'
+import { filterObject } from 'Shared/utilities'
 
 const initialState = {
   // nested at { [documentId]: { [fieldId]: {} } }
@@ -52,6 +53,44 @@ export const documentFields = (state = initialState, action) => {
       const lastCreatedFieldId = initialState.lastCreatedFieldId
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
+    }
+    case ActionTypes.INITIATE_FIELD_ORDER: {
+      const { documentId, fieldId, newOrder } = action
+      const documentFields = { ...state.documentFieldsById[documentId] }
+      const fieldToUpdate = { ...state.documentFieldsById[documentId][fieldId] }
+      // Set the new order on the dragged element
+      const oldOrder = fieldToUpdate.order
+      fieldToUpdate.order = newOrder
+      // Adjust the fields between the newOrder and oldOrder range
+      const updatedFields = { [fieldId]: fieldToUpdate }
+      if (oldOrder > newOrder) {
+        // move everything from newOrder to oldOrder up
+        const fieldsToMove = filterObject(documentFields, field => field.order >= newOrder && field.order < oldOrder)
+        Object.keys(fieldsToMove).forEach((key) => {
+          if (key === fieldId) return
+          const updatedField = { ...documentFields[key], order: documentFields[key].order + 1 }
+          updatedFields[key] = updatedField
+        })
+      } else {
+        // move everything from oldOrder to newOrder down
+        const fieldsToMove = filterObject(documentFields, field => field.order >= oldOrder && field.order <= newOrder)
+        Object.keys(fieldsToMove).forEach((key) => {
+          if (key === fieldId) return
+          const updatedField = { ...documentFields[key], order: documentFields[key].order - 1 }
+          updatedFields[key] = updatedField
+        })
+      }
+      // Merge fields
+      Object.keys(updatedFields).forEach((fieldKey) => {
+        documentFields[fieldKey] = updatedFields[fieldKey]
+      })
+      return {
+        ...state,
+        documentFieldsById: {
+          ...state.documentFieldsById,
+          [documentId]: documentFields
+        }
+      }
     }
     case ActionTypes.INITIATE_FIELD_REMOVE: {
       const { id } = action

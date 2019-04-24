@@ -51,6 +51,7 @@ const DocumentFieldComponent = ({
   return (
     <li
       className={fieldClasses}
+      data-id={field.id}
       data-order={index}
       draggable="true"
       onDragStart={dragStartHandler}
