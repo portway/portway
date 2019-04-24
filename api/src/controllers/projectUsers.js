@@ -12,7 +12,7 @@ const { listPerm, readPerm, updatePerm, deletePerm, createPerm } = crudPerms(
 )
 
 const bodySchema = Joi.compile(
-  requiredFields(RESOURCE_TYPES.PROJECT_USER, 'userId', 'projectId', 'roleId')
+  requiredFields(RESOURCE_TYPES.PROJECT_USER, 'userId', 'roleId')
 )
 
 const bodyUpdateSchema = Joi.compile({
@@ -74,13 +74,14 @@ const getProjectUser = async function(req, res) {
 
 const createProjectUser = async (req, res) => {
   const { body } = req
+  const { projectId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
     const projectUser = await BusinessProjectUser.addUserIdToProject(
       body.userId,
-      body.projectId,
       body.roleId,
+      projectId,
       orgId
     )
     res.status(201).json({ data: projectUser })
@@ -92,7 +93,7 @@ const createProjectUser = async (req, res) => {
 
 const updateProjectUser = async (req, res) => {
   const { body } = req
-  const { id } = req.params.id
+  const { id } = req.params
   const { orgId } = req.requestorInfo
 
   try {
