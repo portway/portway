@@ -28,7 +28,10 @@ async function createForDocument(docId, body) {
     throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
   }
 
-  const createdField = await document.createField(body)
+  // make sure document fields are ordered correctly and get next order number for new field
+  const docFieldCount = await normalizeFieldOrderAndGetCount(docId, orgId)
+
+  const createdField = await document.createField({ ...body, order: docFieldCount })
 
   const fieldValue = await createdField.addFieldValue({
     value: body.value,
@@ -46,6 +49,7 @@ async function findAllForDocument(docId, orgId) {
   const include = getFieldValueInclude(db)
   const fields = await db.model(MODEL_NAME).findAll({
     where: { docId, orgId },
+    order: db.col('order'),
     include
   })
 
@@ -90,6 +94,8 @@ async function deleteByIdForDocument(id, docId, orgId) {
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
   await field.destroy()
+
+  await normalizeFieldOrderAndGetCount(docId, orgId)
 }
 
 async function updateOrderById(id, docId, orgId, newPosition) {
@@ -108,7 +114,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
   // no order position change, do nothing
   if (newPosition === currentPosition) return
 
-  const currentMax = (await db.model(MODEL_NAME).count({ where: { docId, orgId } })) - 1
+  const currentMax = (await normalizeFieldOrderAndGetCount(docId, orgId)) - 1
 
   if (newPosition > currentMax) {
     const message = `Cannot update order, the final field order position for this document is ${currentMax}`
@@ -122,18 +128,35 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
     if (newPosition > currentPosition) {
       // moving to a higher order position
-      await db.query(`UPDATE "Fields" SET "order" = "order" - 1 WHERE "order" >= ${currentPosition} and "order" <= ${newPosition};`, { transaction })
-      // await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" > ${newPosition};`, { transaction })
+      await db.query(
+        `UPDATE "Fields"
+        SET "order" = "order" - 1
+        WHERE "order" >= ${currentPosition}
+        and "order" <= ${newPosition};`,
+        { transaction }
+      )
     } else if (newPosition < currentPosition) {
       // moving to a lower order position
-      await db.query(`UPDATE "Fields" SET "order" = "order" + 1 WHERE "order" >= ${newPosition} and "order" < ${currentPosition};`, { transaction })
+      await db.query(
+        `UPDATE "Fields"
+        SET "order" = "order" + 1
+        WHERE "order" >= ${newPosition}
+        and "order" < ${currentPosition};`,
+        { transaction }
+      )
     }
-    await db.query(`UPDATE "Fields" SET "order" = ${newPosition} WHERE "id" = ${id};`, { transaction })
+    await db.query(
+      `UPDATE "Fields"
+      SET "order" = ${newPosition}
+      WHERE "id" = ${id};`,
+      { transaction }
+    )
 
     await transaction.commit()
   } catch (err) {
     // Rollback transaction if any errors were encountered
     await transaction.rollback()
+    throw err
   }
 }
 
@@ -174,6 +197,43 @@ function validateNumberPrecision(value) {
     const message = `number value exceeds maximum of ${MAX_NUMBER_PRECISION} significant digits`
     throw ono({ code: 400, message, errorType: apiErrorTypes.ValidationError }, message)
   }
+}
+
+async function normalizeFieldOrderAndGetCount(docId, orgId) {
+  const db = getDb()
+
+  const docFields = await db.model(MODEL_NAME).findAll({
+    where: { docId, orgId },
+    order: db.col('order'),
+    attributes: ['id', 'order']
+  })
+
+  const uniqueOrderVals = docFields.reduce((uniqueOrderVals, field) => {
+    if (!uniqueOrderVals.includes(field.order)) return [...uniqueOrderVals, field.order]
+    return uniqueOrderVals
+  }, [])
+
+  const currentMaxOrderVal = Math.max(...uniqueOrderVals)
+
+  //verify that all doc fields have a unique order value, and that the current maximum value is correct, if so, return early
+  if (docFields.length === uniqueOrderVals.length && docFields.length === currentMaxOrderVal + 1) return docFields.length
+
+  let transaction
+  try {
+    transaction = await db.transaction()
+
+    await Promise.all(docFields.map((field, index) => {
+      return field.update({ order: index }, { transaction })
+    }))
+
+    await transaction.commit()
+  } catch (err) {
+    // Rollback transaction if any errors were encountered
+    await transaction.rollback()
+    throw err
+  }
+
+  return docFields.length
 }
 
 export default {
