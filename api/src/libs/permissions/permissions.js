@@ -32,6 +32,30 @@ export function getOrganizationRole(requestorInfo) {
   return roles
 }
 
+export async function getProjectRolesForUser(requestorInfo, project) {
+  const projectRoles = []
+  const defaultProjectAccess = projectPermissionGenerator(project)
+  projectRoles.push(defaultProjectAccess)
+
+  const projectUser = await BusinessProjectUser.getProjectUserAssignment(
+    requestorInfo.requestorId,
+    project.id,
+    requestorInfo.orgId
+  )
+  if (projectUser) {
+    projectRoles.push(PROJECT_ROLES[projectUser.roleId])
+  }
+  return projectRoles
+}
+
+export async function getProjectRoleForProjectToken(requestorInfo, project) {
+  if (project.id === requestorInfo.projectId) {
+    return [PROJECT_ROLES[requestorInfo.roleId]]
+  } else {
+    return []
+  }
+}
+
 export async function getProjectRoles(requestorInfo, requestedAction) {
   const projectRoles = []
   const project = await resourceToProject(requestedAction, requestorInfo.orgId)
@@ -41,23 +65,13 @@ export async function getProjectRoles(requestorInfo, requestedAction) {
   }
 
   if (requestorInfo.requestorType === RESOURCE_TYPES.USER) {
-    const defaultProjectAccess = projectPermissionGenerator(project)
-    projectRoles.push(defaultProjectAccess)
-
-    const projectUser = await BusinessProjectUser.getProjectUserAssignment(
-      requestorInfo.requestorId,
-      project.id,
-      requestorInfo.orgId
-    )
-    if (projectUser) {
-      projectRoles.push(PROJECT_ROLES[projectUser.roleId])
-    }
+    const roles = await getProjectRolesForUser(requestorInfo, project)
+    projectRoles.push(...roles)
   }
 
   if (requestorInfo.requestorType === RESOURCE_TYPES.PROJECT_TOKEN) {
-    if (project.id === requestorInfo.projectId) {
-      projectRoles.push(PROJECT_ROLES[requestorInfo.roleId])
-    }
+    const roles = await getProjectRoleForProjectToken(requestorInfo, project)
+    projectRoles.push(...roles)
   }
 
   return projectRoles
