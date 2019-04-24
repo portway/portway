@@ -16,7 +16,7 @@ const createMany = async function(numberOfFields, override) {
   const db = getDb()
   const fields = Array(numberOfFields)
     .fill()
-    .map(() => getFieldData(override))
+    .map((__, index) => getFieldData({ order: index, ...override }))
 
   const createdFields = await Promise.all(
     fields.map(fieldData => db.model('Field').create(fieldData))

@@ -28,6 +28,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       order: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {
