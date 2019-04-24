@@ -40,7 +40,7 @@ ProjectRolesDropdown.propTypes = {
 
 ProjectRolesDropdown.defaultProps = {
   buttonStyle: 'normal',
-  projectRoleId: 3 // READ is default
+  projectRoleId: Constants.ROLE_IDS.READER
 }
 
 export default ProjectRolesDropdown
