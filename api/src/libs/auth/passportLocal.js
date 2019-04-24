@@ -1,5 +1,5 @@
 import { Strategy as LocalStrategy } from 'passport-local'
-import UserCoordinator from '../coordinators/user'
+import UserCoordinator from '../../coordinators/user'
 import ono from 'ono'
 
 const options = {

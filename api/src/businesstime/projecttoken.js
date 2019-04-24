@@ -27,6 +27,15 @@ async function findById(id, orgId) {
   })
 }
 
+// To be used only internally!
+async function findByIdUnsanitized(id, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findOne({
+    where: { orgId, id },
+    raw: true
+  })
+}
+
 async function findAllByProjectId(projectId, orgId) {
   const db = getDb()
   const tokens = await db.model(MODEL_NAME).findAll({
@@ -76,6 +85,7 @@ async function deleteById(id, orgId) {
 export default {
   create,
   findById,
+  findByIdUnsanitized,
   findAllByProjectId,
   updateNameById,
   addTokenStringById,

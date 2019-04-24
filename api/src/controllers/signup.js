@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { validateBody } from '../libs/middleware/payloadValidation'
 import signUpCoordinator from '../coordinators/signUp'
 import userCoordinator from '../coordinators/user'
-import auth from '../libs/auth'
+import auth from '../libs/auth/auth'
 
 const signupPayloadSchema = Joi.compile({
   firstName: Joi.string().required(),

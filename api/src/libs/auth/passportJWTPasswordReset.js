@@ -1,8 +1,7 @@
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import ono from 'ono'
-
-import tokenSettings from './tokenSettings'
-import UserCoordinator from '../coordinators/user'
+import tokenSettings from '../tokenSettings'
+import UserCoordinator from '../../coordinators/user'
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

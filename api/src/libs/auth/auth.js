@@ -19,6 +19,7 @@ const init = (passport) => {
 
 export default {
   jwtMiddleware: passport.authenticate('jwt', { session: false }),
+  jwtProjectTokenMiddleware: passport.authenticate('dangerProjectToken', { session: false }),
   loginMiddleware: passport.authenticate('local', { session: false }),
   jwtPasswordResetMiddleware: passport.authenticate('jwt-password-reset', { session: false }),
   init

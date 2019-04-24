@@ -1,5 +1,5 @@
-import { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
-import { ORGANIZATION_ROLES, PROJECT_ROLES } from '../../constants/roles'
+import RESOURCE_TYPES, { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
+import { ORGANIZATION_ROLES, PROJECT_ROLES, PROJECT_ROLE_IDS } from '../../constants/roles'
 import checkRolePermissions from './checkRolePermissions'
 import projectPermissionGenerator from './projectPermissionGenerator'
 import resourceToProject from '../resourceToProject'
@@ -11,7 +11,8 @@ import { permissions as permissionsDebug } from '../debugLoggers'
     orgId: '123',
     requestorType: 'user',
     requestorId: '234',
-    [orgRoleId: 123]
+    [orgRoleId: 123],
+    [projectId: 123]
   }
 
   requestedAction = {
@@ -38,15 +39,25 @@ export async function getProjectRoles(requestorInfo, requestedAction) {
     permissionsDebug(`project not found`)
     return projectRoles
   }
-  const defaultProjectAccess = projectPermissionGenerator(project)
-  projectRoles.push(defaultProjectAccess)
-  const projectUser = await BusinessProjectUser.getProjectUserAssignment(
-    requestorInfo.requestorId,
-    project.id,
-    requestorInfo.orgId
-  )
-  if (projectUser) {
-    projectRoles.push(PROJECT_ROLES[projectUser.roleId])
+
+  if (requestorInfo.requestorType === RESOURCE_TYPES.USER) {
+    const defaultProjectAccess = projectPermissionGenerator(project)
+    projectRoles.push(defaultProjectAccess)
+
+    const projectUser = await BusinessProjectUser.getProjectUserAssignment(
+      requestorInfo.requestorId,
+      project.id,
+      requestorInfo.orgId
+    )
+    if (projectUser) {
+      projectRoles.push(PROJECT_ROLES[projectUser.roleId])
+    }
+  }
+
+  if (requestorInfo.requestorType === RESOURCE_TYPES.PROJECT_TOKEN) {
+    if (project.id === requestorInfo.projectId) {
+      projectRoles.push(PROJECT_ROLES[requestorInfo.roleId])
+    }
   }
 
   return projectRoles
