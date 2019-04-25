@@ -14,10 +14,8 @@ describe('BusinessField', () => {
 
   beforeAll(async () => {
     await initializeTestDb()
-    const factoryProjects = await ProjectFactory.createMany(1)
-    factoryProject = factoryProjects[0]
-    const factoryDocuments = await DocumentFactory.createMany(1, { projectId: factoryProject.id })
-    factoryDocument = factoryDocuments[0]
+    factoryProject = (await ProjectFactory.createMany(1))[0]
+    factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
   })
 
   describe('#createForDocument', () => {
@@ -27,8 +25,10 @@ describe('BusinessField', () => {
       type: 1
     }
     let field
+    let fieldA
 
     beforeAll(async () => {
+      fieldA = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
       field = await BusinessField.createForDocument(factoryDocument.id, {
         ...fieldBody,
         docId: factoryDocument.id
@@ -41,6 +41,15 @@ describe('BusinessField', () => {
       expect(field).toEqual(expect.objectContaining(expectedBody))
       expect(field.constructor).toBe(Object)
       expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
+    })
+
+    it('should give the field the correct order: value', () => {
+      expect(field.order).toEqual(1)
+    })
+
+    it('should update other doc fields with out of sync order values', async () => {
+      const updatedFactoryField = await fieldA.reload()
+      expect(updatedFactoryField.order).toEqual(0)
     })
 
     describe('when the parent document does not exist', () => {
@@ -112,12 +121,13 @@ describe('BusinessField', () => {
     let docId
 
     const updateBody = {
-      name: 'an-updated-name'
+      name: 'an-updated-name',
     }
 
     beforeAll(async () => {
-      const factoryFields = await FieldFactory.createMany(1, { docId: factoryDocument.id, type: 1 })
-      factoryField = factoryFields[0]
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+      factoryField = (await FieldFactory.createMany(1, { docId: factoryDocument.id, type: 1 }))[0]
       fieldId = factoryField.id
       orgId = factoryField.orgId
       docId = factoryField.docId
@@ -127,10 +137,7 @@ describe('BusinessField', () => {
       let updatedField
 
       beforeAll(async () => {
-        updatedField = await BusinessField.updateByIdForDocument(factoryField.id, docId, orgId, {
-          ...updateBody,
-          docId
-        })
+        updatedField = await BusinessField.updateByIdForDocument(factoryField.id, docId, orgId, updateBody)
       })
 
       it('should return a POJO with updated body fields', () => {
@@ -242,18 +249,39 @@ describe('BusinessField', () => {
   })
 
   describe('#deleteByIdForDocument', () => {
-    let factoryField
+    let fieldA
+    let fieldB
+    let fieldC
+
 
     beforeAll(async () => {
-      const factoryFields = await FieldFactory.createMany(1, { docId: factoryDocument.id })
-      factoryField = factoryFields[0]
+      await clearDb()
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+      fieldA = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
+      fieldB = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 1 }))[0]
+      fieldC = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 2 }))[0]
     })
 
-    it('should not throw an error if the target document is found', async () => {
-      await expect(
-        BusinessField.deleteByIdForDocument(factoryField.id, factoryDocument.id, constants.ORG_ID)
-      ).resolves.toEqual(undefined)
+    describe('when the field is successfully deleted', () => {
+      beforeAll(async () => {
+        await BusinessField.deleteByIdForDocument(fieldB.id, factoryDocument.id, constants.ORG_ID)
+      })
+
+      it('should remove the field from the db', async () => {
+        await expect(
+          fieldB.reload()
+        ).rejects.toThrow()
+      })
+
+      it('should re-order remaining fields for the document', async () => {
+        const updatedFieldA = await fieldA.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedFieldA.order).toEqual(0)
+        expect(updatedFieldC.order).toEqual(1)
+      })
     })
+
 
     it('should throw an error if the target field is not found', async () => {
       await expect(
@@ -263,13 +291,13 @@ describe('BusinessField', () => {
 
     it('should throw an error if the document does not have the passed in docId', async () => {
       await expect(
-        BusinessField.deleteByIdForDocument(factoryField.id, 0, constants.ORG_ID)
+        BusinessField.deleteByIdForDocument(fieldB.id, 0, constants.ORG_ID)
       ).rejects.toThrow()
     })
 
     it('should throw an error if the document does not have the passed in orgId', async () => {
       await expect(
-        BusinessField.deleteByIdForDocument(factoryField.id, factoryDocument.id, constants.ORG_ID_2)
+        BusinessField.deleteByIdForDocument(fieldB.id, factoryDocument.id, constants.ORG_ID_2)
       ).rejects.toThrow()
     })
   })
@@ -279,6 +307,8 @@ describe('BusinessField', () => {
 
     beforeAll(async () => {
       await clearDb()
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
       factoryField = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
     })
 
@@ -311,11 +341,10 @@ describe('BusinessField', () => {
       let fieldB
       let fieldC
 
-      beforeAll(async () => {
-        await clearDb()
-      })
-
       beforeEach(async () => {
+        await clearDb()
+        factoryProject = (await ProjectFactory.createMany(1))[0]
+        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
         fieldA = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
         fieldB = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 1 }))[0]
         fieldC = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 2 }))[0]
@@ -379,6 +408,15 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(0)
         expect(updatedFieldB.order).toEqual(2)
         expect(updatedFieldC.order).toEqual(1)
+      })
+
+      it('should re-order out of sync field items before moving', async () => {
+        const outOfSyncField = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 5 }))[0]
+        await BusinessField.updateOrderById(fieldC.id, factoryDocument.id, constants.ORG_ID, 3)
+        const updatedOutOfSyncField = await outOfSyncField.reload()
+        const updatedFieldC = await fieldC.reload()
+        expect(updatedOutOfSyncField.order).toEqual(2)
+        expect(updatedFieldC.order).toEqual(3)
       })
     })
   })

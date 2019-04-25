@@ -1,9 +1,9 @@
 import Joi from 'joi'
 
 export const rawSchema = {
-  userId: Joi.number(),
+  roleId: Joi.number(),
   projectId: Joi.number(),
-  roleId: Joi.number()
+  name: Joi.string()
 }
 
 export default Joi.compile(rawSchema)

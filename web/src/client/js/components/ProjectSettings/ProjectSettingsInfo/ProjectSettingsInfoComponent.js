@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 
-const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
+const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
   if (!project) return null
   const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
   return (
@@ -15,7 +15,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           id="projectName"
           label="Project Name"
           name="project[name]"
-          onChange={onUpdateHandler}
+          onChange={(e) => { updateProjectHandler({ name: e.target.value }) }}
           placeholder="My project"
           value={project.name} />
         <TextField
@@ -23,7 +23,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           label="Description (optional)"
           large
           name="project[description]"
-          onChange={onUpdateHandler}
+          onChange={(e) => { updateProjectHandler({ description: e.target.value }) }}
           placeholder=""
           value={project.description} />
       </section>
@@ -34,7 +34,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
           help={helpText}
           label="Make this project public"
           name="project[privacy]"
-          onChange={onUpdateHandler}
+          onChange={(e) => { updateProjectHandler({ privacy: e.target.value }) }}
           value="checked"
         />
       </section>
@@ -44,7 +44,7 @@ const ProjectSettingsInfoComponent = ({ project, onUpdateHandler }) => {
 
 ProjectSettingsInfoComponent.propTypes = {
   project: PropTypes.object.isRequired,
-  onUpdateHandler: PropTypes.func.isRequired
+  updateProjectHandler: PropTypes.func.isRequired
 }
 
 export default ProjectSettingsInfoComponent

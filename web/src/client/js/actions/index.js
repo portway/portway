@@ -12,6 +12,15 @@ export const ActionTypes = {
   RECEIVE_UPDATED_PROJECT: 'RECEIVE_UPDATED_PROJECT',
   INITIATE_PROJECT_REMOVE: 'INITIATE_PROJECT_REMOVE',
   REMOVE_PROJECT: 'REMOVE_PROJECT',
+  // Project Assignments
+  REQUEST_PROJECT_ASSIGNEES: 'REQUEST_PROJECT_ASSIGNEES',
+  RECEIVE_PROJECT_ASSIGNEES: 'RECEIVE_PROJECT_ASSIGNEES',
+  CREATE_PROJECT_ASSIGNEE: 'CREATE_PROJECT_ASSIGNEE',
+  RECEIVE_CREATED_PROJECT_ASSIGNEE: 'RECEIVE_CREATED_PROJECT_ASSIGNEE',
+  INITIATE_PROJECT_ASSIGNEE_UPDATE: 'INITIATE_PROJECT_ASSIGNEE_UPDATE',
+  RECEIVE_UPDATED_PROJECT_ASSIGNEE: 'RECEIVE_UPDATED_PROJECT_ASSIGNEE',
+  INITIATE_PROJECT_ASSIGNEE_REMOVE: 'INITIATE_PROJECT_ASSIGNEE_REMOVE',
+  REMOVE_PROJECT_ASSIGNEE: 'REMOVE_PROJECT_ASSIGNEE',
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
@@ -57,6 +66,17 @@ export const Projects = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id')
+}
+
+export const ProjectAssignments = {
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECT_ASSIGNEES, 'projectId'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_ASSIGNEES, 'projectId', 'data'),
+  create: makeActionCreator(ActionTypes.CREATE_PROJECT_ASSIGNEE, 'projectId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_ASSIGNEE, 'projectId', 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_UPDATE, 'projectId'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE, 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE, 'projectId', 'assignmentId'),
+  removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_ASSIGNEE, 'projectId', 'userId'),
 }
 
 export const Documents = {
