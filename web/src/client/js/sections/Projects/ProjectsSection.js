@@ -19,7 +19,7 @@ class ProjectsContainer extends React.PureComponent {
     }
     return (
       <main>
-        <OrgPermission acceptedRoleIds={[]} elseRender={(
+        <OrgPermission acceptedRoleIds={[1, 2]} elseRender={(
           <ToolbarComponent action={{}} filter sort />
         )}>
           <ToolbarComponent action={toolbarAction} filter sort />

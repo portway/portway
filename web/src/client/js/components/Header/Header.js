@@ -7,6 +7,7 @@ import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenu from 'Components/UserMenu/UserMenu'
+import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './Header.scss'
 
@@ -24,15 +25,17 @@ const renderBrandLogo = (logo) => {
 
 const renderProjectsItems = () => {
   return (
-    <div className="navbar__content-items">
-      <Link
-        className="btn btn--blank btn--with-circular-icon"
-        title="Create a new project"
-        to={Constants.PATH_PROJECT_CREATE}>
-        <AddIcon width="12" height="12" />
-        <span className="label">New Project</span>
-      </Link>
-    </div>
+    <OrgPermission acceptedRoleIds={[1, 2]}>
+      <div className="navbar__content-items">
+        <Link
+          className="btn btn--blank btn--with-circular-icon"
+          title="Create a new project"
+          to={Constants.PATH_PROJECT_CREATE}>
+          <AddIcon width="12" height="12" />
+          <span className="label">New Project</span>
+        </Link>
+      </div>
+    </OrgPermission>
   )
 }
 
