@@ -55,14 +55,15 @@ export const documentFields = (state = initialState, action) => {
       return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.INITIATE_FIELD_ORDER: {
-      // No change, early return
-      if (oldOrder === newOrder) return state
-
       const { documentId, fieldId, newOrder } = action
       const documentFields = { ...state.documentFieldsById[documentId] }
       const { [fieldId]: fieldToUpdate, ...remainingFields } = documentFields
-      // Set the new order on the dragged element
       const oldOrder = fieldToUpdate.order
+
+      // No change, early return
+      if (oldOrder === newOrder) return { ...state }
+
+      // Set the new order on the dragged element
       const updatedField = { ...fieldToUpdate, order: newOrder }
       const updatedFields = { [fieldId]: updatedField }
 
