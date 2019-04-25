@@ -310,6 +310,174 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /projects/{projectId}/assignments:
+    get:
+      description: |
+        Returns all project user assignments
+      operationId: findProjectUsers
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project user assignments response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new project user assignment
+      operationId: addDocument
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: project user to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProjectUser'
+      responses:
+        '201':
+          description: project user assignment response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /projects/{projectId}/assignments/{id}:
+    get:
+      description: Returns a project user assignment based on a single ID
+      operationId: findProjectUserById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: ID of project user assignment to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project user assignment response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a project user assignment based on a single ID
+      operationId: updateProjectUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: ID of project to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Project User assignment body to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectUser'
+      responses:
+        '200':
+          description: project user assignment response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: deletes a single project user assignment based on the ID supplied
+      operationId: deleteProjectUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: ID of project user assignment to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: project user assignment deleted
+        default:
+          description: unexpbected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+
   /documents/{documentId}/fields:
     get:
       description: |
@@ -640,3 +808,35 @@ components:
       properties:
         error:
           type: string
+
+    ProjectUser:
+      allOf:
+        - $ref: '#/components/schemas/NewProjectUser'
+        - required:
+            - id
+        - properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    NewProjectUser:
+      required:
+        - roleId
+        - userId
+      properties:
+        roleId:
+          type: number
+        userId:
+          type: number
+
+    UpdateProjectUser:
+      required:
+        - roleId
+      properties:
+        roleId:
+          type: number
