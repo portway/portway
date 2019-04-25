@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ProjectCreatorContainer from 'Components/ProjectForm/ProjectCreatorContainer'
+import { withOrgPermission } from 'Components/Permission/OrgPermission'
 
 const ProjectCreate = () => {
   return (
@@ -14,4 +15,4 @@ const ProjectCreate = () => {
   )
 }
 
-export default ProjectCreate
+export default withOrgPermission([1, 2])(ProjectCreate)
