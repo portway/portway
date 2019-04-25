@@ -105,6 +105,13 @@ export const PROJECT_ROLES = {
       [actions.CREATE]: true,
       [actions.DELETE]: true,
       [actions.UPDATE]: true
+    },
+    [resourceTypes.PROJECT_TOKEN]: {
+      [actions.READ]: true,
+      [actions.LIST]: true,
+      [actions.CREATE]: true,
+      [actions.DELETE]: true,
+      [actions.UPDATE]: true
     }
   },
   [PROJECT_ROLE_IDS.CONTRIBUTOR]: {

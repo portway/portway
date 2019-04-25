@@ -21,7 +21,8 @@ export default async function(requestedAction, orgId) {
   switch (requestedAction.resourceType) {
     case resourceTypes.PROJECT:
       projectId = requestedAction.data.id
-    case resourceTypes.DOCUMENT: {
+      break
+    default: {
       if (requestedAction.data.projectId) {
         projectId = requestedAction.data.projectId
       }
