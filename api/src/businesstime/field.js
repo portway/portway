@@ -103,7 +103,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
   if (newPosition < 0) {
     const message = `Cannot update order, minimum order position is 0`
-    throw ono({ code: 400, message }, message)
+    throw ono({ code: 400, publicMessage: message }, message)
   }
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
@@ -118,7 +118,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
   if (newPosition > currentMax) {
     const message = `Cannot update order, the final field order position for this document is ${currentMax}`
-    throw ono({ code: 409, message }, message)
+    throw ono({ code: 409, publicMessage: message }, message)
   }
 
   let transaction
