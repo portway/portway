@@ -4,16 +4,22 @@ const FIELD_TYPES = {
   NUMBER: 3
 }
 
-const ROLE_IDS = {
+const PROJECT_ROLE_IDS = {
   ADMIN: 1,
   CONTRIBUTOR: 2,
   READER: 3
 }
 
-const ROLE_NAMES = {
-  [ROLE_IDS.ADMIN]: 'Admin',
-  [ROLE_IDS.CONTRIBUTOR]: 'Contributor',
-  [ROLE_IDS.READER]: 'Reader'
+const ORGANIZATION_ROLE_IDS = {
+  OWNER: 1,
+  ADMIN: 2,
+  USER: 3
+}
+
+const PROJECT_ROLE_NAMES = {
+  [PROJECT_ROLE_IDS.ADMIN]: 'Admin',
+  [PROJECT_ROLE_IDS.CONTRIBUTOR]: 'Contributor',
+  [PROJECT_ROLE_IDS.READER]: 'Reader'
 }
 
 // Note: This is so we can use this webpack as well, don't convert this to ES6
@@ -40,6 +46,7 @@ module.exports = {
     [FIELD_TYPES.NUMBER]: 'number-'
   },
   FIELD_TYPES: FIELD_TYPES,
-  ROLE_IDS: ROLE_IDS,
-  ROLE_NAMES: ROLE_NAMES
+  PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
+  PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
+  ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS
 }

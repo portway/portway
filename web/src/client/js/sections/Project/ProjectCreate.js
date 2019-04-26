@@ -1,6 +1,10 @@
 import React from 'react'
 
 import ProjectCreatorContainer from 'Components/ProjectForm/ProjectCreatorContainer'
+import { withOrgPermission } from 'Components/Permission/OrgPermission'
+import Constants from 'Shared/constants'
+
+const { ORGANIZATION_ROLE_IDS } = Constants
 
 const ProjectCreate = () => {
   return (
@@ -14,4 +18,4 @@ const ProjectCreate = () => {
   )
 }
 
-export default ProjectCreate
+export default withOrgPermission([ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN])(ProjectCreate)

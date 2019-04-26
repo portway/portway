@@ -6,6 +6,9 @@ import { AddIcon } from 'Components/Icons'
 import Constants from 'Shared/constants'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
+import OrgPermission from 'Components/Permission/OrgPermission'
+
+const { ORGANIZATION_ROLE_IDS } = Constants
 
 class ProjectsContainer extends React.PureComponent {
   render() {
@@ -18,7 +21,11 @@ class ProjectsContainer extends React.PureComponent {
     }
     return (
       <main>
-        <ToolbarComponent action={toolbarAction} filter sort />
+        <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]} elseRender={(
+          <ToolbarComponent action={{}} filter sort />
+        )}>
+          <ToolbarComponent action={toolbarAction} filter sort />
+        </OrgPermission>
         <ProjectsListContainer />
       </main>
     )

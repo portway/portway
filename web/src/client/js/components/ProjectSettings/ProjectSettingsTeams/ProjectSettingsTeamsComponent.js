@@ -9,7 +9,7 @@ import ProjectTeamList from './ProjectTeamList'
 const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState()
-  const [newUserRole, setNewUserRole] = useState(Constants.ROLE_IDS.READER)
+  const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
 
   return (
     <form className="project-settings__team">

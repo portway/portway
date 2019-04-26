@@ -16,6 +16,7 @@ export default function(roles, resourceType, action) {
   if (!Array.isArray(roles)) {
     roles = [roles]
   }
+
   const hasRole = roles.find((role) => {
     return role[resourceType] && role[resourceType][action]
   })
