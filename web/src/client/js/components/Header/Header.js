@@ -9,6 +9,8 @@ import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer
 import UserMenu from 'Components/UserMenu/UserMenu'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
+const { ORGANIZATION_ROLE_IDS } = Constants
+
 import './Header.scss'
 
 const brand = {
@@ -25,7 +27,7 @@ const renderBrandLogo = (logo) => {
 
 const renderProjectsItems = () => {
   return (
-    <OrgPermission acceptedRoleIds={[1, 2]}>
+    <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
       <div className="navbar__content-items">
         <Link
           className="btn btn--blank btn--with-circular-icon"

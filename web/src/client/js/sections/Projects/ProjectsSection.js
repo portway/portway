@@ -8,6 +8,8 @@ import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
+const { ORGANIZATION_ROLE_IDS } = Constants
+
 class ProjectsContainer extends React.PureComponent {
   render() {
     const toolbarAction = {
@@ -19,7 +21,7 @@ class ProjectsContainer extends React.PureComponent {
     }
     return (
       <main>
-        <OrgPermission acceptedRoleIds={[1, 2]} elseRender={(
+        <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]} elseRender={(
           <ToolbarComponent action={{}} filter sort />
         )}>
           <ToolbarComponent action={toolbarAction} filter sort />
