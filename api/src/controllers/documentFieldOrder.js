@@ -40,7 +40,7 @@ const updateFieldOrder = async function(req, res) {
     res.status(204).send()
   } catch (e) {
     console.error(e.stack)
-    const message = e.message || `error updating field order with id ${fieldId}`
+    const message = e.publicMessage || `error updating field order with id ${fieldId}`
     res.status(e.code || 500).json({ error: message, errorType: e.errorType })
   }
 }
