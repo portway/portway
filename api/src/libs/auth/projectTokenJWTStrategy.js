@@ -5,44 +5,11 @@ import passport from 'passport-strategy'
 import util from 'util'
 import { ExtractJwt } from 'passport-jwt'
 
-// Why re-invent the wheel holmes?
+// Re-use the wheel, use passport-jwt's token header extractor
 const getTokenFromReq = ExtractJwt.fromAuthHeaderAsBearerToken()
 
 /**
- * `Strategy` constructor.
- *
- * The token authentication strategy authenticates requests based on the
- * credentials submitted through standard request headers or body.
- *
- * Applications must supply a `verify` callback which accepts
- * unique `token` credentials, and then calls the `done` callback supplying a
- * `user`, which should be set to `false` if the credentials are not valid.
- * If an exception occured, `err` should be set.
- *
- * Optionally, `options` can be used to change the fields in which the
- * credentials are found.
- *
- * Options:
- *
- *   - `tokenField`  field name where the token is found, defaults to 'token'
- *   - `tokenQuery`  query string name where the token is found, defaults to 'token'
- *   - `tokenParams`  params name where the token is found, defaults to 'token'
- *   - `tokenHeader`  header name where the token is found, defaults to 'token'
- *   - `passReqToCallback`  when `true`, `req` is the first argument to the verify callback (default: `false`)
- *
- * Examples:
- *
- *     passport.use(new UniqueTokenStrategy(
- *       function(token, done) {
- *         User.findOne({ token: token }, function (err, user) {
- *           done(err, user);
- *         });
- *       }
- *     ));
- *
- * @param {Object} options
- * @param {Function} verify
- * @api public
+ * `Strategy` constructor. Needs to be a named export
  */
 export function Strategy(options, verify) {
   if (typeof options === 'function') {
@@ -64,13 +31,6 @@ export function Strategy(options, verify) {
  */
 util.inherits(Strategy, passport.Strategy)
 
-/**
- * Authenticate request based on the contents of a form submission.
- *
- * @param {Object} req
- * @param {Object} options
- * @api protected
- */
 Strategy.prototype.authenticate = function(req, options) {
   options = options || {}
   const self = this
@@ -99,6 +59,6 @@ Strategy.prototype.authenticate = function(req, options) {
 }
 
 /**
- * Expose `Strategy`.
+ * Expose `Strategy` as default export too, because passport
  */
 export default Strategy

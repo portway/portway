@@ -1,5 +1,5 @@
 import RESOURCE_TYPES, { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
-import { ORGANIZATION_ROLES, PROJECT_ROLES, PROJECT_ROLE_IDS } from '../../constants/roles'
+import { ORGANIZATION_ROLES, PROJECT_ROLES } from '../../constants/roles'
 import checkRolePermissions from './checkRolePermissions'
 import projectPermissionGenerator from './projectPermissionGenerator'
 import resourceToProject from '../resourceToProject'
@@ -78,6 +78,7 @@ export async function getProjectRoles(requestorInfo, requestedAction) {
 }
 
 async function projectResourceHandler(requestorInfo, requestedAction) {
+  permissionsDebug(`projectResourceHandler entry`)
   const projectRoles = await getProjectRoles(requestorInfo, requestedAction)
   permissionsDebug(`project roles: ${JSON.stringify(projectRoles)}`)
   const hasProjectPermission = checkRolePermissions(

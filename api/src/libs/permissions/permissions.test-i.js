@@ -122,5 +122,59 @@ describe('Permissions', () => {
         })
       })
     })
+
+    describe('project token requestor', () => {
+      let requestorInfo
+      beforeAll(() => {
+        requestorInfo = {
+          orgId: project.orgId,
+          requestorType: RESOURCE_TYPES.PROJECT_TOKEN,
+          requestorId: 1234,
+          roleId: PROJECT_ROLE_IDS.READER,
+          projectId: project.id
+        }
+      })
+
+      describe('requests a project resource', () => {
+        describe('with project access', () => {
+          let hasPermission
+
+          beforeAll(async () => {
+            const requestedAction = {
+              resourceType: RESOURCE_TYPES.PROJECT,
+              action: ACTIONS.READ,
+              data: {
+                id: project.id
+              }
+            }
+            hasPermission = await permissions(requestorInfo, requestedAction)
+          })
+
+          it('should return true', () => {
+            expect(hasPermission).toBe(true)
+          })
+        })
+        describe('for a different project', () => {
+          let hasPermission
+          beforeAll(async () => {
+            const anotherProject = (await ProjectFactory.createMany(1, {
+              orgId: project.orgId
+            }))[0]
+            const requestedAction = {
+              resourceType: RESOURCE_TYPES.PROJECT,
+              action: ACTIONS.READ,
+              data: {
+                id: anotherProject.id
+              }
+            }
+            hasPermission = await permissions(requestorInfo, requestedAction)
+          })
+
+          it('should return false', () => {
+            expect(hasPermission).toBe(false)
+          })
+        })
+      })
+    })
   })
 })
