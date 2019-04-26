@@ -70,7 +70,7 @@ export const ORGANIZATION_ROLES = {
       [actions.UPDATE]: true,
       [actions.DELETE]: true,
       [actions.READ]: true,
-      [actions.LIST]: true,
+      [actions.LIST]: true
     }
   },
   [rIds.USER]: {
