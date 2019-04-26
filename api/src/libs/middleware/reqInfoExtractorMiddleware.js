@@ -15,6 +15,7 @@ export default async (req, res, next) => {
     }
     case RESOURCE_TYPES.PROJECT_TOKEN: {
       req.requestorInfo.projectId = req.user.projectId
+      req.requestorInfo.roleId = req.user.roleId
     }
   }
 

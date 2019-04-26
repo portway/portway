@@ -64,7 +64,7 @@ const loadControllers = (router, controllers, middleware, routerOptions) => {
 }
 
 const loader = (router) => {
-  loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware, auth.jwtProjectTokenMiddleware, reqInfoExtractor])
+  loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware, reqInfoExtractor])
   loadControllers(router, UNAUTHENTICATED_CONTROLLERS)
 }
 

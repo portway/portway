@@ -44,7 +44,7 @@ const getTokenFromReq = ExtractJwt.fromAuthHeaderAsBearerToken()
  * @param {Function} verify
  * @api public
  */
-function Strategy(options, verify) {
+export function Strategy(options, verify) {
   if (typeof options === 'function') {
     verify = options
     options = {}
@@ -92,7 +92,7 @@ Strategy.prototype.authenticate = function(req, options) {
   }
 
   try {
-    this._verify(req, token, verified)
+    this._verify(token, verified)
   } catch (ex) {
     return self.error(ex)
   }
@@ -101,6 +101,4 @@ Strategy.prototype.authenticate = function(req, options) {
 /**
  * Expose `Strategy`.
  */
-exports = {
-  Strategy
-}
+export default Strategy

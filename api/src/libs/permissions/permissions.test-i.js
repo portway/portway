@@ -7,6 +7,7 @@ import ACTIONS from '../../constants/actions'
 import initializeTestDb from '../../db/__testSetup__/initializeTestDb'
 import { getDb } from '../../db/dbConnector'
 import BusinessProjectUser from '../../businesstime/projectuser'
+import RESOURCE_TYPES from '../../constants/resourceTypes'
 
 describe('Permissions', () => {
   beforeAll(async () => {
@@ -20,7 +21,7 @@ describe('Permissions', () => {
       const user = (await UserFactory.createMany(1, { orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN }))[0]
       requestorInfo = {
         orgId: user.orgId,
-        requestorType: 'user',
+        requestorType: RESOURCE_TYPES.USER,
         requestorId: user.id,
         orgRoleId: user.orgRoleId
       }
