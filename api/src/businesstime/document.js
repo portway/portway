@@ -35,6 +35,15 @@ async function findAllForProject(projectId, orgId) {
   })
 }
 
+async function findById(id, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findOne({
+    where: { id, orgId },
+    raw: true,
+    attributes: PUBLIC_FIELDS
+  })
+}
+
 async function findByIdForProject(id, projectId, orgId) {
   const db = getDb()
   return await db.model(MODEL_NAME).findOne({
@@ -79,6 +88,7 @@ async function findParentProjectByDocumentId(id, orgId) {
 export default {
   createForProject,
   updateByIdForProject,
+  findById,
   findByIdForProject,
   findAllForProject,
   deleteByIdForProject,
