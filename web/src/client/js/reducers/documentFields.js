@@ -1,5 +1,4 @@
 import { ActionTypes } from '../actions'
-import { filterObject } from 'Shared/utilities'
 
 const initialState = {
   // nested at { [documentId]: { [fieldId]: {} } }
