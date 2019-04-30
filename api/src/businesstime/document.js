@@ -77,11 +77,13 @@ async function findParentProjectByDocumentId(id, orgId) {
 }
 
 async function findByIdWithFields(id, orgId) {
-  console.log(id, orgId)
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({
     where: { id, orgId },
-    include: [{ model: db.model('Field') }]
+    include: [{ model: db.model('Field') }],
+    order: [
+      [db.model('Field'), 'order', 'ASC']
+    ],
   })
 
   if (!document) return document
