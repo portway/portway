@@ -25,7 +25,7 @@ const getDocument = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const document = await BusinessDocument.findById(id, orgId)
+    const document = await BusinessDocument.findByIdWithFields(id, orgId)
     if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
     res.json({ data: document })
   } catch (e) {

@@ -1,6 +1,7 @@
 import BusinessDocument from './document'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import DocumentFactory from '../db/__testSetup__/factories/document'
+import FieldFactory from '../db/__testSetup__/factories/field'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
@@ -138,6 +139,7 @@ describe('BusinessDocument', () => {
           expect(document.password).toBe(undefined)
           expect(document.constructor).toBe(Object)
           expect(typeof document.projectId).toBe('number')
+          expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
         }
       })
     })
@@ -160,6 +162,10 @@ describe('BusinessDocument', () => {
           expect(document.id).toBe(targetDocumentId)
           expect(document.constructor).toBe(Object)
           expect(document.projectId).toBe(factoryProject.id)
+        })
+
+        it('should return public fields', () => {
+          expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
         })
       })
 
@@ -259,6 +265,57 @@ describe('BusinessDocument', () => {
     it('should return the parent project of passed in document', () => {
       expect(project.id).toEqual(factoryProject.id)
       expect(Object.keys(project)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT]))
+    })
+  })
+
+  describe('#findByIdWithFields', () => {
+    let factoryDocument
+    let factoryFields
+    let document
+
+    beforeAll(async () => {
+      await clearDb()
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+      factoryFields = await FieldFactory.createMany(3, { type: 3, docId: factoryDocument.id })
+    })
+
+    describe('when the target document has the passed in orgId', () => {
+      beforeAll(async () => {
+        document = await BusinessDocument.findByIdWithFields(
+          factoryDocument.id,
+          constants.ORG_ID
+        )
+      })
+
+      it('should return a document as POJO', () => {
+        expect(document.id).toBe(factoryDocument.id)
+        expect(document.constructor).toBe(Object)
+        expect(document.projectId).toBe(factoryProject.id)
+      })
+
+      it('should include fields', () => {
+        const factoryFieldIds = factoryFields.map(field => field.id)
+        const docFieldIds = document.fields.map(field => field.id)
+        expect(docFieldIds).toEqual(expect.arrayContaining(factoryFieldIds))
+      })
+
+      it('should return public fields', () => {
+        expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.DOCUMENT]))
+      })
+    })
+
+    describe('when the target document does not have the passed in orgId', () => {
+      beforeAll(async () => {
+        document = await BusinessDocument.findByIdForProject(
+          factoryDocument.id,
+          constants.ORG_ID_2
+        )
+      })
+
+      it('should return null', () => {
+        expect(document).toBe(null)
+      })
     })
   })
 })
