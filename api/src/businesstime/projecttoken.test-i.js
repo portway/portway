@@ -119,6 +119,27 @@ describe('BusinessProjectToken', () => {
     })
   })
 
+  describe('#findByIdUnsanitized', () => {
+    let token
+    let factoryToken
+    beforeAll(async () => {
+      factoryToken = (await TokenFactory.createMany(1, {
+        projectId: 123,
+        orgId: constants.ORG_ID
+      }))[0]
+
+      token = await BusinessProjectToken.findByIdUnsanitized(factoryToken.id, factoryToken.orgId)
+    })
+
+    it('should return public fields', () => {
+      expect(Object.keys(token)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+    })
+
+    it('should return the secret', () => {
+      expect(token.secret).toBe(factoryToken.secret)
+    })
+  })
+
   describe('#addTokenStringById', () => {
     let updatedTokenString
     let updatedToken

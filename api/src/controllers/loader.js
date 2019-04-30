@@ -1,5 +1,5 @@
 import express from 'express'
-import auth from '../libs/auth'
+import auth from '../libs/auth/auth'
 import reqInfoExtractor from '../libs/middleware/reqInfoExtractorMiddleware'
 
 // To add a controller, add the base path to mount it as a key

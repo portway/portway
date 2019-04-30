@@ -1,12 +1,14 @@
 import { getOrganizationRole } from './permissions'
+import RESOURCE_TYPES from '../../constants/resourceTypes'
 
-describe('getOrganizationRole', () => {
+
+describe('#getOrganizationRole', () => {
   describe('with an orgRoleId', () => {
     let orgRoles
     beforeAll(() => {
       const requestorInfo = {
         requestorId: 1,
-        requestorType: 'user',
+        requestorType: RESOURCE_TYPES.USER,
         orgId: 1,
         orgRoleId: 1
       }

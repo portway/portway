@@ -7,6 +7,7 @@ import ACTIONS from '../../constants/actions'
 import initializeTestDb from '../../db/__testSetup__/initializeTestDb'
 import { getDb } from '../../db/dbConnector'
 import BusinessProjectUser from '../../businesstime/projectuser'
+import RESOURCE_TYPES from '../../constants/resourceTypes'
 
 describe('Permissions', () => {
   beforeAll(async () => {
@@ -20,7 +21,7 @@ describe('Permissions', () => {
       const user = (await UserFactory.createMany(1, { orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN }))[0]
       requestorInfo = {
         orgId: user.orgId,
-        requestorType: 'user',
+        requestorType: RESOURCE_TYPES.USER,
         requestorId: user.id,
         orgRoleId: user.orgRoleId
       }
@@ -118,6 +119,60 @@ describe('Permissions', () => {
         })
         it('should return false', () => {
           expect(requestStatus).toBe(false)
+        })
+      })
+    })
+
+    describe('project token requestor', () => {
+      let requestorInfo
+      beforeAll(() => {
+        requestorInfo = {
+          orgId: project.orgId,
+          requestorType: RESOURCE_TYPES.PROJECT_TOKEN,
+          requestorId: 1234,
+          roleId: PROJECT_ROLE_IDS.READER,
+          projectId: project.id
+        }
+      })
+
+      describe('requests a project resource', () => {
+        describe('with project access', () => {
+          let hasPermission
+
+          beforeAll(async () => {
+            const requestedAction = {
+              resourceType: RESOURCE_TYPES.PROJECT,
+              action: ACTIONS.READ,
+              data: {
+                id: project.id
+              }
+            }
+            hasPermission = await permissions(requestorInfo, requestedAction)
+          })
+
+          it('should return true', () => {
+            expect(hasPermission).toBe(true)
+          })
+        })
+        describe('for a different project', () => {
+          let hasPermission
+          beforeAll(async () => {
+            const anotherProject = (await ProjectFactory.createMany(1, {
+              orgId: project.orgId
+            }))[0]
+            const requestedAction = {
+              resourceType: RESOURCE_TYPES.PROJECT,
+              action: ACTIONS.READ,
+              data: {
+                id: anotherProject.id
+              }
+            }
+            hasPermission = await permissions(requestorInfo, requestedAction)
+          })
+
+          it('should return false', () => {
+            expect(hasPermission).toBe(false)
+          })
         })
       })
     })

@@ -1,4 +1,4 @@
-import { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
+import RESOURCE_TYPES, { PROJECT_RESOURCE_TYPES } from '../../constants/resourceTypes'
 import { ORGANIZATION_ROLES, PROJECT_ROLES } from '../../constants/roles'
 import checkRolePermissions from './checkRolePermissions'
 import projectPermissionGenerator from './projectPermissionGenerator'
@@ -11,7 +11,8 @@ import { permissions as permissionsDebug } from '../debugLoggers'
     orgId: '123',
     requestorType: 'user',
     requestorId: '234',
-    [orgRoleId: 123]
+    [orgRoleId: 123],
+    [projectId: 123]
   }
 
   requestedAction = {
@@ -31,15 +32,11 @@ export function getOrganizationRole(requestorInfo) {
   return roles
 }
 
-export async function getProjectRoles(requestorInfo, requestedAction) {
+export async function getProjectRolesForUser(requestorInfo, project) {
   const projectRoles = []
-  const project = await resourceToProject(requestedAction, requestorInfo.orgId)
-  if (!project) {
-    permissionsDebug(`project not found`)
-    return projectRoles
-  }
   const defaultProjectAccess = projectPermissionGenerator(project)
   projectRoles.push(defaultProjectAccess)
+
   const projectUser = await BusinessProjectUser.getProjectUserAssignment(
     requestorInfo.requestorId,
     project.id,
@@ -48,11 +45,40 @@ export async function getProjectRoles(requestorInfo, requestedAction) {
   if (projectUser) {
     projectRoles.push(PROJECT_ROLES[projectUser.roleId])
   }
+  return projectRoles
+}
+
+export async function getProjectRoleForProjectToken(requestorInfo, project) {
+  if (project.id === requestorInfo.projectId) {
+    return [PROJECT_ROLES[requestorInfo.roleId]]
+  } else {
+    return []
+  }
+}
+
+export async function getProjectRoles(requestorInfo, requestedAction) {
+  const projectRoles = []
+  const project = await resourceToProject(requestedAction, requestorInfo.orgId)
+  if (!project) {
+    permissionsDebug(`project not found`)
+    return projectRoles
+  }
+
+  if (requestorInfo.requestorType === RESOURCE_TYPES.USER) {
+    const roles = await getProjectRolesForUser(requestorInfo, project)
+    projectRoles.push(...roles)
+  }
+
+  if (requestorInfo.requestorType === RESOURCE_TYPES.PROJECT_TOKEN) {
+    const roles = await getProjectRoleForProjectToken(requestorInfo, project)
+    projectRoles.push(...roles)
+  }
 
   return projectRoles
 }
 
 async function projectResourceHandler(requestorInfo, requestedAction) {
+  permissionsDebug(`projectResourceHandler entry`)
   const projectRoles = await getProjectRoles(requestorInfo, requestedAction)
   permissionsDebug(`project roles: ${JSON.stringify(projectRoles)}`)
   const hasProjectPermission = checkRolePermissions(

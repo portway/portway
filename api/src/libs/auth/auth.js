@@ -1,5 +1,6 @@
 import passport from 'passport'
 import JWTAuth from './passportJWT'
+import JWTProjectToken from './projectTokenJWT'
 import localAuth from './passportLocal'
 import JWTPasswordResetAuth from './passportJWTPasswordReset'
 
@@ -13,12 +14,13 @@ const init = (passport) => {
   })
 
   JWTAuth(passport)
+  JWTProjectToken(passport)
   localAuth(passport)
   JWTPasswordResetAuth(passport)
 }
 
 export default {
-  jwtMiddleware: passport.authenticate('jwt', { session: false }),
+  jwtMiddleware: passport.authenticate(['jwt', 'dangerProjectToken'], { session: false }),
   loginMiddleware: passport.authenticate('local', { session: false }),
   jwtPasswordResetMiddleware: passport.authenticate('jwt-password-reset', { session: false }),
   init

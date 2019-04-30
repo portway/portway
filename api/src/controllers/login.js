@@ -1,4 +1,4 @@
-import auth from '../libs/auth'
+import auth from '../libs/auth/auth'
 import tokenIntegrator from '../integrators/token'
 
 // Caution: login controller routes have NO AUTH by default!

@@ -5,7 +5,7 @@ import passport from 'passport'
 import logger from 'morgan'
 //libs
 import envVarValidation from './libs/envVarValidation'
-import auth from './libs/auth'
+import auth from './libs/auth/auth'
 import controllerLoader from './controllers/loader'
 
 // Check if required env vars are set the right format

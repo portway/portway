@@ -13,5 +13,8 @@ const getGenericMockTokenData = () => {
 export default {
   create: jest.fn(() => getGenericMockTokenData()),
   findById: jest.fn(() => getGenericMockTokenData()),
+  findByIdUnsanitized: jest.fn(() => {
+    return { ...getGenericMockTokenData(), secret: 'abc123' }
+  }),
   addTokenStringById: jest.fn(() => getGenericMockTokenData())
 }
