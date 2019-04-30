@@ -112,35 +112,6 @@ describe('BusinessProject', () => {
         })
       })
     })
-
-    describe('#findByIdUnsanitized', () => {
-      let targetProjectId
-      let project
-
-      describe('when the target project has the passed in orgId', () => {
-        beforeAll(async () => {
-          targetProjectId = factoryProjects[0].get('id')
-          project = await BusinessProject.findById(targetProjectId, constants.ORG_ID)
-        })
-
-        it('should return a project as POJO', () => {
-          expect(project.id).toBe(targetProjectId)
-          expect(project.constructor).toBe(Object)
-          expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
-        })
-      })
-
-      describe('when the target project does not have the passed in orgId', () => {
-        beforeAll(async () => {
-          targetProjectId = factoryProjects[0].get('id')
-          project = await BusinessProject.findById(targetProjectId, constants.ORG_ID_2)
-        })
-
-        it('should return null', () => {
-          expect(project).toBe(null)
-        })
-      })
-    })
   })
 
   describe('#deleteById', () => {
