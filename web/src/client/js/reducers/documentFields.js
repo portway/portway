@@ -53,6 +53,49 @@ export const documentFields = (state = initialState, action) => {
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
     }
+    case ActionTypes.INITIATE_FIELD_ORDER: {
+      const { documentId, fieldId, newOrder } = action
+      const documentFields = { ...state.documentFieldsById[documentId] }
+      const { [fieldId]: fieldToUpdate, ...remainingFields } = documentFields
+      const oldOrder = fieldToUpdate.order
+
+      // No change, early return
+      if (oldOrder === newOrder) return { ...state }
+
+      // Set the new order on the dragged element
+      const updatedField = { ...fieldToUpdate, order: newOrder }
+      const updatedFields = { [fieldId]: updatedField }
+
+      if (newOrder < oldOrder) {
+        // move everything from newOrder to oldOrder up
+        Object.keys(remainingFields).forEach((key) => {
+          const field = remainingFields[key]
+          if (field.order >= newOrder && field.order < oldOrder) {
+            updatedFields[field.id] = { ...field, order: field.order + 1 }
+            return
+          }
+          updatedFields[field.id] = { ...field }
+        })
+      } else {
+        // move everything from oldOrder to newOrder down
+        Object.keys(remainingFields).forEach((key) => {
+          const field = remainingFields[key]
+          if (field.order > oldOrder && field.order <= newOrder) {
+            updatedFields[field.id] = { ...field, order: field.order - 1 }
+            return
+          }
+          updatedFields[field.id] = { ...field }
+        })
+      }
+
+      return {
+        ...state,
+        documentFieldsById: {
+          ...state.documentFieldsById,
+          [documentId]: updatedFields
+        }
+      }
+    }
     case ActionTypes.INITIATE_FIELD_REMOVE: {
       const { id } = action
       const loadingById = { ...state.loading.byId, [id]: true }
