@@ -2,7 +2,9 @@
 import resourceTypes from './resourceTypes'
 import globalPublicFields from './globalPublicFields'
 
-const DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId'].concat(globalPublicFields)
+const PROJECT_DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId'].concat(globalPublicFields)
+
+const DOCUMENT_PUBLIC_FIELDS = PROJECT_DOCUMENT_PUBLIC_FIELDS.concat(['fields'])
 
 const PROJECT_PUBLIC_FIELDS = ['name', 'description'].concat(globalPublicFields)
 
@@ -24,6 +26,7 @@ const PROJECT_TOKEN_PUBLIC_FIELDS = ['token', 'name', 'projectId', 'roleId'].con
 
 
 export default {
+  [resourceTypes.PROJECT_DOCUMENT]: Object.freeze(PROJECT_DOCUMENT_PUBLIC_FIELDS),
   [resourceTypes.DOCUMENT]: Object.freeze(DOCUMENT_PUBLIC_FIELDS),
   [resourceTypes.PROJECT]: Object.freeze(PROJECT_PUBLIC_FIELDS),
   [resourceTypes.FIELD]: Object.freeze(FIELD_PUBLIC_FIELDS),
