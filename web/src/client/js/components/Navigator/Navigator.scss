@@ -41,7 +41,7 @@ $navigatorPlaceholderWidth: 56px;
       }
       .icon {
         flex: 1;
-        margin-right: 6px;
+        margin-right: $iconMargin;
       }
     }
   }
