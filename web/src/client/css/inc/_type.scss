@@ -1,3 +1,5 @@
+@import 'vars';
+
 /* aleo-regular - latin */
 @font-face {
   font-family: 'Aleo';
@@ -38,17 +40,16 @@
     /* Safari, Android, iOS */ url('/css/fonts/aleo-v2-latin-700.svg#Aleo') format('svg'); /* Legacy iOS */
 }
 
-// https://vasilis.nl/nerd/code/emcalc/
 html, body {
   font-family: $sansSerif;
-  font-size: 15px; // base font
+  font-size: 62.5%; // base font
 }
 
 .navbar-brand h1, .navbar-brand-name {
-  font-size: 1.867rem; // 28px
+  font-size: 2.8rem; // 28px
   font-weight: 700;
-  letter-spacing: 0.029em; // .8px
-  line-height: 0.643em; // 18px
+  letter-spacing: 0.08rem; // .8px
+  line-height: 1.8rem; // 18px
   span {
     font-weight: 700;
   }
@@ -60,9 +61,9 @@ h1,
 .h-first-level {
   color: $primary;
   font-family: $serif !important;
-  font-size: 1.600rem; // 24px
+  font-size: 2.4rem; // 24px
   font-weight: 700;
-  line-height: 0.750em; // 18pxs
+  line-height: 1.8rem; // 18px
   a {
     color: $primary;
     text-decoration: none;
@@ -72,17 +73,17 @@ h1,
 h2,
 .h-second-level {
   font-family: $serif !important;
-  font-size: 1.2rem; // 18px
+  font-size: 1.8rem; // 18px
   font-weight: 700;
-  line-height: 1em; //18px
+  line-height: 1.8rem; //18px
 }
 
 h3,
 .h-third-level {
   font-family: $serif !important;
-  font-size: 1.2rem; // 18px
+  font-size: 1.8rem; // 18px
   font-weight: 400;
-  line-height: 1em; // 18px
+  line-height: 1.8rem; // 18px
 }
 
 .header--with-icon {
@@ -91,14 +92,14 @@ h3,
 }
 
 p {
-  font-size: 1rem; // 15px
-  line-height: 1.2em; // 18px
+  font-size: $baseFontSize;
+  line-height: 1.8rem; // 18px
 }
 
 .small {
-  font-size: 0.800rem; // 12px
-  line-height: 1.167em; // 14px
-  padding: 0.417em 0; // 5px
+  font-size: 1.2rem; // 12px
+  line-height: 1.4rem; // 14px
+  padding: .5rem 0; // 5px
 }
 
 b, strong {
@@ -106,9 +107,9 @@ b, strong {
 }
 
 .flash {
-  font-size: 0.800rem; // 12px
-  line-height: 1.167em; // 14px
-  padding: 0.417em 0; // 5px
+  font-size: 1.2rem; // 12px
+  line-height: 1.4rem; // 14px
+  padding: .5rem 0; // 5px
   &--danger {
     color: $danger;
   }
@@ -116,10 +117,10 @@ b, strong {
 
 .note {
   font-family: $serif !important;
-  font-size: 0.800rem; // 12px
+  font-size: 1.2rem; // 12px
   font-style: italic;
-  letter-spacing: 0.012em; // .14px
-  line-height: 1em; // 12px
+  letter-spacing: 0.014rem; // .14px
+  line-height: 1.2rem; // 12px
 }
 
 .danger {
@@ -131,21 +132,16 @@ b, strong {
 
 time {
   font-family: $serif !important;
-  font-size: 0.800rem; // 12px
+  font-size: 1.2rem; // 12px
   font-style: italic;
-  letter-spacing: 0.012em; // .14px
-  line-height: 1em; // 12px
+  letter-spacing: 0.014rem; // .14px
+  line-height: 1.2rem; // 12px
 }
 
-input, textarea, keygen, select, button {
-  font-size: 1rem; // 15px
+input, textarea, keygen, select, button, li, div {
+  font-size: $baseFontSize;
 }
 
-input, textarea, keygen, select, button {
-  font-size: 1rem;
-}
-
-input,
-textarea {
+input, textarea {
   font-family: $sansSerif;
 }
