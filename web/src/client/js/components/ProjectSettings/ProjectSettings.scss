@@ -54,7 +54,14 @@
   &__teammate {
     align-items: center;
     margin-bottom: 6px;
-    &-name { flex: 1; }
+    &-name {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      .icon {
+        margin-right: $iconMargin;
+      }
+    }
     &-role {
       width: 200px;
     }
@@ -63,7 +70,7 @@
       border-radius: $borderRadius;
       color: $white;
       font-size: 80%;
-      margin-left: .5rem;
+      margin-left: $iconMargin;
       padding: 1px 6px;
     }
   }

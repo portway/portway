@@ -10,7 +10,7 @@ const ProjectRolesDropdown = ({ buttonStyle, defaultValue, disabled, onChange })
   const roleSelectorButton = {
     label: permissionMenuLabel,
     className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
-    icon: <CaretIcon width="14" height="14" />
+    icon: <CaretIcon />
   }
   const adjustRoleHandler = (roleId) => {
     setPermissionMenuLabel(Constants.PROJECT_ROLE_NAMES[roleId])

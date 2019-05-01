@@ -20,8 +20,7 @@ const Checkbox = ({ help, id, label, large, name, placeholder, value, onChange }
           id={id}
           placeholder={placeholder}
           defaultChecked={value}
-          onChange={onChange}
-        />
+          onChange={onChange} />
       </div>
       {help && <div className="form-field__help small">{help}</div>}
     </div>

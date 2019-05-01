@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import currentUserId from 'Libs/currentUserId'
-import { RemoveIcon } from 'Components/Icons'
+import { RemoveIcon, UserIcon } from 'Components/Icons'
 import ProjectRolesDropdown from './ProjectRolesDropdown'
 
 const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignmentHandler }) => {
@@ -13,13 +13,16 @@ const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignme
     return (
       <li key={`${user.id}-${index}`} className="field__row project-settings__teammate">
         <span className="project-settings__teammate-name">
+          <UserIcon />
           {user.firstName} {user.lastName}
           {itsMeMario && <span className="project-settings__teammate-is-you">You</span>}
         </span>
         <div className="project-settings__teammate-role">
           <ProjectRolesDropdown buttonStyle='blank' disabled={itsMeMario} defaultValue={user.projectRoleId} onChange={(roleId) => { updateAssignmentHandler(user.assignmentId, roleId) }} />
         </div>
-        <button disabled={itsMeMario} type="button" className="btn btn--blank btn--with-circular-icon" onClick={() => { removeAssignmentHandler(user.id, user.assignmentId) }}><RemoveIcon width="14" height="14" /></button>
+        <button disabled={itsMeMario} type="button" className="btn btn--blank btn--with-circular-icon" onClick={() => { removeAssignmentHandler(user.id, user.assignmentId) }}>
+          <RemoveIcon />
+        </button>
       </li>
     )
   })
