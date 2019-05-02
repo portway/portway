@@ -19,7 +19,7 @@ const ProjectSettingsTokensContainer = ({ match }) => {
       token: token.token,
     }
   })
-  return <ProjectSettingsTokensComponent tokens={tokenArray} />
+  return <ProjectSettingsTokensComponent projectId={projectId} tokens={tokenArray} />
 }
 
 ProjectSettingsTokensContainer.propTypes = {

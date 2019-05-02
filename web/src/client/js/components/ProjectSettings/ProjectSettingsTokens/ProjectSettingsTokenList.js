@@ -1,30 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Constants from 'Shared/constants'
+import ProjectSettingsTokenItem from './ProjectSettingsTokenItem'
 
-const ProjectSettingsTokenList = ({ tokens }) => {
-  console.log(tokens)
+const ProjectSettingsTokenList = ({ selectedToken, tokens, tokenSelectHandler }) => {
+  const [copiedToken, setCopiedToken] = useState(null)
+  function copyHandler(tokenId) {
+    setCopiedToken(tokenId)
+  }
   function renderTokens() {
     return tokens.map((token) => {
-      return (
-        <li key={`token-${token.id}`} className="project-settings__token-list-item">
-          <span className="project-settings__token-list-item__name">{token.name}</span>
-          <span className="project-settings__token-list-item__role pill pill--highlight">{Constants.PROJECT_ROLE_NAMES[token.roleId]}</span>
-          <input className="project-settings__token-list-item__token" readOnly type="text" value={token.token} />
-        </li>
-      )
+      return <ProjectSettingsTokenItem
+        key={`token-${token.id}`}
+        copied={copiedToken === token.id}
+        copyHandler={copyHandler}
+        selected={selectedToken === token.id}
+        selectHandler={tokenSelectHandler}
+        token={token} />
     })
   }
   return (
-    <ol className="prokect-settings__token-list">
+    <ol className="project-settings__token-list">
       {renderTokens()}
     </ol>
   )
 }
 
 ProjectSettingsTokenList.propTypes = {
-  tokens: PropTypes.array.isRequired
+  selectedToken: PropTypes.number,
+  tokens: PropTypes.array.isRequired,
+  tokenSelectHandler: PropTypes.func.isRequired
 }
 
 export default ProjectSettingsTokenList

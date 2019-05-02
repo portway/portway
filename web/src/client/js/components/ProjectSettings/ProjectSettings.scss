@@ -21,6 +21,7 @@
   }
   &__panel {
     flex: 1;
+    overflow-x: hidden;
     section {
       &:first-child {
         padding-top: 0;
@@ -65,13 +66,49 @@
     &-role {
       width: 200px;
     }
-    &-is-you {
-      background-color: $highlight;
-      border-radius: $borderRadius;
-      color: $white;
-      font-size: 80%;
-      margin-left: $iconMargin;
-      padding: 1px 6px;
+  }
+
+  // Tokens
+  &__tokens {}
+  &__token-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__token-list-item {
+    align-items: center;
+    display: flex;
+    input[type="radio"] {
+      margin-right: 1.8rem;
+    }
+    &__info {
+      flex: 1;
+    }
+    &__details {
+      align-items: center;
+      display: flex;
+    }
+    &__token {
+      align-items: center;
+      display: flex;
+      input {
+        flex: 1;
+      }
+    }
+  }
+
+  // Endpoints
+  &__endpoints {}
+  &__endpoint-name {
+    margin-bottom: 6px;
+  }
+  &__endpoint {
+    display: flex;
+    &-token {
+      color: $gray-dark;
+    }
+    &-url {
+      color: $primary;
     }
   }
 
