@@ -8,10 +8,20 @@ const MODEL_NAME = 'DocumentVersion'
 
 async function createVersion(docId, orgId) {
   const db = getDb()
-  // TODO: get next version number
-  const versionNumber = 1
+  const latestVersion = await getLatestDocumentVersion(docId, orgId)
+  const versionNumber = latestVersion ? latestVersion.versionNumber + 1 : 1
   const version = await db.model(MODEL_NAME).create({ versionNumber, docId, orgId })
   return version
+}
+
+async function getLatestDocumentVersion(docId, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findOne({
+    where: { docId, orgId },
+    attributes: ['versionNumber'],
+    order: [['versionNumber', 'DESC']],
+    raw: true
+  })
 }
 
 export default {

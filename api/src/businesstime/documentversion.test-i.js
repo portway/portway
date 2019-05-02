@@ -31,5 +31,20 @@ describe('BusinessDocument', () => {
     it('should have a verison number', () => {
       expect(typeof documentVersion.versionNumber).toBe('number')
     })
+
+    it('should set the version to 1', () => {
+      expect(documentVersion.versionNumber).toBe(1)
+    })
+
+    describe('version increment', () => {
+      let nextVersion
+      beforeAll(async () => {
+        nextVersion = await BusinessDocumentVersion.createVersion(factoryDocument.id, factoryDocument.orgId)
+      })
+
+      it('should increment version by 1', () => {
+        expect(nextVersion.versionNumber).toBe(documentVersion.versionNumber + 1)
+      })
+    })
   })
 })
