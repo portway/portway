@@ -14,17 +14,17 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
   const docKey = document ? document.id : 0
   const contentDropdown = {
     className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon width="18" height="18" />,
+    icon: <AddIcon />,
     label: 'Insert'
   }
   const dataDropdown = {
     className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon width="18" height="18" />,
+    icon: <AddIcon />,
     label: 'Add data'
   }
   const dropdownButton = {
     className: 'btn btn--blank btn--with-circular-icon',
-    icon: <MoreIcon width="18" height="18" />
+    icon: <MoreIcon />
   }
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)

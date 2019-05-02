@@ -23,8 +23,7 @@ describe('<MessageComponent />', () => {
           visible={visible}
           type={type}
           message={message}
-          onDelete={onDeleteHandler}
-        />
+          onDelete={onDeleteHandler} />
       )
       expect(component.find('.message-body').text()).toContain(message)
     })
@@ -35,8 +34,7 @@ describe('<MessageComponent />', () => {
           visible={false}
           type={type}
           message={message}
-          onDelete={onDeleteHandler}
-        />
+          onDelete={onDeleteHandler} />
       )
       expect(component.equals(null)).toBe(true)
     })
@@ -47,8 +45,7 @@ describe('<MessageComponent />', () => {
           visible={visible}
           type={type}
           message={message}
-          onDelete={onDeleteHandler}
-        />
+          onDelete={onDeleteHandler} />
       )
       component.find('.delete').simulate('click')
       expect(onDeleteHandler.mock.calls.length).toBe(1)

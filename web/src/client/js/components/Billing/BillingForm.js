@@ -65,8 +65,7 @@ class BillingForm extends React.Component {
               classes={elementClasses}
               onReady={(el) => {
                 el.focus()
-              }}
-            />
+              }} />
           </div>
         </div>
         <div className="field is-horizontal">
@@ -79,8 +78,7 @@ class BillingForm extends React.Component {
                 <CardExpiryElement
                   id="card-expiry"
                   style={elementStyles}
-                  classes={elementClasses}
-                />
+                  classes={elementClasses} />
               </div>
             </div>
             <div className="field">
@@ -102,8 +100,7 @@ class BillingForm extends React.Component {
                   type="number"
                   name="zip-code"
                   placeholder="97215"
-                  autoComplete="section-billing postal-code"
-                />
+                  autoComplete="section-billing postal-code" />
               </div>
             </div>
           </div>
@@ -119,8 +116,7 @@ class BillingForm extends React.Component {
               type="email"
               name="email"
               placeholder="email@domain.com"
-              autoComplete="section-billing username"
-            />
+              autoComplete="section-billing username" />
           </div>
         </div>
         <div className="field">
@@ -134,8 +130,7 @@ class BillingForm extends React.Component {
               name="planId"
               value="plan_ETYqFpkbcgDast"
               disabled
-              readOnly
-            />
+              readOnly />
           </div>
         </div>
         <div className="field">

@@ -22,8 +22,8 @@ MoreIcon.propTypes = {
 MoreIcon.defaultProps = {
   className: 'icon-more',
   fill: '#3b3d3e',
-  height: '36',
-  width: '36'
+  height: '18',
+  width: '18'
 }
 
 export default MoreIcon

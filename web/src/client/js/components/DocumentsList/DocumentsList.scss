@@ -72,7 +72,7 @@
     }
     .icon {
       height: 16px;
-      margin-right: 6px;
+      margin-right: $iconMargin;
       width: 16px;
       g {
         stroke: $gray;

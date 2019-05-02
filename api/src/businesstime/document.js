@@ -6,10 +6,10 @@ import resourcePublicFields from '../constants/resourcePublicFields'
 
 const MODEL_NAME = 'Document'
 
-const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.DOCUMENT]
+const PROJECT_DOCUMENT_PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]
 
 const publicFields = (instance) => {
-  return pick(instance, PUBLIC_FIELDS)
+  return pick(instance, PROJECT_DOCUMENT_PUBLIC_FIELDS)
 }
 
 async function createForProject(projectId, body) {
@@ -29,7 +29,7 @@ async function createForProject(projectId, body) {
 async function findAllForProject(projectId, orgId) {
   const db = getDb()
   return await db.model(MODEL_NAME).findAll({
-    attributes: PUBLIC_FIELDS,
+    attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
     where: { projectId, orgId },
     raw: true
   })
@@ -40,7 +40,7 @@ async function findByIdForProject(id, projectId, orgId) {
   return await db.model(MODEL_NAME).findOne({
     where: { id, projectId, orgId },
     raw: true,
-    attributes: PUBLIC_FIELDS
+    attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS
   })
 }
 
@@ -76,11 +76,31 @@ async function findParentProjectByDocumentId(id, orgId) {
   return pick(project, resourcePublicFields[resourceTypes.PROJECT])
 }
 
+async function findByIdWithFields(id, orgId) {
+  const db = getDb()
+  const document = await db.model(MODEL_NAME).findOne({
+    where: { id, orgId },
+    include: [{ model: db.model('Field') }],
+    order: [
+      [db.model('Field'), 'order', 'ASC']
+    ],
+  })
+
+  if (!document) return document
+
+  const fields = document.Fields.map((field) => {
+    return pick(field, resourcePublicFields[resourceTypes.FIELD])
+  })
+
+  return pick( { ...document.get({ plain: true }), fields }, resourcePublicFields[resourceTypes.DOCUMENT])
+}
+
 export default {
   createForProject,
   updateByIdForProject,
   findByIdForProject,
   findAllForProject,
   deleteByIdForProject,
-  findParentProjectByDocumentId
+  findParentProjectByDocumentId,
+  findByIdWithFields
 }

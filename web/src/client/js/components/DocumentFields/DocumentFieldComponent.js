@@ -86,7 +86,7 @@ const DocumentFieldComponent = ({
         <div className="document-field__tool-options">
           {onDestroy &&
           <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
-            <TrashIcon width="18" height="18" />
+            <TrashIcon />
           </button>
           }
         </div>
