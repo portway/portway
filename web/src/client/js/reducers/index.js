@@ -6,6 +6,7 @@ import { documents } from './documents'
 import { documentFields } from './documentFields'
 import { projects } from './projects'
 import { projectAssignments } from './projectAssignments'
+import { userAssignments } from './userAssignments'
 import { users } from './users'
 import { ui } from './ui'
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   documentFields,
   projects,
   projectAssignments,
+  userAssignments,
   users,
   ui
 })

@@ -8,6 +8,9 @@ import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
 import './DocumentsList.scss'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
+
+const { PROJECT_ROLE_IDS } = Constants
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
   const listItemRef = useRef()
@@ -85,6 +88,11 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
 
   return (
     <div className={classes}>
+      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]} elseRender={(
+        <ToolbarComponent action={{}} filter sort />
+      )}>
+        <ToolbarComponent action={toolbarAction} filter sort />
+      </ProjectPermission>
       <ToolbarComponent action={toolbarAction} filter sort />
       <nav>
         <ol className="documents-list__list">
@@ -100,11 +108,11 @@ DocumentsListComponent.propTypes = {
   createChangeHandler: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
   createCallback: PropTypes.func.isRequired,
-  documents: PropTypes.array.isRequired
+  documents: PropTypes.array.isRequired,
+  projectId: PropTypes.number.isRequired
 }
 
 DocumentsListComponent.defaultProps = {
-  projectName: '',
   documents: {}
 }
 

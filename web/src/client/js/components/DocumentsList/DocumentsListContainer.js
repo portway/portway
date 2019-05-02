@@ -42,7 +42,8 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       createCallback={createDocumentHandler}
       createChangeHandler={createDocumentAction}
       creating={ui.documents.creating}
-      documents={sortedDocuments} />
+      documents={sortedDocuments}
+      projectId={match.params.projectId}/>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Users } from './index'
+import { Users, UserProjectAssignments } from './index'
 import { fetch } from '../api'
 
 /**
@@ -24,5 +24,13 @@ export const logoutUser = (id) => {
     dispatch(Users.logout(id))
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/'
     location.href = '/'
+  }
+}
+
+export const fetchUserProjectAssignments = (userId) => {
+  return async (dispatch) => {
+    dispatch(UserProjectAssignments.request())
+    const { data } = await fetch(`users/${userId}/projectassignments`)
+    return dispatch(UserProjectAssignments.receive(userId, data))
   }
 }
