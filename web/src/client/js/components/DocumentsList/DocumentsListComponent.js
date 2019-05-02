@@ -23,7 +23,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   // Set up toolbar
   const toolbarAction = {
     callback: () => { createCallback(true) },
-    icon: <AddIcon width="16" height="16" />,
+    icon: <AddIcon />,
     label: 'New Document',
     shortcut: 'n',
     title: 'Create a new document in this project'
@@ -64,7 +64,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
             <button
               className="btn btn--blank btn--with-circular-icon"
               onClick={() => { createCallback(false) }}>
-              <RemoveIcon width="18" height="18" />
+              <RemoveIcon />
             </button>
           </div>
         </li>
