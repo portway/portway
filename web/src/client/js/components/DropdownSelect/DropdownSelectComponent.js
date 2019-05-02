@@ -60,8 +60,7 @@ const DropdownSelectComponent = ({ button, className, menu, shortcut }) => {
           onChange={changeHandler}
           options={menu.options}
           placeholder="Filter..."
-          tabSelectsValue={false}
-        />
+          tabSelectsValue={false} />
       </div>
     </div>
   )

@@ -50,7 +50,7 @@ const NavigatorContainer = ({ history, location }) => {
     })
     return (
       <div className={classnames} ref={innerRef} {...innerProps}>
-        <ProjectIcon fill="#d2e0f2" width="18" height="18" />
+        <ProjectIcon fill="#d2e0f2" />
         <components.Option {...props} />
         <Link
           className="navigator__settings"
@@ -72,7 +72,7 @@ const NavigatorContainer = ({ history, location }) => {
         aria-expanded={expanded}
         className="btn btn--blank btn--with-circular-icon"
         onClick={toggleCallback}>
-        <CaretIcon width="12" height="12" />
+        <CaretIcon />
         <span className="label">{project ? project.name : 'Projects'}</span>
       </button>
       <div className="menu menu--dark" hidden={!expanded}>

@@ -36,9 +36,7 @@ export const withOrgPermission = (acceptedRoleIds, elseRender) => {
       render() {
         return (
           <OrgPermission acceptedRoleIds={acceptedRoleIds} elseRender={elseRender}>
-            <WrappedComponent
-              {...this.props}
-            />
+            <WrappedComponent {...this.props} />
           </OrgPermission>
         )
       }
