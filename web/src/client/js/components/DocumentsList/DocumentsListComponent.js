@@ -12,7 +12,7 @@ import ProjectPermission from 'Components/Permission/ProjectPermission'
 
 const { PROJECT_ROLE_IDS } = Constants
 
-const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents }) => {
+const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, projectId }) => {
   const listItemRef = useRef()
   const nameRef = useRef()
 
@@ -88,9 +88,12 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
 
   return (
     <div className={classes}>
-      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]} elseRender={(
-        <ToolbarComponent action={{}} filter sort />
-      )}>
+      <ProjectPermission
+        projectId={projectId}
+        acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}
+        elseRender={(
+          <ToolbarComponent action={{}} filter sort />
+        )}>
         <ToolbarComponent action={toolbarAction} filter sort />
       </ProjectPermission>
       <ToolbarComponent action={toolbarAction} filter sort />

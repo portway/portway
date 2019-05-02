@@ -4,7 +4,12 @@ export default function(sequelize, DataTypes) {
     {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
-      orgId: DataTypes.INTEGER
+      orgId: DataTypes.INTEGER,
+      public: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      }
     },
     {}
   )
