@@ -75,10 +75,10 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
               <code className="code">
                 <span className="code__command">curl</span> -H &quot;Authorization: Bearer <span className="project-settings__endpoint-token">{selectedToken.token}</span>&quot; \<br />
                 -d &apos;<span className="code__json">&#123;&quot;name&quot;: &quot;My updated document name&quot;&#125;</span>&apos; -H &quot;Content-Type: application/json&quot; -X PUT \<br />
-                <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents</span>
+                <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents/&lt;DOCUMENT_ID&gt;</span>
               </code>
             </pre>
-            <textarea ref={putEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My updated document name"}' -H "Content-Type: application/json" -X PUT ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
+            <textarea ref={putEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My updated document name"}' -H "Content-Type: application/json" -X PUT ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents/<DOCUMENT_ID>`} />
           </dd>
         </dl>
       </section>

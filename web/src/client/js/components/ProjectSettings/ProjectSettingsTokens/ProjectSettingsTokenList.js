@@ -13,6 +13,9 @@ const ProjectSettingsTokenList = ({ selectedToken, tokens, tokenSelectHandler })
         token={token} />
     })
   }
+  if (tokens.length === 0) {
+    return <p>There are no project tokens. Have your project admin create one.</p>
+  }
   return (
     <ol className="project-settings__token-list">
       {renderTokens()}
