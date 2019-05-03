@@ -22,7 +22,7 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
       <section>
         <header className="header header--with-button">
           <h2>Project Keys</h2>
-          <button className="btn btn--white">Add project key</button>
+          <button className="btn">Add project key</button>
         </header>
         <ProjectSettingsTokenList selectedToken={selectedTokenId} tokens={tokens} tokenSelectHandler={tokenSelectHandler} />
       </section>
