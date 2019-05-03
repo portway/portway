@@ -138,6 +138,31 @@ time {
   line-height: 1.2rem; // 12px
 }
 
+.pill {
+  background-color: $gray-light;
+  border-radius: $borderRadius;
+  color: $black-bis;
+  // font-size: 80%;
+  margin: 0 $iconMargin;
+  padding: 1px $iconMargin;
+  &--highlight {
+    background-color: $highlight;
+    color: $white;
+  }
+  &--green {
+    background-color: $primary;
+    color: $white;
+  }
+  &--orange {
+    background-color: $highlight;
+    color: $white;
+  }
+  &--blue {
+    background-color: $action;
+    color: $white;
+  }
+}
+
 input, textarea, keygen, select, button, li, div {
   font-size: $baseFontSize;
 }

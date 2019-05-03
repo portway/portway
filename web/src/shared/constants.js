@@ -27,6 +27,9 @@ module.exports = {
   PRODUCT_NAME: 'Project Danger',
   PRODUCT_ID: 'project-danger',
   PRODUCT_LOGO: '/images/logo.svg',
+  PRODUCT_API_URL: 'https://api.project-danger.com/v1',
+  // Documentation
+  DOCUMENTATION_URL: 'https://docs.project-danger.com/',
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New Document',
   // Paths
@@ -40,12 +43,14 @@ module.exports = {
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
     [FIELD_TYPES.TEXT]: 'text-area-',
     [FIELD_TYPES.NUMBER]: 'number-'
   },
   FIELD_TYPES: FIELD_TYPES,
+  // Roles
   PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
   ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS
