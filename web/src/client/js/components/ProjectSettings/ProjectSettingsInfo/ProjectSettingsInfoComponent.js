@@ -39,7 +39,7 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
             const accessLevel = e.target.checked ? PROJECT_ACCESS_LEVELS.READ : null
             updateProjectHandler({ accessLevel })
           }}
-          value="checked" />
+          value={project.accessLevel === PROJECT_ACCESS_LEVELS.READ} />
       </section>
     </form>
   )

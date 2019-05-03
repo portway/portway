@@ -20,7 +20,6 @@ import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchFields } from 'Actions/field'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments } from 'Actions/user'
 import { fetchProject, fetchProjects, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
-import { fetchUser, fetchUsers } from 'Actions/user'
 import currentUserId from './currentUserId'
 
 export default {
