@@ -22,6 +22,11 @@ const PROJECT_ROLE_NAMES = {
   [PROJECT_ROLE_IDS.READER]: 'Reader'
 }
 
+const PROJECT_ACCESS_LEVELS = {
+  READ: 'read',
+  WRITE: 'write'
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
@@ -48,5 +53,6 @@ module.exports = {
   FIELD_TYPES: FIELD_TYPES,
   PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
-  ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS
+  ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS,
+  PROJECT_ACCESS_LEVELS: PROJECT_ACCESS_LEVELS
 }

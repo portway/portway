@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import { ORGANIZATION_ROLE_IDS, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { PROJECT_ROLE_IDS, PROJECT_ACCESS_LEVELS } from 'Shared/constants'
 
 const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId }) => {
   const rejectRender = (
@@ -49,9 +49,9 @@ export default ProjectPermission
 
 const getRoleIdFromProjectAccessLevel = function(accessLevel) {
   switch (accessLevel) {
-    case 'write':
+    case PROJECT_ACCESS_LEVELS.WRITE:
       return PROJECT_ROLE_IDS.CONTRIBUTOR
-    case 'read':
+    case PROJECT_ACCESS_LEVELS.READ:
       return PROJECT_ROLE_IDS.READER
   }
 }
