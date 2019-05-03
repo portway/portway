@@ -18,8 +18,9 @@
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchFields } from 'Actions/field'
-import { fetchProject, fetchProjects, fetchProjectAssignees } from 'Actions/project'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments } from 'Actions/user'
+import { fetchProject, fetchProjects, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
+import { fetchUser, fetchUsers } from 'Actions/user'
 import currentUserId from './currentUserId'
 
 export default {
@@ -92,6 +93,17 @@ export default {
         },
         getDataFromState: (state) => {
           return state.projectAssignments.assignmentsByProjectId[projectId]
+        }
+      }
+    },
+    tokens: function(projectId) {
+      return {
+        fetchAction: fetchProjectTokens(projectId),
+        getLoadingStatusFromState: (state) => {
+          return state.projectTokens.loading.tokensByProjectId[projectId]
+        },
+        getDataFromState: (state) => {
+          return state.projectTokens.tokensByProjectId[projectId]
         }
       }
     }

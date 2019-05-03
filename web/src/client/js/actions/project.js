@@ -1,4 +1,4 @@
-import { Projects, ProjectAssignees } from './index'
+import { Projects, ProjectAssignees, ProjectTokens } from './index'
 import { fetch, add, update, remove } from '../api'
 import Constants from 'Shared/constants'
 
@@ -78,5 +78,17 @@ export const removeProjectAssignee = (projectId, userId, assignmentId) => {
     dispatch(ProjectAssignees.initiateRemove(projectId))
     await remove(`projects/${projectId}/assignments/${assignmentId}`)
     dispatch(ProjectAssignees.removedOne(projectId, userId))
+  }
+}
+
+/**
+ * Project Keys
+ */
+export const fetchProjectTokens = (projectId) => {
+  return async (dispatch) => {
+    // ... get the keys
+    dispatch(ProjectTokens.request(projectId))
+    const { data } = await fetch(`projects/${projectId}/tokens`)
+    dispatch(ProjectTokens.receive(projectId, data))
   }
 }

@@ -15,7 +15,7 @@ const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignme
         <span className="project-settings__teammate-name">
           <UserIcon />
           {user.firstName} {user.lastName}
-          {itsMeMario && <span className="project-settings__teammate-is-you">You</span>}
+          {itsMeMario && <span className="project-settings__teammate-is-you pill pill--highlight">You</span>}
         </span>
         <div className="project-settings__teammate-role">
           <ProjectRolesDropdown buttonStyle='blank' disabled={itsMeMario} defaultValue={user.projectRoleId} onChange={(roleId) => { updateAssignmentHandler(user.assignmentId, roleId) }} />
