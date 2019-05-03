@@ -17,14 +17,8 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
     </>
   )
 
-  const { data: currentUser = {} } = useDataService(dataMapper.users.current())
   const { data: project = {} } = useDataService(dataMapper.projects.id(projectId))
   const { data: userProjectAssignments = {} } = useDataService(dataMapper.users.currentUserProjectAssignments())
-
-  // Look at current user Org perms, Org owners and admins have all project perms
-  if ([ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN].indexOf(currentUser.orgRoleId) > -1) {
-    return successRender
-  }
 
   const projectAssignment = userProjectAssignments[projectId]
 
@@ -33,7 +27,7 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
     return successRender
   }
 
-  // Current user doesn't have required org perms and isn't manually assigned necessary role for this project,
+  // Current user isn't manually assigned necessary role for this project,
   // check the default access level granted to all users
   const projectRoleId = getRoleIdFromProjectAccessLevel(project.accessLevel)
 
