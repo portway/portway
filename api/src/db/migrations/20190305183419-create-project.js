@@ -21,10 +21,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      public: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
+      accessLevel: {
+        type: Sequelize.STRING,
+        defaultValue: null
       },
       createdAt: {
         allowNull: false,

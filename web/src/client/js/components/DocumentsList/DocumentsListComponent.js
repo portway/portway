@@ -96,7 +96,6 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
         )}>
         <ToolbarComponent action={toolbarAction} filter sort />
       </ProjectPermission>
-      <ToolbarComponent action={toolbarAction} filter sort />
       <nav>
         <ol className="documents-list__list">
           {renderNewDocument()}

@@ -3,34 +3,45 @@ import PropTypes from 'prop-types'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import { ORGANIZATION_ROLE_IDS, PROJECT_ROLE_IDS } from 'Shared/constants'
 
 const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId }) => {
-  const rejectRender = elseRender || null
+  const rejectRender = (
+    <>
+      {elseRender || null}
+    </>
+  )
+  const successRender = (
+    <>
+      {children}
+    </>
+  )
 
-  const { data: userProjectAssignments } = useDataService(dataMapper.users.currentUserProjectAssignments())
+  const { data: currentUser = {} } = useDataService(dataMapper.users.current())
+  const { data: project = {} } = useDataService(dataMapper.projects.id(projectId))
+  const { data: userProjectAssignments = {} } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  const { data: project } = useDataService(dataMapper.projects.id(projectId))
-
-  if (!userProjectAssignments) return rejectRender
+  // Look at current user Org perms, Org owners and admins have all project perms
+  if ([ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN].indexOf(currentUser.orgRoleId) > -1) {
+    return successRender
+  }
 
   const projectAssignment = userProjectAssignments[projectId]
 
-  console.log(projectAssignment)
-  console.log(project)
-
+  // Check the manual project role assignments for the current user
   if (projectAssignment && acceptedRoleIds.indexOf(projectAssignment.roleId) > -1) {
-    return (
-      <>
-        {children}
-      </>
-    )
+    return successRender
   }
 
-  return (
-    <>
-      {rejectRender}
-    </>
-  )
+  // Current user doesn't have required org perms and isn't manually assigned necessary role for this project,
+  // check the default access level granted to all users
+  const projectRoleId = getRoleIdFromProjectAccessLevel(project.accessLevel)
+
+  if (projectRoleId && acceptedRoleIds.indexOf(projectRoleId) > -1) {
+    return successRender
+  }
+
+  return rejectRender
 }
 
 ProjectPermission.propTypes = {
@@ -42,20 +53,11 @@ ProjectPermission.propTypes = {
 
 export default ProjectPermission
 
-export const withProjectPermission = (acceptedRoleIds, elseRender) => {
-  return (WrappedComponent) => {
-    class HOC extends React.Component {
-      render() {
-        return (
-          <ProjectPermission acceptedRoleIds={acceptedRoleIds} elseRender={elseRender}>
-            <WrappedComponent
-              {...this.props}
-            />
-          </ProjectPermission>
-        )
-      }
-    }
-
-    return HOC
+const getRoleIdFromProjectAccessLevel = function(accessLevel) {
+  switch (accessLevel) {
+    case 'write':
+      return PROJECT_ROLE_IDS.CONTRIBUTOR
+    case 'read':
+      return PROJECT_ROLE_IDS.READER
   }
 }

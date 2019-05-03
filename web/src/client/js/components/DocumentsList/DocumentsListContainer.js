@@ -43,7 +43,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       createChangeHandler={createDocumentAction}
       creating={ui.documents.creating}
       documents={sortedDocuments}
-      projectId={match.params.projectId}/>
+      projectId={Number(match.params.projectId)}/>
   )
 }
 
