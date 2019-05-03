@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
+import Store from '../../../reducers'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import { createProjectToken } from 'Actions/project'
 
 import ProjectSettingsTokensComponent from './ProjectSettingsTokensComponent'
 
@@ -19,7 +21,15 @@ const ProjectSettingsTokensContainer = ({ match }) => {
       token: token.token,
     }
   })
-  return <ProjectSettingsTokensComponent projectId={projectId} tokens={tokenArray} />
+
+  function tokenCreateHandler(projectId, projectRoleId, tokenName) {
+    Store.dispatch(createProjectToken(projectId, {
+      roleId: projectRoleId,
+      name: tokenName
+    }))
+  }
+
+  return <ProjectSettingsTokensComponent createHandler={tokenCreateHandler} projectId={projectId} tokens={tokenArray} />
 }
 
 ProjectSettingsTokensContainer.propTypes = {

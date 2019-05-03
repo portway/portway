@@ -29,6 +29,23 @@ export const projectTokens = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.CREATE_PROJECT_TOKEN: {
+      const tokensByProjectId = { ...state.tokensByProjectId, [action.projectId]: true }
+      return { ...state, loading: { ...state.loading, tokensByProjectId } }
+    }
+    case ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN: {
+      const loadingById = { ...state.tokensByProjectId, [action.projectId]: false }
+      const projectToken = { ...state.tokensByProjectId[action.projectId], [action.data.id]: action.data }
+      const tokensByProjectId = { ...state.tokensByProjectId, [action.projectId]: projectToken }
+      return {
+        ...state,
+        tokensByProjectId,
+        loading: {
+          ...state.loading,
+          tokensByProjectId: loadingById
+        }
+      }
+    }
     default: {
       return { ...state }
     }

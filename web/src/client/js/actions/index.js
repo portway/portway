@@ -24,6 +24,8 @@ export const ActionTypes = {
   // Project Keys
   REQUEST_PROJECT_TOKENS: 'REQUEST_PROJECT_TOKENS',
   RECEIVE_PROJECT_TOKENS: 'RECEIVE_PROJECT_TOKENS',
+  CREATE_PROJECT_TOKEN: 'CREATE_PROJECT_TOKEN',
+  RECEIVE_CREATED_PROJECT_TOKEN: 'RECEIVE_CREATED_PROJECT_TOKEN',
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
@@ -85,6 +87,8 @@ export const ProjectAssignments = {
 export const ProjectTokens = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECT_TOKENS, 'projectId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_TOKENS, 'projectId', 'data'),
+  create: makeActionCreator(ActionTypes.CREATE_PROJECT_TOKEN, 'projectId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN, 'projectId', 'data'),
 }
 
 export const Documents = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 
 import Constants from 'Shared/constants'
-import ProjectRolesDropdown from './ProjectRolesDropdown'
+import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 
 const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {

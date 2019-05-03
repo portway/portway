@@ -1,8 +1,12 @@
 @import 'CSS/inc/_vars.scss';
 
 .project-settings {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   &__container {
     display: flex;
+    flex: 1;
     padding-top: $brandWidth / 2;
   }
   &__navigation {
@@ -33,18 +37,17 @@
   }
 
   // Section specific
-  &__team {}
   &__teammate-field {
     justify-content: space-between;
     .react-select-container {
       flex: 1;
       margin-right: 16px;
     }
-  }
-  &__teammate-menu {
-    margin-right: 16px;
-    .menu {
-      width: 500px;
+    .project-roles {
+      margin-right: 16px;
+      .menu {
+        width: 500px;
+      }
     }
   }
   &__team-list {
@@ -69,7 +72,6 @@
   }
 
   // Tokens
-  &__tokens {}
   &__token-list {
     list-style: none;
     margin: 0;
@@ -125,7 +127,6 @@
   }
 
   // Endpoints
-  &__endpoints {}
   &__endpoint-name {
     background-color: $white-ter;
     align-items: center;
