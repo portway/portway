@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import Store from '../../../reducers'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { createProjectToken } from 'Actions/project'
 
 import ProjectSettingsTokensComponent from './ProjectSettingsTokensComponent'
 
-const ProjectSettingsTokensContainer = ({ match }) => {
+const ProjectSettingsTokensContainer = ({ createProjectToken, creating, match }) => {
   const { projectId } = match.params
   const { data: tokens } = useDataService(dataMapper.projects.tokens(projectId))
   if (!tokens) return null
@@ -23,17 +23,29 @@ const ProjectSettingsTokensContainer = ({ match }) => {
   })
 
   function tokenCreateHandler(projectId, projectRoleId, tokenName) {
-    Store.dispatch(createProjectToken(projectId, {
+    createProjectToken(projectId, {
       roleId: projectRoleId,
       name: tokenName
-    }))
+    })
   }
 
   return <ProjectSettingsTokensComponent createHandler={tokenCreateHandler} projectId={projectId} tokens={tokenArray} />
 }
 
 ProjectSettingsTokensContainer.propTypes = {
+  createProjectToken: PropTypes.func.isRequired,
+  creating: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired
 }
 
-export default withRouter(ProjectSettingsTokensContainer)
+const mapStateToProps = (state) => {
+  return {
+    creating: state.ui.tokens.creating
+  }
+}
+
+const mapDispatchToProps = { createProjectToken }
+
+export default withRouter(
+  connect(mapStateToProps)(ProjectSettingsTokensContainer)
+)

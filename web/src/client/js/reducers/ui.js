@@ -14,6 +14,9 @@ const initialState = {
   fields: {
     creating: false,
     type: -1
+  },
+  tokens: {
+    creating: false
   }
 }
 
