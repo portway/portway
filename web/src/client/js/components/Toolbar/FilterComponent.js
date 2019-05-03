@@ -6,7 +6,7 @@ import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 function FilterComponent() {
   const filterButton = {
     className: 'btn--blank',
-    icon: <FilterIcon width="18" height="18" />
+    icon: <FilterIcon />
   }
   return (
     <DropdownComponent button={filterButton} align="right">

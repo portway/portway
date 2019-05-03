@@ -41,13 +41,13 @@ $navigatorPlaceholderWidth: 56px;
       }
       .icon {
         flex: 1;
-        margin-right: 6px;
+        margin-right: $iconMargin;
       }
     }
   }
 
   &__settings {
-    font-size: 0.800rem;
+    font-size: 1rem;
   }
 
   // The React Select container

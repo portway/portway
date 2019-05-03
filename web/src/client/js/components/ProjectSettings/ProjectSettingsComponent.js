@@ -5,6 +5,7 @@ import { NavLink, Redirect } from 'react-router-dom'
 import Constants from 'Shared/constants'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
 import ProjectSettingsTeamsContainer from './ProjectSettingsTeams/ProjectSettingsTeamsContainer'
+import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
 
 import './ProjectSettings.scss'
 
@@ -27,6 +28,9 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
       case SETTINGS_PATHS.TEAMS: {
         return <ProjectSettingsTeamsContainer />
       }
+      case SETTINGS_PATHS.KEYS: {
+        return <ProjectSettingsTokensContainer />
+      }
       default:
         return <Redirect to={`${settingsSectionPath}/info`} />
     }
@@ -39,8 +43,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
           <ul className="list-blank">
             <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`}>Info</NavLink></li>
             <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink></li>
-            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.ENDPOINTS}`}>Endpoints</NavLink></li>
-            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>Keys</NavLink></li>
+            <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>API Keys</NavLink></li>
           </ul>
         </nav>
         <div className="project-settings__panel">

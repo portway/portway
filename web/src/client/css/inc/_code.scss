@@ -1,0 +1,31 @@
+pre {
+  background-color: $black-bis;
+  color: $gray;
+  direction: ltr;
+  hyphens: none;
+  margin: 0 0 2rem;
+  overflow-x: scroll;
+  padding: 2rem;
+  tab-size: 2;
+  white-space: pre;
+  word-spacing: normal;
+  .code {
+    word-wrap: break-word;
+    // Command is Bash command
+    &__command {
+      &:before {
+        color: $white-bis;
+        content: '$ ';
+      }
+    }
+    // Comments
+    &__block-comment {
+      color: $black-ter;
+      display: block;
+    }
+    // Code
+    &__json {
+      color: $white;
+    }
+  }
+}

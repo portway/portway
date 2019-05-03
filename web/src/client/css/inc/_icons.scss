@@ -7,15 +7,16 @@
   background-repeat: no-repeat;
   background-size: 50%;
   display: inline-flex;
-  height: 36px;
+  height: 24px;
   justify-content: center;
-  width: 36px;
+  width: 24px;
 
-  &-user {
-    background-image: url('/images/icon/user.svg');
+  // Any svg should be 12x12 when in a button with a circle
+  .btn--with-circular-icon & {
+    svg {
+      height: 12px;
+      width: 12px;
+    }
   }
 
-  &-menu-more {
-    background-image: url('/images/icon/menu-more.svg');
-  }
 }
