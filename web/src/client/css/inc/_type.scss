@@ -141,21 +141,25 @@ time {
 .pill {
   background-color: $gray-light;
   border-radius: $borderRadius;
-  color: $white;
-  font-size: 80%;
+  color: $black-bis;
+  // font-size: 80%;
   margin: 0 $iconMargin;
   padding: 1px $iconMargin;
   &--highlight {
     background-color: $highlight;
+    color: $white;
   }
   &--green {
     background-color: $primary;
+    color: $white;
   }
   &--orange {
     background-color: $highlight;
+    color: $white;
   }
   &--blue {
     background-color: $action;
+    color: $white;
   }
 }
 

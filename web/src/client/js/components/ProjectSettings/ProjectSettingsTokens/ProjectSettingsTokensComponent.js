@@ -1,8 +1,9 @@
 /* eslint-disable no-trailing-spaces */
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Constants from 'Shared/constants'
+import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 
 const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
@@ -12,10 +13,17 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
     setSelectedToken(tokens.find(token => token.id === tokenId))
     setSelectedTokenId(tokenId)
   }
+  // Refs for copying endpoints
+  const getEndpointRef = useRef()
+  const postEndpointRef = useRef()
+  const putEndpointRef = useRef()
   return (
     <div className="project-settings__tokens">
       <section>
-        <h2>Project Keys</h2>
+        <header className="header header--with-button">
+          <h2>Project Keys</h2>
+          <button className="btn btn--white">Add project key</button>
+        </header>
         <ProjectSettingsTokenList selectedToken={selectedTokenId} tokens={tokens} tokenSelectHandler={tokenSelectHandler} />
       </section>
       <section>
@@ -28,7 +36,9 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
         <p>Looking for the full API? Check out our <a href={Constants.DOCUMENTATION_URL} target="_blank" rel="noopener noreferrer">documentation</a>.</p>
         <dl className="project-settings__endpoints">
           <dt className="project-settings__endpoint-name">
-            <span className="project-settings__endpoint-method pill pill--green">GET</span> Documents
+            <span className="project-settings__endpoint-method pill pill--green">GET</span>
+            <span className="project-settings__endpoint-resource">Documents</span>
+            <ClipboardComponent copyRef={getEndpointRef} />
           </dt>
           <dd className="project-settings__endpoint">
             <pre>
@@ -38,10 +48,12 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
                 <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents</span>
               </code>
             </pre>
-            <textarea hidden readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
+            <textarea ref={getEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
           </dd>
           <dt className="project-settings__endpoint-name">
-            <span className="project-settings__endpoint-method pill pill--orange">POST</span> Documents
+            <span className="project-settings__endpoint-method pill pill--orange">POST</span>
+            <span className="project-settings__endpoint-resource">Documents</span>
+            <ClipboardComponent copyRef={postEndpointRef} />
           </dt>
           <dd className="project-settings__endpoint">
             <pre>
@@ -51,10 +63,12 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
                 <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents</span>
               </code>
             </pre>
-            <textarea hidden readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My new document"}' -H "Content-Type: application/json" -X POST ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
+            <textarea ref={postEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My new document"}' -H "Content-Type: application/json" -X POST ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
           </dd>
           <dt className="project-settings__endpoint-name">
-            <span className="project-settings__endpoint-method pill pill--blue">PUT</span> Documents
+            <span className="project-settings__endpoint-method pill pill--blue">PUT</span>
+            <span className="project-settings__endpoint-resource">Documents</span>
+            <ClipboardComponent copyRef={putEndpointRef} />
           </dt>
           <dd className="project-settings__endpoint">
             <pre>
@@ -64,7 +78,7 @@ const ProjectSettingsTokensComponent = ({ projectId, tokens }) => {
                 <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents</span>
               </code>
             </pre>
-            <textarea hidden readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My updated document name"}' -H "Content-Type: application/json" -X PUT ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
+            <textarea ref={putEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My updated document name"}' -H "Content-Type: application/json" -X PUT ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
           </dd>
         </dl>
       </section>
