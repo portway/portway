@@ -30,7 +30,7 @@ export const logoutUser = (id) => {
 export const fetchUserProjectAssignments = (userId) => {
   return async (dispatch) => {
     dispatch(UserProjectAssignments.request())
-    const { data } = await fetch(`users/${userId}/projectassignments`)
+    const { data } = await fetch(`users/${userId}/assignments`)
     return dispatch(UserProjectAssignments.receive(userId, data))
   }
 }
