@@ -7,19 +7,18 @@ import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 import ProjectSettingsCreateToken from './ProjectSettingsCreateToken'
 
-const ProjectSettingsTokensComponent = ({ createHandler, projectId, tokens }) => {
-  const [creatingToken, setCreatingToken] = useState(false)
+const ProjectSettingsTokensComponent = ({ createHandler, createMode, projectId, setCreateMode, tokens }) => {
   const [selectedTokenId, setSelectedTokenId] = useState(tokens[0].id || null)
   const [selectedToken, setSelectedToken] = useState(tokens[0] || null)
   function tokenSelectHandler(tokenId) {
     setSelectedToken(tokens.find(token => token.id === tokenId))
     setSelectedTokenId(tokenId)
   }
-  function createTokenHandler() {
-    setCreatingToken(true)
+  function createModeHandler() {
+    setCreateMode(true)
   }
-  function cancelHandler() {
-    setCreatingToken(false)
+  function cancelCreateModeHandler() {
+    setCreateMode(false)
   }
   // Refs for copying endpoints
   const getEndpointRef = useRef()
@@ -34,13 +33,13 @@ const ProjectSettingsTokensComponent = ({ createHandler, projectId, tokens }) =>
         <ProjectSettingsTokenList selectedToken={selectedTokenId} tokens={tokens} tokenSelectHandler={tokenSelectHandler} />
       </section>
       <section>
-        {!creatingToken &&
-        <button className="btn" disabled={creatingToken} onClick={createTokenHandler}>Add project key</button>
+        {!createMode &&
+        <button className="btn" disabled={createMode} onClick={createModeHandler}>Add project key</button>
         }
-        {creatingToken &&
+        {createMode &&
           <>
           <h3>Add a new project key</h3>
-          <ProjectSettingsCreateToken projectId={projectId} cancelHandler={cancelHandler} createHandler={createHandler} />
+          <ProjectSettingsCreateToken projectId={projectId} cancelHandler={cancelCreateModeHandler} createHandler={createHandler} />
           </>
         }
       </section>
@@ -106,7 +105,9 @@ const ProjectSettingsTokensComponent = ({ createHandler, projectId, tokens }) =>
 
 ProjectSettingsTokensComponent.propTypes = {
   createHandler: PropTypes.func.isRequired,
+  createMode: PropTypes.bool.isRequired,
   projectId: PropTypes.string.isRequired,
+  setCreateMode: PropTypes.func.isRequired,
   tokens: PropTypes.array.isRequired
 }
 

@@ -6,10 +6,11 @@ import { withRouter } from 'react-router-dom'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { createProjectToken } from 'Actions/project'
+import { uiCreateTokenMode } from 'Actions/ui'
 
 import ProjectSettingsTokensComponent from './ProjectSettingsTokensComponent'
 
-const ProjectSettingsTokensContainer = ({ createProjectToken, creating, match }) => {
+const ProjectSettingsTokensContainer = ({ createProjectToken, creating, match, uiCreateTokenMode }) => {
   const { projectId } = match.params
   const { data: tokens } = useDataService(dataMapper.projects.tokens(projectId))
   if (!tokens) return null
@@ -29,13 +30,18 @@ const ProjectSettingsTokensContainer = ({ createProjectToken, creating, match })
     })
   }
 
-  return <ProjectSettingsTokensComponent createHandler={tokenCreateHandler} projectId={projectId} tokens={tokenArray} />
+  function setCreateMode(value) {
+    uiCreateTokenMode(value)
+  }
+
+  return <ProjectSettingsTokensComponent createHandler={tokenCreateHandler} createMode={creating} projectId={projectId} setCreateMode={setCreateMode} tokens={tokenArray} />
 }
 
 ProjectSettingsTokensContainer.propTypes = {
   createProjectToken: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  uiCreateTokenMode: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -44,7 +50,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { createProjectToken }
+const mapDispatchToProps = { createProjectToken, uiCreateTokenMode }
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(ProjectSettingsTokensContainer)

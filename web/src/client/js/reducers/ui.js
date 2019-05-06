@@ -22,6 +22,8 @@ const initialState = {
 
 export const ui = (state = initialState, action) => {
   switch (action.type) {
+    // Document and field creation
+    // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_CREATE: {
       return { ...state, documents: { ...state.documents, creating: action.value } }
     }
@@ -36,6 +38,9 @@ export const ui = (state = initialState, action) => {
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }
     }
+
+    // Confirmation dialog
+    // -------------------------------------------------------------------------
     case ActionTypes.UI_INITIATE_CONFIRMATION: {
       return {
         ...state,
@@ -62,6 +67,27 @@ export const ui = (state = initialState, action) => {
         confirmation: {
           ...state.confirmation,
           confirming: false
+        }
+      }
+    }
+
+    // Project tokens
+    // -------------------------------------------------------------------------
+    case ActionTypes.UI_CREATE_TOKEN_MODE: {
+      return {
+        ...state,
+        tokens: {
+          ...state.tokens,
+          creating: action.value
+        }
+      }
+    }
+    case ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN: {
+      return {
+        ...state,
+        tokens: {
+          ...state.tokens,
+          creating: false
         }
       }
     }
