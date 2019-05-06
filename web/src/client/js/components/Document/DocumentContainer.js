@@ -38,9 +38,13 @@ const DocumentContainer = ({
    * If we have fields, break them up by type for field names
    */
   let fieldsByType
+
   if (fields) {
     fieldsByType = groupBy(fields, 'type')
+  } else {
+    fieldsByType = {}
   }
+
   function fieldCreationHandler(fieldType) {
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0

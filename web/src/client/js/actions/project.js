@@ -1,4 +1,4 @@
-import { Projects, ProjectAssignments, ProjectTokens } from './index'
+import { Projects, ProjectAssignees, ProjectTokens } from './index'
 import { fetch, add, update, remove } from '../api'
 import Constants from 'Shared/constants'
 
@@ -51,33 +51,33 @@ export const removeProject = (projectId, history) => {
  */
 export const fetchProjectAssignees = (projectId) => {
   return async (dispatch) => {
-    dispatch(ProjectAssignments.request(projectId))
+    dispatch(ProjectAssignees.request(projectId))
     const { data } = await fetch(`projects/${projectId}/assignments`)
-    dispatch(ProjectAssignments.receive(projectId, data))
+    dispatch(ProjectAssignees.receive(projectId, data))
   }
 }
 
 export const createProjectAssignee = (projectId, body) => {
   return async (dispatch) => {
-    dispatch(ProjectAssignments.create(projectId))
+    dispatch(ProjectAssignees.create(projectId))
     const { data } = await add(`projects/${projectId}/assignments`, body)
-    dispatch(ProjectAssignments.receiveOneCreated(projectId, data))
+    dispatch(ProjectAssignees.receiveOneCreated(projectId, data))
   }
 }
 
 export const updateProjectAssignee = (projectId, assignmentId, body) => {
   return async (dispatch) => {
-    dispatch(ProjectAssignments.initiateUpdate(projectId))
+    dispatch(ProjectAssignees.initiateUpdate(projectId))
     const { data } = await update(`projects/${projectId}/assignments/${assignmentId}`, body)
-    dispatch(ProjectAssignments.receiveOneUpdated(data))
+    dispatch(ProjectAssignees.receiveOneUpdated(data))
   }
 }
 
 export const removeProjectAssignee = (projectId, userId, assignmentId) => {
   return async (dispatch) => {
-    dispatch(ProjectAssignments.initiateRemove(projectId))
+    dispatch(ProjectAssignees.initiateRemove(projectId))
     await remove(`projects/${projectId}/assignments/${assignmentId}`)
-    dispatch(ProjectAssignments.removedOne(projectId, userId))
+    dispatch(ProjectAssignees.removedOne(projectId, userId))
   }
 }
 

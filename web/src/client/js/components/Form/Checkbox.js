@@ -34,7 +34,7 @@ Checkbox.propTypes = {
   large: PropTypes.bool,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.bool,
   onChange: PropTypes.func
 }
 

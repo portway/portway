@@ -120,6 +120,15 @@ async function getProjectUserAssignment(userId, projectId, orgId) {
   })
 }
 
+async function findAllProjectAssignmentsForUser(userId, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findAll({
+    where: { userId, orgId },
+    attributes: PUBLIC_FIELDS,
+    raw: true
+  })
+}
+
 export default {
   create,
   addUserIdToProject,
@@ -128,5 +137,6 @@ export default {
   deleteByIdForProject,
   removeAllUsersFromProject,
   getProjectUserAssignment,
-  updateProjectUserById
+  updateProjectUserById,
+  findAllProjectAssignmentsForUser
 }
