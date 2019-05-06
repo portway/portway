@@ -15,20 +15,17 @@ const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField,
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
   const { documentId } = match.params
-  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
+  const { data: fields = {} } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
-    if (!fields) return
     const fieldMap = Object.keys(fields).map((fieldId) => {
       return fields[fieldId]
     })
     fieldMap.sort((a, b) => {
       return a.order - b.order
     })
-    if (fieldMap.length > 0) {
-      setOrderedFields(fieldMap)
-    }
+    setOrderedFields(fieldMap)
   }, [fields])
 
   // Actions

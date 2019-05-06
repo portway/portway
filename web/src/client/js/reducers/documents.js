@@ -1,6 +1,7 @@
 import { ActionTypes } from '../actions'
 
 const initialState = {
+  currentDocumentId: null,
   projectDocumentsById: {},
   loading: {
     byProject: {},

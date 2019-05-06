@@ -36,8 +36,6 @@ export const ActionTypes = {
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   // Fields
-  REQUEST_FIELDS: 'REQUEST_FIELDS',
-  RECEIVE_FIELDS: 'RECEIVE_FIELDS',
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
   INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
@@ -97,15 +95,13 @@ export const Documents = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
   deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
-  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'projectId', 'documentId'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
   receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data')
 }
 
 export const Fields = {
-  requestList: makeActionCreator(ActionTypes.REQUEST_FIELDS, 'documentId'),
-  receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
   initiateCreate: makeActionCreator(ActionTypes.INITIATE_FIELD_CREATE, 'documentId', 'fieldType'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
   initiateOrderUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_ORDER, 'documentId', 'fieldId', 'newOrder'),
