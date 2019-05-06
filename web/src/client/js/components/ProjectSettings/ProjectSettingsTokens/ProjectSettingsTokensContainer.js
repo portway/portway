@@ -47,5 +47,5 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = { createProjectToken }
 
 export default withRouter(
-  connect(mapStateToProps)(ProjectSettingsTokensContainer)
+  connect(mapStateToProps, mapDispatchToProps)(ProjectSettingsTokensContainer)
 )
