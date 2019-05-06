@@ -10,40 +10,54 @@ describe('documentVersion', () => {
     await initializeTestDb()
   })
   describe('#publishDocumentVersion', () => {
-    let factoryDocument
-    let factoryFields
-    let document
-    beforeAll(async () => {
-      const factoryProject = (await ProjectFactory.createMany(1))[0]
+    describe('with a valid document id', () => {
+      let factoryDocument
+      let factoryFields
+      let document
+      beforeAll(async () => {
+        const factoryProject = (await ProjectFactory.createMany(1))[0]
 
-      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
+        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
 
-      factoryFields = await FieldFactory.createMany(3, {
-        docId: factoryDocument.id,
-        orgId: factoryDocument.orgId
+        factoryFields = await FieldFactory.createMany(3, {
+          docId: factoryDocument.id,
+          orgId: factoryDocument.orgId
+        })
+
+        document = await documentVersionCoordinator.publishDocumentVersion(factoryDocument.id, factoryProject.id, factoryProject.orgId)
       })
 
-      document = await documentVersionCoordinator.publishDocumentVersion(factoryDocument.id, factoryProject.id, factoryProject.orgId)
+      it('should create new fields', async () => {
+        const db = getDb()
+        const fields = await db.model('Field').findAll({
+          where: { orgId: factoryDocument.orgId, versionId: document.publishedVersionId },
+          raw: true
+        })
+
+        expect(fields.length).toBe(factoryFields.length)
+      })
+
+      it('should create a new document version', async () => {
+        const db = getDb()
+        const docVersion = await db.model('DocumentVersion').findOne({
+          where: { id: document.publishedVersionId },
+          raw: true
+        })
+        expect(docVersion.id).toBe(document.publishedVersionId)
+        expect(docVersion.docId).toBe(document.id)
+      })
     })
-
-    it('should create new fields', async () => {
-      const db = getDb()
-      const fields = await db.model('Field').findAll({
-        where: { orgId: factoryDocument.orgId, versionId: document.publishedVersionId },
-        raw: true
+    describe('with an invalid document id', () => {
+      let project
+      beforeAll(async () => {
+        project = (await ProjectFactory.createMany(1))[0]
       })
 
-      expect(fields.length).toBe(factoryFields.length)
-    })
-
-    it('should create a new document version', async () => {
-      const db = getDb()
-      const docVersion = await db.model('DocumentVersion').findOne({
-        where: { id: document.publishedVersionId },
-        raw: true
+      it('should throw an error', async () => {
+        await expect(
+          documentVersionCoordinator.publishDocumentVersion(9999999, project.id, project.orgId)
+        ).rejects.toThrow()
       })
-      expect(docVersion.id).toBe(document.publishedVersionId)
-      expect(docVersion.docId).toBe(document.id)
     })
   })
 })
