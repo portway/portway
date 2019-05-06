@@ -7,7 +7,7 @@ import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 import ProjectSettingsCreateToken from './ProjectSettingsCreateToken'
 
-const ProjectSettingsTokensComponent = ({ createHandler, createMode, projectId, setCreateMode, tokens }) => {
+const ProjectSettingsTokensComponent = ({ createHandler, createMode, projectId, removeHandler, setCreateMode, tokens }) => {
   const [selectedTokenId, setSelectedTokenId] = useState(tokens[0].id || null)
   const [selectedToken, setSelectedToken] = useState(tokens[0] || null)
   function tokenSelectHandler(tokenId) {
@@ -30,7 +30,7 @@ const ProjectSettingsTokensComponent = ({ createHandler, createMode, projectId, 
         <header className="header">
           <h2>Project Keys</h2>
         </header>
-        <ProjectSettingsTokenList selectedToken={selectedTokenId} tokens={tokens} tokenSelectHandler={tokenSelectHandler} />
+        <ProjectSettingsTokenList selectedToken={selectedTokenId} tokens={tokens} tokenRemoveHandler={removeHandler} tokenSelectHandler={tokenSelectHandler} />
       </section>
       <section>
         {!createMode &&
@@ -108,6 +108,7 @@ ProjectSettingsTokensComponent.propTypes = {
   createMode: PropTypes.bool.isRequired,
   projectId: PropTypes.string.isRequired,
   setCreateMode: PropTypes.func.isRequired,
+  removeHandler: PropTypes.func.isRequired,
   tokens: PropTypes.array.isRequired
 }
 

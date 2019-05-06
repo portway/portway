@@ -100,3 +100,11 @@ export const createProjectToken = (projectId, body) => {
     dispatch(ProjectTokens.receiveOneCreated(projectId, data))
   }
 }
+
+export const removeProjectToken = (projectId, tokenId) => {
+  return async (dispatch) => {
+    dispatch(ProjectTokens.initiateRemove(projectId, tokenId))
+    await remove(`projects/${projectId}/tokens/${tokenId}`)
+    dispatch(ProjectTokens.removedOne(projectId, tokenId))
+  }
+}
