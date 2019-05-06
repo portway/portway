@@ -23,7 +23,7 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
   const projectAssignment = userProjectAssignments[projectId]
 
   // Check the manual project role assignments for the current user
-  if (projectAssignment && acceptedRoleIds.indexOf(projectAssignment.roleId) > -1) {
+  if (projectAssignment && acceptedRoleIds.includes(projectAssignment.roleId)) {
     return successRender
   }
 
@@ -31,7 +31,7 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
   // check the default access level granted to all users
   const projectRoleId = getRoleIdFromProjectAccessLevel(project.accessLevel)
 
-  if (projectRoleId && acceptedRoleIds.indexOf(projectRoleId) > -1) {
+  if (projectRoleId && acceptedRoleIds.includes(projectRoleId)) {
     return successRender
   }
 
