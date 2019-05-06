@@ -38,8 +38,7 @@ const ProjectFormComponent = ({ formOptions, teamOptions }) => {
               onChange: teamOptions.changeHandler,
               options: teamOptions.users,
               value: teamOptions.selectedUsers
-            }}
-          />
+            }} />
         </div>
       )}
       <div className="btn-group">

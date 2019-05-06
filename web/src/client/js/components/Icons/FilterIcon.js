@@ -22,8 +22,8 @@ FilterIcon.propTypes = {
 FilterIcon.defaultProps = {
   className: 'icon-filter',
   fill: '#3b3d3e',
-  height: '36',
-  width: '36'
+  height: '18',
+  width: '18'
 }
 
 export default FilterIcon

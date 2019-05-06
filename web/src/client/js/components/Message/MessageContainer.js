@@ -22,8 +22,7 @@ class MessageContainer extends React.Component {
         visible={this.state.visible}
         type={this.props.type}
         message={this.props.message}
-        onDelete={this.deleteHandler.bind(this)}
-      />
+        onDelete={this.deleteHandler.bind(this)} />
     )
   }
 

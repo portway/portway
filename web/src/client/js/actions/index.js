@@ -21,6 +21,9 @@ export const ActionTypes = {
   RECEIVE_UPDATED_PROJECT_ASSIGNEE: 'RECEIVE_UPDATED_PROJECT_ASSIGNEE',
   INITIATE_PROJECT_ASSIGNEE_REMOVE: 'INITIATE_PROJECT_ASSIGNEE_REMOVE',
   REMOVE_PROJECT_ASSIGNEE: 'REMOVE_PROJECT_ASSIGNEE',
+  // Project Keys
+  REQUEST_PROJECT_TOKENS: 'REQUEST_PROJECT_TOKENS',
+  RECEIVE_PROJECT_TOKENS: 'RECEIVE_PROJECT_TOKENS',
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
@@ -75,6 +78,11 @@ export const ProjectAssignments = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE, 'projectId', 'assignmentId'),
   removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_ASSIGNEE, 'projectId', 'userId'),
+}
+
+export const ProjectTokens = {
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECT_TOKENS, 'projectId'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_TOKENS, 'projectId', 'data'),
 }
 
 export const Documents = {

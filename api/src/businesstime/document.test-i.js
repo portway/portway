@@ -298,6 +298,7 @@ describe('BusinessDocument', () => {
         const factoryFieldIds = factoryFields.map(field => field.id)
         const docFieldIds = document.fields.map(field => field.id)
         expect(docFieldIds).toEqual(expect.arrayContaining(factoryFieldIds))
+        document.fields.forEach(field => expect(field.value).toBeDefined())
       })
 
       it('should return public fields', () => {

@@ -21,6 +21,7 @@
   }
   &__panel {
     flex: 1;
+    overflow-x: hidden;
     section {
       &:first-child {
         padding-top: 0;
@@ -54,17 +55,93 @@
   &__teammate {
     align-items: center;
     margin-bottom: 6px;
-    &-name { flex: 1; }
+    &-name {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      .icon {
+        margin-right: $iconMargin;
+      }
+    }
     &-role {
       width: 200px;
     }
-    &-is-you {
-      background-color: $highlight;
+  }
+
+  // Tokens
+  &__tokens {}
+  &__token-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__token-list-item {
+    align-items: center;
+    display: flex;
+    input[type="radio"] {
+      margin-right: 1.8rem;
+    }
+    &__info {
+      border: thin solid $gray;
+      flex: 1;
+      margin-bottom: 2rem;
+      padding: 1rem;
+    }
+    &__details {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+    }
+    &__name {
+      font-weight: 700;
+    }
+    &__field {
+      border: thin solid $gray-light;
       border-radius: $borderRadius;
-      color: $white;
-      font-size: 80%;
-      margin-left: .5rem;
-      padding: 1px 6px;
+      display: flex;
+      width: 100%;
+      .pill {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        font-size: 1.2rem;
+        margin: 0;
+        padding: 2px 6px;
+      }
+      input {
+        border: none;
+        color: $gray-dark;
+        font-size: 1.3rem;
+        padding: 2px 6px;
+      }
+    }
+    &__token {
+      align-items: center;
+      display: flex;
+      input {
+        flex: 1;
+      }
+    }
+  }
+
+  // Endpoints
+  &__endpoints {}
+  &__endpoint-name {
+    background-color: $white-ter;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__endpoint-resource {
+    flex: 1;
+  }
+  &__endpoint {
+    display: flex;
+    &-token {
+      color: $gray-dark;
+    }
+    &-url {
+      color: $primary;
     }
   }
 
