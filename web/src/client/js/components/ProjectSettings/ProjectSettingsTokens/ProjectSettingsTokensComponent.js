@@ -27,22 +27,18 @@ const ProjectSettingsTokensComponent = ({ createHandler, createMode, projectId, 
   return (
     <div className="project-settings__tokens">
       <section>
-        <header className="header">
+        <header className="header header--with-button">
           <h2>Project Keys</h2>
+          <button className="btn" disabled={createMode} onClick={createModeHandler}>Add project key</button>
         </header>
         <ProjectSettingsTokenList selectedToken={selectedTokenId} tokens={tokens} tokenRemoveHandler={removeHandler} tokenSelectHandler={tokenSelectHandler} />
       </section>
+      {createMode &&
       <section>
-        {!createMode &&
-        <button className="btn" disabled={createMode} onClick={createModeHandler}>Add project key</button>
-        }
-        {createMode &&
-          <>
-          <h3>Add a new project key</h3>
-          <ProjectSettingsCreateToken projectId={projectId} cancelHandler={cancelCreateModeHandler} createHandler={createHandler} />
-          </>
-        }
+        <h3>Add a new project key</h3>
+        <ProjectSettingsCreateToken projectId={projectId} cancelHandler={cancelCreateModeHandler} createHandler={createHandler} />
       </section>
+      }
       <section>
         <h2>Project Endpoints</h2>
         <p>
