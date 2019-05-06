@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
+import { PROJECT_ACCESS_LEVELS } from 'Shared/constants'
 
 const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
   if (!project) return null
@@ -34,8 +35,11 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
           help={helpText}
           label="Make this project public"
           name="project[privacy]"
-          onChange={(e) => { updateProjectHandler({ privacy: e.target.value }) }}
-          value="checked" />
+          onChange={(e) => {
+            const accessLevel = e.target.checked ? PROJECT_ACCESS_LEVELS.READ : null
+            updateProjectHandler({ accessLevel })
+          }}
+          value={project.accessLevel === PROJECT_ACCESS_LEVELS.READ} />
       </section>
     </form>
   )
