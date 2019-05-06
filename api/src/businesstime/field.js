@@ -160,7 +160,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
   }
 }
 
-function getFieldValueInclude(db) {
+export function getFieldValueInclude(db) {
   return Object.values(FIELD_TYPE_MODELS).map((modelName) => {
     return {
       model: db.model(modelName)

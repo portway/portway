@@ -156,6 +156,44 @@ describe('BusinessProjectUser', () => {
     })
   })
 
+  describe('#findAllProjectAssignmentsForUser', () => {
+    let factoryProjects
+    let factoryUser
+    let userProjectAssignments
+
+    beforeAll(async () => {
+      await clearDb()
+      factoryProjects = await ProjectFactory.createMany(4, { orgId: constants.ORG_ID })
+      factoryUser = (await UserFactory.createMany(1, { orgId: constants.ORG_ID }))[0]
+      await Promise.all(
+        factoryProjects.map(p =>
+          BusinessProjectUser.create({
+            userId: factoryUser.id,
+            orgId: constants.ORG_ID,
+            roleId: 3,
+            projectId: p.id
+          })
+        )
+      )
+
+      userProjectAssignments = await BusinessProjectUser.findAllProjectAssignmentsForUser(factoryUser.id, constants.ORG_ID)
+    })
+
+    it('should return project user assignments', () => {
+      expect(userProjectAssignments.length).toEqual(4)
+      const factoryProjectIds = factoryProjects.map(p => p.id)
+      const userProjectAssignmentProjectIds = userProjectAssignments.map(a => a.projectId)
+      expect(factoryProjectIds).toEqual(expect.arrayContaining(userProjectAssignmentProjectIds))
+    })
+
+    it('should return POJO assignments', () => {
+      userProjectAssignments.forEach((assignment) => {
+        expect(assignment.constructor).toBe(Object)
+        expect(Object.keys(assignment)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+      })
+    })
+  })
+
   describe('#deleteByIdForProject', () => {
     let projectUsers
     let project

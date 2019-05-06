@@ -55,6 +55,9 @@ export const ActionTypes = {
   REQUEST_USER: 'REQUEST_USER',
   RECEIVE_USER: 'RECEIVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
+  // User Project Assignments
+  REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
+  RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
@@ -76,7 +79,7 @@ export const Projects = {
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id')
 }
 
-export const ProjectAssignments = {
+export const ProjectAssignees = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECT_ASSIGNEES, 'projectId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_ASSIGNEES, 'projectId', 'data'),
   create: makeActionCreator(ActionTypes.CREATE_PROJECT_ASSIGNEE, 'projectId'),
@@ -127,6 +130,11 @@ export const Users = {
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
+}
+
+export const UserProjectAssignments = {
+  request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS),
+  receive: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECT_ASSIGNMENTS, 'userId', 'data')
 }
 
 export const UI = {

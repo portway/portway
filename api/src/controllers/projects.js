@@ -1,5 +1,7 @@
 import ono from 'ono'
-import { validateBody } from '../libs/middleware/payloadValidation'
+import Joi from 'joi'
+
+import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import projectCoordinator from '../coordinators/projectCrud'
 import BusinessProject from '../businesstime/project'
 import crudPerms from '../libs/middleware/reqCrudPerms'
@@ -14,6 +16,10 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   }
 )
 
+const paramSchema = Joi.compile({
+  id: Joi.number()
+})
+
 const projectsController = function(router) {
   router.post(
     '/',
@@ -22,9 +28,15 @@ const projectsController = function(router) {
     addProject
   )
   router.get('/', listPerm, getProjects)
-  router.get('/:id', readPerm, getProject)
-  router.put('/:id', validateBody(projectSchema, { includeDetails: true }), updatePerm, replaceProject)
-  router.delete('/:id', deletePerm, deleteProject)
+  router.get('/:id', validateParams(paramSchema), readPerm, getProject)
+  router.put(
+    '/:id',
+    validateParams(paramSchema),
+    validateBody(projectSchema, { includeDetails: true }),
+    updatePerm,
+    replaceProject
+  )
+  router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProject)
 }
 
 const getProjects = async function(req, res) {
