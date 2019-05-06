@@ -141,6 +141,9 @@
   }
   &__endpoint {
     display: flex;
+    pre {
+      width: 100%;
+    }
     &-token {
       color: $gray-dark;
     }

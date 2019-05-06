@@ -8,8 +8,8 @@ import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 import ProjectSettingsCreateToken from './ProjectSettingsCreateToken'
 
 const ProjectSettingsTokensComponent = ({ createHandler, createMode, projectId, removeHandler, setCreateMode, tokens }) => {
-  const [selectedTokenId, setSelectedTokenId] = useState(tokens[0].id || null)
-  const [selectedToken, setSelectedToken] = useState(tokens[0] || null)
+  const [selectedTokenId, setSelectedTokenId] = useState(tokens[0] ? tokens[0].id : null)
+  const [selectedToken, setSelectedToken] = useState(tokens[0] || { token: '<TOKEN>' })
   function tokenSelectHandler(tokenId) {
     setSelectedToken(tokens.find(token => token.id === tokenId))
     setSelectedTokenId(tokenId)
