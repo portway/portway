@@ -3,6 +3,13 @@
 
 .document {
 
+  &__no-document {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+  }
+
   &__header {
     background-color: $white;
     align-items: center;

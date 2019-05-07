@@ -31,7 +31,7 @@ const DocumentContainer = ({
    * a helpful message
    */
   if (typeof match.params.documentId === 'undefined') {
-    return <div>No document</div>
+    return <div className="document__no-document">No document</div>
   }
 
   /**
