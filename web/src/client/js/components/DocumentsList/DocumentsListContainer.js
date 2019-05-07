@@ -23,7 +23,11 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
   }
 
   function createDocumentHandler(value) {
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}/document/new` })
+    if (value === false) {
+      history.goBack()
+    } else {
+      history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}/document/new` })
+    }
     uiDocumentCreate(value)
   }
 

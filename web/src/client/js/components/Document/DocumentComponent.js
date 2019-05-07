@@ -9,7 +9,7 @@ import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsCon
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, publishDocumentHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const contentDropdown = {
@@ -32,7 +32,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
   return (
     <div className="document" key={docKey}>
       <header className="document__header">
-        <button className="btn btn--blank document__button-expand">
+        <button className="btn btn--blank document__button-expand" title="Expand to full screen">
           <ExpandIcon />
         </button>
         <div className="document__title-container">
@@ -52,7 +52,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
             ref={titleRef} />
           <span className="document__publish-date note">Last published: May 3 2019</span>
         </div>
-        <button className="btn btn--small btn--with-icon">
+        <button className="btn btn--small btn--with-icon" onClick={publishDocumentHandler} title="Publish this version">
           <PublishIcon fill="#ffffff" /> <span className="label">Publish</span>
         </button>
       </header>
@@ -88,6 +88,7 @@ DocumentComponent.propTypes = {
   document: PropTypes.object,
   fieldCreationHandler: PropTypes.func.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
+  publishDocumentHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
 }
 
