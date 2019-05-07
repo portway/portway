@@ -20,7 +20,7 @@ const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, projectId })
     nameRef.current.focus()
   }, [])
   return (
-    <form className="project-settings__create-token">
+    <form className="project-settings__create-token" onSubmit={(e) => { e.preventDefault(); createKeyHandler() }}>
       <div className="form-field">
         <div className="field">
           <label htmlFor="token-name">Key name <span className="note">(required)</span></label>
@@ -36,7 +36,7 @@ const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, projectId })
       </div>
       <div className="form-field">
         <div className="field__row field--with-space">
-          <button type="button" className="btn btn--primary" disabled={creationDisabled} onClick={createKeyHandler}>Create key</button>
+          <button className="btn btn--primary" disabled={creationDisabled}>Create key</button>
           <button type="button" className="btn btn--blank" onClick={cancelHandler}>Cancel</button>
         </div>
       </div>

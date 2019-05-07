@@ -34,9 +34,10 @@ export const projectTokens = (state = initialState, action) => {
       return { ...state, loading: { ...state.loading, tokensByProjectId } }
     }
     case ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN: {
-      const loadingById = { ...state.tokensByProjectId, [action.projectId]: false }
-      const projectToken = { ...state.tokensByProjectId[action.projectId], [action.data.id]: action.data }
-      const tokensByProjectId = { ...state.tokensByProjectId, [action.projectId]: projectToken }
+      const { projectId } = action.data
+      const loadingById = { ...state.tokensByProjectId, [projectId]: false }
+      const projectToken = { ...state.tokensByProjectId[projectId], [action.data.id]: action.data }
+      const tokensByProjectId = { ...state.tokensByProjectId, [projectId]: projectToken }
       return {
         ...state,
         tokensByProjectId,

@@ -94,7 +94,7 @@ export const ProjectTokens = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECT_TOKENS, 'projectId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_TOKENS, 'projectId', 'data'),
   create: makeActionCreator(ActionTypes.CREATE_PROJECT_TOKEN, 'projectId'),
-  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN, 'projectId', 'data'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_TOKEN_REMOVE, 'projectId', 'tokenId'),
   removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_TOKEN, 'projectId', 'tokenId'),
 }
