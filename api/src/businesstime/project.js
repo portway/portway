@@ -4,7 +4,6 @@ import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import BusinessProjectUser from './projectuser'
 
 const MODEL_NAME = 'Project'
 
@@ -59,7 +58,20 @@ async function deleteById(id, orgId) {
 
 async function findAllProjectsForUser(userId, orgId) {
   const db = getDb()
-  const userProjectAssignments = BusinessProjectUser.findAllProjectAssignmentsForUser(userId, orgId)
+
+  const projects = await db.model(MODEL_NAME).findAll({
+    where: db.or(
+      { orgId, accessLevel: 'read' },
+      { '$ProjectUsers.userId$': userId }
+    ),
+    include: [{
+      model: db.model('ProjectUser'),
+      where: { userId, orgId },
+      required: false
+    }]
+  })
+
+  return projects
 }
 
 export default {

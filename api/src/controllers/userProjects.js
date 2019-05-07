@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { validateParams } from '../libs/middleware/payloadValidation'
-import BusinessProjectUser from '../businesstime/projectuser'
+import BusinessProject from '../businesstime/project'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
@@ -25,7 +25,7 @@ const paramSchema = Joi.compile({
   userId: Joi.number().required()
 })
 
-const userProjectRolesController = function(router) {
+const userProjectsController = function(router) {
   // all routes are nested at users/:userId/projects and receive req.params.userId
   router.get(
     '/',
@@ -40,7 +40,7 @@ const getUserProjects = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const userProjectAssignments = await BusinessProjectUser.findAllProjectsForUser(userId, orgId)
+    const userProjectAssignments = await BusinessProject.findAllProjectsForUser(userId, orgId)
     res.status(200).json({ data: userProjectAssignments })
   } catch (e) {
     console.error(e.stack)
@@ -48,4 +48,4 @@ const getUserProjects = async function(req, res) {
   }
 }
 
-export default userProjectRolesController
+export default userProjectsController
