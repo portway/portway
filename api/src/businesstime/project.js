@@ -1,8 +1,10 @@
-import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+
+import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import BusinessProjectUser from './projectuser'
 
 const MODEL_NAME = 'Project'
 
@@ -55,10 +57,16 @@ async function deleteById(id, orgId) {
   await project.destroy()
 }
 
+async function findAllProjectsForUser(userId, orgId) {
+  const db = getDb()
+  const userProjectAssignments = BusinessProjectUser.findAllProjectAssignmentsForUser(userId, orgId)
+}
+
 export default {
   create,
   findById,
   findAll,
   updateById,
-  deleteById
+  deleteById,
+  findAllProjectsForUser
 }

@@ -18,7 +18,13 @@ const deleteById = async (projectId, orgId) => {
   await BusinessProjectUser.removeAllUsersFromProject(projectId, orgId)
 }
 
+async function findAllProjectsForUser(userId, orgId) {
+  const db = getDb()
+  const userProjectAssignments = BusinessProjectUser.findAllProjectAssignmentsForUser(userId, orgId)
+}
+
 export default {
   createProject,
-  deleteById
+  deleteById,
+  findAllProjectsForUser
 }

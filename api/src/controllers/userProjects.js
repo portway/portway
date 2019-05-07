@@ -5,15 +5,15 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 
-const readPerm = (req, res, next) => {
+const listPerm = (req, res, next) => {
   const { userId } = req.params
 
-  // only allow users to see their own project assignments for now
+  // only allowing access to the current user's projects here
   if (userId === req.requestorInfo.requestorId) {
     return perms((req) => {
       return {
-        resourceType: RESOURCE_TYPES.USER,
-        action: ACTIONS.READ_MY
+        resourceType: RESOURCE_TYPES.PROJECT,
+        action: ACTIONS.LIST_MY
       }
     })(req, res, next)
   }
@@ -26,21 +26,21 @@ const paramSchema = Joi.compile({
 })
 
 const userProjectRolesController = function(router) {
-  // all routes are nested at users/:userId/assignments and receive req.params.userId
+  // all routes are nested at users/:userId/projects and receive req.params.userId
   router.get(
     '/',
     validateParams(paramSchema),
-    readPerm,
-    getUserProjectAssignments
+    listPerm,
+    getUserProjects
   )
 }
 
-const getUserProjectAssignments = async function(req, res) {
+const getUserProjects = async function(req, res) {
   const { userId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
-    const userProjectAssignments = await BusinessProjectUser.findAllProjectAssignmentsForUser(userId, orgId)
+    const userProjectAssignments = await BusinessProjectUser.findAllProjectsForUser(userId, orgId)
     res.status(200).json({ data: userProjectAssignments })
   } catch (e) {
     console.error(e.stack)
