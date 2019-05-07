@@ -4,6 +4,7 @@ import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
 
 const MODEL_NAME = 'Project'
 
@@ -61,7 +62,7 @@ async function findAllProjectsForUser(userId, orgId) {
 
   const projects = await db.model(MODEL_NAME).findAll({
     where: db.or(
-      { orgId, accessLevel: 'read' },
+      db.or({ orgId, accessLevel: PROJECT_ACCESS_LEVELS.READ }, { orgId, accessLevel: PROJECT_ACCESS_LEVELS.WRITE }),
       { '$ProjectUsers.userId$': userId }
     ),
     include: [{
@@ -71,7 +72,7 @@ async function findAllProjectsForUser(userId, orgId) {
     }]
   })
 
-  return projects
+  return projects.map(publicFields)
 }
 
 export default {
