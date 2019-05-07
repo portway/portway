@@ -5,6 +5,7 @@ import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './Document.scss'
@@ -53,7 +54,9 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
           <span className="document__publish-date note">Last published: May 3 2019</span>
         </div>
         <button className="btn btn--small btn--with-icon" onClick={publishDocumentHandler} title="Publish this version">
-          <PublishIcon fill="#ffffff" /> <span className="label">Publish</span>
+          <SpinnerComponent width="12" height="12" color="#ffffff" />
+          <PublishIcon fill="#ffffff" />
+          <span className="label">Publish</span>
         </button>
       </header>
       <div className="document__menus">
