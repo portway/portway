@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { AddIcon, MoreIcon } from 'Components/Icons'
+import { AddIcon, ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -32,20 +32,31 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
   return (
     <div className="document" key={docKey}>
       <header className="document__header">
-        <textarea
-          className="document__title"
-          defaultValue={document.name}
-          onChange={(e) => {
-            e.persist()
-            changeHandlerAction(e)
-          }}
-          onKeyDown={(e) => {
-            if (e.key.toLowerCase() === 'enter') {
-              nameChangeHandler(e)
-              titleRef.current.blur()
-            }
-          }}
-          ref={titleRef} />
+        <button className="btn btn--blank document__button-expand">
+          <ExpandIcon />
+        </button>
+        <div className="document__title-container">
+          <textarea
+            className="document__title"
+            defaultValue={document.name}
+            onChange={(e) => {
+              e.persist()
+              changeHandlerAction(e)
+            }}
+            onKeyDown={(e) => {
+              if (e.key.toLowerCase() === 'enter') {
+                nameChangeHandler(e)
+                titleRef.current.blur()
+              }
+            }}
+            ref={titleRef} />
+          <span className="document__publish-date note">Last published: May 3 2019</span>
+        </div>
+        <button className="btn btn--small btn--with-icon">
+          <PublishIcon fill="#ffffff" /> <span className="label">Publish</span>
+        </button>
+      </header>
+      <div className="document__menus">
         <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
           <DropdownItem label="Text" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
         </DropdownComponent>
@@ -66,7 +77,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
           <DropdownItem label="Duplicate document" type="button" />
           <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
-      </header>
+      </div>
       <DocumentFieldsContainer />
     </div>
   )

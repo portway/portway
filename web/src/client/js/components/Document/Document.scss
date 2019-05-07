@@ -4,9 +4,27 @@
 .document {
 
   &__header {
-    align-items: flex-start;
+    background-color: $white;
+    align-items: center;
+    border-bottom: thin solid $white-ter;
     display: flex;
+    height: 63px;
     justify-content: space-between;
+    margin-bottom: ($brandWidth / 2);
+    padding: 0 ($brandWidth / 2) 0 0;
+  }
+
+  &__button-expand {
+    padding: 0 ($brandWidth / 8);
+    .icon-expand {
+      path {
+        fill: $gray-dark;
+      }
+    }
+  }
+
+  &__title-container {
+    flex: 1;
   }
 
   &__title {
@@ -17,17 +35,31 @@
     font-family: $serif;
     font-size: 1.8rem;
     font-weight: 700;
+    height: 2rem;
     line-height: 1em;
-    padding-top: 8px;
+    padding: 0;
     outline: none;
     resize: none;
+    width: 100%;
     -webkit-appearance: none;
+  }
+
+  &__publish-date {
+    color: $gray-dark;
+    display: block;
+  }
+
+  &__menus {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 $brandWidth / 2;
   }
 
   &__fields {
     list-style: none;
-    padding: ($brandWidth / 2) 0;
     margin: 0;
+    padding: $brandWidth / 2;
   }
 
 }
