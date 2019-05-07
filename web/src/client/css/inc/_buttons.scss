@@ -1,6 +1,27 @@
 @import 'vars';
 @import 'mixins';
 
+:root {
+  --button-white-background: #{$white};
+  --button-white-border: #{$gray-light};
+  --button-white-border-hover: #{$white-ter};
+  --button-icon-background: #{$white-bis};
+  --button-icon-hover: #{$white-ter};
+  --button-icon-active: #{$gray};
+  --button-icon-expanded: #{$gray-light};
+  --button-label-expanded: #{$gray-dark};
+  @media (prefers-color-scheme: dark) {
+    --button-white-background: #{$black-bis};
+    --button-white-border: #{$black-er};
+    --button-white-border-hover: #{$black-er};
+    --button-icon-background: #{$black-ter};
+    --button-icon-hover: #{$gray-dark};
+    --button-icon-active: #{$black-er};
+    --button-icon-expanded: #{$black-er};
+    --button-label-expanded: #{$gray-dark};
+  }
+}
+
 .btn-group {
   align-items: center;
   display: flex;
@@ -69,23 +90,23 @@ button,
   }
 
   &--white {
-    @include focus($white, $gray-light);
-    background-color: $white;
-    border: thin solid $gray-light;
+    @include focus(var(--button-white-background), var(--button-white-border));
+    background-color: var(--button-white-background);
+    border: thin solid var(--button-white-border);
     color: inherit;
     &:not([disabled]) {
       &:hover {
-        background-color: $white;
-        border: thin solid $white-ter;
+        background-color: var(--button-white-background);
+        border: thin solid var(--button-white-border-hover);
         color: inherit;
       }
       &:active {
-        background-color: $white;
+        background-color: var(--button-white-background);
         color: inherit;
       }
     }
     &[aria-expanded="true"] {
-      background-color: $white-ter;
+      background-color: var(--button-white-border-hover);
     }
   }
 
@@ -137,7 +158,7 @@ button,
     align-items: center;
     display: inline-flex;
     .icon {
-      background-color: $white-bis;
+      background-color: var(--button-icon-background);
       border-radius: 50% 50%;
     }
     .label {
@@ -148,23 +169,23 @@ button,
     &:hover {
       &:not([disabled]) {
         .icon {
-          background-color: $white-ter;
+          background-color: var(--button-icon-hover);
         }
       }
     }
     &:active {
       &:not([disabled]) {
         .icon {
-          background-color: $gray;
+          background-color: var(--button-icon-active);
         }
       }
     }
     &[aria-expanded="true"] {
       .icon {
-        background-color: $gray-light;
+        background-color: var(--button-icon-expanded);
       }
       .label {
-        color: $gray-dark;
+        color: var(--button-label-expanded);
       }
     }
   }
