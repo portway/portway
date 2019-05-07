@@ -80,6 +80,7 @@ const DocumentContainer = ({
   return <DocumentComponent
     document={document}
     fieldCreationHandler={fieldCreationHandler}
+    isPublishing={ui.documents.isPublishing}
     nameChangeHandler={nameChangeHandler}
     publishDocumentHandler={publishDocumentHandler}
     removeDocumentHandler={removeDocumentHandler} />

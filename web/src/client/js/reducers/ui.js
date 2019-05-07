@@ -9,7 +9,8 @@ const initialState = {
     confirmedLabel: ''
   },
   documents: {
-    creating: false
+    creating: false,
+    isPublishing: false,
   },
   fields: {
     creating: false,
@@ -37,6 +38,27 @@ export const ui = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }
+    }
+
+    // Document publishng
+    // -------------------------------------------------------------------------
+    case ActionTypes.INITIATE_DOCUMENT_PUBLISH: {
+      return {
+        ...state,
+        documents: {
+          ...state.documents,
+          isPublishing: true
+        }
+      }
+    }
+    case ActionTypes.RECEIVE_PUBLISHED_DOCUMENT: {
+      return {
+        ...state,
+        documents: {
+          ...state.documents,
+          isPublishing: false
+        }
+      }
     }
 
     // Confirmation dialog
