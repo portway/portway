@@ -61,6 +61,25 @@ button,
     }
   }
 
+  &--primary {
+    @include focus($primary, $primary);
+    background-color: $primary;
+    border: thin solid $primary;
+    &:not([disabled]) {
+      &:hover {
+        background-color: lighten($primary, 10%);
+        color: $white;
+      }
+      &:active {
+        background-color: $primary-dark;
+        color: $white;
+      }
+    }
+    &[aria-expanded="true"] {
+      background-color: $primary-dark;
+    }
+  }
+
   &--white {
     @include focus($white, $gray-light);
     background-color: $white;

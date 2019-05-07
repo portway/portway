@@ -22,7 +22,7 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (ui.documents.creating) {
+  if (ui.documents.creating || match.params.documentId === 'new') {
     return null
   }
 

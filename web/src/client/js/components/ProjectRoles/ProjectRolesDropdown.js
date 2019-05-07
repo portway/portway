@@ -5,19 +5,20 @@ import Constants from 'Shared/constants'
 import { CaretIcon } from 'Components/Icons'
 import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 
-const ProjectRolesDropdown = ({ buttonStyle, defaultValue, disabled, onChange }) => {
+const ProjectRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(Constants.PROJECT_ROLE_NAMES[defaultValue])
   const roleSelectorButton = {
     label: permissionMenuLabel,
     className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
-    icon: <CaretIcon />
+    icon: <CaretIcon />,
+    name: name
   }
   const adjustRoleHandler = (roleId) => {
     setPermissionMenuLabel(Constants.PROJECT_ROLE_NAMES[roleId])
     onChange(roleId)
   }
   return (
-    <DropdownComponent align="right" autoCollapse={true} button={roleSelectorButton} className="project-settings__teammate-menu" disabled={disabled}>
+    <DropdownComponent align={align} autoCollapse={true} button={roleSelectorButton} className="project-roles" disabled={disabled}>
       <DropdownItem label={Constants.PROJECT_ROLE_NAMES[Constants.PROJECT_ROLE_IDS.READER]} onClick={() => adjustRoleHandler(Constants.PROJECT_ROLE_IDS.READER) }>
         <p className="small">Project Readers can view all of the documents in this project, but that is all.</p>
       </DropdownItem>
@@ -32,13 +33,16 @@ const ProjectRolesDropdown = ({ buttonStyle, defaultValue, disabled, onChange })
 }
 
 ProjectRolesDropdown.propTypes = {
+  align: PropTypes.oneOf(['left', 'right']),
   buttonStyle: PropTypes.oneOf(['normal', 'blank']),
   defaultValue: PropTypes.number.isRequired,
   disabled: PropTypes.bool,
+  name: PropTypes.string,
   onChange: PropTypes.func.isRequired
 }
 
 ProjectRolesDropdown.defaultProps = {
+  align: 'left',
   buttonStyle: 'normal',
   projectRoleId: Constants.PROJECT_ROLE_IDS.READER
 }

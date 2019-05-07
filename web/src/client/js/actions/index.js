@@ -21,9 +21,13 @@ export const ActionTypes = {
   RECEIVE_UPDATED_PROJECT_ASSIGNEE: 'RECEIVE_UPDATED_PROJECT_ASSIGNEE',
   INITIATE_PROJECT_ASSIGNEE_REMOVE: 'INITIATE_PROJECT_ASSIGNEE_REMOVE',
   REMOVE_PROJECT_ASSIGNEE: 'REMOVE_PROJECT_ASSIGNEE',
-  // Project Keys
+  // Project Tokens
   REQUEST_PROJECT_TOKENS: 'REQUEST_PROJECT_TOKENS',
   RECEIVE_PROJECT_TOKENS: 'RECEIVE_PROJECT_TOKENS',
+  CREATE_PROJECT_TOKEN: 'CREATE_PROJECT_TOKEN',
+  RECEIVE_CREATED_PROJECT_TOKEN: 'RECEIVE_CREATED_PROJECT_TOKEN',
+  INITIATE_PROJECT_TOKEN_REMOVE: 'INITIATE_PROJECT_TOKEN_REMOVE',
+  REMOVE_PROJECT_TOKEN: 'REMOVE_PROJECT_TOKEN',
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
@@ -58,7 +62,8 @@ export const ActionTypes = {
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
-  UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION'
+  UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
+  UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE'
 }
 
 export const Projects = {
@@ -88,6 +93,10 @@ export const ProjectAssignees = {
 export const ProjectTokens = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECT_TOKENS, 'projectId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_TOKENS, 'projectId', 'data'),
+  create: makeActionCreator(ActionTypes.CREATE_PROJECT_TOKEN, 'projectId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN, 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_TOKEN_REMOVE, 'projectId', 'tokenId'),
+  removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_TOKEN, 'projectId', 'tokenId'),
 }
 
 export const Documents = {
@@ -132,5 +141,6 @@ export const UI = {
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
-  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
+  createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value')
 }

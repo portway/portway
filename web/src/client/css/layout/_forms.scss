@@ -1,4 +1,5 @@
 @import '../inc/vars';
+@import '../inc/mixins';
 
 form {
   .form-field {
@@ -14,6 +15,13 @@ form {
       &__row {
         display: flex;
         width: 100%;
+        button, .btn {
+          margin-right: 1.8rem;
+        }
+      }
+
+      &--with-space {
+        padding-top: 2.4rem;
       }
 
     }
@@ -44,6 +52,7 @@ form {
 
   label {
     display: block;
+    font-weight: 700;
     padding: 4px 0;
   }
 
@@ -65,9 +74,7 @@ form {
       color: $gray;
     }
     &:focus {
-      border: thin solid $action;
-      box-shadow: inset 0 1px 2px $white-bis, 0 0 0 0.2em $action-light;
-      outline: none;
+      @include focus($white, $action);
     }
   }
 

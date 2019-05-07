@@ -2,9 +2,10 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import Constants from 'Shared/constants'
+import { TrashIcon } from 'Components/Icons'
 import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 
-const ProjectSettingsTokenItem = ({ selected, selectHandler, token }) => {
+const ProjectSettingsTokenItem = ({ removeHandler, selected, selectHandler, token }) => {
   const tokenRef = useRef()
   return (
     <li key={`token-${token.id}`} className={`project-settings__token-list-item${selected ? ' project-settings__token-list-item--selected' : '' }`}>
@@ -19,6 +20,7 @@ const ProjectSettingsTokenItem = ({ selected, selectHandler, token }) => {
             <input readOnly type="text" value={token.token} ref={tokenRef} id={`token-${token.id}`} />
           </div>
           <ClipboardComponent copyRef={tokenRef} />
+          <button className="btn btn--blank btn--with-circular-icon" onClick={() => { removeHandler(token.id) }}><TrashIcon /></button>
         </div>
       </div>
     </li>
@@ -26,6 +28,7 @@ const ProjectSettingsTokenItem = ({ selected, selectHandler, token }) => {
 }
 
 ProjectSettingsTokenItem.propTypes = {
+  removeHandler: PropTypes.func.isRequired,
   selected: PropTypes.bool,
   selectHandler: PropTypes.func.isRequired,
   token: PropTypes.object.isRequired

@@ -32,7 +32,7 @@ module.exports = {
   PRODUCT_NAME: 'Project Danger',
   PRODUCT_ID: 'project-danger',
   PRODUCT_LOGO: '/images/logo.svg',
-  PRODUCT_API_URL: 'https://api.project-danger.com/v1',
+  PRODUCT_API_URL: 'http://localhost:3001/api',
   // Documentation
   DOCUMENTATION_URL: 'https://docs.project-danger.com/',
   // Default text strings
