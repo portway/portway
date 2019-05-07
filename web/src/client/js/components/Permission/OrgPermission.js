@@ -7,7 +7,7 @@ import dataMapper from 'Libs/dataMapper'
 const OrgPermission = ({ children, elseRender, acceptedRoleIds }) => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
-  if (currentUser && acceptedRoleIds.indexOf(currentUser.orgRoleId) > -1) {
+  if (currentUser && acceptedRoleIds.includes(currentUser.orgRoleId)) {
     return (
       <>
         {children}

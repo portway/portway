@@ -28,7 +28,7 @@ describe('BusinessDocument', () => {
       expect(documentVersion.orgId).toBe(factoryDocument.orgId)
     })
 
-    it('should have a verison number', () => {
+    it('should have a version number', () => {
       expect(typeof documentVersion.versionNumber).toBe('number')
     })
 

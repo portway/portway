@@ -14,7 +14,7 @@ const ProjectSettingsTeamContainer = ({ match }) => {
   const { projectId } = match.params
   const { data: users } = useDataService(dataMapper.users.list())
   const { data: currentUser } = useDataService(dataMapper.users.current())
-  const { data: projectAssignments } = useDataService(dataMapper.projects.assignments(projectId))
+  const { data: projectAssignments } = useDataService(dataMapper.projects.projectAssignments(projectId))
 
   if (!currentUser || !users || !projectAssignments) return null
 

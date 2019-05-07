@@ -4,7 +4,11 @@ export default function(sequelize, DataTypes) {
     {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
-      orgId: DataTypes.INTEGER
+      orgId: DataTypes.INTEGER,
+      accessLevel: {
+        type: DataTypes.STRING,
+        defaultValue: null
+      }
     },
     {}
   )

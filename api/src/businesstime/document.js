@@ -3,6 +3,7 @@ import ono from 'ono'
 import { pick } from '../libs/utils'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import { getFieldValueInclude } from './field'
 
 const MODEL_NAME = 'Document'
 
@@ -80,7 +81,7 @@ async function findByIdWithFields(id, orgId) {
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({
     where: { id, orgId },
-    include: [{ model: db.model('Field') }],
+    include: [{ model: db.model('Field'), include: getFieldValueInclude(db) }],
     order: [
       [db.model('Field'), 'order', 'ASC']
     ],
