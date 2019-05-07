@@ -4,6 +4,7 @@ import { pick } from '../libs/utils'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { getFieldValueInclude } from './field'
+import { Op } from 'sequelize'
 
 const MODEL_NAME = 'Document'
 
@@ -77,6 +78,29 @@ async function findParentProjectByDocumentId(id, orgId) {
   return pick(project, resourcePublicFields[resourceTypes.PROJECT])
 }
 
+async function findByIdWithPublishedFields(id, orgId) {
+  const db = getDb()
+  const document = await db.model(MODEL_NAME).findOne({
+    where: {
+      id,
+      orgId
+    },
+    include: [{
+      model: db.model('Field'),
+      where: {
+        versionId: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
+      },
+      required: false,
+      include: getFieldValueInclude(db)
+    }],
+    order: [
+      [db.model('Field'), 'order', 'ASC']
+    ]
+  })
+
+  return publicDocumentWithFields(document)
+}
+
 async function findByIdWithFields(id, orgId) {
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({
@@ -87,13 +111,17 @@ async function findByIdWithFields(id, orgId) {
     ],
   })
 
+  return publicDocumentWithFields(document)
+}
+
+async function publicDocumentWithFields(document) {
   if (!document) return document
 
   const fields = document.Fields.map((field) => {
     return pick(field, resourcePublicFields[resourceTypes.FIELD])
   })
 
-  return pick( { ...document.get({ plain: true }), fields }, resourcePublicFields[resourceTypes.DOCUMENT])
+  return pick({ ...document.get({ plain: true }), fields }, resourcePublicFields[resourceTypes.DOCUMENT])
 }
 
 export default {
@@ -103,5 +131,6 @@ export default {
   findAllForProject,
   deleteByIdForProject,
   findParentProjectByDocumentId,
+  findByIdWithPublishedFields,
   findByIdWithFields
 }

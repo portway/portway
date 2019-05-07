@@ -1,5 +1,6 @@
 import ono from 'ono'
 import { BigNumber } from 'bignumber.js'
+import { Op } from 'sequelize'
 
 import { getDb } from '../db/dbConnector'
 import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
@@ -44,9 +45,17 @@ async function createForDocument(docId, body) {
   return await findByIdForDocument(createdField.id, docId, orgId)
 }
 
-async function findAllForDocument(docId, orgId) {
+async function findAllPublishedForDocument(docId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
+
+  include.push({
+    model: db.model('Document'),
+    where: {
+      publishedVersionId: { [Op.col]: `${MODEL_NAME}.versionId` }
+    }
+  })
+
   const fields = await db.model(MODEL_NAME).findAll({
     where: { docId, orgId },
     order: db.col('order'),
@@ -55,6 +64,24 @@ async function findAllForDocument(docId, orgId) {
 
   return fields.map(publicFields)
 }
+
+async function findAllForDocument(docId, orgId) {
+  const db = getDb()
+  const include = getFieldValueInclude(db)
+
+  const fields = await db.model(MODEL_NAME).findAll({
+    where: {
+      docId,
+      orgId,
+      versionId: null
+    },
+    order: db.col('order'),
+    include
+  })
+
+  return fields.map(publicFields)
+}
+
 
 async function findByIdForDocument(id, docId, orgId) {
   const db = getDb()
@@ -241,6 +268,7 @@ export default {
   updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
+  findAllPublishedForDocument,
   deleteByIdForDocument,
   updateOrderById
 }

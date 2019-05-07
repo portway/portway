@@ -23,9 +23,12 @@ const documentsController = function(router) {
 const getDocument = async function(req, res) {
   const { id } = req.params
   const { orgId } = req.requestorInfo
+  const { draft } = req.query
+
+  const lookup = draft === 'true' ? 'findByIdWithFields' : 'findByIdWithPublishedFields'
 
   try {
-    const document = await BusinessDocument.findByIdWithFields(id, orgId)
+    const document = await BusinessDocument[lookup](id, orgId)
     if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
     res.json({ data: document })
   } catch (e) {
