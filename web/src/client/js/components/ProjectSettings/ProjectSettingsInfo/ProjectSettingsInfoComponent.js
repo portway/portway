@@ -9,7 +9,7 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
   if (!project) return null
   const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
   return (
-    <form className="project-settings__info">
+    <form className="project-settings__info" onSubmit={(e) => { e.preventDefault() }}>
       <section>
         <h2>General information</h2>
         <TextField

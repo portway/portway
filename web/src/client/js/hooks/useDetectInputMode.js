@@ -20,6 +20,7 @@ function useDetectInputMode() {
       document.body.classList.add('using-mouse')
     }
     function keyDownHandler(e) {
+      if (e.target.type === 'text') return
       if (e.key && e.key.toLowerCase() !== 'meta') {
         document.body.classList.remove('using-mouse')
       }
