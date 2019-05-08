@@ -17,10 +17,10 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
     </>
   )
 
-  const { data: project = {} } = useDataService(dataMapper.projects.id(projectId))
+  const { data: project = {} } = useDataService(dataMapper.projects.id(Number(projectId)))
   const { data: userProjectAssignments = {} } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  const projectAssignment = userProjectAssignments[projectId]
+  const projectAssignment = userProjectAssignments[Number(projectId)]
 
   // Check the manual project role assignments for the current user
   if (projectAssignment && acceptedRoleIds.includes(projectAssignment.roleId)) {
@@ -42,7 +42,10 @@ ProjectPermission.propTypes = {
   children: PropTypes.node.isRequired,
   elseRender: PropTypes.node,
   acceptedRoleIds: PropTypes.array.isRequired,
-  projectId: PropTypes.number.isRequired
+  projectId: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.number.isRequired
+  ])
 }
 
 export default ProjectPermission
