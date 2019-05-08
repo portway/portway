@@ -1,3 +1,4 @@
+import currentUserId from 'Libs/currentUserId'
 import { Projects, ProjectAssignees, ProjectTokens } from './index'
 import { fetch, add, update, remove } from '../api'
 import Constants from 'Shared/constants'
@@ -8,7 +9,7 @@ import Constants from 'Shared/constants'
  */
 export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
-  const { data } = await fetch('projects')
+  const { data } = await fetch(`users/${currentUserId}/projects`)
   dispatch(Projects.receive(data))
 }
 
