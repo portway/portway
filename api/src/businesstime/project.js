@@ -1,8 +1,10 @@
-import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+
+import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
 
 const MODEL_NAME = 'Project'
 
@@ -55,10 +57,29 @@ async function deleteById(id, orgId) {
   await project.destroy()
 }
 
+async function findAllForUser(userId, orgId) {
+  const db = getDb()
+
+  const projects = await db.model(MODEL_NAME).findAll({
+    where: db.or(
+      db.or({ orgId, accessLevel: PROJECT_ACCESS_LEVELS.READ }, { orgId, accessLevel: PROJECT_ACCESS_LEVELS.WRITE }),
+      { '$ProjectUsers.userId$': userId }
+    ),
+    include: [{
+      model: db.model('ProjectUser'),
+      where: { userId, orgId },
+      required: false
+    }]
+  })
+
+  return projects.map(publicFields)
+}
+
 export default {
   create,
   findById,
   findAll,
   updateById,
-  deleteById
+  deleteById,
+  findAllForUser
 }

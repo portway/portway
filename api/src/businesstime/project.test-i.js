@@ -1,9 +1,13 @@
 import BusinessProject from './project'
+import BusinessProjectUser from './projectuser'
 import ProjectFactory from '../db/__testSetup__/factories/project'
+import UserFactory from '../db/__testSetup__/factories/user'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
+import { PROJECT_ROLE_IDS } from '../constants/roles'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.PROJECT]
 
@@ -128,6 +132,49 @@ describe('BusinessProject', () => {
 
     it('should throw an error if the target project is not found', async () => {
       await expect(BusinessProject.deleteById(0)).rejects.toThrow()
+    })
+  })
+
+  describe('#findAllForUser', () => {
+    let factoryUser
+    let assignedProject
+    let publicReadProject
+    let publicWriteProject
+    let projects
+
+    beforeAll(async () => {
+      await clearDb()
+      factoryUser = (await UserFactory.createMany(1))[0]
+      const factoryProjects = await ProjectFactory.createMany(3)
+      assignedProject = factoryProjects[0]
+      publicReadProject = (await ProjectFactory.createMany(1, { accessLevel: PROJECT_ACCESS_LEVELS.READ }))[0]
+      publicWriteProject = (await ProjectFactory.createMany(1, { accessLevel: PROJECT_ACCESS_LEVELS.WRITE }))[0]
+
+      await BusinessProjectUser.create({
+        orgId: constants.ORG_ID,
+        projectId: assignedProject.id,
+        userId: factoryUser.id,
+        roleId: PROJECT_ROLE_IDS.READER
+      })
+
+      await ProjectFactory.createMany(2, { orgId: constants.ORG_2_ID })
+    })
+
+    beforeAll(async () => {
+      projects = await BusinessProject.findAllForUser(factoryUser.id, constants.ORG_ID)
+    })
+
+    it('should return all user assigned projects and public projects in organization', () => {
+      expect(projects.length).toEqual(3)
+      const projectIds = projects.map(project => project.id)
+      expect(projectIds).toEqual(expect.arrayContaining([assignedProject.id, publicReadProject.id, publicWriteProject.id]))
+    })
+
+    it('should return projects as POJOs', () => {
+      for (const project of projects) {
+        expect(project.constructor).toBe(Object)
+        expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+      }
     })
   })
 })
