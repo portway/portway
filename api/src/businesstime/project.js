@@ -57,7 +57,7 @@ async function deleteById(id, orgId) {
   await project.destroy()
 }
 
-async function findAllProjectsForUser(userId, orgId) {
+async function findAllForUser(userId, orgId) {
   const db = getDb()
 
   const projects = await db.model(MODEL_NAME).findAll({
@@ -81,5 +81,5 @@ export default {
   findAll,
   updateById,
   deleteById,
-  findAllProjectsForUser
+  findAllForUser
 }

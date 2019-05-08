@@ -40,11 +40,11 @@ const getUserProjects = async function(req, res) {
   const { orgId } = req.requestorInfo
 
   try {
-    const userProjectAssignments = await BusinessProject.findAllProjectsForUser(userId, orgId)
-    res.status(200).json({ data: userProjectAssignments })
+    const userProjects = await BusinessProject.findAllForUser(userId, orgId)
+    res.status(200).json({ data: userProjects })
   } catch (e) {
     console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch user project assignments' })
+    res.status(e.code || 500).json({ error: 'Cannot fetch user projects' })
   }
 }
 
