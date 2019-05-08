@@ -15,6 +15,17 @@
     width: 40px;
     @include focus(transparent);
   }
+  &__banner {
+    background-color: $gray-light;
+    padding: 8px 14px;
+  }
+  &__username {
+    display: block;
+    font-weight: 700;
+  }
+  &__email {
+    color: $gray-dark;
+  }
 }
 
 // /images/icon/user-avatar.svg

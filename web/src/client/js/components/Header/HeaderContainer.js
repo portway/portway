@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Constants from 'Shared/constants'
 import Header from './Header'
 

@@ -13,10 +13,10 @@ const DropdownItem = ({ children, className, divider, label, onClick, href, type
       elementType = <Link className={className} to={href} onClick={onClick}>{label}{children}</Link>
       break
     case 'submenu':
-      elementType = <span className="menu__sub-item">{label}{children}</span>
+      elementType = <div className="menu__sub-item">{label}{children}</div>
       break
     default:
-      elementType = <span className={className}>{children}</span>
+      elementType = <div className={className}>{children}</div>
       break
   }
   const menuItemClasses = cx({
@@ -41,7 +41,7 @@ DropdownItem.propTypes = {
 }
 
 DropdownItem.defaultProps = {
-  type: 'button'
+  // type: 'button'
 }
 
 export default DropdownItem

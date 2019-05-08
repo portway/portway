@@ -40,7 +40,6 @@
   background-color: $white;
   border-radius: 0;
   color: $black-bis;
-  cursor: pointer;
   display: block;
   text-decoration: none;
   min-width: 210px;
@@ -60,10 +59,6 @@
     }
   }
 
-  &:hover {
-    background-color: $white-ter;
-    color: $black-bis;
-  }
   &:active,
   &.active {
     background-color: $gray;
@@ -76,9 +71,6 @@
     background-color: $black-bis;
     color: $white;
     padding: 0;
-    &:hover {
-      background-color: lighten($black-bis, 5%);
-    }
   }
 }
 
@@ -116,6 +108,7 @@
   a, button {
     @extend .menu__item;
     @include focus(transparent);
+    cursor: pointer;
     position: relative;
     text-align: left;
     white-space: normal;
@@ -124,6 +117,15 @@
     }
     &.btn--danger {
       color: $danger;
+    }
+    &:hover {
+      background-color: $white-ter;
+      color: $black-bis;
+    }
+    .menu--dark & {
+      &:hover {
+        background-color: lighten($black-bis, 5%);
+      }
     }
   }
 }
