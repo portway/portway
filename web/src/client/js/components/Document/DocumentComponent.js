@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
@@ -31,6 +32,10 @@ const DocumentComponent = ({
   }
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
+  })
+  const menuClasses = cx({
+    'document__menus': true,
+    'document__menus--disabled': isPublishing
   })
   return (
     <div className="document" key={docKey}>
@@ -65,7 +70,7 @@ const DocumentComponent = ({
           <span className="label">Publish</span>
         </button>
       </header>
-      <div className="document__menus">
+      <div className={menuClasses}>
         <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
           <DropdownItem label="Text" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
         </DropdownComponent>

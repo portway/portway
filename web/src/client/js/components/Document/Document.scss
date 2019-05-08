@@ -61,12 +61,27 @@
     display: flex;
     justify-content: flex-end;
     padding: 0 $brandWidth / 2;
+
+    // When publishing a document, disable everything
+    &--disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
   }
 
   &__fields {
     list-style: none;
     margin: 0;
     padding: $brandWidth / 2;
+    transition: opacity 0.2s ease-in-out;
+
+    // When publishing a document, disable everything
+    &--disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
   }
 
 }
