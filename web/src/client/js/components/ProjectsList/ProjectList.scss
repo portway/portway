@@ -12,7 +12,7 @@ $horizontalPadding: 1.3%;
     perspective: 100px;
 
     &__item {
-      background-color: $white;
+      background-color: var(--base-background);
       display: flex;
       flex-direction: column;
       margin-bottom: 6px;
@@ -29,7 +29,7 @@ $horizontalPadding: 1.3%;
       &--active {
         // This is the selected project, and it is open
         &[aria-expanded="true"] {
-          border: thin solid $gray-light;
+          border: thin solid var(--base-border-color);
           border-radius: $borderRadius;
           margin: 24px 0;
           .project-list__info {
@@ -60,7 +60,7 @@ $horizontalPadding: 1.3%;
       }
     }
     &__title {
-      color: $black-bis;
+      color: var(--base-color);
       margin: 0 0 0;
     }
     &__item-meta {
@@ -71,7 +71,7 @@ $horizontalPadding: 1.3%;
     // The actions and other info under the __info section
     &__actions {
       align-items: center;
-      border-top: thin solid $gray-light;
+      border-top: thin solid var(--base-border-color);
       display: flex;
       justify-content: space-between;
       margin-top: 8px;

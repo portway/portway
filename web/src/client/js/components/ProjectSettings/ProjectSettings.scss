@@ -1,5 +1,14 @@
 @import 'CSS/inc/_vars.scss';
 
+:root {
+  --project-settings-menu-background: #{$gray};
+  --project-settings-endpoint-name-background: #{$white-ter};
+  @media (prefers-color-scheme: dark) {
+    --project-settings-menu-background: #{$black-er};
+    --project-settings-endpoint-name-background: #{$gray-dark};
+  }
+}
+
 .project-settings {
   display: flex;
   flex: 1;
@@ -14,11 +23,11 @@
     width: 20%;
     a {
       display: block;
-      color: $black-bis;
+      color: var(--base-color);
       padding: 8px 7px;
       text-decoration: none;
       &.active {
-        background-color: $gray;
+        background-color: var(--project-settings-menu-background);
         border-left: 2px solid $primary;
       }
     }
@@ -84,7 +93,7 @@
       margin-right: 1.8rem;
     }
     &__info {
-      border: thin solid $gray;
+      border: thin solid var(--base-border-color);
       flex: 1;
       margin-bottom: 2rem;
       padding: 1rem;
@@ -99,7 +108,8 @@
       font-weight: 700;
     }
     &__field {
-      border: thin solid $gray-light;
+      align-items: center;
+      border: thin solid var(--base-border-color);
       border-radius: $borderRadius;
       display: flex;
       width: 100%;
@@ -131,7 +141,7 @@
 
   // Endpoints
   &__endpoint-name {
-    background-color: $white-ter;
+    background-color: var(--project-settings-endpoint-name-background);
     align-items: center;
     display: flex;
     justify-content: space-between;

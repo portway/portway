@@ -26,7 +26,7 @@ const paramSchema = Joi.compile({
 })
 
 const userProjectRolesController = function(router) {
-  // all routes are nested at users/:userId/projectroles and receive req.params.userId
+  // all routes are nested at users/:userId/assignments and receive req.params.userId
   router.get(
     '/',
     validateParams(paramSchema),

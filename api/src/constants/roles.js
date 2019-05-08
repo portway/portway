@@ -34,7 +34,8 @@ export const ORGANIZATION_ROLES = {
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,
       [actions.READ]: true,
-      [actions.CREATE]: true
+      [actions.CREATE]: true,
+      [actions.LIST_MY]: true
     },
     [resourceTypes.PROJECT_USER]: {
       [actions.UPDATE]: true,
@@ -57,7 +58,8 @@ export const ORGANIZATION_ROLES = {
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,
       [actions.READ]: true,
-      [actions.CREATE]: true
+      [actions.CREATE]: true,
+      [actions.LIST_MY]: true
     },
     [resourceTypes.USER]: {
       [actions.LIST]: true,
@@ -75,7 +77,7 @@ export const ORGANIZATION_ROLES = {
   },
   [rIds.USER]: {
     [resourceTypes.PROJECT]: {
-      [actions.LIST]: true
+      [actions.LIST_MY]: true
     },
     [resourceTypes.USER]: {
       [actions.LIST]: true,
