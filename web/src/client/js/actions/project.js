@@ -1,5 +1,5 @@
-import { Projects, ProjectAssignees, ProjectTokens } from './index'
-import { fetch, add, update, remove } from '../api'
+import { Projects, ProjectAssignees, ProjectTokens, Notifications } from './index'
+import { fetch, add, update, remove, globalErrorCodes } from '../api'
 import Constants from 'Shared/constants'
 
 /**
@@ -8,8 +8,10 @@ import Constants from 'Shared/constants'
  */
 export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
-  const { data } = await fetch('projects')
-  dispatch(Projects.receive(data))
+  const { data, status } = await fetch('projects')
+  globalErrorCodes.includes(status) ?
+    dispatch(Notifications.create('error', status, data)) :
+    dispatch(Projects.receive(data))
 }
 
 export const fetchProject = (projectId) => {

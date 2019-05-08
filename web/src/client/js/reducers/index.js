@@ -4,22 +4,24 @@ import thunk from 'redux-thunk'
 
 import { documents } from './documents'
 import { documentFields } from './documentFields'
+import { notifications } from './notifications'
 import { projects } from './projects'
 import { projectAssignments } from './projectAssignments'
-import { userAssignments } from './userAssignments'
 import { projectTokens } from './projectTokens'
-import { users } from './users'
 import { ui } from './ui'
+import { users } from './users'
+import { userAssignments } from './userAssignments'
 
 const rootReducer = combineReducers({
   documents,
   documentFields,
+  notifications,
   projects,
   projectAssignments,
-  userAssignments,
   projectTokens,
+  ui,
   users,
-  ui
+  userAssignments
 })
 
 const middlewares = [thunk]
