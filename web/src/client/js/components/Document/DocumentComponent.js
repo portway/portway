@@ -10,7 +10,9 @@ import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsCon
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, isPublishing, publishDocumentHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({
+  document, fieldCreationHandler, nameChangeHandler, isPublishing,
+  publishDocumentHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const contentDropdown = {
@@ -53,7 +55,11 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
             ref={titleRef} />
           <span className="document__publish-date note">Last published: May 3 2019</span>
         </div>
-        <button className="btn btn--small btn--with-icon" disabled={isPublishing} onClick={publishDocumentHandler} title="Publish this version">
+        <button
+          className="btn btn--small btn--with-icon"
+          disabled={isPublishing}
+          onClick={publishDocumentHandler}
+          title="Publish this version">
           {isPublishing && <SpinnerComponent width="12" height="12" color="#ffffff" />}
           {!isPublishing && <PublishIcon fill="#ffffff" />}
           <span className="label">Publish</span>
@@ -81,7 +87,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
           <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
       </div>
-      <DocumentFieldsContainer isPublishing={isPublishing} />
+      <DocumentFieldsContainer />
     </div>
   )
 }

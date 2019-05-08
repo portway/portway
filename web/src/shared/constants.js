@@ -47,6 +47,8 @@ module.exports = {
   PATH_PROJECTS: '/projects',
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
+  PATH_DOCUMENT_NEW: '/document/new',
+  PATH_DOCUMENT_NEW_PARAM: 'new',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
   // Fields
   FIELD_LABELS: {
