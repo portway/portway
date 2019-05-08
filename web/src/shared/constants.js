@@ -35,6 +35,9 @@ module.exports = {
   PRODUCT_API_URL: 'https://api.project-danger.com/v1',
   // Documentation
   DOCUMENTATION_URL: 'https://docs.project-danger.com/',
+  // Support
+  SUPPORT_EMAIL: 'support@project-danger.com',
+  SUPPORT_LINK: 'https://support.project-danger.com/',
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New Document',
   // Paths
