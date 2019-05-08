@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 
 import NotificationComponent from './NotificationComponent'
 
-const NotificationList = ({ notifications }) => {
+const NotificationList = ({ dismissHandler, notifications }) => {
   function renderNotices() {
-    return notifications.map((notice, index) => {
-      return <NotificationComponent key={index} id={`notice-${index}`} notice={notice} />
+    return notifications.map((notice) => {
+      return <NotificationComponent dismissHandler={dismissHandler} key={notice.id} id={notice.id} notice={notice.notice} />
     })
   }
   if (notifications.length > 0) {
@@ -21,6 +21,7 @@ const NotificationList = ({ notifications }) => {
 }
 
 NotificationList.propTypes = {
+  dismissHandler: PropTypes.func.isRequired,
   notifications: PropTypes.array.isRequired
 }
 

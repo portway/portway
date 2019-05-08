@@ -2,19 +2,35 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { dismissNotification } from 'Actions/notifications'
 import NotificationList from './NotificationList'
 import './Notifications.scss'
 
-const NotificationsContainer = ({ notifications }) => {
+const NotificationsContainer = ({ dismissNotification, notifications }) => {
+  const notificationArray = Object.keys(notifications).map((key) => {
+    return {
+      id: key,
+      notice: notifications[key]
+    }
+  })
+
+  function dismissHandler(noticeId) {
+    // Delayed so the animation can take place
+    setTimeout(() => {
+      dismissNotification(noticeId)
+    }, 200)
+  }
+
   return (
     <div className="notifications">
-      <NotificationList notifications={notifications} />
+      <NotificationList dismissHandler={dismissHandler} notifications={notificationArray} />
     </div>
   )
 }
 
 NotificationsContainer.propTypes = {
-  notifications: PropTypes.array.isRequired
+  dismissNotification: PropTypes.func.isRequired,
+  notifications: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -23,4 +39,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(NotificationsContainer)
+const mapDispatchToProps = { dismissNotification }
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsContainer)

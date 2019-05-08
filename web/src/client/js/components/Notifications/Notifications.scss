@@ -3,7 +3,10 @@
 :root {
   --notice-width: 250px;
   --notice-space: #{$brandWidth / 2};
-  --notice-background: linear-gradient(90deg, rgba(241,242,242,1) 0%, rgba(255,255,255,1) 42%, rgba(249,250,250,1) 100%);
+  --notice-background: #{$white-ter};
+  @media (prefers-color-scheme: dark) {
+    --notice-background: #{$black-er};
+  }
 }
 
 @keyframes slidein {
@@ -15,6 +18,15 @@
   }
   100% {
     transform: translate3d(calc(var(--notice-width) * -1 - var(--notice-space)), 0, 0);
+  }
+}
+
+@keyframes slideout {
+  from {
+    transform: translate3d(calc(var(--notice-width) * -1 - var(--notice-space)), 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -37,6 +49,7 @@
     border-radius: $borderRadius;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     display: flex;
+    margin-bottom: 1rem;
     padding: 1rem;
     width: var(--notice-width);
     h2 {
@@ -47,11 +60,18 @@
       font-size: 1.3rem;
       margin: 0;
     }
+
+    // Clicking close adds this class, then removes it from the store
+    &--dismissed {
+      animation: slideout 0.3s ease 0s 1 normal forwards;
+    }
+
     &--error {
       .notifications__code {
         color: $danger;
       }
     }
+
   }
 
   &__remove {

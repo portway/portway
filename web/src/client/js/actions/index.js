@@ -49,6 +49,7 @@ export const ActionTypes = {
   REMOVE_FIELD: 'REMOVE_FIELD',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
+  DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
@@ -123,7 +124,8 @@ export const Fields = {
 }
 
 export const Notifications = {
-  create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'noticeType', 'code', 'message')
+  create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'noticeType', 'code', 'message'),
+  dismiss: makeActionCreator(ActionTypes.DISMISS_NOTIFICATION, 'noticeId'),
 }
 
 export const Users = {

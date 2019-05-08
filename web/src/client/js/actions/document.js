@@ -1,20 +1,24 @@
 import Constants from 'Shared/constants'
-import { Documents } from './index'
-import { add, fetch, update, remove } from '../api'
+import { Documents, Notifications } from './index'
+import { add, fetch, update, remove, globalErrorCodes } from '../api'
 
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
-    const { data } = await fetch(`projects/${projectId}/documents`)
-    dispatch(Documents.receiveList(projectId, data))
+    const { data, status } = await fetch(`projects/${projectId}/documents`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create('error', status, data)) :
+      dispatch(Documents.receiveList(projectId, data))
   }
 }
 
 export const fetchDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.requestOne(documentId))
-    const { data } = await fetch(`documents/${documentId}`)
-    dispatch(Documents.receiveOne(data))
+    const { data, status } = await fetch(`documents/${documentId}`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create('error', status, data)) :
+      dispatch(Documents.receiveOne(data))
   }
 }
 
