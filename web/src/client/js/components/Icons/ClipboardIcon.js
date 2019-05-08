@@ -26,7 +26,7 @@ ClipboardIcon.propTypes = {
 
 ClipboardIcon.defaultProps = {
   className: 'icon-clipboard',
-  fill: '#3b3d3e',
+  fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#e5e7e6' : '#3b3d3e',
   height: '18',
   width: '18'
 }

@@ -1,9 +1,16 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
+:root {
+  --field-background: #{$white};
+  @media (prefers-color-scheme: dark) {
+    --field-background: #{$black-bis};
+  }
+}
+
 .document-field {
-  background-color: $white;
-  border: thin solid $gray-light;
+  background-color: var(--field-background);
+  border: thin solid var(--base-border-color);
   cursor: grab;
   margin-bottom: ($brandWidth / 2);
   outline: 0;

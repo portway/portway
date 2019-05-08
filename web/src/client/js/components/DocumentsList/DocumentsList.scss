@@ -1,6 +1,19 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
+:root {
+  --document-list-active-item: #{$white-bis};
+  --document-list-item-hover: #{rgba($white-ter, .2)};
+  --document-list-item-new: #{rgba($white-ter, .2)};
+  --document-list-item-color: #{$black-ter};
+  @media (prefers-color-scheme: dark) {
+    --document-list-active-item: #{$black-er};
+    --document-list-item-new: #{rgba($black-ter, .2)};
+    --document-list-item-hover: #{rgba($black-ter, .2)};
+    --document-list-item-color: #{$white-ter};
+  }
+}
+
 .documents-list {
   &__list {
     list-style: none;
@@ -8,7 +21,7 @@
     padding: 0;
   }
   &__item {
-    border-top: thin solid $white-ter;
+    border-top: thin solid var(--base-border-color);
     transition: opacity 0.2s ease-in-out;
     // New item is a fake list item
     &--new {
@@ -21,10 +34,10 @@
         .btn--with-circular-icon {
           padding: 0;
           .icon {
-            background-color: $white-ter;
-            height: 30px;
+            // background-color: $white-ter;
+            // height: 30px;
             margin-right: 0;
-            width: 30px;
+            // width: 30px;
           }
         }
       }
@@ -38,7 +51,7 @@
         resize: none;
       }
       &:focus {
-        background-color: $white-bis;
+        background-color: var(--document-list-active-item);
       }
     }
   }
@@ -48,19 +61,29 @@
     padding: $sideGutterWidth / 4;
     white-space: normal;
     width: 100%;
+    &:not([disabled]) {
+      &:hover {
+        background-color: var(--document-list-item-hover);
+      }
+    }
     &.active {
-      background-color: $white-bis;
+      background-color: var(--document-list-active-item);
+      &:not([disabled]) {
+        &:hover {
+          background-color: var(--document-list-active-item);
+        }
+      }
       &:focus {
-        background-color: $white-bis;
+        background-color: var(--document-list-active-item);
       }
     }
   }
   &__name {
     border: 0;
-    color: $black-ter;
+    color: var(--document-list-item-color);
     padding-bottom: $sideGutterWidth / 4;
     .active & {
-      color: $black-bis;
+      color: var(--document-list-item-color);
     }
   }
   &__date {
@@ -86,7 +109,7 @@
     .documents-list__item {
       opacity: 0.2;
       &--new {
-        background-color: $white-bis;
+        background-color: var(--document-list-item-new);
         opacity: 1;
       }
     }
