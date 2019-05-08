@@ -18,7 +18,7 @@ const NotificationsContainer = ({ dismissNotification, notifications }) => {
     // Delayed so the animation can take place
     setTimeout(() => {
       dismissNotification(noticeId)
-    }, 200)
+    }, 500)
   }
 
   return (
