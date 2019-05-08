@@ -43,11 +43,13 @@ const publishDocument = async function(req, res) {
   const { id } = req.params
   const { orgId } = req.requestorInfo
 
-  let publishedDoc
-
   try {
     const document = await BusinessDocument.findById(id, orgId)
-    publishedDoc = await documentVersionCoordinator.publishDocumentVersion(document.id, document.projectId, orgId)
+    const publishedDoc = await documentVersionCoordinator.publishDocumentVersion(
+      document.id,
+      document.projectId,
+      orgId
+    )
     res.json({ data: publishedDoc })
   } catch (e) {
     console.error(e.stack)
