@@ -92,3 +92,19 @@ export const fetchProjectTokens = (projectId) => {
     dispatch(ProjectTokens.receive(projectId, data))
   }
 }
+
+export const createProjectToken = (projectId, body) => {
+  return async (dispatch) => {
+    dispatch(ProjectTokens.create(projectId))
+    const { data } = await add(`projects/${projectId}/tokens`, body)
+    dispatch(ProjectTokens.receiveOneCreated(data))
+  }
+}
+
+export const removeProjectToken = (projectId, tokenId) => {
+  return async (dispatch) => {
+    dispatch(ProjectTokens.initiateRemove(projectId, tokenId))
+    await remove(`projects/${projectId}/tokens/${tokenId}`)
+    dispatch(ProjectTokens.removedOne(projectId, tokenId))
+  }
+}

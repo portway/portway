@@ -30,6 +30,7 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
         aria-haspopup
         aria-expanded={expanded}
         aria-label={button.label}
+        name={button.name}
         onClick={() => { setExpanded(!expanded)}}>
         {button.icon && button.icon}
         {button.label && <div className="label">{button.label}</div>}
@@ -54,7 +55,8 @@ DropdownComponent.propTypes = {
     className: PropTypes.string,
     icon: PropTypes.element,
     iconPlacement: PropTypes.string,
-    label: PropTypes.string
+    label: PropTypes.string,
+    name: PropTypes.string
   }),
   children: PropTypes.node.isRequired,
   className: PropTypes.string,

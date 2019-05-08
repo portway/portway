@@ -3,9 +3,12 @@
 // Main content container for each section component
 // Based on a 640/768 ratio in Sketch file
 main {
-  padding: 12px 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - #{$headerHeight + $ribbonHeight}); // 12px top padding
+  padding: 12px 24px 0;
   @include media('>=medium') {
-    padding: 12px $sideGutterWidth;
+    padding: 12px $sideGutterWidth 0;
   }
 }
 

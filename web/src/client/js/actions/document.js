@@ -10,10 +10,10 @@ export const fetchDocuments = (projectId) => {
   }
 }
 
-export const fetchDocument = (projectId, documentId) => {
+export const fetchDocument = (documentId) => {
   return async (dispatch) => {
-    dispatch(Documents.requestOne(projectId, documentId))
-    const { data } = await fetch(`projects/${projectId}/documents/${documentId}`)
+    dispatch(Documents.requestOne(documentId))
+    const { data } = await fetch(`documents/${documentId}`)
     dispatch(Documents.receiveOne(data))
   }
 }
@@ -24,6 +24,17 @@ export const createDocument = (projectId, history, body) => {
     const { data } = await add(`projects/${projectId}/documents`, body)
     dispatch(Documents.receiveOneCreated(data))
     history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}/document/${data.id}` })
+  }
+}
+
+export const publishDocument = (documentId) => {
+  return async (dispatch) => {
+    dispatch(Documents.publish(documentId))
+    // @todo replace with actual endpoint when ready
+    setTimeout(() => {
+      const data = { id: documentId }
+      dispatch(Documents.receivePublishedVersion(data))
+    }, 2000)
   }
 }
 

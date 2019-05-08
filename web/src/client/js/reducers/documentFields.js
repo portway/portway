@@ -12,16 +12,16 @@ const initialState = {
 
 export const documentFields = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.REQUEST_FIELDS: {
+    case ActionTypes.REQUEST_DOCUMENT: {
       const { documentId } = action
       const byDocument = { ...state.loading.byDocument, [documentId]: true }
       return { ...state, loading: { ...state.loading, byDocument } }
     }
-    case ActionTypes.RECEIVE_FIELDS: {
-      const documentId = action.documentId
+    case ActionTypes.RECEIVE_DOCUMENT: {
+      const documentId = action.data.id
       const byDocument = { ...state.loading.byDocument, [documentId]: false }
-      const documentFieldsObject = action.data.reduce((object, doc) => {
-        object[doc.id] = doc
+      const documentFieldsObject = action.data.fields.reduce((object, field) => {
+        object[field.id] = field
         return object
       }, {})
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: documentFieldsObject }

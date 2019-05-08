@@ -49,6 +49,37 @@ button,
     }
   }
 
+  &--small {
+    font-size: 1.2rem;
+    min-height: 24px;
+    padding: 0 18px;
+    &.btn--with-icon {
+      .icon {
+        height: 12px;
+        width: 12px;
+      }
+    }
+  }
+
+  &--primary {
+    @include focus($primary, $primary);
+    background-color: $primary;
+    border: thin solid $primary;
+    &:not([disabled]) {
+      &:hover {
+        background-color: lighten($primary, 10%);
+        color: $white;
+      }
+      &:active {
+        background-color: $primary-dark;
+        color: $white;
+      }
+    }
+    &[aria-expanded="true"] {
+      background-color: $primary-dark;
+    }
+  }
+
   &--white {
     @include focus($white, $gray-light);
     background-color: $white;
@@ -91,10 +122,8 @@ button,
   &--with-icon {
     align-items: center;
     display: inline-flex;
-    padding: 0 10px;
+    padding: 0 10px 0 10px;
     .icon {
-      height: 28px;
-      width: 28px;
       .icon-caret {
         transition: transform 0.2s ease-in-out;
       }
@@ -102,7 +131,7 @@ button,
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      padding: 2px 12px 2px 0;
+      padding: 2px 0 2px 4px;
     }
     &[aria-expanded="true"] {
       .icon-caret {

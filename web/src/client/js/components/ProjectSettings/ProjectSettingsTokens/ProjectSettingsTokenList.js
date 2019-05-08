@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 
 import ProjectSettingsTokenItem from './ProjectSettingsTokenItem'
 
-const ProjectSettingsTokenList = ({ selectedToken, tokens, tokenSelectHandler }) => {
+const ProjectSettingsTokenList = ({ selectedToken, tokens, tokenRemoveHandler, tokenSelectHandler }) => {
   function renderTokens() {
     return tokens.map((token) => {
       return <ProjectSettingsTokenItem
         key={`token-${token.id}`}
+        removeHandler={tokenRemoveHandler}
         selected={selectedToken === token.id}
         selectHandler={tokenSelectHandler}
         token={token} />

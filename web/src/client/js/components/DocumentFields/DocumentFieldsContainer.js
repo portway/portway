@@ -11,24 +11,23 @@ import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
-const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField, updateField, updateFieldOrder, uiConfirm }) => {
+const DocumentFieldsContainer = ({
+  creating, createdFieldId, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
+}) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
   const { documentId } = match.params
-  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
+  const { data: fields = {} } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
-    if (!fields) return
     const fieldMap = Object.keys(fields).map((fieldId) => {
       return fields[fieldId]
     })
     fieldMap.sort((a, b) => {
       return a.order - b.order
     })
-    if (fieldMap.length > 0) {
-      setOrderedFields(fieldMap)
-    }
+    setOrderedFields(fieldMap)
   }, [fields])
 
   // Actions
@@ -107,13 +106,15 @@ const DocumentFieldsContainer = ({ creating, createdFieldId, match, removeField,
       fields={orderedFields}
       fieldChangeHandler={debouncedValueChangeHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
-      fieldDestroyHandler={fieldDestroyHandler} />
+      fieldDestroyHandler={fieldDestroyHandler}
+      isPublishing={isPublishing} />
   )
 }
 
 DocumentFieldsContainer.propTypes = {
   creating: PropTypes.bool.isRequired,
   createdFieldId: PropTypes.number,
+  isPublishing: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
@@ -124,7 +125,8 @@ DocumentFieldsContainer.propTypes = {
 const mapStateToProps = (state) => {
   return {
     creating: state.ui.fields.creating,
-    createdFieldId: state.documentFields.lastCreatedFieldId
+    createdFieldId: state.documentFields.lastCreatedFieldId,
+    isPublishing: state.ui.documents.isPublishing
   }
 }
 
