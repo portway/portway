@@ -56,8 +56,7 @@ const NavigatorContainer = ({ history, location }) => {
         <components.Option {...props} />
         <ProjectPermission
           projectId={data.value}
-          acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}
-          elseRender={(null)}>
+          acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} >
           <Link
             className="navigator__settings"
             onClick={(e) => {

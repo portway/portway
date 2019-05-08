@@ -129,7 +129,7 @@ export const Users = {
 }
 
 export const UserProjectAssignments = {
-  request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS),
+  request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS, 'userId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECT_ASSIGNMENTS, 'userId', 'data')
 }
 
