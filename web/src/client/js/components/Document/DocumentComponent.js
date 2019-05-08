@@ -47,18 +47,18 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
           }}
           ref={titleRef} />
         <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
-          <DropdownItem label="Text" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
+          <DropdownItem label="Text" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
         </DropdownComponent>
         <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
           <DropdownItem label="Text" type="submenu">
             <DropdownSubmenu align="right">
-              <DropdownItem label="Textbox" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
-              <DropdownItem label="String" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
+              <DropdownItem label="Textbox" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
+              <DropdownItem label="String" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
             </DropdownSubmenu>
           </DropdownItem>
           <DropdownItem label="Number" type="submenu">
             <DropdownSubmenu align="right">
-              <DropdownItem label="Number" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
+              <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
             </DropdownSubmenu>
           </DropdownItem>
         </DropdownComponent>

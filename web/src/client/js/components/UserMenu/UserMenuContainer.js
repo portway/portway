@@ -29,7 +29,7 @@ const UserMenuContainer = () => {
   }
   return (
     <DropdownComponent className="user-menu__dropdown" button={button} align="right">
-      <DropdownItem className="user-menu__banner">
+      <DropdownItem type="banner" className="user-menu__banner">
         <span className="user-menu__username">{name}</span>
         <span className="user-menu__email">{currentUser.email}</span>
       </DropdownItem>

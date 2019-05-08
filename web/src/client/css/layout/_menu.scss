@@ -59,10 +59,6 @@
     }
   }
 
-  &:active,
-  &.active {
-    background-color: $gray;
-  }
   &:last-child {
     margin-bottom: 0;
   }
@@ -79,6 +75,9 @@
   @include focus(transparent);
   font-weight: 500;
   &:hover, &:focus {
+    background-color: $white-ter;
+    color: $black-bis;
+    cursor: pointer;
     .menu__submenu {
       display: block;
     }
@@ -121,6 +120,10 @@
     &:hover {
       background-color: $white-ter;
       color: $black-bis;
+    }
+    &:active,
+    &.active {
+      background-color: $gray;
     }
     .menu--dark & {
       &:hover {

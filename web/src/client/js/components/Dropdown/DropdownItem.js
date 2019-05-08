@@ -37,11 +37,11 @@ DropdownItem.propTypes = {
   href: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
-  type: PropTypes.oneOf(['button', 'link', 'submenu'])
+  type: PropTypes.oneOf(['button', 'link', 'submenu', 'banner'])
 }
 
 DropdownItem.defaultProps = {
-  // type: 'button'
+  type: 'button'
 }
 
 export default DropdownItem
