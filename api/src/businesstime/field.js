@@ -49,7 +49,7 @@ async function findAllPublishedForDocument(docId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
-  // Document include must happen first, before field value includes
+  // Putting document include first, not sure it matters
   include.unshift({
     model: db.model('Document'),
     where: {
@@ -61,8 +61,7 @@ async function findAllPublishedForDocument(docId, orgId) {
   const fields = await db.model(MODEL_NAME).findAll({
     where: { docId, orgId },
     order: db.col('order'),
-    include,
-    logging: console.log
+    include
   })
 
   return fields.map(publicFields)
