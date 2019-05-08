@@ -4,8 +4,9 @@ import { validateParams } from '../libs/middleware/payloadValidation'
 import BusinessDocument from '../businesstime/document'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
+import documentVersionCoordinator from '../coordinators/documentVersion'
 
-const { readPerm } = crudPerms(
+const { readPerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
   (req) => {
     return { documentId: req.params.id }
@@ -18,6 +19,7 @@ const paramSchema = Joi.compile({
 
 const documentsController = function(router) {
   router.get('/:id', validateParams(paramSchema), readPerm, getDocument)
+  router.post('/:id/publish', validateParams(paramSchema), updatePerm, publishDocument)
 }
 
 const getDocument = async function(req, res) {
@@ -34,6 +36,22 @@ const getDocument = async function(req, res) {
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
+  }
+}
+
+const publishDocument = async function(req, res) {
+  const { id } = req.params
+  const { orgId } = req.requestorInfo
+
+  let publishedDoc
+
+  try {
+    const document = await BusinessDocument.findById(id, orgId)
+    publishedDoc = await documentVersionCoordinator.publishDocumentVersion(document.id, document.projectId, orgId)
+    res.json({ data: publishedDoc })
+  } catch (e) {
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: `error publishing document with id ${id}` })
   }
 }
 

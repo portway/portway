@@ -7,15 +7,21 @@ import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import apiErrorTypes from '../constants/apiErrorTypes'
+import { getDb } from '../db/dbConnector'
 
 describe('BusinessField', () => {
   let factoryProject
   let factoryDocument
+  const versionId = 12
+
 
   beforeAll(async () => {
     await initializeTestDb()
     factoryProject = (await ProjectFactory.createMany(1))[0]
-    factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+    factoryDocument = (await DocumentFactory.createMany(1, {
+      projectId: factoryProject.id,
+      publishedVersionId: versionId
+    }))[0]
   })
 
   describe('#createForDocument', () => {
@@ -119,6 +125,7 @@ describe('BusinessField', () => {
     let fieldId
     let orgId
     let docId
+    let updateFactoryDocument
 
     const updateBody = {
       name: 'an-updated-name',
@@ -126,8 +133,8 @@ describe('BusinessField', () => {
 
     beforeAll(async () => {
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      factoryField = (await FieldFactory.createMany(1, { docId: factoryDocument.id, type: 1 }))[0]
+      updateFactoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+      factoryField = (await FieldFactory.createMany(1, { docId: updateFactoryDocument.id, type: 1 }))[0]
       fieldId = factoryField.id
       orgId = factoryField.orgId
       docId = factoryField.docId
@@ -187,11 +194,44 @@ describe('BusinessField', () => {
       factoryFields = await FieldFactory.createMany(5, { docId: factoryDocument.id })
       await DocumentFactory.createMany(2, {
         docId: factoryDocument.id,
-        orgId: constants.ORG_2_ID
+        orgId: constants.ORG_2_ID,
       })
       await DocumentFactory.createMany(2, {
         docId: 0,
         orgId: constants.ORG_ID
+      })
+    })
+
+    describe('#findAllPublishedForDocument', () => {
+      let fields
+
+      beforeAll(async () => {
+        await FieldFactory.createMany(4, {
+          docId: factoryDocument.id,
+          orgId: factoryDocument.orgId,
+          versionId
+        })
+
+        fields = await BusinessField.findAllPublishedForDocument(factoryDocument.id, factoryDocument.orgId)
+      })
+
+      it('should return all published fields', async () => {
+        const db = getDb()
+        const fielddebug = await db.model('Field').findAll({
+          where: { docId: factoryDocument.id, orgId: factoryDocument.orgId },
+          raw: true
+        })
+        console.log(fielddebug)
+        console.log('###################################')
+        console.log(factoryDocument.get({ plain: true }))
+        expect(fields.length).toEqual(4)
+      })
+
+      it('should return fields as POJOs', () => {
+        for (const field of fields) {
+          expect(field.constructor).toBe(Object)
+          expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
+        }
       })
     })
 

@@ -78,6 +78,21 @@ async function findParentProjectByDocumentId(id, orgId) {
   return pick(project, resourcePublicFields[resourceTypes.PROJECT])
 }
 
+async function findById(id, orgId) {
+  const db = getDb()
+  const document = await db.model(MODEL_NAME).findOne({
+    where: { id, orgId },
+    attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
+    raw: true
+  })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Document id ${id} not found`)
+  }
+
+  return document
+}
+
 async function findByIdWithPublishedFields(id, orgId) {
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({
@@ -132,5 +147,6 @@ export default {
   deleteByIdForProject,
   findParentProjectByDocumentId,
   findByIdWithPublishedFields,
-  findByIdWithFields
+  findByIdWithFields,
+  findById
 }

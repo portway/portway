@@ -49,17 +49,20 @@ async function findAllPublishedForDocument(docId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
-  include.push({
+  // Document include must happen first, before field value includes
+  include.unshift({
     model: db.model('Document'),
     where: {
       publishedVersionId: { [Op.col]: `${MODEL_NAME}.versionId` }
-    }
+    },
+    attributes: []
   })
 
   const fields = await db.model(MODEL_NAME).findAll({
     where: { docId, orgId },
     order: db.col('order'),
-    include
+    include,
+    logging: console.log
   })
 
   return fields.map(publicFields)

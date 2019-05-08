@@ -15,7 +15,10 @@ const createMany = async function(numberOfDocuments, override) {
   const db = getDb()
   const projects = Array(numberOfDocuments).fill().map(() => getDocumentData(override))
 
-  return Promise.all(projects.map(projectData => db.model('Document').create(projectData)))
+  return Promise.all(projects.map((projectData) => {
+    // console.info(projectData)
+    return db.model('Document').create(projectData)
+  }))
 }
 
 export default {
