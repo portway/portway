@@ -5,7 +5,8 @@ const ACTIONS = {
   DELETE: 'DELETE',
   CREATE: 'CREATE',
   UPDATE_ORG_ROLE: 'UPDATE_ORG_ROLE',
-  READ_MY: 'READ_MY'
+  READ_MY: 'READ_MY',
+  LIST_MY: 'LIST_MY'
 }
 
 export default ACTIONS

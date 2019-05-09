@@ -1,11 +1,18 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
+:root {
+  --global-search-background: #{$white-ter};
+  @media (prefers-color-scheme: dark) {
+    --global-search-background: #{$black-ter};
+  }
+}
+
 .global-search {
   input[type='search'] {
-    background: $white-ter url('/images/icon/search.svg') no-repeat 12px 50%;
+    background: var(--global-search-background) url('/images/icon/search.svg') no-repeat 12px 50%;
     border: none;
-    border-radius: 18px;
+    border-radius: 1.8rem;
     margin: 0;
     padding: 7px 12px 7px 33px;
     -webkit-appearance: none;

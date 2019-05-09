@@ -1,6 +1,13 @@
 @import '../inc/vars';
 @import '../inc/mixins';
 
+:root {
+  --form-background: #{$white};
+  @media (prefers-color-scheme: dark) {
+    --form-background: #{$black-er};
+  }
+}
+
 form {
   .form-field {
     margin-bottom: 18px;
@@ -65,8 +72,8 @@ form {
 
   input[type='text'],
   input[type='email'] {
-    background: $white;
-    border: thin solid $gray-light;
+    background: var(--form-background);
+    border: thin solid var(--base-border-color);
     border-radius: $borderRadius;
     padding: 8px;
     width: 100%;
@@ -74,7 +81,7 @@ form {
       color: $gray;
     }
     &:focus {
-      @include focus($white, $action);
+      @include focus(var(--form-background), $action);
     }
   }
 

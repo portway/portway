@@ -7,7 +7,8 @@
 
   .navbar {
     align-items: center;
-    border-bottom: thin solid $gray-light;
+    // border-bottom: thin solid $gray-light;
+    border-bottom: thin solid var(--base-border-color);
     display: flex;
 
     // Brand area is top left, with logo
@@ -57,7 +58,7 @@
     // The right-most area with user related functions
     &__user {
       align-items: center;
-      border-left: thin solid $gray-light;
+      border-left: thin solid var(--base-border-color);
       display: flex;
       height: $sideGutterWidth;
       justify-content: center;

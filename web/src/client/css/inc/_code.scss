@@ -1,6 +1,17 @@
+:root {
+  --pre-background: #{$black-bis};
+  --pre-color: #{$gray};
+  --pre-comment-color: #{$black-ter};
+  @media (prefers-color-scheme: dark) {
+    --pre-background: #{$black-er};
+    --pre-color: #{$black-ter};
+    --pre-comment-color: #{$gray-dark};
+  }
+}
+
 pre {
-  background-color: $black-bis;
-  color: $gray;
+  background-color: var(--pre-background);
+  color: var(--pre-color);
   direction: ltr;
   hyphens: none;
   margin: 0 0 2rem;
@@ -20,7 +31,7 @@ pre {
     }
     // Comments
     &__block-comment {
-      color: $black-ter;
+      color: var(--pre-comment-color);
       display: block;
     }
     // Code

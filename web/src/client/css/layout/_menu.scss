@@ -1,9 +1,26 @@
 @import '../inc/vars';
 @import '../inc/mixins';
 
+:root {
+  --menu-background: #{$white};
+  --menu-color: #{$black-bis};
+  --menu-border: #{$gray-dark};
+  --menu-hover: #{$white-ter};
+  --menu-dark: #{$black-bis};
+  --menu-highlight: #{lighten($black-bis, 5%)};
+  @media (prefers-color-scheme: dark) {
+    --menu-background: #{$black-bis};
+    --menu-color: #{$white};
+    --menu-border: #{$black-er};
+    --menu-hover: #{$black-ter};
+    --menu-dark: #{$black-er};
+    --menu-highlight: #{lighten($black-er, 5%)};
+  }
+}
+
 .menu {
-  background: $white;
-  border: thin solid $gray-dark;
+  background: var(--menu-background);
+  border: thin solid var(--menu-border);
   border-radius: $borderRadius;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
   padding: 0;
@@ -18,7 +35,7 @@
   }
 
   &--dark {
-    background: $black-bis;
+    background: var(--menu-dark);
     border: thin solid transparent;
   }
 
@@ -37,10 +54,9 @@
 }
 
 .menu__item {
-  background-color: $white;
+  background-color: var(--menu-background);
   border-radius: 0;
-  color: $black-bis;
-  cursor: pointer;
+  color: var(--menu-color);
   display: block;
   text-decoration: none;
   min-width: 210px;
@@ -50,7 +66,7 @@
 
   &--divider {
     &:before {
-      border-top: thin solid $gray;
+      border-top: thin solid var(--menu-border);
       content : '';
       display: block;
       left: 0;
@@ -60,25 +76,14 @@
     }
   }
 
-  &:hover {
-    background-color: $white-ter;
-    color: $black-bis;
-  }
-  &:active,
-  &.active {
-    background-color: $gray;
-  }
   &:last-child {
     margin-bottom: 0;
   }
 
   .menu--dark & {
-    background-color: $black-bis;
+    background-color: var(--menu-dark);
     color: $white;
     padding: 0;
-    &:hover {
-      background-color: lighten($black-bis, 5%);
-    }
   }
 }
 
@@ -87,6 +92,9 @@
   @include focus(transparent);
   font-weight: 500;
   &:hover, &:focus {
+    background-color: $white-ter;
+    color: $black-bis;
+    cursor: pointer;
     .menu__submenu {
       display: block;
     }
@@ -116,6 +124,7 @@
   a, button {
     @extend .menu__item;
     @include focus(transparent);
+    cursor: pointer;
     position: relative;
     text-align: left;
     white-space: normal;
@@ -124,6 +133,19 @@
     }
     &.btn--danger {
       color: $danger;
+    }
+    &:hover {
+      background-color: var(--menu-hover);
+      color: var(--menu-color);
+    }
+    &:active,
+    &.active {
+      background-color: $gray;
+    }
+    .menu--dark & {
+      &:hover {
+        background-color: var(--menu-highlight);
+      }
     }
   }
 }

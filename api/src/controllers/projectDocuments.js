@@ -14,8 +14,6 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   }
 )
 
-// TODO: this is currently piggybacking off of project perms
-
 const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
   id: Joi.number()
