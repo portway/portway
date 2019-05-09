@@ -32,5 +32,6 @@ export const getNotificationMessage = function(notification) {
   if (notification.type === NOTIFICATION_TYPES.ERROR) {
     return errorMessages[notification.code]
   }
+  // Return the default message if it's not an error
   return notification.message
 }
