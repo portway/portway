@@ -7,8 +7,9 @@ import useClickOutside from 'Hooks/useClickOutside'
 import { AddIcon, RemoveIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
-import './DocumentsList.scss'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
+
+import './DocumentsList.scss'
 
 const { PROJECT_ROLE_IDS } = Constants
 

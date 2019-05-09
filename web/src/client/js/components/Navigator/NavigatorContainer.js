@@ -5,7 +5,6 @@ import cx from 'classnames'
 
 import { withRouter, Link } from 'react-router-dom'
 
-// import NavigatorComponent from './NavigatorComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import useClickOutside from 'Hooks/useClickOutside'
@@ -15,8 +14,11 @@ import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import { CaretIcon, ProjectIcon } from 'Components/Icons'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
 
 import './Navigator.scss'
+
+const { PROJECT_ROLE_IDS } = Constants
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
@@ -52,15 +54,19 @@ const NavigatorContainer = ({ history, location }) => {
       <div className={classnames} ref={innerRef} {...innerProps}>
         <ProjectIcon fill="#d2e0f2" />
         <components.Option {...props} />
-        <Link
-          className="navigator__settings"
-          onClick={(e) => {
-            e.stopPropagation()
-            collapseCallback()
-          }}
-          to={`${Constants.PATH_PROJECT}/${data.value}/settings`}>
-          Settings
-        </Link>
+        <ProjectPermission
+          projectId={data.value}
+          acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} >
+          <Link
+            className="navigator__settings"
+            onClick={(e) => {
+              e.stopPropagation()
+              collapseCallback()
+            }}
+            to={`${Constants.PATH_PROJECT}/${data.value}/settings`}>
+            Settings
+          </Link>
+        </ProjectPermission>
       </div>
     )
   }

@@ -18,7 +18,13 @@ export const projects = (state = initialState, action) => {
         projectsById[project.id] = project
         return projectsById
       }, {})
-      return { ...state, projectsById, loading: { ...state.loading, list: false } }
+
+      const loadingById = action.data.reduce((loadingById, project) => {
+        loadingById[project.id] = false
+        return loadingById
+      }, {})
+
+      return { ...state, projectsById, loading: { ...state.loading, list: false, byId: loadingById } }
     }
     case ActionTypes.REQUEST_PROJECT: {
       const loadingById = { ...state.loading.byId, [action.id]: false }

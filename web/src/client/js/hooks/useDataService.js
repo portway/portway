@@ -44,6 +44,7 @@ export default function useDataService(
   })
 
   useEffect(() => {
+    let mounted = true
     const loading = getLoadingStatusFromState(Store.getState())
     setLoading(loading)
 
@@ -52,6 +53,8 @@ export default function useDataService(
     }
 
     function handleStateChange() {
+      if (!mounted) return
+
       const state = Store.getState()
       const loading = getLoadingStatusFromState(state)
       setLoading(loading)
@@ -61,11 +64,12 @@ export default function useDataService(
       }
     }
 
-    const unsubsubscribeFn = Store.subscribe(handleStateChange)
+    const unsubscribeFn = Store.subscribe(handleStateChange)
     handleStateChange()
 
     return () => {
-      unsubsubscribeFn()
+      unsubscribeFn()
+      mounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
