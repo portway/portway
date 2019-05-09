@@ -7,6 +7,7 @@ const token = getCookieValue('token')
 // process.env.API_PUBLIC_URL
 // eslint-disable-next-line no-undef
 const baseURL = new URL('api/', VAR_API_URL)
+const globalErrorCodes = [403, 404, 500]
 
 const axiosInstance = axios.create({
   baseURL: baseURL.toString(),
@@ -17,8 +18,13 @@ const axiosInstance = axios.create({
 })
 
 async function fetch(resource) {
-  const { data } = await axiosInstance.get(resource)
-  return data
+  try {
+    const { data: { data }, status } = await axiosInstance.get(resource)
+    return { data, status }
+  } catch (error) {
+    const { data, status } = error.response
+    return { data, status }
+  }
 }
 
 async function add(resource, body) {
@@ -36,4 +42,4 @@ async function remove(resource) {
   return data
 }
 
-export { fetch, add, update, remove }
+export { fetch, add, update, remove, globalErrorCodes }

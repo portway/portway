@@ -1,7 +1,6 @@
-import currentUserId from 'Libs/currentUserId'
-import { Projects, ProjectAssignees, ProjectTokens } from './index'
-import { fetch, add, update, remove } from '../api'
-import Constants from 'Shared/constants'
+import { Projects, ProjectAssignees, ProjectTokens, Notifications } from './index'
+import { fetch, add, update, remove, globalErrorCodes } from '../api'
+import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
 
 /**
  * Redux action
@@ -9,15 +8,19 @@ import Constants from 'Shared/constants'
  */
 export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
-  const { data } = await fetch(`users/${currentUserId}/projects`)
-  dispatch(Projects.receive(data))
+  const { data, status } = await fetch('projects')
+  globalErrorCodes.includes(status) ?
+    dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
+    dispatch(Projects.receive(data))
 }
 
 export const fetchProject = (projectId) => {
   return async (dispatch) => {
     dispatch(Projects.requestOne(projectId))
-    const { data } = await fetch(`projects/${projectId}`)
-    dispatch(Projects.receiveOne(data))
+    const { data, status } = await fetch(`projects/${projectId}`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status)) :
+      dispatch(Projects.receiveOne(data))
   }
 }
 
@@ -26,7 +29,7 @@ export const createProject = (body, history) => {
     dispatch(Projects.create())
     const { data } = await add('projects', body)
     dispatch(Projects.receiveOneCreated(data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${data.id}` })
+    history.push({ pathname: `${PATH_PROJECT}/${data.id}` })
   }
 }
 
@@ -43,7 +46,7 @@ export const removeProject = (projectId, history) => {
     dispatch(Projects.initiateRemove())
     await remove(`projects/${projectId}`)
     dispatch(Projects.removeOne(projectId))
-    history.push({ pathname: Constants.PATH_PROJECTS })
+    history.push({ pathname: PATH_PROJECTS })
   }
 }
 
