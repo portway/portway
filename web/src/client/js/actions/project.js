@@ -1,6 +1,6 @@
 import { Projects, ProjectAssignees, ProjectTokens, Notifications } from './index'
 import { fetch, add, update, remove, globalErrorCodes } from '../api'
-import Constants from 'Shared/constants'
+import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
 
 /**
  * Redux action
@@ -10,7 +10,7 @@ export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
   const { data, status } = await fetch('projects')
   globalErrorCodes.includes(status) ?
-    dispatch(Notifications.create('error', status, data)) :
+    dispatch(Notifications.create(data, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
     dispatch(Projects.receive(data))
 }
 
@@ -19,7 +19,7 @@ export const fetchProject = (projectId) => {
     dispatch(Projects.requestOne(projectId))
     const { data, status } = await fetch(`projects/${projectId}`)
     globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create('error', status, data)) :
+      dispatch(Notifications.create(data, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status)) :
       dispatch(Projects.receiveOne(data))
   }
 }
@@ -29,7 +29,7 @@ export const createProject = (body, history) => {
     dispatch(Projects.create())
     const { data } = await add('projects', body)
     dispatch(Projects.receiveOneCreated(data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${data.id}` })
+    history.push({ pathname: `${PATH_PROJECT}/${data.id}` })
   }
 }
 
@@ -46,7 +46,7 @@ export const removeProject = (projectId, history) => {
     dispatch(Projects.initiateRemove())
     await remove(`projects/${projectId}`)
     dispatch(Projects.removeOne(projectId))
-    history.push({ pathname: Constants.PATH_PROJECTS })
+    history.push({ pathname: PATH_PROJECTS })
   }
 }
 

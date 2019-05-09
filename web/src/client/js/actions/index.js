@@ -124,7 +124,7 @@ export const Fields = {
 }
 
 export const Notifications = {
-  create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'noticeType', 'code', 'message'),
+  create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'message', 'noticeType', 'resource', 'code'),
   dismiss: makeActionCreator(ActionTypes.DISMISS_NOTIFICATION, 'noticeId'),
 }
 

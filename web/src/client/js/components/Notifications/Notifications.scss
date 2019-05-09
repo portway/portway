@@ -1,11 +1,11 @@
 @import 'CSS/inc/_vars.scss';
 
 :root {
-  --notice-width: 250px;
-  --notice-space: #{$brandWidth / 2};
-  --notice-background: #{$white-ter};
+  --notification-width: 300px;
+  --notification-space: #{$brandWidth / 2};
+  --notification-background: #{$white-ter};
   @media (prefers-color-scheme: dark) {
-    --notice-background: #{$black-er};
+    --notification-background: #{$black-er};
   }
 }
 
@@ -14,16 +14,16 @@
     transform: translate3d(0, 0, 0);
   }
   70% {
-    transform: translate3d(calc((var(--notice-width) * -1.2 )), 0, 0);
+    transform: translate3d(calc((var(--notification-width) * -1.2 )), 0, 0);
   }
   100% {
-    transform: translate3d(calc(var(--notice-width) * -1 - var(--notice-space)), 0, 0);
+    transform: translate3d(calc(var(--notification-width) * -1 - var(--notification-space)), 0, 0);
   }
 }
 
 @keyframes slideout {
   from {
-    transform: translate3d(calc(var(--notice-width) * -1 - var(--notice-space)), 0, 0);
+    transform: translate3d(calc(var(--notification-width) * -1 - var(--notification-space)), 0, 0);
   }
   to {
     transform: translate3d(0, 0, 0);
@@ -43,15 +43,15 @@
     padding: 0;
   }
 
-  &__notice {
+  &__notification {
     animation: slidein 0.3s ease 0.3s 1 normal forwards;
-    background: var(--notice-background);
+    background: var(--notification-background);
     border-radius: $borderRadius;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     display: flex;
     margin-bottom: 1rem;
     padding: 1rem;
-    width: var(--notice-width);
+    width: var(--notification-width);
     h2 {
       font-size: 1.4rem;
       margin: 0;

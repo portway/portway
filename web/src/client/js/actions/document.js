@@ -1,4 +1,4 @@
-import Constants from 'Shared/constants'
+import { PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
 import { Documents, Notifications } from './index'
 import { add, fetch, update, remove, globalErrorCodes } from '../api'
 
@@ -7,7 +7,7 @@ export const fetchDocuments = (projectId) => {
     dispatch(Documents.requestList(projectId))
     const { data, status } = await fetch(`projects/${projectId}/documents`)
     globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create('error', status, data)) :
+      dispatch(Notifications.create(data, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status)) :
       dispatch(Documents.receiveList(projectId, data))
   }
 }
@@ -17,7 +17,7 @@ export const fetchDocument = (documentId) => {
     dispatch(Documents.requestOne(documentId))
     const { data, status } = await fetch(`documents/${documentId}`)
     globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create('error', status, data)) :
+      dispatch(Notifications.create(NOTIFICATION_TYPES.ERROR, status, data)) :
       dispatch(Documents.receiveOne(data))
   }
 }
@@ -27,7 +27,7 @@ export const createDocument = (projectId, history, body) => {
     dispatch(Documents.create(projectId, body))
     const { data } = await add(`projects/${projectId}/documents`, body)
     dispatch(Documents.receiveOneCreated(data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}/document/${data.id}` })
+    history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
   }
 }
 
@@ -47,6 +47,6 @@ export const deleteDocument = (projectId, documentId, history) => {
       id: documentId
     })
     dispatch(Documents.deleted(projectId, documentId, data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}` })
+    history.push({ pathname: `${PATH_PROJECT}/${projectId}` })
   }
 }

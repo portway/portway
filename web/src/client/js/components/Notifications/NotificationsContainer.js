@@ -10,14 +10,14 @@ const NotificationsContainer = ({ dismissNotification, notifications }) => {
   const notificationArray = Object.keys(notifications).map((key) => {
     return {
       id: key,
-      notice: notifications[key]
+      notification: notifications[key]
     }
   })
 
-  function dismissHandler(noticeId) {
+  function dismissHandler(notificationId) {
     // Delayed so the animation can take place
     setTimeout(() => {
-      dismissNotification(noticeId)
+      dismissNotification(notificationId)
     }, 500)
   }
 
@@ -35,7 +35,7 @@ NotificationsContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    notifications: state.notifications.notices
+    notifications: state.notifications.notifications
   }
 }
 

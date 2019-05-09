@@ -27,6 +27,18 @@ const PROJECT_ACCESS_LEVELS = {
   WRITE: 'write'
 }
 
+const NOTIFICATION_TYPES = {
+  ERROR: 'error',
+  SUCCESS: 'success',
+  WARNING: 'warning'
+}
+
+const NOTIFICATION_RESOURCE = {
+  PROJECTS: 'PROJECTS',
+  PROJECT: 'PROJECT',
+  DOCUMENTS: 'DOCUMENTS'
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
@@ -51,6 +63,8 @@ module.exports = {
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  NOTIFICATION_TYPES: NOTIFICATION_TYPES,
+  NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',

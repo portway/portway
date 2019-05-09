@@ -5,8 +5,8 @@ import NotificationComponent from './NotificationComponent'
 
 const NotificationList = ({ dismissHandler, notifications }) => {
   function renderNotices() {
-    return notifications.map((notice) => {
-      return <NotificationComponent dismissHandler={dismissHandler} key={notice.id} id={notice.id} notice={notice.notice} />
+    return notifications.map((notification) => {
+      return <NotificationComponent dismissHandler={dismissHandler} key={notification.id} id={notification.id} notification={notification.notification} />
     })
   }
   if (notifications.length > 0) {

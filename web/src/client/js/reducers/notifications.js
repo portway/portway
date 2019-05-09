@@ -2,23 +2,24 @@ import { uniqueId } from 'lodash'
 import { ActionTypes } from '../actions'
 
 const initialState = {
-  notices: {}
+  notifications: {}
 }
 
 export const notifications = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.CREATE_NOTIFICATION: {
-      const { noticeType, code, message } = action
+      const { noticeType, resource, code, message } = action
       const noticeId = uniqueId(Date.now())
       const notice = {
         type: noticeType,
+        resource: resource,
         code: code,
         message: message
       }
       return {
         ...state,
-        notices: {
-          ...state.notices,
+        notifications: {
+          ...state.notifications,
           [noticeId]: notice
         }
       }
@@ -26,10 +27,10 @@ export const notifications = (state = initialState, action) => {
     case ActionTypes.DISMISS_NOTIFICATION: {
       const { noticeId } = action
       // eslint-disable-next-line no-unused-vars
-      const { [noticeId]: ___, ...restNotifications } = state.notices
+      const { [noticeId]: ___, ...restNotifications } = state.notifications
       return {
         ...state,
-        notices: restNotifications
+        notifications: restNotifications
       }
     }
     default:
