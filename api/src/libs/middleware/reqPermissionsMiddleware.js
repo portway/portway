@@ -1,6 +1,4 @@
 import checkPermission from '../permissions/permissions'
-import RESOURCE_TYPES from '../../constants/resourceTypes'
-import apiErrorTypes from '../../constants/apiErrorTypes';
 /*
 requestorInfo = {
   orgId: '123',
