@@ -9,7 +9,9 @@ import registerServiceWorker from './utilities/registerServiceWorker'
 import Constants from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
 
+import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryComponent'
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
+import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
 import HeaderContainer from 'Components/Header/HeaderContainer'
 import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
@@ -22,13 +24,14 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router basename={Constants.PATH_APP}>
-        <>
+        <ErrorBoundaryComponent>
           <ConfirmationContainer />
           <HeaderContainer />
+          <NotificationsContainer />
           <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
           <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
           <Route path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
-        </>
+        </ErrorBoundaryComponent>
       </Router>
     </Provider>
   )

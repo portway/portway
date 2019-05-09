@@ -27,6 +27,19 @@ const PROJECT_ACCESS_LEVELS = {
   WRITE: 'write'
 }
 
+const NOTIFICATION_TYPES = {
+  ERROR: 'error',
+  SUCCESS: 'success',
+  WARNING: 'warning'
+}
+
+const NOTIFICATION_RESOURCE = {
+  PROJECTS: 'PROJECTS',
+  PROJECT: 'PROJECT',
+  DOCUMENTS: 'DOCUMENTS',
+  DOCUMENT: 'DOCUMENT'
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
@@ -35,6 +48,9 @@ module.exports = {
   PRODUCT_API_URL: 'https://api.project-danger.com/v1',
   // Documentation
   DOCUMENTATION_URL: 'https://docs.project-danger.com/',
+  // Support
+  SUPPORT_EMAIL: 'support@project-danger.com',
+  SUPPORT_LINK: 'https://support.project-danger.com/',
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New Document',
   // Paths
@@ -48,6 +64,8 @@ module.exports = {
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  NOTIFICATION_TYPES: NOTIFICATION_TYPES,
+  NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',

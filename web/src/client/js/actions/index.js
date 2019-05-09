@@ -47,6 +47,9 @@ export const ActionTypes = {
   INITIATE_FIELD_ORDER: 'INITIATE_FIELD_ORDER',
   INITIATE_FIELD_REMOVE: 'INITIATE_FIELD_REMOVE',
   REMOVE_FIELD: 'REMOVE_FIELD',
+  // Notifications
+  CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
+  DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
@@ -118,6 +121,11 @@ export const Fields = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'documentId', 'fieldId')
+}
+
+export const Notifications = {
+  create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'message', 'noticeType', 'resource', 'code'),
+  dismiss: makeActionCreator(ActionTypes.DISMISS_NOTIFICATION, 'noticeId'),
 }
 
 export const Users = {
