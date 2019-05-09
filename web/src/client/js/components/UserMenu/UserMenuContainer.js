@@ -16,7 +16,7 @@ function logoutAction() {
   Store.dispatch(logoutUser(currentUserId))
 }
 
-const UserMenu = () => {
+const UserMenuContainer = () => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
   // fuck outta here
@@ -29,10 +29,14 @@ const UserMenu = () => {
   }
   return (
     <DropdownComponent className="user-menu__dropdown" button={button} align="right">
+      <DropdownItem type="banner" className="user-menu__banner">
+        <span className="user-menu__username">{name}</span>
+        <span className="user-menu__email">{currentUser.email}</span>
+      </DropdownItem>
       <DropdownItem label="Settings" type="link" href={Constants.PATH_SETTINGS} />
       <DropdownItem label="Sign out" type="button" divider onClick={() => { logoutAction() }} />
     </DropdownComponent>
   )
 }
 
-export default UserMenu
+export default UserMenuContainer
