@@ -57,7 +57,6 @@
   background-color: var(--menu-background);
   border-radius: 0;
   color: var(--menu-color);
-  cursor: pointer;
   display: block;
   text-decoration: none;
   min-width: 210px;
@@ -77,14 +76,6 @@
     }
   }
 
-  &:hover {
-    background-color: var(--menu-hover);
-    color: var(--menu-color);
-  }
-  &:active,
-  &.active {
-    background-color: $gray;
-  }
   &:last-child {
     margin-bottom: 0;
   }
@@ -93,9 +84,6 @@
     background-color: var(--menu-dark);
     color: $white;
     padding: 0;
-    &:hover {
-      background-color: var(--menu-highlight);
-    }
   }
 }
 
@@ -104,6 +92,9 @@
   @include focus(transparent);
   font-weight: 500;
   &:hover, &:focus {
+    background-color: $white-ter;
+    color: $black-bis;
+    cursor: pointer;
     .menu__submenu {
       display: block;
     }
@@ -133,6 +124,7 @@
   a, button {
     @extend .menu__item;
     @include focus(transparent);
+    cursor: pointer;
     position: relative;
     text-align: left;
     white-space: normal;
@@ -141,6 +133,19 @@
     }
     &.btn--danger {
       color: $danger;
+    }
+    &:hover {
+      background-color: var(--menu-hover);
+      color: var(--menu-color);
+    }
+    &:active,
+    &.active {
+      background-color: $gray;
+    }
+    .menu--dark & {
+      &:hover {
+        background-color: var(--menu-highlight);
+      }
     }
   }
 }

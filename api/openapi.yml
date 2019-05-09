@@ -801,13 +801,6 @@ components:
           description: Number value with maximum of 15 significant digits (including decimal digits).
             For longer numbers we recommend storing as a string and parsing the value in your code.
           example: 1234567890.12345
-    Error:
-      required:
-        - code
-        - message
-      properties:
-        error:
-          type: string
 
     ProjectUser:
       allOf:
@@ -840,3 +833,29 @@ components:
       properties:
         roleId:
           type: number
+
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        error:
+          type: string
+        errorType:
+          type: string
+          description: Optional error type
+          enum:
+            - undefined
+            - ValidationError
+            - FieldValueIncorrectTypeError
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+
+    ErrorDetail:
+      properties:
+        message:
+          type: string
+        key:
+          type: string      

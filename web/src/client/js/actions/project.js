@@ -10,7 +10,7 @@ export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
   const { data, status } = await fetch('projects')
   globalErrorCodes.includes(status) ?
-    dispatch(Notifications.create(data, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
+    dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
     dispatch(Projects.receive(data))
 }
 
@@ -19,7 +19,7 @@ export const fetchProject = (projectId) => {
     dispatch(Projects.requestOne(projectId))
     const { data, status } = await fetch(`projects/${projectId}`)
     globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create(data, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status)) :
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status)) :
       dispatch(Projects.receiveOne(data))
   }
 }
