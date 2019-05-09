@@ -7,7 +7,6 @@ import { RemoveIcon } from 'Components/Icons'
 import { getNotificationTitle, getNotificationMessage } from './NotificationMessages'
 
 const NotificationComponent = ({ dismissHandler, id, notification }) => {
-  console.log(notification)
   const notificationClasses = cx({
     'notifications__notification': true,
     'notifications__notification--error': notification.type === NOTIFICATION_TYPES.ERROR,
