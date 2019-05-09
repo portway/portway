@@ -18,7 +18,7 @@ const listPerm = (req, res, next) => {
     })(req, res, next)
   }
 
-  res.status(403).send('Invalid Permissions')
+  res.status(403).send({ error: 'Invalid Permissions' })
 }
 
 const paramSchema = Joi.compile({
