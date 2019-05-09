@@ -63,14 +63,14 @@ const ProjectsListItem = ({
       </div>
       <div className="project-list__actions" hidden={activeProjectId !== projectId}>
         <div className="project-list__actions-start">
-          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} elseRender={(null)}>
+          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
             <button className="btn btn--blank btn--danger" onClick={handleDelete}>
               Delete
             </button>
           </ProjectPermission>
         </div>
         <div className="project-list__actions-end">
-          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} elseRender={(null)}>
+          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
             <button className="btn btn--blank">Duplicate</button>
             <Link to={`/project/${projectId}/settings`} className="btn btn--blank">Settings</Link>
           </ProjectPermission>
