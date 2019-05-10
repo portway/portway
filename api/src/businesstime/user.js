@@ -4,6 +4,7 @@ import { UniqueConstraintError } from 'sequelize'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 export const MODEL_NAME = 'User'
 
@@ -59,7 +60,7 @@ async function findSanitizedById(id, orgId) {
 async function updateByEmail(email, body) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { email } })
-  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with email: ${email}`)
+  if (!user) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, user not found with email: ${email}`)
   const updatedUser = await user.update(body)
   return updatedUser && publicFields(updatedUser)
 }
@@ -67,7 +68,7 @@ async function updateByEmail(email, body) {
 async function updateById(id, body) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findByPk(id)
-  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
+  if (!user) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, user not found with id: ${id}`)
   const updatedUser = await user.update(body)
   return updatedUser && publicFields(updatedUser)
 }
@@ -75,7 +76,7 @@ async function updateById(id, body) {
 async function updateOrgRole(id, orgRoleId, orgId) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
-  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
+  if (!user) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, user not found with id: ${id}`)
   const updatedUser = await user.update({ orgRoleId })
   return updatedUser && publicFields(updatedUser)
 }

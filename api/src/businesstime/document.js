@@ -4,6 +4,7 @@ import { pick } from '../libs/utils'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { getFieldValueInclude } from './field'
+import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 const MODEL_NAME = 'Document'
 
@@ -20,7 +21,7 @@ async function createForProject(projectId, body) {
   const project = await db.model('Project').findOne({ where: { id: projectId, orgId } })
 
   if (!project) {
-    throw ono({ code: 404 }, `Cannot create document, project not found with id: ${projectId}`)
+    throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot create document, project not found with id: ${projectId}`)
   }
 
   const createdDocument = await db.model(MODEL_NAME).create({ ...body, projectId })
@@ -50,7 +51,7 @@ async function updateByIdForProject(id, projectId, orgId, body) {
 
   const document = await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId } })
 
-  if (!document) throw ono({ code: 404 }, `Cannot update, document not found with id: ${id}`)
+  if (!document) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, document not found with id: ${id}`)
 
   const updatedDocument = await document.update(body)
   return publicFields(updatedDocument)
@@ -60,7 +61,7 @@ async function deleteByIdForProject(id, projectId, orgId) {
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId } })
 
-  if (!document) throw ono({ code: 404 }, `Cannot delete, document not found with id: ${id}`)
+  if (!document) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot delete, document not found with id: ${id}`)
 
   await document.destroy()
 }

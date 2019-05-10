@@ -1,5 +1,6 @@
+import ono from 'ono'
+
 import checkPermission from '../permissions/permissions'
-import ERROR_MESSAGES from '../../constants/errorMessages'
 /*
 requestorInfo = {
   orgId: '123',
@@ -48,7 +49,8 @@ export default (actionBuilder) => {
         throw new Error('Invalid Permissions')
       }
     } catch (e) {
-      res.status(404).send({ error: ERROR_MESSAGES.NOT_FOUND })
+      const err = new ono({ code: 404 }, e.message)
+      next(err)
     }
   }
 }

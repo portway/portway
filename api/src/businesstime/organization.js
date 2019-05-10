@@ -1,6 +1,7 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
 import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
+import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 const MODEL_NAME = 'Organization'
 const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'name', 'ownerId']
@@ -23,7 +24,7 @@ async function updateById(id, body) {
   const organization = await db.model(MODEL_NAME).findByPk(id)
 
   if (!organization) {
-    throw ono({ code: 404 }, `Cannot update, organization not found with id: ${id}`)
+    throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, organization not found with id: ${id}`)
   }
 
   const updatedOrganization = await organization.update(body)

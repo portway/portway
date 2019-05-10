@@ -30,7 +30,7 @@ const documentFieldOrderController = function(router) {
   )
 }
 
-const updateFieldOrder = async function(req, res) {
+const updateFieldOrder = async function(req, res, next) {
   const { documentId, fieldId } = req.params
   const { order } = req.body
   const { orgId } = req.requestorInfo
@@ -39,9 +39,7 @@ const updateFieldOrder = async function(req, res) {
     await BusinessField.updateOrderById(fieldId, documentId, orgId, order)
     res.status(204).send()
   } catch (e) {
-    console.error(e.stack)
-    const message = e.publicMessage || `error updating field order with id ${fieldId}`
-    res.status(e.code || 500).json({ error: message, errorType: e.errorType })
+    next(e)
   }
 }
 

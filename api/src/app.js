@@ -7,6 +7,7 @@ import logger from 'morgan'
 import envVarValidation from './libs/envVarValidation'
 import auth from './libs/auth/auth'
 import controllerLoader from './controllers/loader'
+import apiErrorHandler from './libs/middleware/apiErrorHandler'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -64,5 +65,9 @@ router.get('/', (req, res) => {
 })
 
 controllerLoader(router)
+
+// ERROR HANDLING - This should always be the last piece of middleware!
+// Get here by calling next(error) in a controller
+app.use(apiErrorHandler)
 
 export default app
