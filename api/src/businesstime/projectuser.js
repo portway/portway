@@ -3,7 +3,6 @@ import ono from 'ono'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 const MODEL_NAME = 'ProjectUser'
 
@@ -32,14 +31,14 @@ async function addUserIdToProject(userId, projectId, roleId, orgId) {
 
   if (!project) {
     throw ono(
-      { code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND },
+      { code: 404 },
       `Project ${projectId} not found, cannot assign user ${userId}`
     )
   }
 
   if (!user) {
     throw ono(
-      { code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND },
+      { code: 404 },
       `User id ${userId} not found, cannot assign project ${projectId}`
     )
   }
@@ -58,7 +57,7 @@ async function updateProjectUserById(id, roleId, orgId) {
 
   const projectUser = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
   if (!projectUser) {
-    throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Project user assignment id ${id} not found`)
+    throw ono({ code: 404 }, `Project user assignment id ${id} not found`)
   }
   return publicFields(await projectUser.update({
     roleId
@@ -88,7 +87,7 @@ async function findByIdAndProject(id, projectId, orgId) {
   })
 
   if (!projectUser) {
-    throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Project user assignment id ${id} not found for project ${projectId}`)
+    throw ono({ code: 404 }, `Project user assignment id ${id} not found for project ${projectId}`)
   }
 
   return projectUser
@@ -100,7 +99,7 @@ async function deleteByIdForProject(id, projectId, orgId) {
 
   if (!projectUser) {
     throw ono(
-      { code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND },
+      { code: 404 },
       `Cannot delete, projectUser not found with id ${id} and project ${projectId}`
     )
   }

@@ -3,7 +3,6 @@ import ono from 'ono'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 const MODEL_NAME = 'ProjectToken'
 
@@ -50,7 +49,7 @@ async function updateNameById(id, updatedName, orgId) {
   const db = getDb()
   const token = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
 
-  if (!token) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, token not found with id: ${id}`)
+  if (!token) throw ono({ code: 404 }, `Cannot update, token not found with id: ${id}`)
 
   const updatedToken = await token.update({
     name: updatedName
@@ -75,7 +74,7 @@ async function deleteById(id, orgId) {
 
   if (!token) {
     throw ono(
-      { code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND },
+      { code: 404 },
       `Cannot delete, token not found with id ${id}`
     )
   }

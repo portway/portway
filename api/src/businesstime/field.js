@@ -7,7 +7,6 @@ import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 const MODEL_NAME = 'Field'
 
@@ -26,7 +25,7 @@ async function createForDocument(docId, body) {
   const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
   if (!document) {
-    throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot create field, document not found with id: ${docId}`)
+    throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
   }
 
   // make sure document fields are ordered correctly and get next order number for new field
@@ -73,11 +72,11 @@ async function updateByIdForDocument(id, docId, orgId, body) {
   const document = await db.model('Document').findOne({ where: { id: docId, orgId }, raw: true })
 
   if (!document) {
-    throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update field, document not found with id: ${docId}`)
+    throw ono({ code: 404 }, `Cannot update field, document not found with id: ${docId}`)
   }
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
-  if (!field) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update, field not found with id: ${id}`)
+  if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
   validateFieldValueByType(body.value, field.type)
 
@@ -92,7 +91,7 @@ async function deleteByIdForDocument(id, docId, orgId) {
   const db = getDb()
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
-  if (!field) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot delete, field not found with id: ${id}`)
+  if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
   await field.destroy()
 
@@ -108,7 +107,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
   }
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
-  if (!field) throw ono({ code: 404, publicMessage: PUBLIC_MESSAGES.NOT_FOUND }, `Cannot update order, field not found with id: ${id}`)
+  if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
 
   const currentPosition = field.order
 
