@@ -1,4 +1,5 @@
 import checkPermission from '../permissions/permissions'
+import ERROR_MESSAGES from '../../constants/errorMessages'
 /*
 requestorInfo = {
   orgId: '123',
@@ -47,7 +48,7 @@ export default (actionBuilder) => {
         throw new Error('Invalid Permissions')
       }
     } catch (e) {
-      res.status(403).send({ error: 'Invalid Permissions' })
+      res.status(404).send({ error: ERROR_MESSAGES.NOT_FOUND })
     }
   }
 }

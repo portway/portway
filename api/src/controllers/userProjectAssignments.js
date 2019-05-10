@@ -4,7 +4,7 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
-import apiErrorTypes from '../constants/apiErrorTypes';
+import ERROR_MESSAGES from '../constants/errorMessages'
 
 const readPerm = (req, res, next) => {
   const { userId } = req.params
@@ -19,7 +19,7 @@ const readPerm = (req, res, next) => {
     })(req, res, next)
   }
 
-  res.status(403).send({ error: 'Invalid Permissions' })
+  res.status(404).send({ error: ERROR_MESSAGES.NOT_FOUND })
 }
 
 const paramSchema = Joi.compile({
