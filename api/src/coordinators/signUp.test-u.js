@@ -11,8 +11,7 @@ jest.mock('../integrators/token')
 jest.mock('../libs/passwordResetKey')
 
 describe('signUp coordinator', () => {
-  const firstName = 'Nicolas'
-  const lastName = 'Cage'
+  const name = 'Nicolas Cage'
   const email = 'faceoff@johntravolta.gov'
 
   describe('#createUserAndOrganization', () => {
@@ -20,8 +19,7 @@ describe('signUp coordinator', () => {
 
     beforeAll(async () => {
       passwordResetToken = await signUpCoordinator.createUserAndOrganization(
-        firstName,
-        lastName,
+        name,
         email
       )
     })
@@ -39,8 +37,7 @@ describe('signUp coordinator', () => {
       const mockOrgId = BusinessOrganization.create.mock.results[0].value.id
       expect(BusinessUser.create.mock.calls.length).toBe(1)
       expect(BusinessUser.create.mock.calls[0][0]).toEqual({
-        firstName,
-        lastName,
+        name,
         email,
         orgId: mockOrgId,
         resetKey: mockResetKey,

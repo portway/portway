@@ -14,7 +14,7 @@ const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignme
       <li key={`${user.id}-${index}`} className="field__row project-settings__teammate">
         <span className="project-settings__teammate-name">
           <UserIcon />
-          {user.firstName} {user.lastName}
+          {user.name}
           {itsMeMario && <span className="project-settings__teammate-is-you pill pill--highlight">You</span>}
         </span>
         <div className="project-settings__teammate-role">

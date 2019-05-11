@@ -7,8 +7,7 @@ const PROJ_X_ORG_ID = seedIds.PROJEXT_X_ORG_ID
 const bulkUsers = [
   {
     id: seedIds.BONKEY_USER_ID,
-    firstName: 'Bonkey Jr.',
-    lastName: 'Bong',
+    name: 'Bonkey Bong Jr.',
     email: 'bonkey@bong.com',
     createdAt: TODAY,
     updatedAt: TODAY,
@@ -19,8 +18,7 @@ const bulkUsers = [
   },
   {
     id: seedIds.BIDDY_USER_ID,
-    firstName: 'Biddy',
-    lastName: 'Bong',
+    name: 'Biddy Bong',
     email: 'biddy@bong.com',
     createdAt: TODAY,
     updatedAt: TODAY,
@@ -31,8 +29,7 @@ const bulkUsers = [
   },
   {
     id: seedIds.BADDY_USER_ID,
-    firstName: 'Baddy',
-    lastName: 'Bong',
+    name: 'Baddy Bong',
     email: 'baddy@bong.com',
     createdAt: TODAY,
     updatedAt: TODAY,
@@ -43,8 +40,7 @@ const bulkUsers = [
   },
   {
     id: seedIds.BIXIE_USER_ID,
-    firstName: 'Bixie',
-    lastName: 'Bong',
+    name: 'Bixie Bong',
     email: 'bixie@bong.com',
     createdAt: TODAY,
     updatedAt: TODAY,
@@ -55,8 +51,7 @@ const bulkUsers = [
   },
   {
     id: seedIds.CAROL_X_USER_ID,
-    firstName: 'Carol',
-    lastName: 'X',
+    name: 'Carol X',
     email: 'carolx@bong.com',
     createdAt: TODAY,
     updatedAt: TODAY,
@@ -67,8 +62,7 @@ const bulkUsers = [
   },
   {
     id: seedIds.BOB_X_USER_ID,
-    firstName: 'Bob',
-    lastName: 'X',
+    name: 'Bob X',
     email: 'bobx@bong.com',
     createdAt: TODAY,
     updatedAt: TODAY,

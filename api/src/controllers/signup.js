@@ -6,8 +6,7 @@ import userCoordinator from '../coordinators/user'
 import auth from '../libs/auth/auth'
 
 const signupPayloadSchema = Joi.compile({
-  firstName: Joi.string().required(),
-  lastName: Joi.string().required(),
+  name: Joi.string().required(),
   email: Joi.string()
     .email()
     .required()
@@ -29,10 +28,10 @@ const signupController = function(router) {
 }
 
 const signUp = async function(req, res) {
-  const { firstName, lastName, email } = req.body
+  const { name, email } = req.body
 
   try {
-    const token = await signUpCoordinator.createUserAndOrganization(firstName, lastName, email)
+    const token = await signUpCoordinator.createUserAndOrganization(name, email)
     res.status(200).send({ token })
   } catch (e) {
     console.error(e.stack)
