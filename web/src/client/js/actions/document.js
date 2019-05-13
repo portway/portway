@@ -31,6 +31,17 @@ export const createDocument = (projectId, history, body) => {
   }
 }
 
+export const publishDocument = (documentId) => {
+  return async (dispatch) => {
+    dispatch(Documents.publish(documentId))
+    // @todo replace with actual endpoint when ready
+    setTimeout(() => {
+      const data = { id: documentId }
+      dispatch(Documents.receivePublishedVersion(data))
+    }, 2000)
+  }
+}
+
 export const updateDocument = (projectId, documentId, body) => {
   return async (dispatch) => {
     dispatch(Documents.update(projectId, documentId, body))

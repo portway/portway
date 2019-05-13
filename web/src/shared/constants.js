@@ -45,7 +45,7 @@ module.exports = {
   PRODUCT_NAME: 'Project Danger',
   PRODUCT_ID: 'project-danger',
   PRODUCT_LOGO: '/images/logo.svg',
-  PRODUCT_API_URL: 'https://api.project-danger.com/v1',
+  PRODUCT_API_URL: 'http://localhost:3001/api',
   // Documentation
   DOCUMENTATION_URL: 'https://docs.project-danger.com/',
   // Support
@@ -63,6 +63,8 @@ module.exports = {
   PATH_PROJECTS: '/projects',
   PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
+  PATH_DOCUMENT_NEW: '/document/new',
+  PATH_DOCUMENT_NEW_PARAM: 'new',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
   NOTIFICATION_TYPES: NOTIFICATION_TYPES,
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,

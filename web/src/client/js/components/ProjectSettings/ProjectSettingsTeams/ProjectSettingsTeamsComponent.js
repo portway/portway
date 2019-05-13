@@ -28,7 +28,7 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
                 ref={selectRef} />
-              <ProjectRolesDropdown defaultValue={newUserRole} onChange={(newRoleId) => { setNewUserRole(newRoleId) }} />
+              <ProjectRolesDropdown align="right" defaultValue={newUserRole} onChange={(newRoleId) => { setNewUserRole(newRoleId) }} />
               <button
                 type="button"
                 className="btn"
