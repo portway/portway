@@ -21,9 +21,13 @@ export const ActionTypes = {
   RECEIVE_UPDATED_PROJECT_ASSIGNEE: 'RECEIVE_UPDATED_PROJECT_ASSIGNEE',
   INITIATE_PROJECT_ASSIGNEE_REMOVE: 'INITIATE_PROJECT_ASSIGNEE_REMOVE',
   REMOVE_PROJECT_ASSIGNEE: 'REMOVE_PROJECT_ASSIGNEE',
-  // Project Keys
+  // Project Tokens
   REQUEST_PROJECT_TOKENS: 'REQUEST_PROJECT_TOKENS',
   RECEIVE_PROJECT_TOKENS: 'RECEIVE_PROJECT_TOKENS',
+  CREATE_PROJECT_TOKEN: 'CREATE_PROJECT_TOKEN',
+  RECEIVE_CREATED_PROJECT_TOKEN: 'RECEIVE_CREATED_PROJECT_TOKEN',
+  INITIATE_PROJECT_TOKEN_REMOVE: 'INITIATE_PROJECT_TOKEN_REMOVE',
+  REMOVE_PROJECT_TOKEN: 'REMOVE_PROJECT_TOKEN',
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
@@ -36,8 +40,6 @@ export const ActionTypes = {
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   // Fields
-  REQUEST_FIELDS: 'REQUEST_FIELDS',
-  RECEIVE_FIELDS: 'RECEIVE_FIELDS',
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
   INITIATE_FIELD_UPDATE: 'INITIATE_FIELD_UPDATE',
@@ -45,6 +47,9 @@ export const ActionTypes = {
   INITIATE_FIELD_ORDER: 'INITIATE_FIELD_ORDER',
   INITIATE_FIELD_REMOVE: 'INITIATE_FIELD_REMOVE',
   REMOVE_FIELD: 'REMOVE_FIELD',
+  // Notifications
+  CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
+  DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
   // Users
   REQUEST_USERS: 'REQUEST_USERS',
   RECEIVE_USERS: 'RECEIVE_USERS',
@@ -58,7 +63,8 @@ export const ActionTypes = {
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
-  UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION'
+  UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
+  UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE'
 }
 
 export const Projects = {
@@ -88,6 +94,10 @@ export const ProjectAssignees = {
 export const ProjectTokens = {
   request: makeActionCreator(ActionTypes.REQUEST_PROJECT_TOKENS, 'projectId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_TOKENS, 'projectId', 'data'),
+  create: makeActionCreator(ActionTypes.CREATE_PROJECT_TOKEN, 'projectId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN, 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_TOKEN_REMOVE, 'projectId', 'tokenId'),
+  removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_TOKEN, 'projectId', 'tokenId'),
 }
 
 export const Documents = {
@@ -97,15 +107,13 @@ export const Documents = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
   deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
-  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'projectId', 'documentId'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
   receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data')
 }
 
 export const Fields = {
-  requestList: makeActionCreator(ActionTypes.REQUEST_FIELDS, 'documentId'),
-  receiveList: makeActionCreator(ActionTypes.RECEIVE_FIELDS, 'documentId', 'data'),
   initiateCreate: makeActionCreator(ActionTypes.INITIATE_FIELD_CREATE, 'documentId', 'fieldType'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'data'),
   initiateOrderUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_ORDER, 'documentId', 'fieldId', 'newOrder'),
@@ -113,6 +121,11 @@ export const Fields = {
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'documentId', 'fieldId')
+}
+
+export const Notifications = {
+  create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'message', 'noticeType', 'resource', 'code'),
+  dismiss: makeActionCreator(ActionTypes.DISMISS_NOTIFICATION, 'noticeId'),
 }
 
 export const Users = {
@@ -124,7 +137,7 @@ export const Users = {
 }
 
 export const UserProjectAssignments = {
-  request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS),
+  request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS, 'userId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECT_ASSIGNMENTS, 'userId', 'data')
 }
 
@@ -132,5 +145,6 @@ export const UI = {
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
-  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value')
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
+  createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value')
 }

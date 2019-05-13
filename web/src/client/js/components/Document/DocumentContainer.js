@@ -9,17 +9,15 @@ import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
 import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
-import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
+  createField, deleteDocument, fields, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  const { data: fields } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   /**
    * If we're creating a document, render nothing
@@ -40,9 +38,13 @@ const DocumentContainer = ({
    * If we have fields, break them up by type for field names
    */
   let fieldsByType
+
   if (fields) {
     fieldsByType = groupBy(fields, 'type')
+  } else {
+    fieldsByType = {}
   }
+
   function fieldCreationHandler(fieldType) {
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
@@ -82,6 +84,7 @@ const DocumentContainer = ({
 DocumentContainer.propTypes = {
   createField: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
+  fields: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   loading: PropTypes.object.isRequired,
@@ -94,7 +97,8 @@ DocumentContainer.propTypes = {
 const mapStateToProps = (state) => {
   return {
     ui: state.ui,
-    loading: state.documents.loading
+    loading: state.documents.loading,
+    fields: state.documentFields[state.documents.currentDocumentId]
   }
 }
 

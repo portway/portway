@@ -9,6 +9,10 @@ const initialState = {
 
 export const userAssignments = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.RECEIVE_CREATED_PROJECT: {
+      const assignmentsByUserId = { ...state.loading.assignmentsByUserId, [action.userId]: null }
+      return { ...state, loading: { ...state.loading, assignmentsByUserId } }
+    }
     case ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS: {
       const assignmentsByUserId = { ...state.loading.assignmentsByUserId, [action.userId]: true }
       return { ...state, loading: { ...state.loading, assignmentsByUserId } }

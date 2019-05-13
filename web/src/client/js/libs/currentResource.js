@@ -57,7 +57,7 @@ const currentResource = (resourceName, path) => {
         break
       }
       func = dataMapper.documents.id
-      if (matchResults && matchResults.params.projectId && matchResults.params.documentId) {
+      if (matchResults && matchResults.params.documentId) {
         returnValue = func(matchResults.params.projectId, matchResults.params.documentId)
       } else {
         returnValue = returnNull()

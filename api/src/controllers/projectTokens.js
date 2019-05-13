@@ -13,7 +13,7 @@ const { listPerm, readPerm, updatePerm, deletePerm, createPerm } = crudPerms(
 )
 
 const bodySchema = Joi.compile(
-  requiredFields(RESOURCE_TYPES.PROJECT_TOKEN, 'projectId', 'roleId', 'name')
+  requiredFields(RESOURCE_TYPES.PROJECT_TOKEN, 'roleId', 'name')
 )
 
 const bodyUpdateSchema = Joi.compile({
@@ -76,6 +76,7 @@ const getProjectToken = async function(req, res) {
 const createProjectToken = async (req, res) => {
   const { body } = req
   const { orgId } = req.requestorInfo
+  body.projectId = req.params.projectId
 
   try {
     const token = await projectTokenCreator(body, orgId)

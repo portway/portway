@@ -1,5 +1,12 @@
 @import 'CSS/inc/_vars.scss';
 
+:root {
+  --project-background: #{$white-bis};
+  @media (prefers-color-scheme: dark) {
+    --project-background: #{$black-bis};
+  }
+}
+
 .project {
   padding: 0;
 
@@ -13,7 +20,7 @@
   &__documents {
     display: flex;
     &-list-container {
-      border-right: thin solid $gray-light;
+      border-right: thin solid var(--base-border-color);
       height: calc(100vh - #{$ribbonHeight + $headerHeight});
       overflow-y: auto;
       overscroll-behavior: contain;
@@ -21,7 +28,7 @@
       -webkit-overflow-scrolling: touch;
     }
     &-document-container {
-      background-color: $white-bis;
+      background-color: var(--project-background);
       flex: 1;
       height: calc(100vh - #{$ribbonHeight + $headerHeight});
       overflow-y: auto;

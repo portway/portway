@@ -1,20 +1,24 @@
-import Constants from 'Shared/constants'
-import { Documents } from './index'
-import { add, fetch, update, remove } from '../api'
+import { PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
+import { Documents, Notifications } from './index'
+import { add, fetch, update, remove, globalErrorCodes } from '../api'
 
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
-    const { data } = await fetch(`projects/${projectId}/documents`)
-    dispatch(Documents.receiveList(projectId, data))
+    const { data, status } = await fetch(`projects/${projectId}/documents`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status)) :
+      dispatch(Documents.receiveList(projectId, data))
   }
 }
 
-export const fetchDocument = (projectId, documentId) => {
+export const fetchDocument = (documentId) => {
   return async (dispatch) => {
-    dispatch(Documents.requestOne(projectId, documentId))
-    const { data } = await fetch(`projects/${projectId}/documents/${documentId}`)
-    dispatch(Documents.receiveOne(data))
+    dispatch(Documents.requestOne(documentId))
+    const { data, status } = await fetch(`documents/${documentId}`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status)) :
+      dispatch(Documents.receiveOne(data))
   }
 }
 
@@ -23,7 +27,7 @@ export const createDocument = (projectId, history, body) => {
     dispatch(Documents.create(projectId, body))
     const { data } = await add(`projects/${projectId}/documents`, body)
     dispatch(Documents.receiveOneCreated(data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}/document/${data.id}` })
+    history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
   }
 }
 
@@ -43,6 +47,6 @@ export const deleteDocument = (projectId, documentId, history) => {
       id: documentId
     })
     dispatch(Documents.deleted(projectId, documentId, data))
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${projectId}` })
+    history.push({ pathname: `${PATH_PROJECT}/${projectId}` })
   }
 }

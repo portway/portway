@@ -4,6 +4,7 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
+import apiErrorTypes from '../constants/apiErrorTypes';
 
 const readPerm = (req, res, next) => {
   const { userId } = req.params
@@ -18,7 +19,7 @@ const readPerm = (req, res, next) => {
     })(req, res, next)
   }
 
-  res.status(403).send('Invalid Permissions')
+  res.status(403).send({ error: 'Invalid Permissions' })
 }
 
 const paramSchema = Joi.compile({
@@ -26,7 +27,7 @@ const paramSchema = Joi.compile({
 })
 
 const userProjectRolesController = function(router) {
-  // all routes are nested at users/:userId/projectroles and receive req.params.userId
+  // all routes are nested at users/:userId/assignments and receive req.params.userId
   router.get(
     '/',
     validateParams(paramSchema),

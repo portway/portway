@@ -9,6 +9,18 @@
 @import 'hacks';
 @import 'react-select';
 
+:root {
+  color-scheme: light dark;
+  --base-background: #{$white};
+  --base-color: #{$black-bis};
+  --base-border-color: #{$gray-light};
+  @media (prefers-color-scheme: dark) {
+    --base-background: #{$black-bis};
+    --base-color: #{$white};
+    --base-border-color: #{$black-er};
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -18,7 +30,10 @@ body {
   overscroll-behavior-y: none;
 }
 body {
+  background-color: var(--base-background);
+  color: var(--base-color);
   margin: 0;
+  overflow-x: hidden;
   padding: 0;
 }
 
@@ -30,6 +45,12 @@ a {
   &:active {
     color: darken($action, 20%);
   }
+}
+
+input, textarea {
+  background: var(--base-background);
+  border: thin solid var(--base-border-color);
+  color: var(--base-color);
 }
 
 [contenteditable] {

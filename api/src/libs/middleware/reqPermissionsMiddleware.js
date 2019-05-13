@@ -47,7 +47,7 @@ export default (actionBuilder) => {
         throw new Error('Invalid Permissions')
       }
     } catch (e) {
-      res.status(403).send('Invalid Permissions')
+      res.status(403).send({ error: 'Invalid Permissions' })
     }
   }
 }

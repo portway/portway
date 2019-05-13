@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 
 import Constants from 'Shared/constants'
-import ProjectRolesDropdown from './ProjectRolesDropdown'
+import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 
 const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
@@ -12,7 +12,7 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
   const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
 
   return (
-    <form className="project-settings__team">
+    <form className="project-settings__team" onSubmit={(e) => { e.preventDefault() }}>
       <section>
         <h2>Manage your team</h2>
         <div className="form-field form-field--large">

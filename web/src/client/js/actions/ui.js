@@ -9,6 +9,13 @@ export const uiDocumentCreate = (value) => {
   }
 }
 
+// Projects
+export const uiCreateTokenMode = (value) => {
+  return async (dispatch) => {
+    dispatch(UI.createTokenMode(value))
+  }
+}
+
 /**
  * Confirmation system
  */

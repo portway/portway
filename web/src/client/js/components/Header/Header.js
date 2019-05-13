@@ -6,18 +6,12 @@ import Constants from 'Shared/constants'
 import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
-import UserMenu from 'Components/UserMenu/UserMenu'
+import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 const { ORGANIZATION_ROLE_IDS } = Constants
 
 import './Header.scss'
-
-const brand = {
-  logo: Constants.PRODUCT_LOGO,
-  name: Constants.PRODUCT_NAME,
-  default: true // if this is our branding
-}
 
 const renderBrandLogo = (logo) => {
   return {
@@ -41,7 +35,7 @@ const renderProjectsItems = () => {
   )
 }
 
-const Header = ({ location }) => {
+const Header = ({ brand, location }) => {
   const section = location.pathname.split('/')[1]
   return (
     <header className="masthead" role="banner">
@@ -66,7 +60,7 @@ const Header = ({ location }) => {
           <GlobalSearchContainer />
         </div>
         <div className="navbar__user">
-          <UserMenu />
+          <UserMenuContainer />
         </div>
       </nav>
     </header>
