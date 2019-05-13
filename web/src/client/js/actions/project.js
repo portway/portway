@@ -1,3 +1,4 @@
+import currentUserId from 'Libs/currentUserId'
 import { Projects, ProjectAssignees, ProjectTokens, Notifications } from './index'
 import { fetch, add, update, remove, globalErrorCodes } from '../api'
 import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
@@ -8,7 +9,7 @@ import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES 
  */
 export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
-  const { data, status } = await fetch('projects')
+  const { data, status } = await fetch(`users/${currentUserId}/projects`)
   globalErrorCodes.includes(status) ?
     dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
     dispatch(Projects.receive(data))
