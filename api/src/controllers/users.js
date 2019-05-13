@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { validateParams } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 
 import BusinessUser from '../businesstime/user'
 import ono from 'ono'
@@ -7,12 +7,16 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
+import { requiredFields } from './payloadSchemas/helpers'
+import userCoordinator from '../coordinators/user'
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
 })
 
-const { readPerm, listPerm } = crudPerms(
+const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email')
+
+const { readPerm, listPerm, createPerm } = crudPerms(
   RESOURCE_TYPES.USER,
   (req) => { return { id: req.params.id } }
 )
@@ -34,11 +38,15 @@ const conditionalReadPerm = (req, res, next) => {
 
 const usersController = function(router) {
   router.get('/', listPerm, getUsers)
-  router.get(
-    '/:id',
+  router.get('/:id',
     validateParams(paramSchema),
     conditionalReadPerm,
     getUser
+  )
+  router.post('/',
+    validateBody(bodySchema),
+    createPerm,
+    createUser
   )
 }
 
@@ -58,6 +66,19 @@ const getUser = async function(req, res, next) {
     const user = await BusinessUser.findSanitizedById(id, req.requestorInfo.orgId)
     if (!user) throw ono({ code: 404 }, `No user with id ${id}`)
     res.json({ data: user })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const createUser = async function(req, res, next) {
+  const { body } = req
+  const { email } = body
+  const orgId = req.requestorInfo.orgId
+
+  try {
+    const user = await userCoordinator.createPendingUser(email, orgId)
+    res.status(201).json({ data: user })
   } catch (e) {
     next(e)
   }

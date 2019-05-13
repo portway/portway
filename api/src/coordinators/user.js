@@ -1,6 +1,8 @@
 import passwords from '../libs/passwords'
 import BusinessUser from '../businesstime/user'
 import ono from 'ono'
+import passwordResetKey from '../libs/passwordResetKey'
+import tokenIntegrator from '../integrators/token'
 
 // TODO: do we want this by id instead?
 async function updatePassword(email, password) {
@@ -49,9 +51,29 @@ async function validatePasswordResetKey(userId, resetKey) {
   return user
 }
 
+async function createPendingUser(email, orgId) {
+  const resetKey = passwordResetKey.generate()
+  const createdUser = await BusinessUser.create({
+    email,
+    firstName: email,
+    lastName: email,
+    orgRoleId: 2,
+    orgId,
+    resetKey
+  })
+
+  const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
+
+  // TODO: email tokenized signup url to user
+
+  //TODO: remove this
+  console.info(`http://localhost:3000/sign-up/registration/password?token=${token}`)
+}
+
 export default {
   updatePassword,
   setInitialPassword,
   validateEmailPasswordCombo,
-  validatePasswordResetKey
+  validatePasswordResetKey,
+  createPendingUser
 }
