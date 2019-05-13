@@ -16,7 +16,6 @@ const createMany = async function(numberOfDocuments, override) {
   const projects = Array(numberOfDocuments).fill().map(() => getDocumentData(override))
 
   return Promise.all(projects.map((projectData) => {
-    // console.info(projectData)
     return db.model('Document').create(projectData)
   }))
 }

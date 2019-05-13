@@ -219,7 +219,7 @@ describe('BusinessField', () => {
         for (const field of fields) {
           expect(field.constructor).toBe(Object)
           expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
-          expect(Boolean(field.value)).toBe(true)
+          expect(field.value).toBeDefined()
         }
       })
     })
@@ -239,7 +239,7 @@ describe('BusinessField', () => {
         for (const field of fields) {
           expect(field.constructor).toBe(Object)
           expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
-          expect(Boolean(field.value)).toBe(true)
+          expect(field.value).toBeDefined()
         }
       })
     })
