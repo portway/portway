@@ -28,27 +28,25 @@ const signupController = function(router) {
   )
 }
 
-const signUp = async function(req, res) {
+const signUp = async function(req, res, next) {
   const { firstName, lastName, email } = req.body
 
   try {
     const token = await signUpCoordinator.createUserAndOrganization(firstName, lastName, email)
     res.status(200).send({ token })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot sign up' })
+    next(e)
   }
 }
 
-const setInitialPassword = async function(req, res) {
+const setInitialPassword = async function(req, res, next) {
   const { password } = req.body
   const { id: userId } = req.user
 
   try {
     await userCoordinator.setInitialPassword(userId, password)
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot sign up' })
+    next(e)
   }
 
   res.status(200).send()

@@ -1,4 +1,6 @@
 import Joi from 'joi'
+import ono from 'ono'
+
 import { validateParams } from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -18,7 +20,8 @@ const listPerm = (req, res, next) => {
     })(req, res, next)
   }
 
-  res.status(403).send({ error: 'Invalid Permissions' })
+  const err = new ono({ code: 404 }, 'Requested user id does not match requestor id')
+  next(err)
 }
 
 const paramSchema = Joi.compile({
@@ -35,7 +38,7 @@ const userProjectsController = function(router) {
   )
 }
 
-const getUserProjects = async function(req, res) {
+const getUserProjects = async function(req, res, next) {
   const { userId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -43,8 +46,7 @@ const getUserProjects = async function(req, res) {
     const userProjects = await BusinessProject.findAllForUser(userId, orgId)
     res.status(200).json({ data: userProjects })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch user projects' })
+    next(e)
   }
 }
 

@@ -40,7 +40,7 @@ const projectUsersController = function(router) {
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectUser)
 }
 
-const getProjectUsers = async function(req, res) {
+const getProjectUsers = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -48,12 +48,11 @@ const getProjectUsers = async function(req, res) {
     const projectUsers = await BusinessProjectUser.findAllByProjectId(projectId, orgId)
     res.json({ data: projectUsers })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch project users' })
+    next(e)
   }
 }
 
-const getProjectUser = async function(req, res) {
+const getProjectUser = async function(req, res, next) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -62,12 +61,11 @@ const getProjectUser = async function(req, res) {
     if (!user) throw ono({ code: 404 }, `No user with id ${id}`)
     res.json({ data: user })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
+    next(e)
   }
 }
 
-const createProjectUser = async (req, res) => {
+const createProjectUser = async (req, res, next) => {
   const { body } = req
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
@@ -81,12 +79,11 @@ const createProjectUser = async (req, res) => {
     )
     res.status(201).json({ data: projectUser })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot assign user to project' })
+    next(e)
   }
 }
 
-const updateProjectUser = async (req, res) => {
+const updateProjectUser = async (req, res, next) => {
   const { body } = req
   const { id } = req.params
   const { orgId } = req.requestorInfo
@@ -99,12 +96,11 @@ const updateProjectUser = async (req, res) => {
     )
     res.status(200).json({ data: projectUser })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot assign user to project' })
+    next(e)
   }
 }
 
-const deleteProjectUser = async function(req, res) {
+const deleteProjectUser = async function(req, res, next) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -112,8 +108,7 @@ const deleteProjectUser = async function(req, res) {
     await BusinessProjectUser.deleteByIdForProject(id, projectId, orgId)
     res.status(204).send()
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `Error removing user ${id} from project ${projectId}` })
+    next(e)
   }
 }
 

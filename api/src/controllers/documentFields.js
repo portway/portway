@@ -41,7 +41,7 @@ const documentFields = function(router) {
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteDocumentField)
 }
 
-const getDocumentFields = async function(req, res) {
+const getDocumentFields = async function(req, res, next) {
   const { documentId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -49,12 +49,11 @@ const getDocumentFields = async function(req, res) {
     const fields = await BusinessField.findAllForDocument(documentId, orgId)
     res.json({ data: fields })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch fields' })
+    next(e)
   }
 }
 
-const getDocumentField = async function(req, res) {
+const getDocumentField = async function(req, res, next) {
   const { id, documentId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -63,12 +62,11 @@ const getDocumentField = async function(req, res) {
     if (!field) throw ono({ code: 404 }, `No field with id ${id}`)
     res.json({ data: field })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching field with id ${id}` })
+    next(e)
   }
 }
 
-const addDocumentField = async function(req, res) {
+const addDocumentField = async function(req, res, next) {
   const { body } = req
   const { documentId } = req.params
   const { orgId } = req.requestorInfo
@@ -79,13 +77,11 @@ const addDocumentField = async function(req, res) {
     const field = await BusinessField.createForDocument(documentId, body)
     res.status(201).json({ data: field })
   } catch (e) {
-    console.error(e.stack)
-    const message = e.publicMessage || 'Cannot create field'
-    res.status(e.code || 500).json({ error: message, errorType: e.errorType })
+    next(e)
   }
 }
 
-const updateDocumentField = async function(req, res) {
+const updateDocumentField = async function(req, res, next) {
   const { id, documentId } = req.params
   const { body } = req
   const { orgId } = req.requestorInfo
@@ -94,13 +90,11 @@ const updateDocumentField = async function(req, res) {
     const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, body)
     res.status(200).json({ data: field })
   } catch (e) {
-    console.error(e.stack)
-    const message = e.publicMessage || `error updating field with id ${id}`
-    res.status(e.code || 500).json({ error: message, errorType: e.errorType })
+    next(e)
   }
 }
 
-const deleteDocumentField = async function(req, res) {
+const deleteDocumentField = async function(req, res, next) {
   const { id, documentId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -108,8 +102,7 @@ const deleteDocumentField = async function(req, res) {
     await BusinessField.deleteByIdForDocument(id, documentId, orgId)
     res.status(204).send()
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error deleting field with id ${id}` })
+    next(e)
   }
 }
 

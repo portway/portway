@@ -1,5 +1,8 @@
+import ono from 'ono'
 import Joi from 'joi'
+
 import apiErrorTypes from '../../constants/apiErrorTypes'
+import PUBLIC_MESSAGES from '../../constants/publicMessages'
 
 // validation occurs on req.body
 export function validateBody(schema, options = {}) {
@@ -19,16 +22,15 @@ export function validateBody(schema, options = {}) {
       req.body = value
       return next()
     }
-    console.error(error)
 
-    const errorPayload = { error: 'Invalid request payload input' }
+    const apiError = new ono({ code: 400, publicMessage: PUBLIC_MESSAGES.INVALID_PAYLOAD }, error.message)
 
     if (error.name === 'ValidationError' && includeDetails) {
-      errorPayload.errorDetails = error.details.map((detail) => { return { message: detail.message, key: detail.context.key }})
-      errorPayload.errorType = apiErrorTypes.ValidationError
+      apiError.errorDetails = error.details.map((detail) => { return { message: detail.message, key: detail.context.key }})
+      apiError.errorType = apiErrorTypes.ValidationError
     }
 
-    res.status(400).send(errorPayload)
+    next(apiError)
   }
 }
 
@@ -47,6 +49,8 @@ export function validateParams(schema, options = {}) {
       return next()
     }
 
-    res.status(400).send('Invalid request')
+    const apiError = new ono({ code: 400, publicMessage: PUBLIC_MESSAGES.INVALID_PARAM }, error.message)
+
+    next(apiError)
   }
 }
