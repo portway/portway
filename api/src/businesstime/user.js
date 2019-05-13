@@ -80,6 +80,15 @@ async function updateOrgRole(id, orgRoleId, orgId) {
   return updatedUser && publicFields(updatedUser)
 }
 
+async function deleteById(id, orgId) {
+  const db = getDb()
+  const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
+
+  if (!user) throw ono({ code: 404 }, `Cannot delete, user not found with id: ${id}`)
+
+  await user.destroy()
+}
+
 export default {
   create,
   findByEmail,
@@ -88,5 +97,6 @@ export default {
   findSanitizedById,
   updateByEmail,
   updateById,
-  updateOrgRole
+  updateOrgRole,
+  deleteById
 }

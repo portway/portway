@@ -16,7 +16,7 @@ const paramSchema = Joi.compile({
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email')
 
-const { readPerm, listPerm, createPerm } = crudPerms(
+const { readPerm, listPerm, createPerm, updatePerm, deletePerm } = crudPerms(
   RESOURCE_TYPES.USER,
   (req) => { return { id: req.params.id } }
 )
@@ -36,6 +36,21 @@ const conditionalReadPerm = (req, res, next) => {
   return readPerm(req, res, next)
 }
 
+const conditionalUpdatePerm = (req, res, next) => {
+  const { id } = req.params
+  // if ids match use the 'UPDATE_MY' user perm
+  if (id === req.requestorInfo.requestorId) {
+    return perms((req) => {
+      return {
+        resourceType: RESOURCE_TYPES.USER,
+        action: ACTIONS.UPDATE_MY
+      }
+    })(req, res, next)
+  }
+  // not requesting self, normal user read perm
+  return updatePerm(req, res, next)
+}
+
 const usersController = function(router) {
   router.get('/', listPerm, getUsers)
   router.get('/:id',
@@ -47,6 +62,16 @@ const usersController = function(router) {
     validateBody(bodySchema),
     createPerm,
     createUser
+  )
+  router.put('/:id',
+    validateParams(paramSchema),
+    conditionalUpdatePerm,
+    updateUser
+  )
+  router.delete('/:id',
+    validateParams(paramSchema),
+    deletePerm,
+    deleteUser
   )
 }
 
@@ -60,7 +85,7 @@ const getUsers = async function(req, res, next) {
 }
 
 const getUser = async function(req, res, next) {
-  const id = req.params.id
+  const { id } = req.params
 
   try {
     const user = await BusinessUser.findSanitizedById(id, req.requestorInfo.orgId)
@@ -74,11 +99,36 @@ const getUser = async function(req, res, next) {
 const createUser = async function(req, res, next) {
   const { body } = req
   const { email } = body
-  const orgId = req.requestorInfo.orgId
+  const { orgId } = req.requestorInfo
 
   try {
     const user = await userCoordinator.createPendingUser(email, orgId)
     res.status(201).json({ data: user })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const updateUser = async function(req, res, next) {
+  const { id } = req.params
+  const { body } = req
+  const { orgId } = req.requestorInfo
+
+  try {
+    const user = await BusinessUser.updateById(id, body, orgId)
+    res.status(201).json({ data: user })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const deleteUser = async function(req, res, next) {
+  const { id } = req.params
+  const { orgId } = req.requestorInfo
+
+  try {
+    await BusinessUser.deleteById(id, orgId)
+    res.status(204).send()
   } catch (e) {
     next(e)
   }
