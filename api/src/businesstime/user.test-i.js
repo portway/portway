@@ -195,4 +195,21 @@ describe('BusinessUser', () => {
       })
     })
   })
+
+  describe('#deleteById', () => {
+    let factoryUser
+
+    beforeAll(async () => {
+      const factoryUsers = await UserFactory.createMany(1)
+      factoryUser = factoryUsers[0]
+    })
+
+    it('should not throw an error if the target user is found', async () => {
+      await expect(BusinessUser.deleteById(factoryUser.id, factoryUser.orgId)).resolves.toEqual(undefined)
+    })
+
+    it('should throw an error if the target user is not found', async () => {
+      await expect(BusinessUser.deleteById(0)).rejects.toThrow()
+    })
+  })
 })

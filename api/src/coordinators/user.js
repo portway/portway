@@ -1,8 +1,10 @@
 import passwords from '../libs/passwords'
 import BusinessUser from '../businesstime/user'
+import BusinessProjectUser from '../businesstime/projectuser'
 import ono from 'ono'
 import passwordResetKey from '../libs/passwordResetKey'
 import tokenIntegrator from '../integrators/token'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 
 // TODO: do we want this by id instead?
 async function updatePassword(email, password) {
@@ -55,9 +57,10 @@ async function createPendingUser(email, orgId) {
   const resetKey = passwordResetKey.generate()
   const createdUser = await BusinessUser.create({
     email,
+    //TODO: convert this to the single name field when that work is merged
     firstName: email,
     lastName: email,
-    orgRoleId: 2,
+    orgRoleId: ORGANIZATION_ROLE_IDS.USER,
     orgId,
     resetKey
   })
@@ -66,8 +69,13 @@ async function createPendingUser(email, orgId) {
 
   // TODO: email tokenized signup url to user
 
-  //TODO: remove this
+  //TODO: temporary logging to verify functionality, remove this when emailing is in place
   console.info(`http://localhost:3000/sign-up/registration/password?token=${token}`)
+}
+
+async function deleteById(userId, orgId) {
+  await BusinessUser.deleteById(userId, orgId)
+  await BusinessProjectUser.removeAllProjectAssignmentsForUser(userId, orgId)
 }
 
 export default {
@@ -75,5 +83,6 @@ export default {
   setInitialPassword,
   validateEmailPasswordCombo,
   validatePasswordResetKey,
-  createPendingUser
+  createPendingUser,
+  deleteById
 }

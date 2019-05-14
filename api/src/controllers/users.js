@@ -1,14 +1,14 @@
 import Joi from 'joi'
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
-
-import BusinessUser from '../businesstime/user'
 import ono from 'ono'
+
+import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import BusinessUser from '../businesstime/user'
+import userCoordinator from '../coordinators/user'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
-import userCoordinator from '../coordinators/user'
 import userSchema from './payloadSchemas/user'
 
 const paramSchema = Joi.compile({
@@ -129,7 +129,7 @@ const deleteUser = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessUser.deleteById(id, orgId)
+    await userCoordinator.deleteById(id, orgId)
     res.status(204).send()
   } catch (e) {
     next(e)
