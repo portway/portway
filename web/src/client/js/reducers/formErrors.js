@@ -2,7 +2,8 @@ import { ActionTypes } from '../actions'
 import { groupBy } from 'Shared/utilities'
 
 const initialState = {
-  project: {}
+  project: {},
+  document: {}
 }
 
 export const formErrors = (state = initialState, action) => {
