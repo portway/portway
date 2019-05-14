@@ -12,7 +12,7 @@ const organizationsController = function(router) {
   router.get('/:id', getOrganization)
 }
 
-const getOrganization = async function(req, res) {
+const getOrganization = async function(req, res, next) {
   const id = req.params.id
 
   try {
@@ -20,20 +20,18 @@ const getOrganization = async function(req, res) {
     if (!org) throw ono({ code: 404 }, `No organization with id ${id}`)
     res.json({ data: org })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching organization with id ${id}` })
+    next(e)
   }
 }
 
-const addOrganization = async function(req, res) {
+const addOrganization = async function(req, res, next) {
   const { name } = req.body
 
   try {
     const org = await BusinessOrganization.create({ name })
     res.status(201).json({ data: org })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create organization' })
+    next(e)
   }
 }
 

@@ -1,3 +1,5 @@
+import ono from 'ono'
+
 import checkPermission from '../permissions/permissions'
 /*
 requestorInfo = {
@@ -47,7 +49,8 @@ export default (actionBuilder) => {
         throw new Error('Invalid Permissions')
       }
     } catch (e) {
-      res.status(403).send({ error: 'Invalid Permissions' })
+      const err = new ono({ code: 404 }, e.message)
+      next(err)
     }
   }
 }

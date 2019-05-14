@@ -40,7 +40,7 @@ const projectDocumentsController = function(router) {
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectDocument)
 }
 
-const getProjectDocuments = async function(req, res) {
+const getProjectDocuments = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -48,12 +48,11 @@ const getProjectDocuments = async function(req, res) {
     const documents = await BusinessDocument.findAllForProject(projectId, orgId)
     res.json({ data: documents })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch documents' })
+    next(e)
   }
 }
 
-const getProjectDocument = async function(req, res) {
+const getProjectDocument = async function(req, res, next) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -62,12 +61,11 @@ const getProjectDocument = async function(req, res) {
     if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
     res.json({ data: document })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
+    next(e)
   }
 }
 
-const addProjectDocument = async function(req, res) {
+const addProjectDocument = async function(req, res, next) {
   const { body } = req
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
@@ -78,12 +76,11 @@ const addProjectDocument = async function(req, res) {
     const document = await BusinessDocument.createForProject(projectId, body)
     res.status(201).json({ data: document })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create document' })
+    next(e)
   }
 }
 
-const replaceProjectDocument = async function(req, res) {
+const replaceProjectDocument = async function(req, res, next) {
   const { id, projectId } = req.params
   const { body } = req
   const { orgId } = req.requestorInfo
@@ -92,12 +89,11 @@ const replaceProjectDocument = async function(req, res) {
     const document = await BusinessDocument.updateByIdForProject(id, projectId, orgId, body)
     res.json({ data: document })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error updating document with id ${id}` })
+    next(e)
   }
 }
 
-const deleteProjectDocument = async function(req, res) {
+const deleteProjectDocument = async function(req, res, next) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -105,8 +101,7 @@ const deleteProjectDocument = async function(req, res) {
     await BusinessDocument.deleteByIdForProject(id, projectId, orgId)
     res.status(204).send()
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error deleting document with id ${id}` })
+    next(e)
   }
 }
 
