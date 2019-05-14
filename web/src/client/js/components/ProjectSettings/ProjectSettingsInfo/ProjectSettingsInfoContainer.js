@@ -34,7 +34,7 @@ ProjectSettingsInfoContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    errors: state.formErrors.project.errorsByField
+    errors: state.formErrors.project
   }
 }
 

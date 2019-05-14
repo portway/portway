@@ -77,8 +77,7 @@ export const Route = {
 }
 
 export const FormErrors = {
-  create: makeActionCreator(ActionTypes.CREATE_FORM_ERRORS, 'resource', 'data', 'status'),
-  clear: makeActionCreator(ActionTypes.CLEAR_FORM_ERRORS, 'resource')
+  create: makeActionCreator(ActionTypes.CREATE_FORM_ERRORS, 'resource', 'data', 'status')
 }
 
 export const Projects = {

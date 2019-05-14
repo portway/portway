@@ -2,9 +2,7 @@ import { ActionTypes } from '../actions'
 import { groupBy } from 'Shared/utilities'
 
 const initialState = {
-  project: {
-    errorsByField: {}
-  }
+  project: {}
 }
 
 export const formErrors = (state = initialState, action) => {
@@ -20,15 +18,7 @@ export const formErrors = (state = initialState, action) => {
       const errorsByField = groupBy(action.data.errorDetails, 'key')
       return {
         ...state,
-        [resource]: { errorsByField }
-      }
-    }
-    // @todo remove? We don't need this if we just reset on route change
-    case ActionTypes.CLEAR_FORM_ERRORS: {
-      const resource = action.resource
-      return {
-        ...state,
-        [resource]: initialState[resource]
+        [resource]: errorsByField
       }
     }
     default: {

@@ -49,8 +49,12 @@ async function update(resource, body) {
 }
 
 async function remove(resource) {
-  const { data } = await axiosInstance.delete(resource)
-  return data
+  try {
+    await axiosInstance.delete(resource)
+  } catch (error) {
+    const { data, status } = error.response
+    return { data, status }
+  }
 }
 
 export { fetch, add, update, remove, globalErrorCodes, validationCodes }

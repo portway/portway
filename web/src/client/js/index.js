@@ -8,7 +8,7 @@ import Constants from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
-import AppContainer from './AppContainer'
+import AppContainer from 'Components/App/AppContainer'
 import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryComponent'
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
