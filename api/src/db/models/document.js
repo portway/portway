@@ -5,7 +5,9 @@ module.exports = (sequelize, DataTypes) => {
     publishedVersionId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
     projectId: DataTypes.INTEGER
-  }, {})
+  }, {
+    paranoid: true
+  })
   Document.associate = function(models) {
     Document.belongsTo(models.Organization, {
       foreignKey: 'orgId'

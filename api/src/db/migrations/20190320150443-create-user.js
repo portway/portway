@@ -43,6 +43,9 @@ module.exports = {
       },
       resetKey: {
         type: Sequelize.STRING
+      },
+      deletedAt: {
+        type: Sequelize.DATE
       }
     })
   },

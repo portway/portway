@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     orgId: DataTypes.INTEGER,
     projectId: DataTypes.INTEGER,
     roleId: DataTypes.INTEGER
-  }, {})
+  }, {
+    paranoid: true
+  })
   ProjectToken.associate = function(models) {
     // associations can be defined here
   }
