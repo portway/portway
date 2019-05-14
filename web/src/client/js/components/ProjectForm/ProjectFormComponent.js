@@ -5,13 +5,14 @@ import { UserIcon } from 'Components/Icons'
 import TextField from 'Components/Form/TextField'
 import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
-const ProjectFormComponent = ({ formOptions, teamOptions }) => {
+const ProjectFormComponent = ({ errors, formOptions, teamOptions }) => {
   return (
     <form className="project-form" onSubmit={formOptions.submitHandler}>
       <TextField
         id="projectName"
         label="Project Name"
-        name="project[name]"
+        name="name"
+        errors={errors.name}
         placeholder="My new project"
         value={formOptions.values.projectName}
         onChange={formOptions.changeHandler} />
@@ -19,7 +20,8 @@ const ProjectFormComponent = ({ formOptions, teamOptions }) => {
         id="projectDescription"
         label="Description (optional)"
         large
-        name="project[description]"
+        name="description"
+        errors={errors.description}
         value={formOptions.values.projectDescription}
         onChange={formOptions.changeHandler} />
       {teamOptions && (
@@ -54,8 +56,7 @@ const ProjectFormComponent = ({ formOptions, teamOptions }) => {
 }
 
 ProjectFormComponent.propTypes = {
-  name: PropTypes.string,
-  description: PropTypes.string,
+  errors: PropTypes.object,
   formOptions: PropTypes.shape({
     submitLabel: PropTypes.string.isRequired,
     submitHandler: PropTypes.func.isRequired,
@@ -74,8 +75,7 @@ ProjectFormComponent.propTypes = {
         value: PropTypes.string,
         label: PropTypes.string
       })
-    ),
-    changeHandler: PropTypes.func
+    )
   })
 }
 
