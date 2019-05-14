@@ -9,16 +9,28 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       orgId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       name: {
         type: Sequelize.STRING
       },
       docId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Documents',
+          key: 'id'
+        }
       },
       versionId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'DocumentVersions',
+          key: 'id'
+        }
       },
       fieldValueId: {
         type: Sequelize.INTEGER
