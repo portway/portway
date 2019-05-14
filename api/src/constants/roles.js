@@ -51,7 +51,8 @@ export const ORGANIZATION_ROLES = {
       [actions.UPDATE]: true,
       [actions.DELETE]: true,
       [actions.UPDATE_ORG_ROLE]: true,
-      [actions.READ_MY]: true
+      [actions.READ_MY]: true,
+      [actions.UPDATE_MY]: true
     }
   },
   [rIds.ADMIN]: {
@@ -66,7 +67,8 @@ export const ORGANIZATION_ROLES = {
       [actions.CREATE]: true,
       [actions.READ]: true,
       [actions.UPDATE_ORG_ROLE]: true,
-      [actions.READ_MY]: true
+      [actions.READ_MY]: true,
+      [actions.UPDATE_MY]: true
     },
     [resourceTypes.PROJECT_USER]: {
       [actions.UPDATE]: true,
@@ -81,7 +83,8 @@ export const ORGANIZATION_ROLES = {
     },
     [resourceTypes.USER]: {
       [actions.LIST]: true,
-      [actions.READ_MY]: true
+      [actions.READ_MY]: true,
+      [actions.UPDATE_MY]: true
     }
   }
 }

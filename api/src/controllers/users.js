@@ -9,6 +9,7 @@ import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import userCoordinator from '../coordinators/user'
+import userSchema from './payloadSchemas/user'
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
@@ -47,7 +48,7 @@ const conditionalUpdatePerm = (req, res, next) => {
       }
     })(req, res, next)
   }
-  // not requesting self, normal user read perm
+  // not requesting self, normal user update perm
   return updatePerm(req, res, next)
 }
 
@@ -65,6 +66,7 @@ const usersController = function(router) {
   )
   router.put('/:id',
     validateParams(paramSchema),
+    validateBody(userSchema),
     conditionalUpdatePerm,
     updateUser
   )
