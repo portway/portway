@@ -57,9 +57,7 @@ async function createPendingUser(email, orgId) {
   const resetKey = passwordResetKey.generate()
   const createdUser = await BusinessUser.create({
     email,
-    //TODO: convert this to the single name field when that work is merged
-    firstName: email,
-    lastName: email,
+    name: email,
     orgRoleId: ORGANIZATION_ROLE_IDS.USER,
     orgId,
     resetKey

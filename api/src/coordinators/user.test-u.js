@@ -175,8 +175,7 @@ describe('user coordinator', () => {
       expect(BusinessUser.create.mock.calls.length).toBe(1)
       expect(BusinessUser.create.mock.calls[0][0]).toEqual({
         email,
-        firstName: email,
-        lastName: email,
+        name: email,
         orgId,
         resetKey: mockResetKey,
         orgRoleId: ORGANIZATION_ROLE_IDS.USER
