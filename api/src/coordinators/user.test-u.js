@@ -1,14 +1,24 @@
 import userCoordinator from './user'
 import BusinessUser from '../businesstime/user'
 import passwords from '../libs/passwords'
+import passwordResetKey from '../libs/passwordResetKey'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import tokenIntegrator from '../integrators/token'
+import BusinessProjectUser from '../businesstime/projectuser'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
 
 jest.mock('../businesstime/user')
+jest.mock('../businesstime/projectuser')
 jest.mock('../libs/passwords')
+jest.mock('../libs/passwordResetKey')
+jest.mock('../integrators/token')
 
 describe('user coordinator', () => {
   const email = 'hughjackman@johntravolta.gov'
   const password = 'swordfish'
   const userId = 1
+  const orgId = 0
 
   describe('#updatePassword', () => {
     beforeAll(async () => {
@@ -70,7 +80,7 @@ describe('user coordinator', () => {
     })
   })
 
-  describe('validateEmailPasswordCombo', () => {
+  describe('#validateEmailPasswordCombo', () => {
     describe('when a valid email/password combo is passed', () => {
       let returnVal
 
@@ -117,7 +127,7 @@ describe('user coordinator', () => {
     })
   })
 
-  describe('validatePasswordResetKey', () => {
+  describe('#validatePasswordResetKey', () => {
     describe('when the target user is not found', () => {
       beforeAll(async () => {
         BusinessUser.setFindByIdReturnValue(null)
@@ -148,6 +158,61 @@ describe('user coordinator', () => {
         // eslint-disable-next-line max-len
         await expect(userCoordinator.validatePasswordResetKey(1, 'some-key-definitely-not-real')).rejects.toThrow()
       })
+    })
+  })
+
+  describe('#createPendingUser', () => {
+    const email = 'not-a-real-email@email.fun'
+    let createdUser
+
+    beforeAll(async () => {
+      createdUser = await userCoordinator.createPendingUser(email, orgId)
+    })
+
+    it('should call passwordResetKey.generate', () => {
+      expect(passwordResetKey.generate.mock.calls.length).toBe(1)
+    })
+
+    it('should call BusinessUser.create with the correct body', () => {
+      const mockResetKey = passwordResetKey.generate.mock.results[0].value
+      expect(BusinessUser.create.mock.calls.length).toBe(1)
+      expect(BusinessUser.create.mock.calls[0][0]).toEqual({
+        email,
+        name: email,
+        orgId,
+        resetKey: mockResetKey,
+        orgRoleId: ORGANIZATION_ROLE_IDS.USER
+      })
+    })
+
+    it('should call tokenIntegrator.generatePasswordResetToken with the user id and reset key', () => {
+      const mockResetKey = passwordResetKey.generate.mock.results[0].value
+      const mockUserId = BusinessUser.create.mock.results[0].value.id
+      expect(tokenIntegrator.generatePasswordResetToken.mock.calls.length).toBe(1)
+      expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][0]).toBe(mockUserId)
+      expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][1]).toBe(mockResetKey)
+    })
+
+    it('should return the created user with only public fields exposed', () => {
+      expect(Object.keys(createdUser)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.USER]))
+    })
+  })
+
+  describe('#deleteById', () => {
+    beforeAll(async () => {
+      await userCoordinator.deleteById(userId, orgId)
+    })
+
+    it('should call BusinessUser.deleteById', () => {
+      expect(BusinessUser.deleteById.mock.calls.length).toBe(1)
+      expect(BusinessUser.deleteById.mock.calls[0][0]).toBe(userId)
+      expect(BusinessUser.deleteById.mock.calls[0][1]).toBe(orgId)
+    })
+
+    it('should call BusinessProjectUser.removeAllProjectAssignmentsForUser', () => {
+      expect(BusinessProjectUser.removeAllProjectAssignmentsForUser.mock.calls.length).toBe(1)
+      expect(BusinessProjectUser.removeAllProjectAssignmentsForUser.mock.calls[0][0]).toBe(userId)
+      expect(BusinessProjectUser.removeAllProjectAssignmentsForUser.mock.calls[0][1]).toBe(orgId)
     })
   })
 })

@@ -129,6 +129,11 @@ async function findAllProjectAssignmentsForUser(userId, orgId) {
   })
 }
 
+async function removeAllProjectAssignmentsForUser(userId, orgId) {
+  const db = getDb()
+  await db.model(MODEL_NAME).destroy({ where: { userId, orgId } })
+}
+
 export default {
   create,
   addUserIdToProject,
@@ -138,5 +143,6 @@ export default {
   removeAllUsersFromProject,
   getProjectUserAssignment,
   updateProjectUserById,
-  findAllProjectAssignmentsForUser
+  findAllProjectAssignmentsForUser,
+  removeAllProjectAssignmentsForUser
 }
