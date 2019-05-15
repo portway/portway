@@ -14,7 +14,7 @@ import currentResource from 'Libs/currentResource'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, fields, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
+  createField, deleteDocument, errors, fields, history, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -76,6 +76,7 @@ const DocumentContainer = ({
 
   return <DocumentComponent
     document={document}
+    errors={errors}
     fieldCreationHandler={fieldCreationHandler}
     nameChangeHandler={nameChangeHandler}
     removeDocumentHandler={removeDocumentHandler} />
@@ -84,10 +85,10 @@ const DocumentContainer = ({
 DocumentContainer.propTypes = {
   createField: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
+  errors: PropTypes.object,
   fields: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  loading: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
@@ -96,9 +97,9 @@ DocumentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    errors: state.formErrors.document,
+    fields: state.documentFields[state.documents.currentDocumentId],
     ui: state.ui,
-    loading: state.documents.loading,
-    fields: state.documentFields[state.documents.currentDocumentId]
   }
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import cx from 'classnames'
-import FieldErrors from './FieldErrors'
+import ValidationComponent from 'Components/Validation/ValidationComponent'
 
 const Checkbox = ({ help, id, label, large, name, errors, placeholder, value, onChange }) => {
   const textFieldClasses = cx({
@@ -23,7 +23,7 @@ const Checkbox = ({ help, id, label, large, name, errors, placeholder, value, on
           placeholder={placeholder}
           defaultChecked={value}
           onChange={onChange} />
-        <FieldErrors errors={errors} />
+        <ValidationComponent errors={errors} />
       </div>
       {help && <div className="form-field__help small">{help}</div>}
     </div>

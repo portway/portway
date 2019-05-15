@@ -4,12 +4,13 @@ import PropTypes from 'prop-types'
 import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, MoreIcon } from 'Components/Icons'
+import ValidationComponent from 'Components/Validation/ValidationComponent'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './Document.scss'
 
-const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, removeDocumentHandler }) => {
+const DocumentComponent = ({ document, errors, fieldCreationHandler, nameChangeHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const contentDropdown = {
@@ -67,6 +68,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
           <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
       </header>
+      <ValidationComponent errors={errors.name} />
       <DocumentFieldsContainer />
     </div>
   )
@@ -75,6 +77,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
+  errors: PropTypes.object,
   fieldCreationHandler: PropTypes.func.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired
