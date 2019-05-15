@@ -4,14 +4,13 @@ import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 
-async function createUserAndOrganization(firstName, lastName, email) {
-  const organizationName = `${firstName} ${lastName}'s Organization`
+async function createUserAndOrganization(name, email) {
+  const organizationName = `${name}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
   const resetKey = passwordResetKey.generate()
 
   const createdUser = await BusinessUser.create({
-    firstName,
-    lastName,
+    name,
     email,
     orgId: organization.id,
     orgRoleId: ORGANIZATION_ROLE_IDS.OWNER,

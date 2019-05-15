@@ -19,7 +19,7 @@ const SignUpController = function(router) {
 }
 
 const registerOrganization = async (req, res) => {
-  const { firstName, lastName, email } = req.body
+  const { name, email } = req.body
 
   let token
   try {
@@ -27,8 +27,7 @@ const registerOrganization = async (req, res) => {
       url: 'signup',
       method: 'POST',
       data: {
-        firstName,
-        lastName,
+        name,
         email
       }
     }))

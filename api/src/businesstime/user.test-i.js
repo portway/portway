@@ -13,8 +13,7 @@ describe('BusinessUser', () => {
 
   describe('#create', () => {
     const userBody = {
-      firstName: 'first-name',
-      lastName: 'last-name',
+      name: 'user name',
       email: 'user@email.com',
       orgId: 1,
       orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN
@@ -36,7 +35,7 @@ describe('BusinessUser', () => {
   describe('#updateById', () => {
     describe('when the target user is found', () => {
       let user
-      const updateBody = { firstName: 'an-updated-name' }
+      const updateBody = { name: 'an-updated-name' }
 
       beforeAll(async () => {
         const factoryUsers = await UserFactory.createMany(1)
@@ -62,7 +61,7 @@ describe('BusinessUser', () => {
   describe('#updateByEmail', () => {
     describe('when the target user is found', () => {
       let user
-      const updateBody = { firstName: 'an-updated-name' }
+      const updateBody = { name: 'an-updated-name' }
 
       beforeAll(async () => {
         const factoryUsers = await UserFactory.createMany(1)

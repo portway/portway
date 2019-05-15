@@ -41,8 +41,7 @@ describe('user coordinator', () => {
   describe('#setInitialPassword', () => {
     const mockUserWithoutPassword = {
       id: 8675309,
-      firstName: 'not-a-real-first-name',
-      lastName: 'not-a-real-last-name',
+      name: 'not-a-real Name',
       email: 'not-a-real-email@email.com',
       orgId: 666,
       resetKey: 'not-a-real-reset-key'
