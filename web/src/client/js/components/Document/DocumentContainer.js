@@ -30,7 +30,7 @@ const DocumentContainer = ({
    * If there is no document and we are not creating: true, then we render
    * a helpful message
    */
-  if (typeof match.params.documentId === 'undefined') {
+  if (typeof match.params.documentId === 'undefined' || match.params.documentId === 'new') {
     return <div>No document</div>
   }
 

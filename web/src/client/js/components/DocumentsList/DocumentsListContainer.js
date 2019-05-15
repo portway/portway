@@ -23,7 +23,11 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
   }
 
   function createDocumentHandler(value) {
-    history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}/document/new` })
+    if (value === false) {
+      history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}` })
+    } else {
+      history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}/document/new` })
+    }
     uiDocumentCreate(value)
   }
 
@@ -41,7 +45,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
     <DocumentsListComponent
       createCallback={createDocumentHandler}
       createChangeHandler={createDocumentAction}
-      creating={ui.documents.creating}
+      creating={ui.documents.creating || match.params.documentId === 'new'}
       documents={sortedDocuments}
       projectId={Number(match.params.projectId)}/>
   )
