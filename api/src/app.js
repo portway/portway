@@ -7,6 +7,8 @@ import logger from 'morgan'
 import envVarValidation from './libs/envVarValidation'
 import auth from './libs/auth/auth'
 import controllerLoader from './controllers/loader'
+import apiErrorHandler from './libs/middleware/apiErrorHandler'
+import noRouteHandler from './libs/middleware/noRouteHandler'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -51,7 +53,7 @@ app.use(passport.initialize())
 auth.init(passport)
 
 //ROUTES
-//=============================================================================
+//=============================================================================//
 
 const router = express.Router()
 
@@ -64,5 +66,14 @@ router.get('/', (req, res) => {
 })
 
 controllerLoader(router)
+
+// ERROR HANDLING - This should always be the last set of middleware!
+
+//=============================================================================//
+// We're only here if no routes matched, throws a 404 to the apiErrorHandler
+app.use(noRouteHandler)
+// Get here by calling next(error) in a controller
+app.use(apiErrorHandler)
+//=============================================================================//
 
 export default app

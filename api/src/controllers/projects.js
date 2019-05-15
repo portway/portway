@@ -34,22 +34,21 @@ const projectsController = function(router) {
     validateParams(paramSchema),
     validateBody(projectSchema, { includeDetails: true }),
     updatePerm,
-    replaceProject
+    updateProject
   )
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProject)
 }
 
-const getProjects = async function(req, res) {
+const getProjects = async function(req, res, next) {
   try {
     const projects = await BusinessProject.findAll(req.requestorInfo.orgId)
     res.json({ data: projects })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch projects' })
+    next(e)
   }
 }
 
-const getProject = async function(req, res) {
+const getProject = async function(req, res, next) {
   const { id } = req.params
 
   try {
@@ -57,12 +56,11 @@ const getProject = async function(req, res) {
     if (!project) throw ono({ code: 404 }, `No project with id ${id}`)
     res.json({ data: project })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching project with id ${id}` })
+    next(e)
   }
 }
 
-const addProject = async function(req, res) {
+const addProject = async function(req, res, next) {
   const { body } = req
   body.orgId = req.requestorInfo.orgId
   try {
@@ -73,12 +71,11 @@ const addProject = async function(req, res) {
     )
     res.status(201).json({ data: project })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create project' })
+    next(e)
   }
 }
 
-const replaceProject = async function(req, res) {
+const updateProject = async function(req, res, next) {
   const { id } = req.params
   const { body } = req
 
@@ -88,20 +85,18 @@ const replaceProject = async function(req, res) {
     const project = await BusinessProject.updateById(id, body, req.requestorInfo.orgId)
     res.json({ data: project })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error updating project with id ${id}` })
+    next(e)
   }
 }
 
-const deleteProject = async function(req, res) {
+const deleteProject = async function(req, res, next) {
   const { id } = req.params
 
   try {
     await projectCoordinator.deleteById(id, req.requestorInfo.orgId)
     res.status(204).send()
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error deleting project with id ${id}` })
+    next(e)
   }
 }
 

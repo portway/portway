@@ -6,8 +6,7 @@ import { ORGANIZATION_ROLE_IDS } from '../../../constants/roles'
 const getUserData = function(override = {}) {
   const defaultProps = {
     email: faker.internet.email(),
-    firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    name: faker.name.findName(),
     password: faker.internet.password(),
     orgId: ORG_ID,
     orgRoleId: ORGANIZATION_ROLE_IDS.USER

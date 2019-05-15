@@ -4,7 +4,7 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
-import apiErrorTypes from '../constants/apiErrorTypes';
+import ono from 'ono';
 
 const readPerm = (req, res, next) => {
   const { userId } = req.params
@@ -19,14 +19,15 @@ const readPerm = (req, res, next) => {
     })(req, res, next)
   }
 
-  res.status(403).send({ error: 'Invalid Permissions' })
+  const err = new ono({ code: 404 }, 'Requested user id does not match requestor id')
+  next(err)
 }
 
 const paramSchema = Joi.compile({
   userId: Joi.number().required()
 })
 
-const userProjectRolesController = function(router) {
+const userProjectAssignmentsController = function(router) {
   // all routes are nested at users/:userId/assignments and receive req.params.userId
   router.get(
     '/',
@@ -36,7 +37,7 @@ const userProjectRolesController = function(router) {
   )
 }
 
-const getUserProjectAssignments = async function(req, res) {
+const getUserProjectAssignments = async function(req, res, next) {
   const { userId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -44,9 +45,8 @@ const getUserProjectAssignments = async function(req, res) {
     const userProjectAssignments = await BusinessProjectUser.findAllProjectAssignmentsForUser(userId, orgId)
     res.status(200).json({ data: userProjectAssignments })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch user project assignments' })
+    next(e)
   }
 }
 
-export default userProjectRolesController
+export default userProjectAssignmentsController

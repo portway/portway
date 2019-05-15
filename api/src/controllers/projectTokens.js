@@ -46,7 +46,7 @@ const projectTokensController = function(router) {
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectToken)
 }
 
-const getProjectTokens = async function(req, res) {
+const getProjectTokens = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
 
@@ -54,12 +54,11 @@ const getProjectTokens = async function(req, res) {
     const projectTokens = await BusinessProjectToken.findAllByProjectId(projectId, orgId)
     res.json({ data: projectTokens })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot fetch project tokens' })
+    next(e)
   }
 }
 
-const getProjectToken = async function(req, res) {
+const getProjectToken = async function(req, res, next) {
   const { id } = req.params
   const { orgId } = req.requestorInfo
 
@@ -68,12 +67,11 @@ const getProjectToken = async function(req, res) {
     if (!user) throw ono({ code: 404 }, `No token with id ${id}`)
     res.json({ data: user })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `error fetching document with id ${id}` })
+    next(e)
   }
 }
 
-const createProjectToken = async (req, res) => {
+const createProjectToken = async (req, res, next) => {
   const { body } = req
   const { orgId } = req.requestorInfo
   body.projectId = req.params.projectId
@@ -82,12 +80,11 @@ const createProjectToken = async (req, res) => {
     const token = await projectTokenCreator(body, orgId)
     res.status(201).json({ data: token })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot create project token' })
+    next(e)
   }
 }
 
-const updateProjectToken = async (req, res) => {
+const updateProjectToken = async (req, res, next) => {
   const { name } = req.body
   const { id } = req.params
   const { orgId } = req.requestorInfo
@@ -100,21 +97,19 @@ const updateProjectToken = async (req, res) => {
     )
     res.status(200).json({ data: projectToken })
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot update project token' })
+    next(e)
   }
 }
 
-const deleteProjectToken = async function(req, res) {
-  const { id, projectId } = req.params
+const deleteProjectToken = async function(req, res, next) {
+  const { id } = req.params
   const { orgId } = req.requestorInfo
 
   try {
     await BusinessProjectToken.deleteById(id, orgId)
     res.status(204).send()
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: `Error removing project token ${id} from project ${projectId}` })
+    next(e)
   }
 }
 

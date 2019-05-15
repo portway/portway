@@ -20,7 +20,7 @@ async function setInitialPassword(id, password) {
     throw ono({ code: 404 }, `No user found with id: ${id}`)
   }
   if (user.password) {
-    throw ono({ code: 403 }, 'Cannot set initial password, user already has one')
+    throw ono({ code: 409 }, 'Cannot set initial password, user already has one')
   }
   const hashedPassword = await passwords.generateHash(password)
   await BusinessUser.updateById(user.id, {

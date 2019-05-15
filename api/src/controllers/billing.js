@@ -22,7 +22,7 @@ const getBilling = async function(req, res) {
   res.json({ billing: true })
 }
 
-const addBilling = async function(req, res) {
+const addBilling = async function(req, res, next) {
   const { token, planId, email } = req.body
 
   try {
@@ -34,9 +34,7 @@ const addBilling = async function(req, res) {
 
     res.send('successfully subscribed user to plan')
   } catch (e) {
-    console.error(e.stack)
-    const message = 'unable to add billing information'
-    res.status(e.statusCode || 500).send({ error: message })
+    next(e)
   }
 }
 

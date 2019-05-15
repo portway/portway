@@ -31,7 +31,7 @@ const userOrgRoleController = function(router) {
   )
 }
 
-const updateUserOrgRole = async function(req, res) {
+const updateUserOrgRole = async function(req, res, next) {
   const { orgRoleId } = req.body
   const { userId } = req.params
   const { orgId } = req.requestorInfo
@@ -40,8 +40,7 @@ const updateUserOrgRole = async function(req, res) {
     await BusinessUser.updateOrgRole(userId, orgRoleId, orgId)
     res.status(204).json()
   } catch (e) {
-    console.error(e.stack)
-    res.status(e.code || 500).json({ error: 'Cannot update user organization role' })
+    next(e)
   }
 }
 
