@@ -184,14 +184,12 @@ describe('BusinessField', () => {
 
     beforeAll(async () => {
       await clearDb()
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
       factoryFields = await FieldFactory.createMany(5, { docId: factoryDocument.id })
-      await DocumentFactory.createMany(2, {
+      await FieldFactory.createMany(2, {
         docId: factoryDocument.id,
         orgId: constants.ORG_2_ID
-      })
-      await DocumentFactory.createMany(2, {
-        docId: 0,
-        orgId: constants.ORG_ID
       })
     })
 

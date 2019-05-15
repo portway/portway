@@ -8,7 +8,7 @@
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node",
     "test": "npm run test-u && npm run test-i",
-    "test-i": "jest 'src/.*\\.test-(i)\\.js$' -i",
+    "test-i": "jest 'src/.*\\.test-(i)\\.js$' -i -b",
     "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
     "migrate": "sequelize db:migrate"
