@@ -32,6 +32,7 @@ const DocumentComponent = ({ document, errors, fieldCreationHandler, nameChangeH
   })
   return (
     <div className="document" key={docKey}>
+      <ValidationComponent errors={errors.name} />
       <header className="document__header">
         <textarea
           className="document__title"
@@ -68,7 +69,6 @@ const DocumentComponent = ({ document, errors, fieldCreationHandler, nameChangeH
           <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
       </header>
-      <ValidationComponent errors={errors.name} />
       <DocumentFieldsContainer />
     </div>
   )

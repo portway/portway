@@ -1,5 +1,5 @@
 import { PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
-import { Documents, FormErrors, Notifications } from './index'
+import { Documents, Validation, Notifications } from './index'
 import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
 
 export const fetchDocuments = (projectId) => {
@@ -27,7 +27,7 @@ export const createDocument = (projectId, history, body) => {
     dispatch(Documents.create(projectId, body))
     const { data, status } = await add(`projects/${projectId}/documents`, body)
     if (validationCodes.includes(status)) {
-      dispatch(FormErrors.create('document', data, status))
+      dispatch(Validation.create('document', data, status))
       return
     }
     dispatch(Documents.receiveOneCreated(data))
@@ -40,7 +40,7 @@ export const updateDocument = (projectId, documentId, body) => {
     dispatch(Documents.update(projectId, documentId, body))
     const { data, status } = await update(`projects/${projectId}/documents/${documentId}`, body)
     validationCodes.includes(status) ?
-      dispatch(FormErrors.create('document', data, status)) :
+      dispatch(Validation.create('document', data, status)) :
       dispatch(Documents.receiveOneUpdated(data))
   }
 }

@@ -97,7 +97,7 @@ DocumentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    errors: state.formErrors.document,
+    errors: state.validation.document,
     fields: state.documentFields[state.documents.currentDocumentId],
     ui: state.ui,
   }

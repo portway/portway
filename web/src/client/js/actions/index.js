@@ -50,9 +50,9 @@ export const ActionTypes = {
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
-  // Form Erorrs & Validation
-  CREATE_FORM_ERRORS: 'CREATE_FORM_ERRORS',
-  CLEAR_FORM_ERRORS: 'CLEAR_FORM_ERRORS',
+  // Validation
+  CREATE_VALIDATION_ERRORS: 'CREATE_VALIDATION_ERRORS',
+  CLEAR_VALIDATION_ERRORS: 'CLEAR_VALIDATION_ERRORS',
   // Routes
   ROUTE_CHANGE: 'ROUTE_CHANGE',
   // Users
@@ -76,8 +76,9 @@ export const Route = {
   change: makeActionCreator(ActionTypes.ROUTE_CHANGE)
 }
 
-export const FormErrors = {
-  create: makeActionCreator(ActionTypes.CREATE_FORM_ERRORS, 'resource', 'data', 'status')
+export const Validation = {
+  create: makeActionCreator(ActionTypes.CREATE_VALIDATION_ERRORS, 'resource', 'data', 'status'),
+  clear: makeActionCreator(ActionTypes.CLEAR_VALIDATION_ERRORS, 'resource')
 }
 
 export const Projects = {

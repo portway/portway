@@ -11,8 +11,8 @@ const ValidationComponent = ({ errors }) => {
     })
   }
   return (
-    <div className="validation__errors" role="alert">
-      <ul>
+    <div className="validation" role="alert">
+      <ul className="validation__errors">
         {renderErrors()}
       </ul>
     </div>
