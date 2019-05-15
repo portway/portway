@@ -64,7 +64,7 @@ const ProjectCreatorContainer = ({ errors, history }) => {
   const userOptions = usersWithoutMe.map((user) => {
     return {
       value: String(user.id),
-      label: `${user.firstName} ${user.lastName}`
+      label: user.name
     }
   })
 

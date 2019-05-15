@@ -4,8 +4,7 @@ export const rawSchema = {
   id: Joi.number(),
   createdAt: Joi.date(),
   updatedAt: Joi.date(),
-  firstName: Joi.string(),
-  lastName: Joi.string(),
+  name: Joi.string(),
   email: Joi.string()
 }
 
