@@ -37,7 +37,8 @@ const NOTIFICATION_RESOURCE = {
   PROJECTS: 'PROJECTS',
   PROJECT: 'PROJECT',
   DOCUMENTS: 'DOCUMENTS',
-  DOCUMENT: 'DOCUMENT'
+  DOCUMENT: 'DOCUMENT',
+  FIELD: 'FIELD'
 }
 
 // Note: This is so we can use this webpack as well, don't convert this to ES6

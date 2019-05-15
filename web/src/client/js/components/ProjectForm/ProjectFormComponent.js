@@ -44,7 +44,7 @@ const ProjectFormComponent = ({ errors, formOptions, teamOptions }) => {
         </div>
       )}
       <div className="btn-group">
-        <input type="submit" className="btn" value={formOptions.submitLabel} />
+        <input type="submit" className="btn" disabled={formOptions.values.projectName === ''} value={formOptions.submitLabel} />
         {formOptions.cancelHandler && (
           <button className="btn btn--blank" onClick={formOptions.cancelHandler}>
             {formOptions.cancelLabel || 'Cancel'}

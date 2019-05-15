@@ -96,9 +96,11 @@ export const removeProjectAssignee = (projectId, userId, assignmentId) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.initiateRemove(projectId))
     const { data, status } = await remove(`projects/${projectId}/assignments/${assignmentId}`)
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('project', data, status)) :
-      dispatch(ProjectAssignees.removedOne(projectId, userId))
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      return
+    }
+    dispatch(ProjectAssignees.removedOne(projectId, userId))
   }
 }
 
@@ -117,15 +119,21 @@ export const fetchProjectTokens = (projectId) => {
 export const createProjectToken = (projectId, body) => {
   return async (dispatch) => {
     dispatch(ProjectTokens.create(projectId))
-    const { data } = await add(`projects/${projectId}/tokens`, body)
-    dispatch(ProjectTokens.receiveOneCreated(data))
+    const { data, status } = await add(`projects/${projectId}/tokens`, body)
+    validationCodes.includes(status) ?
+      dispatch(Validation.create('project', data, status)) :
+      dispatch(ProjectTokens.receiveOneCreated(data))
   }
 }
 
 export const removeProjectToken = (projectId, tokenId) => {
   return async (dispatch) => {
     dispatch(ProjectTokens.initiateRemove(projectId, tokenId))
-    await remove(`projects/${projectId}/tokens/${tokenId}`)
+    const { data, status } = await remove(`projects/${projectId}/tokens/${tokenId}`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      return
+    }
     dispatch(ProjectTokens.removedOne(projectId, tokenId))
   }
 }

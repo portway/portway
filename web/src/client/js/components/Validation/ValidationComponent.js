@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import './Validation.scss'
 
-const ValidationComponent = ({ errors }) => {
+const ValidationComponent = ({ errors, value }) => {
   if (errors.length === 0) return null
   function renderErrors() {
     return errors.map((error, index) => {
@@ -20,7 +20,8 @@ const ValidationComponent = ({ errors }) => {
 }
 
 ValidationComponent.propTypes = {
-  errors: PropTypes.array
+  errors: PropTypes.array.isRequired,
+  value: PropTypes.string
 }
 
 ValidationComponent.defaultProps = {

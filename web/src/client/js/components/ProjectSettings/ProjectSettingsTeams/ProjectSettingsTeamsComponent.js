@@ -5,9 +5,9 @@ import Select from 'react-select'
 import Constants from 'Shared/constants'
 import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
-import ValidationComponent from 'Components/Validation/ValidationComponent'
+import ValidationContainer from 'Components/Validation/ValidationContainer'
 
-const ProjectSettingsTeamsComponent = ({ errors, users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
+const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
   const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
@@ -39,7 +39,7 @@ const ProjectSettingsTeamsComponent = ({ errors, users, createAssignmentHandler,
                   selectRef.current.onChange('', 'clear')
                 }}>Add teammate</button>
             </div>
-            <ValidationComponent errors={errors} />
+            <ValidationContainer resource="project" value="userId" />
           </div>
         </div>
       </section>
@@ -57,7 +57,6 @@ const ProjectSettingsTeamsComponent = ({ errors, users, createAssignmentHandler,
 
 ProjectSettingsTeamsComponent.propTypes = {
   createAssignmentHandler: PropTypes.func.isRequired,
-  errors: PropTypes.array,
   removeAssignmentHandler: PropTypes.func.isRequired,
   updateAssignmentHandler: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,

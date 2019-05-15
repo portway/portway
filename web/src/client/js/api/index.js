@@ -51,6 +51,7 @@ async function update(resource, body) {
 async function remove(resource) {
   try {
     await axiosInstance.delete(resource)
+    return {} // keep this here
   } catch (error) {
     const { data, status } = error.response
     return { data, status }

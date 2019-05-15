@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import Store from '../../../reducers'
@@ -11,7 +10,7 @@ import { createProjectAssignee, updateProjectAssignee, removeProjectAssignee } f
 import { uiConfirm } from 'Actions/ui'
 import ProjectSettingsTeamComponent from './ProjectSettingsTeamsComponent'
 
-const ProjectSettingsTeamContainer = ({ errors, match }) => {
+const ProjectSettingsTeamContainer = ({ match }) => {
   const { projectId } = match.params
   const { data: users } = useDataService(dataMapper.users.list())
   const { data: currentUser } = useDataService(dataMapper.users.current())
@@ -59,7 +58,6 @@ const ProjectSettingsTeamContainer = ({ errors, match }) => {
   return (
     <ProjectSettingsTeamComponent
       createAssignmentHandler={createAssignmentHandler}
-      errors={errors.userId}
       projectUsers={assignedUsers}
       removeAssignmentHandler={removeAssignmentHandler}
       updateAssignmentHandler={updateAssignmentHandler}
@@ -68,16 +66,7 @@ const ProjectSettingsTeamContainer = ({ errors, match }) => {
 }
 
 ProjectSettingsTeamContainer.propTypes = {
-  errors: PropTypes.object,
   match: PropTypes.object.isRequired
 }
 
-const mapStateToProps = (state) => {
-  return {
-    errors: state.validation.project
-  }
-}
-
-export default withRouter(
-  connect(mapStateToProps)(ProjectSettingsTeamContainer)
-)
+export default withRouter(ProjectSettingsTeamContainer)
