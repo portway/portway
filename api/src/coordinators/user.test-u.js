@@ -5,6 +5,8 @@ import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import tokenIntegrator from '../integrators/token'
 import BusinessProjectUser from '../businesstime/projectuser'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
@@ -161,9 +163,10 @@ describe('user coordinator', () => {
 
   describe('#createPendingUser', () => {
     const email = 'not-a-real-email@email.fun'
+    let createdUser
 
     beforeAll(async () => {
-      await userCoordinator.createPendingUser(email, orgId)
+      createdUser = await userCoordinator.createPendingUser(email, orgId)
     })
 
     it('should call passwordResetKey.generate', () => {
@@ -188,6 +191,10 @@ describe('user coordinator', () => {
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls.length).toBe(1)
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][0]).toBe(mockUserId)
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][1]).toBe(mockResetKey)
+    })
+
+    it('should return the created user with only public fields exposed', () => {
+      expect(Object.keys(createdUser)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.USER]))
     })
   })
 
