@@ -1,8 +1,7 @@
 const getGenericMockUserData = () => {
   return {
     id: 8675309,
-    firstName: 'not-a-real-first-name',
-    lastName: 'not-a-real-last-name',
+    name: 'not-a real-name',
     email: 'not-a-real-email@email.com',
     orgId: 666,
     password: 'not-a-real-hashed-password',

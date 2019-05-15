@@ -35,7 +35,7 @@ const ProjectSettingsTeamContainer = ({ match }) => {
   const userOptions = unassignedUsers.map((user) => {
     return {
       value: String(user.id),
-      label: `${user.firstName} ${user.lastName}`
+      label: user.name
     }
   })
 
@@ -48,7 +48,7 @@ const ProjectSettingsTeamContainer = ({ match }) => {
   }
 
   function removeAssignmentHandler(userId, assignmentId) {
-    const name = users[userId].firstName
+    const name = users[userId].name
     const message = <span>Remove <span className="highlight">{name}</span> from this project?</span>
     const confirmedAction = () => { Store.dispatch(removeProjectAssignee(projectId, userId, assignmentId)) }
     const confirmedLabel = `Yes, remove ${name}`

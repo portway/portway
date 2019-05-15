@@ -22,7 +22,7 @@ const UserMenuContainer = () => {
   // fuck outta here
   if (!currentUser) return null
 
-  const name = `${currentUser.firstName} ${currentUser.lastName}`
+  const name = `${currentUser.name}`
   const button = {
     className: 'btn--blank user-menu__button',
     label: `${name}'s avatar`
