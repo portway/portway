@@ -3,8 +3,7 @@ import { getDb } from '../../dbConnector'
 
 const getOrganizationData = function(override = {}) {
   const defaultProps = {
-    name: faker.random.word(),
-    orgId: 1
+    name: faker.random.word()
   }
   return { ...defaultProps, ...override }
 }

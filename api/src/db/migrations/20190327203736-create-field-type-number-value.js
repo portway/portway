@@ -9,7 +9,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       orgId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       value: {
         type: Sequelize.DOUBLE
@@ -29,6 +33,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     })

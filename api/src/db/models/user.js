@@ -9,7 +9,9 @@ export default function(sequelize, DataTypes) {
       orgRoleId: DataTypes.INTEGER,
       resetKey: DataTypes.STRING
     },
-    {}
+    {
+      paranoid: true
+    }
   )
   User.associate = function(models) {
     User.belongsTo(models.Organization, {

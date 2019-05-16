@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       roleId: DataTypes.INTEGER
     },
     {
+      paranoid: true,
       freezeTableName: true,
       tableName: 'ProjectsUsers'
     }

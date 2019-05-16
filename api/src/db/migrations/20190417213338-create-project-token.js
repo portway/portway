@@ -21,11 +21,19 @@ module.exports = {
       },
       orgId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       projectId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'Projects',
+          key: 'id'
+        }
       },
       roleId: {
         type: Sequelize.INTEGER,
@@ -37,6 +45,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     })
