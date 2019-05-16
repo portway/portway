@@ -135,6 +135,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
     throw ono({ code: 400, publicMessage: message }, message)
   }
 
+  // Normalize order before trying to get the current order in case the current order changes
+  const currentMax = (await normalizeFieldOrderAndGetCount(docId, orgId)) - 1
+
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
 
@@ -142,8 +145,6 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
   // no order position change, do nothing
   if (newPosition === currentPosition) return
-
-  const currentMax = (await normalizeFieldOrderAndGetCount(docId, orgId)) - 1
 
   if (newPosition > currentMax) {
     const message = `Cannot update order, the final field order position for this document is ${currentMax}`
@@ -161,8 +162,8 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         `UPDATE "Fields"
         SET "order" = "order" - 1
         WHERE "order" >= ${currentPosition}
-        AND "versionId" = ${null}
-        AND "deletedAt" = ${null}
+        AND "versionId" IS NULL
+        AND "deletedAt" IS NULL
         AND "docId" = ${docId}
         AND "order" <= ${newPosition};`,
         { transaction }
@@ -173,8 +174,8 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         `UPDATE "Fields"
         SET "order" = "order" + 1
         WHERE "order" >= ${newPosition}
-        AND "versionId" = ${null}
-        AND "deletedAt" = ${null}
+        AND "versionId" IS NULL
+        AND "deletedAt" IS NULL
         AND "docId" = ${docId}
         AND "order" < ${currentPosition};`,
         { transaction }
