@@ -391,14 +391,24 @@ describe('BusinessField', () => {
       let fieldA
       let fieldB
       let fieldC
+      let factoryDocuments
+      let fieldForAnotherDoc
 
       beforeEach(async () => {
         await clearDb()
         factoryProject = (await ProjectFactory.createMany(1))[0]
-        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+        factoryDocuments = await DocumentFactory.createMany(2, { projectId: factoryProject.id })
+
+        factoryDocument = factoryDocuments[0]
         fieldA = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
         fieldB = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 1 }))[0]
         fieldC = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 2 }))[0]
+
+        // Create fields for another doc so we can make sure order is not impacted
+        fieldForAnotherDoc = (
+          await FieldFactory.createMany(1,
+            { docId: factoryDocuments[1].id, order: 1 })
+        )[0]
       })
 
       it('should successfully move lowest item to the highest order position', async () => {
@@ -409,6 +419,9 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(2)
         expect(updatedFieldB.order).toEqual(0)
         expect(updatedFieldC.order).toEqual(1)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
 
       it('should successfully move lowest item to the middle order position', async () => {
@@ -419,6 +432,9 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(1)
         expect(updatedFieldB.order).toEqual(0)
         expect(updatedFieldC.order).toEqual(2)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
 
       it('should successfully move middle item to lowest order position', async () => {
@@ -429,6 +445,9 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(1)
         expect(updatedFieldB.order).toEqual(0)
         expect(updatedFieldC.order).toEqual(2)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
 
       it('should successfully move middle item to highest order position', async () => {
@@ -439,6 +458,9 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(0)
         expect(updatedFieldB.order).toEqual(2)
         expect(updatedFieldC.order).toEqual(1)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
 
       it('should successfully move last item to first order position', async () => {
@@ -449,6 +471,9 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(1)
         expect(updatedFieldB.order).toEqual(2)
         expect(updatedFieldC.order).toEqual(0)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
 
       it('should successfully move last item to middle order position', async () => {
@@ -459,6 +484,9 @@ describe('BusinessField', () => {
         expect(updatedFieldA.order).toEqual(0)
         expect(updatedFieldB.order).toEqual(2)
         expect(updatedFieldC.order).toEqual(1)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
 
       it('should re-order out of sync field items before moving', async () => {
@@ -468,6 +496,9 @@ describe('BusinessField', () => {
         const updatedFieldC = await fieldC.reload()
         expect(updatedOutOfSyncField.order).toEqual(2)
         expect(updatedFieldC.order).toEqual(3)
+
+        const updatedFieldForAnotherDoc = await fieldForAnotherDoc.reload()
+        expect(updatedFieldForAnotherDoc.order).toEqual(1)
       })
     })
   })
