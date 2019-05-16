@@ -17,7 +17,7 @@ export const renderBundles = (req, pageTitle, bundleKey) => {
     }
   }
   return {
-    title: `${constants.PRODUCT_NAME} – ${pageTitle}`,
+    title: `${pageTitle} –– ${constants.PRODUCT_NAME}`,
     flash: flash,
     permalink: makePermalinkWithString(pageTitle),
     css: req.app.locals.bundles[bundleKey].css,

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
-import Constants from 'Shared/constants'
 import { groupBy } from 'Shared/utilities'
 import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
@@ -11,13 +11,20 @@ import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
+import { FIELD_LABELS, PRODUCT_NAME } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, fields, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
+  createField, deleteDocument, fields, history, loading, location, match, ui, updateDocument, uiConfirm
+}) => {
+  const { data: project } = useDataService(currentResource('project', location.pathname), [
+    location.pathname
+  ])
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+
+  if (!project || !document) return null
 
   /**
    * If we're creating a document, render nothing
@@ -48,7 +55,7 @@ const DocumentContainer = ({
   function fieldCreationHandler(fieldType) {
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
-    const newName = Constants.FIELD_LABELS[fieldType] + (value + 1)
+    const newName = FIELD_LABELS[fieldType] + (value + 1)
     createField(document.id, fieldType, {
       name: newName,
       type: fieldType
@@ -74,11 +81,18 @@ const DocumentContainer = ({
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
-  return <DocumentComponent
-    document={document}
-    fieldCreationHandler={fieldCreationHandler}
-    nameChangeHandler={nameChangeHandler}
-    removeDocumentHandler={removeDocumentHandler} />
+  return (
+    <>
+      <Helmet>
+        <title>{project.name}: {document.name} –– {PRODUCT_NAME}</title>
+      </Helmet>
+      <DocumentComponent
+        document={document}
+        fieldCreationHandler={fieldCreationHandler}
+        nameChangeHandler={nameChangeHandler}
+        removeDocumentHandler={removeDocumentHandler} />
+    </>
+  )
 }
 
 DocumentContainer.propTypes = {
