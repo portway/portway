@@ -1,6 +1,15 @@
 import passwords from '../libs/passwords'
 import BusinessUser from '../businesstime/user'
+import BusinessProjectUser from '../businesstime/projectuser'
 import ono from 'ono'
+import passwordResetKey from '../libs/passwordResetKey'
+import tokenIntegrator from '../integrators/token'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import resourceTypes from '../constants/resourceTypes'
+import resourcePublicFields from '../constants/resourcePublicFields'
+import { pick } from '../libs/utils'
+
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
 // TODO: do we want this by id instead?
 async function updatePassword(email, password) {
@@ -49,9 +58,36 @@ async function validatePasswordResetKey(userId, resetKey) {
   return user
 }
 
+async function createPendingUser(email, orgId) {
+  const resetKey = passwordResetKey.generate()
+  const createdUser = await BusinessUser.create({
+    email,
+    name: email,
+    orgRoleId: ORGANIZATION_ROLE_IDS.USER,
+    orgId,
+    resetKey
+  })
+
+  const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
+
+  // TODO: email tokenized signup url to user
+
+  //TODO: temporary logging to verify functionality, remove this when emailing is in place
+  console.info(`http://localhost:3000/sign-up/registration/password?token=${token}`)
+
+  return pick(createdUser, PUBLIC_FIELDS)
+}
+
+async function deleteById(userId, orgId) {
+  await BusinessUser.deleteById(userId, orgId)
+  await BusinessProjectUser.removeAllProjectAssignmentsForUser(userId, orgId)
+}
+
 export default {
   updatePassword,
   setInitialPassword,
   validateEmailPasswordCombo,
-  validatePasswordResetKey
+  validatePasswordResetKey,
+  createPendingUser,
+  deleteById
 }

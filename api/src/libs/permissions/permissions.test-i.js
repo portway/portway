@@ -108,7 +108,7 @@ describe('Permissions', () => {
         let requestStatus
         beforeAll(async () => {
           const db = getDb()
-          await db.model('ProjectUser').truncate()
+          await db.model('ProjectUser').truncate({ force: true })
           await BusinessProjectUser.create({
             orgId: project.orgId,
             projectId: project.id,

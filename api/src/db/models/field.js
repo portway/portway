@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     {
+      paranoid: true,
       getterMethods: {
         value() {
           const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]

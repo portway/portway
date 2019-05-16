@@ -4,7 +4,7 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
-import ono from 'ono';
+import ono from 'ono'
 
 const readPerm = (req, res, next) => {
   const { userId } = req.params

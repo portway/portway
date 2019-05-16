@@ -17,7 +17,11 @@ module.exports = {
       },
       orgId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       orgRoleId: {
         allowNull: false,
@@ -36,6 +40,9 @@ module.exports = {
       },
       resetKey: {
         type: Sequelize.STRING
+      },
+      deletedAt: {
+        type: Sequelize.DATE
       }
     })
   },

@@ -25,6 +25,7 @@ export default {
   updateByEmail: jest.fn(() => getGenericMockUserData()),
   updateById: jest.fn(() => getGenericMockUserData()),
   create: jest.fn(() => getGenericMockUserData()),
+  deleteById: jest.fn(),
   setFindByIdReturnValue,
   resetFindByIdReturnValue
 }
