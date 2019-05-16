@@ -132,8 +132,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         `UPDATE "Fields"
         SET "order" = "order" - 1
         WHERE "order" >= ${currentPosition}
-        AND docId = ${docId}
-        AND versionId = ${null}
+        AND "versionId" = ${null}
+        AND "deletedAt" = ${null}
+        AND "docId" = ${docId}
         AND "order" <= ${newPosition};`,
         { transaction }
       )
@@ -143,8 +144,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         `UPDATE "Fields"
         SET "order" = "order" + 1
         WHERE "order" >= ${newPosition}
-        AND docId = ${docId}
-        AND versionId = ${null}        
+        AND "versionId" = ${null}
+        AND "deletedAt" = ${null}
+        AND "docId" = ${docId}
         AND "order" < ${currentPosition};`,
         { transaction }
       )
