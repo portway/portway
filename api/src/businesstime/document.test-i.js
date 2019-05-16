@@ -365,7 +365,7 @@ describe('BusinessDocument', () => {
         orgId: factoryProject.orgId
       }))[0]
 
-      DocumentVersionFactory.createMany(1, {
+      await DocumentVersionFactory.createMany(1, {
         docId: factoryDocument.id,
         id: versionId
       })
