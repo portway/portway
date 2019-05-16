@@ -50,8 +50,11 @@ async function update(resource, body) {
 
 async function remove(resource) {
   try {
+    // All of our actions expect an object to be returned, however delete()
+    // doesn't return anything. We return an empty object here to prevent
+    // errors on trying to access data or status
     await axiosInstance.delete(resource)
-    return {} // keep this here
+    return {} // keep this here ^
   } catch (error) {
     const { data, status } = error.response
     return { data, status }

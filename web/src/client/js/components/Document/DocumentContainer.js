@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Constants from 'Shared/constants'
+import { FIELD_LABELS, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import { groupBy } from 'Shared/utilities'
 import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
@@ -30,7 +30,7 @@ const DocumentContainer = ({
    * If there is no document and we are not creating: true, then we render
    * a helpful message
    */
-  if (typeof match.params.documentId === 'undefined' || match.params.documentId === 'new') {
+  if (typeof match.params.documentId === 'undefined' || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
     return <div>No document</div>
   }
 
@@ -48,7 +48,7 @@ const DocumentContainer = ({
   function fieldCreationHandler(fieldType) {
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
-    const newName = Constants.FIELD_LABELS[fieldType] + (value + 1)
+    const newName = FIELD_LABELS[fieldType] + (value + 1)
     createField(document.id, fieldType, {
       name: newName,
       type: fieldType

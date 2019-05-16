@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Constants from 'Shared/constants'
+import { PATH_DOCUMENT_NEW, PATH_PROJECT } from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
@@ -24,9 +24,9 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
 
   function createDocumentHandler(value) {
     if (value === false) {
-      history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}` })
+      history.push({ pathname: `${PATH_PROJECT}/${match.params.projectId}` })
     } else {
-      history.push({ pathname: `${Constants.PATH_PROJECT}/${match.params.projectId}/document/new` })
+      history.push({ pathname: `${PATH_PROJECT}/${match.params.projectId}${PATH_DOCUMENT_NEW}` })
     }
     uiDocumentCreate(value)
   }
