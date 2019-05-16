@@ -7,6 +7,7 @@ import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import apiErrorTypes from '../constants/apiErrorTypes'
+import { getDb } from '../db/dbConnector'
 
 describe('BusinessField', () => {
   let factoryProject
@@ -15,7 +16,9 @@ describe('BusinessField', () => {
   beforeAll(async () => {
     await initializeTestDb()
     factoryProject = (await ProjectFactory.createMany(1))[0]
-    factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+    factoryDocument = (await DocumentFactory.createMany(1, {
+      projectId: factoryProject.id
+    }))[0]
   })
 
   describe('#createForDocument', () => {
@@ -119,6 +122,7 @@ describe('BusinessField', () => {
     let fieldId
     let orgId
     let docId
+    let updateFactoryDocument
 
     const updateBody = {
       name: 'an-updated-name',
@@ -126,8 +130,8 @@ describe('BusinessField', () => {
 
     beforeAll(async () => {
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      factoryField = (await FieldFactory.createMany(1, { docId: factoryDocument.id, type: 1 }))[0]
+      updateFactoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+      factoryField = (await FieldFactory.createMany(1, { docId: updateFactoryDocument.id, type: 1 }))[0]
       fieldId = factoryField.id
       orgId = factoryField.orgId
       docId = factoryField.docId
@@ -181,15 +185,51 @@ describe('BusinessField', () => {
 
   describe('field fetching', () => {
     let factoryFields
+    let documentForFields
+    const versionId = 12
 
     beforeAll(async () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      factoryFields = await FieldFactory.createMany(5, { docId: factoryDocument.id })
+      documentForFields = (await DocumentFactory.createMany(3, {
+        orgId: constants.ORG_ID,
+        publishedVersionId: versionId,
+        projectId: factoryProject.id
+      }))[0]
+
+      factoryFields = await FieldFactory.createMany(5, {
+        docId: documentForFields.id
+      })
+
       await FieldFactory.createMany(2, {
         docId: factoryDocument.id,
         orgId: constants.ORG_2_ID
+      })
+    })
+
+    describe('#findAllPublishedForDocument', () => {
+      let fields
+
+      beforeAll(async () => {
+        await FieldFactory.createMany(4, {
+          docId: documentForFields.id,
+          orgId: documentForFields.orgId,
+          versionId
+        })
+
+        fields = await BusinessField.findAllPublishedForDocument(documentForFields.id, documentForFields.orgId)
+      })
+
+      it('should return all published fields', async () => {
+        expect(fields.length).toEqual(4)
+      })
+
+      it('should return fields as POJOs', () => {
+        for (const field of fields) {
+          expect(field.constructor).toBe(Object)
+          expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
+          expect(field.value).toBeDefined()
+        }
       })
     })
 
@@ -197,7 +237,7 @@ describe('BusinessField', () => {
       let fields
 
       beforeAll(async () => {
-        fields = await BusinessField.findAllForDocument(factoryDocument.id, constants.ORG_ID)
+        fields = await BusinessField.findAllForDocument(documentForFields.id, constants.ORG_ID)
       })
 
       it('should return all fields from passed in document and org', () => {
@@ -208,6 +248,7 @@ describe('BusinessField', () => {
         for (const field of fields) {
           expect(field.constructor).toBe(Object)
           expect(Object.keys(field)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.FIELD]))
+          expect(field.value).toBeDefined()
         }
       })
     })
@@ -221,7 +262,7 @@ describe('BusinessField', () => {
           targetFieldId = factoryFields[0].id
           field = await BusinessField.findByIdForDocument(
             targetFieldId,
-            factoryDocument.id,
+            documentForFields.id,
             constants.ORG_ID
           )
         })
@@ -250,20 +291,21 @@ describe('BusinessField', () => {
     let fieldA
     let fieldB
     let fieldC
+    let documentToDelete
 
 
     beforeAll(async () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      fieldA = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 0 }))[0]
-      fieldB = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 1 }))[0]
-      fieldC = (await FieldFactory.createMany(1, { docId: factoryDocument.id, order: 2 }))[0]
+      documentToDelete = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+      fieldA = (await FieldFactory.createMany(1, { docId: documentToDelete.id, order: 0 }))[0]
+      fieldB = (await FieldFactory.createMany(1, { docId: documentToDelete.id, order: 1 }))[0]
+      fieldC = (await FieldFactory.createMany(1, { docId: documentToDelete.id, order: 2 }))[0]
     })
 
     describe('when the field is successfully deleted', () => {
       beforeAll(async () => {
-        await BusinessField.deleteByIdForDocument(fieldB.id, factoryDocument.id, constants.ORG_ID)
+        await BusinessField.deleteByIdForDocument(fieldB.id, documentToDelete.id, constants.ORG_ID)
       })
 
       it('should remove the field from the db', async () => {
@@ -283,7 +325,7 @@ describe('BusinessField', () => {
 
     it('should throw an error if the target field is not found', async () => {
       await expect(
-        BusinessField.deleteByIdForDocument(0, factoryDocument.id, constants.ORG_ID)
+        BusinessField.deleteByIdForDocument(0, documentToDelete.id, constants.ORG_ID)
       ).rejects.toThrow()
     })
 
@@ -295,7 +337,7 @@ describe('BusinessField', () => {
 
     it('should throw an error if the document does not have the passed in orgId', async () => {
       await expect(
-        BusinessField.deleteByIdForDocument(fieldB.id, factoryDocument.id, constants.ORG_ID_2)
+        BusinessField.deleteByIdForDocument(fieldB.id, documentToDelete.id, constants.ORG_ID_2)
       ).rejects.toThrow()
     })
   })

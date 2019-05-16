@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       publishedVersionId: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       orgId: {
         allowNull: false,
