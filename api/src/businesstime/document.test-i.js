@@ -12,8 +12,7 @@ describe('BusinessDocument', () => {
 
   beforeAll(async () => {
     await initializeTestDb()
-    const factoryProjects = await ProjectFactory.createMany(1)
-    factoryProject = factoryProjects[0]
+    factoryProject = (await ProjectFactory.createMany(1))[0]
   })
 
   describe('#createForProject', () => {
@@ -112,14 +111,11 @@ describe('BusinessDocument', () => {
 
     beforeAll(async () => {
       await clearDb()
+      factoryProject = (await ProjectFactory.createMany(1))[0]
       factoryDocuments = await DocumentFactory.createMany(5, { projectId: factoryProject.id })
       await DocumentFactory.createMany(2, {
         projectId: factoryProject.id,
         orgId: constants.ORG_2_ID
-      })
-      await DocumentFactory.createMany(2, {
-        projectId: 0,
-        orgId: constants.ORG_ID
       })
     })
 
@@ -206,6 +202,7 @@ describe('BusinessDocument', () => {
 
     beforeAll(async () => {
       await clearDb()
+      factoryProject = (await ProjectFactory.createMany(1))[0]
       const factoryDocuments = await DocumentFactory.createMany(1, { projectId: factoryProject.id })
       factoryDocument = factoryDocuments[0]
     })

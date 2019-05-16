@@ -15,7 +15,7 @@ describe('BusinessUser', () => {
     const userBody = {
       name: 'user name',
       email: 'user@email.com',
-      orgId: 1,
+      orgId: constants.ORG_ID,
       orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN
     }
     let user

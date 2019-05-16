@@ -19,7 +19,11 @@ module.exports = {
       },
       orgId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       accessLevel: {
         type: Sequelize.STRING,
@@ -31,6 +35,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     })

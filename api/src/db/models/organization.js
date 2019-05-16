@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    {}
+    {
+      paranoid: true
+    }
   )
   Organization.associate = function(models) {
     Organization.belongsTo(models.User, {

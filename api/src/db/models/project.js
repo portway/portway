@@ -10,7 +10,9 @@ export default function(sequelize, DataTypes) {
         defaultValue: null
       }
     },
-    {}
+    {
+      paranoid: true
+    }
   )
   Project.associate = function(models) {
     Project.belongsTo(models.Organization, {
