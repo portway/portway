@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     docId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER
   }, {
+    paranoid: true,
     updatedAt: false
   })
   DocumentVersion.associate = function(models) {

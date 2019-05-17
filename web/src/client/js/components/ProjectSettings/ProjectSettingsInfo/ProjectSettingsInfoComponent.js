@@ -5,7 +5,7 @@ import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 import { PROJECT_ACCESS_LEVELS } from 'Shared/constants'
 
-const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
+const ProjectSettingsInfoComponent = ({ errors, project, updateProjectHandler }) => {
   if (!project) return null
   const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
   return (
@@ -15,7 +15,8 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
         <TextField
           id="projectName"
           label="Project Name"
-          name="project[name]"
+          name="name"
+          errors={errors.name}
           onChange={(e) => { updateProjectHandler({ name: e.target.value }) }}
           placeholder="My project"
           value={project.name} />
@@ -23,7 +24,8 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
           id="projectDescription"
           label="Description (optional)"
           large
-          name="project[description]"
+          name="description"
+          errors={errors.description}
           onChange={(e) => { updateProjectHandler({ description: e.target.value }) }}
           placeholder=""
           value={project.description} />
@@ -35,6 +37,7 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
           help={helpText}
           label="Make this project public"
           name="project[privacy]"
+          errors={errors.privacy}
           onChange={(e) => {
             const accessLevel = e.target.checked ? PROJECT_ACCESS_LEVELS.READ : null
             updateProjectHandler({ accessLevel })
@@ -46,6 +49,7 @@ const ProjectSettingsInfoComponent = ({ project, updateProjectHandler }) => {
 }
 
 ProjectSettingsInfoComponent.propTypes = {
+  errors: PropTypes.object,
   project: PropTypes.object.isRequired,
   updateProjectHandler: PropTypes.func.isRequired
 }

@@ -101,9 +101,11 @@ describe('BusinessProjectToken', () => {
 
   describe('#findById', () => {
     let token
+
     beforeAll(async () => {
+      const factoryProject = (await ProjectFactory.createMany(1))[0]
       const factoryToken = (await TokenFactory.createMany(1, {
-        projectId: 123,
+        projectId: factoryProject.id,
         orgId: constants.ORG_ID
       }))[0]
 
@@ -123,8 +125,9 @@ describe('BusinessProjectToken', () => {
     let token
     let factoryToken
     beforeAll(async () => {
+      const factoryProject = (await ProjectFactory.createMany(1))[0]
       factoryToken = (await TokenFactory.createMany(1, {
-        projectId: 123,
+        projectId: factoryProject.id,
         orgId: constants.ORG_ID
       }))[0]
 
@@ -146,8 +149,9 @@ describe('BusinessProjectToken', () => {
     beforeAll(async () => {
       updatedTokenString = 'asdf123asdf123.23423480atotallyrealtoken'
 
+      const factoryProject = (await ProjectFactory.createMany(1))[0]
       const token = (await TokenFactory.createMany(1, {
-        projectId: 123,
+        projectId: factoryProject.id,
         orgId: constants.ORG_ID
       }))[0]
 

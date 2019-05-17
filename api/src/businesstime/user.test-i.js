@@ -15,7 +15,7 @@ describe('BusinessUser', () => {
     const userBody = {
       name: 'user name',
       email: 'user@email.com',
-      orgId: 1,
+      orgId: constants.ORG_ID,
       orgRoleId: ORGANIZATION_ROLE_IDS.ADMIN
     }
     let user
@@ -192,6 +192,23 @@ describe('BusinessUser', () => {
       it('should throw an error', async () => {
         await expect(BusinessUser.updateOrgRole(0, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)).rejects.toThrow()
       })
+    })
+  })
+
+  describe('#deleteById', () => {
+    let factoryUser
+
+    beforeAll(async () => {
+      const factoryUsers = await UserFactory.createMany(1)
+      factoryUser = factoryUsers[0]
+    })
+
+    it('should not throw an error if the target user is found', async () => {
+      await expect(BusinessUser.deleteById(factoryUser.id, factoryUser.orgId)).resolves.toEqual(undefined)
+    })
+
+    it('should throw an error if the target user is not found', async () => {
+      await expect(BusinessUser.deleteById(0)).rejects.toThrow()
     })
   })
 })

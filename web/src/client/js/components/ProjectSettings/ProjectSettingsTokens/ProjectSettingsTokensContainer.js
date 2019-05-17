@@ -76,7 +76,7 @@ ProjectSettingsTokensContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    creating: state.ui.tokens.creating
+    creating: state.ui.tokens.creating,
   }
 }
 

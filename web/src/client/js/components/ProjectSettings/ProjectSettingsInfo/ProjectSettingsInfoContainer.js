@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
@@ -12,7 +13,7 @@ import { PRODUCT_NAME } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import ProjectSettingsInfoComponent from './ProjectSettingsInfoComponent'
 
-const ProjectSettingsInfoContainer = ({ location }) => {
+const ProjectSettingsInfoContainer = ({ errors, location }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
@@ -28,13 +29,22 @@ const ProjectSettingsInfoContainer = ({ location }) => {
       <Helmet>
         <title>{project.name}: Information –– {PRODUCT_NAME}</title>
       </Helmet>
-      <ProjectSettingsInfoComponent project={project} updateProjectHandler={debouncedUpdateHandler} />
+      <ProjectSettingsInfoComponent errors={errors} project={project} updateProjectHandler={debouncedUpdateHandler} />
     </>
   )
 }
 
 ProjectSettingsInfoContainer.propTypes = {
+  errors: PropTypes.object,
   location: PropTypes.object.isRequired
 }
 
-export default withRouter(ProjectSettingsInfoContainer)
+const mapStateToProps = (state) => {
+  return {
+    errors: state.validation.project
+  }
+}
+
+export default withRouter(
+  connect(mapStateToProps)(ProjectSettingsInfoContainer)
+)
