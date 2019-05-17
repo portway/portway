@@ -24,7 +24,7 @@ export const projects = (state = initialState, action) => {
         return loadingById
       }, {})
 
-      return { ...state, projectsById, loading: { ...state.loading, list: false, byId: loadingById } }
+      return { ...state, projectsById, loading: { ...state.loading, list: false, byId: { ...state.loading.byId, ...loadingById } } }
     }
     case ActionTypes.REQUEST_PROJECT: {
       const loadingById = { ...state.loading.byId, [action.id]: false }
@@ -39,6 +39,11 @@ export const projects = (state = initialState, action) => {
       const projectsById = { ...state.projectsById, [id]: action.data }
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, projectsById, loading: { ...state.loading, byId: loadingById } }
+    }
+    case ActionTypes.RECEIVE_PROJECT_ERROR: {
+      const id = action.projectId
+      const loadingById = { ...state.loading.byId, [id]: false }
+      return { ...state, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.RECEIVE_CREATED_PROJECT: {
       const id = action.data.id

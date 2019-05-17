@@ -57,8 +57,10 @@ export default function useDataService(
 
       const state = Store.getState()
       const loading = getLoadingStatusFromState(state)
+
       setLoading(loading)
-      if (loading === false) {
+
+      if (loading === false && mounted) {
         const data = getDataFromState(state)
         setData(data)
       }
@@ -68,8 +70,8 @@ export default function useDataService(
     handleStateChange()
 
     return () => {
-      unsubscribeFn()
       mounted = false
+      unsubscribeFn()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
