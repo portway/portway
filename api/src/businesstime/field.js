@@ -29,10 +29,18 @@ async function createForDocument(docId, body) {
     throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
   }
 
-  // make sure document fields are ordered correctly and get next order number for new field
-  const docFieldCount = await normalizeFieldOrderAndGetCount(docId, orgId)
+  let createFieldBody
 
-  const createdField = await document.createField({ ...body, order: docFieldCount })
+  // For non-versioned fields, set order
+  if (!body.versionId) {
+    // make sure document fields are ordered correctly and get next order number for new field
+    const docFieldCount = await normalizeFieldOrderAndGetCount(docId, orgId)
+    createFieldBody = { ...body, order: docFieldCount }
+  } else {
+    createFieldBody = body
+  }
+
+  const createdField = await document.createField(createFieldBody)
 
   const fieldValue = await createdField.addFieldValue({
     value: body.value,
@@ -107,6 +115,8 @@ async function updateByIdForDocument(id, docId, orgId, body) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
+  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
+
   validateFieldValueByType(body.value, field.type)
 
   const updatedField = await field.update(body)
@@ -121,6 +131,8 @@ async function deleteByIdForDocument(id, docId, orgId) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
+
+  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
 
   await field.destroy()
 
