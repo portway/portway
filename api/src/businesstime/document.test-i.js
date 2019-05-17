@@ -1,6 +1,7 @@
 import BusinessDocument from './document'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import DocumentFactory from '../db/__testSetup__/factories/document'
+import DocumentVersionFactory from '../db/__testSetup__/factories/documentVersion'
 import FieldFactory from '../db/__testSetup__/factories/field'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
@@ -108,6 +109,7 @@ describe('BusinessDocument', () => {
 
   describe('document fetching', () => {
     let factoryDocuments
+    let factoryProject
 
     beforeAll(async () => {
       await clearDb()
@@ -145,7 +147,8 @@ describe('BusinessDocument', () => {
       let document
 
       beforeAll(async () => {
-        factoryDocument = (await DocumentFactory.createMany(1))[0]
+        factoryProject = (await ProjectFactory.createMany(1))[0]
+        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
         document = await BusinessDocument.findById(factoryDocument.id, factoryDocument.orgId)
       })
 
@@ -164,16 +167,19 @@ describe('BusinessDocument', () => {
     })
 
     describe('#findByIdForProject', () => {
-      let targetDocumentId
-      let document
-
       describe('when the target document has the passed in orgId and projectId', () => {
+        let targetDocumentId
+        let factoryProject
+        let document
+
         beforeAll(async () => {
-          targetDocumentId = factoryDocuments[0].id
+          factoryProject = (await ProjectFactory.createMany(1))[0]
+          const factoryDocument = (await DocumentFactory.createMany(3, { projectId: factoryProject.id }))[0]
+          targetDocumentId = factoryDocument.id
           document = await BusinessDocument.findByIdForProject(
-            targetDocumentId,
+            factoryDocument.id,
             factoryProject.id,
-            constants.ORG_ID
+            factoryDocument.orgId
           )
         })
 
@@ -189,6 +195,9 @@ describe('BusinessDocument', () => {
       })
 
       describe('when the target document does not have the passed in orgId', () => {
+        let targetDocumentId
+        let document
+
         beforeAll(async () => {
           targetDocumentId = factoryDocuments[0].id
           document = await BusinessDocument.findByIdForProject(
@@ -204,6 +213,9 @@ describe('BusinessDocument', () => {
       })
 
       describe('when the target document does not have the passed in projectId', () => {
+        let targetDocumentId
+        let document
+
         beforeAll(async () => {
           targetDocumentId = factoryDocuments[0].id
           document = await BusinessDocument.findByIdForProject(
@@ -350,8 +362,14 @@ describe('BusinessDocument', () => {
       factoryDocument = (await DocumentFactory.createMany(1, {
         projectId: factoryProject.id,
         publishedVersionId: versionId,
-        orgId: factoryProject.id
+        orgId: factoryProject.orgId
       }))[0]
+
+      await DocumentVersionFactory.createMany(1, {
+        docId: factoryDocument.id,
+        id: versionId
+      })
+
       await FieldFactory.createMany(3, { type: 3, docId: factoryDocument.id })
       publishedFactoryFields = await FieldFactory.createMany(2, {
         docId: factoryDocument.id,
