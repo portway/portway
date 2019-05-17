@@ -1,17 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
+import { PRODUCT_NAME } from 'Shared/constants'
 import Store from '../../../reducers'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import currentResource from 'Libs/currentResource'
 
 import { createProjectAssignee, updateProjectAssignee, removeProjectAssignee } from 'Actions/project'
 import { uiConfirm } from 'Actions/ui'
 import ProjectSettingsTeamComponent from './ProjectSettingsTeamsComponent'
 
-const ProjectSettingsTeamContainer = ({ match }) => {
-  const { projectId } = match.params
+const ProjectSettingsTeamContainer = ({ location }) => {
+  const { data: project } = useDataService(currentResource('project', location.pathname), [
+    location.pathname
+  ])
+  const projectId = project.id
   const { data: users } = useDataService(dataMapper.users.list())
   const { data: currentUser } = useDataService(dataMapper.users.current())
   const { data: projectAssignments } = useDataService(dataMapper.projects.projectAssignments(projectId))
@@ -56,17 +62,22 @@ const ProjectSettingsTeamContainer = ({ match }) => {
   }
 
   return (
-    <ProjectSettingsTeamComponent
-      createAssignmentHandler={createAssignmentHandler}
-      projectUsers={assignedUsers}
-      removeAssignmentHandler={removeAssignmentHandler}
-      updateAssignmentHandler={updateAssignmentHandler}
-      users={userOptions} />
+    <>
+      <Helmet>
+        <title>{project.name}: Team management –– {PRODUCT_NAME}</title>
+      </Helmet>
+      <ProjectSettingsTeamComponent
+        createAssignmentHandler={createAssignmentHandler}
+        projectUsers={assignedUsers}
+        removeAssignmentHandler={removeAssignmentHandler}
+        updateAssignmentHandler={updateAssignmentHandler}
+        users={userOptions} />
+    </>
   )
 }
 
 ProjectSettingsTeamContainer.propTypes = {
-  match: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
 }
 
 export default withRouter(ProjectSettingsTeamContainer)
