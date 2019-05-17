@@ -150,6 +150,27 @@ describe('BusinessField', () => {
       })
     })
 
+    describe('when the target field is published', () => {
+      let publishedField
+
+      beforeAll(async () => {
+        const version = (await DocumentVersionFactory.createMany(
+          1, { docId: updateFactoryDocument.id })
+        )[0]
+        publishedField = (await FieldFactory.createMany(1, {
+          docId: updateFactoryDocument.id,
+          type: factoryField.type,
+          versionId: version.id
+        }))[0]
+      })
+
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.updateByIdForDocument(publishedField.id, docId, orgId, updateBody)
+        ).rejects.toThrow()
+      })
+    })
+
     describe('when the target field is not found', () => {
       it('should throw an error', async () => {
         await expect(
@@ -328,6 +349,28 @@ describe('BusinessField', () => {
         const updatedFieldC = await fieldC.reload()
         expect(updatedFieldA.order).toEqual(0)
         expect(updatedFieldC.order).toEqual(1)
+      })
+    })
+
+    describe('when the field is published', () => {
+      let publishedField
+
+      beforeAll(async () => {
+        const version = (await DocumentVersionFactory.createMany(
+          1, { docId: documentToDelete.id })
+        )[0]
+
+        publishedField = (await FieldFactory.createMany(1, {
+          docId: documentToDelete.id,
+          type: fieldC.type,
+          versionId: version.id
+        }))[0]
+      })
+
+      it('should throw an error', async () => {
+        await expect(
+          BusinessField.deleteByIdForDocument(publishedField.id, documentToDelete.id, constants.ORG_ID)
+        ).rejects.toThrow()
       })
     })
 
