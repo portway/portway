@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import Constants from 'Shared/constants'
+import { FIELD_LABELS, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import { groupBy } from 'Shared/utilities'
 import { uiConfirm } from 'Actions/ui'
 import { updateDocument, deleteDocument } from 'Actions/document'
@@ -14,7 +14,7 @@ import currentResource from 'Libs/currentResource'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, fields, history, loading, location, match, ui, updateDocument, uiConfirm }) => {
+  createField, deleteDocument, fields, history, location, match, ui, updateDocument, uiConfirm }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -30,7 +30,7 @@ const DocumentContainer = ({
    * If there is no document and we are not creating: true, then we render
    * a helpful message
    */
-  if (typeof match.params.documentId === 'undefined') {
+  if (typeof match.params.documentId === 'undefined' || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
     return <div>No document</div>
   }
 
@@ -48,7 +48,7 @@ const DocumentContainer = ({
   function fieldCreationHandler(fieldType) {
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
-    const newName = Constants.FIELD_LABELS[fieldType] + (value + 1)
+    const newName = FIELD_LABELS[fieldType] + (value + 1)
     createField(document.id, fieldType, {
       name: newName,
       type: fieldType
@@ -87,7 +87,6 @@ DocumentContainer.propTypes = {
   fields: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  loading: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
   updateDocument: PropTypes.func.isRequired,
@@ -96,9 +95,8 @@ DocumentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    fields: state.documentFields[state.documents.currentDocumentId],
     ui: state.ui,
-    loading: state.documents.loading,
-    fields: state.documentFields[state.documents.currentDocumentId]
   }
 }
 

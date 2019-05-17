@@ -10,7 +10,9 @@ import { uiCreateTokenMode, uiConfirm } from 'Actions/ui'
 
 import ProjectSettingsTokensComponent from './ProjectSettingsTokensComponent'
 
-const ProjectSettingsTokensContainer = ({ createProjectToken, creating, match, removeProjectToken, uiConfirm, uiCreateTokenMode }) => {
+const ProjectSettingsTokensContainer = ({
+  createProjectToken, creating, match, removeProjectToken, uiConfirm, uiCreateTokenMode
+}) => {
   const { projectId } = match.params
   const { data: tokens } = useDataService(dataMapper.projects.tokens(projectId))
   if (!tokens) return null
@@ -63,7 +65,7 @@ ProjectSettingsTokensContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    creating: state.ui.tokens.creating
+    creating: state.ui.tokens.creating,
   }
 }
 

@@ -55,6 +55,18 @@ form {
         }
       }
     }
+
+    &--error {
+      .field {
+        label {
+          color: $danger;
+        }
+        input, textarea {
+          border-left: 6px solid $danger;
+        }
+      }
+    }
+
   }
 
   label {

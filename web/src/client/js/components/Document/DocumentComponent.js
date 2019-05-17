@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, MoreIcon } from 'Components/Icons'
+import ValidationContainer from 'Components/Validation/ValidationContainer'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -31,6 +32,7 @@ const DocumentComponent = ({ document, fieldCreationHandler, nameChangeHandler, 
   })
   return (
     <div className="document" key={docKey}>
+      <ValidationContainer resource="document" value="name" />
       <header className="document__header">
         <textarea
           className="document__title"

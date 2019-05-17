@@ -1,0 +1,10 @@
+@import 'CSS/inc/_vars.scss';
+
+.validation {
+  &__errors {
+    color: $danger;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}

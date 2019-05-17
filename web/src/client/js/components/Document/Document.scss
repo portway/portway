@@ -2,6 +2,7 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+  position: relative;
 
   &__header {
     align-items: flex-start;
@@ -28,6 +29,11 @@
     list-style: none;
     padding: ($brandWidth / 2) 0;
     margin: 0;
+  }
+
+  // Validation for document
+  .validation {
+    // background-color: $gray-light;
   }
 
 }
