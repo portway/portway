@@ -167,7 +167,7 @@ describe('BusinessField', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.updateByIdForDocument(publishedField.id, docId, orgId, updateBody)
-        ).rejects.toThrow()
+        ).rejects.toEqual(expect.objectContaining({ code: 403 }))
       })
     })
 
@@ -370,7 +370,7 @@ describe('BusinessField', () => {
       it('should throw an error', async () => {
         await expect(
           BusinessField.deleteByIdForDocument(publishedField.id, documentToDelete.id, constants.ORG_ID)
-        ).rejects.toThrow()
+        ).rejects.toEqual(expect.objectContaining({ code: 403 }))
       })
     })
 
