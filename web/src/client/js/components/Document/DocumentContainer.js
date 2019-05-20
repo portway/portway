@@ -10,12 +10,13 @@ import { deleteDocument, publishDocument, updateDocument } from 'Actions/documen
 import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
+import Constants from 'Shared/constants'
 
 import { FIELD_LABELS, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, fields, history, loading,
+  createField, deleteDocument, fields, history,
   location, match, publishDocument, ui, updateDocument, uiConfirm
 }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [

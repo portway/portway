@@ -123,6 +123,7 @@ async function findByIdWithFields(id, orgId) {
     include: [{
       model: db.model('Field'),
       where: { versionId: null },
+      required: false,
       include: getFieldValueInclude(db)
     }],
     order: [
