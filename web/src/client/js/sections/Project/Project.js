@@ -1,5 +1,4 @@
 import React from 'react'
-
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
 

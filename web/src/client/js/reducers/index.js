@@ -4,6 +4,7 @@ import thunk from 'redux-thunk'
 
 import { documents } from './documents'
 import { documentFields } from './documentFields'
+import { validation } from './validation'
 import { notifications } from './notifications'
 import { projects } from './projects'
 import { projectAssignments } from './projectAssignments'
@@ -15,13 +16,14 @@ import { userAssignments } from './userAssignments'
 const rootReducer = combineReducers({
   documents,
   documentFields,
+  validation,
   notifications,
   projects,
   projectAssignments,
   projectTokens,
   ui,
   users,
-  userAssignments
+  userAssignments,
 })
 
 const middlewares = [thunk]

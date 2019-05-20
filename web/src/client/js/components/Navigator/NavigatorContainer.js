@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import Select, { components } from 'react-select'
 import cx from 'classnames'
+import { Helmet } from 'react-helmet'
 
 import { withRouter, Link } from 'react-router-dom'
 
@@ -18,7 +19,7 @@ import ProjectPermission from 'Components/Permission/ProjectPermission'
 
 import './Navigator.scss'
 
-const { PROJECT_ROLE_IDS } = Constants
+const { PRODUCT_NAME, PROJECT_ROLE_IDS } = Constants
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
@@ -72,34 +73,39 @@ const NavigatorContainer = ({ history, location }) => {
   }
 
   return (
-    <div ref={nodeRef} className="navigator">
-      <button
-        aria-haspopup
-        aria-expanded={expanded}
-        className="btn btn--blank btn--with-circular-icon"
-        onClick={toggleCallback}>
-        <CaretIcon />
-        <span className="label">{project ? project.name : 'Projects'}</span>
-      </button>
-      <div className="menu menu--dark" hidden={!expanded}>
-        <Select
-          ref={selectRef}
-          className={`navigator__select`}
-          classNamePrefix="react-select"
-          components={{ Option }}
-          menuIsOpen={true}
-          onChange={(value) => {
-            history.push({
-              pathname: `${Constants.PATH_PROJECT}/${value.value}`
-            })
-            collapseCallback()
-          }}
-          options={Object.values(projects).map((project) => {
-            return { label: project.name, value: String(project.id) }
-          })}
-          value={null} />
+    <>
+      <Helmet>
+        <title>{project ? project.name : 'My Projects'} –– {PRODUCT_NAME}</title>
+      </Helmet>
+      <div ref={nodeRef} className="navigator">
+        <button
+          aria-haspopup
+          aria-expanded={expanded}
+          className="btn btn--blank btn--with-circular-icon"
+          onClick={toggleCallback}>
+          <CaretIcon />
+          <span className="label">{project ? project.name : 'Projects'}</span>
+        </button>
+        <div className="menu menu--dark" hidden={!expanded}>
+          <Select
+            ref={selectRef}
+            className={`navigator__select`}
+            classNamePrefix="react-select"
+            components={{ Option }}
+            menuIsOpen={true}
+            onChange={(value) => {
+              history.push({
+                pathname: `${Constants.PATH_PROJECT}/${value.value}`
+              })
+              collapseCallback()
+            }}
+            options={Object.values(projects).map((project) => {
+              return { label: project.name, value: String(project.id) }
+            })}
+            value={null} />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

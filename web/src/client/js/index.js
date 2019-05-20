@@ -1,14 +1,15 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import store from './reducers'
+import { PATH_APP, PATH_DASHBOARD, PATH_PROJECTS, PATH_PROJECT, PRODUCT_NAME } from 'Shared/constants'
+import useDetectInputMode from 'Hooks/useDetectInputMode'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
-import Constants from 'Shared/constants'
-import useDetectInputMode from 'Hooks/useDetectInputMode'
-
+import AppContainer from 'Components/App/AppContainer'
 import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryComponent'
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
@@ -17,27 +18,30 @@ import DashboardSection from 'Sections/Dashboard/DashboardSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
 
-import 'CSS/app.scss'
-
-const App = () => {
+const Index = () => {
   useDetectInputMode()
   return (
     <Provider store={store}>
-      <Router basename={Constants.PATH_APP}>
-        <ErrorBoundaryComponent>
-          <ConfirmationContainer />
-          <HeaderContainer />
-          <NotificationsContainer />
-          <Route exact path={Constants.PATH_DASHBOARD} component={DashboardSection} />
-          <Route exact path={Constants.PATH_PROJECTS} component={ProjectsSection} />
-          <Route path={`${Constants.PATH_PROJECT}/:projectId`} component={ProjectSection} />
-        </ErrorBoundaryComponent>
+      <Router basename={PATH_APP}>
+        <AppContainer>
+          <Helmet>
+            <title>{PRODUCT_NAME}</title>
+          </Helmet>
+          <ErrorBoundaryComponent>
+            <ConfirmationContainer />
+            <HeaderContainer />
+            <NotificationsContainer />
+            <Route exact path={PATH_DASHBOARD} component={DashboardSection} />
+            <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
+            <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
+          </ErrorBoundaryComponent>
+        </AppContainer>
       </Router>
     </Provider>
   )
 }
 
-render(<App />, document.getElementById('application'))
+render(<Index />, document.getElementById('application'))
 
 registerServiceWorker()
 

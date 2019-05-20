@@ -2,6 +2,7 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+  position: relative;
 
   &__no-document {
     align-items: center;
@@ -82,6 +83,11 @@
       pointer-events: none;
     }
 
+  }
+
+  // Validation for document
+  .validation {
+    // background-color: $gray-light;
   }
 
 }

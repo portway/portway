@@ -161,6 +161,10 @@ time {
     background-color: $action;
     color: $white;
   }
+  &--danger {
+    background-color: $danger;
+    color: $white;
+  }
 }
 
 input, textarea, keygen, select, button, li, div {

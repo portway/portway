@@ -31,7 +31,7 @@ const projectTokensController = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(bodySchema, { includeDetails: true }),
     createPerm,
     createProjectToken
   )
