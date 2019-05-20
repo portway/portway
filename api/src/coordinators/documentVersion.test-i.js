@@ -3,6 +3,7 @@ import DocumentFactory from '../db/__testSetup__/factories/document'
 import FieldFactory from '../db/__testSetup__/factories/field'
 import initializeTestDb from '../db/__testSetup__/initializeTestDb'
 import documentVersionCoordinator from './documentVersion'
+import { uniqueVals } from '../libs/utils'
 import { getDb } from '../db/dbConnector'
 
 describe('documentVersion', () => {
@@ -27,14 +28,26 @@ describe('documentVersion', () => {
         document = await documentVersionCoordinator.publishDocumentVersion(factoryDocument.id, factoryProject.id, factoryProject.orgId)
       })
 
-      it('should create new fields', async () => {
-        const db = getDb()
-        const fields = await db.model('Field').findAll({
-          where: { orgId: factoryDocument.orgId, versionId: document.publishedVersionId },
-          raw: true
+      describe('published fields', () => {
+        let fields
+
+        beforeAll(async () => {
+          const db = getDb()
+          fields = await db.model('Field').findAll({
+            where: { orgId: factoryDocument.orgId, versionId: document.publishedVersionId },
+            raw: true
+          })
         })
 
-        expect(fields.length).toBe(factoryFields.length)
+        it('should create new fields', async () => {
+          expect(fields.length).toBe(factoryFields.length)
+        })
+
+        it('should order the new fields', async () => {
+          const order = uniqueVals(fields.map(field => field.order))
+          expect(order.length).toBe(factoryFields.length)
+          expect(order).toEqual(expect.arrayContaining(factoryFields.map(f => f.order)))
+        })
       })
 
       it('should create a new document version', async () => {
