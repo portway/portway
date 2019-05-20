@@ -10,12 +10,12 @@ const SignUpController = function(router) {
 
   router.post('/registration', registerOrganization)
 
-  router.get('/registration/password', async (req, res) => {
+  router.get('/registration/complete', async (req, res) => {
     const { token } = req.query
-    res.render('user/registration', { ...renderBundles(req, 'Registration', 'index'), token })
+    res.render('user/registration', { ...renderBundles(req, 'Registration', 'registration'), token })
   })
 
-  router.post('/registration/password', setInitialPassword)
+  router.post('/registration/complete', setInitialPassword)
 }
 
 const registerOrganization = async (req, res) => {
@@ -39,11 +39,25 @@ const registerOrganization = async (req, res) => {
   res.redirect(`registration/password?token=${token}`)
 }
 
+// @todo Hey @jj, how can I get this to render the form again
+// and making sure organization and the radio buttons are whatever
+// value they put in before?
+// Will want to do that on the try/catch too I assume?
+// Test by making the submit button enabled
 const setInitialPassword = async (req, res) => {
-  const { password, 'confirm-password': confirmPassword, token } = req.body
+  const {
+    organization,
+    password,
+    'confirm-password': confirmPassword,
+    'project-creation': projectCreation,
+    token
+  } = req.body
 
-  // TODO re-render form with mismatch error message
   if (password !== confirmPassword) {
+    res.render('/sign-up/registration/complete?message=password', {
+      orgName: organization,
+      projectCreation: projectCreation
+    })
     return res.send(400)
   }
 

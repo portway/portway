@@ -1,0 +1,18 @@
+@import 'inc/vars';
+@import 'inc/theme';
+@import 'inc/type';
+
+body.home {
+  background: $primary-light;
+}
+
+.login-form {
+  width: 400px;
+  label {
+    color: $black-bis;
+  }
+}
+
+[hidden] {
+  display: none;
+}

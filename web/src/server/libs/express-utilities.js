@@ -12,6 +12,12 @@ export const renderBundles = (req, pageTitle, bundleKey) => {
           message: 'Invalid username or password'
         }
         break
+      case 'password':
+        flash = {
+          type: 'danger',
+          message: 'Your passwords don\'t match'
+        }
+        break
       default:
         break
     }
