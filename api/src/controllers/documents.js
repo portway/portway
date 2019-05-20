@@ -4,7 +4,6 @@ import { validateParams } from '../libs/middleware/payloadValidation'
 import BusinessDocument from '../businesstime/document'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
-import PUBLIC_MESSAGES from '../constants/publicMessages'
 
 const { readPerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
