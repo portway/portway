@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 
 import Constants from 'Shared/constants'
 import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
+import ValidationContainer from 'Components/Validation/ValidationContainer'
 
-const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, projectId }) => {
+const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, errors, projectId }) => {
   const [projectRoleId, setProjectRoleId] = useState(Constants.PROJECT_ROLE_IDS.READER)
   const [creationDisabled, setCreationDisabled] = useState(true)
   const nameRef = useRef()
@@ -26,6 +27,7 @@ const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, projectId })
           <label htmlFor="token-name">Key name <span className="note">(required)</span></label>
           <input ref={nameRef} type="text" name="token-name" placeholder="Key name..." onChange={nameChangeHandler} />
           <p className="note">The name is not important. Use it as a way to identify your differeny keys.</p>
+          <ValidationContainer resource="project" value="name" />
         </div>
       </div>
       <div className="form-field">
@@ -47,6 +49,7 @@ const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, projectId })
 ProjectSettingsCreateToken.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   createHandler: PropTypes.func.isRequired,
+  errors: PropTypes.array,
   projectId: PropTypes.string.isRequired
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import Store from '../../reducers'
@@ -10,7 +11,7 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import currentUserId from 'Libs/currentUserId'
 
-const ProjectCreatorContainer = ({ history }) => {
+const ProjectCreatorContainer = ({ errors, history }) => {
   const { data: users } = useDataService(dataMapper.users.list())
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
@@ -26,7 +27,6 @@ const ProjectCreatorContainer = ({ history }) => {
         {
           name: formValues.projectName,
           description: formValues.projectDescription
-          // teamMemberIds: selectedUsers // TODO: when endpoint support has this, add back
         },
         history
       )
@@ -77,6 +77,7 @@ const ProjectCreatorContainer = ({ history }) => {
   return (
     <div>
       <ProjectFormComponent
+        errors={errors}
         formOptions={formOptions}
         teamOptions={teamOptions}
         currentUser={currentUser} />
@@ -85,7 +86,16 @@ const ProjectCreatorContainer = ({ history }) => {
 }
 
 ProjectCreatorContainer.propTypes = {
+  errors: PropTypes.object,
   history: PropTypes.object.isRequired
 }
 
-export default withRouter(ProjectCreatorContainer)
+const mapStateToProps = (state) => {
+  return {
+    errors: state.validation.project
+  }
+}
+
+export default withRouter(
+  connect(mapStateToProps)(ProjectCreatorContainer)
+)

@@ -17,8 +17,16 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
     </>
   )
 
-  const { data: project = {} } = useDataService(dataMapper.projects.id(Number(projectId)))
-  const { data: userProjectAssignments = {} } = useDataService(dataMapper.users.currentUserProjectAssignments())
+  const { data: project = {}, loading: projectLoading } = useDataService(dataMapper.projects.id(Number(projectId)))
+  const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+
+  // check if either project or assignment loading hasn't been triggered yet, or is currently loading, if so always return null
+  if (projectLoading || projectLoading == null) {
+    return <>projectLoading</>
+  }
+  if (assignmentLoading || assignmentLoading == null) {
+    return <>assignmentLoading</>
+  }
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
 

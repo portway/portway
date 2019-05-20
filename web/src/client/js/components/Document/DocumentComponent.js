@@ -5,6 +5,7 @@ import cx from 'classnames'
 import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { AddIcon, ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
+import ValidationContainer from 'Components/Validation/ValidationContainer'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
@@ -39,6 +40,7 @@ const DocumentComponent = ({
   })
   return (
     <div className="document" key={docKey}>
+      <ValidationContainer resource="document" value="name" />
       <header className="document__header">
         <button className="btn btn--blank document__button-expand" title="Expand to full screen">
           <ExpandIcon />
