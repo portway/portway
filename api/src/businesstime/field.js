@@ -1,5 +1,6 @@
 import ono from 'ono'
 import { BigNumber } from 'bignumber.js'
+import { Op } from 'sequelize'
 
 import { getDb } from '../db/dbConnector'
 import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
@@ -28,10 +29,18 @@ async function createForDocument(docId, body) {
     throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
   }
 
-  // make sure document fields are ordered correctly and get next order number for new field
-  const docFieldCount = await normalizeFieldOrderAndGetCount(docId, orgId)
+  let createFieldBody
 
-  const createdField = await document.createField({ ...body, order: docFieldCount })
+  // For non-versioned fields, set order
+  if (!body.versionId) {
+    // make sure document fields are ordered correctly and get next order number for new field
+    const docFieldCount = await normalizeFieldOrderAndGetCount(docId, orgId)
+    createFieldBody = { ...body, order: docFieldCount }
+  } else {
+    createFieldBody = body
+  }
+
+  const createdField = await document.createField(createFieldBody)
 
   const fieldValue = await createdField.addFieldValue({
     value: body.value,
@@ -44,9 +53,19 @@ async function createForDocument(docId, body) {
   return await findByIdForDocument(createdField.id, docId, orgId)
 }
 
-async function findAllForDocument(docId, orgId) {
+async function findAllPublishedForDocument(docId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
+
+  // Putting document include first, not sure it matters
+  include.unshift({
+    model: db.model('Document'),
+    where: {
+      publishedVersionId: { [Op.col]: `${MODEL_NAME}.versionId` }
+    },
+    attributes: []
+  })
+
   const fields = await db.model(MODEL_NAME).findAll({
     where: { docId, orgId },
     order: db.col('order'),
@@ -55,6 +74,24 @@ async function findAllForDocument(docId, orgId) {
 
   return fields.map(publicFields)
 }
+
+async function findAllForDocument(docId, orgId) {
+  const db = getDb()
+  const include = getFieldValueInclude(db)
+
+  const fields = await db.model(MODEL_NAME).findAll({
+    where: {
+      docId,
+      orgId,
+      versionId: null
+    },
+    order: db.col('order'),
+    include
+  })
+
+  return fields.map(publicFields)
+}
+
 
 async function findByIdForDocument(id, docId, orgId) {
   const db = getDb()
@@ -78,6 +115,8 @@ async function updateByIdForDocument(id, docId, orgId, body) {
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
+  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
+
   validateFieldValueByType(body.value, field.type)
 
   const updatedField = await field.update(body)
@@ -93,6 +132,8 @@ async function deleteByIdForDocument(id, docId, orgId) {
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
+  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
+
   await field.destroy()
 
   await normalizeFieldOrderAndGetCount(docId, orgId)
@@ -106,6 +147,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
     throw ono({ code: 400, publicMessage: message }, message)
   }
 
+  // Normalize order before trying to get the current order in case the current order changes
+  const currentMax = (await normalizeFieldOrderAndGetCount(docId, orgId)) - 1
+
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
 
@@ -113,8 +157,6 @@ async function updateOrderById(id, docId, orgId, newPosition) {
 
   // no order position change, do nothing
   if (newPosition === currentPosition) return
-
-  const currentMax = (await normalizeFieldOrderAndGetCount(docId, orgId)) - 1
 
   if (newPosition > currentMax) {
     const message = `Cannot update order, the final field order position for this document is ${currentMax}`
@@ -132,7 +174,10 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         `UPDATE "Fields"
         SET "order" = "order" - 1
         WHERE "order" >= ${currentPosition}
-        and "order" <= ${newPosition};`,
+        AND "versionId" IS NULL
+        AND "deletedAt" IS NULL
+        AND "docId" = ${docId}
+        AND "order" <= ${newPosition};`,
         { transaction }
       )
     } else if (newPosition < currentPosition) {
@@ -141,7 +186,10 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         `UPDATE "Fields"
         SET "order" = "order" + 1
         WHERE "order" >= ${newPosition}
-        and "order" < ${currentPosition};`,
+        AND "versionId" IS NULL
+        AND "deletedAt" IS NULL
+        AND "docId" = ${docId}
+        AND "order" < ${currentPosition};`,
         { transaction }
       )
     }
@@ -203,7 +251,7 @@ async function normalizeFieldOrderAndGetCount(docId, orgId) {
   const db = getDb()
 
   const docFields = await db.model(MODEL_NAME).findAll({
-    where: { docId, orgId },
+    where: { docId, orgId, versionId: null },
     order: db.col('order'),
     attributes: ['id', 'order']
   })
@@ -241,6 +289,7 @@ export default {
   updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
+  findAllPublishedForDocument,
   deleteByIdForDocument,
   updateOrderById
 }

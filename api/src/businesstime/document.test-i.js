@@ -1,6 +1,7 @@
 import BusinessDocument from './document'
 import ProjectFactory from '../db/__testSetup__/factories/project'
 import DocumentFactory from '../db/__testSetup__/factories/document'
+import DocumentVersionFactory from '../db/__testSetup__/factories/documentVersion'
 import FieldFactory from '../db/__testSetup__/factories/field'
 import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
@@ -108,6 +109,7 @@ describe('BusinessDocument', () => {
 
   describe('document fetching', () => {
     let factoryDocuments
+    let factoryProject
 
     beforeAll(async () => {
       await clearDb()
@@ -140,17 +142,44 @@ describe('BusinessDocument', () => {
       })
     })
 
-    describe('#findByIdForProject', () => {
-      let targetDocumentId
+    describe('#findById', () => {
+      let factoryDocument
       let document
 
+      beforeAll(async () => {
+        factoryProject = (await ProjectFactory.createMany(1))[0]
+        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
+        document = await BusinessDocument.findById(factoryDocument.id, factoryDocument.orgId)
+      })
+
+      it('it should find the document', () => {
+        expect(document.id).toBe(factoryDocument.id)
+      })
+
+      it('should return document as POJO', () => {
+        expect(document.constructor).toBe(Object)
+        expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
+      })
+
+      it('should not return fields', () => {
+        expect(document.fields).toBe(undefined)
+      })
+    })
+
+    describe('#findByIdForProject', () => {
       describe('when the target document has the passed in orgId and projectId', () => {
+        let targetDocumentId
+        let factoryProject
+        let document
+
         beforeAll(async () => {
-          targetDocumentId = factoryDocuments[0].id
+          factoryProject = (await ProjectFactory.createMany(1))[0]
+          const factoryDocument = (await DocumentFactory.createMany(3, { projectId: factoryProject.id }))[0]
+          targetDocumentId = factoryDocument.id
           document = await BusinessDocument.findByIdForProject(
-            targetDocumentId,
+            factoryDocument.id,
             factoryProject.id,
-            constants.ORG_ID
+            factoryDocument.orgId
           )
         })
 
@@ -166,6 +195,9 @@ describe('BusinessDocument', () => {
       })
 
       describe('when the target document does not have the passed in orgId', () => {
+        let targetDocumentId
+        let document
+
         beforeAll(async () => {
           targetDocumentId = factoryDocuments[0].id
           document = await BusinessDocument.findByIdForProject(
@@ -181,6 +213,9 @@ describe('BusinessDocument', () => {
       })
 
       describe('when the target document does not have the passed in projectId', () => {
+        let targetDocumentId
+        let document
+
         beforeAll(async () => {
           targetDocumentId = factoryDocuments[0].id
           document = await BusinessDocument.findByIdForProject(
@@ -313,6 +348,67 @@ describe('BusinessDocument', () => {
 
       it('should return null', () => {
         expect(document).toBe(null)
+      })
+    })
+  })
+
+  describe('#findByIdWithPublishedFields', () => {
+    let factoryDocument
+    let publishedFactoryFields
+    const versionId = 5
+
+    beforeAll(async () => {
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      factoryDocument = (await DocumentFactory.createMany(1, {
+        projectId: factoryProject.id,
+        publishedVersionId: versionId,
+        orgId: factoryProject.orgId
+      }))[0]
+
+      await DocumentVersionFactory.createMany(1, {
+        docId: factoryDocument.id,
+        id: versionId
+      })
+
+      await FieldFactory.createMany(3, { type: 3, docId: factoryDocument.id })
+      publishedFactoryFields = await FieldFactory.createMany(2, {
+        docId: factoryDocument.id,
+        versionId,
+        orgId: factoryDocument.orgId
+      })
+    })
+
+    describe('with a valid document id', () => {
+      let document
+      beforeAll(async () => {
+        document = await BusinessDocument.findByIdWithPublishedFields(factoryDocument.id, factoryDocument.orgId)
+      })
+
+      it('should return the document as a POJO', () => {
+        expect(document.id).toBe(factoryDocument.id)
+        expect(document.constructor).toBe(Object)
+      })
+
+      it('should include fields', () => {
+        const factoryFieldIds = publishedFactoryFields.map(field => field.id)
+        const docFieldIds = document.fields.map(field => field.id)
+        expect(docFieldIds).toEqual(expect.arrayContaining(factoryFieldIds))
+        document.fields.forEach(field => expect(field.value).toBeDefined())
+      })
+
+      it('should return public fields', () => {
+        expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.DOCUMENT]))
+      })
+    })
+
+    describe('with an invalid document id', () => {
+      let document
+      beforeAll(async () => {
+        document = await BusinessDocument.findByIdWithPublishedFields(0, factoryDocument.orgId)
+      })
+
+      it('should not return a document', () => {
+        expect(document).toBeNull()
       })
     })
   })
