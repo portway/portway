@@ -4,6 +4,7 @@ import Joi from 'joi'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import projectCoordinator from '../coordinators/projectCrud'
 import BusinessProject from '../businesstime/project'
+import BusinessOrganization from '../businesstime/organization'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields } from './payloadSchemas/helpers'
@@ -16,6 +17,14 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   }
 )
 
+const conditionalCreatePerm = async function(req, res, next) {
+  const org = await BusinessOrganization.findSanitizedById(req.requestorInfo.orgId)
+  if (org.allowUserProjectCreation) {
+    return next()
+  }
+  return createPerm(req, res, next)
+}
+
 const paramSchema = Joi.compile({
   id: Joi.number()
 })
@@ -24,7 +33,7 @@ const projectsController = function(router) {
   router.post(
     '/',
     validateBody(requiredFields(RESOURCE_TYPES.PROJECT, 'name'), { includeDetails: true }),
-    createPerm,
+    conditionalCreatePerm,
     addProject
   )
   router.get('/', listPerm, getProjects)
