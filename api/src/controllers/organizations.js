@@ -16,7 +16,7 @@ const getOrganization = async function(req, res, next) {
   const id = req.params.id
 
   try {
-    const org = await BusinessOrganization.findById(id)
+    const org = await BusinessOrganization.findSanitizedById(id)
     if (!org) throw ono({ code: 404 }, `No organization with id ${id}`)
     res.json({ data: org })
   } catch (e) {

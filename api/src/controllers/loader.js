@@ -9,7 +9,7 @@ import reqInfoExtractor from '../libs/middleware/reqInfoExtractorMiddleware'
 // Controllers can be added as unauthorized (custom auth or public controllers),
 /// or a regular authenticated controller
 
-// Controllers that uses default auth
+// Controllers that use default auth
 const AUTHENTICATED_CONTROLLERS = {
   '/billing': { fileName: 'billing' },
   '/projects': {
@@ -38,6 +38,9 @@ const AUTHENTICATED_CONTROLLERS = {
       '/:userId/assignments': { fileName: 'userProjectAssignments' },
       '/:userId/projects': { fileName: 'userProjects' }
     }
+  },
+  '/organizations': {
+    fileName: 'organizations'
   }
 }
 
