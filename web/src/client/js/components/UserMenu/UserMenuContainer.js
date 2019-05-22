@@ -1,14 +1,16 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-import Constants from 'Shared/constants'
+import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_SETTINGS } from 'Shared/constants'
 
 import Store from '../../reducers'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import currentUserId from 'Libs/currentUserId'
-import { logoutUser } from '../../actions/user'
+import { logoutUser } from 'Actions/user'
 
 import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
+import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './UserMenu.scss'
 
@@ -32,8 +34,11 @@ const UserMenuContainer = () => {
       <DropdownItem type="banner" className="user-menu__banner">
         <span className="user-menu__username">{name}</span>
         <span className="user-menu__email">{currentUser.email}</span>
+        <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
       </DropdownItem>
-      <DropdownItem label="Settings" type="link" href={Constants.PATH_SETTINGS} />
+      <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+        <DropdownItem label="Administration" type="link" href={PATH_ADMIN} />
+      </OrgPermission>
       <DropdownItem label="Sign out" type="button" divider onClick={() => { logoutAction() }} />
     </DropdownComponent>
   )

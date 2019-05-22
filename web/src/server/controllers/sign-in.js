@@ -1,4 +1,4 @@
-import constants from '../../shared/constants'
+import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS } from '../../shared/constants'
 
 import { renderBundles } from '../libs/express-utilities'
 import auth from '../libs/auth'
@@ -10,8 +10,8 @@ const SignInController = function(router) {
   })
 
   router.post('/', auth.loginMiddleware, (req, res) => {
-    res.cookie('token', req.user.token, { maxAge: constants.MAX_COOKIE_AGE_MS })
-    res.redirect('/d/projects')
+    res.cookie('token', req.user.token, { maxAge: MAX_COOKIE_AGE_MS })
+    res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
   })
 
   router.get('/password-reset', auth.jwtMiddleware, (req, res) => {

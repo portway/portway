@@ -1,14 +1,12 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
-:root {
+.global-search {
   --global-search-background: #{$white-ter};
+  padding: 0 1rem;
   @media (prefers-color-scheme: dark) {
     --global-search-background: #{$black-ter};
   }
-}
-
-.global-search {
   input[type='search'] {
     background: var(--global-search-background) url('/images/icon/search.svg') no-repeat 12px 50%;
     border: none;

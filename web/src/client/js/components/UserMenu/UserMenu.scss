@@ -26,6 +26,12 @@
   &__email {
     color: $gray-dark;
   }
+  &__link {
+    background-color: transparent !important;
+    color: $action !important;
+    margin: 0 !important;
+    padding: 4px 0 !important;
+  }
 }
 
 // /images/icon/user-avatar.svg

@@ -145,6 +145,7 @@ time {
   // font-size: 80%;
   margin: 0 $iconMargin;
   padding: 1px $iconMargin;
+  text-decoration: none;
   &--highlight {
     background-color: $highlight;
     color: $white;
