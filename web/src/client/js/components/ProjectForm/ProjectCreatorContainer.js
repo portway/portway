@@ -9,7 +9,7 @@ import ProjectFormComponent from './ProjectFormComponent'
 import Constants from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import currentUserId from 'Libs/currentUserId'
+import { currentUserId } from 'Libs/currentIds'
 
 const ProjectCreatorContainer = ({ errors, history }) => {
   const { data: users } = useDataService(dataMapper.users.list())

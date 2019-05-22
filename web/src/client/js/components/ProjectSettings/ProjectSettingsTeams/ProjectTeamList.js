@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import currentUserId from 'Libs/currentUserId'
+import { currentUserId } from 'Libs/currentIds'
 import { RemoveIcon, UserIcon } from 'Components/Icons'
 import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
 

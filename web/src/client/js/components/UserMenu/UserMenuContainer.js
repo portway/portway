@@ -5,7 +5,7 @@ import Constants from 'Shared/constants'
 import Store from '../../reducers'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import currentUserId from 'Libs/currentUserId'
+import { currentUserId } from 'Libs/currentIds'
 import { logoutUser } from '../../actions/user'
 
 import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'

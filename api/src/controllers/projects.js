@@ -19,6 +19,8 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 
 const conditionalCreatePerm = async function(req, res, next) {
   const org = await BusinessOrganization.findSanitizedById(req.requestorInfo.orgId)
+  // This is currently allowing ANY organization user to create a project, if we want only certain users to be affected by the
+  // allowUserProjectCreation flag, we should add an additional role perm to check here
   if (org.allowUserProjectCreation) {
     return next()
   }

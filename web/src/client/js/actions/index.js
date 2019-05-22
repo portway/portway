@@ -67,6 +67,9 @@ export const ActionTypes = {
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
   RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
+  // Organizations
+  REQUEST_ORGANIZATION: 'REQUEST_ORGANIZATION',
+  RECEIVE_ORGANIZATION: 'RECEIVE_ORGANIZATION',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
@@ -159,6 +162,11 @@ export const Users = {
 export const UserProjectAssignments = {
   request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS, 'userId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECT_ASSIGNMENTS, 'userId', 'data')
+}
+
+export const Organizations = {
+  requestOne: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION, 'id'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION, 'data')
 }
 
 export const UI = {
