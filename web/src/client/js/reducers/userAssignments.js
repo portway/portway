@@ -3,19 +3,15 @@ import { ActionTypes } from '../actions'
 const initialState = {
   assignmentsByUserId: {},
   loading: {
-    assignmentsByUserId: {}
+    byUserId: {}
   }
 }
 
 export const userAssignments = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.RECEIVE_CREATED_PROJECT: {
-      const assignmentsByUserId = { ...state.loading.assignmentsByUserId, [action.userId]: null }
-      return { ...state, loading: { ...state.loading, assignmentsByUserId } }
-    }
     case ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS: {
-      const assignmentsByUserId = { ...state.loading.assignmentsByUserId, [action.userId]: true }
-      return { ...state, loading: { ...state.loading, assignmentsByUserId } }
+      const loadingByUserId = { ...state.loading.byUserId, [action.userId]: true }
+      return { ...state, loading: { ...state.loading, byUserId: loadingByUserId } }
     }
     case ActionTypes.RECEIVE_USER_PROJECT_ASSIGNMENTS: {
       const userAssignmentsByProjectId = action.data.reduce((assignments, assignment) => {
@@ -25,13 +21,13 @@ export const userAssignments = (state = initialState, action) => {
         ...state.assignmentsByUserId,
         [action.userId]: userAssignmentsByProjectId
       }
-      const loadingById = { ...state.loading.assignmentsByUserId, [action.userId]: false }
+      const loadingByUserId = { ...state.loading.byUserId, [action.userId]: false }
       return {
         ...state,
         assignmentsByUserId,
         loading: {
           ...state.loading,
-          assignmentsByUserId: loadingById
+          byUserId: loadingByUserId
         }
       }
     }
