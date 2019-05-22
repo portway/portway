@@ -36,7 +36,7 @@ const registerOrganization = async (req, res) => {
     return res.status(500).send('There was an error registering your organization')
   }
 
-  res.redirect(`registration/password?token=${token}`)
+  res.redirect(`registration/complete?token=${token}`)
 }
 
 // @todo Hey @jj, how can I get this to render the form again
