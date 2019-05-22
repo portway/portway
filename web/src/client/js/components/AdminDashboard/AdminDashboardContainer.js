@@ -7,7 +7,6 @@ import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminDashboardComponent from './AdminDashboardComponent'
 
 const AdminDashboardContainer = ({ match }) => {
-  console.log(match.params.section)
   return (
     <OrgPermission
       acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}

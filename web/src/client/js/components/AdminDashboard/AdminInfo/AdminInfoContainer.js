@@ -1,11 +1,32 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
-const AdminInfoContainer = () => {
-  return <div />
+import { ORGANIZATION_ROLE_IDS, PRODUCT_NAME, PATH_PROJECTS } from 'Shared/constants'
+import OrgPermission from 'Components/Permission/OrgPermission'
+import AdminInfoComponent from './AdminInfoComponent'
+
+const AdminInfoContainer = ({ errors }) => {
+  return (
+    <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
+      <Helmet>
+        <title>Account Settings: Organization Info – {PRODUCT_NAME}</title>
+      </Helmet>
+      <AdminInfoComponent errors={errors} />
+    </OrgPermission>
+  )
 }
 
 AdminInfoContainer.propTypes = {
+  errors: PropTypes.object
 }
 
-export default AdminInfoContainer
+const mapStateToProps = (state) => {
+  return {
+    errors: state.validation.organization
+  }
+}
+
+export default connect(mapStateToProps)(AdminInfoContainer)

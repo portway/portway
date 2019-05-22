@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { NavLink, Redirect } from 'react-router-dom'
 
-import { PATH_ADMIN, PRODUCT_NAME } from 'Shared/constants'
+import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PRODUCT_NAME } from 'Shared/constants'
 import AdminInfoContainer from './AdminInfo/AdminInfoContainer'
-import BillingContainer from 'Components/Billing/BillingContainer'
+import AdminBillingContainer from './AdminBilling/AdminBillingContainer'
+import OrgPermission from 'Components/Permission/OrgPermission'
 
 const ADMIN_PATHS = {
-  INFO: 'info',
+  INFO: 'general',
   USERS: 'users',
   BILLING: 'billing'
 }
@@ -20,7 +21,7 @@ const AdminDashboardComponent = ({ section }) => {
         return <AdminInfoContainer />
       }
       case ADMIN_PATHS.BILLING: {
-        return <BillingContainer />
+        return <AdminBillingContainer />
       }
       default:
         return <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.INFO}`} />
@@ -37,9 +38,11 @@ const AdminDashboardComponent = ({ section }) => {
           <div className="panel__container">
             <nav className="panel__navigation">
               <ul className="list--blank">
-                <li><NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.INFO}`}>Info</NavLink></li>
+                <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
+                  <li><NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.INFO}`}>General Settings</NavLink></li>
+                  <li><NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>Billing</NavLink></li>
+                </OrgPermission>
                 <li><NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`}>Users</NavLink></li>
-                <li><NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>Billing</NavLink></li>
               </ul>
             </nav>
             <div className="panel__content">

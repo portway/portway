@@ -6,7 +6,6 @@ import AdminDashboardContainer from 'Components/AdminDashboard/AdminDashboardCon
 
 const AdminSection = () => {
   const adminSectionPath = `${PATH_ADMIN}/:section`
-  console.log('I am called')
   return (
     <Switch>
       <Route exact path={adminSectionPath} component={AdminDashboardContainer} />

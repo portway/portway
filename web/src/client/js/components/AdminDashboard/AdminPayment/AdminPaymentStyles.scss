@@ -1,0 +1,15 @@
+@import 'CSS/inc/_vars.scss';
+
+.admin-payment {
+  &__card-type {
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  &__card-ending {
+    font-weight: 700;
+  }
+  &__card-expiration {
+    display: block;
+    margin-top: .5rem;
+  }
+}

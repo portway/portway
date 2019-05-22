@@ -4,6 +4,7 @@ import { groupBy } from 'Shared/utilities'
 const initialState = {
   document: {},
   field: {},
+  organization: {},
   project: {},
 }
 
