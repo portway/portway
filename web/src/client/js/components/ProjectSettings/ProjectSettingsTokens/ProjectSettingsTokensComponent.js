@@ -111,7 +111,7 @@ const ProjectSettingsTokensComponent = ({
 ProjectSettingsTokensComponent.propTypes = {
   createHandler: PropTypes.func.isRequired,
   createMode: PropTypes.bool.isRequired,
-  projectId: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
   setCreateMode: PropTypes.func.isRequired,
   removeHandler: PropTypes.func.isRequired,
   tokens: PropTypes.array.isRequired

@@ -1,49 +1,15 @@
 @import 'CSS/inc/_vars.scss';
 
-:root {
-  --project-settings-menu-background: #{$gray};
-  --project-settings-endpoint-name-background: #{$white-ter};
-  @media (prefers-color-scheme: dark) {
-    --project-settings-menu-background: #{$black-er};
-    --project-settings-endpoint-name-background: #{$gray-dark};
-  }
-}
-
 .project-settings {
+  // Vars
+  --endpoint-name-background: #{$white-ter};
+  @media (prefers-color-scheme: dark) {
+    --endpoint-name-background: #{$gray-dark};
+  }
+  // ---------------------------------------------------------------------------
   display: flex;
   flex: 1;
   flex-direction: column;
-  &__container {
-    display: flex;
-    flex: 1;
-    padding-top: $brandWidth / 2;
-  }
-  &__navigation {
-    margin-right: $brandWidth;
-    width: 20%;
-    a {
-      display: block;
-      color: var(--base-color);
-      padding: 8px 7px;
-      text-decoration: none;
-      &.active {
-        background-color: var(--project-settings-menu-background);
-        border-left: 2px solid $primary;
-      }
-    }
-  }
-  &__panel {
-    flex: 1;
-    overflow-x: hidden;
-    section {
-      &:first-child {
-        padding-top: 0;
-      }
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
 
   // Section specific
   &__teammate-field {
@@ -141,7 +107,7 @@
 
   // Endpoints
   &__endpoint-name {
-    background-color: var(--project-settings-endpoint-name-background);
+    background-color: var(--endpoint-name-background);
     align-items: center;
     display: flex;
     justify-content: space-between;

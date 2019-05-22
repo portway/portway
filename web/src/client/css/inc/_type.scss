@@ -142,9 +142,10 @@ time {
   background-color: $gray-light;
   border-radius: $borderRadius;
   color: $black-bis;
-  // font-size: 80%;
+  display: inline-block;
+  font-size: 90%;
   margin: 0 $iconMargin;
-  padding: 1px $iconMargin;
+  padding: 3px $iconMargin;
   text-decoration: none;
   &--highlight {
     background-color: $highlight;

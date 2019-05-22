@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Constants from 'Shared/constants'
+import { PATH_DOCUMENT, PATH_PROJECT, PATH_PROJECT_CREATE } from 'Shared/constants'
 
 import Project from './Project'
 import ProjectCreate from './ProjectCreate'
@@ -10,11 +10,11 @@ import ProjectSettings from './ProjectSettings'
 import './ProjectSection.scss'
 
 const ProjectSection = () => {
-  const projectBasePath = `${Constants.PATH_PROJECT}/:projectId`
-  const documentPath = `${Constants.PATH_PROJECT}/:projectId${Constants.PATH_DOCUMENT}/:documentId`
-  const settingsPath = `${Constants.PATH_PROJECT}/:projectId/settings`
-  const settingsSectionPath = `${Constants.PATH_PROJECT}/:projectId/settings/:setting`
-  const createPath = Constants.PATH_PROJECT_CREATE
+  const projectBasePath = `${PATH_PROJECT}/:projectId`
+  const documentPath = `${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/:documentId`
+  const settingsPath = `${PATH_PROJECT}/:projectId/settings`
+  const settingsSectionPath = `${PATH_PROJECT}/:projectId/settings/:setting`
+  const createPath = PATH_PROJECT_CREATE
 
   return (
     <Switch>

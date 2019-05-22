@@ -31,9 +31,9 @@ const Index = () => {
             <ConfirmationContainer />
             <HeaderContainer />
             <NotificationsContainer />
-            <Route exact path={PATH_ADMIN} component={AdminSection} />
             <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
             <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
+            <Route path={PATH_ADMIN} component={AdminSection} />
           </ErrorBoundaryComponent>
         </AppContainer>
       </Router>

@@ -83,7 +83,9 @@ form {
   }
 
   input[type='text'],
-  input[type='email'] {
+  input[type='email'],
+  input[type='number'],
+  .StripeElement .InputContainer {
     background: var(--form-background);
     border: thin solid var(--base-border-color);
     border-radius: $borderRadius;

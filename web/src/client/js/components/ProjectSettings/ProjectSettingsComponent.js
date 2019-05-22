@@ -37,16 +37,16 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
   }
 
   return (
-    <div className="project-settings">
-      <div className="project-settings__container">
-        <nav className="project-settings__navigation">
-          <ul className="list-blank">
+    <div className="project-settings panel">
+      <div className="project-settings__container panel__container">
+        <nav className="project-settings__navigation panel__navigation">
+          <ul className="list--blank">
             <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`}>Info</NavLink></li>
             <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink></li>
             <li><NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>API Keys</NavLink></li>
           </ul>
         </nav>
-        <div className="project-settings__panel">
+        <div className="project-settings__panel panel__content">
           {renderProjectSettingPanel()}
         </div>
       </div>
