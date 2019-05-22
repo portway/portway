@@ -44,9 +44,12 @@ const documentFields = function(router) {
 const getDocumentFields = async function(req, res, next) {
   const { documentId } = req.params
   const { orgId } = req.requestorInfo
+  const { draft } = req.query
+
+  const lookup = draft === 'true' ? 'findAllForDocument' : 'findAllPublishedForDocument'
 
   try {
-    const fields = await BusinessField.findAllForDocument(documentId, orgId)
+    const fields = await BusinessField[lookup](documentId, orgId)
     res.json({ data: fields })
   } catch (e) {
     next(e)

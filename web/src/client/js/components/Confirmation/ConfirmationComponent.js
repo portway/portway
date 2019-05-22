@@ -8,7 +8,7 @@ const ConfirmationComponent = ({ cancelAction, confirmedAction, confirmedLabel, 
   const confirmationRef = useRef()
   useClickOutside(confirmationRef, cancelAction)
   return (
-    <div className="confirmation">
+    <div className="confirmation" role="alert">
       <div className="confirmation__dialog" ref={confirmationRef}>
         <p className="confirmation__message">{message}</p>
         <div className="confirmation__actions">

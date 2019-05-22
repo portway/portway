@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import Constants from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
@@ -18,7 +19,8 @@ const DocumentFieldsComponent = ({
   fields,
   fieldChangeHandler,
   fieldRenameHandler,
-  fieldDestroyHandler
+  fieldDestroyHandler,
+  isPublishing
 }) => {
   const showFieldName = fields.length > 1
   function renderFieldType(field, index) {
@@ -62,8 +64,12 @@ const DocumentFieldsComponent = ({
     })
     return fieldArray
   }
+  const fieldsClasses = cx({
+    'document__fields': true,
+    'document__fields--disabled': isPublishing
+  })
   return (
-    <ol className="document__fields">
+    <ol className={fieldsClasses}>
       {renderFields()}
     </ol>
   )
@@ -80,7 +86,8 @@ DocumentFieldsComponent.propTypes = {
   fields: PropTypes.array.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
-  fieldDestroyHandler: PropTypes.func.isRequired
+  fieldDestroyHandler: PropTypes.func.isRequired,
+  isPublishing: PropTypes.bool.isRequired
 }
 
 export default DocumentFieldsComponent
