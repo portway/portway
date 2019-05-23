@@ -54,7 +54,8 @@ const Header = ({ brand, location }) => {
           </Link>
         </div>
         <div className="navbar__content">
-          {`/${section}` === PATH_ADMIN && (<>Account Settings</>)}
+          {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
+          {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
           {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <Navigator />}
           {`/${section}` === PATH_PROJECT && renderProjectsItems()}
         </div>

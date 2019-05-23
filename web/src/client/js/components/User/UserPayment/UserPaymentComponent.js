@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
 import StripeContainer from './StripeContainer'
-import './AdminPaymentStyles.scss'
+import './_UserPaymentStyles.scss'
 
-const AdminPaymentComponent = () => {
+const UserPaymentComponent = () => {
   const [isStripeOpen, setStripeOpen] = useState(false)
   return (
     <div className="admin-payment">
@@ -26,7 +26,7 @@ const AdminPaymentComponent = () => {
   )
 }
 
-AdminPaymentComponent.propTypes = {
+UserPaymentComponent.propTypes = {
 }
 
-export default AdminPaymentComponent
+export default UserPaymentComponent

@@ -1,10 +1,10 @@
 import React from 'react'
-import AdminSeatsContainer from 'Components/Admin/AdminSeats/AdminSeatsContainer'
-import AdminPaymentComponent from 'Components/Admin/AdminPayment/AdminPaymentComponent'
+import UserSeatsContainer from 'Components/User/UserSeats/UserSeatsContainer'
+import UserPaymentComponent from 'Components/User/UserPayment/UserPaymentComponent'
 
-import './AdminBillingStyles.scss'
+import './_UserBillingStyles.scss'
 
-class AdminBillingComponent extends React.PureComponent {
+class UserBillingComponent extends React.PureComponent {
   render() {
     return (
       <>
@@ -16,15 +16,15 @@ class AdminBillingComponent extends React.PureComponent {
         </section>
         <section>
           <h2>Manage Seats</h2>
-          <AdminSeatsContainer />
+          <UserSeatsContainer />
         </section>
         <section>
           <h2>Payment information</h2>
-          <AdminPaymentComponent />
+          <UserPaymentComponent />
         </section>
       </>
     )
   }
 }
 
-export default AdminBillingComponent
+export default UserBillingComponent

@@ -6,20 +6,20 @@ import { Helmet } from 'react-helmet'
 
 import { ORGANIZATION_ROLE_IDS, PRODUCT_NAME, PATH_PROJECTS } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
-import AdminInfoComponent from './AdminInfoComponent'
+import UserOrganizationComponent from './UserOrganizationComponent'
 
-const AdminInfoContainer = ({ errors }) => {
+const UserOrganizationContainer = ({ errors }) => {
   return (
     <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
       <Helmet>
         <title>Account Settings: Organization Info – {PRODUCT_NAME}</title>
       </Helmet>
-      <AdminInfoComponent errors={errors} />
+      <UserOrganizationComponent errors={errors} />
     </OrgPermission>
   )
 }
 
-AdminInfoContainer.propTypes = {
+UserOrganizationContainer.propTypes = {
   errors: PropTypes.object
 }
 
@@ -29,4 +29,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(AdminInfoContainer)
+export default connect(mapStateToProps)(UserOrganizationContainer)

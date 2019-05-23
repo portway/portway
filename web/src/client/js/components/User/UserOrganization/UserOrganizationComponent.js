@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 
-const AdminInfoComponent = ({ errors }) => {
+const UserOrganizationComponent = ({ errors }) => {
   const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
   return (
     <form className="admin-settings__info" onSubmit={(e) => { e.preventDefault() }}>
@@ -35,8 +35,8 @@ const AdminInfoComponent = ({ errors }) => {
   )
 }
 
-AdminInfoComponent.propTypes = {
+UserOrganizationComponent.propTypes = {
   errors: PropTypes.object
 }
 
-export default AdminInfoComponent
+export default UserOrganizationComponent
