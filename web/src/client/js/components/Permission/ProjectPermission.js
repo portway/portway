@@ -22,16 +22,16 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
 
   // check if either project or assignment loading hasn't been triggered yet, or is currently loading, if so always return null
   if (projectLoading || projectLoading == null) {
-    return <>projectLoading</>
+    return <>{null}</>
   }
   if (assignmentLoading || assignmentLoading == null) {
-    return <>assignmentLoading</>
+    return <>{null}</>
   }
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
 
   // Check the manual project role assignments for the current user
-  if (projectAssignment && acceptedRoleIds.includes(projectAssignment.roleId)) {
+  if (acceptedRoleIds.includes(projectAssignment.roleId)) {
     return successRender
   }
 
@@ -39,9 +39,10 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
   // check the default access level granted to all users
   const projectRoleId = getRoleIdFromProjectAccessLevel(project.accessLevel)
 
-  if (projectRoleId && acceptedRoleIds.includes(projectRoleId)) {
+  if (acceptedRoleIds.includes(projectRoleId)) {
     return successRender
   }
+
 
   return rejectRender
 }

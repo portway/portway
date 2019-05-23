@@ -144,7 +144,7 @@ export default {
       return {
         fetchAction: fetchUserProjectAssignments(currentUserId),
         getLoadingStatusFromState: (state) => {
-          return state.userAssignments.loading.assignmentsByUserId[currentUserId]
+          return state.userAssignments.loading.byUserId[currentUserId]
         },
         getDataFromState: (state) => {
           return state.userAssignments.assignmentsByUserId[currentUserId]
