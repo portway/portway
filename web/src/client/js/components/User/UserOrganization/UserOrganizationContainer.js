@@ -9,14 +9,15 @@ import useDataService from 'Hooks/useDataService'
 
 import { ORGANIZATION_ROLE_IDS, PRODUCT_NAME, PATH_PROJECTS } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
+import { updateOrganization } from 'Actions/organization'
 import UserOrganizationComponent from './UserOrganizationComponent'
 
-const UserOrganizationContainer = ({ errors }) => {
+const UserOrganizationContainer = ({ errors, updateOrganization }) => {
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   if (!currentOrg) return null
 
   function submitHandler(values) {
-    console.log(values)
+    updateOrganization(currentOrg.id, values)
   }
 
   return (
@@ -30,7 +31,8 @@ const UserOrganizationContainer = ({ errors }) => {
 }
 
 UserOrganizationContainer.propTypes = {
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  updateOrganization: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -39,4 +41,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(UserOrganizationContainer)
+const mapDispatchToProps = { updateOrganization }
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserOrganizationContainer)

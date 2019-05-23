@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const TextField = ({ help, id, label, large, name, errors, placeholder, type, value, onBlur, onChange }) => {
+const TextField = ({ help, id, label, large, name, errors, placeholder, required, type, value, onBlur, onChange }) => {
   const textFieldClasses = cx({
     'form-field': true,
     'form-field--large': large,
@@ -21,7 +21,8 @@ const TextField = ({ help, id, label, large, name, errors, placeholder, type, va
           placeholder={placeholder}
           defaultValue={value}
           onBlur={onBlur}
-          onChange={onChange} />
+          onChange={onChange}
+          required={required} />
         <ValidationComponent errors={errors} />
       </div>
       {help && <div className="form-field__help small">{help}</div>}
@@ -38,6 +39,7 @@ TextField.propTypes = {
   errors: PropTypes.array,
   placeholder: PropTypes.string,
   type: PropTypes.string,
+  required: PropTypes.bool,
   value: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func

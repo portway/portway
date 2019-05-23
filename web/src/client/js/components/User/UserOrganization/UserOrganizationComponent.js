@@ -20,25 +20,28 @@ const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
       <section>
         <h2>General information</h2>
         <TextField
+          errors={errors.name}
           id="orgName"
           label="Organization Name"
           name="name"
-          errors={errors.name}
           onChange={(e) => { setName(e.target.value) }}
           placeholder="ACME, Inc"
-          value={organization.name} />
+          required
+          value={organization.name}
+        />
       </section>
       <section>
         <h2>Privacy</h2>
         <Checkbox
-          id="orgProjectCreation"
+          errors={errors.privacy}
           help={helpText}
+          id="orgProjectCreation"
           label={`Everyone in ${organization.name} can create projects`}
           large={true}
           name="organization[allowUserProjectCreation]"
-          errors={errors.privacy}
           onChange={(e) => { setAllowProjectCreation(e.target.checked) }}
-          value={allowProjectCreation} />
+          value={allowProjectCreation}
+        />
       </section>
       <div className="btn-group">
         <button className="btn btn-primary">Update Organization</button>

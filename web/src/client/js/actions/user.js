@@ -23,7 +23,6 @@ export const updateUser = (userId, body) => {
   return async (dispatch) => {
     dispatch(Users.initiateUpdate(userId))
     const { data, status } = await update(`users/${userId}`, body)
-    console.log(data, status)
     validationCodes.includes(status) ?
       dispatch(Validation.create('user', data, status)) :
       dispatch(Users.receiveOneUpdated(data))

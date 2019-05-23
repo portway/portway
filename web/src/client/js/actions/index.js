@@ -72,6 +72,8 @@ export const ActionTypes = {
   // Organizations
   REQUEST_ORGANIZATION: 'REQUEST_ORGANIZATION',
   RECEIVE_ORGANIZATION: 'RECEIVE_ORGANIZATION',
+  INITIATE_ORGANIZATION_UPDATE: 'INITIATE_ORGANIZATION_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION: 'RECEIVE_UPDATED_ORGANIZATION',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
@@ -170,7 +172,9 @@ export const UserProjectAssignments = {
 
 export const Organizations = {
   requestOne: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION, 'id'),
-  receiveOne: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION, 'data')
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION, 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_UPDATE, 'id'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION, 'data'),
 }
 
 export const UI = {

@@ -23,23 +23,27 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
       <section>
         <h2>Your information</h2>
         <TextField
+          errors={errors.name}
           id="userName"
           label="Full name"
           name="name"
           onBlur={(e) => { setName(e.target.value)} }
           placeholder="Enter your full name"
+          required
           value={user.name}
-          errors={errors.name} />
+        />
         <TextField
+          errors={errors.email}
+          help={emailHelpText}
           id="userEmail"
           label="Email address"
           name="email"
-          help={emailHelpText}
           onBlur={(e) => { setEmail(e.target.value)} }
           placeholder="name@domain.com"
+          required
           type="email"
           value={user.email}
-          errors={errors.email} />
+        />
       </section>
       <section>
         <h2>Your Image</h2>
