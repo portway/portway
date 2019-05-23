@@ -39,14 +39,9 @@ const registerOrganization = async (req, res) => {
   res.redirect(`registration/complete?token=${token}`)
 }
 
-// @todo Hey @jj, how can I get this to render the form again
-// and making sure organization and the radio buttons are whatever
-// value they put in before?
-// Will want to do that on the try/catch too I assume?
-// Test by making the submit button enabled
 const setInitialPassword = async (req, res) => {
   const {
-    organization,
+    orgName,
     password,
     'confirm-password': confirmPassword,
     'project-creation': projectCreation,
@@ -54,11 +49,16 @@ const setInitialPassword = async (req, res) => {
   } = req.body
 
   if (password !== confirmPassword) {
-    res.render('/sign-up/registration/complete?message=password', {
-      orgName: organization,
-      projectCreation: projectCreation
+    return res.render('user/registration', {
+      ...renderBundles(req, 'Registration', 'registration'),
+      token,
+      flash: {
+        type: 'error',
+        message: 'The passwords you entered do not match'
+      },
+      orgName,
+      projectCreation
     })
-    return res.send(400)
   }
 
   try {
@@ -73,8 +73,16 @@ const setInitialPassword = async (req, res) => {
       }
     })
   } catch ({ response }) {
-    console.error({ status: response.status, message: response.data })
-    return res.status(500).send('There was an error setting your password')
+    return res.render('user/registration', {
+      ...renderBundles(req, 'Registration', 'registration'),
+      token,
+      flash: {
+        type: 'error',
+        message: response.data.error
+      },
+      orgName,
+      projectCreation
+    })
   }
 
   res.redirect('/sign-in')
