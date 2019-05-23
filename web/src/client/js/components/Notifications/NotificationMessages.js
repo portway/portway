@@ -27,7 +27,7 @@ export const getNotificationMessage = function(notification) {
   const errorMessages = {
     403: `Sorry, you don\'t have access to ${resourceStrings[notification.resource]}`,
     404: `Sorry, we couldn\'t find ${resourceStrings[notification.resource]}`,
-    500: `Something went wrong, and it\'s our fault. Try refreshing, or email ${<a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>}.`
+    500: (<>{`Something went wrong, and it\'s our fault. Try refreshing, or email`} <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.</>)
   }
   if (notification.type === NOTIFICATION_TYPES.ERROR) {
     return errorMessages[notification.code]

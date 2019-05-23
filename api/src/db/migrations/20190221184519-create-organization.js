@@ -16,6 +16,10 @@ module.exports = {
         // then assign the org owner as the user
         type: Sequelize.INTEGER
       },
+      allowUserProjectCreation: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -1,4 +1,4 @@
-import currentUserId from 'Libs/currentUserId'
+import { currentUserId } from 'Libs/currentIds'
 import { Validation, Projects, ProjectAssignees, ProjectTokens, Notifications } from './index'
 import { fetch, add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'

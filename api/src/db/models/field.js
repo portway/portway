@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       orgId: DataTypes.INTEGER,
       name: DataTypes.STRING,
       docId: DataTypes.INTEGER,
-      versionId: DataTypes.INTEGER,
+      versionId: {
+        type: DataTypes.INTEGER,
+        defaultValue: null,
+        allowNull: true
+      },
       type: DataTypes.INTEGER,
       order: {
         type: DataTypes.INTEGER,

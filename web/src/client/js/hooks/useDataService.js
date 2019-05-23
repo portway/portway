@@ -58,12 +58,12 @@ export default function useDataService(
       const state = Store.getState()
       const loading = getLoadingStatusFromState(state)
 
-      setLoading(loading)
-
       if (loading === false && mounted) {
         const data = getDataFromState(state)
         setData(data)
       }
+
+      setLoading(loading)
     }
 
     const unsubscribeFn = Store.subscribe(handleStateChange)

@@ -31,6 +31,9 @@ const rIds = ORGANIZATION_ROLE_IDS
 // give an org role permission!
 export const ORGANIZATION_ROLES = {
   [rIds.OWNER]: {
+    [resourceTypes.ORGANIZATION]: {
+      [actions.READ_MY]: true
+    },
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,
       [actions.READ]: true,
@@ -56,6 +59,9 @@ export const ORGANIZATION_ROLES = {
     }
   },
   [rIds.ADMIN]: {
+    [resourceTypes.ORGANIZATION]: {
+      [actions.READ_MY]: true
+    },
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,
       [actions.READ]: true,
@@ -78,6 +84,9 @@ export const ORGANIZATION_ROLES = {
     }
   },
   [rIds.USER]: {
+    [resourceTypes.ORGANIZATION]: {
+      [actions.READ_MY]: true
+    },
     [resourceTypes.PROJECT]: {
       [actions.LIST_MY]: true
     },

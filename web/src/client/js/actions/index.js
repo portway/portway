@@ -40,6 +40,8 @@ export const ActionTypes = {
   REMOVE_DOCUMENT: 'REMOVE_DOCUMENT',
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
+  INITIATE_DOCUMENT_PUBLISH: 'INITIATE_DOCUMENT_PUBLISH',
+  RECEIVE_PUBLISHED_DOCUMENT: 'RECEIVE_PUBLISHED_DOCUMENT',
   // Fields
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
@@ -65,6 +67,9 @@ export const ActionTypes = {
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
   RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
+  // Organizations
+  REQUEST_ORGANIZATION: 'REQUEST_ORGANIZATION',
+  RECEIVE_ORGANIZATION: 'RECEIVE_ORGANIZATION',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
@@ -126,7 +131,9 @@ export const Documents = {
   requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
-  receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data')
+  receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data'),
+  publish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_PUBLISH, 'documentId'),
+  receivePublishedVersion: makeActionCreator(ActionTypes.RECEIVE_PUBLISHED_DOCUMENT, 'data'),
 }
 
 export const Fields = {
@@ -155,6 +162,11 @@ export const Users = {
 export const UserProjectAssignments = {
   request: makeActionCreator(ActionTypes.REQUEST_USER_PROJECT_ASSIGNMENTS, 'userId'),
   receive: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECT_ASSIGNMENTS, 'userId', 'data')
+}
+
+export const Organizations = {
+  requestOne: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION, 'id'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION, 'data')
 }
 
 export const UI = {

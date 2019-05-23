@@ -2,7 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink, Link, withRouter } from 'react-router-dom'
 
-import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_BILLING, PATH_PROJECTS, PATH_PROJECT, PATH_PROJECT_CREATE, PATH_SETTINGS } from 'Shared/constants'
+import {
+  ORGANIZATION_ROLE_IDS,
+  ORGANIZATION_SETTINGS,
+  PATH_ADMIN,
+  PATH_BILLING,
+  PATH_PROJECTS,
+  PATH_PROJECT,
+  PATH_PROJECT_CREATE,
+  PATH_SETTINGS
+} from 'Shared/constants'
 
 import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
@@ -20,7 +29,9 @@ const renderBrandLogo = (logo) => {
 
 const renderProjectsItems = () => {
   return (
-    <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+    <OrgPermission
+      acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+      acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
       <div className="navbar__content-items">
         <Link
           className="btn btn--blank btn--with-circular-icon"
