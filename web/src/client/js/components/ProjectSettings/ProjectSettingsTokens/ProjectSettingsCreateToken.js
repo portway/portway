@@ -50,7 +50,7 @@ ProjectSettingsCreateToken.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   createHandler: PropTypes.func.isRequired,
   errors: PropTypes.array,
-  projectId: PropTypes.string.isRequired
+  projectId: PropTypes.number.isRequired
 }
 
 export default ProjectSettingsCreateToken

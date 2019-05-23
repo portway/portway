@@ -56,12 +56,10 @@ const Header = ({ brand, location }) => {
           </Link>
         </div>
         <div className="navbar__content">
-          {`/${section}` !== PATH_ADMIN &&
-            `/${section}` !== PATH_SETTINGS && <Navigator />}
-          {
-            `/${section}` === PATH_PROJECT &&
-            renderProjectsItems()
-          }
+          {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
+          {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
+          {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <Navigator />}
+          {`/${section}` === PATH_PROJECT && renderProjectsItems()}
         </div>
         <div className="navbar__misc">
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>

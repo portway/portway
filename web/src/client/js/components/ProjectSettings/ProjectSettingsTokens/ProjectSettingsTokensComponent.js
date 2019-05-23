@@ -7,6 +7,8 @@ import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 import ProjectSettingsCreateToken from './ProjectSettingsCreateToken'
 
+import './_ProjectSettingsTokens.scss'
+
 const ProjectSettingsTokensComponent = ({
   createHandler, createMode, projectId, removeHandler, setCreateMode, tokens
 }) => {
@@ -111,7 +113,7 @@ const ProjectSettingsTokensComponent = ({
 ProjectSettingsTokensComponent.propTypes = {
   createHandler: PropTypes.func.isRequired,
   createMode: PropTypes.bool.isRequired,
-  projectId: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
   setCreateMode: PropTypes.func.isRequired,
   removeHandler: PropTypes.func.isRequired,
   tokens: PropTypes.array.isRequired

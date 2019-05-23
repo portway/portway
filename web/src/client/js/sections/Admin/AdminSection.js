@@ -1,23 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
-import { PATH_PROJECTS } from 'Shared/constants'
-import SimpleProjectListContainer from 'Components/SimpleProjectList/SimpleProjectListContainer'
+import { PATH_ADMIN } from 'Shared/constants'
+import AdminDashboardContainer from 'Components/Admin/AdminDashboardContainer'
 
-class AdminSection extends React.PureComponent {
-  render() {
-    return (
-      <main>
-        <div className="section">
-          <h2>My Projects</h2>
-          <SimpleProjectListContainer />
-          <Link to={PATH_PROJECTS} className="btn btn--blank">
-            See all projects...
-          </Link>
-        </div>
-      </main>
-    )
-  }
+const AdminSection = () => {
+  const adminSectionPath = `${PATH_ADMIN}/:section`
+  return (
+    <Switch>
+      <Route exact path={adminSectionPath} component={AdminDashboardContainer} />
+      <Route exact path={PATH_ADMIN} component={AdminDashboardContainer} />
+    </Switch>
+  )
 }
 
 export default AdminSection

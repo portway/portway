@@ -50,12 +50,14 @@ form {
       border-radius: $borderRadius;
       cursor: text;
       color: #fff;
+      min-height: 36px;
       &--menu-is-open {
         border-radius: $borderRadius;
       }
       &--is-focused {
         border: thin solid $action;
-        box-shadow: inset 0 1px 2px var(--react-select-background), 0 0 0 0.2em $action-light;
+        box-shadow: none;
+        // box-shadow: inset 0 1px 2px var(--react-select-background), 0 0 0 0.2em $action-light;
       }
     }
     // Text field

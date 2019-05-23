@@ -1,8 +1,12 @@
 import React from 'react'
-import { StripeProvider } from 'react-stripe-elements'
-import BillingComponent from './BillingComponent'
+import { Redirect } from 'react-router-dom'
+import { Elements, StripeProvider } from 'react-stripe-elements'
 
-class BillingContainer extends React.Component {
+import { ORGANIZATION_ROLE_IDS, PATH_PROJECTS } from 'Shared/constants'
+import OrgPermission from 'Components/Permission/OrgPermission'
+import StripeComponent from './StripeComponent'
+
+class StripeContainer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,11 +27,13 @@ class BillingContainer extends React.Component {
 
   render() {
     return (
-      <div className="billing-container">
+      <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
         <StripeProvider stripe={this.state.stripe}>
-          <BillingComponent />
+          <Elements>
+            <StripeComponent />
+          </Elements>
         </StripeProvider>
-      </div>
+      </OrgPermission>
     )
   }
 
@@ -47,4 +53,4 @@ class BillingContainer extends React.Component {
   }
 }
 
-export default BillingContainer
+export default StripeContainer

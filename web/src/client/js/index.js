@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import store from './reducers'
-import { PATH_APP, PATH_ADMIN, PATH_PROJECTS, PATH_PROJECT, PRODUCT_NAME } from 'Shared/constants'
+import { PATH_APP, PATH_ADMIN, PATH_PROJECTS, PATH_PROJECT, PATH_SETTINGS, PRODUCT_NAME } from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
@@ -14,6 +14,7 @@ import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryCompon
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
 import HeaderContainer from 'Components/Header/HeaderContainer'
+import UserSection from 'Sections/User/UserSection'
 import AdminSection from 'Sections/Admin/AdminSection'
 import ProjectsSection from 'Sections/Projects/ProjectsSection'
 import ProjectSection from 'Sections/Project/ProjectSection'
@@ -31,9 +32,10 @@ const Index = () => {
             <ConfirmationContainer />
             <HeaderContainer />
             <NotificationsContainer />
-            <Route exact path={PATH_ADMIN} component={AdminSection} />
             <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
             <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
+            <Route path={PATH_SETTINGS} component={UserSection} />
+            <Route path={PATH_ADMIN} component={AdminSection} />
           </ErrorBoundaryComponent>
         </AppContainer>
       </Router>

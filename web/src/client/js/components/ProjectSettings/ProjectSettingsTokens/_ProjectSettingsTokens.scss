@@ -1,0 +1,95 @@
+@import 'CSS/inc/_vars.scss';
+
+// Tokens
+.project-settings {
+
+  --endpoint-name-background: #{$white-ter};
+
+  @media (prefers-color-scheme: dark) {
+    --endpoint-name-background: #{$gray-dark};
+  }
+
+  // Token list
+  &__token-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__token-list-item {
+    align-items: center;
+    display: flex;
+    input[type="radio"] {
+      margin-right: 1.8rem;
+    }
+    &__info {
+      border: thin solid var(--base-border-color);
+      flex: 1;
+      margin-bottom: 2rem;
+      padding: 1rem;
+    }
+    &__details {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: flex-start;
+    }
+    &__name {
+      font-weight: 700;
+    }
+    &__field {
+      align-items: center;
+      border: thin solid var(--base-border-color);
+      border-radius: $borderRadius;
+      display: flex;
+      width: 100%;
+      .pill {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        font-size: 1.2rem;
+        margin: 0;
+        padding: 2px 6px;
+      }
+      input {
+        border: none;
+        color: $gray-dark;
+        font-size: 1.3rem;
+        padding: 2px 6px;
+      }
+    }
+    &__token {
+      align-items: center;
+      display: flex;
+      input {
+        flex: 1;
+      }
+      .btn {
+        margin-left: 1rem;
+      }
+    }
+  } // token-list
+
+  // Endpoints
+  &__endpoint-name {
+    background-color: var(--endpoint-name-background);
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem 0 .5rem;
+  }
+  &__endpoint-resource {
+    flex: 1;
+  }
+  &__endpoint {
+    display: flex;
+    pre {
+      width: 100%;
+    }
+    &-token {
+      color: $gray-dark;
+    }
+    &-url {
+      color: $primary;
+    }
+  } // endpoints
+
+}

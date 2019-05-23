@@ -1,6 +1,6 @@
-// @import 'bulma/sass/components/message.sass';
-// We should get this working, but webpack loaders are weird
+@import 'CSS/inc/_vars.scss';
 
 .message {
+  background-color: $gray-light;
   margin: 1em 0;
 }

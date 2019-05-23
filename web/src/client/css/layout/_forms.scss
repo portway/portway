@@ -9,42 +9,52 @@
 }
 
 form {
+  padding: 0 5px;
+
+  .field {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 300px;
+    &__row {
+      display: flex;
+      width: 100%;
+      button, .btn {
+        margin-right: 1.8rem;
+      }
+    }
+    &__control {
+      width: 100%;
+    }
+    &--with-space {
+      padding-top: 2.4rem;
+    }
+  } // field
+
   .form-field {
     margin-bottom: 18px;
-
-    .field {
-      align-items: flex-start;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      width: 300px;
-
-      &__row {
-        display: flex;
-        width: 100%;
-        button, .btn {
-          margin-right: 1.8rem;
-        }
-      }
-
-      &--with-space {
-        padding-top: 2.4rem;
-      }
-
-    }
 
     &--large {
       .field {
         width: 100%;
       }
-    }
+    } // form-field--large
 
     &--horizontal {
       .field {
-        align-items: center;
+        align-items: flex-end;
         flex-direction: row;
+        width: 100%;
+        > div {
+          margin-right: 1rem;
+        }
       }
-    }
+    } // form-field--horizontal
+
+    &--hidden {
+      display: none;
+    } // form-field--hidden
 
     &--checkbox {
       .field {
@@ -54,7 +64,7 @@ form {
           margin-right: 6px;
         }
       }
-    }
+    } // form-field--checkbox
 
     &--error {
       .field {
@@ -65,10 +75,12 @@ form {
           border-left: 6px solid $danger;
         }
       }
-    }
+    } // form-field--eror
 
-  }
+  } // form-field
 
+  // Defaults
+  // ---------------------------------------------------------------------------
   label {
     display: block;
     font-weight: 700;
@@ -83,7 +95,9 @@ form {
   }
 
   input[type='text'],
-  input[type='email'] {
+  input[type='email'],
+  input[type='number'],
+  .StripeElement {
     background: var(--form-background);
     border: thin solid var(--base-border-color);
     border-radius: $borderRadius;
@@ -91,6 +105,10 @@ form {
     width: 100%;
     &::placeholder {
       color: $gray;
+    }
+    &.focus {
+      // StripeElement
+      border: thin solid $action;
     }
     &:focus {
       @include focus(var(--form-background), $action);
