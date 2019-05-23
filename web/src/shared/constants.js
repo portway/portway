@@ -61,7 +61,7 @@ module.exports = {
   LABEL_NEW_DOCUMENT: 'New Document',
   // Paths
   PATH_APP: '/d',
-  PATH_BILLING: '/admin/account',
+  PATH_BILLING: '/settings/billing',
   PATH_ADMIN: '/admin',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',

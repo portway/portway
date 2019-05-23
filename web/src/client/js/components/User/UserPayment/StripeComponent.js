@@ -9,7 +9,7 @@ import {
   CardCVCElement
 } from 'react-stripe-elements'
 
-import { PATH_ADMIN } from 'Shared/constants'
+import { PATH_SETTINGS } from 'Shared/constants'
 import CountryList from 'Shared/countryList'
 
 const elementStyles = {
@@ -167,7 +167,7 @@ class StripeComponent extends React.Component {
         <div className="field field__row field--with-space">
           <div className="field__control field__control--submit">
             <input className="btn" type="submit" value="Update payment information" />
-            <Link to={PATH_ADMIN}>Cancel</Link>
+            <Link to={PATH_SETTINGS}>Cancel</Link>
           </div>
         </div>
 
