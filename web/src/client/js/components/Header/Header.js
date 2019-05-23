@@ -5,11 +5,14 @@ import { NavLink, Link, withRouter } from 'react-router-dom'
 import {
   ORGANIZATION_ROLE_IDS,
   ORGANIZATION_SETTINGS,
-  PATH_ADMIN, PATH_BILLING,
+  PATH_BILLING,
+  PATH_ADMIN,
+  PATH_BILLING,
   PATH_PROJECTS,
   PATH_PROJECT,
   PATH_PROJECT_CREATE,
-  PATH_SETTINGS } from 'Shared/constants'
+  PATH_SETTINGS
+} from 'Shared/constants'
 
 import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'

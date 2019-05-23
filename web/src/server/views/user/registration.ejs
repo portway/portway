@@ -3,15 +3,12 @@
 <main class="section">
   <div class="container">
     <h1 class="title">Complete your registration</h1>
-    <% if (flash) { %>
-    <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
-    <% } %>
     <form class="login-form" action="/sign-up/registration/complete" method="POST">
       <div class="section">
         <div class="field">
-          <label class="label is-small" for="organization">Organization name</label>
+          <label class="label is-small" for="orgName">Organization name</label>
           <div class="control">
-            <input class="input" name="organization" id="org-name" type="text" placeholder="ACME, Inc" autocomplete="section-signup organization" value="<%= locals.orgName %>">
+            <input class="input" name="orgName" id="org-name" type="text" placeholder="ACME, Inc" autocomplete="section-signup organization" value="<%= locals.orgName %>">
           </div>
         </div>
       </div>
@@ -30,6 +27,9 @@
             <p id="password-help" class="help is-danger" hidden>Your passwords don't match</p>
           </div>
         </div>
+        <% if (flash) { %>
+          <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+        <% } %>
         <div class="field field--with-space">
           <%
             if (typeof button === 'undefined') {
