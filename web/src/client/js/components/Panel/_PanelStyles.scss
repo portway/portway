@@ -1,0 +1,46 @@
+@import 'CSS/inc/_vars.scss';
+
+/**
+ * Panel is a navigataion on the left, content on the right layout
+ * Project Settings, Admin Settings, etc
+ */
+.panel {
+  --menu-background: #{$gray};
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  @media (prefers-color-scheme: dark) {
+    --menu-background: #{$black-er};
+  }
+  &__container {
+    display: flex;
+    flex: 1;
+    padding-top: $brandWidth / 2;
+  }
+  &__navigation {
+    margin-right: $brandWidth;
+    width: 20%;
+    a {
+      display: block;
+      color: var(--base-color);
+      padding: 8px 7px;
+      text-decoration: none;
+      &.active {
+        background-color: var(--menu-background);
+        border-left: 2px solid $primary;
+      }
+    }
+  }
+  &__content {
+    flex: 1;
+    overflow-x: hidden;
+    section {
+      &:first-child {
+        padding-top: 0;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
