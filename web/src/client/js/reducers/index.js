@@ -12,6 +12,7 @@ import { projectTokens } from './projectTokens'
 import { ui } from './ui'
 import { users } from './users'
 import { userAssignments } from './userAssignments'
+import { organizations } from './organizations'
 
 const rootReducer = combineReducers({
   documents,
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   ui,
   users,
   userAssignments,
+  organizations
 })
 
 const middlewares = [thunk]

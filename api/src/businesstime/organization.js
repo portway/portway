@@ -1,9 +1,10 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
-import GLOBAL_PUBLIC_FIELDS from '../constants/globalPublicFields'
+import resourcePublicFields from '../constants/resourcePublicFields'
+import resourceTypes from '../constants/resourceTypes'
 
 const MODEL_NAME = 'Organization'
-const PUBLIC_FIELDS = [...GLOBAL_PUBLIC_FIELDS, 'name', 'ownerId']
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.ORGANIZATION]
 
 async function create(body) {
   const db = getDb()

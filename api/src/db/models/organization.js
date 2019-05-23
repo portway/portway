@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
           model: 'User',
           key: 'id'
         }
+      },
+      allowUserProjectCreation: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {
