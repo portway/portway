@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import { PATH_ADMIN } from 'Shared/constants'
-import AdminDashboardContainer from 'Components/AdminDashboard/AdminDashboardContainer'
+import AdminDashboardContainer from 'Components/Admin/AdminDashboardContainer'
 
 const AdminSection = () => {
   const adminSectionPath = `${PATH_ADMIN}/:section`

@@ -22,6 +22,9 @@ main {
  */
 .panel {
   --menu-background: #{$gray};
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   @media (prefers-color-scheme: dark) {
     --menu-background: #{$black-er};
   }

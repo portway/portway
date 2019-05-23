@@ -1,0 +1,46 @@
+@import 'CSS/inc/_vars.scss';
+
+.admin-payment {
+  &__method {
+    margin-bottom: 1rem;
+  }
+  &__card-type {
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  &__card-ending {
+    font-weight: 700;
+  }
+  &__card-expiration {
+    display: block;
+    margin-top: .5rem;
+  }
+
+  // Specific field__control for this component
+  .field__control {
+    &--card {
+      width: 180px;
+    }
+    &--expiry {
+      width: 180px;
+    }
+    &--cvc {
+      width: 60px;
+    }
+    &--postal {
+      width: 60px;
+    }
+    &--country {
+      width: 300px;
+    }
+    &--submit {
+      input {
+        margin-right: 1rem;
+      }
+      a {
+        color: $gray-dark;
+      }
+    }
+  }
+
+}

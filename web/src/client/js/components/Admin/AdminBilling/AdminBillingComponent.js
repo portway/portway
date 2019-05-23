@@ -1,6 +1,6 @@
 import React from 'react'
-import AdminSeatsContainer from 'Components/AdminDashboard/AdminSeats/AdminSeatsContainer'
-import AdminPaymentComponent from 'Components/AdminDashboard/AdminPayment/AdminPaymentComponent'
+import AdminSeatsContainer from 'Components/Admin/AdminSeats/AdminSeatsContainer'
+import AdminPaymentComponent from 'Components/Admin/AdminPayment/AdminPaymentComponent'
 
 import './AdminBillingStyles.scss'
 

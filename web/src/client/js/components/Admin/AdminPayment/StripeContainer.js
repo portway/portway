@@ -1,6 +1,6 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import { StripeProvider } from 'react-stripe-elements'
+import { Elements, StripeProvider } from 'react-stripe-elements'
 
 import { ORGANIZATION_ROLE_IDS, PATH_PROJECTS } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
@@ -29,7 +29,9 @@ class StripeContainer extends React.Component {
     return (
       <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
         <StripeProvider stripe={this.state.stripe}>
-          <StripeComponent />
+          <Elements>
+            <StripeComponent />
+          </Elements>
         </StripeProvider>
       </OrgPermission>
     )
