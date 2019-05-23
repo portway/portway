@@ -8,7 +8,7 @@ import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
-const { ORGANIZATION_ROLE_IDS, PATH_PROJECT_CREATE } = Constants
+const { ORGANIZATION_ROLE_IDS, ORGANIZATION_SETTINGS, PATH_PROJECT_CREATE } = Constants
 
 class ProjectsContainer extends React.PureComponent {
   render() {
@@ -21,9 +21,12 @@ class ProjectsContainer extends React.PureComponent {
     }
     return (
       <main>
-        <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]} elseRender={(
-          <ToolbarComponent action={{}} filter sort />
-        )}>
+        <OrgPermission
+          acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+          acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}
+          elseRender={(
+            <ToolbarComponent action={{}} filter sort />
+          )}>
           <ToolbarComponent action={toolbarAction} filter sort />
         </OrgPermission>
         <ProjectsListContainer />
