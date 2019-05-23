@@ -6,7 +6,6 @@ import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_SETTINGS } from 'Shared/constan
 import Store from '../../reducers'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-
 import { currentUserId } from 'Libs/currentIds'
 import { logoutUser } from 'Actions/user'
 
