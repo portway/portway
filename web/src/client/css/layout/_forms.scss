@@ -35,6 +35,12 @@ form {
   .form-field {
     margin-bottom: 18px;
 
+    &__help {
+      color: $gray-dark;
+      padding: 4px;
+      width: 300px;
+    }
+
     &--large {
       .field {
         width: 100%;

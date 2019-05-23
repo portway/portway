@@ -63,6 +63,8 @@ export const ActionTypes = {
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
   RECEIVE_USER: 'RECEIVE_USER',
+  INITIATE_USER_UPDATE: 'INITIATE_USER_UPDATE',
+  RECEIVE_UPDATED_USER: 'RECEIVE_UPDATED_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
@@ -154,8 +156,10 @@ export const Notifications = {
 export const Users = {
   request: makeActionCreator(ActionTypes.REQUEST_USERS),
   receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data'),
-  requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'id'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER, 'data'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
 }
 

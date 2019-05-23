@@ -1,5 +1,5 @@
-import { Users, UserProjectAssignments } from './index'
-import { fetch } from '../api'
+import { Users, UserProjectAssignments, Validation } from './index'
+import { fetch, update, validationCodes } from '../api'
 
 /**
  * Redux action
@@ -16,6 +16,17 @@ export const fetchUser = (id) => {
     dispatch(Users.requestOne(id))
     const { data } = await fetch(`users/${id}`)
     return dispatch(Users.receiveOne(data))
+  }
+}
+
+export const updateUser = (userId, body) => {
+  return async (dispatch) => {
+    dispatch(Users.initiateUpdate(userId))
+    const { data, status } = await update(`users/${userId}`, body)
+    console.log(data, status)
+    validationCodes.includes(status) ?
+      dispatch(Validation.create('user', data, status)) :
+      dispatch(Users.receiveOneUpdated(data))
   }
 }
 

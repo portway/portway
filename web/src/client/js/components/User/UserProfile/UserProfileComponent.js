@@ -7,7 +7,7 @@ import FileField from 'Components/Form/FileField'
 
 import './_UserProfile.scss'
 
-const UserProfileComponent = ({ user, submitHandler }) => {
+const UserProfileComponent = ({ errors, user, submitHandler }) => {
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
 
@@ -15,6 +15,8 @@ const UserProfileComponent = ({ user, submitHandler }) => {
     e.preventDefault()
     submitHandler({ name, email })
   }
+
+  const emailHelpText = `Remember, your email address is your username! We will validate this email before changing it.`
 
   return (
     <form onSubmit={formSubmitHandler}>
@@ -24,17 +26,20 @@ const UserProfileComponent = ({ user, submitHandler }) => {
           id="userName"
           label="Full name"
           name="name"
-          onChange={(e) => { setName(e.value)} }
+          onBlur={(e) => { setName(e.target.value)} }
           placeholder="Enter your full name"
-          value={user.name} />
+          value={user.name}
+          errors={errors.name} />
         <TextField
           id="userEmail"
           label="Email address"
           name="email"
-          onChange={(e) => { setEmail(e.value)} }
+          help={emailHelpText}
+          onBlur={(e) => { setEmail(e.target.value)} }
           placeholder="name@domain.com"
           type="email"
-          value={user.email} />
+          value={user.email}
+          errors={errors.email} />
       </section>
       <section>
         <h2>Your Image</h2>
@@ -51,6 +56,7 @@ const UserProfileComponent = ({ user, submitHandler }) => {
 }
 
 UserProfileComponent.propTypes = {
+  errors: PropTypes.object,
   user: PropTypes.object.isRequired,
   submitHandler: PropTypes.func.isRequired
 }

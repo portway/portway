@@ -21,11 +21,22 @@ export const users = (state = initialState, action) => {
       return { ...state, usersById, loading: { ...state.loading, list: false } }
     }
     case ActionTypes.REQUEST_USER: {
-      const loadingById = { ...state.loading.byId, [action.id]: true }
+      const loadingById = { ...state.loading.byId, [action.userId]: true }
       return {
         ...state,
         loading: { ...state.loading, byId: loadingById }
       }
+    }
+    case ActionTypes.INITIATE_USER_UPDATE: {
+      const id = action.userId
+      const byId = { ...state.loading.byId, [id]: true }
+      return { ...state, loading: { ...state.loading, byId: byId } }
+    }
+    case ActionTypes.RECEIVE_UPDATED_USER: {
+      const id = action.data.id
+      const usersById = { ...state.usersById, [id]: action.data }
+      const byId = { ...state.loading.byId, [id]: false }
+      return { ...state, usersById, loading: { ...state.loading, byId: byId } }
     }
     case ActionTypes.RECEIVE_USER: {
       const id = action.data.id

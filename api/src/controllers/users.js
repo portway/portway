@@ -60,13 +60,13 @@ const usersController = function(router) {
     getUser
   )
   router.post('/',
-    validateBody(bodySchema),
+    validateBody(bodySchema, { includeDetails: true }),
     createPerm,
     createUser
   )
   router.put('/:id',
     validateParams(paramSchema),
-    validateBody(userSchema),
+    validateBody(userSchema, { includeDetails: true }),
     conditionalUpdatePerm,
     updateUser
   )
