@@ -5,7 +5,6 @@ import { NavLink, Link, withRouter } from 'react-router-dom'
 import {
   ORGANIZATION_ROLE_IDS,
   ORGANIZATION_SETTINGS,
-  PATH_BILLING,
   PATH_ADMIN,
   PATH_BILLING,
   PATH_PROJECTS,
