@@ -5,7 +5,7 @@ import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 
 const UserOrganizationComponent = ({ errors }) => {
-  const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
+  const helpText = 'Checking this box allows anyone in your organization to create projects'
   return (
     <form className="admin-settings__info" onSubmit={(e) => { e.preventDefault() }}>
       <section>
