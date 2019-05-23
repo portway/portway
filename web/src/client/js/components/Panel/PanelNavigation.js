@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const PanelNavigation = ({ children }) => {
   function renderChildren() {
-    children.map((child, index) => {
+    return children.map((child, index) => {
       return <li key={`pn-${index}`} className="panel__navigation-item">{child}</li>
     })
   }

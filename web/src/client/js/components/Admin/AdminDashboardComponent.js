@@ -15,20 +15,13 @@ const ADMIN_PATHS = {
   BILLING: 'billing'
 }
 
-const AdminDashboardComponent = ({ section }) => {
-  function renderAdminPanel() {
-    switch (section) {
-      case ADMIN_PATHS.INFO: {
-        return <AdminInfoContainer />
-      }
-      case ADMIN_PATHS.BILLING: {
-        return <AdminBillingContainer />
-      }
-      default:
-        return <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.INFO}`} />
-    }
-  }
+const PANEL_PATHS = {
+  [ADMIN_PATHS.INFO]: <AdminInfoContainer />,
+  [ADMIN_PATHS.BILLING]: <AdminBillingContainer />,
+  default: <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.INFO}`} />
+}
 
+const AdminDashboardComponent = ({ section }) => {
   return (
     <>
       <Helmet>
@@ -43,9 +36,7 @@ const AdminDashboardComponent = ({ section }) => {
             </OrgPermission>
             <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`}>Users</NavLink>
           </PanelNavigation>
-          <PanelContent>
-            {renderAdminPanel()}
-          </PanelContent>
+          <PanelContent contentKey={section} contentMap={PANEL_PATHS} />
         </Panel>
       </main>
     </>
