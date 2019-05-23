@@ -2,14 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink, Link, withRouter } from 'react-router-dom'
 
-import Constants from 'Shared/constants'
+import {
+  ORGANIZATION_ROLE_IDS,
+  ORGANIZATION_SETTINGS,
+  PATH_ADMIN,
+  PATH_BILLING,
+  PATH_PROJECTS,
+  PATH_PROJECT,
+  PATH_PROJECT_CREATE,
+  PATH_SETTINGS
+} from 'Shared/constants'
+
 import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
-
-const { ORGANIZATION_ROLE_IDS, ORGANIZATION_SETTINGS } = Constants
 
 import './Header.scss'
 
@@ -28,7 +36,7 @@ const renderProjectsItems = () => {
         <Link
           className="btn btn--blank btn--with-circular-icon"
           title="Create a new project"
-          to={Constants.PATH_PROJECT_CREATE}>
+          to={PATH_PROJECT_CREATE}>
           <AddIcon />
           <span className="label">New Project</span>
         </Link>
@@ -43,24 +51,24 @@ const Header = ({ brand, location }) => {
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar__brand">
-          <Link to={Constants.PATH_PROJECTS}>
+          <Link to={PATH_PROJECTS}>
             <span className="navbar__logo" style={renderBrandLogo(brand.logo)} />
           </Link>
         </div>
         <div className="navbar__content">
-          {`/${section}` === Constants.PATH_DASHBOARD && (
-            <h1 className={`navbar-brand-name${brand.default ? ' default' : ''}`}>
-              <NavLink to={Constants.PATH_DASHBOARD}>{Constants.PRODUCT_NAME}</NavLink>
-            </h1>
-          )}
-          {`/${section}` !== Constants.PATH_DASHBOARD &&
-            `/${section}` !== Constants.PATH_SETTINGS && <Navigator />}
+          {`/${section}` !== PATH_ADMIN &&
+            `/${section}` !== PATH_SETTINGS && <Navigator />}
           {
-            `/${section}` === Constants.PATH_PROJECT &&
+            `/${section}` === PATH_PROJECT &&
             renderProjectsItems()
           }
-          <GlobalSearchContainer />
         </div>
+        <div className="navbar__misc">
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+            <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
+          </OrgPermission>
+        </div>
+        <GlobalSearchContainer />
         <div className="navbar__user">
           <UserMenuContainer />
         </div>

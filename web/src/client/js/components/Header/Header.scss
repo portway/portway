@@ -43,6 +43,12 @@
       }
     }
 
+    &__misc {
+      align-items: center;
+      display: flex;
+      font-size: 90%;
+    }
+
     &__content-items {
       align-items: center;
       display: flex;

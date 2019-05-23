@@ -73,7 +73,7 @@ async function createPendingUser(email, orgId) {
   // TODO: email tokenized signup url to user
 
   //TODO: temporary logging to verify functionality, remove this when emailing is in place
-  console.info(`http://localhost:3000/sign-up/registration/password?token=${token}`)
+  console.info(`http://localhost:3000/sign-up/registration/complete?token=${token}`)
 
   return pick(createdUser, PUBLIC_FIELDS)
 }

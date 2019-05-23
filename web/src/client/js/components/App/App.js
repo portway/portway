@@ -10,6 +10,7 @@ const App = ({ children, history, routeChange }) => {
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   return children
 }
 

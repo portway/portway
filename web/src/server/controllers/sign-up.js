@@ -10,12 +10,12 @@ const SignUpController = function(router) {
 
   router.post('/registration', registerOrganization)
 
-  router.get('/registration/password', async (req, res) => {
+  router.get('/registration/complete', async (req, res) => {
     const { token } = req.query
-    res.render('user/registration', { ...renderBundles(req, 'Registration', 'index'), token })
+    res.render('user/registration', { ...renderBundles(req, 'Registration', 'registration'), token })
   })
 
-  router.post('/registration/password', setInitialPassword)
+  router.post('/registration/complete', setInitialPassword)
 }
 
 const registerOrganization = async (req, res) => {
@@ -36,15 +36,29 @@ const registerOrganization = async (req, res) => {
     return res.status(500).send('There was an error registering your organization')
   }
 
-  res.redirect(`registration/password?token=${token}`)
+  res.redirect(`registration/complete?token=${token}`)
 }
 
 const setInitialPassword = async (req, res) => {
-  const { password, 'confirm-password': confirmPassword, token } = req.body
+  const {
+    orgName,
+    password,
+    'confirm-password': confirmPassword,
+    'project-creation': projectCreation,
+    token
+  } = req.body
 
-  // TODO re-render form with mismatch error message
   if (password !== confirmPassword) {
-    return res.send(400)
+    return res.render('user/registration', {
+      ...renderBundles(req, 'Registration', 'registration'),
+      token,
+      flash: {
+        type: 'error',
+        message: 'The passwords you entered do not match'
+      },
+      orgName,
+      projectCreation
+    })
   }
 
   try {
@@ -59,8 +73,16 @@ const setInitialPassword = async (req, res) => {
       }
     })
   } catch ({ response }) {
-    console.error({ status: response.status, message: response.data })
-    return res.status(500).send('There was an error setting your password')
+    return res.render('user/registration', {
+      ...renderBundles(req, 'Registration', 'registration'),
+      token,
+      flash: {
+        type: 'error',
+        message: response.data.error
+      },
+      orgName,
+      projectCreation
+    })
   }
 
   res.redirect('/sign-in')

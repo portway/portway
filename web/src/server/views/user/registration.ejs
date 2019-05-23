@@ -3,30 +3,42 @@
 <main class="section">
   <div class="container">
     <h1 class="title">Complete your registration</h1>
-    <p>You're almost there! Pick a strong password to finish the last step.</p>
-    <form class="login-form" action="/sign-up/registration/password" method="POST">
-      <div class="field">
-        <label class="label is-small" for="password">Password</label>
-        <div class="control">
-          <input class="input is-success" name="password" type="password" placeholder="" autocomplete="section-signup new-password">
-          <p class="help is-success">Nice password.</p>
+    <form class="login-form" action="/sign-up/registration/complete" method="POST">
+      <div class="section">
+        <div class="field">
+          <label class="label is-small" for="orgName">Organization name</label>
+          <div class="control">
+            <input class="input" name="orgName" id="org-name" type="text" placeholder="ACME, Inc" autocomplete="section-signup organization" value="<%= locals.orgName %>">
+          </div>
         </div>
       </div>
-      <div class="field">
-        <label class="label is-small" for="confirm-password">Confirm password</label>
-        <div class="control">
-          <input class="input is-danger" name="confirm-password" type="password" placeholder="" autocomplete="section-signup new-password">
-          <p class="help is-danger">Your passwords don't match</p>
+      <div class="section">
+        <p>You're almost there! Pick a strong password to finish the last step.</p>
+        <div class="field">
+          <label class="label is-small" for="password">Password</label>
+          <div class="control">
+            <input class="input" name="password" id="password" type="password" placeholder="" autocomplete="section-signup new-password">
+          </div>
         </div>
-      </div>
-      <div class="field field--with-space">
-        <%
-          if (typeof button === 'undefined') {
-            var button = 'Save Password'
-          }
-        %>
-        <input type="hidden" id="email" name="token" value="<%= token %>">
-        <input type="submit" class="button is-primary" value="<%= button %>">
+        <div class="field">
+          <label class="label is-small" for="confirm-password">Confirm password</label>
+          <div class="control">
+            <input class="input" name="confirm-password" id="confirm-password" type="password" placeholder="" autocomplete="section-signup new-password">
+            <p id="password-help" class="help is-danger" hidden>Your passwords don't match</p>
+          </div>
+        </div>
+        <% if (flash) { %>
+          <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+        <% } %>
+        <div class="field field--with-space">
+          <%
+            if (typeof button === 'undefined') {
+              var button = 'Complete registration'
+            }
+          %>
+          <input type="hidden" id="email" name="token" value="<%= token %>">
+          <input type="submit" id="complete-btn" class="button is-primary" value="<%= button %>">
+        </div>
       </div>
     </form>
   </div>

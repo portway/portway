@@ -62,7 +62,7 @@ module.exports = {
   // Paths
   PATH_APP: '/d',
   PATH_BILLING: '/billing',
-  PATH_DASHBOARD: '/dashboard',
+  PATH_ADMIN: '/admin',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT_NEW_PARAM: 'new',
