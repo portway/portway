@@ -7,6 +7,8 @@ import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 import ProjectSettingsCreateToken from './ProjectSettingsCreateToken'
 
+import './_ProjectSettingsTokens.scss'
+
 const ProjectSettingsTokensComponent = ({
   createHandler, createMode, projectId, removeHandler, setCreateMode, tokens
 }) => {

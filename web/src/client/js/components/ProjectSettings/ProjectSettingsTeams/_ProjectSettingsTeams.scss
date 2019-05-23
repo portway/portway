@@ -1,0 +1,38 @@
+@import 'CSS/inc/_vars.scss';
+
+.project-settings {
+  // Section specific
+  &__teammate-field {
+    justify-content: space-between;
+    .react-select-container {
+      flex: 1;
+      margin-right: 16px;
+    }
+    .project-roles {
+      margin-right: 16px;
+      .menu {
+        width: 500px;
+      }
+    }
+  }
+  &__team-list {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+  &__teammate {
+    align-items: center;
+    margin-bottom: 6px;
+    &-name {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      .icon {
+        margin-right: $iconMargin;
+      }
+    }
+    &-role {
+      width: 200px;
+    }
+  }
+}

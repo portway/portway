@@ -8,8 +8,6 @@ import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsI
 import ProjectSettingsTeamsContainer from './ProjectSettingsTeams/ProjectSettingsTeamsContainer'
 import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
 
-import './ProjectSettings.scss'
-
 const SETTINGS_PATHS = {
   INFO: 'info',
   TEAMS: 'teams',

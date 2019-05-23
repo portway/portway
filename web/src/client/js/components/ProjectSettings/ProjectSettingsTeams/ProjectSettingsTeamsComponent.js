@@ -7,6 +7,8 @@ import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 
+import './_ProjectSettingsTeams.scss'
+
 const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
