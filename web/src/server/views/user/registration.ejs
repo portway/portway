@@ -3,9 +3,6 @@
 <main class="section">
   <div class="container">
     <h1 class="title">Complete your registration</h1>
-    <% if (flash) { %>
-      <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
-    <% } %>
     <form class="login-form" action="/sign-up/registration/complete" method="POST">
       <div class="section">
         <div class="field">
@@ -30,6 +27,9 @@
             <p id="password-help" class="help is-danger" hidden>Your passwords don't match</p>
           </div>
         </div>
+        <% if (flash) { %>
+          <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+        <% } %>
         <div class="field field--with-space">
           <%
             if (typeof button === 'undefined') {
