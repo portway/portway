@@ -4,21 +4,21 @@ import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import { sendSingleRecipientEmail } from '../integrators/email'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/organization')
 jest.mock('../integrators/token')
 jest.mock('../libs/passwordResetKey')
+jest.mock('../integrators/email')
 
 describe('signUp coordinator', () => {
   const name = 'Nicolas Cage'
   const email = 'faceoff@johntravolta.gov'
 
   describe('#createUserAndOrganization', () => {
-    let passwordResetToken
-
     beforeAll(async () => {
-      passwordResetToken = await signUpCoordinator.createUserAndOrganization(
+      await signUpCoordinator.createUserAndOrganization(
         name,
         email
       )
@@ -54,9 +54,12 @@ describe('signUp coordinator', () => {
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][1]).toBe(mockResetKey)
     })
 
-    it('should return the generated password reset token', () => {
-      const mockResetToken = tokenIntegrator.generatePasswordResetToken.mock.results[0].value
-      expect(passwordResetToken).toBe(mockResetToken)
+    it('should call emailIntegrator.sendSingleRecipientEmail with the user email and email body with password token', () => {
+      const mockUserEmail = BusinessUser.create.mock.results[0].value.email
+      const passwordResetToken = tokenIntegrator.generatePasswordResetToken.mock.results[0].value
+      expect(sendSingleRecipientEmail.mock.calls.length).toBe(1)
+      expect(sendSingleRecipientEmail.mock.calls[0][0].address).toBe(mockUserEmail)
+      expect(sendSingleRecipientEmail.mock.calls[0][0].body).toEqual(expect.stringMatching(passwordResetToken))
     })
   })
 })

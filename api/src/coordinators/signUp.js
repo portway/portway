@@ -3,6 +3,7 @@ import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import { sendSingleRecipientEmail } from '../integrators/email'
 
 async function createUserAndOrganization(name, email) {
   const organizationName = `${name}'s Organization`
@@ -20,7 +21,8 @@ async function createUserAndOrganization(name, email) {
   await BusinessOrganization.updateById(organization.id, { ownerId: createdUser.id })
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
-  return token
+
+  await sendSingleRecipientEmail({ address: createdUser.email, body: `http://localhost:3000/sign-up/registration/complete?token=${token}` })
 }
 
 export default {
