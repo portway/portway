@@ -6,11 +6,11 @@ import Checkbox from 'Components/Form/Checkbox'
 
 const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
   const [name, setName] = useState(organization.name)
-  const [allowProjectCreation, setAllowProjectCreation] = useState(organization.allowUserProjectCreation)
+  const [allowUserProjectCreation, setAllowUserProjectCreation] = useState(organization.allowUserProjectCreation)
 
   function formSubmitHandler(e) {
     e.preventDefault()
-    submitHandler({ name, allowProjectCreation })
+    submitHandler({ name, allowUserProjectCreation })
   }
 
   const helpText = 'Checking this box allows anyone in your organization to create projects'
@@ -39,8 +39,8 @@ const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
           label={`Everyone in ${organization.name} can create projects`}
           large={true}
           name="organization[allowUserProjectCreation]"
-          onChange={(e) => { setAllowProjectCreation(e.target.checked) }}
-          value={allowProjectCreation}
+          onChange={(e) => { setAllowUserProjectCreation(e.target.checked) }}
+          value={allowUserProjectCreation}
         />
       </section>
       <div className="btn-group">
