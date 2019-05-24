@@ -90,7 +90,17 @@ form {
     &__menu-notice {
       background: var(--react-select-notice-background);
     }
+  } // react-select
+
+  &--with-indicators {
+    .react-select__control {
+      cursor: default;
+    }
+    .react-select__indicators {
+      display: block;
+    }
   }
+
 }
 
 .react-select-button {

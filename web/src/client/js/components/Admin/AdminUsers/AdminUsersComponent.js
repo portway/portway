@@ -4,8 +4,9 @@ import moment from 'moment'
 
 import { ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
 import Table from 'Components/Table/Table'
+import AdminUsersCreateForm from './AdminUsersCreateForm'
 
-const AdminUsersComponent = ({ users }) => {
+const AdminUsersComponent = ({ addUserHandler, errors, isCreating, setCreateMode, users }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
     role: { label: 'Role', sortable: true },
@@ -38,8 +39,15 @@ const AdminUsersComponent = ({ users }) => {
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          <button className="btn">Add User</button>
+          <button className="btn" disabled={isCreating} onClick={() => { setCreateMode(true) }}>Add User</button>
         </header>
+        {isCreating &&
+          <AdminUsersCreateForm
+            cancelHandler={() => {setCreateMode(false) }}
+            errors={errors}
+            submitHandler={addUserHandler}
+          />
+        }
         <Table headings={userHeadings} rows={userRows} />
       </section>
     </div>
@@ -47,6 +55,10 @@ const AdminUsersComponent = ({ users }) => {
 }
 
 AdminUsersComponent.propTypes = {
+  addUserHandler: PropTypes.func,
+  errors: PropTypes.object,
+  isCreating: PropTypes.bool.isRequired,
+  setCreateMode: PropTypes.func.isRequired,
   users: PropTypes.object.isRequired
 }
 

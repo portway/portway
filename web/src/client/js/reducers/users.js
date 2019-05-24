@@ -27,6 +27,12 @@ export const users = (state = initialState, action) => {
         loading: { ...state.loading, byId: loadingById }
       }
     }
+    case ActionTypes.RECEIVE_CREATED_USER: {
+      const id = action.data.id
+      const byId = { ...state.loading.byId, [id]: false }
+      const usersById = { ...state.usersById, [id]: action.data }
+      return { ...state, usersById, loading: { ...state.loading, byId } }
+    }
     case ActionTypes.INITIATE_USER_UPDATE: {
       const id = action.userId
       const byId = { ...state.loading.byId, [id]: true }
