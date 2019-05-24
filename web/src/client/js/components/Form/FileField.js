@@ -4,25 +4,23 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const TextField = ({ help, id, label, large, name, errors, placeholder, required, type, value, onBlur, onChange }) => {
-  const textFieldClasses = cx({
+const FileField = ({ help, id, label, large, name, errors, value, onChange }) => {
+  const fileFieldClasses = cx({
     'form-field': true,
+    'form-field--file': true,
     'form-field--large': large,
     'form-field--error': errors.length > 0
   })
   return (
-    <div className={textFieldClasses}>
+    <div className={fileFieldClasses}>
       <div className="field">
-        <label htmlFor={id}>{label}</label>
+        {label && <label htmlFor={id}>{label}</label>}
         <input
-          type={type}
+          type="file"
           name={name}
           id={id}
-          placeholder={placeholder}
           defaultValue={value}
-          onBlur={onBlur}
-          onChange={onChange}
-          required={required} />
+          onChange={onChange} />
         <ValidationComponent errors={errors} />
       </div>
       {help && <div className="form-field__help small">{help}</div>}
@@ -30,24 +28,19 @@ const TextField = ({ help, id, label, large, name, errors, placeholder, required
   )
 }
 
-TextField.propTypes = {
+FileField.propTypes = {
   help: PropTypes.string,
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   large: PropTypes.bool,
   name: PropTypes.string.isRequired,
   errors: PropTypes.array,
-  placeholder: PropTypes.string,
-  type: PropTypes.string,
-  required: PropTypes.bool,
   value: PropTypes.string,
-  onBlur: PropTypes.func,
   onChange: PropTypes.func
 }
 
-TextField.defaultProps = {
+FileField.defaultProps = {
   errors: [],
-  type: 'text'
 }
 
-export default TextField
+export default FileField

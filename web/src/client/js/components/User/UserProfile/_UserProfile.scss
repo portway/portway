@@ -1,0 +1,18 @@
+.user-profile {
+  &__image {
+    align-items: center;
+    display: flex;
+
+    .icon {
+      margin-right: 1rem;
+    }
+
+    // Override the file field for this one
+    .form-field{
+      &--file {
+        margin: 0;
+      }
+    }
+
+  }
+}

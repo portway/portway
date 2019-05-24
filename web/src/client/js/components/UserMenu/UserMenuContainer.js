@@ -20,9 +20,10 @@ function logoutAction() {
 
 const UserMenuContainer = () => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
+  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
 
   // fuck outta here
-  if (!currentUser) return null
+  if (!currentUser || !currentOrg) return null
 
   const name = `${currentUser.name}`
   const button = {
@@ -33,7 +34,7 @@ const UserMenuContainer = () => {
     <DropdownComponent className="user-menu__dropdown" button={button} align="right">
       <DropdownItem type="banner" className="user-menu__banner">
         <span className="user-menu__username">{name}</span>
-        <span className="user-menu__email">{currentUser.email}</span>
+        <span className="user-menu__organization">{currentOrg.name}</span>
         <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
       </DropdownItem>
       <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
