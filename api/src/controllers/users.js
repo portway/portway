@@ -118,7 +118,7 @@ const updateUser = async function(req, res, next) {
 
   try {
     const user = await BusinessUser.updateById(id, body, orgId)
-    res.status(201).json({ data: user })
+    res.status(200).json({ data: user })
   } catch (e) {
     next(e)
   }
