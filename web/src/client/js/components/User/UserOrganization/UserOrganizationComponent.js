@@ -1,42 +1,64 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 
-const UserOrganizationComponent = ({ errors }) => {
+const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
+  const [name, setName] = useState(organization.name)
+  const [allowUserProjectCreation, setAllowUserProjectCreation] = useState(organization.allowUserProjectCreation)
+
+  function formSubmitHandler(e) {
+    e.preventDefault()
+    submitHandler({ name, allowUserProjectCreation })
+  }
+
   const helpText = 'Checking this box allows anyone in your organization to create projects'
+
   return (
-    <form className="admin-settings__info" onSubmit={(e) => { e.preventDefault() }}>
+    <form onSubmit={formSubmitHandler}>
       <section>
         <h2>General information</h2>
         <TextField
+          errors={errors.name}
           id="orgName"
           label="Organization Name"
           name="name"
-          errors={errors.name}
-          onChange={(e) => {}}
+          onChange={(e) => { setName(e.target.value) }}
           placeholder="ACME, Inc"
-          value={null} />
+          required
+          value={organization.name}
+        />
       </section>
       <section>
         <h2>Privacy</h2>
         <Checkbox
-          id="orgProjectCreation"
-          help={helpText}
-          label="Everyone in ACME, Inc can create projects"
-          large={true}
-          name="organization[projectCreation]"
           errors={errors.privacy}
-          onChange={null}
-          value={true} />
+          help={helpText}
+          id="orgProjectCreation"
+          label={`Everyone in ${organization.name} can create projects`}
+          large={true}
+          name="organization[allowUserProjectCreation]"
+          onChange={(e) => { setAllowUserProjectCreation(e.target.checked) }}
+          value={allowUserProjectCreation}
+        />
       </section>
+      <div className="btn-group">
+        <button className="btn btn-primary">Update Organization</button>
+      </div>
     </form>
   )
 }
 
 UserOrganizationComponent.propTypes = {
-  errors: PropTypes.object
+  errors: PropTypes.object,
+  organization: PropTypes.object.isRequired,
+  submitHandler: PropTypes.func.isRequired
+}
+
+UserOrganizationComponent.defaultProps = {
+  errors: {},
+  organization: {}
 }
 
 export default UserOrganizationComponent

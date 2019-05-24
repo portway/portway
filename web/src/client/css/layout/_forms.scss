@@ -35,6 +35,12 @@ form {
   .form-field {
     margin-bottom: 18px;
 
+    &__help {
+      color: $gray-dark;
+      padding: 4px;
+      width: 300px;
+    }
+
     &--large {
       .field {
         width: 100%;
@@ -58,11 +64,16 @@ form {
 
     &--checkbox {
       .field {
+        align-items: center;
         flex-direction: row-reverse;
         justify-content: flex-end;
         input {
           margin-right: 6px;
+          width: 30px;
         }
+      }
+      .form-field__help {
+        padding-left: 40px;
       }
     } // form-field--checkbox
 
@@ -113,6 +124,10 @@ form {
     &:focus {
       @include focus(var(--form-background), $action);
     }
+  }
+
+  input[type='file'] {
+    border: none;
   }
 
 }

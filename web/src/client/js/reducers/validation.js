@@ -6,6 +6,7 @@ const initialState = {
   field: {},
   organization: {},
   project: {},
+  user: {}
 }
 
 export const validation = (state = initialState, action) => {
