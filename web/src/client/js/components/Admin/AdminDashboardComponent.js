@@ -6,12 +6,14 @@ import { NavLink, Redirect } from 'react-router-dom'
 import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_PROJECTS, PRODUCT_NAME } from 'Shared/constants'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPermission from 'Components/Permission/OrgPermission'
+import AdminUsersContainer from './AdminUsers/AdminUsersContainer'
 
 const ADMIN_PATHS = {
   USERS: 'users',
 }
 
 const PANEL_PATHS = {
+  [ADMIN_PATHS.USERS]: <AdminUsersContainer />,
   default: <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} />
 }
 
