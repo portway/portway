@@ -32,7 +32,8 @@ const rIds = ORGANIZATION_ROLE_IDS
 export const ORGANIZATION_ROLES = {
   [rIds.OWNER]: {
     [resourceTypes.ORGANIZATION]: {
-      [actions.READ_MY]: true
+      [actions.READ_MY]: true,
+      [actions.UPDATE_MY]: true
     },
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,
