@@ -48,7 +48,9 @@ const AdminUsersComponent = ({ addUserHandler, errors, isCreating, setCreateMode
             submitHandler={addUserHandler}
           />
         }
-        <Table headings={userHeadings} rows={userRows} />
+        {!isCreating &&
+          <Table headings={userHeadings} rows={userRows} />
+        }
       </section>
     </div>
   )
