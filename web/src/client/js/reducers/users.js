@@ -27,6 +27,12 @@ export const users = (state = initialState, action) => {
         loading: { ...state.loading, byId: loadingById }
       }
     }
+    case ActionTypes.RECEIVE_USER: {
+      const id = action.data.id
+      const usersById = { ...state.usersById, [id]: action.data }
+      const loadingById = { ...state.loading.byId, [id]: false }
+      return { ...state, usersById, loading: { ...state.loading, byId: loadingById } }
+    }
     case ActionTypes.RECEIVE_CREATED_USER: {
       const id = action.data.id
       const byId = { ...state.loading.byId, [id]: false }
@@ -36,19 +42,13 @@ export const users = (state = initialState, action) => {
     case ActionTypes.INITIATE_USER_UPDATE: {
       const id = action.userId
       const byId = { ...state.loading.byId, [id]: true }
-      return { ...state, loading: { ...state.loading, byId: byId } }
+      return { ...state, loading: { ...state.loading, byId: byId, list: true } }
     }
     case ActionTypes.RECEIVE_UPDATED_USER: {
       const id = action.data.id
       const usersById = { ...state.usersById, [id]: action.data }
       const byId = { ...state.loading.byId, [id]: false }
-      return { ...state, usersById, loading: { ...state.loading, byId: byId } }
-    }
-    case ActionTypes.RECEIVE_USER: {
-      const id = action.data.id
-      const usersById = { ...state.usersById, [id]: action.data }
-      const loadingById = { ...state.loading.byId, [id]: false }
-      return { ...state, usersById, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, usersById, loading: { ...state.loading, byId: byId, list: false } }
     }
     default: {
       return state

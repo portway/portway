@@ -27,7 +27,7 @@ const AdminUsersComponent = ({ addUserHandler, errors, isCreating, setCreateMode
   const userRows = {}
   Object.values(users).forEach((user) => {
     userRows[user.id] = [
-      <a href={`mailto:${user.email}`} key={`email${user.id}`}>{user.name}</a>,
+      user.name,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
       moment(user.createdAt).format('YYYY MMM DD'),
       renderTools(user)

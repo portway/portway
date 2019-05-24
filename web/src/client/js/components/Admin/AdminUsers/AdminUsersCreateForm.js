@@ -9,7 +9,7 @@ import ValidationComponent from 'Components/Validation/ValidationComponent'
 const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
   const [name, setName] = useState()
   const [email, setEmail] = useState()
-  const [orgRole, setOrgRole] = useState()
+  const [orgRole, setOrgRole] = useState(ORGANIZATION_ROLE_IDS.USER)
 
   function formSubmitHandler(e) {
     e.preventDefault()
