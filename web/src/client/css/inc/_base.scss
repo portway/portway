@@ -14,10 +14,12 @@
   --base-background: #{$white};
   --base-color: #{$black-bis};
   --base-border-color: #{$gray-light};
+  --link-color-gray: #{$gray-dark};
   @media (prefers-color-scheme: dark) {
     --base-background: #{$black-bis};
     --base-color: #{$white};
     --base-border-color: #{$black-er};
+    --link-color-gray: #{$gray};
   }
 }
 
@@ -38,7 +40,7 @@ body {
   padding: 0;
 }
 
-a {
+a, .link {
   color: $action;
   &:hover {
     color: lighten($action, 20%);
@@ -46,6 +48,18 @@ a {
   &:active {
     color: darken($action, 20%);
   }
+
+  &--gray {
+    color: var(--link-color-gray);
+    text-decoration: none;
+    &:hover {
+      color: lighten($gray-dark, 20%);
+    }
+    &:active {
+      color: darken($gray-dark, 20%);
+    }
+  }
+
 }
 
 input, textarea {

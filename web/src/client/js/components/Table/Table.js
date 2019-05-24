@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import TableHeading from './TableHeading'
 import TableRow from './TableRow'
 
+import './_TableStyles.scss'
+
 const Table = ({ headings, rows }) => {
   function renderHeadings() {
     return Object.keys(headings).map((hId) => {
@@ -20,7 +22,7 @@ const Table = ({ headings, rows }) => {
   return (
     <section className="table">
       <ol className="table__list">
-        <li className="table__heading">
+        <li className="table__row table__heading">
           {renderHeadings()}
         </li>
         {renderRows()}
