@@ -1,10 +1,7 @@
+@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .user-menu {
-  --user-menu-banner-bg: #{$gray-light};
-  @media (prefers-color-scheme: dark) {
-    --user-menu-banner-bg: #{$black-er};
-  }
   &__dropdown {
     border-radius: 50% 50%;
   }
@@ -20,6 +17,10 @@
     @include focus(transparent);
   }
   &__banner {
+    --user-menu-banner-bg: #{$gray-light};
+    @media (prefers-color-scheme: dark) {
+      --user-menu-banner-bg: #{$black-er};
+    }
     background-color: var(--user-menu-banner-bg);
     padding: 8px 14px;
   }
