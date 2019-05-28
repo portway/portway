@@ -54,12 +54,13 @@ describe('signUp coordinator', () => {
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][1]).toBe(mockResetKey)
     })
 
-    it('should call emailIntegrator.sendSingleRecipientEmail with the user email and email body with password token', () => {
+    it('should call emailIntegrator.sendSingleRecipientEmail with the user email and email bodies with password token', () => {
       const mockUserEmail = BusinessUser.create.mock.results[0].value.email
       const passwordResetToken = tokenIntegrator.generatePasswordResetToken.mock.results[0].value
       expect(sendSingleRecipientEmail.mock.calls.length).toBe(1)
       expect(sendSingleRecipientEmail.mock.calls[0][0].address).toBe(mockUserEmail)
-      expect(sendSingleRecipientEmail.mock.calls[0][0].body).toEqual(expect.stringMatching(passwordResetToken))
+      expect(sendSingleRecipientEmail.mock.calls[0][0].textBody).toEqual(expect.stringMatching(passwordResetToken))
+      expect(sendSingleRecipientEmail.mock.calls[0][0].htmlBody).toEqual(expect.stringMatching(passwordResetToken))
     })
   })
 })
