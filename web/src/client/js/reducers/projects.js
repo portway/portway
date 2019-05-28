@@ -45,10 +45,13 @@ export const projects = (state = initialState, action) => {
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, loading: { ...state.loading, byId: loadingById } }
     }
+    case ActionTypes.CREATE_PROJECT: {
+      return { ...state, loading: { ...state.loading, list: true } }
+    }
     case ActionTypes.RECEIVE_CREATED_PROJECT: {
       const id = action.data.id
       const projectsById = { ...state.projectsById, [id]: action.data }
-      return { ...state, projectsById }
+      return { ...state, projectsById, loading: { ...state.loading, list: false } }
     }
     case ActionTypes.INITIATE_PROJECT_UPDATE: {
       const id = action.id

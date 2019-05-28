@@ -31,7 +31,7 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
   const projectAssignment = userProjectAssignments[Number(projectId)]
 
   // Check the manual project role assignments for the current user
-  if (acceptedRoleIds.includes(projectAssignment.roleId)) {
+  if (projectAssignment && acceptedRoleIds.includes(projectAssignment.roleId)) {
     return successRender
   }
 
