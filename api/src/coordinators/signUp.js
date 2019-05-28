@@ -5,6 +5,8 @@ import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 
+const { CLIENT_URL } = process.env
+
 async function createUserAndOrganization(name, email) {
   const organizationName = `${name}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
@@ -22,8 +24,7 @@ async function createUserAndOrganization(name, email) {
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
 
-  // TODO: need to set the url from ENV to allow production emailing when we have that set up
-  const linkUrl = `http://localhost:3000/sign-up/registration/complete?token=${token}`
+  const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
   const htmlBody = `
     <H2>Here is your link to finish signing-up for Project Danger:</h2
