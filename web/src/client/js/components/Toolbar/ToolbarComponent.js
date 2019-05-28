@@ -21,7 +21,7 @@ const ToolbarComponent = ({ action, filter, sort }) => {
           className="btn btn--blank btn--with-circular-icon"
           onClick={action.callback}
           title={action.title}>
-          {action.icon && (action.icon)}
+          {action.icon}
           {action.label && <span className="label">{action.label}</span>}
         </button>
       </div>
@@ -35,10 +35,10 @@ const ToolbarComponent = ({ action, filter, sort }) => {
 
 ToolbarComponent.propTypes = {
   action: PropTypes.shape({
-    callback: PropTypes.func.isRequired,
+    callback: PropTypes.func,
     icon: PropTypes.node,
-    label: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired
+    label: PropTypes.string,
+    title: PropTypes.string
   }),
   filter: PropTypes.bool,
   sort: PropTypes.bool

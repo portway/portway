@@ -65,6 +65,7 @@ export const ActionTypes = {
   RECEIVE_USER: 'RECEIVE_USER',
   INITIATE_USER_UPDATE: 'INITIATE_USER_UPDATE',
   RECEIVE_UPDATED_USER: 'RECEIVE_UPDATED_USER',
+  RECEIVE_UPDATED_ROLE: 'RECEIVE_UPDATED_ROLE',
   INITIATE_USER_CREATE: 'INITIATE_USER_CREATE',
   RECEIVE_CREATED_USER: 'RECEIVE_CREATED_USER',
   LOGOUT_USER: 'LOGOUT_USER',
@@ -167,6 +168,7 @@ export const Users = {
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_USER, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER, 'data'),
+  receiveUpdatedRole: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ROLE, 'userId', 'orgRoleId'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
 }
 

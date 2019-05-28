@@ -45,7 +45,7 @@ export const createUser = (values) => {
     dispatch(Users.receiveOneCreated(data))
     // If we're trying to be an admin
     if (role === ORGANIZATION_ROLE_IDS.ADMIN) {
-      dispatch(updateUserRole(data.id, { orgRoleId: values.orgRole }))
+      dispatch(updateUserRole(data.id, values.orgRole))
     }
   }
 }
@@ -60,13 +60,13 @@ export const updateUser = (userId, body) => {
   }
 }
 
-export const updateUserRole = (userId, body) => {
+export const updateUserRole = (userId, orgRoleId) => {
   return async (dispatch) => {
     dispatch(Users.initiateUpdate(userId))
-    const { data, status } = await update(`users/${userId}/orgRole`, body)
+    const { data, status } = await update(`users/${userId}/orgRole`, { orgRoleId: orgRoleId })
     validationCodes.includes(status) ?
       dispatch(Validation.create('user', data, status)) :
-      dispatch(Users.receiveOneUpdated(data))
+      dispatch(Users.receiveUpdatedRole(userId, orgRoleId))
   }
 }
 
