@@ -8,18 +8,21 @@ import OrgPermission from 'Components/Permission/OrgPermission'
 
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import UserProfileContainer from './UserProfile/UserProfileContainer'
+import UserSecurityContainer from './UserSecurity/UserSecurityContainer'
 import UserOrganizationContainer from './UserOrganization/UserOrganizationContainer'
 import UserBillingContainer from './UserBilling/UserBillingContainer'
 
 const UserSettingsComponent = ({ section }) => {
   const USER_PATHS = {
     PROFILE: 'profile',
+    SECURITY: 'security',
     ORGANIZATION: 'organization',
     BILLING: 'billing'
   }
 
   const PANEL_PATHS = {
     [USER_PATHS.PROFILE]: <UserProfileContainer />,
+    [USER_PATHS.SECURITY]: <UserSecurityContainer />,
     [USER_PATHS.ORGANIZATION]: <UserOrganizationContainer />,
     [USER_PATHS.BILLING]: <UserBillingContainer />,
     default: <Redirect to={`${PATH_SETTINGS}/${USER_PATHS.PROFILE}`} />
@@ -34,6 +37,7 @@ const UserSettingsComponent = ({ section }) => {
         <Panel>
           <PanelNavigation>
             <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.PROFILE}`}>My Profile</NavLink>
+            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.SECURITY}`}>Security</NavLink>
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.ORGANIZATION}`}>Organization</NavLink>
             </OrgPermission>
