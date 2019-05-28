@@ -8,7 +8,7 @@ AWS.config.update({ region: AWS_SES_REGION })
 const SES = new AWS.SES({ apiVersion: '2010-12-01' })
 
 // Create sendEmail params
-const getSESParams = ({ toAddresses, textBody, htmlBody }) => {
+const getSESParams = ({ toAddresses, textBody, htmlBody, subject }) => {
   return {
     Destination: {
     /* required */
@@ -23,14 +23,10 @@ const getSESParams = ({ toAddresses, textBody, htmlBody }) => {
           Charset: 'UTF-8',
           Data: htmlBody
         },
-        Text: {
-          Charset: 'UTF-8',
-          Data: textBody
-        }
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'Test email'
+        Data: subject
       }
     },
     Source: SENDER_EMAIL_ADDRESS /* required */,
@@ -40,20 +36,13 @@ const getSESParams = ({ toAddresses, textBody, htmlBody }) => {
   }
 }
 
-export const sendSingleRecipientEmail = async function({ address, textBody, htmlBody }) {
+export const sendSingleRecipientEmail = async function({ address, textBody, htmlBody, subject }) {
   try {
     await SES.sendEmail(getSESParams({
       toAddresses: [address],
       textBody,
-      Text: {
-          Charset: 'UTF-8',
-          Data: textBody
-        },
       htmlBody,
-      Text: {
-          Charset: 'UTF-8',
-          Data: textBody
-        }
+      subject
     })).promise()
   } catch (err) {
     throw ono(err, { code: 503 }, 'AWS SES failed to send email')

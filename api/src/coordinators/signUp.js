@@ -32,8 +32,10 @@ async function createUserAndOrganization(name, email) {
   `
   const textBody = `Here is your link to finish signing-up for Project Danger: ${linkUrl}`
 
+  const subject = 'Project Danger email confirmation'
 
-  await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody })
+
+  await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody, subject })
 }
 
 export default {
