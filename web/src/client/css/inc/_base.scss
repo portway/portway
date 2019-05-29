@@ -60,6 +60,28 @@ a, .link {
     }
   }
 
+  // Back links for top of pages
+  &--back {
+    align-items: center;
+    color: var(--link-color-gray);
+    display: flex;
+    margin-bottom: 2rem;
+    padding: 8px 7px 8px 0;
+    text-decoration: none;
+    &:before {
+      background-image: url('../images/icon/caret.svg');
+      background-repeat: no-repeat;
+      background-size: 12px 12px;
+      background-position: 50% 50%;
+      content: '';
+      display: inline-block;
+      height: 18px;
+      margin-right: 6px;
+      transform: rotate(90deg);
+      width: 18px;
+    }
+  }
+
 }
 
 input, textarea {

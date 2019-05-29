@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
 
+import { PRODUCT_NAME } from 'Shared/constants'
 import { createUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
@@ -31,15 +33,20 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
   }
 
   return (
-    <AdminUsersComponent
-      addUserHandler={addUserHandler}
-      currentUserId={currentUserId}
-      isCreating={isCreating}
-      errors={errors}
-      removeUserHandler={removeUserHandler}
-      setCreateMode={setCreateMode}
-      users={users}
-    />
+    <>
+      <Helmet>
+        <title>Admin: Users – {PRODUCT_NAME}</title>
+      </Helmet>
+      <AdminUsersComponent
+        addUserHandler={addUserHandler}
+        currentUserId={currentUserId}
+        isCreating={isCreating}
+        errors={errors}
+        removeUserHandler={removeUserHandler}
+        setCreateMode={setCreateMode}
+        users={users}
+      />
+    </>
   )
 }
 
