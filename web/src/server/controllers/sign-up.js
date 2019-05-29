@@ -1,5 +1,6 @@
 import { renderBundles } from '../libs/express-utilities'
 import DangerAPI from '../libs/api'
+import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS } from '../../shared/constants'
 
 const API = new DangerAPI(process.env.API_URL)
 
@@ -31,7 +32,11 @@ const registerOrganization = async (req, res) => {
       }
     })
   } catch ({ response }) {
-    console.error({ status: response.status, message: response.data })
+    if (!response) {
+      console.error('Timeout error')
+    } else {
+      console.error({ status: response.status, message: response.data })
+    }
     return res.status(500).send('There was an error registering your organization')
   }
 
@@ -60,8 +65,9 @@ const setInitialPassword = async (req, res) => {
     })
   }
 
+  let accessToken
   try {
-    await API.send({
+    ({ data: { token: accessToken } } = await API.send({
       url: 'signup/initialPassword',
       method: 'POST',
       headers: {
@@ -70,21 +76,21 @@ const setInitialPassword = async (req, res) => {
       data: {
         password
       }
-    })
+    }))
   } catch ({ response }) {
     return res.render('user/registration', {
       ...renderBundles(req, 'Registration', 'registration'),
       token,
       flash: {
         type: 'error',
-        message: response.data.error
+        message: 'Cannot set password, has this link already been used?'
       },
       orgName,
       projectCreation
     })
   }
-
-  res.redirect('/sign-in')
+  res.cookie('token', accessToken, { maxAge: MAX_COOKIE_AGE_MS })
+  res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
 }
 
 export default SignUpController

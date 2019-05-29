@@ -31,7 +31,7 @@ const signUp = async function(req, res, next) {
   const { name, email } = req.body
 
   try {
-    const token = await signUpCoordinator.createUserAndOrganization(name, email)
+    await signUpCoordinator.createUserAndOrganization(name, email)
     res.status(204).send()
   } catch (e) {
     next(e)
@@ -43,12 +43,11 @@ const setInitialPassword = async function(req, res, next) {
   const { id: userId } = req.user
 
   try {
-    await userCoordinator.setInitialPassword(userId, password)
+    const token = await userCoordinator.setInitialPassword(userId, password)
+    res.json({ token })
   } catch (e) {
     next(e)
   }
-
-  res.status(200).send()
 }
 
 export default signupController
