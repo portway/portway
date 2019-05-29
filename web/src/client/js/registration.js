@@ -2,7 +2,6 @@ import { debounce } from 'Shared/utilities'
 
 import 'CSS/registration.scss'
 
-const orgField = document.querySelector('#org-name')
 const submitBtn = document.querySelector('#complete-btn')
 const passwordField = document.querySelector('#password')
 const confirmField = document.querySelector('#confirm-password')
@@ -13,7 +12,7 @@ function isPasswordMatch() {
 }
 
 function isRegReady() {
-  return orgField.value !== '' && isPasswordMatch()
+  return isPasswordMatch()
 }
 
 const passwordCheckHandler = debounce(200, (e) => {
@@ -29,15 +28,8 @@ const passwordCheckHandler = debounce(200, (e) => {
   }
 })
 
-const keydownHandler = debounce(200, (e) => {
-  if (isRegReady()) {
-    submitBtn.removeAttribute('disabled')
-  }
-})
-
 // Disable the submit button unless we know the org name has a value
 submitBtn.setAttribute('disabled', true)
-orgField.addEventListener('keydown', keydownHandler, false)
 confirmField.addEventListener('keydown', passwordCheckHandler, false)
 
 // Todo: Investigate why the globals.js doesnt work for this one
