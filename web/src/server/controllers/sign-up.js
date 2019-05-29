@@ -21,22 +21,21 @@ const SignUpController = function(router) {
 const registerOrganization = async (req, res) => {
   const { name, email } = req.body
 
-  let token
   try {
-    ({ data: { token } } = await API.send({
+    await API.send({
       url: 'signup',
       method: 'POST',
       data: {
         name,
         email
       }
-    }))
+    })
   } catch ({ response }) {
     console.error({ status: response.status, message: response.data })
     return res.status(500).send('There was an error registering your organization')
   }
 
-  res.redirect(`registration/complete?token=${token}`)
+  res.redirect('/sign-up/processing')
 }
 
 const setInitialPassword = async (req, res) => {
