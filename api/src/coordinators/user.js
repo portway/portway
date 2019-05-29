@@ -37,9 +37,13 @@ async function setInitialPassword(id, password) {
     throw ono({ code: 409 }, 'Cannot set initial password, user already has one')
   }
   const hashedPassword = await passwords.generateHash(password)
-  await BusinessUser.updateById(user.id, {
+  const updatedUser = await BusinessUser.updateById(user.id, {
     password: hashedPassword
   })
+
+  const token = tokenIntegrator.generateToken(updatedUser.id, updatedUser.orgRoleId, updatedUser.orgId)
+
+  return token
 }
 
 async function validateEmailPasswordCombo(email, password) {

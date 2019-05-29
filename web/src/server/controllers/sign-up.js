@@ -1,5 +1,6 @@
 import { renderBundles } from '../libs/express-utilities'
 import DangerAPI from '../libs/api'
+import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS } from '../../shared/constants'
 
 const API = new DangerAPI(process.env.API_URL)
 
@@ -60,8 +61,9 @@ const setInitialPassword = async (req, res) => {
     })
   }
 
+  let accessToken
   try {
-    await API.send({
+    ({ data: { token: accessToken } } = await API.send({
       url: 'signup/initialPassword',
       method: 'POST',
       headers: {
@@ -70,7 +72,7 @@ const setInitialPassword = async (req, res) => {
       data: {
         password
       }
-    })
+    }))
   } catch ({ response }) {
     return res.render('user/registration', {
       ...renderBundles(req, 'Registration', 'registration'),
@@ -83,8 +85,8 @@ const setInitialPassword = async (req, res) => {
       projectCreation
     })
   }
-
-  res.redirect('/sign-in')
+  res.cookie('token', accessToken, { maxAge: MAX_COOKIE_AGE_MS })
+  res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
 }
 
 export default SignUpController
