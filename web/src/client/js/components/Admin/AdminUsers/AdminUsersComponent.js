@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
-import { ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
+import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
 import Table from 'Components/Table/Table'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
@@ -31,7 +32,7 @@ const AdminUsersComponent = ({ addUserHandler, errors, isCreating, removeUserHan
   const userRows = {}
   Object.values(users).forEach((user) => {
     userRows[user.id] = [
-      user.name,
+      <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
       moment(user.createdAt).format('YYYY MMM DD'),
       renderTools(user)
