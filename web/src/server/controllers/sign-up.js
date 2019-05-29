@@ -32,7 +32,11 @@ const registerOrganization = async (req, res) => {
       }
     })
   } catch ({ response }) {
-    console.error({ status: response.status, message: response.data })
+    if (!response) {
+      console.error('Timeout error')
+    } else {
+      console.error({ status: response.status, message: response.data })
+    }
     return res.status(500).send('There was an error registering your organization')
   }
 
