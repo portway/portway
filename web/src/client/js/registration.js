@@ -25,6 +25,7 @@ const passwordCheckHandler = debounce(200, (e) => {
   } else {
     confirmField.classList.add('is-danger')
     passwordHelp.style.display = 'block'
+    submitBtn.setAttribute('disabled', true)
   }
 })
 
