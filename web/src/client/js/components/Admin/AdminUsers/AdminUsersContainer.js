@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import { currentUserId } from 'Libs/currentIds'
 
 import { PRODUCT_NAME } from 'Shared/constants'
 import { createUser, removeUser } from 'Actions/user'
@@ -38,6 +39,7 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
       </Helmet>
       <AdminUsersComponent
         addUserHandler={addUserHandler}
+        currentUserId={currentUserId}
         isCreating={isCreating}
         errors={errors}
         removeUserHandler={removeUserHandler}

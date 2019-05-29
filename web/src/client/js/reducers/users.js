@@ -50,11 +50,10 @@ export const users = (state = initialState, action) => {
       const byId = { ...state.loading.byId, [id]: false }
       return { ...state, usersById, loading: { ...state.loading, byId: byId, list: false } }
     }
-    case ActionTypes.RECEIVE_UPDATED_ROLE: {
+    case ActionTypes.RECEIVE_UPDATED_USER_ROLE: {
       const { userId, orgRoleId } = action
       const userObj = { ...state.usersById[userId], orgRoleId }
       const byId = { ...state.loading.byId, [userId]: false }
-      //userObj.orgRoleId = orgRoleId
       return {
         ...state,
         usersById: { ...state.usersById, [userId]: userObj },

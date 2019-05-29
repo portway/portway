@@ -32,7 +32,7 @@ const signUp = async function(req, res, next) {
 
   try {
     const token = await signUpCoordinator.createUserAndOrganization(name, email)
-    res.status(200).send({ token })
+    res.status(204).send()
   } catch (e) {
     next(e)
   }
