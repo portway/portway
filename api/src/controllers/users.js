@@ -15,7 +15,7 @@ const paramSchema = Joi.compile({
   id: Joi.number().required()
 })
 
-const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email')
+const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
 
 const { readPerm, listPerm, createPerm, updatePerm, deletePerm } = crudPerms(
   RESOURCE_TYPES.USER,
@@ -100,11 +100,11 @@ const getUser = async function(req, res, next) {
 
 const createUser = async function(req, res, next) {
   const { body } = req
-  const { email } = body
+  const { email, name } = body
   const { orgId } = req.requestorInfo
 
   try {
-    const user = await userCoordinator.createPendingUser(email, orgId)
+    const user = await userCoordinator.createPendingUser(email, name, orgId)
     res.status(201).json({ data: user })
   } catch (e) {
     next(e)
