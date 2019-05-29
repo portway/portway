@@ -24,16 +24,13 @@ export const fetchUser = (id) => {
 export const createUser = (values) => {
   // If we're creating an admin user we have to post a regular user first
   // and then hit the PUT endpoint to make that user an admin
-  let body = {}
+  const body = {
+    name: values.name,
+    email: values.email
+  }
   let role = ORGANIZATION_ROLE_IDS.USER
   if (values.orgRole === ORGANIZATION_ROLE_IDS.ADMIN) {
     role = ORGANIZATION_ROLE_IDS.ADMIN
-    body = {
-      name: values.name,
-      email: values.email
-    }
-  } else {
-    body = values
   }
   return async (dispatch) => {
     dispatch(Users.create())
@@ -44,9 +41,7 @@ export const createUser = (values) => {
     }
     dispatch(Users.receiveOneCreated(data))
     // If we're trying to be an admin
-    if (role === ORGANIZATION_ROLE_IDS.ADMIN) {
-      dispatch(updateUserRole(data.id, values.orgRole))
-    }
+    dispatch(updateUserRole(data.id, role))
   }
 }
 
