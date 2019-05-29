@@ -1,67 +1,26 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 
-import Constants from 'Shared/constants'
+import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { ProjectIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
-
-const { PROJECT_ROLE_IDS } = Constants
+import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer'
 
 const ProjectsListItem = ({
-  activeProjectId,
-  animate,
-  callback,
   projectId,
   project,
   handleDelete
 }) => {
-  const [itemHeight, setItemHeight] = useState(null)
-  // Set the width and height of the list item after render so that we can animate
-  // these properties
-  const itemRef = useCallback((node) => {
-    if (node !== null) {
-      setItemHeight(node.getBoundingClientRect().height)
-    }
-  }, [])
-
-  const projectClasses = classNames({
-    'project-list__item': true,
-    'project-list__item--animate': animate,
-    'project-list__item--active': activeProjectId === projectId,
-    'project-list__item--disabled': activeProjectId && activeProjectId !== projectId
-  })
-
-  const activeProjectWidth = animate ? '103%' : '100%'
-  const activeProjectHeight = animate ? '200px' : 'auto'
-  const projectWidth = activeProjectId === projectId ? activeProjectWidth : `100%`
-  const projectHeight = activeProjectId === projectId ? activeProjectHeight : `${itemHeight}px`
-
   return (
-    <li
-      aria-expanded={activeProjectId === projectId}
-      aria-haspopup={true}
-      className={projectClasses}
-      ref={itemRef}
-      style={{ height: `${projectHeight}`, width: `${projectWidth}` }}>
-      <div
-        className="project-list__info"
-        onClick={() => callback(projectId)}
-        onKeyDown={(e) => {
-          if (e.keyCode === 13) {
-            callback(projectId)
-          }
-        }}
-        role="button"
-        tabIndex="0">
-        <ProjectIcon className="icon-project" />
-        <span>
-          <h3 className="project-list__title">{project.name}</h3>
-          <p className="project-list__item-meta">Last updated by _USER_</p>
-        </span>
-      </div>
-      <div className="project-list__actions" hidden={activeProjectId !== projectId}>
+    <li className="project-list__item">
+      <Link to={`${PATH_PROJECT}/${projectId}`} className="project-list__info">
+        <ProjectIcon className="project-list__icon" width="24" height="24" />
+        <h3 className="project-list__title">{project.name}</h3>
+        <p className="project-list__item-meta">Last updated by _USER_</p>
+        <ProjectUsersContainer collapsed={true} projectId={projectId} />
+      </Link>
+      <div className="project-list__actions">
         <div className="project-list__actions-start">
           <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
             <button className="btn btn--blank btn--danger" onClick={handleDelete}>
@@ -74,9 +33,6 @@ const ProjectsListItem = ({
             <button className="btn btn--blank">Duplicate</button>
             <Link to={`/project/${projectId}/settings`} className="btn btn--blank">Settings</Link>
           </ProjectPermission>
-          <Link to={`/project/${projectId}`} className="btn" role="button" tabIndex="0">
-            Open
-          </Link>
         </div>
       </div>
     </li>

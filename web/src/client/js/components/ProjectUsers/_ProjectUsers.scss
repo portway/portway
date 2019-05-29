@@ -1,0 +1,20 @@
+@import 'CSS/inc/_vars.scss';
+
+.project-users {
+  &__collapsed-list {
+    margin: 0;
+    padding: 0;
+  }
+  &__collapsed-item {
+    align-items: center;
+    background: red;
+    border: thin solid $white;
+    border-radius: 50% 50%;
+    display: inline-flex;
+    font-size: .9rem;
+    height: 24px;
+    justify-content: center;
+    margin-right: -6px;
+    width: 24px;
+  }
+}

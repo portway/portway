@@ -13,55 +13,29 @@ $horizontalPadding: 1.3%;
 
     &__item {
       background-color: var(--base-background);
-      display: flex;
-      flex-direction: column;
       margin-bottom: 6px;
       outline: 0;
       position: relative;
-      left: 50%;
-      transform: translateX(-50%);
-      &--animate {
-        transition: width 0.3s ease-in-out, height 0.2s ease-in-out, margin 0.2s ease-in-out, opacity 0.4s ease-in-out;
-      }
-      &--disabled {
-        opacity: .2;
-      }
-      &--active {
-        // This is the selected project, and it is open
-        &[aria-expanded="true"] {
-          border: thin solid var(--base-border-color);
-          border-radius: $borderRadius;
-          margin: 24px 0;
-          .project-list__info {
-            padding: 14px $horizontalPadding;
-            &[role="button"] {
-              cursor: default;
-            }
-          }
-          .project-list__actions {
-            padding-left: $horizontalPadding;
-          }
-        }
-      }
     }
 
     &__info {
       @include focus(transparent);
-      // The icon, title, and last updated part
-      // The part that is visible without focusing on an item
-      // This is going to get an outline when its parent is focused (keyboard only)
-      align-items: flex-start;
+      align-items: center;
+      color: var(--base-color);
       display: flex;
       flex: 1;
       padding: 12px $horizontalPadding 12px 0;
-      transition: padding 0.3s ease-in-out;
-      .icon {
-        margin-right: $horizontalPadding;
-      }
+      text-decoration: none;
     }
     &__title {
       color: var(--base-color);
+      flex: 1;
       margin: 0 0 0;
+      padding: 2rem;
+    }
+    &__meta {
+      display: flex;
+      justify-content: space-between;
     }
     &__item-meta {
       margin: 0;
