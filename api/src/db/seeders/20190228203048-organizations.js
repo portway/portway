@@ -8,12 +8,14 @@ const bulkOrgs = [
   {
     id: ORG_ID,
     name: 'BonkeyBong',
+    ownerId: seedIds.BONKEY_USER_ID,
     createdAt: TODAY,
     updatedAt: TODAY
   },
   {
     id: PROJ_X_ORG_ID,
     name: 'Prestigious Company X',
+    ownerId: seedIds.BOB_X_USER_ID,
     createdAt: TODAY,
     updatedAt: TODAY
   }
