@@ -38,7 +38,8 @@ async function setInitialPassword(id, password) {
   }
   const hashedPassword = await passwords.generateHash(password)
   const updatedUser = await BusinessUser.updateById(user.id, {
-    password: hashedPassword
+    password: hashedPassword,
+    resetKey: null
   })
 
   const token = tokenIntegrator.generateToken(updatedUser.id, updatedUser.orgRoleId, updatedUser.orgId)

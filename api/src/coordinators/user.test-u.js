@@ -53,10 +53,12 @@ describe('user coordinator', () => {
       resetKey: 'not-a-real-reset-key'
     }
 
+    let token
+
     beforeAll(async () => {
       passwords.generateHash.mockReset()
       BusinessUser.setFindByIdReturnValue(mockUserWithoutPassword)
-      await userCoordinator.setInitialPassword(userId, password)
+      token = await userCoordinator.setInitialPassword(userId, password)
     })
 
     afterAll(() => {
@@ -79,8 +81,22 @@ describe('user coordinator', () => {
       expect(BusinessUser.updateById.mock.calls.length).toBe(1)
       expect(BusinessUser.updateById.mock.calls[0][0]).toBe(mockUserId)
       expect(BusinessUser.updateById.mock.calls[0][1]).toEqual({
-        password: mockHashedPassword
+        password: mockHashedPassword,
+        resetKey: null
       })
+    })
+
+    it('should call tokenIntegrator.generateToken with the correct data', () => {
+      const mockUser = BusinessUser.findById.mock.results[0].value
+      expect(tokenIntegrator.generateToken.mock.calls.length).toBe(1)
+      expect(tokenIntegrator.generateToken.mock.calls[0][0]).toBe(mockUser.id)
+      expect(tokenIntegrator.generateToken.mock.calls[0][1]).toBe(mockUser.orgRoleId)
+      expect(tokenIntegrator.generateToken.mock.calls[0][2]).toBe(mockUser.orgId)
+    })
+
+    it('should return an access token', () => {
+      const mockToken = tokenIntegrator.generateToken.mock.results[0].value
+      expect(token).toEqual(mockToken)
     })
   })
 
