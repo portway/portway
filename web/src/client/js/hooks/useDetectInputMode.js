@@ -1,5 +1,8 @@
 import { useEffect } from 'react'
 
+// Don't adjust input method if it's a certain type of field
+const inputTypesThatShouldntReturnTrue = ['text', 'password', 'email']
+
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
 // Test via a getter in the options object to see if the passive property is accessed
 let supportsPassive = false
@@ -20,7 +23,7 @@ function useDetectInputMode() {
       document.body.classList.add('using-mouse')
     }
     function keyDownHandler(e) {
-      if (e.target.type === 'text') return
+      if (inputTypesThatShouldntReturnTrue.includes(e.target.type)) return
       if (e.key && e.key.toLowerCase() !== 'meta') {
         document.body.classList.remove('using-mouse')
       }
