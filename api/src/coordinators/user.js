@@ -37,12 +37,12 @@ async function setInitialPassword(id, password) {
     throw ono({ code: 409 }, 'Cannot set initial password, user already has one')
   }
   const hashedPassword = await passwords.generateHash(password)
-  const updatedUser = await BusinessUser.updateById(user.id, {
+  await BusinessUser.updateById(user.id, {
     password: hashedPassword,
     resetKey: null
   })
 
-  const token = tokenIntegrator.generateToken(updatedUser.id, updatedUser.orgRoleId, updatedUser.orgId)
+  const token = tokenIntegrator.generateToken(user.id, user.orgRoleId, user.orgId)
 
   return token
 }
