@@ -18,6 +18,9 @@ const initialState = {
   },
   tokens: {
     creating: false
+  },
+  users: {
+    creating: false
   }
 }
 
@@ -89,6 +92,28 @@ export const ui = (state = initialState, action) => {
         confirmation: {
           ...state.confirmation,
           confirming: false
+        }
+      }
+    }
+
+    // Users
+    // -------------------------------------------------------------------------
+    case ActionTypes.UI_CREATE_USER_MODE: {
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          creating: action.value
+        }
+      }
+    }
+
+    case ActionTypes.RECEIVE_CREATED_USER: {
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          creating: false
         }
       }
     }

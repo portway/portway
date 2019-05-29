@@ -1,5 +1,6 @@
 import userCoordinator from './user'
 import BusinessUser from '../businesstime/user'
+import BusinessOrganization from '../businesstime/organization'
 import passwords from '../libs/passwords'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
@@ -7,12 +8,15 @@ import tokenIntegrator from '../integrators/token'
 import BusinessProjectUser from '../businesstime/projectuser'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import { sendSingleRecipientEmail } from '../integrators/email'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
+jest.mock('../businesstime/organization')
 jest.mock('../libs/passwords')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/token')
+jest.mock('../integrators/email')
 
 describe('user coordinator', () => {
   const email = 'hughjackman@johntravolta.gov'
@@ -49,10 +53,12 @@ describe('user coordinator', () => {
       resetKey: 'not-a-real-reset-key'
     }
 
+    let token
+
     beforeAll(async () => {
       passwords.generateHash.mockReset()
       BusinessUser.setFindByIdReturnValue(mockUserWithoutPassword)
-      await userCoordinator.setInitialPassword(userId, password)
+      token = await userCoordinator.setInitialPassword(userId, password)
     })
 
     afterAll(() => {
@@ -75,8 +81,22 @@ describe('user coordinator', () => {
       expect(BusinessUser.updateById.mock.calls.length).toBe(1)
       expect(BusinessUser.updateById.mock.calls[0][0]).toBe(mockUserId)
       expect(BusinessUser.updateById.mock.calls[0][1]).toEqual({
-        password: mockHashedPassword
+        password: mockHashedPassword,
+        resetKey: null
       })
+    })
+
+    it('should call tokenIntegrator.generateToken with the correct data', () => {
+      const mockUser = BusinessUser.findById.mock.results[0].value
+      expect(tokenIntegrator.generateToken.mock.calls.length).toBe(1)
+      expect(tokenIntegrator.generateToken.mock.calls[0][0]).toBe(mockUser.id)
+      expect(tokenIntegrator.generateToken.mock.calls[0][1]).toBe(mockUser.orgRoleId)
+      expect(tokenIntegrator.generateToken.mock.calls[0][2]).toBe(mockUser.orgId)
+    })
+
+    it('should return an access token', () => {
+      const mockToken = tokenIntegrator.generateToken.mock.results[0].value
+      expect(token).toEqual(mockToken)
     })
   })
 
@@ -186,12 +206,31 @@ describe('user coordinator', () => {
       })
     })
 
+    it('should call BusinessOrganization.findSanitizedById with the passed in orgId', () => {
+      expect(BusinessOrganization.findSanitizedById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.findSanitizedById.mock.calls[0][0]).toEqual(orgId)
+    })
+
     it('should call tokenIntegrator.generatePasswordResetToken with the user id and reset key', () => {
       const mockResetKey = passwordResetKey.generate.mock.results[0].value
       const mockUserId = BusinessUser.create.mock.results[0].value.id
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls.length).toBe(1)
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][0]).toBe(mockUserId)
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][1]).toBe(mockResetKey)
+    })
+
+    it('should call emailIntegrator.sendSingleRecipientEmail with the user email and email bodies with password token', () => {
+      const mockUserEmail = BusinessUser.create.mock.results[0].value.email
+      const passwordResetToken =
+        tokenIntegrator.generatePasswordResetToken.mock.results[0].value
+      expect(sendSingleRecipientEmail.mock.calls.length).toBe(1)
+      expect(sendSingleRecipientEmail.mock.calls[0][0].address).toBe(mockUserEmail)
+      expect(sendSingleRecipientEmail.mock.calls[0][0].textBody).toEqual(
+        expect.stringMatching(passwordResetToken)
+      )
+      expect(sendSingleRecipientEmail.mock.calls[0][0].htmlBody).toEqual(
+        expect.stringMatching(passwordResetToken)
+      )
     })
 
     it('should return the created user with only public fields exposed', () => {

@@ -2,6 +2,12 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+  --document-header-bg: #{$white};
+  --document-header-border: #{$white-ter};
+  @media (prefers-color-scheme: dark) {
+    --document-header-bg: #{$black-bis};
+    --document-header-border: #{$black-er};
+  }
   position: relative;
 
   &__no-document {
@@ -12,9 +18,9 @@
   }
 
   &__header {
-    background-color: $white;
+    background-color: var(--document-header-bg);
     align-items: center;
-    border-bottom: thin solid $white-ter;
+    border-bottom: thin solid var(--document-header-border);
     display: flex;
     height: 63px;
     justify-content: space-between;
@@ -50,6 +56,11 @@
     resize: none;
     width: 100%;
     -webkit-appearance: none;
+
+    &:focus {
+      color: $primary-light;
+    }
+
   }
 
   &__publish-date {

@@ -16,6 +16,13 @@ export const uiCreateTokenMode = (value) => {
   }
 }
 
+// Users
+export const uiCreateUserMode = (value) => {
+  return async (dispatch) => {
+    dispatch(UI.createUserMode(value))
+  }
+}
+
 /**
  * Confirmation system
  */
