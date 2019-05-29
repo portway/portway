@@ -33,7 +33,7 @@ const AdminDashboardComponent = ({ section }) => {
       acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
       elseRender={<Redirect to={PATH_PROJECTS} />}>
       <Helmet>
-        <title>Dashboard – {PRODUCT_NAME}</title>
+        <title>Admin – {PRODUCT_NAME}</title>
       </Helmet>
       <main>
         <Panel>
