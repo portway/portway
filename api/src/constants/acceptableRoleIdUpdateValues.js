@@ -1,0 +1,1 @@
+export default Object.freeze([2, 3])
