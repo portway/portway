@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
+import { TrashIcon } from 'Components/Icons'
 import Table from 'Components/Table/Table'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
 
-const AdminUsersComponent = ({ addUserHandler, errors, isCreating, setCreateMode, users }) => {
+const AdminUsersComponent = ({ addUserHandler, errors, isCreating, removeUserHandler, setCreateMode, users }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
     role: { label: 'Role', sortable: true },
@@ -17,8 +18,11 @@ const AdminUsersComponent = ({ addUserHandler, errors, isCreating, setCreateMode
   function renderTools(user) {
     return (
       <div className="table__tools">
-        <a href={`mailto:${user.email}`} className="link link--gray">Email</a>
-        <button className="btn btn--blank btn--danger">Remove</button>
+        <button
+          className="btn btn--blank btn--with-circular-icon"
+          onClick={() => { removeUserHandler(user.id) }}>
+          <TrashIcon />
+        </button>
       </div>
     )
   }
@@ -60,6 +64,7 @@ AdminUsersComponent.propTypes = {
   addUserHandler: PropTypes.func,
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
+  removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
   users: PropTypes.object.isRequired
 }

@@ -61,6 +61,15 @@ export const users = (state = initialState, action) => {
         loading: { ...state.loading, byId: byId, list: false }
       }
     }
+    case ActionTypes.INITIATE_USER_REMOVE: {
+      return { ...state, loading: { ...state.loading, list: true } }
+    }
+    case ActionTypes.REMOVE_USER: {
+      const id = action.userId
+      // eslint-disable-next-line no-unused-vars
+      const { [id]: __, ...usersById } = state.usersById
+      return { ...state, usersById, loading: { ...state.loading, list: false } }
+    }
     default: {
       return state
     }

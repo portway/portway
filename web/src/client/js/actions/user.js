@@ -1,7 +1,7 @@
-import { Users, UserProjectAssignments, Validation } from './index'
-import { add, fetch, update, validationCodes } from '../api'
+import { Notifications, Users, UserProjectAssignments, Validation } from './index'
+import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
 
-import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
+import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 
 /**
  * Redux action
@@ -57,6 +57,18 @@ export const updateUser = (userId, body) => {
     validationCodes.includes(status) ?
       dispatch(Validation.create('user', data, status)) :
       dispatch(Users.receiveOneUpdated(data))
+  }
+}
+
+export const removeUser = (userId) => {
+  return async (dispatch) => {
+    dispatch(Users.initiateRemove(userId))
+    const { data, status } = await remove(`users/${userId}`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    dispatch(Users.removeOne(userId))
   }
 }
 

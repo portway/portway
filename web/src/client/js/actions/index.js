@@ -68,6 +68,8 @@ export const ActionTypes = {
   RECEIVE_UPDATED_ROLE: 'RECEIVE_UPDATED_ROLE',
   INITIATE_USER_CREATE: 'INITIATE_USER_CREATE',
   RECEIVE_CREATED_USER: 'RECEIVE_CREATED_USER',
+  INITIATE_USER_REMOVE: 'INITIATE_USER_REMOVE',
+  REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
@@ -169,6 +171,8 @@ export const Users = {
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER, 'data'),
   receiveUpdatedRole: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ROLE, 'userId', 'orgRoleId'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_USER_REMOVE, 'userId'),
+  removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
 }
 
