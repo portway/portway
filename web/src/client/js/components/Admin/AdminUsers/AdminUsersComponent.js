@@ -7,7 +7,7 @@ import { TrashIcon } from 'Components/Icons'
 import Table from 'Components/Table/Table'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
 
-const AdminUsersComponent = ({ addUserHandler, errors, isCreating, removeUserHandler, setCreateMode, users }) => {
+const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating, removeUserHandler, setCreateMode, users }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
     role: { label: 'Role', sortable: true },
@@ -16,6 +16,7 @@ const AdminUsersComponent = ({ addUserHandler, errors, isCreating, removeUserHan
   }
 
   function renderTools(user) {
+    if (user.id === currentUserId) return null
     return (
       <div className="table__tools">
         <button
@@ -62,6 +63,7 @@ const AdminUsersComponent = ({ addUserHandler, errors, isCreating, removeUserHan
 
 AdminUsersComponent.propTypes = {
   addUserHandler: PropTypes.func,
+  currentUserId: PropTypes.object.isRequired,
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   removeUserHandler: PropTypes.func,

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import { currentUserId } from 'Libs/currentIds'
 
 import { createUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
@@ -32,6 +33,7 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
   return (
     <AdminUsersComponent
       addUserHandler={addUserHandler}
+      currentUserId={currentUserId}
       isCreating={isCreating}
       errors={errors}
       removeUserHandler={removeUserHandler}
