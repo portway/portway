@@ -79,7 +79,7 @@ const setInitialPassword = async (req, res) => {
       token,
       flash: {
         type: 'error',
-        message: response.data.error
+        message: 'Cannot set password, has this link already been used?'
       },
       orgName,
       projectCreation

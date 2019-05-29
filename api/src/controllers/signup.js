@@ -42,14 +42,12 @@ const setInitialPassword = async function(req, res, next) {
   const { password } = req.body
   const { id: userId } = req.user
 
-  let token
   try {
-    token = await userCoordinator.setInitialPassword(userId, password)
+    const token = await userCoordinator.setInitialPassword(userId, password)
+    res.json({ token })
   } catch (e) {
     next(e)
   }
-
-  res.json({ token })
 }
 
 export default signupController
