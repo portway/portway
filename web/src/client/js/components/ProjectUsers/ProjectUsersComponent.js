@@ -6,13 +6,19 @@ import ProjectUsersCollapsedItem from './ProjectUsersCollapsedItem'
 import './_ProjectUsers.scss'
 
 const ProjectUsersComponent = ({ collapsed, users }) => {
+  const userColors = ['#51a37d', '#3f8a67', '#dcede5', '#f8963a', '#6ba5f2', '#6095da', '#d2e0f2']
   const collapsedUsers = users.slice(0, 2)
   const collapsedDiff = users.length - collapsedUsers.length
+
+  function getUserColor() {
+    // 7 is userColors
+    return userColors[Math.floor(Math.random() * Math.floor(7))]
+  }
 
   // Show 3 users at first
   function renderCollapsedUsers() {
     return collapsedUsers.map((user, index) => {
-      return <ProjectUsersCollapsedItem user={user} key={`${user.id}-${index}`} />
+      return <ProjectUsersCollapsedItem color={getUserColor()} user={user} key={`${user.id}-${index}`} />
     })
   }
 

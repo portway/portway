@@ -4,82 +4,72 @@
 $horizontalPadding: 1.3%;
 
 .project-list-container {
+  --project-width-min: 200px;
+  --project-width-max: 300px;
 
   .project-list {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     list-style: none;
     margin: 0;
-    padding: 0;
-    perspective: 100px;
+    padding: 2rem 0;
 
     &__item {
       background-color: var(--base-background);
-      margin-bottom: 6px;
+      border: thin solid $gray-light;
+      border-radius: $borderRadius;
       outline: 0;
       position: relative;
     }
 
     &__info {
-      @include focus(transparent);
       align-items: center;
       color: var(--base-color);
       display: flex;
-      flex: 1;
-      padding: 12px $horizontalPadding 12px 0;
+      justify-content: space-between;
+      padding: 2rem;
       text-decoration: none;
     }
-    &__title {
-      color: var(--base-color);
-      flex: 1;
-      margin: 0 0 0;
-      padding: 2rem;
-    }
-    &__meta {
+
+    &__link {
+      align-items: center;
       display: flex;
-      justify-content: space-between;
+      text-decoration: none;
     }
-    &__item-meta {
-      margin: 0;
-      padding: 0;
+
+    &__icon {
+      margin-right: 1rem;
+    }
+
+    &__title {
+      // color: var(--base-color);
+      margin: 0 0 0;
+    }
+
+    &__team {
+      align-items: center;
+      display: flex;
+    }
+
+    &__team-title {
+      color: $gray;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin: 0 1rem 0 0;
     }
 
     // The actions and other info under the __info section
     &__actions {
+      background-color: $gray-light;
       align-items: center;
-      border-top: thin solid var(--base-border-color);
       display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      padding: 12px $horizontalPadding 12px 0;
-      transition: visibilty 0.3s linear 0.6s;
-      visibility: visible;
-
-      &[hidden] {
-        height: 0;
-        margin: 0;
-        padding: 0;
-        visibility: hidden;
+      justify-content: flex-end;
+      padding: 0 1rem;
+      a, button {
+        font-size: 1.2rem;
+        margin-left: 1rem;
       }
-
-      &-start {
-        flex: 1;
-        .btn--warning {
-          text-align: left;
-        }
-      }
-
-      &-end {
-        .btn--blank {
-          color: $action;
-        }
-      }
-
-      .btn {
-        margin-right: 18px;
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-
     }
 
   }

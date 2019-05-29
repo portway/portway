@@ -19,7 +19,7 @@ export const projectAssignments = (state = initialState, action) => {
         return object
       }, {})
       const assignmentsByProjectId = { ...state.assignmentsByProjectId, [action.projectId]: assignmentsObject }
-      const loadingById = { ...state.assignmentsByProjectId, [action.projectId]: false }
+      const loadingById = { ...state.loading.assignmentsByProjectId, [action.projectId]: false }
       return {
         ...state,
         assignmentsByProjectId,

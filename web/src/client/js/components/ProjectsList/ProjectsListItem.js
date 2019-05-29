@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
-import { ProjectIcon } from 'Components/Icons'
+import { ProjectIcon, TrashIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer'
 
@@ -14,26 +14,26 @@ const ProjectsListItem = ({
 }) => {
   return (
     <li className="project-list__item">
-      <Link to={`${PATH_PROJECT}/${projectId}`} className="project-list__info">
-        <ProjectIcon className="project-list__icon" width="24" height="24" />
-        <h3 className="project-list__title">{project.name}</h3>
-        <p className="project-list__item-meta">Last updated by _USER_</p>
-        <ProjectUsersContainer collapsed={true} projectId={projectId} />
-      </Link>
+      <div className="project-list__info">
+        <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
+          <ProjectIcon className="project-list__icon" width="32" height="32" />
+          <h3 className="project-list__title">{project.name}</h3>
+        </Link>
+        <div className="project-list__team">
+          <h4 className="project-list__team-title">Team:</h4>
+          <ProjectUsersContainer collapsed={true} projectId={projectId} />
+        </div>
+      </div>
       <div className="project-list__actions">
-        <div className="project-list__actions-start">
-          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
-            <button className="btn btn--blank btn--danger" onClick={handleDelete}>
-              Delete
-            </button>
-          </ProjectPermission>
-        </div>
-        <div className="project-list__actions-end">
-          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
-            <button className="btn btn--blank">Duplicate</button>
-            <Link to={`/project/${projectId}/settings`} className="btn btn--blank">Settings</Link>
-          </ProjectPermission>
-        </div>
+        <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+          <button className="btn btn--blank">Duplicate</button>
+          <Link to={`/project/${projectId}/settings`} className="btn btn--blank">Settings</Link>
+        </ProjectPermission>
+        <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+          <button className="btn btn--blank btn--with-circular-icon" onClick={handleDelete}>
+            <TrashIcon />
+          </button>
+        </ProjectPermission>
       </div>
     </li>
   )
