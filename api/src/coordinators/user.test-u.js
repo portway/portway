@@ -163,10 +163,11 @@ describe('user coordinator', () => {
 
   describe('#createPendingUser', () => {
     const email = 'not-a-real-email@email.fun'
+    const name = 'Fakothy McGee'
     let createdUser
 
     beforeAll(async () => {
-      createdUser = await userCoordinator.createPendingUser(email, orgId)
+      createdUser = await userCoordinator.createPendingUser(email, name, orgId)
     })
 
     it('should call passwordResetKey.generate', () => {
@@ -178,7 +179,7 @@ describe('user coordinator', () => {
       expect(BusinessUser.create.mock.calls.length).toBe(1)
       expect(BusinessUser.create.mock.calls[0][0]).toEqual({
         email,
-        name: email,
+        name,
         orgId,
         resetKey: mockResetKey,
         orgRoleId: ORGANIZATION_ROLE_IDS.USER
