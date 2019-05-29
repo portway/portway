@@ -8,8 +8,14 @@
   }
 }
 
-form {
+form, .form {
   padding: 0 5px;
+
+  &__section {
+    border: thin solid var(--base-border-color);
+    border-radius: $borderRadius;
+    padding: 2rem;
+  }
 
   .field {
     align-items: flex-start;
@@ -57,6 +63,23 @@ form {
         }
       }
     } // form-field--horizontal
+
+    &--with-button {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      .field {
+        input {
+          border-radius: $borderRadius;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+      button, .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
 
     &--hidden {
       display: none;
@@ -108,10 +131,12 @@ form {
   input[type='text'],
   input[type='email'],
   input[type='number'],
+  input[type='password'],
   .StripeElement {
     background: var(--form-background);
     border: thin solid var(--base-border-color);
     border-radius: $borderRadius;
+    min-height: 38px;
     padding: 8px;
     width: 100%;
     &::placeholder {

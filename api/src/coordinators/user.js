@@ -58,11 +58,11 @@ async function validatePasswordResetKey(userId, resetKey) {
   return user
 }
 
-async function createPendingUser(email, orgId) {
+async function createPendingUser(email, name, orgId) {
   const resetKey = passwordResetKey.generate()
   const createdUser = await BusinessUser.create({
     email,
-    name: email,
+    name,
     orgRoleId: ORGANIZATION_ROLE_IDS.USER,
     orgId,
     resetKey
