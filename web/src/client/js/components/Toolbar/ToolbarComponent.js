@@ -34,7 +34,12 @@ const ToolbarComponent = ({ action, filter, sort }) => {
 }
 
 ToolbarComponent.propTypes = {
-  action: PropTypes.object,
+  action: PropTypes.shape({
+    callback: PropTypes.func,
+    icon: PropTypes.node,
+    label: PropTypes.string,
+    title: PropTypes.string
+  }),
   filter: PropTypes.bool,
   sort: PropTypes.bool
 }

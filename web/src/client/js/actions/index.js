@@ -65,6 +65,11 @@ export const ActionTypes = {
   RECEIVE_USER: 'RECEIVE_USER',
   INITIATE_USER_UPDATE: 'INITIATE_USER_UPDATE',
   RECEIVE_UPDATED_USER: 'RECEIVE_UPDATED_USER',
+  RECEIVE_UPDATED_USER_ROLE: 'RECEIVE_UPDATED_USER_ROLE',
+  INITIATE_USER_CREATE: 'INITIATE_USER_CREATE',
+  RECEIVE_CREATED_USER: 'RECEIVE_CREATED_USER',
+  INITIATE_USER_REMOVE: 'INITIATE_USER_REMOVE',
+  REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
@@ -79,7 +84,8 @@ export const ActionTypes = {
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
-  UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE'
+  UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE',
+  UI_CREATE_USER_MODE: 'UI_CREATE_USER_MODE'
 }
 
 export const Route = {
@@ -160,8 +166,13 @@ export const Users = {
   receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
+  create: makeActionCreator(ActionTypes.INITIATE_USER_CREATE, 'userId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_USER, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER, 'data'),
+  receiveUpdatedRole: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER_ROLE, 'userId', 'orgRoleId'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_USER_REMOVE, 'userId'),
+  removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
 }
 
@@ -182,5 +193,6 @@ export const UI = {
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
-  createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value')
+  createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
+  createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
 }
