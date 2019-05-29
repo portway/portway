@@ -63,7 +63,7 @@ const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating
 
 AdminUsersComponent.propTypes = {
   addUserHandler: PropTypes.func,
-  currentUserId: PropTypes.object.isRequired,
+  currentUserId: PropTypes.number.isRequired,
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   removeUserHandler: PropTypes.func,
