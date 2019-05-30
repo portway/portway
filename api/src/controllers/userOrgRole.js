@@ -4,6 +4,7 @@ import BusinessUser from '../businesstime/user'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
+import ACCEPTABLE_ROLE_ID_UPDATE_VALUES from '../constants/acceptableRoleIdUpdateValues'
 
 const checkUpdatePerms = perms((req) => {
   return {
@@ -13,7 +14,7 @@ const checkUpdatePerms = perms((req) => {
 })
 
 const bodySchema = Joi.compile({
-  orgRoleId: Joi.number().required()
+  orgRoleId: Joi.number().valid([ACCEPTABLE_ROLE_ID_UPDATE_VALUES]).required()
 })
 
 const paramSchema = Joi.compile({
