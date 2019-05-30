@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
-import { ProjectIcon, TrashIcon } from 'Components/Icons'
+import { ProjectIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer'
 
@@ -20,16 +20,14 @@ const ProjectsListItem = ({
           <h3 className="project-list__title">{project.name}</h3>
         </Link>
         <div className="project-list__team">
-          <h4 className="project-list__team-title">Team:</h4>
           <ProjectUsersContainer collapsed={true} projectId={projectId} />
         </div>
       </div>
       <div className="project-list__actions">
         <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
-          <button className="btn btn--blank">Duplicate</button>
-          <Link to={`/project/${projectId}/settings`} className="btn btn--blank">Settings</Link>
-        </ProjectPermission>
-        <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+          <Link to={`/project/${projectId}/settings`} className="btn btn--blank btn--with-circular-icon">
+            <SettingsIcon />
+          </Link>
           <button className="btn btn--blank btn--with-circular-icon" onClick={handleDelete}>
             <TrashIcon />
           </button>
