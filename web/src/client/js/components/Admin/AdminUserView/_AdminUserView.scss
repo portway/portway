@@ -1,0 +1,10 @@
+@import 'CSS/inc/_vars.scss';
+
+.admin-user {
+
+  &__back-btn {
+    color: $action;
+    font-size: 1.2rem;
+  }
+
+}
