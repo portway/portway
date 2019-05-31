@@ -3,6 +3,7 @@ import ono from 'ono'
 
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessUser from '../businesstime/user'
+import BusinessOrganization from '../businesstime/organization'
 import userCoordinator from '../coordinators/user'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -19,7 +20,9 @@ const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
 
 const { readPerm, listPerm, createPerm, updatePerm, deletePerm } = crudPerms(
   RESOURCE_TYPES.USER,
-  (req) => { return { id: req.params.id } }
+  (req) => {
+    return { id: req.params.id }
+  }
 )
 
 const conditionalReadPerm = (req, res, next) => {
@@ -52,29 +55,35 @@ const conditionalUpdatePerm = (req, res, next) => {
   return updatePerm(req, res, next)
 }
 
+const conditionalDeletePerm = async (req, res, next) => {
+  const { id } = req.params
+  const { requestorId, orgId } = req.requestorInfo
+
+  // Never allow deletion of the org owner
+  const organization = await BusinessOrganization.findSanitizedById(orgId)
+  if (id === organization.ownerId) {
+    return next(ono({ code: 404 }, 'Cannot Delete An Organization Owner'))
+  }
+  // Don't allow self deletion, if we want to add this in the future, add a DELETE_MY perm for users
+  if (id === requestorId) {
+    return next(ono({ code: 404 }, 'Users Cannot Delete Themselves'))
+  }
+
+  return deletePerm(req, res, next)
+}
+
 const usersController = function(router) {
   router.get('/', listPerm, getUsers)
-  router.get('/:id',
-    validateParams(paramSchema),
-    conditionalReadPerm,
-    getUser
-  )
-  router.post('/',
-    validateBody(bodySchema, { includeDetails: true }),
-    createPerm,
-    createUser
-  )
-  router.put('/:id',
+  router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getUser)
+  router.post('/', validateBody(bodySchema, { includeDetails: true }), createPerm, createUser)
+  router.put(
+    '/:id',
     validateParams(paramSchema),
     validateBody(userSchema, { includeDetails: true }),
     conditionalUpdatePerm,
     updateUser
   )
-  router.delete('/:id',
-    validateParams(paramSchema),
-    deletePerm,
-    deleteUser
-  )
+  router.delete('/:id', validateParams(paramSchema), conditionalDeletePerm, deleteUser)
 }
 
 const getUsers = async function(req, res, next) {

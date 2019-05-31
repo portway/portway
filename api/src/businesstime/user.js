@@ -42,18 +42,21 @@ async function findById(id) {
 
 async function findAllSanitized(orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({
-    attributes: PUBLIC_FIELDS,
-    where: { orgId },
-    raw: true
+  const users = await db.model(MODEL_NAME).findAll({
+    where: { orgId }
   })
+
+  return users.map(publicFields)
 }
 
 async function findSanitizedById(id, orgId) {
   const db = getDb()
-  return await db
+  const user = await db
     .model(MODEL_NAME)
-    .findOne({ attributes: PUBLIC_FIELDS, where: { id, orgId }, raw: true })
+    .findOne({ where: { id, orgId } })
+
+  if (!user) return user
+  return publicFields(user)
 }
 
 async function updateByEmail(email, body) {

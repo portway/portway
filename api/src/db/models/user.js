@@ -10,7 +10,15 @@ export default function(sequelize, DataTypes) {
       resetKey: DataTypes.STRING
     },
     {
-      paranoid: true
+      paranoid: true,
+      getterMethods: {
+        pending() {
+          // We know if a user has a resetKey and nothing yet set for their password that they are still pending
+          const resetKey = this.getDataValue('resetKey')
+          const password = this.getDataValue('password')
+          return Boolean(resetKey && !password)
+        }
+      }
     }
   )
   User.associate = function(models) {

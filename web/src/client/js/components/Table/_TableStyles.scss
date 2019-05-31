@@ -6,7 +6,7 @@
   --cell-padding: .5rem;
   --row-alternate-bg-color: #{$white-bis};
   @media (prefers-color-scheme: dark) {
-    --row-alternate-bg-color: #{$black-er};
+    --row-alternate-bg-color: rgba(0, 0, 0, .1);
   }
   &__list {
     list-style: none;
