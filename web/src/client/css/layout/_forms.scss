@@ -3,8 +3,10 @@
 
 :root {
   --form-background: #{$white};
+  --form-placeholder-color: #{$gray};
   @media (prefers-color-scheme: dark) {
     --form-background: #{$black-er};
+    --form-placeholder-color: #{$black-bis};
   }
 }
 
@@ -140,7 +142,7 @@ form, .form {
     padding: 8px;
     width: 100%;
     &::placeholder {
-      color: $gray;
+      color: var(--form-placeholder-color);
     }
     &.focus {
       // StripeElement
