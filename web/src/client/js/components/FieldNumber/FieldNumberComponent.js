@@ -8,7 +8,7 @@ const FieldNumberComponent = ({ field, onChange }) => {
     <input
       className="h-second-level"
       defaultValue={field.value}
-      onChange={(e) => { onChange(field.id, e.target.value) }}
+      onChange={(e) => { onChange(field.id, Number.parseFloat(e.target.value)) }}
       onFocus={(e) => { e.target.select() }}
       type="number" />
   )
