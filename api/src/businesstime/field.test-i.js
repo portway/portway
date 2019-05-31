@@ -77,7 +77,7 @@ describe('BusinessField', () => {
     })
 
     describe('when the field is set to a number type', () => {
-      describe('and receives a string value', () => {
+      describe('and receives an invalid string value', () => {
         it('should throw an error', async () => {
           await expect(
             BusinessField.createForDocument(factoryDocument.id, {
@@ -85,7 +85,46 @@ describe('BusinessField', () => {
               type: 3,
               value: 'some test string'
             })
-          ).rejects.toEqual(expect.objectContaining({ code: 400, errorType: apiErrorTypes.FieldValueIncorrectTypeError }))
+          ).rejects.toEqual(expect.objectContaining(
+            { code: 400, errorType: apiErrorTypes.ValidationError }
+          ))
+        })
+      })
+
+      describe('and receives a valid string value', () => {
+        let field
+
+        beforeAll(async () => {
+          field = await BusinessField.createForDocument(factoryDocument.id, {
+            ...fieldBody,
+            type: 3,
+            value: '123.456'
+          })
+        })
+
+        it('should return a number', () => {
+          expect(typeof field.value).toBe('number')
+          expect(field.value).toBe(123.456)
+        })
+      })
+
+      describe.skip('and receives a significant zero', () => {
+        let field
+
+        beforeAll(async () => {
+          field = await BusinessField.createForDocument(factoryDocument.id, {
+            ...fieldBody,
+            type: 3,
+            value: '123.45600'
+          })
+        })
+        
+        it('should return a number', () => {
+          expect(typeof field.value).toBe('number')
+        })
+
+        it('should preserve significant values', () => {
+          expect(field.value.toString()).toBe('123.45600')
         })
       })
 
@@ -147,6 +186,54 @@ describe('BusinessField', () => {
       it('should return a POJO with updated body fields', () => {
         expect(updatedField).toEqual(expect.objectContaining(updateBody))
         expect(updatedField.constructor).toBe(Object)
+      })
+    })
+
+    describe('when the target field is a number', async () => {
+      let numberField
+
+      beforeAll(async () => {
+        numberField = await BusinessField.createForDocument(updateFactoryDocument.id, {
+          type: 3,
+          name: 'number field',
+          value: 13,
+          orgId: updateFactoryDocument.orgId
+        })
+      })
+
+      describe('and the value is a number', () => {
+        let updatedField
+        const updateNumber = 273
+
+        beforeAll(async () => {
+          updatedField = await BusinessField.updateByIdForDocument(numberField.id, updateFactoryDocument.id, updateFactoryDocument.orgId, { value: updateNumber })
+        })
+
+        it('should return a number value', () => {
+          expect(typeof updatedField.value).toBe('number')
+        })
+
+        it('should update the number', () => {
+          expect(updatedField.value).toBe(updateNumber)
+        })
+      })
+
+      describe('and the value is a string', () => {
+        let updatedField
+        const updateNumber = "273.45"
+        const expectedReturnValue = 273.45
+
+        beforeAll(async () => {
+          updatedField = await BusinessField.updateByIdForDocument(numberField.id, updateFactoryDocument.id, updateFactoryDocument.orgId, { value: updateNumber })
+        })
+
+        it('should return a number value', () => {
+          expect(typeof updatedField.value).toBe('number')
+        })
+
+        it('should update the number', () => {
+          expect(updatedField.value).toBe(expectedReturnValue)
+        })        
       })
     })
 

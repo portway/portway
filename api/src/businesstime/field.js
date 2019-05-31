@@ -21,7 +21,8 @@ async function createForDocument(docId, body) {
   const db = getDb()
   const { orgId } = body
 
-  validateFieldValueByType(body.value, body.type)
+  const value = setFieldValueByType(body.value, body.type)
+  validateFieldValueByType(value, body.type)
 
   const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
@@ -43,7 +44,7 @@ async function createForDocument(docId, body) {
   const createdField = await document.createField(createFieldBody)
 
   const fieldValue = await createdField.addFieldValue({
-    value: body.value,
+    value,
     structuredValue: body.structuredValue,
     orgId
   })
@@ -117,11 +118,12 @@ async function updateByIdForDocument(id, docId, orgId, body) {
 
   if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
 
-  validateFieldValueByType(body.value, field.type)
+  const value = setFieldValueByType(body.value, field.type)
+  validateFieldValueByType(value, field.type)
 
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
-  await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
+  await fieldValue.update({ value, structuredValue: body.structuredValue })
 
   return await findByIdForDocument(field.id, docId, orgId)
 }
@@ -216,6 +218,23 @@ export function getFieldValueInclude(db) {
   })
 }
 
+/**
+ * Converts field values to the appropriate type for
+ * storage and/or further validation
+ * @param {Mixed} fieldValue value of the field
+ * @param {String} type the field type constant
+ */
+function setFieldValueByType(fieldValue, type) {
+  if (fieldValue == null) return fieldValue
+
+  switch(type) {
+    case FIELD_TYPES.NUMBER:
+      return BigNumber(fieldValue).toNumber()
+    default:
+      return fieldValue
+  }
+}
+
 function validateFieldValueByType(fieldValue, type) {
   let isValidType = false
 
@@ -229,7 +248,7 @@ function validateFieldValueByType(fieldValue, type) {
       break
     case FIELD_TYPES.NUMBER:
       isValidType = typeof fieldValue === 'number'
-      isValidType && validateNumberPrecision(fieldValue)
+      isValidType && validateNumberValue(fieldValue)
       break
   }
 
@@ -238,10 +257,15 @@ function validateFieldValueByType(fieldValue, type) {
     throw ono({ code: 400, message, errorType: apiErrorTypes.FieldValueIncorrectTypeError }, message)
   }
 }
-
-function validateNumberPrecision(value) {
+// Goherenext
+function validateNumberValue(value) {
+  value = BigNumber(value)
+  if (Number.isNaN(value.toNumber())) {
+    const message = `number value cannot be parsed as a number`
+    throw ono({ code: 400, message, errorType: apiErrorTypes.ValidationError }, message)    
+  }
   // validate that the number value's precision is 15 or less, allowing storage as DOUBLE
-  if (BigNumber(value).precision(true) > MAX_NUMBER_PRECISION) {
+  if (value.precision(true) > MAX_NUMBER_PRECISION) {
     const message = `number value exceeds maximum of ${MAX_NUMBER_PRECISION} significant digits`
     throw ono({ code: 400, message, errorType: apiErrorTypes.ValidationError }, message)
   }
