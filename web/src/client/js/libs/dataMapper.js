@@ -22,6 +22,14 @@ import { fetchProject, fetchProjects, fetchProjectAssignees, fetchProjectTokens 
 import { fetchOrganization } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
 
+function returnNull() {
+  return {
+    fetchAction: () => null,
+    getLoadingStatusFromState: () => null,
+    getDataFromState: () => null
+  }
+}
+
 export default {
   documents: {
     list: function(projectId) {
@@ -127,6 +135,19 @@ export default {
         },
         getDataFromState: (state) => {
           return state.users.usersById[id]
+        }
+      }
+    },
+    projectAssignmentsForUser: function(userId) {
+      console.log(userId)
+      if (!userId) return returnNull()
+      return {
+        fetchAction: fetchUserProjectAssignments(userId),
+        getLoadingStatusFromState: (state) => {
+          return state.userAssignments.loading.byUserId[userId]
+        },
+        getDataFromState: (state) => {
+          return state.userAssignments.assignmentsByUserId[userId]
         }
       }
     },

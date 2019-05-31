@@ -4,12 +4,13 @@ import moment from 'moment'
 import { Link } from 'react-router-dom'
 
 import { RemoveIcon } from 'Components/Icons'
-import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
+import { PATH_ADMIN } from 'Shared/constants'
 import OrgRolesDropdown from 'Components/RolesDropdowns/OrgRolesDropdown'
+import SimpleProjectListContainer from 'Components/SimpleProjectList/SimpleProjectListContainer'
 
 import './_AdminUserView.scss'
 
-const AdminUserViewComponent = ({ roleChangeHandler, user }) => {
+const AdminUserViewComponent = ({ projects, roleChangeHandler, user }) => {
   return (
     <div className="admin-user">
       <header className="header header--with-button">
@@ -21,32 +22,18 @@ const AdminUserViewComponent = ({ roleChangeHandler, user }) => {
       </header>
       <section>
         <h2>General Information</h2>
-        <div className="form">
-          <div className="form-field">
-            <div className="field">
-              <span className="field__label">Email</span>
-              <div className="field__control">
-                <a href={`mailto:${user.email}`}>{user.email}</a>
-              </div>
-            </div>
-          </div>
-          <div className="form-field">
-            <div className="field">
-              <span className="field__label">Date added</span>
-              <div className="field__control">
-                {moment(user.createdAt).format()}
-              </div>
-            </div>
-          </div>
-          <div className="form-field">
-            <div className="field">
-              <span className="field__label">User Role</span>
-              <div className="field__control">
-                <OrgRolesDropdown defaultValue={user.orgRoleId} onChange={roleChangeHandler} />
-              </div>
-            </div>
-          </div>
-        </div>
+        <dl className="admin-user__definition-list">
+          <dt>Email</dt>
+          <dd><a href={`mailto:${user.email}`}>{user.email}</a></dd>
+          <dt>Date added</dt>
+          <dd>{moment(user.createdAt).format()}</dd>
+          <dt>User role</dt>
+          <dd><OrgRolesDropdown defaultValue={user.orgRoleId} onChange={roleChangeHandler} /></dd>
+        </dl>
+      </section>
+      <section>
+        <h2>{user.name}&apos;s Projects</h2>
+        <SimpleProjectListContainer />
       </section>
 
     </div>
@@ -54,6 +41,7 @@ const AdminUserViewComponent = ({ roleChangeHandler, user }) => {
 }
 
 AdminUserViewComponent.propTypes = {
+  projects: PropTypes.object,
   roleChangeHandler: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 }

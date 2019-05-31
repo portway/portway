@@ -11,6 +11,7 @@ const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, on
     label: permissionMenuLabel,
     className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
     icon: <CaretIcon />,
+    iconPlacement: 'after',
     name: name
   }
   const adjustRoleHandler = (roleId) => {
@@ -18,7 +19,7 @@ const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, on
     onChange(roleId)
   }
   return (
-    <DropdownComponent align={align} autoCollapse={true} button={roleSelectorButton} className="project-roles" disabled={disabled}>
+    <DropdownComponent align={align} autoCollapse={true} button={roleSelectorButton} className="org-roles" disabled={disabled}>
       <DropdownItem label={ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.USER]} onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) } />
       <DropdownItem label={ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.ADMIN]} onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.ADMIN) } />
     </DropdownComponent>

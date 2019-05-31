@@ -11,6 +11,7 @@ const ProjectRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name
     label: permissionMenuLabel,
     className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
     icon: <CaretIcon />,
+    iconPlacement: 'after',
     name: name
   }
   const adjustRoleHandler = (roleId) => {
