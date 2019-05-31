@@ -18,4 +18,8 @@ ProjectUsersCollapsedItem.propTypes = {
   user: PropTypes.object.isRequired
 }
 
+ProjectUsersCollapsedItem.defaultProps = {
+  color: '#a0a2a1'
+}
+
 export default ProjectUsersCollapsedItem

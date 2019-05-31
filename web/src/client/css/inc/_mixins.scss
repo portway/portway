@@ -1,6 +1,6 @@
 @import 'vars';
 
-@mixin focus($bgColor, $borderColor: transparent) {
+:root {
   --focus-border-color: #{$action};
   --focus-shadow-one: #{$white-bis};
   --focus-shadow-two: #{$action-light};
@@ -9,6 +9,9 @@
     --focus-shadow-one: #{$black-bis};
     --focus-shadow-two: #{$action};
   }
+}
+
+@mixin focus($bgColor, $borderColor: transparent) {
   border-color: transparent;
   border: thin inset transparent;
   box-shadow: unset;

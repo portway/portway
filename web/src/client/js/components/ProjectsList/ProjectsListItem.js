@@ -14,15 +14,20 @@ const ProjectsListItem = ({
 }) => {
   return (
     <li className="project-list__item">
-      <div className="project-list__info">
-        <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
+      <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
+        <div className="project-list__title">
           <ProjectIcon className="project-list__icon" width="32" height="32" />
-          <h3 className="project-list__title">{project.name}</h3>
-        </Link>
+          <div className="project-list__title-container">
+            <h3>{project.name}</h3>
+            {project.description &&
+            <span className="note">{project.description}</span>
+            }
+          </div>
+        </div>
         <div className="project-list__team">
           <ProjectUsersContainer collapsed={true} projectId={projectId} />
         </div>
-      </div>
+      </Link>
       <div className="project-list__actions">
         <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
           <Link to={`/project/${projectId}/settings`} className="btn btn--blank btn--with-circular-icon">

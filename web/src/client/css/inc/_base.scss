@@ -14,11 +14,13 @@
   --base-background: #{$white};
   --base-color: #{$black-bis};
   --base-border-color: #{$gray-light};
+  --base-link-color: #{$action};
   --link-color-gray: #{$gray-dark};
   @media (prefers-color-scheme: dark) {
     --base-background: #{$black-bis};
     --base-color: #{$white};
     --base-border-color: #{$black-er};
+    --base-link-color: #{$action};
     --link-color-gray: #{$gray};
   }
 }

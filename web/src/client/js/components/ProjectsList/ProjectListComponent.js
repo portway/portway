@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import useClickOutside from 'Hooks/useClickOutside'
 import ProjectsListItem from './ProjectsListItem'
-import './ProjectList.scss'
+import './_ProjectList.scss'
 
 function ProjectsListComponent({ deleteHandler, projects }) {
   const [activeProjectId, setActiveProjectId] = useState(null)
