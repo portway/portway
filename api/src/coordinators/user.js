@@ -37,10 +37,13 @@ async function setInitialPassword(id, password) {
     throw ono({ code: 409 }, 'Cannot set initial password, user already has one')
   }
   const hashedPassword = await passwords.generateHash(password)
-  await BusinessUser.updateById(user.id, {
-    password: hashedPassword,
-    resetKey: null
-  })
+  await BusinessUser.updateById(
+    user.id,
+    {
+      password: hashedPassword,
+      resetKey: null
+    },
+    user.orgId)
 
   const token = tokenIntegrator.generateToken(user.id, user.orgRoleId, user.orgId)
 
@@ -102,6 +105,18 @@ async function createPendingUser(email, name, orgId) {
 async function deleteById(userId, orgId) {
   await BusinessUser.deleteById(userId, orgId)
   await BusinessProjectUser.removeAllProjectAssignmentsForUser(userId, orgId)
+}
+
+async function resendInvite(userId, orgId) {
+  const resetKey = passwordResetKey.generate()
+  // const updatedUser = await BusinessUser.updateById({
+  //   email,
+  //   name,
+  //   orgRoleId: ORGANIZATION_ROLE_IDS.USER,
+  //   orgId,
+  //   resetKey
+  // })
+
 }
 
 export default {
