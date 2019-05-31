@@ -257,7 +257,7 @@ function validateFieldValueByType(fieldValue, type) {
     throw ono({ code: 400, message, errorType: apiErrorTypes.FieldValueIncorrectTypeError }, message)
   }
 }
-// Goherenext
+
 function validateNumberValue(value) {
   value = BigNumber(value)
   if (Number.isNaN(value.toNumber())) {

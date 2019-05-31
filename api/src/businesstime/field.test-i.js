@@ -219,21 +219,42 @@ describe('BusinessField', () => {
       })
 
       describe('and the value is a string', () => {
-        let updatedField
-        const updateNumber = "273.45"
-        const expectedReturnValue = 273.45
 
-        beforeAll(async () => {
-          updatedField = await BusinessField.updateByIdForDocument(numberField.id, updateFactoryDocument.id, updateFactoryDocument.orgId, { value: updateNumber })
+        describe('that is valid', () => {
+          let updatedField
+          const updateNumber = "273.45"
+          const expectedReturnValue = 273.45
+  
+          beforeAll(async () => {
+            updatedField = await BusinessField.updateByIdForDocument(numberField.id, updateFactoryDocument.id, updateFactoryDocument.orgId, { value: updateNumber })
+          })
+  
+          it('should return a number value', () => {
+            expect(typeof updatedField.value).toBe('number')
+          })
+  
+          it('should update the number', () => {
+            expect(updatedField.value).toBe(expectedReturnValue)
+          })   
         })
-
-        it('should return a number value', () => {
-          expect(typeof updatedField.value).toBe('number')
+        
+        describe('that is invalid', () => {
+          it('should throw an error', async () => {
+            await expect(
+              BusinessField.updateByIdForDocument(
+                numberField.id, 
+                updateFactoryDocument.id, 
+                updateFactoryDocument.orgId, 
+                {
+                  value: 'not a number'
+                }
+              )              
+            ).rejects.toEqual(expect.objectContaining({ 
+              code: 400, 
+              errorType: apiErrorTypes.ValidationError 
+            }))
+          })
         })
-
-        it('should update the number', () => {
-          expect(updatedField.value).toBe(expectedReturnValue)
-        })        
       })
     })
 
