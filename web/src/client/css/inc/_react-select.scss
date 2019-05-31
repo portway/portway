@@ -52,6 +52,7 @@ form {
       border-radius: $borderRadius;
       cursor: text;
       color: var(--react-select-control-color);
+      max-height: 36px;
       min-height: 36px;
       &--menu-is-open {
         border-radius: $borderRadius;
