@@ -151,7 +151,7 @@ const resendInvite = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    await userCoordinator.resendInvite(userId, orgId)
+    await userCoordinator.resendInvite(id, orgId)
     res.status(204).send()
   } catch (e) {
     next(e)

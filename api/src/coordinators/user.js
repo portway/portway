@@ -3,18 +3,15 @@ import ono from 'ono'
 import passwords from '../libs/passwords'
 import BusinessUser from '../businesstime/user'
 import BusinessProjectUser from '../businesstime/projectuser'
-import BusinessOrganization from '../businesstime/organization'
 import passwordResetKey from '../libs/passwordResetKey'
 import tokenIntegrator from '../integrators/token'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import { sendSingleRecipientEmail } from '../integrators/email'
+import emailCoordinator from '../coordinators/email'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
-
-const { CLIENT_URL } = process.env
 
 // TODO: do we want this by id instead?
 async function updatePassword(email, password) {
@@ -81,23 +78,9 @@ async function createPendingUser(email, name, orgId) {
     resetKey
   })
 
-  const organization = await BusinessOrganization.findSanitizedById(orgId)
-
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
 
-  const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
-
-  const invitedText = `You've been invited to join ${organization.name} on Project Danger!`
-  const linkText = `Use the following link to complete your registration:`
-  const htmlBody = `
-    <H2>${invitedText}</h2>
-    <H3>${linkText}</h3>
-    <div>${linkUrl}</div>
-  `
-  const textBody = `${invitedText}\n${linkText}\n${linkUrl}`
-  const subject = `Project Danger Invitation`
-
-  await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody, subject })
+  await emailCoordinator.sendInvitationEmail(createdUser.email, token, orgId)
 
   return pick(createdUser, PUBLIC_FIELDS)
 }
@@ -109,14 +92,15 @@ async function deleteById(userId, orgId) {
 
 async function resendInvite(userId, orgId) {
   const resetKey = passwordResetKey.generate()
-  // const updatedUser = await BusinessUser.updateById({
-  //   email,
-  //   name,
-  //   orgRoleId: ORGANIZATION_ROLE_IDS.USER,
-  //   orgId,
-  //   resetKey
-  // })
+  const user = await BusinessUser.findSanitizedById(userId, orgId)
 
+  if (!user.pending) {
+    throw ono({ code: 404 }, 'Cannot resend a an invite to a non-pending user')
+  }
+
+  const updatedUser = await BusinessUser.updateById(userId, { resetKey }, orgId)
+  const token = tokenIntegrator.generatePasswordResetToken(updatedUser.id, resetKey)
+  await emailCoordinator.sendInvitationEmail(updatedUser.email, token, orgId)
 }
 
 export default {
@@ -125,5 +109,6 @@ export default {
   validateEmailPasswordCombo,
   validatePasswordResetKey,
   createPendingUser,
-  deleteById
+  deleteById,
+  resendInvite
 }
