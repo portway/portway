@@ -15,6 +15,16 @@ export const fetchProjects = async (dispatch) => {
     dispatch(Projects.receive(data))
 }
 
+export const fetchProjectsForUser = (userId) => {
+  return async (dispatch) => {
+    dispatch(Projects.request())
+    const { data, status } = await fetch(`users/${userId}/projects`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
+      dispatch(Projects.receive(data))
+  }
+}
+
 export const fetchProject = (projectId) => {
   return async (dispatch) => {
     dispatch(Projects.requestOne(projectId))

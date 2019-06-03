@@ -4,13 +4,28 @@ import moment from 'moment'
 import { Link } from 'react-router-dom'
 
 import { RemoveIcon } from 'Components/Icons'
-import { PATH_ADMIN } from 'Shared/constants'
+import { PATH_ADMIN, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import OrgRolesDropdown from 'Components/RolesDropdowns/OrgRolesDropdown'
-import SimpleProjectListContainer from 'Components/SimpleProjectList/SimpleProjectListContainer'
+import Table from 'Components/Table/Table'
 
 import './_AdminUserView.scss'
 
-const AdminUserViewComponent = ({ projects, roleChangeHandler, user }) => {
+const AdminUserViewComponent = ({ userProjects, roleChangeHandler, user }) => {
+  const projectTableHeadings = {
+    project: { label: 'Project Name', sortable: true },
+    tools: { label: '' }
+  }
+
+  const projectTableRows = {}
+  if (userProjects) {
+    Object.values(userProjects).forEach((project) => {
+      projectTableRows[project.id] = [
+        project.name,
+        'hello'
+      ]
+    })
+  }
+
   return (
     <div className="admin-user">
       <header className="header header--with-button">
@@ -27,13 +42,17 @@ const AdminUserViewComponent = ({ projects, roleChangeHandler, user }) => {
           <dd><a href={`mailto:${user.email}`}>{user.email}</a></dd>
           <dt>Date added</dt>
           <dd>{moment(user.createdAt).format()}</dd>
+          {user.orgRoleId !== ORGANIZATION_ROLE_IDS.OWNER &&
+          <>
           <dt>User role</dt>
           <dd><OrgRolesDropdown defaultValue={user.orgRoleId} onChange={roleChangeHandler} /></dd>
+          </>
+          }
         </dl>
       </section>
       <section>
         <h2>{user.name}&apos;s Projects</h2>
-        <SimpleProjectListContainer />
+        <Table headings={projectTableHeadings} rows={projectTableRows} />
       </section>
 
     </div>
@@ -41,7 +60,7 @@ const AdminUserViewComponent = ({ projects, roleChangeHandler, user }) => {
 }
 
 AdminUserViewComponent.propTypes = {
-  projects: PropTypes.object,
+  userProjects: PropTypes.object,
   roleChangeHandler: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 }

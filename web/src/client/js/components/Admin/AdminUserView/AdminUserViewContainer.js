@@ -20,10 +20,8 @@ const AdminUserViewContainer = ({ match, updateUserRole }) => {
   }
   const { data: users } = useDataService(dataMapper.users.list())
   const userFromRoute = users[match.params.subSection] ? users[match.params.subSection] : paramUser
-  const { data: userProjects } = useDataService(dataMapper.users.projectAssignmentsForUser(userFromRoute.id))
+  const { data: userProjects } = useDataService(dataMapper.users.listForUser(userFromRoute.id))
   if (!users || !userFromRoute) return null
-
-  console.log(userProjects)
 
   function roleChangeHandler(value) {
     updateUserRole(userFromRoute.id, value)
@@ -34,7 +32,7 @@ const AdminUserViewContainer = ({ match, updateUserRole }) => {
       <Helmet>
         <title>Admin: {userFromRoute.name} – {PRODUCT_NAME}</title>
       </Helmet>
-      <AdminUserViewComponent projects={userProjects} roleChangeHandler={roleChangeHandler} user={userFromRoute} />
+      <AdminUserViewComponent userProjects={userProjects} roleChangeHandler={roleChangeHandler} user={userFromRoute} />
     </>
   )
 }

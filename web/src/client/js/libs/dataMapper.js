@@ -18,7 +18,7 @@
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments } from 'Actions/user'
-import { fetchProject, fetchProjects, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
+import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
 import { fetchOrganization } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
 
@@ -73,6 +73,17 @@ export default {
     list: function() {
       return {
         fetchAction: fetchProjects,
+        getLoadingStatusFromState: (state) => {
+          return state.projects.loading.list
+        },
+        getDataFromState: (state) => {
+          return state.projects.projectsById
+        }
+      }
+    },
+    listForUser: function(userId) {
+      return {
+        fetchAction: fetchProjectsForUser(userId),
         getLoadingStatusFromState: (state) => {
           return state.projects.loading.list
         },
@@ -139,7 +150,6 @@ export default {
       }
     },
     projectAssignmentsForUser: function(userId) {
-      console.log(userId)
       if (!userId) return returnNull()
       return {
         fetchAction: fetchUserProjectAssignments(userId),
