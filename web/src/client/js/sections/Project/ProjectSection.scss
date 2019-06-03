@@ -75,6 +75,9 @@
       height: 30px;
       margin: 0;
       padding: .25rem 1rem;
+      &.active {
+        background-color: var(--base-border-color);
+      }
       &:hover {
         background-color: var(--base-border-color) !important;
       }

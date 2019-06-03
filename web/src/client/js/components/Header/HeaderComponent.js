@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NavLink, Link, withRouter } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 
 import {
   ORGANIZATION_ROLE_IDS,
@@ -10,16 +10,18 @@ import {
   PATH_PROJECTS,
   PATH_PROJECT,
   PATH_PROJECT_CREATE,
-  PATH_SETTINGS
+  PATH_SETTINGS,
+  PROJECT_ROLE_IDS
 } from 'Shared/constants'
 
-import { AddIcon } from 'Components/Icons'
+import { AddIcon, SettingsIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
-import './Header.scss'
+import './_Header.scss'
 
 const renderBrandLogo = (logo) => {
   return {
@@ -45,8 +47,7 @@ const renderProjectsItems = () => {
   )
 }
 
-const Header = ({ brand, location }) => {
-  const section = location.pathname.split('/')[1]
+const Header = ({ brand, projectId, section }) => {
   return (
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -66,6 +67,17 @@ const Header = ({ brand, location }) => {
             <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
           </OrgPermission>
         </div>
+
+        {projectId &&
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectId={projectId}>
+          <NavLink to={`${PATH_PROJECT}/${projectId}/settings`}
+            className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
+            title="Adjust this project's settings">
+            <SettingsIcon />
+            <span className="label">Project Settings</span>
+          </NavLink>
+        </ProjectPermission>
+        }
         <GlobalSearchContainer />
         <div className="navbar__user">
           <UserMenuContainer />
@@ -77,7 +89,8 @@ const Header = ({ brand, location }) => {
 
 Header.propTypes = {
   brand: PropTypes.object,
-  location: PropTypes.object.isRequired
+  projectId: PropTypes.string,
+  section: PropTypes.string.isRequired,
 }
 
-export default withRouter(Header)
+export default Header
