@@ -82,6 +82,7 @@ export default {
       }
     },
     listForUser: function(userId) {
+      if (!userId) return returnNull()
       return {
         fetchAction: fetchProjectsForUser(userId),
         getLoadingStatusFromState: (state) => {
@@ -150,7 +151,6 @@ export default {
       }
     },
     projectAssignmentsForUser: function(userId) {
-      if (!userId) return returnNull()
       return {
         fetchAction: fetchUserProjectAssignments(userId),
         getLoadingStatusFromState: (state) => {

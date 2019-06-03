@@ -20,7 +20,7 @@ const AdminUserViewContainer = ({ match, updateUserRole }) => {
   }
   const { data: users } = useDataService(dataMapper.users.list())
   const userFromRoute = users[match.params.subSection] ? users[match.params.subSection] : paramUser
-  const { data: userProjects } = useDataService(dataMapper.users.listForUser(userFromRoute.id))
+  const { data: userProjects } = useDataService(dataMapper.projects.listForUser(userFromRoute.id))
   if (!users || !userFromRoute) return null
 
   function roleChangeHandler(value) {

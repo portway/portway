@@ -16,6 +16,8 @@ const AdminUserViewComponent = ({ userProjects, roleChangeHandler, user }) => {
     tools: { label: '' }
   }
 
+  console.log(userProjects)
+
   const projectTableRows = {}
   if (userProjects) {
     Object.values(userProjects).forEach((project) => {
