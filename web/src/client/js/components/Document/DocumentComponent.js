@@ -60,7 +60,6 @@ const DocumentComponent = ({
               }
             }}
             ref={titleRef} />
-          <span className="document__publish-date note">Last published: May 3 2019</span>
         </div>
         <button
           className="btn btn--small btn--with-icon"

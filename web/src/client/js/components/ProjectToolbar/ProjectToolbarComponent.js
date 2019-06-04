@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, NavLink } from 'react-router-dom'
+import moment from 'moment'
 
 import {
   ORGANIZATION_ROLE_IDS,
@@ -16,7 +17,7 @@ import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer
 
 import './_ProjectToolbar.scss'
 
-const ProjectToolbarComponent = ({ projectId }) => {
+const ProjectToolbarComponent = ({ document, projectId }) => {
   return (
     <footer className="project-toolbar">
       <OrgPermission
@@ -42,11 +43,20 @@ const ProjectToolbarComponent = ({ projectId }) => {
         <span className="project-toolbar__team-label">Your Team:</span>
         <ProjectUsersContainer projectId={projectId} collapsed />
       </div>
+      {document &&
+      <div className="project-toolbar__document-info">
+        Last update: {moment(document.updatedAt).format('ddd, hA')} –&nbsp;
+        {document.publishedVersionId &&
+        <b>Published</b>
+        }
+      </div>
+      }
     </footer>
   )
 }
 
 ProjectToolbarComponent.propTypes = {
+  document: PropTypes.object,
   projectId: PropTypes.string.isRequired
 }
 

@@ -17,7 +17,15 @@
       color: $gray-dark;
       padding-right: .5rem;
     }
+  } // team
 
+  &__document-info {
+    align-items: center;
+    color: $gray-dark;
+    display: flex;
+    flex: 1;
+    font-size: 1.2rem;
+    justify-content: flex-end;
   }
 
 }
