@@ -2,8 +2,10 @@
 
 :root {
   --project-background: #{$white-bis};
+  --project-toolbar-background: #{$white-ter};
   @media (prefers-color-scheme: dark) {
     --project-background: #{$black-bis};
+    --project-toolbar-background: #{$black-ter};
   }
 }
 
@@ -22,7 +24,7 @@
    * Edit anything else in Components/ProjectToolbar/_ProjectToolbar.scss
    */
   &-toolbar {
-    background-color: $white-ter;
+    background-color: var(--project-toolbar-background);
     border-top: thin solid var(--base-border-color);
     bottom: 0;
     left: 0;
