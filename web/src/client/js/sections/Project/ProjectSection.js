@@ -7,7 +7,7 @@ import Project from './Project'
 import ProjectCreate from './ProjectCreate'
 import ProjectSettings from './ProjectSettings'
 
-import './ProjectSection.scss'
+import './_ProjectSection.scss'
 
 const ProjectSection = () => {
   const projectBasePath = `${PATH_PROJECT}/:projectId`

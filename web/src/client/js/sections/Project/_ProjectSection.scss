@@ -17,6 +17,21 @@
     padding-right: $sideGutterWidth / 6;
   }
 
+  /**
+   * This is themeing the toolbar just for this section!
+   * Edit anything else in Components/ProjectToolbar/_ProjectToolbar.scss
+   */
+  &-toolbar {
+    background-color: $white-ter;
+    border-top: thin solid var(--base-border-color);
+    bottom: 0;
+    left: 0;
+    font-size: 1.2rem;
+    position: fixed;
+    width: 100vw;
+    z-index: 100;
+  }
+
   &__documents {
     display: flex;
     &-list-container {

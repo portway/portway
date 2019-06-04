@@ -4,21 +4,15 @@ import { NavLink, Link } from 'react-router-dom'
 
 import {
   ORGANIZATION_ROLE_IDS,
-  ORGANIZATION_SETTINGS,
   PATH_ADMIN,
   PATH_BILLING,
   PATH_PROJECTS,
-  PATH_PROJECT,
-  PATH_PROJECT_CREATE,
-  PATH_SETTINGS,
-  PROJECT_ROLE_IDS
+  PATH_SETTINGS
 } from 'Shared/constants'
 
-import { AddIcon, SettingsIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
-import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './_Header.scss'
@@ -29,25 +23,7 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const renderProjectsItems = () => {
-  return (
-    <OrgPermission
-      acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-      acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
-      <div className="navbar__content-items">
-        <Link
-          className="btn btn--blank btn--with-circular-icon"
-          title="Create a new project"
-          to={PATH_PROJECT_CREATE}>
-          <AddIcon />
-          <span className="label">New Project</span>
-        </Link>
-      </div>
-    </OrgPermission>
-  )
-}
-
-const Header = ({ brand, projectId, section }) => {
+const HeaderComponent = ({ brand, section }) => {
   return (
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -60,24 +36,12 @@ const Header = ({ brand, projectId, section }) => {
           {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
           {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
           {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <Navigator />}
-          {`/${section}` === PATH_PROJECT && renderProjectsItems()}
         </div>
         <div className="navbar__misc">
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
             <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
           </OrgPermission>
         </div>
-
-        {projectId &&
-        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectId={projectId}>
-          <NavLink to={`${PATH_PROJECT}/${projectId}/settings`}
-            className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
-            title="Adjust this project's settings">
-            <SettingsIcon />
-            <span className="label">Project Settings</span>
-          </NavLink>
-        </ProjectPermission>
-        }
         <GlobalSearchContainer />
         <div className="navbar__user">
           <UserMenuContainer />
@@ -87,10 +51,9 @@ const Header = ({ brand, projectId, section }) => {
   )
 }
 
-Header.propTypes = {
+HeaderComponent.propTypes = {
   brand: PropTypes.object,
-  projectId: PropTypes.string,
   section: PropTypes.string.isRequired,
 }
 
-export default Header
+export default HeaderComponent
