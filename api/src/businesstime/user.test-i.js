@@ -41,7 +41,8 @@ describe('BusinessUser', () => {
         const factoryUsers = await UserFactory.createMany(1)
         user = await BusinessUser.updateById(
           factoryUsers[0].id,
-          updateBody
+          updateBody,
+          constants.ORG_ID
         )
       })
 
