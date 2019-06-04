@@ -86,10 +86,10 @@ export default {
       return {
         fetchAction: fetchProjectsForUser(userId),
         getLoadingStatusFromState: (state) => {
-          return state.projects.loading.list
+          return state.userProjects.loading.byUserId[userId]
         },
         getDataFromState: (state) => {
-          return state.projects.projectsById
+          return state.userProjects.projectsByUserId[userId]
         }
       }
     },

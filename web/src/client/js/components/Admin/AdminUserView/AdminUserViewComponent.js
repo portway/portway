@@ -15,8 +15,6 @@ const AdminUserViewComponent = ({ userProjects, roleChangeHandler, user }) => {
     project: { label: 'Project Name', sortable: true },
     tools: { label: '' }
   }
-  console.log('PROJECTS')
-  console.log(userProjects)
 
   const projectTableRows = {}
   if (userProjects) {
