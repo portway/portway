@@ -31,12 +31,7 @@ export const userAssignments = (state = initialState, action) => {
         }
       }
     }
-    case ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE: {
-      const assignmentsByUserId = { ...state.loading.assignmentsByUserId, [action.userId]: true }
-      return { ...state, loading: { ...state.loading, assignmentsByUserId } }
-    }
     case ActionTypes.REMOVE_PROJECT_ASSIGNEE: {
-      const loadingById = { ...state.loading.assignmentsByUserId, [action.userId]: false }
       // in case it's undefined, default to an empty object
       const userAssignments = state.assignmentsByUserId[action.userId] || {}
       // eslint-disable-next-line no-unused-vars, no-undef
@@ -44,11 +39,7 @@ export const userAssignments = (state = initialState, action) => {
       const assignmentsByUserId = { ...state.assignmentsByUserId, [action.userId]: restUserAssignments }
       return {
         ...state,
-        assignmentsByUserId,
-        loading: {
-          ...state.loading,
-          byUserId: loadingById
-        }
+        assignmentsByUserId
       }
     }
     default:
