@@ -71,8 +71,10 @@ export const projectAssignments = (state = initialState, action) => {
     }
     case ActionTypes.REMOVE_PROJECT_ASSIGNEE: {
       const loadingById = { ...state.loading.assignmentsByProjectId, [action.projectId]: false }
+      // in case it's undefined, default to an empty object
+      const projectAssignees = state.assignmentsByProjectId[action.projectId] || {}
       // eslint-disable-next-line no-unused-vars, no-undef
-      const { [action.userId]: ___, ...restProjectAssignees } = state.assignmentsByProjectId[action.projectId]
+      const { [action.userId]: ___, ...restProjectAssignees } = projectAssignees
       const assignmentsByProjectId = { ...state.assignmentsByProjectId, [action.projectId]: restProjectAssignees }
       return {
         ...state,
