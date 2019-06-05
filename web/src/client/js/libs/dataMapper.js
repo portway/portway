@@ -151,6 +151,7 @@ export default {
       }
     },
     projectAssignmentsForUser: function(userId) {
+      if (!userId) return returnNull()
       return {
         fetchAction: fetchUserProjectAssignments(userId),
         getLoadingStatusFromState: (state) => {

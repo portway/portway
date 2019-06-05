@@ -35,7 +35,7 @@ export const projectAssignments = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE: {
       const loadingById = { ...state.loading.assignmentsByProjectId, [action.data.projectId]: false }
-      const updatedAssignment = { ...state.assignmentsByProjectId[action.data.projectId][action.data.userId] = action.data }
+      const updatedAssignment = { ...state.assignmentsByProjectId[action.data.projectId], [action.data.userId]: action.data }
       return {
         ...state,
         assignmentsByProjectId: {
