@@ -1,9 +1,11 @@
-import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+
+import { getDb } from '../db/dbConnector'
 import { UniqueConstraintError } from 'sequelize'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 
 export const MODEL_NAME = 'User'
 
@@ -78,7 +80,12 @@ async function updateById(id, body) {
 async function updateOrgRole(id, orgRoleId, orgId) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
-  if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
+  if (!user) throw ono({ code: 404 }, `Cannot update org role, user not found with id: ${id}`)
+
+  if (user.orgRoleId === ORGANIZATION_ROLE_IDS.OWNER) {
+    throw ono({ code: 404 }, 'Cannot change the role of an organization owner')
+  }
+
   const updatedUser = await user.update({ orgRoleId })
   return updatedUser && publicFields(updatedUser)
 }

@@ -178,8 +178,8 @@ describe('BusinessUser', () => {
       let user
 
       beforeAll(async () => {
-        const factoryUsers = await UserFactory.createMany(1)
-        user = await BusinessUser.updateOrgRole(factoryUsers[0].id, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)
+        const factoryUser = (await UserFactory.createMany(1))[0]
+        user = await BusinessUser.updateOrgRole(factoryUser.id, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)
       })
 
       it('should update the user', () => {
@@ -190,7 +190,14 @@ describe('BusinessUser', () => {
 
     describe('when the target user is not found', () => {
       it('should throw an error', async () => {
-        await expect(BusinessUser.updateOrgRole(0, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)).rejects.toThrow()
+        await expect(BusinessUser.updateOrgRole(0, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)).rejects.toEqual(expect.objectContaining({ code: 404 }))
+      })
+    })
+
+    describe('when the target user is an org owner', () => {
+      it('should throw an error', async () => {
+        const factoryOrgOwner = (await UserFactory.createMany(1, { orgRoleId: ORGANIZATION_ROLE_IDS.OWNER }))[0]
+        await expect(BusinessUser.updateOrgRole(factoryOrgOwner.id, ORGANIZATION_ROLE_IDS.ADMIN, constants.ORG_ID)).rejects.toEqual(expect.objectContaining({ code: 404 }))
       })
     })
   })
