@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -12,8 +13,15 @@ import { createUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
 
-const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCreateUserMode, uiConfirm }) => {
+const AdminUsersContainer = ({ history, isCreating, createUser, errors, removeUser, uiCreateUserMode, uiConfirm }) => {
   const { data: users } = useDataService(dataMapper.users.list())
+  const [sortBy, setSortBy] = useState('createdAt')
+  const [sortMethod, setSortMethod] = useState('ASC')
+
+  // Update the params on state change
+  useEffect(() => {
+    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}` })
+  }, [history, sortBy, sortMethod])
 
   function addUserHandler(values) {
     createUser(values)
@@ -26,6 +34,15 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
     const confirmedAction = () => { removeUser(userdId) }
     const confirmedLabel = 'Yes, delete this user'
     uiConfirm({ message, confirmedAction, confirmedLabel })
+  }
+
+  function sortUsersHandler(id) {
+    if (sortBy === id) {
+      sortMethod === 'ASC' ? setSortMethod('DESC') : setSortMethod('ASC')
+      return
+    }
+    setSortBy(id)
+    setSortMethod('ASC')
   }
 
   function setCreateMode(value) {
@@ -44,6 +61,9 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
         errors={errors}
         removeUserHandler={removeUserHandler}
         setCreateMode={setCreateMode}
+        sortBy={sortBy}
+        sortMethod={sortMethod}
+        sortUsersHandler={sortUsersHandler}
         users={users}
       />
     </>
@@ -51,6 +71,7 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
 }
 
 AdminUsersContainer.propTypes = {
+  history: PropTypes.object.isRequired,
   isCreating: PropTypes.bool.isRequired,
   createUser: PropTypes.func.isRequired,
   errors: PropTypes.object,
@@ -68,4 +89,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { createUser, removeUser, uiCreateUserMode, uiConfirm }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
+)

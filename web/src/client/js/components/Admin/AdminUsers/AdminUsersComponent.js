@@ -8,10 +8,21 @@ import { TrashIcon } from 'Components/Icons'
 import Table from 'Components/Table/Table'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
 
-const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating, removeUserHandler, setCreateMode, users }) => {
+const AdminUsersComponent = ({
+  addUserHandler,
+  currentUserId,
+  errors,
+  isCreating,
+  removeUserHandler,
+  setCreateMode,
+  sortBy,
+  sortMethod,
+  sortUsersHandler,
+  users
+}) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
-    role: { label: 'Role', sortable: true },
+    role: { label: 'Role' },
     createdAt: { label: 'Added', sortable: true },
     tools: { label: '' }
   }
@@ -32,7 +43,6 @@ const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating
   // Create a nice user row object
   const userRows = {}
   Object.values(users).forEach((user) => {
-    console.log(user.pending)
     userRows[user.id] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
@@ -56,7 +66,7 @@ const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating
           />
         }
         {!isCreating &&
-          <Table headings={userHeadings} rows={userRows} />
+          <Table headings={userHeadings} rows={userRows} sortedBy={sortBy} sortMethod={sortMethod} sortCallback={sortUsersHandler} />
         }
       </section>
     </div>
@@ -70,6 +80,9 @@ AdminUsersComponent.propTypes = {
   isCreating: PropTypes.bool.isRequired,
   removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortMethod: PropTypes.string.isRequired,
+  sortUsersHandler: PropTypes.func,
   users: PropTypes.object.isRequired
 }
 

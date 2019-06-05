@@ -15,8 +15,28 @@
   }
   &__heading-cell {
     align-self: center;
+    color: $gray-dark;
     font-weight: 500;
     padding: var(--cell-padding);
+  }
+  &__heading-btn {
+    &--sortable {
+      color: $black-ter;
+      text-decoration: underline;
+    }
+    &--sorted {
+      color: $black-bis;
+    }
+    &--ascending {
+      + .icon {
+        transform: rotate(180deg);
+      }
+    }
+    &--descending {
+      + .icon {
+        transform: rotate(0);
+      }
+    }
   }
   &__row {
     display: grid;
