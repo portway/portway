@@ -42,6 +42,7 @@ const AdminUserViewComponent = ({
   if (userProjects && projectAssignments) {
     Object.values(userProjects).forEach((project) => {
       const assignment = projectAssignments[project.id]
+      if (!assignment) return
       projectTableRows[project.id] = [
         project.name,
         <ProjectRolesDropdown

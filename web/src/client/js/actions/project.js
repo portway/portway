@@ -109,7 +109,7 @@ export const updateProjectAssignee = (projectId, assignmentId, body) => {
 
 export const removeProjectAssignee = (projectId, userId, assignmentId) => {
   return async (dispatch) => {
-    dispatch(ProjectAssignees.initiateRemove(projectId))
+    dispatch(ProjectAssignees.initiateRemove(projectId, userId))
     const { data, status } = await remove(`projects/${projectId}/assignments/${assignmentId}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))

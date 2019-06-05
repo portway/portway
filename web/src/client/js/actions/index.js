@@ -122,7 +122,7 @@ export const ProjectAssignees = {
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_ASSIGNEE, 'projectId', 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_UPDATE, 'projectId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE, 'data'),
-  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE, 'projectId', 'assignmentId'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE, 'projectId', 'userId'),
   removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_ASSIGNEE, 'projectId', 'userId'),
 }
 
