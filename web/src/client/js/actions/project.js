@@ -44,6 +44,10 @@ export const createProject = (body, history) => {
   return async (dispatch) => {
     dispatch(Projects.create())
     const { data, status } = await add('projects', body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      return
+    }
     if (validationCodes.includes(status)) {
       dispatch(Validation.create('project', data, status))
       return
@@ -57,6 +61,10 @@ export const updateProject = (projectId, body) => {
   return async (dispatch) => {
     dispatch(Projects.initiateUpdate())
     const { data, status } = await update(`projects/${projectId}`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('project', data, status)) :
       dispatch(Projects.receiveOneUpdated(data))
@@ -83,6 +91,10 @@ export const fetchProjectAssignees = (projectId) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.request(projectId))
     const { data } = await fetch(`projects/${projectId}/assignments`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
+      return
+    }
     dispatch(ProjectAssignees.receive(projectId, data))
   }
 }
@@ -91,6 +103,10 @@ export const createProjectAssignee = (projectId, body) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.create(projectId))
     const { data, status } = await add(`projects/${projectId}/assignments`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('project', data, status)) :
       dispatch(ProjectAssignees.receiveOneCreated(projectId, data))
@@ -101,6 +117,10 @@ export const updateProjectAssignee = (projectId, assignmentId, body) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.initiateUpdate(projectId))
     const { data, status } = await update(`projects/${projectId}/assignments/${assignmentId}`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('project', data, status)) :
       dispatch(ProjectAssignees.receiveOneUpdated(data))
@@ -112,7 +132,7 @@ export const removeProjectAssignee = (projectId, userId, assignmentId) => {
     dispatch(ProjectAssignees.initiateRemove(projectId, userId))
     const { data, status } = await remove(`projects/${projectId}/assignments/${assignmentId}`)
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return
     }
     dispatch(ProjectAssignees.removedOne(projectId, userId))
