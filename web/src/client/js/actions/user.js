@@ -77,6 +77,18 @@ export const updateUserRole = (userId, orgRoleId) => {
   }
 }
 
+export const reinviteUser = (userId) => {
+  return async (dispatch) => {
+    dispatch(Users.initiateReinvite(userId))
+    const { data, status } = await add(`users/${userId}/resendinvite`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    dispatch(Users.receiveSuccessfulReinvite(userId))
+  }
+}
+
 export const logoutUser = (id) => {
   return (dispatch) => {
     dispatch(Users.logout(id))
