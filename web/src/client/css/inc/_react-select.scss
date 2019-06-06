@@ -1,6 +1,8 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
+// react-select css vars are in the root scope because there are a few different
+// types of react-select containers
 :root {
   --react-select-background: #{$white-bis};
   --react-select-border: #{$gray-light};
@@ -34,8 +36,16 @@
   min-width: 300px;
 }
 
+// Reset some values that we're setting on inputs in _forms.scss when the input
+// is inside of a react-select.
+// We are setting the min-height of inputs to 38px in _forms.scss
 form {
   .react-select__input {
+    input[type="text"] {
+      // min-height was causing an issue in Chrome and Firefox pushing the
+      // react-select input down
+      min-height: unset;
+    }
     input[type="text"]:focus {
       border: none;
       box-shadow: none;
@@ -52,8 +62,8 @@ form {
       border-radius: $borderRadius;
       cursor: text;
       color: var(--react-select-control-color);
-      max-height: 36px;
-      min-height: 36px;
+      max-height: 38px;
+      min-height: 38px;
       &--menu-is-open {
         border-radius: $borderRadius;
       }
