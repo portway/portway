@@ -84,6 +84,7 @@ const usersController = function(router) {
     updateUser
   )
   router.delete('/:id', validateParams(paramSchema), conditionalDeletePerm, deleteUser)
+  router.post('/:id/resendinvite', validateParams(paramSchema), createPerm, resendInvite)
 }
 
 const getUsers = async function(req, res, next) {
@@ -139,6 +140,18 @@ const deleteUser = async function(req, res, next) {
 
   try {
     await userCoordinator.deleteById(id, orgId)
+    res.status(204).send()
+  } catch (e) {
+    next(e)
+  }
+}
+
+const resendInvite = async function(req, res, next) {
+  const { id } = req.params
+  const { orgId } = req.requestorInfo
+
+  try {
+    await userCoordinator.resendInvite(id, orgId)
     res.status(204).send()
   } catch (e) {
     next(e)

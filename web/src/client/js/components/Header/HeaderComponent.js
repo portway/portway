@@ -38,7 +38,7 @@ const HeaderComponent = ({ brand, section }) => {
           {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <Navigator />}
         </div>
         <div className="navbar__misc">
-          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
             <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
           </OrgPermission>
         </div>

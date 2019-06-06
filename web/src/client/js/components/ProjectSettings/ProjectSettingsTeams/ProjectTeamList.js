@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { currentUserId } from 'Libs/currentIds'
 import { RemoveIcon, UserIcon } from 'Components/Icons'
-import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
+import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 
 const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignmentHandler }) => {
   if (!projectUsers) return null

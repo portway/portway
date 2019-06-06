@@ -32,7 +32,6 @@ const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating
   // Create a nice user row object
   const userRows = {}
   Object.values(users).forEach((user) => {
-    console.log(user.pending)
     userRows[user.id] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],

@@ -32,8 +32,9 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
         aria-label={button.label}
         name={button.name}
         onClick={() => { setExpanded(!expanded)}}>
-        {button.icon && button.icon}
+        {button.iconPlacement === 'before' && button.icon}
         {button.label && <div className="label">{button.label}</div>}
+        {button.iconPlacement === 'after' && button.icon}
       </button>
       <div
         className={`menu menu--${align}`}
@@ -68,7 +69,7 @@ DropdownComponent.propTypes = {
 DropdownComponent.defaultProps = {
   align: 'left',
   button: {
-    iconPlacement: 'left',
+    iconPlacement: 'before',
   }
 }
 
