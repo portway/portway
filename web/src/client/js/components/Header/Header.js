@@ -62,7 +62,7 @@ const Header = ({ brand, location }) => {
           {`/${section}` === PATH_PROJECT && renderProjectsItems()}
         </div>
         <div className="navbar__misc">
-          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
             <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
           </OrgPermission>
         </div>

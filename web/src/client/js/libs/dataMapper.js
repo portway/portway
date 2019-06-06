@@ -18,9 +18,17 @@
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments } from 'Actions/user'
-import { fetchProject, fetchProjects, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
+import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
 import { fetchOrganization } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
+
+function returnNull() {
+  return {
+    fetchAction: () => null,
+    getLoadingStatusFromState: () => null,
+    getDataFromState: () => null
+  }
+}
 
 export default {
   documents: {
@@ -70,6 +78,18 @@ export default {
         },
         getDataFromState: (state) => {
           return state.projects.projectsById
+        }
+      }
+    },
+    listForUser: function(userId) {
+      if (!userId) return returnNull()
+      return {
+        fetchAction: fetchProjectsForUser(userId),
+        getLoadingStatusFromState: (state) => {
+          return state.userProjects.loading.byUserId[userId]
+        },
+        getDataFromState: (state) => {
+          return state.userProjects.projectsByUserId[userId]
         }
       }
     },
@@ -127,6 +147,18 @@ export default {
         },
         getDataFromState: (state) => {
           return state.users.usersById[id]
+        }
+      }
+    },
+    projectAssignmentsForUser: function(userId) {
+      if (!userId) return returnNull()
+      return {
+        fetchAction: fetchUserProjectAssignments(userId),
+        getLoadingStatusFromState: (state) => {
+          return state.userAssignments.loading.byUserId[userId]
+        },
+        getDataFromState: (state) => {
+          return state.userAssignments.assignmentsByUserId[userId]
         }
       }
     },

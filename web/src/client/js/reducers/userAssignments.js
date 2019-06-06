@@ -31,6 +31,17 @@ export const userAssignments = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.REMOVE_PROJECT_ASSIGNEE: {
+      // in case it's undefined, default to an empty object
+      const userAssignments = state.assignmentsByUserId[action.userId] || {}
+      // eslint-disable-next-line no-unused-vars, no-undef
+      const { [action.projectId]: ___, ...restUserAssignments } = userAssignments
+      const assignmentsByUserId = { ...state.assignmentsByUserId, [action.userId]: restUserAssignments }
+      return {
+        ...state,
+        assignmentsByUserId
+      }
+    }
     default:
       return { ...state }
   }
