@@ -6,7 +6,7 @@ import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACCEPTABLE_ROLE_ID_UPDATE_VALUES from '../constants/acceptableRoleIdUpdateValues'
 
-const checkUpdatePerms = perms((req) => {
+const updatePerm = perms((req) => {
   return {
     resourceType: RESOURCE_TYPES.USER,
     action: ACTIONS.UPDATE_ORG_ROLE
@@ -25,7 +25,7 @@ const userOrgRoleController = function(router) {
   // all routes are nested at users/:userId/orgrole and receive req.params.userId
   router.put(
     '/',
-    checkUpdatePerms,
+    updatePerm,
     validateParams(paramSchema),
     validateBody(bodySchema),
     updateUserOrgRole
