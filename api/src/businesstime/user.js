@@ -69,9 +69,9 @@ async function updateByEmail(email, body) {
   return updatedUser && publicFields(updatedUser)
 }
 
-async function updateById(id, body) {
+async function updateById(id, body, orgId) {
   const db = getDb()
-  const user = await db.model(MODEL_NAME).findByPk(id)
+  const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
   if (!user) throw ono({ code: 404 }, `Cannot update, user not found with id: ${id}`)
   const updatedUser = await user.update(body)
   return updatedUser && publicFields(updatedUser)
