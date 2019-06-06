@@ -17,7 +17,7 @@ import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer
 
 import './_ProjectToolbar.scss'
 
-const ProjectToolbarComponent = ({ document, projectId }) => {
+const ProjectToolbarComponent = ({ document, projectId, projectUsers }) => {
   return (
     <footer className="project-toolbar">
       <OrgPermission
@@ -39,15 +39,17 @@ const ProjectToolbarComponent = ({ document, projectId }) => {
           <span className="label">Project Settings</span>
         </NavLink>
       </ProjectPermission>
+      {projectUsers && projectUsers.length > 0 &&
       <div className="project-toolbar__team">
         <span className="project-toolbar__team-label">Your Team:</span>
         <ProjectUsersContainer projectId={projectId} collapsed />
       </div>
+      }
       {document &&
       <div className="project-toolbar__document-info">
-        Last update: {moment(document.updatedAt).format('ddd, hA')} –&nbsp;
+        Last update: {moment(document.updatedAt).format('ddd, hA')}
         {document.publishedVersionId &&
-        <b>Published</b>
+        <b>&nbsp; Published</b>
         }
       </div>
       }
@@ -57,7 +59,8 @@ const ProjectToolbarComponent = ({ document, projectId }) => {
 
 ProjectToolbarComponent.propTypes = {
   document: PropTypes.object,
-  projectId: PropTypes.string.isRequired
+  projectId: PropTypes.string.isRequired,
+  projectUsers: PropTypes.array
 }
 
 export default ProjectToolbarComponent

@@ -3,7 +3,7 @@
 
 .document {
   --document-header-bg: #{$white};
-  --document-header-border: #{$white-ter};
+  --document-header-border: #{$gray-light};
   @media (prefers-color-scheme: dark) {
     --document-header-bg: #{$black-bis};
     --document-header-border: #{$black-er};
@@ -22,7 +22,7 @@
     align-items: center;
     border-bottom: thin solid var(--document-header-border);
     display: flex;
-    height: 63px;
+    height: 65px;
     justify-content: space-between;
     margin-bottom: ($brandWidth / 2);
     padding: 0 ($brandWidth / 2) 0 0;

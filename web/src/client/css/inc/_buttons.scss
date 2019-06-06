@@ -75,8 +75,11 @@ button,
     min-height: 24px;
     padding: 0 18px;
     &.btn--with-icon {
+      padding: 0 6px;
       .icon {
         height: 12px;
+        min-height: 12px;
+        min-width: 12px;
         width: 12px;
       }
     }
