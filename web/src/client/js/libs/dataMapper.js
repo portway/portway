@@ -44,6 +44,7 @@ export default {
       }
     },
     id: function(projectId, documentId) {
+      if (!documentId) return returnNull()
       return {
         fetchAction: fetchDocument(documentId),
         getLoadingStatusFromState: (state) => {
@@ -58,6 +59,7 @@ export default {
   },
   fields: {
     list: function(documentId) {
+      if (!documentId) return returnNull()
       return {
         fetchAction: fetchDocument(documentId),
         getLoadingStatusFromState: (state) => {

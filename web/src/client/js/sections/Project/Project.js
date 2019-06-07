@@ -1,4 +1,6 @@
 import React from 'react'
+
+import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
 
@@ -13,8 +15,10 @@ const Project = () => {
           <DocumentContainer />
         </div>
       </div>
+      <ProjectToolbarContainer />
     </main>
   )
 }
+
 
 export default Project

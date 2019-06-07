@@ -1,25 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NavLink, Link, withRouter } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 
 import {
   ORGANIZATION_ROLE_IDS,
-  ORGANIZATION_SETTINGS,
   PATH_ADMIN,
   PATH_BILLING,
   PATH_PROJECTS,
-  PATH_PROJECT,
-  PATH_PROJECT_CREATE,
   PATH_SETTINGS
 } from 'Shared/constants'
 
-import { AddIcon } from 'Components/Icons'
 import Navigator from 'Components/Navigator/NavigatorContainer'
 import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
-import './Header.scss'
+import './_Header.scss'
 
 const renderBrandLogo = (logo) => {
   return {
@@ -27,26 +23,7 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const renderProjectsItems = () => {
-  return (
-    <OrgPermission
-      acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-      acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
-      <div className="navbar__content-items">
-        <Link
-          className="btn btn--blank btn--with-circular-icon"
-          title="Create a new project"
-          to={PATH_PROJECT_CREATE}>
-          <AddIcon />
-          <span className="label">New Project</span>
-        </Link>
-      </div>
-    </OrgPermission>
-  )
-}
-
-const Header = ({ brand, location }) => {
-  const section = location.pathname.split('/')[1]
+const HeaderComponent = ({ brand, section }) => {
   return (
     <header className="masthead" role="banner">
       <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -59,7 +36,6 @@ const Header = ({ brand, location }) => {
           {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
           {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
           {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <Navigator />}
-          {`/${section}` === PATH_PROJECT && renderProjectsItems()}
         </div>
         <div className="navbar__misc">
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
@@ -75,9 +51,9 @@ const Header = ({ brand, location }) => {
   )
 }
 
-Header.propTypes = {
+HeaderComponent.propTypes = {
   brand: PropTypes.object,
-  location: PropTypes.object.isRequired
+  section: PropTypes.string.isRequired,
 }
 
-export default withRouter(Header)
+export default HeaderComponent

@@ -25,6 +25,10 @@
       color: var(--base-color);
       padding: 8px 7px;
       text-decoration: none;
+      &.link--back {
+        display: flex;
+        // margin: 0;
+      }
       &.active {
         background-color: var(--menu-background);
         border-left: 2px solid $primary;

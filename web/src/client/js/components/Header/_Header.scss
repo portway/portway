@@ -61,6 +61,15 @@
       }
     }
 
+    &__project-settings-link {
+      align-items: center;
+      color: var(--base-color);
+      display: flex;
+      height: $sideGutterWidth;
+      padding: 0 1rem;
+      text-decoration: none;
+    }
+
     // The right-most area with user related functions
     &__user {
       align-items: center;

@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NavLink, Redirect } from 'react-router-dom'
+import { Link, NavLink, Redirect } from 'react-router-dom'
 
-import Constants from 'Shared/constants'
+import { PATH_PROJECT } from 'Shared/constants'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
 import ProjectSettingsTeamsContainer from './ProjectSettingsTeams/ProjectSettingsTeamsContainer'
@@ -17,7 +17,7 @@ const SETTINGS_PATHS = {
 
 const ProjectSettingsComponent = ({ projectId, setting }) => {
   if (!projectId) return null
-  const settingsSectionPath = `${Constants.PATH_PROJECT}/${projectId}/settings`
+  const settingsSectionPath = `${PATH_PROJECT}/${projectId}/settings`
 
   const PANEL_PATHS = {
     [SETTINGS_PATHS.INFO]: <ProjectSettingsInfoContainer />,
@@ -29,6 +29,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
   return (
     <Panel>
       <PanelNavigation>
+        <Link to={`${PATH_PROJECT}/${projectId}`} className="link--back">Back to Project</Link>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`}>Info</NavLink>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>API Keys</NavLink>
