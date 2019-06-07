@@ -3,10 +3,17 @@ import PropTypes from 'prop-types'
 import Select, { components } from 'react-select'
 import cx from 'classnames'
 import { Helmet } from 'react-helmet'
-
 import { withRouter, Link } from 'react-router-dom'
 
-import Constants from 'Shared/constants'
+import {
+  ORGANIZATION_ROLE_IDS,
+  ORGANIZATION_SETTINGS,
+  PATH_PROJECT,
+  PATH_PROJECT_CREATE,
+  PRODUCT_NAME,
+  PROJECT_ROLE_IDS
+} from 'Shared/constants'
+
 import useDataService from 'Hooks/useDataService'
 import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
@@ -16,10 +23,9 @@ import currentResource from 'Libs/currentResource'
 
 import { CaretIcon, ProjectIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
+import OrgPermission from 'Components/Permission/OrgPermission'
 
-import './Navigator.scss'
-
-const { PRODUCT_NAME, PROJECT_ROLE_IDS } = Constants
+import './_Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
   const { data: projects } = useDataService(dataMapper.projects.list())
@@ -64,7 +70,7 @@ const NavigatorContainer = ({ history, location }) => {
               e.stopPropagation()
               collapseCallback()
             }}
-            to={`${Constants.PATH_PROJECT}/${data.value}/settings`}>
+            to={`${PATH_PROJECT}/${data.value}/settings`}>
             Settings
           </Link>
         </ProjectPermission>
@@ -95,7 +101,7 @@ const NavigatorContainer = ({ history, location }) => {
             menuIsOpen={true}
             onChange={(value) => {
               history.push({
-                pathname: `${Constants.PATH_PROJECT}/${value.value}`
+                pathname: `${PATH_PROJECT}/${value.value}`
               })
               collapseCallback()
             }}
@@ -103,6 +109,18 @@ const NavigatorContainer = ({ history, location }) => {
               return { label: project.name, value: String(project.id) }
             })}
             value={null} />
+          <footer className="menu__footer">
+            <OrgPermission
+              acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+              acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
+              <Link to={PATH_PROJECT_CREATE}
+                className="btn btn--small btn--blank navigator__project-btn"
+                onClick={collapseCallback}
+                title="Create a new project">
+                New Project
+              </Link>
+            </OrgPermission>
+          </footer>
         </div>
       </div>
     </>
