@@ -5,36 +5,59 @@ import { Link } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
+
 import AdminUsersCreateForm from './AdminUsersCreateForm'
 import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import Table from 'Components/Table/Table'
+
+import './_AdminUsers.scss'
 
 const AdminUsersComponent = ({
   addUserHandler,
   currentUserId,
   errors,
   isCreating,
+  isInviting,
   pageChangeHandler,
+  reinviteUserHandler,
   removeUserHandler,
   setCreateMode,
+  sortBy,
+  sortMethod,
+  sortUsersHandler,
   users
 }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
-    role: { label: 'Role', sortable: true },
+    role: { label: 'Role' },
     createdAt: { label: 'Added', sortable: true },
     tools: { label: '' }
   }
 
-  function renderTools(user) {
-    if (user.id === currentUserId) return null
+  function renderTools(userId) {
+    if (userId === currentUserId) return null
     return (
       <div className="table__tools">
         <button
           className="btn btn--blank btn--with-circular-icon"
-          onClick={() => { removeUserHandler(user.id) }}>
+          onClick={() => { removeUserHandler(userId) }}>
           <TrashIcon />
         </button>
+      </div>
+    )
+  }
+
+  function renderPendingUser(userId) {
+    return (
+      <div className="admin-users__pending-container">
+        <span className="pill pill--highlight">Pending</span>
+        {isInviting &&
+        <SpinnerComponent />
+        }
+        {!isInviting &&
+        <button className="btn btn--like-a-link" onClick={() => reinviteUserHandler(userId)}>(Reinvite)</button>
+        }
       </div>
     )
   }
@@ -45,8 +68,8 @@ const AdminUsersComponent = ({
     userRows[user.id] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
-      user.pending ? <span className="pill pill--highlight">Pending</span> : moment(user.createdAt).format('YYYY MMM DD'),
-      renderTools(user)
+      user.pending ? renderPendingUser(user.id) : moment(user.createdAt).format('YYYY MMM DD'),
+      renderTools(user.id)
     ]
   })
 
@@ -55,7 +78,12 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          <button className="btn" disabled={isCreating} onClick={() => { setCreateMode(true) }}>Add User</button>
+          <button
+            className="btn"
+            disabled={isCreating}
+            onClick={() => { setCreateMode(true) }}>
+              Add User
+          </button>
         </header>
         {isCreating &&
           <AdminUsersCreateForm
@@ -66,7 +94,12 @@ const AdminUsersComponent = ({
         }
         {!isCreating &&
           <>
-          <Table headings={userHeadings} rows={userRows} />
+          <Table
+            headings={userHeadings}
+            rows={userRows}
+            sortCallback={sortUsersHandler}
+            sortedBy={sortBy}
+            sortMethod={sortMethod} />
           <PaginatorContainer count={100} onChange={pageChangeHandler} />
           </>
         }
@@ -80,9 +113,14 @@ AdminUsersComponent.propTypes = {
   currentUserId: PropTypes.number.isRequired,
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
+  isInviting: PropTypes.bool.isRequired,
   pageChangeHandler: PropTypes.func.isRequired,
+  reinviteUserHandler: PropTypes.func,
   removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortMethod: PropTypes.string.isRequired,
+  sortUsersHandler: PropTypes.func,
   users: PropTypes.object.isRequired
 }
 

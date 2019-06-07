@@ -21,6 +21,11 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
     { value: ORGANIZATION_ROLE_IDS.ADMIN, label: ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.ADMIN] }
   ]
 
+  function isNameOrEmailBlank() {
+    console.log(name === undefined || email === undefined)
+    return name === undefined || email === undefined
+  }
+
   return (
     <form onSubmit={formSubmitHandler}>
       <section>
@@ -64,7 +69,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
       </section>
 
       <div className="btn-group">
-        <button className="btn btn-primary">Add User</button>
+        <button className="btn btn-primary" disabled={isNameOrEmailBlank()}>Add User</button>
         <button type="button" className="btn btn--blank" onClick={cancelHandler}>Cancel</button>
       </div>
     </form>

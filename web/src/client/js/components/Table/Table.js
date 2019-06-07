@@ -1,15 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { QUERY_PARAMS } from 'Shared/constants'
 import TableHeading from './TableHeading'
 import TableRow from './TableRow'
 
 import './_TableStyles.scss'
 
-const Table = ({ headings, rows }) => {
+const Table = ({ headings, rows, sortedBy, sortMethod, sortCallback }) => {
   function renderHeadings() {
     return Object.keys(headings).map((hId) => {
-      return <TableHeading key={hId} sortable={headings[hId].sortable}>{headings[hId].label}</TableHeading>
+      return (
+        <TableHeading
+          key={hId}
+          id={hId}
+          sortable={headings[hId].sortable}
+          sorted={sortedBy === hId}
+          sortMethod={sortMethod}
+          sortHandler={sortCallback}>
+          {headings[hId].label}
+        </TableHeading>
+      )
     })
   }
 
@@ -34,7 +45,10 @@ const Table = ({ headings, rows }) => {
 // @todo Shape this up
 Table.propTypes = {
   headings: PropTypes.object.isRequired,
-  rows: PropTypes.object.isRequired
+  rows: PropTypes.object.isRequired,
+  sortedBy: PropTypes.string,
+  sortMethod: PropTypes.oneOf([QUERY_PARAMS.ASCENDING, QUERY_PARAMS.DESCENDING]),
+  sortCallback: PropTypes.func
 }
 
 Table.defaultProps = {

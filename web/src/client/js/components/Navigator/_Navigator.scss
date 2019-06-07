@@ -28,16 +28,34 @@ $navigatorPlaceholderWidth: 56px;
     }
   }
 
+  &__project-btn {
+    color: $gray;
+    &:not([disabled]) {
+      &:hover,
+      &:active {
+        color: $white-ter;
+      }
+    }
+  }
+
   // Overwriting some values from _menu.scss
   .menu {
     padding: 0;
     width: $navigatorWidth;
     &__item {
       align-items: center;
+      border-top: thin solid rgba(255, 255, 255, .03);
       display: flex;
-      padding: 4px 14px;
+      font-size: 1.3rem;
+      padding: 4px 10px;
+      &:hover {
+        background-color: rgba(255, 255, 255, .03);
+      }
       &--is-focused {
         background-color: lighten($black-er, 10%);
+        &:hover {
+          background-color: lighten($black-er, 10%);
+        }
       }
       .icon {
         flex: 1;

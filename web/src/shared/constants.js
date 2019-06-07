@@ -53,6 +53,11 @@ const ORGANIZATION_SETTINGS = {
   ALLOW_USER_PROJECT_CREATION: 'allowUserProjectCreation'
 }
 
+const QUERY_PARAMS = {
+  ASCENDING: 'ASC',
+  DESCENDING: 'DESC'
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Project Danger',
@@ -61,11 +66,19 @@ module.exports = {
   PRODUCT_API_URL: 'http://localhost:3001/api',
   // Documentation
   DOCUMENTATION_URL: 'https://docs.project-danger.com/',
-  // Support
-  SUPPORT_EMAIL: 'support@project-danger.com',
-  SUPPORT_LINK: 'https://support.project-danger.com/',
+  // Fields
+  FIELD_LABELS: {
+    [FIELD_TYPES.STRING]: 'text-field-',
+    [FIELD_TYPES.TEXT]: 'text-area-',
+    [FIELD_TYPES.NUMBER]: 'number-'
+  },
+  FIELD_TYPES: FIELD_TYPES,
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New Document',
+  MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  // Notifications
+  NOTIFICATION_TYPES: NOTIFICATION_TYPES,
+  NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
   // Paths
   PATH_APP: '/d',
   PATH_BILLING: '/settings/billing',
@@ -80,21 +93,16 @@ module.exports = {
   PATH_SETTINGS: '/settings',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT_NEW_PARAM: 'new',
-  MAX_COOKIE_AGE_MS: '604800000', // 7 days
-  NOTIFICATION_TYPES: NOTIFICATION_TYPES,
-  NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
-  // Fields
-  FIELD_LABELS: {
-    [FIELD_TYPES.STRING]: 'text-field-',
-    [FIELD_TYPES.TEXT]: 'text-area-',
-    [FIELD_TYPES.NUMBER]: 'number-'
-  },
-  FIELD_TYPES: FIELD_TYPES,
   // Roles
-  PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
-  PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
   ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS,
   ORGANIZATION_ROLE_NAMES: ORGANIZATION_ROLE_NAMES,
   ORGANIZATION_SETTINGS: ORGANIZATION_SETTINGS,
-  PROJECT_ACCESS_LEVELS: PROJECT_ACCESS_LEVELS
+  PROJECT_ACCESS_LEVELS: PROJECT_ACCESS_LEVELS,
+  PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
+  PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
+  // Query params
+  QUERY_PARAMS: QUERY_PARAMS,
+  // Support
+  SUPPORT_EMAIL: 'support@project-danger.com',
+  SUPPORT_LINK: 'https://support.project-danger.com/',
 }

@@ -75,8 +75,11 @@ button,
     min-height: 24px;
     padding: 0 18px;
     &.btn--with-icon {
+      padding: 0 6px;
       .icon {
         height: 12px;
+        min-height: 12px;
+        min-width: 12px;
         width: 12px;
       }
     }
@@ -122,7 +125,7 @@ button,
     }
   }
 
-  &--blank {
+  &--blank, &--like-a-link {
     background-color: transparent;
     border-radius: 0;
     color: inherit;
@@ -136,6 +139,20 @@ button,
         box-shadow: none !important;
         color: inherit;
         outline: 0 !important;
+      }
+    }
+  }
+
+  &--like-a-link {
+    color: var(--base-link-color);
+    font-weight: 400;
+    text-decoration: underline;
+    &:not([disabled]) {
+      &:hover, &:focus {
+        color: var(--base-link-hover-color);
+      }
+      &:active {
+        color: var(--base-link-active-color);
       }
     }
   }
