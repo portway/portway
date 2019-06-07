@@ -122,7 +122,7 @@ button,
     }
   }
 
-  &--blank {
+  &--blank, &--like-a-link {
     background-color: transparent;
     border-radius: 0;
     color: inherit;
@@ -136,6 +136,20 @@ button,
         box-shadow: none !important;
         color: inherit;
         outline: 0 !important;
+      }
+    }
+  }
+
+  &--like-a-link {
+    color: var(--base-link-color);
+    font-weight: 400;
+    text-decoration: underline;
+    &:not([disabled]) {
+      &:hover, &:focus {
+        color: var(--base-link-hover-color);
+      }
+      &:active {
+        color: var(--base-link-active-color);
       }
     }
   }

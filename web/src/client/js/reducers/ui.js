@@ -20,7 +20,8 @@ const initialState = {
     creating: false
   },
   users: {
-    creating: false
+    creating: false,
+    inviting: false
   }
 }
 
@@ -116,6 +117,15 @@ export const ui = (state = initialState, action) => {
           creating: false
         }
       }
+    }
+
+    // Reinviting user
+    case ActionTypes.INITIATE_USER_REINVITE: {
+      return { ...state, users: { ...state.users, inviting: true } }
+    }
+
+    case ActionTypes.RECEIVE_REINVITED_USER: {
+      return { ...state, users: { ...state.users, inviting: false } }
     }
 
     // Project tokens
