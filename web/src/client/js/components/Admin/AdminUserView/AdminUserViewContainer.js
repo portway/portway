@@ -15,7 +15,7 @@ import AdminUserViewComponent from './AdminUserViewComponent'
 
 const AdminUserViewContainer = ({ match, removeProjectAssignee, updateProjectAssignee, updateUserRole, uiConfirm }) => {
   const { data: users } = useDataService(dataMapper.users.list())
-  const { data: userFromRoute } = useDataService(dataMapper.users.id(match.params.subSection))
+  const { data: userFromRoute = {} } = useDataService(dataMapper.users.id(match.params.subSection))
   const { data: userProjects } = useDataService(dataMapper.projects.listForUser(userFromRoute.id), [userFromRoute])
   const { data: projectAssignments } = useDataService(dataMapper.users.projectAssignmentsForUser(userFromRoute.id), [userFromRoute])
   if (!users || !userFromRoute) return null
