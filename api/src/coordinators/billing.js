@@ -1,16 +1,25 @@
 import stripeIntegrator from '../integrators/stripe'
+import BusinessOrganization from '../businesstime/organization'
 
-const subscribeCustomerToPlan = async function({ token, planId, email }) {
-  // 1 create customer in stripe - email and source ie token
-  const customer = await stripeIntegrator.createCustomer({ email, token })
+const subscribeOrgToPlan = async function(token, planId, orgId) {
+  // look up org owner and get email
+  const org = await BusinessOrganization.findSanitizedById(orgId)
+  const { stripeId } = org
 
-  // 2 TODO: save customer info to db - email and customer id, token too?, depending on how sign up flow goes, user might already have account,
-  // in that case look up user and update
+  let customer
+
+  // get or create customer
+  if (!stripeId) {
+    customer = await stripeIntegrator.retrieveCustomer(stripeId)
+  } else {
+    customer = await stripeIntegrator.createCustomer({ token })
+    await BusinessOrganization.updateById(orgId, { stripeId: customer.id })
+  }
 
   // 3 subscribe customer to plan - customer id and plan id
   await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
 }
 
 export default {
-  subscribeCustomerToPlan
+  subscribeOrgToPlan
 }
