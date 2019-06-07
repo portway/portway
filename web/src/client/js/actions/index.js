@@ -71,6 +71,8 @@ export const ActionTypes = {
   INITIATE_USER_CREATE: 'INITIATE_USER_CREATE',
   RECEIVE_CREATED_USER: 'RECEIVE_CREATED_USER',
   INITIATE_USER_REMOVE: 'INITIATE_USER_REMOVE',
+  INITIATE_USER_REINVITE: 'INITIATE_USER_REINVITE',
+  RECEIVE_REINVITED_USER: 'RECEIVE_REINVITED_USER',
   REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   // User Project Assignments
@@ -177,6 +179,8 @@ export const Users = {
   receiveUpdatedRole: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER_ROLE, 'userId', 'orgRoleId'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_USER_REMOVE, 'userId'),
   removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
+  initiateReinvite: makeActionCreator(ActionTypes.INITIATE_USER_REINVITE, 'userId'),
+  receiveSuccessfulReinvite: makeActionCreator(ActionTypes.RECEIVE_REINVITED_USER, 'userId'),
   logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
 }
 

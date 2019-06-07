@@ -9,7 +9,7 @@ import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
 
 import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
-import { createUser, removeUser } from 'Actions/user'
+import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
 
@@ -18,6 +18,7 @@ const AdminUsersContainer = ({
   errors,
   history,
   isCreating,
+  isInviting,
   removeUser,
   uiConfirm,
   uiCreateUserMode
@@ -35,6 +36,10 @@ const AdminUsersContainer = ({
 
   function addUserHandler(values) {
     createUser(values)
+  }
+
+  function reinviteUserHandler(userId) {
+    reinviteUser(userId)
   }
 
   function removeUserHandler(userdId) {
@@ -69,7 +74,9 @@ const AdminUsersContainer = ({
         addUserHandler={addUserHandler}
         currentUserId={currentUserId}
         isCreating={isCreating}
+        isInviting={isInviting}
         errors={errors}
+        reinviteUserHandler={reinviteUserHandler}
         removeUserHandler={removeUserHandler}
         setCreateMode={setCreateMode}
         sortBy={sortBy}
@@ -84,8 +91,10 @@ const AdminUsersContainer = ({
 AdminUsersContainer.propTypes = {
   history: PropTypes.object.isRequired,
   isCreating: PropTypes.bool.isRequired,
+  isInviting: PropTypes.bool.isRequired,
   createUser: PropTypes.func.isRequired,
   errors: PropTypes.object,
+  reinviteUser: PropTypes.func.isRequired,
   removeUser: PropTypes.func.isRequired,
   uiCreateUserMode: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
@@ -94,11 +103,12 @@ AdminUsersContainer.propTypes = {
 const mapStateToProps = (state) => {
   return {
     errors: state.validation.user,
-    isCreating: state.ui.users.creating
+    isCreating: state.ui.users.creating,
+    isInviting: state.ui.users.inviting
   }
 }
 
-const mapDispatchToProps = { createUser, removeUser, uiCreateUserMode, uiConfirm }
+const mapDispatchToProps = { createUser, reinviteUser, removeUser, uiCreateUserMode, uiConfirm }
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
