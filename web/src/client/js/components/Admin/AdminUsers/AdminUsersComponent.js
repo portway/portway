@@ -20,11 +20,14 @@ const AdminUsersComponent = ({
   reinviteUserHandler,
   removeUserHandler,
   setCreateMode,
+  sortBy,
+  sortMethod,
+  sortUsersHandler,
   users
 }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
-    role: { label: 'Role', sortable: true },
+    role: { label: 'Role' },
     createdAt: { label: 'Added', sortable: true },
     tools: { label: '' }
   }
@@ -72,7 +75,12 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          <button className="btn" disabled={isCreating} onClick={() => { setCreateMode(true) }}>Add User</button>
+          <button
+            className="btn"
+            disabled={isCreating}
+            onClick={() => { setCreateMode(true) }}>
+              Add User
+          </button>
         </header>
         {isCreating &&
           <AdminUsersCreateForm
@@ -82,7 +90,12 @@ const AdminUsersComponent = ({
           />
         }
         {!isCreating &&
-          <Table headings={userHeadings} rows={userRows} />
+          <Table
+            headings={userHeadings}
+            rows={userRows}
+            sortCallback={sortUsersHandler}
+            sortedBy={sortBy}
+            sortMethod={sortMethod} />
         }
       </section>
     </div>
@@ -98,6 +111,9 @@ AdminUsersComponent.propTypes = {
   reinviteUserHandler: PropTypes.func,
   removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortMethod: PropTypes.string.isRequired,
+  sortUsersHandler: PropTypes.func,
   users: PropTypes.object.isRequired
 }
 

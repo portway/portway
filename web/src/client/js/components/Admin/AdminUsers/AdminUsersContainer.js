@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -7,15 +8,31 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
 
-import { PRODUCT_NAME } from 'Shared/constants'
+import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
 
 const AdminUsersContainer = ({
-  isCreating, isInviting, createUser, errors, reinviteUser, removeUser, uiCreateUserMode, uiConfirm
+  createUser,
+  errors,
+  history,
+  isCreating,
+  isInviting,
+  removeUser,
+  uiConfirm,
+  uiCreateUserMode
 }) => {
   const { data: users } = useDataService(dataMapper.users.list())
+  const [sortBy, setSortBy] = useState('createdAt')
+  const [sortMethod, setSortMethod] = useState(QUERY_PARAMS.ASCENDING)
+
+  // Update the params on state change
+  useEffect(() => {
+    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}` })
+    // @todo handle the sort action here, but not on the first load? that should
+    // already be the default
+  }, [history, sortBy, sortMethod])
 
   function addUserHandler(values) {
     createUser(values)
@@ -32,6 +49,16 @@ const AdminUsersContainer = ({
     const confirmedAction = () => { removeUser(userdId) }
     const confirmedLabel = 'Yes, delete this user'
     uiConfirm({ message, confirmedAction, confirmedLabel })
+  }
+
+  function sortUsersHandler(id) {
+    if (sortBy === id) {
+      sortMethod === QUERY_PARAMS.ASCENDING ?
+        setSortMethod(QUERY_PARAMS.DESCENDING) : setSortMethod(QUERY_PARAMS.ASCENDING)
+      return
+    }
+    setSortBy(id)
+    setSortMethod(QUERY_PARAMS.ASCENDING)
   }
 
   function setCreateMode(value) {
@@ -52,6 +79,9 @@ const AdminUsersContainer = ({
         reinviteUserHandler={reinviteUserHandler}
         removeUserHandler={removeUserHandler}
         setCreateMode={setCreateMode}
+        sortBy={sortBy}
+        sortMethod={sortMethod}
+        sortUsersHandler={sortUsersHandler}
         users={users}
       />
     </>
@@ -59,6 +89,7 @@ const AdminUsersContainer = ({
 }
 
 AdminUsersContainer.propTypes = {
+  history: PropTypes.object.isRequired,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
   createUser: PropTypes.func.isRequired,
@@ -79,4 +110,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { createUser, reinviteUser, removeUser, uiCreateUserMode, uiConfirm }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
+)
