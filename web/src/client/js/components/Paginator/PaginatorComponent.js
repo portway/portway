@@ -8,7 +8,7 @@ const PaginatorComponent = ({ changeHandler, page, pages }) => {
   function renderPageItems() {
     const listItems = []
     for (let index = 1; index < pages; index++) {
-      const current = index === Number(page)
+      const current = index === page
       const pageClasses = cx({
         'paginator__page': true,
         'paginator__page--current': current
@@ -41,7 +41,7 @@ const PaginatorComponent = ({ changeHandler, page, pages }) => {
 
 PaginatorComponent.propTypes = {
   changeHandler: PropTypes.func.isRequired,
-  page: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
   pages: PropTypes.number.isRequired
 }
 
