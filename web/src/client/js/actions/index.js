@@ -13,6 +13,8 @@ export const ActionTypes = {
   RECEIVE_UPDATED_PROJECT: 'RECEIVE_UPDATED_PROJECT',
   INITIATE_PROJECT_REMOVE: 'INITIATE_PROJECT_REMOVE',
   REMOVE_PROJECT: 'REMOVE_PROJECT',
+  REQUEST_USER_PROJECTS: 'REQUEST_USER_PROJECTS',
+  RECEIVE_USER_PROJECTS: 'RECEIVE_USER_PROJECTS',
   // Project Assignments
   REQUEST_PROJECT_ASSIGNEES: 'REQUEST_PROJECT_ASSIGNEES',
   RECEIVE_PROJECT_ASSIGNEES: 'RECEIVE_PROJECT_ASSIGNEES',
@@ -108,7 +110,9 @@ export const Projects = {
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_UPDATE),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
-  removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id')
+  removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id'),
+  requestForUser: makeActionCreator(ActionTypes.REQUEST_USER_PROJECTS, 'userId'),
+  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data')
 }
 
 export const ProjectAssignees = {
@@ -118,7 +122,7 @@ export const ProjectAssignees = {
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_ASSIGNEE, 'projectId', 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_UPDATE, 'projectId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE, 'data'),
-  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE, 'projectId', 'assignmentId'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE, 'projectId', 'userId'),
   removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_ASSIGNEE, 'projectId', 'userId'),
 }
 

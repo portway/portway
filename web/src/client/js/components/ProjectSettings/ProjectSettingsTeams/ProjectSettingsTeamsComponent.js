@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 
 import Constants from 'Shared/constants'
-import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
+import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 

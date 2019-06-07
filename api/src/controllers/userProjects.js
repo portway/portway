@@ -1,13 +1,19 @@
 import Joi from 'joi'
-import ono from 'ono'
 
 import { validateParams } from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
+import crudPerms from '../libs/middleware/reqCrudPerms'
 
-const listPerm = (req, res, next) => {
+const { listPerm } = crudPerms(RESOURCE_TYPES.PROJECT,
+  (req) => {
+    return { id: req.params.id }
+  }
+)
+
+const conditionalListPerm = (req, res, next) => {
   const { userId } = req.params
 
   // only allowing access to the current user's projects here
@@ -20,8 +26,8 @@ const listPerm = (req, res, next) => {
     })(req, res, next)
   }
 
-  const err = new ono({ code: 404 }, 'Requested user id does not match requestor id')
-  next(err)
+  // not requesting self, normal project list perm
+  return listPerm(req, res, next)
 }
 
 const paramSchema = Joi.compile({
@@ -33,7 +39,7 @@ const userProjectsController = function(router) {
   router.get(
     '/',
     validateParams(paramSchema),
-    listPerm,
+    conditionalListPerm,
     getUserProjects
   )
 }

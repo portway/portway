@@ -104,7 +104,7 @@ form, .form {
 
     &--error {
       .field {
-        label {
+        label, .field__label {
           color: $danger;
         }
         input, textarea {
@@ -117,7 +117,7 @@ form, .form {
 
   // Defaults
   // ---------------------------------------------------------------------------
-  label {
+  label, .field__label {
     display: block;
     font-weight: 700;
     padding: 4px 0;
@@ -125,7 +125,7 @@ form, .form {
 
   input[type="checkbox"], input[type="radio"] {
     display: inline-block;
-    + label {
+    + label, .field__label {
       display: inline-block;
     }
   }

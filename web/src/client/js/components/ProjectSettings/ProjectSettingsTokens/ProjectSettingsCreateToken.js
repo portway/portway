@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Constants from 'Shared/constants'
-import ProjectRolesDropdown from 'Components/ProjectRoles/ProjectRolesDropdown'
+import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, errors, projectId }) => {
