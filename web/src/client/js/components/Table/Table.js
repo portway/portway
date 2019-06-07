@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { QUERY_PARAMS } from 'Shared/constants'
 import TableHeading from './TableHeading'
 import TableRow from './TableRow'
 
@@ -46,7 +47,7 @@ Table.propTypes = {
   headings: PropTypes.object.isRequired,
   rows: PropTypes.object.isRequired,
   sortedBy: PropTypes.string,
-  sortMethod: PropTypes.oneOf(['ASC', 'DESC']),
+  sortMethod: PropTypes.oneOf([QUERY_PARAMS.ASCENDING, QUERY_PARAMS.DESCENDING]),
   sortCallback: PropTypes.func
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import { QUERY_PARAMS } from 'Shared/constants'
 import { CaretIcon } from 'Components/Icons'
 
 const TableHeading = ({ children, id, sortable, sorted, sortMethod, sortHandler }) => {
@@ -9,8 +10,8 @@ const TableHeading = ({ children, id, sortable, sorted, sortMethod, sortHandler 
     'btn btn--blank table__heading-btn': true,
     'table__heading-btn--sortable': sortable,
     'table__heading-btn--sorted': sorted,
-    'table__heading-btn--ascending': sortMethod === 'ASC',
-    'table__heading-btn--descending': sortMethod === 'DESC',
+    'table__heading-btn--ascending': sortMethod === QUERY_PARAMS.ASCENDING,
+    'table__heading-btn--descending': sortMethod === QUERY_PARAMS.DESCENDING,
   })
   return (
     <div className="table__heading-cell">
@@ -37,7 +38,7 @@ TableHeading.propTypes = {
   id: PropTypes.string.isRequired,
   sortable: PropTypes.bool,
   sorted: PropTypes.bool,
-  sortMethod: PropTypes.oneOf(['ASC', 'DESC']),
+  sortMethod: PropTypes.oneOf([QUERY_PARAMS.ASCENDING, QUERY_PARAMS.DESCENDING]),
   sortHandler: PropTypes.func
 }
 

@@ -46,7 +46,9 @@ const AdminUsersComponent = ({
     userRows[user.id] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
-      user.pending ? <span className="pill pill--highlight">Pending</span> : moment(user.createdAt).format('YYYY MMM DD'),
+      user.pending ?
+        <span className="pill pill--highlight">Pending</span> :
+        moment(user.createdAt).format('YYYY MMM DD'),
       renderTools(user)
     ]
   })
@@ -56,7 +58,12 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          <button className="btn" disabled={isCreating} onClick={() => { setCreateMode(true) }}>Add User</button>
+          <button
+            className="btn"
+            disabled={isCreating}
+            onClick={() => { setCreateMode(true) }}>
+              Add User
+          </button>
         </header>
         {isCreating &&
           <AdminUsersCreateForm
@@ -66,7 +73,12 @@ const AdminUsersComponent = ({
           />
         }
         {!isCreating &&
-          <Table headings={userHeadings} rows={userRows} sortedBy={sortBy} sortMethod={sortMethod} sortCallback={sortUsersHandler} />
+          <Table
+            headings={userHeadings}
+            rows={userRows}
+            sortCallback={sortUsersHandler}
+            sortedBy={sortBy}
+            sortMethod={sortMethod} />
         }
       </section>
     </div>

@@ -8,19 +8,29 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
 
-import { PRODUCT_NAME } from 'Shared/constants'
+import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
 
-const AdminUsersContainer = ({ history, isCreating, createUser, errors, removeUser, uiCreateUserMode, uiConfirm }) => {
+const AdminUsersContainer = ({
+  createUser,
+  errors,
+  history,
+  isCreating,
+  removeUser,
+  uiConfirm,
+  uiCreateUserMode
+}) => {
   const { data: users } = useDataService(dataMapper.users.list())
   const [sortBy, setSortBy] = useState('createdAt')
-  const [sortMethod, setSortMethod] = useState('ASC')
+  const [sortMethod, setSortMethod] = useState(QUERY_PARAMS.ASCENDING)
 
   // Update the params on state change
   useEffect(() => {
     history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}` })
+    // @todo handle the sort action here, but not on the first load? that should
+    // already be the default
   }, [history, sortBy, sortMethod])
 
   function addUserHandler(values) {
@@ -38,11 +48,12 @@ const AdminUsersContainer = ({ history, isCreating, createUser, errors, removeUs
 
   function sortUsersHandler(id) {
     if (sortBy === id) {
-      sortMethod === 'ASC' ? setSortMethod('DESC') : setSortMethod('ASC')
+      sortMethod === QUERY_PARAMS.ASCENDING ?
+        setSortMethod(QUERY_PARAMS.DESCENDING) : setSortMethod(QUERY_PARAMS.ASCENDING)
       return
     }
     setSortBy(id)
-    setSortMethod('ASC')
+    setSortMethod(QUERY_PARAMS.ASCENDING)
   }
 
   function setCreateMode(value) {
