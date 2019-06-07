@@ -28,6 +28,11 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
+  function pageChangeHandler(page) {
+    // @todo trigger fetch
+    console.info('Change page', page)
+  }
+
   function setCreateMode(value) {
     uiCreateUserMode(value)
   }
@@ -42,6 +47,7 @@ const AdminUsersContainer = ({ isCreating, createUser, errors, removeUser, uiCre
         currentUserId={currentUserId}
         isCreating={isCreating}
         errors={errors}
+        pageChangeHandler={pageChangeHandler}
         removeUserHandler={removeUserHandler}
         setCreateMode={setCreateMode}
         users={users}

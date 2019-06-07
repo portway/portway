@@ -1,0 +1,40 @@
+@import 'CSS/inc/_vars.scss';
+
+.paginator {
+  --paginator-page-bg: #{$white};
+  --paginator-current-bg: #{$white-ter};
+  @media (prefers-color-scheme: dark) {
+    --paginator-page-bg: #{$black-ter};
+    --paginator-current-bg: #{$black-bis};
+  }
+
+  &__list {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__page {
+    background-color: var(--paginator-page-bg);
+    border-radius: $borderRadius;
+    margin: 0 .25rem;
+    padding: 3px;
+    min-width: 24px;
+    text-align: center;
+
+    .btn {
+      min-height: unset;
+    }
+
+    &--current {
+      background-color: var(--paginator-current-bg);
+      font-weight: bold;
+    }
+
+  }
+
+}

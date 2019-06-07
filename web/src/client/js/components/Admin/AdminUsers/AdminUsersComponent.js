@@ -5,10 +5,20 @@ import { Link } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
-import Table from 'Components/Table/Table'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
+import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
+import Table from 'Components/Table/Table'
 
-const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating, removeUserHandler, setCreateMode, users }) => {
+const AdminUsersComponent = ({
+  addUserHandler,
+  currentUserId,
+  errors,
+  isCreating,
+  pageChangeHandler,
+  removeUserHandler,
+  setCreateMode,
+  users
+}) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
     role: { label: 'Role', sortable: true },
@@ -55,7 +65,10 @@ const AdminUsersComponent = ({ addUserHandler, currentUserId, errors, isCreating
           />
         }
         {!isCreating &&
+          <>
           <Table headings={userHeadings} rows={userRows} />
+          <PaginatorContainer count={100} onChange={pageChangeHandler} />
+          </>
         }
       </section>
     </div>
@@ -67,6 +80,7 @@ AdminUsersComponent.propTypes = {
   currentUserId: PropTypes.number.isRequired,
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
+  pageChangeHandler: PropTypes.func.isRequired,
   removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
   users: PropTypes.object.isRequired
