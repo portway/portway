@@ -42,6 +42,18 @@ export const userAssignments = (state = initialState, action) => {
         assignmentsByUserId
       }
     }
+
+    // When a project is created, wipe out userAssignments and set loading to null
+    // to force a refetch
+    case ActionTypes.RECEIVE_CREATED_PROJECT: {
+      return {
+        assignmentsByUserId: {},
+        loading: {
+          byUserId: {}
+        }
+      }
+    }
+
     default:
       return { ...state }
   }
