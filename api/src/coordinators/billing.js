@@ -1,25 +1,36 @@
+import ono from 'ono'
+
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 
-const subscribeOrgToPlan = async function(token, planId, orgId) {
-  // look up org owner and get email
+const subscribeOrgToPlan = async function(planId, orgId) {
   const org = await BusinessOrganization.findSanitizedById(orgId)
-  const { stripeId } = org
 
-  let customer
+  const customer = await stripeIntegrator.retrieveCustomer(org.stripeId)
 
-  // get or create customer
-  if (!stripeId) {
-    customer = await stripeIntegrator.retrieveCustomer(stripeId)
-  } else {
-    customer = await stripeIntegrator.createCustomer({ token })
-    await BusinessOrganization.updateById(orgId, { stripeId: customer.id })
+  if (!customer) {
+    throw ono({ code: 404 }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
   }
 
-  // 3 subscribe customer to plan - customer id and plan id
   await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
 }
 
+const updateOrgBilling = async function(token, orgId) {
+  const org = await BusinessOrganization.findSanitizedById(orgId)
+
+  let customer
+
+  if (org.stripeId) {
+    customer = await stripeIntegrator.updateCustomer(org.stripeId, { source: token })
+  } else {
+    customer = await stripeIntegrator.createCustomer({ source: token, name: org.name })
+    await BusinessOrganization.updateById(orgId, { stripeId: customer.id })
+  }
+
+  return customer
+}
+
 export default {
-  subscribeOrgToPlan
+  subscribeOrgToPlan,
+  updateOrgBilling
 }

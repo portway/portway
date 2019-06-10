@@ -9,8 +9,7 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 
 const bodySchema = Joi.compile({
-  token: Joi.string().required(),
-  planId: Joi.string().required()
+  token: Joi.string().required()
 })
 
 const paramSchema = Joi.compile({
@@ -42,7 +41,7 @@ const conditionalUpdatePerm = async (req, res, next) => {
 
 const orgBillingController = function(router) {
   // all routes are nested at organizations/:orgId and receive req.params.orgId
-  router.put('/billing',
+  router.put('/',
     validateParams(paramSchema),
     validateBody(bodySchema),
     conditionalUpdatePerm,
@@ -51,12 +50,12 @@ const orgBillingController = function(router) {
 }
 
 const updateOrgBilling = async function(req, res, next) {
-  const { token, planId } = req.body
-  const { orgId } = req.params.orgId
+  const { token } = req.body
+  const { orgId } = req.params
 
   try {
-    await billingCoordinator.subscribeOrgToPlan(orgId, token, planId)
-    res.status(204).send()
+    const customer = await billingCoordinator.updateOrgBilling(token, orgId)
+    res.status(200).send(customer)
   } catch (e) {
     next(e)
   }

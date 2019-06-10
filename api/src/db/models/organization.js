@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       allowUserProjectCreation: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
-      }
+      },
+      stripeId: DataTypes.STRING
     },
     {
       paranoid: true

@@ -11,6 +11,9 @@ import {
 
 import { PATH_SETTINGS } from 'Shared/constants'
 import CountryList from 'Shared/countryList'
+import { currentOrgId } from 'Libs/currentIds'
+
+import { update } from '../../../api'
 
 const elementStyles = {
   base: {
@@ -56,8 +59,8 @@ class StripeComponent extends React.Component {
     return (
       <form
         id="payment-form"
-        action="http://localHost:3001/api/billing"
-        method="post"
+        action={`http://localHost:3001/api/organizations/${currentOrgId}/billing`}
+        method="put"
         onSubmit={this.billingSubmitHandler.bind(this)}
         ref={this.formRef}>
 
@@ -183,7 +186,8 @@ class StripeComponent extends React.Component {
     hiddenInput.setAttribute('value', token.id)
     form.appendChild(hiddenInput)
     // Submit the form
-    form.submit()
+    // form.submit()
+    update(`http://localHost:3001/api/organizations/${currentOrgId}/billing`, { token: token.id })
   }
 
   billingSubmitHandler(e) {
