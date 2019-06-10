@@ -8,23 +8,17 @@ import { PRODUCT_NAME } from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import { updateUserRole } from 'Actions/user'
 import { removeProjectAssignee, updateProjectAssignee } from 'Actions/project'
 import { uiConfirm } from 'Actions/ui'
 import AdminUserViewComponent from './AdminUserViewComponent'
 
 const AdminUserViewContainer = ({ match, removeProjectAssignee, updateProjectAssignee, updateUserRole, uiConfirm }) => {
-  const paramUser = {
-    id: null,
-    name: '',
-    orgRoleId: ORGANIZATION_ROLE_IDS.USER
-  }
   const { data: users } = useDataService(dataMapper.users.list())
-  const userFromRoute = users[match.params.subSection] ? users[match.params.subSection] : paramUser
+  const { data: userFromRoute = {} } = useDataService(dataMapper.users.id(match.params.subSection))
   const { data: userProjects } = useDataService(dataMapper.projects.listForUser(userFromRoute.id), [userFromRoute])
   const { data: projectAssignments } = useDataService(dataMapper.users.projectAssignmentsForUser(userFromRoute.id), [userFromRoute])
-  if (!users || !userFromRoute) return null
+  if (!users || !userFromRoute.id) return null
 
   function roleChangeHandler(value) {
     updateUserRole(userFromRoute.id, value)
