@@ -41,7 +41,7 @@ async function findById(orgId) {
   const db = getDb()
   const organization = await db.model(MODEL_NAME).findByPk(orgId)
 
-  return organization
+  return organization.get({ plain: true })
 }
 
 export default {

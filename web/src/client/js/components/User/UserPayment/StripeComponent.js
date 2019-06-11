@@ -187,6 +187,7 @@ class StripeComponent extends React.Component {
     form.appendChild(hiddenInput)
     // Submit the form
     // form.submit()
+    // TODO: this should be in an action, not in the component, move there when we add redux flow
     update(`http://localHost:3001/api/organizations/${currentOrgId}/billing`, { token: token.id })
   }
 
