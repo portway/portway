@@ -37,8 +37,16 @@ async function updateById(id, body) {
   return publicFields(updatedOrganization)
 }
 
+async function findById(orgId) {
+  const db = getDb()
+  const organization = await db.model(MODEL_NAME).findByPk(orgId)
+
+  return organization
+}
+
 export default {
   create,
   findSanitizedById,
-  updateById
+  updateById,
+  findById
 }

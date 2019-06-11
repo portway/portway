@@ -41,6 +41,9 @@ const conditionalUpdatePerm = async (req, res, next) => {
 
 const orgBillingController = function(router) {
   // all routes are nested at organizations/:orgId and receive req.params.orgId
+  router.get('/',
+    getOrgBilling
+  )
   router.put('/',
     validateParams(paramSchema),
     validateBody(bodySchema),
@@ -49,13 +52,24 @@ const orgBillingController = function(router) {
   )
 }
 
+const getOrgBilling = async function(req, res, next) {
+  const { orgId } = req.params
+
+  try {
+    const billing = await billingCoordinator.getOrgBilling(orgId)
+    res.status(200).send(billing)
+  } catch (e) {
+    next(e)
+  }
+}
+
 const updateOrgBilling = async function(req, res, next) {
   const { token } = req.body
   const { orgId } = req.params
 
   try {
-    const customer = await billingCoordinator.updateOrgBilling(token, orgId)
-    res.status(200).send(customer)
+    const billing = await billingCoordinator.updateOrgBilling(token, orgId)
+    res.status(200).send(billing)
   } catch (e) {
     next(e)
   }

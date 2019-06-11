@@ -7,6 +7,12 @@ const createCustomer = async function(body) {
   return customer
 }
 
+const getCustomer = async function(customerId) {
+  const customer = await stripe.customers.retrieve(customerId)
+
+  return customer
+}
+
 const updateCustomer = async function(customerId, body) {
   const customer = await stripe.customers.update(customerId, body)
 
@@ -24,6 +30,7 @@ const createSubscription = async function(customerId, planId) {
 
 export default {
   createCustomer,
+  getCustomer,
   updateCustomer,
   createSubscription
 }
