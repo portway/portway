@@ -56,7 +56,7 @@ async function findAllSanitized(orgId, options) {
 }
 
 function getPaginationOptions(queryOptions) {
-  const { page = 1, perPage = 20 } = queryOptions
+  const { page = 1, perPage = 1 } = queryOptions
 
   return { limit: perPage, offset: (page - 1) * perPage }
 }
