@@ -42,13 +42,23 @@ async function findById(id) {
   return await db.model(MODEL_NAME).findByPk(id, { raw: true })
 }
 
-async function findAllSanitized(orgId) {
+async function findAllSanitized(orgId, options) {
+  const { limit, offset } = getPaginationOptions(options)
+
   const db = getDb()
   const users = await db.model(MODEL_NAME).findAll({
-    where: { orgId }
+    where: { orgId },
+    limit,
+    offset
   })
 
   return users.map(publicFields)
+}
+
+function getPaginationOptions(queryOptions) {
+  const { page = 1, perPage = 20 } = queryOptions
+
+  return { limit: perPage, offset: (page - 1) * perPage }
 }
 
 async function findSanitizedById(id, orgId) {

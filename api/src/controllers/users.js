@@ -18,7 +18,7 @@ const paramSchema = Joi.compile({
 
 const querySchema = Joi.compile({
   page: Joi.number(),
-  per_page: Joi.number()
+  perPage: Joi.number()
 })
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
@@ -78,7 +78,7 @@ const conditionalDeletePerm = async (req, res, next) => {
 }
 
 const usersController = function(router) {
-  router.get('/', listPerm, getUsers)
+  router.get('/', validateQuery(querySchema), listPerm, getUsers)
   router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getUser)
   router.post('/', validateBody(bodySchema, { includeDetails: true }), createPerm, createUser)
   router.put(
@@ -93,8 +93,13 @@ const usersController = function(router) {
 }
 
 const getUsers = async function(req, res, next) {
+  const options = {
+    page: req.query.page,
+    perPage: req.query.perPage
+  }
+
   try {
-    const users = await BusinessUser.findAllSanitized(req.requestorInfo.orgId)
+    const users = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
     res.json({ data: users })
   } catch (e) {
     next(e)
