@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import ono from 'ono'
 
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import userCoordinator from '../coordinators/user'
@@ -14,6 +14,11 @@ import userSchema from './payloadSchemas/user'
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
+})
+
+const querySchema = Joi.compile({
+  page: Joi.number(),
+  per_page: Joi.number()
 })
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
