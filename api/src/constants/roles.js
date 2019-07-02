@@ -58,6 +58,9 @@ export const ORGANIZATION_ROLES = {
       [actions.UPDATE_ORG_ROLE]: true,
       [actions.READ_MY]: true,
       [actions.UPDATE_MY]: true
+    },
+    [resourceTypes.ORG_BILLING]: {
+      [actions.READ_MY]: true
     }
   },
   [rIds.ADMIN]: {

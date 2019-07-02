@@ -16,6 +16,13 @@ const paramSchema = Joi.compile({
   orgId: Joi.number().required()
 })
 
+const readPerm = perms((req) => {
+  return {
+    resourceType: RESOURCE_TYPES.ORG_BILLING,
+    action: ACTIONS.READ_MY
+  }
+})
+
 const conditionalUpdatePerm = async (req, res, next) => {
   const { orgId } = req.params
 
