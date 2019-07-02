@@ -1,5 +1,6 @@
 export const BILLING_PUBLIC_FIELDS = Object.freeze(['currency', 'name', 'balance'])
 
+// These are all the available fields returned from Stripe, uncomment to return from our API billing endpoints
 export const BILLING_SOURCE_PUBLIC_FIELDS = Object.freeze([
   'address_city',
   'address_country',
