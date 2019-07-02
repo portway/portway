@@ -93,14 +93,12 @@ const usersController = function(router) {
 }
 
 const getUsers = async function(req, res, next) {
-  const options = {
-    page: req.query.page,
-    perPage: req.query.perPage
-  }
+  const { page = 1, perPage = 20 } = req.query
+  const options = { page, perPage }
 
   try {
-    const users = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
-    res.json({ data: users })
+    const { users, count } = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
+    res.json({ data: users, page, perPage, total: count, totalPages: Math.ceil(count / perPage) })
   } catch (e) {
     next(e)
   }

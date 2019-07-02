@@ -43,20 +43,23 @@ async function findById(id) {
 }
 
 async function findAllSanitized(orgId, options) {
-  const { limit, offset } = getPaginationOptions(options)
-
+  const paginationOptions = getPaginationOptions(options.page, options.perPage)
   const db = getDb()
-  const users = await db.model(MODEL_NAME).findAll({
-    where: { orgId },
-    limit,
-    offset
-  })
 
-  return users.map(publicFields)
+  const query = {
+    where: { orgId },
+    ...paginationOptions
+  }
+
+  const result = await db.model(MODEL_NAME).findAndCountAll(query)
+
+  return { users: result.rows.map(publicFields), count: result.count }
 }
 
-function getPaginationOptions(queryOptions) {
-  const { page = 1, perPage = 1 } = queryOptions
+function getPaginationOptions(page, perPage) {
+  if (!page || !perPage) {
+    return {}
+  }
 
   return { limit: perPage, offset: (page - 1) * perPage }
 }
