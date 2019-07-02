@@ -16,15 +16,10 @@ const paramSchema = Joi.compile({
   orgId: Joi.number().required()
 })
 
-const readPerm = perms((req) => {
-  return {
-    resourceType: RESOURCE_TYPES.ORG_BILLING,
-    action: ACTIONS.READ_MY
-  }
-})
-
 const conditionalReadPerm = (req, res, next) => {
   const { orgId } = req.params
+
+  console.log(orgId, req.requestorInfo.orgId)
 
   // make sure requestor is reading their own organization
   if (orgId !== req.requestorInfo.orgId) {
@@ -65,6 +60,8 @@ const conditionalUpdatePerm = async (req, res, next) => {
 const orgBillingController = function(router) {
   // all routes are nested at organizations/:orgId and receive req.params.orgId
   router.get('/',
+    validateParams(paramSchema),
+    conditionalReadPerm,
     getOrgBilling
   )
   router.put('/',
@@ -80,7 +77,7 @@ const getOrgBilling = async function(req, res, next) {
 
   try {
     const billing = await billingCoordinator.getOrgBilling(orgId)
-    res.status(200).send(billing)
+    res.status(200).send({ data: billing })
   } catch (e) {
     next(e)
   }
