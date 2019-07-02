@@ -45,7 +45,7 @@ const getOrgBilling = async function(orgId) {
   if (!org) throw ono({ code: 404 }, `Could not fetch billing, organization not found with id ${orgId}`)
 
   // No billing information yet, return empty object
-  if (!org.stripeId) return null
+  if (!org.stripeId) return {}
 
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
 

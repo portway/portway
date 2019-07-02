@@ -23,6 +23,22 @@ const readPerm = perms((req) => {
   }
 })
 
+const conditionalReadPerm = (req, res, next) => {
+  const { orgId } = req.params
+
+  // make sure requestor is reading their own organization
+  if (orgId !== req.requestorInfo.orgId) {
+    return next(ono({ code: 404 }, 'Cannot fetch billing, requestor does not belong to the target organization '))
+  }
+
+  return perms((req) => {
+    return {
+      resourceType: RESOURCE_TYPES.ORGANIZATION,
+      action: ACTIONS.READ_MY_BILLING
+    }
+  })(req, res, next)
+}
+
 const conditionalUpdatePerm = async (req, res, next) => {
   const { orgId } = req.params
 
@@ -76,7 +92,7 @@ const updateOrgBilling = async function(req, res, next) {
 
   try {
     const billing = await billingCoordinator.updateOrgBilling(token, orgId)
-    res.status(200).send(billing)
+    res.status(200).send({ data: billing })
   } catch (e) {
     next(e)
   }

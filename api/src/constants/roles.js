@@ -34,7 +34,8 @@ export const ORGANIZATION_ROLES = {
     [resourceTypes.ORGANIZATION]: {
       [actions.READ_MY]: true,
       [actions.UPDATE_MY]: true,
-      [actions.UPDATE_MY_BILLING]: true
+      [actions.UPDATE_MY_BILLING]: true,
+      [actions.READ_MY_BILLING]: true
     },
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,
@@ -58,9 +59,6 @@ export const ORGANIZATION_ROLES = {
       [actions.UPDATE_ORG_ROLE]: true,
       [actions.READ_MY]: true,
       [actions.UPDATE_MY]: true
-    },
-    [resourceTypes.ORG_BILLING]: {
-      [actions.READ_MY]: true
     }
   },
   [rIds.ADMIN]: {
