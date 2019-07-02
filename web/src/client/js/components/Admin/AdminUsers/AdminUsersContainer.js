@@ -51,6 +51,11 @@ const AdminUsersContainer = ({
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
+  function pageChangeHandler(page) {
+    // @todo trigger fetch
+    console.info('Change page', page)
+  }
+
   function sortUsersHandler(id) {
     if (sortBy === id) {
       sortMethod === QUERY_PARAMS.ASCENDING ?
@@ -76,6 +81,7 @@ const AdminUsersContainer = ({
         isCreating={isCreating}
         isInviting={isInviting}
         errors={errors}
+        pageChangeHandler={pageChangeHandler}
         reinviteUserHandler={reinviteUserHandler}
         removeUserHandler={removeUserHandler}
         setCreateMode={setCreateMode}

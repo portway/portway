@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
+
+import AdminUsersCreateForm from './AdminUsersCreateForm'
+import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import Table from 'Components/Table/Table'
-import AdminUsersCreateForm from './AdminUsersCreateForm'
 
 import './_AdminUsers.scss'
 
@@ -17,6 +19,7 @@ const AdminUsersComponent = ({
   errors,
   isCreating,
   isInviting,
+  pageChangeHandler,
   reinviteUserHandler,
   removeUserHandler,
   setCreateMode,
@@ -90,12 +93,15 @@ const AdminUsersComponent = ({
           />
         }
         {!isCreating &&
+          <>
           <Table
             headings={userHeadings}
             rows={userRows}
             sortCallback={sortUsersHandler}
             sortedBy={sortBy}
             sortMethod={sortMethod} />
+          <PaginatorContainer count={100} onChange={pageChangeHandler} />
+          </>
         }
       </section>
     </div>
@@ -108,6 +114,7 @@ AdminUsersComponent.propTypes = {
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
+  pageChangeHandler: PropTypes.func.isRequired,
   reinviteUserHandler: PropTypes.func,
   removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
