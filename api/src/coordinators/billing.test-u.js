@@ -124,8 +124,8 @@ describe('billing coordinator', () => {
         orgBilling = await billingCoordinator.getOrgBilling(orgId)
       })
 
-      it('should return null', async () => {
-        expect(orgBilling).toEqual(null)
+      it('should return an empty object', async () => {
+        expect(orgBilling).toEqual({})
       })
     })
   })
