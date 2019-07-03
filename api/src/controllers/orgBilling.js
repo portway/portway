@@ -19,8 +19,6 @@ const paramSchema = Joi.compile({
 const conditionalReadPerm = (req, res, next) => {
   const { orgId } = req.params
 
-  console.log(orgId, req.requestorInfo.orgId)
-
   // make sure requestor is reading their own organization
   if (orgId !== req.requestorInfo.orgId) {
     return next(ono({ code: 404 }, 'Cannot fetch billing, requestor does not belong to the target organization '))
