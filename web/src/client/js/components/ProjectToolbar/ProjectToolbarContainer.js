@@ -12,7 +12,7 @@ const ProjectToolbarContainer = ({ match }) => {
   const documentId = match.params.documentId
   const { data: document } = useDataService(dataMapper.documents.id(projectId, documentId), [projectId, documentId])
   const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.projects.projectAssignments(projectId), [projectId])
-  const { data: users, loading: userLoading } = useDataService(dataMapper.users.list())
+  const { data: users, loading: userLoading } = useDataService(dataMapper.users.list(1))
 
   // Create a list of projectUsers if we have any
   let projectUsers = []

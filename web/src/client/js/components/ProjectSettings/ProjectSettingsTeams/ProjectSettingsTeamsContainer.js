@@ -18,7 +18,7 @@ const ProjectSettingsTeamContainer = ({ location }) => {
     location.pathname
   ])
   const projectId = project.id
-  const { data: users } = useDataService(dataMapper.users.list())
+  const { data: users } = useDataService(dataMapper.users.list(1))
   const { data: currentUser } = useDataService(dataMapper.users.current())
   const { data: projectAssignments } = useDataService(dataMapper.projects.projectAssignments(projectId))
 

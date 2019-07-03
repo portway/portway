@@ -12,7 +12,7 @@ import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
 
 const ProjectCreatorContainer = ({ errors, history }) => {
-  const { data: users } = useDataService(dataMapper.users.list())
+  const { data: users } = useDataService(dataMapper.users.list(1))
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
   const [formValues, setFormValues] = useState({

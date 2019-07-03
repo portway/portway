@@ -64,7 +64,7 @@ const AdminUsersComponent = ({
 
   // Create a nice user row object
   const userRows = {}
-  Object.values(users).forEach((user) => {
+  users.forEach((user) => {
     userRows[user.id] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
@@ -121,7 +121,7 @@ AdminUsersComponent.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
-  users: PropTypes.object.isRequired
+  users: PropTypes.array.isRequired
 }
 
 export default AdminUsersComponent

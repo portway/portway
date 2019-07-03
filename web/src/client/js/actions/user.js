@@ -3,14 +3,17 @@ import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '.
 
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 
+const USERS_PER_PAGE = 2
 /**
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchUsers = async (dispatch) => {
-  dispatch(Users.request())
-  const { data } = await fetch('users')
-  return dispatch(Users.receive(data))
+export const fetchUsers = (page = 1) => {
+  return async (dispatch) => {
+    dispatch(Users.request(page))
+    const { data } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}`)
+    return dispatch(Users.receive(data, page))
+  }
 }
 
 export const fetchUser = (id) => {
