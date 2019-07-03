@@ -23,7 +23,8 @@ const AdminUsersContainer = ({
   uiConfirm,
   uiCreateUserMode
 }) => {
-  const { data: users } = useDataService(dataMapper.users.list())
+  const [page, setPage] = useState(1)
+  const { data: users } = useDataService(dataMapper.users.list(page), page)
   const [sortBy, setSortBy] = useState('createdAt')
   const [sortMethod, setSortMethod] = useState(QUERY_PARAMS.ASCENDING)
 
@@ -54,6 +55,7 @@ const AdminUsersContainer = ({
   function pageChangeHandler(page) {
     // @todo trigger fetch
     console.info('Change page', page)
+    setPage(page)
   }
 
   function sortUsersHandler(id) {
