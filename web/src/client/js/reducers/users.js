@@ -3,6 +3,7 @@ import { ActionTypes } from '../actions'
 const initialState = {
   usersById: {},
   userIdsByPage: {},
+  totalPages: null,
   loading: {
     byPage: {},
     byId: {}
@@ -22,13 +23,13 @@ export const users = (state = initialState, action) => {
       }, {})
 
       const userIds = action.data.map(user => user.id)
-
       const loadingByPage = { ...state.loading.byPage, [action.page]: false }
       return {
         ...state,
         usersById: { ...state.usersById, ...usersById },
         loading: { ...state.loading, byPage: loadingByPage },
-        userIdsByPage: { ...state.userIdsByPage, [action.page]: userIds }
+        userIdsByPage: { ...state.userIdsByPage, [action.page]: userIds },
+        totalPages: action.totalPages
       }
     }
     case ActionTypes.REQUEST_USER: {

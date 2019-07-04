@@ -24,7 +24,7 @@ const AdminUsersContainer = ({
   uiCreateUserMode
 }) => {
   const page = parseParams(location.search).page || 1
-  const { data: users = [] } = useDataService(dataMapper.users.list(page), [page])
+  const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page), [page])
   const [sortBy, setSortBy] = useState('createdAt')
   const [sortMethod, setSortMethod] = useState(QUERY_PARAMS.ASCENDING)
 
@@ -90,6 +90,7 @@ const AdminUsersContainer = ({
         sortMethod={sortMethod}
         sortUsersHandler={sortUsersHandler}
         users={users}
+        totalPages={totalPages}
       />
     </>
   )

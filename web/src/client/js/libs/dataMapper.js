@@ -137,9 +137,10 @@ export default {
           return state.users.loading.byPage[page]
         },
         getDataFromState: (state) => {
-          console.log(state)
           const ids = state.users.userIdsByPage[page]
-          return ids && ids.map(id => state.users.usersById[id])
+          const users = ids && ids.map(id => state.users.usersById[id])
+          const totalPages = state.users.totalPages
+          return { users, totalPages }
         }
       }
     },

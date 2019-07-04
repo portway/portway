@@ -169,7 +169,7 @@ export const Notifications = {
 
 export const Users = {
   request: makeActionCreator(ActionTypes.REQUEST_USERS, 'page'),
-  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data', 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
   create: makeActionCreator(ActionTypes.INITIATE_USER_CREATE, 'userId'),

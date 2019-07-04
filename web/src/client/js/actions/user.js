@@ -11,8 +11,8 @@ const USERS_PER_PAGE = 2
 export const fetchUsers = (page = 1) => {
   return async (dispatch) => {
     dispatch(Users.request(page))
-    const { data } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}`)
-    return dispatch(Users.receive(data, page))
+    const { data, totalPages } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}`)
+    return dispatch(Users.receive(data, page, totalPages))
   }
 }
 
