@@ -3,7 +3,7 @@ import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '.
 
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 
-const USERS_PER_PAGE = 2
+const USERS_PER_PAGE = 5
 /**
  * Redux action
  * @returns Redux dispatch with data
