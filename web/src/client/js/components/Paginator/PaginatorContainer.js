@@ -7,14 +7,13 @@ import PaginatorComponent from './PaginatorComponent'
 
 const PaginatorContainer = ({ totalPages, history, location, onChange }) => {
   const queryParams = parseParams(location.search)
-  const [currentPage, setCurrentPage] = useState(Number(queryParams.page) || 1)
+  const currentPage = Number(queryParams.page || 1)
 
   if (!totalPages) return null
 
   function pageChangeHandler(page) {
     if (page === currentPage) return
     queryParams.page = Number(page)
-    setCurrentPage(page)
     onChange && onChange(page)
     history.push({ search: convertParams(queryParams) })
   }
