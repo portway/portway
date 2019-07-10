@@ -33,7 +33,7 @@ const AdminUsersContainer = ({
     history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}&page=${page}` })
     // @todo handle the sort action here, but not on the first load? that should
     // already be the default
-  }, [history, sortBy, sortMethod])
+  }, [history, sortBy, sortMethod, page])
 
   function addUserHandler(values) {
     createUser(values)
