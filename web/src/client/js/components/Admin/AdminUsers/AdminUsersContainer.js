@@ -30,10 +30,10 @@ const AdminUsersContainer = ({
 
   // Update the params on state change
   useEffect(() => {
-    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}` })
+    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}&page=${page}` })
     // @todo handle the sort action here, but not on the first load? that should
     // already be the default
-  }, [history, sortBy, sortMethod])
+  }, [history, sortBy, sortMethod, page])
 
   function addUserHandler(values) {
     createUser(values)

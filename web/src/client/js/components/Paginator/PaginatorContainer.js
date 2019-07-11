@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
@@ -7,14 +7,12 @@ import PaginatorComponent from './PaginatorComponent'
 
 const PaginatorContainer = ({ totalPages, history, location, onChange }) => {
   const queryParams = parseParams(location.search)
-  const [currentPage, setCurrentPage] = useState(Number(queryParams.page) || 1)
-
+  const currentPage = Number(queryParams.page || 1)
   if (!totalPages) return null
 
   function pageChangeHandler(page) {
     if (page === currentPage) return
     queryParams.page = Number(page)
-    setCurrentPage(page)
     onChange && onChange(page)
     history.push({ search: convertParams(queryParams) })
   }
