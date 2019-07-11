@@ -7,7 +7,7 @@ import './_Paginator.scss'
 const PaginatorComponent = ({ changeHandler, page, pages }) => {
   function renderPageItems() {
     const listItems = []
-    for (let index = 1; index < pages; index++) {
+    for (let index = 1; index <= pages; index++) {
       const current = index === page
       const pageClasses = cx({
         'paginator__page': true,

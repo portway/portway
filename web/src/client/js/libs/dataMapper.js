@@ -130,14 +130,17 @@ export default {
     }
   },
   users: {
-    list: function() {
+    list: function(page) {
       return {
-        fetchAction: fetchUsers,
+        fetchAction: fetchUsers(page),
         getLoadingStatusFromState: (state) => {
-          return state.users.loading.list
+          return state.users.loading.byPage[page]
         },
         getDataFromState: (state) => {
-          return state.users.usersById
+          const ids = state.users.userIdsByPage[page]
+          const users = ids && ids.map(id => state.users.usersById[id])
+          const totalPages = state.users.totalPages
+          return { users, totalPages }
         }
       }
     },

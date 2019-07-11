@@ -1,20 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 import { parseParams, convertParams } from '../../utilities/queryParams'
 import PaginatorComponent from './PaginatorComponent'
 
-const PaginatorContainer = ({ count, history, limit = 10, location, onChange }) => {
+const PaginatorContainer = ({ totalPages, history, location, onChange }) => {
   const queryParams = parseParams(location.search)
-  const [currentPage, setCurrentPage] = useState(Number(queryParams.page) || 1)
-  const totalPages = Math.ceil(count / limit)
+  const currentPage = Number(queryParams.page || 1)
+  if (!totalPages) return null
 
   function pageChangeHandler(page) {
     if (page === currentPage) return
     queryParams.page = Number(page)
-    setCurrentPage(page)
-    onChange(page)
+    onChange && onChange(page)
     history.push({ search: convertParams(queryParams) })
   }
 
@@ -27,9 +26,8 @@ const PaginatorContainer = ({ count, history, limit = 10, location, onChange }) 
 }
 
 PaginatorContainer.propTypes = {
-  count: PropTypes.number.isRequired,
+  totalPages: PropTypes.number,
   history: PropTypes.object.isRequired,
-  limit: PropTypes.number,
   location: PropTypes.object.isRequired,
   onChange: PropTypes.func
 }

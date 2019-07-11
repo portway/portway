@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
-
+import { parseParams } from '../../../utilities/queryParams'
 import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
@@ -23,16 +23,17 @@ const AdminUsersContainer = ({
   uiConfirm,
   uiCreateUserMode
 }) => {
-  const { data: users } = useDataService(dataMapper.users.list())
+  const page = parseParams(location.search).page || 1
+  const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page), [page])
   const [sortBy, setSortBy] = useState('createdAt')
   const [sortMethod, setSortMethod] = useState(QUERY_PARAMS.ASCENDING)
 
   // Update the params on state change
   useEffect(() => {
-    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}` })
+    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}&page=${page}` })
     // @todo handle the sort action here, but not on the first load? that should
     // already be the default
-  }, [history, sortBy, sortMethod])
+  }, [history, sortBy, sortMethod, page])
 
   function addUserHandler(values) {
     createUser(values)
@@ -89,6 +90,7 @@ const AdminUsersContainer = ({
         sortMethod={sortMethod}
         sortUsersHandler={sortUsersHandler}
         users={users}
+        totalPages={totalPages}
       />
     </>
   )

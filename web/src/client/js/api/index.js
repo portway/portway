@@ -20,8 +20,8 @@ const axiosInstance = axios.create({
 
 async function fetch(resource) {
   try {
-    const { data: { data }, status } = await axiosInstance.get(resource)
-    return { data, status }
+    const { data: { data, page, perPage, total, totalPages }, status } = await axiosInstance.get(resource)
+    return { data, status, page, perPage, total, totalPages }
   } catch (error) {
     const { data, status } = error.response
     return { data, status }

@@ -26,7 +26,8 @@ const AdminUsersComponent = ({
   sortBy,
   sortMethod,
   sortUsersHandler,
-  users
+  users,
+  totalPages
 }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
@@ -64,7 +65,7 @@ const AdminUsersComponent = ({
 
   // Create a nice user row object
   const userRows = {}
-  Object.values(users).forEach((user) => {
+  users.forEach((user) => {
     userRows[user.id] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
@@ -100,7 +101,7 @@ const AdminUsersComponent = ({
             sortCallback={sortUsersHandler}
             sortedBy={sortBy}
             sortMethod={sortMethod} />
-          <PaginatorContainer count={100} onChange={pageChangeHandler} />
+          <PaginatorContainer totalPages={totalPages} />
           </>
         }
       </section>
@@ -121,7 +122,8 @@ AdminUsersComponent.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
-  users: PropTypes.object.isRequired
+  users: PropTypes.array.isRequired,
+  totalPages: PropTypes.number
 }
 
 export default AdminUsersComponent

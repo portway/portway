@@ -71,7 +71,20 @@ const bulkUsers = [
     orgId: PROJ_X_ORG_ID,
     orgRoleId: 3
   }
-]
+// Create generic reader users for lists
+].concat(Array(40).fill().map((__, index) => {
+  return {
+    id: 10000000 + index,
+    name: `Reader ${index}`,
+    email: `reader${index}@bong.com`,
+    createdAt: TODAY,
+    updatedAt: TODAY,
+    // password is "bonkeybong"
+    password: '$2b$11$5m72f3Gm/diJeP9pFRYdeuSsY64r.xzoJHCUG4iStTHbuPnNE7onm',
+    orgId: ORG_ID,
+    orgRoleId: 3
+  }
+}))
 
 module.exports = {
   up: (queryInterface, Sequelize) => {

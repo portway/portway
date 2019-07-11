@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import ono from 'ono'
 
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import userCoordinator from '../coordinators/user'
@@ -14,6 +14,11 @@ import userSchema from './payloadSchemas/user'
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
+})
+
+const querySchema = Joi.compile({
+  page: Joi.number(),
+  perPage: Joi.number()
 })
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
@@ -73,7 +78,7 @@ const conditionalDeletePerm = async (req, res, next) => {
 }
 
 const usersController = function(router) {
-  router.get('/', listPerm, getUsers)
+  router.get('/', validateQuery(querySchema), listPerm, getUsers)
   router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getUser)
   router.post('/', validateBody(bodySchema, { includeDetails: true }), createPerm, createUser)
   router.put(
@@ -88,9 +93,12 @@ const usersController = function(router) {
 }
 
 const getUsers = async function(req, res, next) {
+  const { page = 1, perPage = 20 } = req.query
+  const options = { page, perPage }
+
   try {
-    const users = await BusinessUser.findAllSanitized(req.requestorInfo.orgId)
-    res.json({ data: users })
+    const { users, count } = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
+    res.json({ data: users, page, perPage, total: count, totalPages: Math.ceil(count / perPage) })
   } catch (e) {
     next(e)
   }
