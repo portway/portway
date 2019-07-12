@@ -2,18 +2,29 @@
 
 .admin-payment {
   &__method {
-    margin-bottom: 1rem;
+    align-items: center;
+    display: flex;
+    margin-bottom: 2rem;
+  }
+  &__card-image {
+    display: block;
+    margin-right: 2rem;
   }
   &__card-type {
-    font-weight: 500;
-    text-decoration: underline;
+  }
+  &__card-ending-in {
+    padding-left: 2rem;
   }
   &__card-ending {
     font-weight: 700;
+    padding: 0 2rem 0 .5rem;
   }
   &__card-expiration {
-    display: block;
-    margin-top: .5rem;
+    font-weight: 700;
+    padding: 0 0 0 .5rem;
+    &--soon {
+      color: $danger;
+    }
   }
 
   // Specific field__control for this component

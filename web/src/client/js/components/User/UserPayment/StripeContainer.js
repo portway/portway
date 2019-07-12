@@ -1,8 +1,13 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { Elements, StripeProvider } from 'react-stripe-elements'
 
+import Store from '../../../reducers'
+import { updateOrganizationBilling } from 'Actions/organization'
+
 import { ORGANIZATION_ROLE_IDS, PATH_PROJECTS } from 'Shared/constants'
+import { currentOrgId } from 'Libs/currentIds'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import StripeComponent from './StripeComponent'
 
@@ -30,11 +35,20 @@ class StripeContainer extends React.Component {
       <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
         <StripeProvider stripe={this.state.stripe}>
           <Elements>
-            <StripeComponent />
+            <StripeComponent
+              cancelHandler={this.props.cancelHandler}
+              isSubmitting={this.props.isSubmitting}
+              orgId={currentOrgId}
+              updateBillingHandler={this.updateBillingHandler}
+            />
           </Elements>
         </StripeProvider>
       </OrgPermission>
     )
+  }
+
+  updateBillingHandler(token) {
+    Store.dispatch(updateOrganizationBilling(currentOrgId, { token: token.id }))
   }
 
   stripeLoadedHandler(data) {
@@ -51,6 +65,11 @@ class StripeContainer extends React.Component {
       throw new URIError('Error loading Stripe.')
     }
   }
+}
+
+StripeContainer.propTypes = {
+  cancelHandler: PropTypes.func,
+  isSubmitting: PropTypes.bool
 }
 
 export default StripeContainer
