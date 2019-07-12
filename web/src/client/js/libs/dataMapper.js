@@ -17,7 +17,7 @@
  * A view can optionally take arguments to the function, for instance to fetch a resource by id
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
-import { fetchUser, fetchUsers, fetchUserProjectAssignments } from 'Actions/user'
+import { fetchUser, fetchUsers, fetchUserProjectAssignments, fetchProjectUsers } from 'Actions/user'
 import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
 import { fetchOrganization } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
@@ -103,6 +103,17 @@ export default {
         },
         getDataFromState: (state) => {
           return state.projects.projectsById[projectId]
+        }
+      }
+    },
+    projectUsers: function(projectId) {
+      return {
+        fetchAction: fetchProjectAssignees(projectId),
+        getLoadingStatusFromState: (state) => {
+          return state.projectUsers.loading.usersByProjectId[projectId]
+        },
+        getDataFromState: (state) => {
+          return state.projectUsers.usersByProjectId[projectId]
         }
       }
     },

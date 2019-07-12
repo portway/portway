@@ -7,13 +7,14 @@ import { documentFields } from './documentFields'
 import { validation } from './validation'
 import { notifications } from './notifications'
 import { projects } from './projects'
-import { projectAssignments } from './projectAssignments'
+import { projectUsers } from './projectUsers'
 import { projectTokens } from './projectTokens'
 import { ui } from './ui'
 import { users } from './users'
 import { userAssignments } from './userAssignments'
 import { organizations } from './organizations'
 import { userProjects } from './userProjects'
+import { projectAssignments } from './projectAssignments'
 
 const rootReducer = combineReducers({
   documents,
@@ -21,13 +22,14 @@ const rootReducer = combineReducers({
   validation,
   notifications,
   projects,
-  projectAssignments,
+  projectUsers,
   projectTokens,
   ui,
   users,
   userAssignments,
   organizations,
-  userProjects
+  userProjects,
+  projectAssignments
 })
 
 const middlewares = [thunk]

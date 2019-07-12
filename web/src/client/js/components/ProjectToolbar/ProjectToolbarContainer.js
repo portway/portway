@@ -11,22 +11,21 @@ const ProjectToolbarContainer = ({ match }) => {
   const projectId = match.params.projectId
   const documentId = match.params.documentId
   const { data: document } = useDataService(dataMapper.documents.id(projectId, documentId), [projectId, documentId])
-  const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.projects.projectAssignments(projectId), [projectId])
-  const { data: users, loading: userLoading } = useDataService(dataMapper.users.list(1))
+  const { data: projectUsers, loading: assigneesLoading } = useDataService(dataMapper.projects.projectUsers(projectId), [projectId])
 
   // Create a list of projectUsers if we have any
-  let projectUsers = []
+  let projectUsersWithoutMe = []
   const myUserId = String(currentUserId)
 
-  if (!userLoading && !assignmentsLoading && projectAssignments) {
-    projectUsers = Object.keys(projectAssignments).filter((userId) => {
+  if (!assigneesLoading && projectUsers) {
+    projectUsersWithoutMe = Object.keys(projectUsers).filter((userId) => {
       if (userId !== myUserId) {
-        return users[userId]
+        return projectUsers[userId]
       }
     })
   }
 
-  return <ProjectToolbarComponent document={document} projectId={projectId} projectUsers={projectUsers} />
+  return <ProjectToolbarComponent document={document} projectId={projectId} projectUsers={projectUsersWithoutMe} />
 }
 
 ProjectToolbarContainer.propTypes = {

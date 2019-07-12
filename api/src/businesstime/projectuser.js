@@ -30,17 +30,11 @@ async function addUserIdToProject(userId, projectId, roleId, orgId) {
   const user = values[1]
 
   if (!project) {
-    throw ono(
-      { code: 404 },
-      `Project ${projectId} not found, cannot assign user ${userId}`
-    )
+    throw ono({ code: 404 }, `Project ${projectId} not found, cannot assign user ${userId}`)
   }
 
   if (!user) {
-    throw ono(
-      { code: 404 },
-      `User id ${userId} not found, cannot assign project ${projectId}`
-    )
+    throw ono({ code: 404 }, `User id ${userId} not found, cannot assign project ${projectId}`)
   }
 
   const result = await db.model(MODEL_NAME).findOrCreate({
@@ -59,21 +53,42 @@ async function updateProjectUserById(id, roleId, orgId) {
   if (!projectUser) {
     throw ono({ code: 404 }, `Project user assignment id ${id} not found`)
   }
-  return publicFields(await projectUser.update({
-    roleId
-  }))
+  return publicFields(
+    await projectUser.update({
+      roleId
+    })
+  )
 }
 
-async function findAllByProjectId(projectId, orgId) {
+async function findAllByProjectId(projectId, orgId, options) {
   const db = getDb()
+  const { includeUser } = options
 
-  return db.model(MODEL_NAME).findAll({
+  const query = {
     attributes: PUBLIC_FIELDS,
     where: {
       orgId,
       projectId
-    },
-    raw: true
+    }
+  }
+
+  if (includeUser) {
+    query.include = {
+      model: db.model('User')
+    }
+  }
+
+  const projectUsers = await db.model(MODEL_NAME).findAll(query)
+
+  return projectUsers.map((projectUser) => {
+    const sanitizedUser = publicFields(projectUser)
+    if (projectUser.User) {
+      return {
+        ...sanitizedUser,
+        user: pick(projectUser.User, resourcePublicFields[resourceTypes.USER])
+      }
+    }
+    return sanitizedUser
   })
 }
 
