@@ -39,7 +39,7 @@ async function findByEmail(email) {
 
 async function findSoftDeletedByEmail(email) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findOne({ where: { email }, paranoid: false }, { raw: true })
+  return await db.model(MODEL_NAME).findOne({ where: { email }, paranoid: false, raw: true })
 }
 
 async function findById(id) {
