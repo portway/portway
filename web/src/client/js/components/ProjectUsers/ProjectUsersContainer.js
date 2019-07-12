@@ -10,7 +10,6 @@ import ProjectUsersComponent from './ProjectUsersComponent'
 const ProjectUsersContainer = ({ projectId, collapsed }) => {
   const { data: projectUsers = {}, loading: projectUsersLoading } = useDataService(dataMapper.projects.projectUsers(projectId))
   if (projectUsersLoading ) return null
-  console.log(projectUsers)
   const projectUsersWithoutMe = Object.values(projectUsers).filter(user => user.id !== currentUserId)
 
   return <ProjectUsersComponent collapsed={collapsed} users={projectUsersWithoutMe} />
