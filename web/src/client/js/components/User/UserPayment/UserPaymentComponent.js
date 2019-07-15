@@ -27,40 +27,53 @@ function renderCardLogo(brand) {
 }
 
 const UserPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
-  const expDate = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month + 1}-01`)
-  const expiringSoon = moment() > expDate.add(1, 'months')
-  const expiringClass = cx({
-    'admin-payment__card-expiration': true,
-    'admin-payment__card-expiration--soon': expiringSoon
-  })
-  return (
-    <div className="admin-payment">
-      {!isStripeOpen && !orgBilling &&
-      <>
-        <p>We don’t have payment on file</p>
-        <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Add Payment Info</button>
-      </>
-      }
-      {!isStripeOpen && orgBilling && orgBilling.source.brand &&
-      <>
-        <div className="admin-payment__method">
-          {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
-          <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>
-          <span className="admin-payment__card-ending"> {orgBilling.source.last4}</span>
-          <span>Expires on</span>
-          <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
-        </div>
-        <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
-      </>
-      }
-      {isStripeOpen &&
-      <>
-        <p>Enter your new card information. We will use this new form of payment from now on.</p>
-        <StripeContainer cancelHandler={() => { openStripeHandler(false) }} isSubmitting={isSubmitting} />
-      </>
-      }
-    </div>
-  )
+  if (!isStripeOpen && Object.keys(orgBilling).length === 0) {
+    return (
+      <div className="admin-payment">
+        <>
+          <p>We don’t have payment on file</p>
+          <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Add Payment Info</button>
+        </>
+      </div>
+    )
+  }
+
+  if (isStripeOpen) {
+    return (
+      <div className="admin-payment">
+        <>
+          <p>Enter your new card information. We will use this new form of payment from now on.</p>
+          <StripeContainer cancelHandler={() => { openStripeHandler(false) }} isSubmitting={isSubmitting} />
+        </>
+      </div>
+    )
+  }
+
+  if (orgBilling && orgBilling.source) {
+    const expDateCalc = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month}-01`)
+    const expDate = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month}-01`)
+    const expiringSoon = moment() > expDateCalc.add(1, 'months')
+    const expiringClass = cx({
+      'admin-payment__card-expiration': true,
+      'admin-payment__card-expiration--soon': expiringSoon
+    })
+    return (
+      <div className="admin-payment">
+        {!isStripeOpen && orgBilling && orgBilling.source.brand &&
+        <>
+          <div className="admin-payment__method">
+            {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
+            <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>
+            <span className="admin-payment__card-ending"> {orgBilling.source.last4}</span>
+            <span>Expires: </span>
+            <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
+          </div>
+          <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
+        </>
+        }
+      </div>
+    )
+  }
 }
 
 UserPaymentComponent.propTypes = {
@@ -71,9 +84,7 @@ UserPaymentComponent.propTypes = {
 }
 
 UserPaymentComponent.defaultProps = {
-  orgBilling: {
-    source: {}
-  }
+  orgBilling: {}
 }
 
 export default UserPaymentComponent

@@ -46,15 +46,8 @@ export const organizations = (state = initialState, action) => {
         loading: { ...state.loading, billingById }
       }
     }
-    case ActionTypes.RECEIVE_ORGANIZATION_BILLING: {
-      if (Object.keys(action.data).length === 0) {
-        const billingById = { ...state.loading.billingById, [action.id]: false }
-        return {
-          ...state,
-          loading: { ...state.loading, billingById }
-        }
-      }
-      // We have billing info
+    case ActionTypes.RECEIVE_ORGANIZATION_BILLING:
+    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING: {
       const billingById = { ...state.loading.billingById, [action.id]: false }
       const organizationsBillingById = { ...state.organizationsBillingById, [action.id]: action.data }
       return {
@@ -68,15 +61,6 @@ export const organizations = (state = initialState, action) => {
       const billingById = { ...state.loading.billingById, [id]: true }
       return {
         ...state,
-        loading: { ...state.loading, billingById }
-      }
-    }
-    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING: {
-      const organizationsBillingById = { ...state.organizationsBillingById, [action.id]: action.data }
-      const billingById = { ...state.loading.billingById, [action.id]: false }
-      return {
-        ...state,
-        organizationsBillingById,
         loading: { ...state.loading, billingById }
       }
     }
