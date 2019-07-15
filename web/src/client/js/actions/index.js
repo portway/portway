@@ -83,13 +83,18 @@ export const ActionTypes = {
   RECEIVE_ORGANIZATION: 'RECEIVE_ORGANIZATION',
   INITIATE_ORGANIZATION_UPDATE: 'INITIATE_ORGANIZATION_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION: 'RECEIVE_UPDATED_ORGANIZATION',
+  REQUEST_ORGANIZATION_BILLING: 'REQUEST_ORGANIZATION_BILLING',
+  RECEIVE_ORGANIZATION_BILLING: 'RECEIVE_ORGANIZATION_BILLING',
+  INITIATE_ORGANIZATION_BILLING_UPDATE: 'INITIATE_ORGANIZATION_BILLING_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_BILLING: 'RECEIVE_UPDATED_ORGANIZATION_BILLING',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
   UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE',
-  UI_CREATE_USER_MODE: 'UI_CREATE_USER_MODE'
+  UI_CREATE_USER_MODE: 'UI_CREATE_USER_MODE',
+  UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM'
 }
 
 export const Route = {
@@ -194,6 +199,10 @@ export const Organizations = {
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_UPDATE, 'id'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION, 'data'),
+  requestBilling: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION_BILLING, 'id'),
+  receiveBilling: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_BILLING, 'id', 'data'),
+  initiateBillingUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE, 'id'),
+  receiveUpdatedBilling: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING, 'id', 'data')
 }
 
 export const UI = {
@@ -203,4 +212,5 @@ export const UI = {
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
+  toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value')
 }
