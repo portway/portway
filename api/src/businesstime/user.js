@@ -44,11 +44,13 @@ async function findById(id) {
 
 async function findAllSanitized(orgId, options) {
   const paginationOptions = getPaginationOptions(options.page, options.perPage)
+  const sortOptions = getSortOptions(options.sortBy, options.sortMethod)
   const db = getDb()
-
+  console.log(sortOptions)
   const query = {
     where: { orgId },
-    ...paginationOptions
+    ...paginationOptions,
+    ...sortOptions
   }
 
   const result = await db.model(MODEL_NAME).findAndCountAll(query)
@@ -62,6 +64,10 @@ function getPaginationOptions(page, perPage) {
   }
 
   return { limit: perPage, offset: (page - 1) * perPage }
+}
+
+function getSortOptions(sortBy = 'createdAt', sortMethod = 'ASC') {
+  return { order: [[sortBy, sortMethod]] }
 }
 
 async function findSanitizedById(id, orgId) {
