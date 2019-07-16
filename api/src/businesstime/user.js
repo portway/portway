@@ -46,11 +46,11 @@ async function findAllSanitized(orgId, options) {
   const paginationOptions = getPaginationOptions(options.page, options.perPage)
   const sortOptions = getSortOptions(options.sortBy, options.sortMethod)
   const db = getDb()
-  console.log(sortOptions)
+
   const query = {
     where: { orgId },
-    ...paginationOptions,
-    ...sortOptions
+    ...sortOptions,
+    ...paginationOptions
   }
 
   const result = await db.model(MODEL_NAME).findAndCountAll(query)
