@@ -12,6 +12,8 @@ import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
+import { sortUsers } from 'Actions/user'
+import Store from '../../../reducers'
 
 const AdminUsersContainer = ({
   createUser,
@@ -33,6 +35,7 @@ const AdminUsersContainer = ({
     history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}&page=${page}` })
     // @todo handle the sort action here, but not on the first load? that should
     // already be the default
+    Store.dispatch(sortUsers(sortBy, sortMethod))
   }, [history, sortBy, sortMethod, page])
 
   function addUserHandler(values) {

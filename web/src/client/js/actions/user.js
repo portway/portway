@@ -107,3 +107,9 @@ export const fetchUserProjectAssignments = (userId) => {
     return dispatch(UserProjectAssignments.receive(userId, data))
   }
 }
+
+export const sortUsers = (sortBy, sortMethod) => {
+  return (dispatch) => {
+    return dispatch(Users.sort(sortBy, sortMethod))
+  }
+}

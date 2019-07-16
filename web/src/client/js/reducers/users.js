@@ -81,6 +81,10 @@ export const users = (state = initialState, action) => {
       const { [id]: __, ...usersById } = state.usersById
       return { ...state, usersById, loading: { ...state.loading, list: false } }
     }
+    case ActionTypes.SORT_USERS: {
+      console.log('reducer')
+      return { ...state }
+    }
     default: {
       return state
     }
