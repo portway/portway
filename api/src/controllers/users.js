@@ -11,6 +11,7 @@ import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import userSchema from './payloadSchemas/user'
+import SORT_METHODS from '../constants/queryOptions'
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
@@ -20,7 +21,7 @@ const querySchema = Joi.compile({
   page: Joi.number(),
   perPage: Joi.number(),
   sortBy: Joi.string().valid(['name', 'createdAt']),
-  sortMethod: Joi.string().valid(['ASC', 'DESC'])
+  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
 })
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
