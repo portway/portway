@@ -1,6 +1,7 @@
 import { ActionTypes } from '../actions'
 
 const initialState = {
+  sortBy: 'createdAt',
   usersById: {},
   userIdsByPage: {},
   totalPages: null,
@@ -82,8 +83,17 @@ export const users = (state = initialState, action) => {
       return { ...state, usersById, loading: { ...state.loading, list: false } }
     }
     case ActionTypes.SORT_USERS: {
-      console.log('reducer')
-      return { ...state }
+      if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {
+        return {
+          ...state,
+          userIdsByPage: {},
+          totalPages: null,
+          sortBy: action.sortBy,
+          sortMethod: action.sortMethod,
+          loading: { ...state.loading, byPage: {} }
+        }
+      }
+      return state
     }
     default: {
       return state

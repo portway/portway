@@ -8,10 +8,10 @@ const USERS_PER_PAGE = 5
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchUsers = (page = 1) => {
+export const fetchUsers = (page = 1, sortBy = 'createdAt', sortMethod = 'ASC') => {
   return async (dispatch) => {
     dispatch(Users.request(page))
-    const { data, totalPages } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}`)
+    const { data, totalPages } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}&sortBy=${sortBy}&sortMethod=${sortMethod}`)
     return dispatch(Users.receive(data, page, totalPages))
   }
 }

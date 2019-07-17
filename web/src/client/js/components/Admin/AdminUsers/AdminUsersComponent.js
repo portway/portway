@@ -65,8 +65,8 @@ const AdminUsersComponent = ({
 
   // Create a nice user row object
   const userRows = {}
-  users.forEach((user) => {
-    userRows[user.id] = [
+  users.forEach((user, index) => {
+    userRows[index] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
       user.pending ? renderPendingUser(user.id) : moment(user.createdAt).format('YYYY MMM DD'),

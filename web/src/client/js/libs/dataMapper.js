@@ -141,9 +141,9 @@ export default {
     }
   },
   users: {
-    list: function(page) {
+    list: function(page, sortBy, sortMethod) {
       return {
-        fetchAction: fetchUsers(page),
+        fetchAction: fetchUsers(page, sortBy, sortMethod),
         getLoadingStatusFromState: (state) => {
           return state.users.loading.byPage[page]
         },
