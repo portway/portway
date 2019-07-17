@@ -47,7 +47,6 @@ export default function useDataService(
     let mounted = true
     const loading = getLoadingStatusFromState(Store.getState())
     setLoading(loading)
-    console.log("HERE", loading)
     if (loading == null) {
       Store.dispatch(fetchAction)
     }

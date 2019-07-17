@@ -6,6 +6,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import { getPaginationOptions, getSortOptions } from '../libs/queryFilters'
 
 export const MODEL_NAME = 'User'
 
@@ -56,18 +57,6 @@ async function findAllSanitized(orgId, options) {
   const result = await db.model(MODEL_NAME).findAndCountAll(query)
 
   return { users: result.rows.map(publicFields), count: result.count }
-}
-
-function getPaginationOptions(page, perPage) {
-  if (!page || !perPage) {
-    return {}
-  }
-
-  return { limit: perPage, offset: (page - 1) * perPage }
-}
-
-function getSortOptions(sortBy = 'createdAt', sortMethod = 'ASC') {
-  return { order: [[sortBy, sortMethod]] }
 }
 
 async function findSanitizedById(id, orgId) {
