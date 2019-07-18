@@ -4,9 +4,11 @@ const initialState = {
   usersById: {},
   userIdsByPage: {},
   totalPages: null,
+  userSearchResultIdsByNameString: {},
   loading: {
     byPage: {},
-    byId: {}
+    byId: {},
+    byNameString: {}
   }
 }
 
@@ -70,6 +72,24 @@ export const users = (state = initialState, action) => {
         ...state,
         usersById: { ...state.usersById, [userId]: userObj },
         loading: { ...state.loading, byId: byId, list: false }
+      }
+    }
+    case ActionTypes.INITIATE_USER_SEARCH_BY_NAME: {
+      const loadingByName = { ...state.loading.byNameString, [action.partialNameString]: true }
+      return { ...state, loading: { ...state.loading, byPage: loadingByName } }
+    }
+    case ActionTypes.RECEIVE_USER_SEARCH_RESULTS_BY_NAME: {
+      const usersById = action.data.reduce((usersById, user) => {
+        usersById[user.id] = user
+        return usersById
+      }, {})
+      const userIds = action.data.map(user => user.id)
+      const loadingByNameString = { ...state.loading.byNameString, [action.partialNameString]: false }
+      return {
+        ...state,
+        usersById: { ...state.usersById, ...usersById },
+        loading: { ...state.loading, byNameString: loadingByNameString },
+        userSearchResultIdsByNameString: { ...state.userSearchResultIdsByNameString, [action.partialNameString]: userIds }
       }
     }
     case ActionTypes.INITIATE_USER_REMOVE: {

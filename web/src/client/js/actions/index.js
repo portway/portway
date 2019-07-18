@@ -75,6 +75,8 @@ export const ActionTypes = {
   RECEIVE_REINVITED_USER: 'RECEIVE_REINVITED_USER',
   REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
+  INITIATE_USER_SEARCH_BY_NAME: 'INITIATE_USER_SEARCH_BY_NAME',
+  RECEIVE_USER_SEARCH_RESULTS_BY_NAME: 'RECEIVE_USER_SEARCH_RESULTS_BY_NAME',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
   RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
@@ -181,7 +183,9 @@ export const Users = {
   removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
   initiateReinvite: makeActionCreator(ActionTypes.INITIATE_USER_REINVITE, 'userId'),
   receiveSuccessfulReinvite: makeActionCreator(ActionTypes.RECEIVE_REINVITED_USER, 'userId'),
-  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
+  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id'),
+  initiateSearchByName: makeActionCreator(ActionTypes.INITIATE_USER_SEARCH_BY_NAME, 'partialNameString'),
+  receiveSearchResultsByName: makeActionCreator(ActionTypes.RECEIVE_USER_SEARCH_RESULTS_BY_NAME, 'data', 'partialNameString')
 }
 
 export const UserProjectAssignments = {

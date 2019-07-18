@@ -9,7 +9,7 @@ import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 import './_ProjectSettingsTeams.scss'
 
-const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
+const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler, userSearchHandler }) => {
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
   const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
@@ -26,7 +26,7 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
               <Select
                 classNamePrefix="react-select"
                 className="react-select-container"
-                noOptionsMessage={() => { return 'Your entire team is on the project' }}
+                onInputChange={(input, action) => { userSearchHandler(input) }}
                 options={users}
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
@@ -61,6 +61,7 @@ ProjectSettingsTeamsComponent.propTypes = {
   createAssignmentHandler: PropTypes.func.isRequired,
   removeAssignmentHandler: PropTypes.func.isRequired,
   updateAssignmentHandler: PropTypes.func.isRequired,
+  userSearchHandler: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
   projectUsers: PropTypes.array.isRequired
 }

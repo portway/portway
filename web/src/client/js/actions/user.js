@@ -3,7 +3,8 @@ import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '.
 
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 
-const USERS_PER_PAGE = 5
+const USERS_PER_PAGE = 10
+const USERS_PER_SEARCH = 10
 /**
  * Redux action
  * @returns Redux dispatch with data
@@ -105,5 +106,13 @@ export const fetchUserProjectAssignments = (userId) => {
     dispatch(UserProjectAssignments.request(userId))
     const { data } = await fetch(`users/${userId}/assignments`)
     return dispatch(UserProjectAssignments.receive(userId, data))
+  }
+}
+
+export const searchByName = (partialNameString) => {
+  return async (dispatch) => {
+    dispatch(Users.initiateSearchByName(partialNameString))
+    const { data } = await fetch(`users?nameSearch=${partialNameString}&page=1&perPage=${USERS_PER_SEARCH}`)
+    return dispatch(Users.receiveSearchResultsByName(data, partialNameString))
   }
 }
