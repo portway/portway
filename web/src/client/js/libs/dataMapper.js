@@ -209,7 +209,6 @@ export default {
           return state.users.loading.byNameString[partialNameString]
         },
         getDataFromState: (state) => {
-          console.log(state.users)
           const ids = state.users.userSearchResultIdsByNameString[partialNameString]
           const users = ids && ids.map(id => state.users.usersById[id])
           return users

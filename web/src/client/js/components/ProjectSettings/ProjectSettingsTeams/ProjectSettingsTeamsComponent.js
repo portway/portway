@@ -26,7 +26,12 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
               <Select
                 classNamePrefix="react-select"
                 className="react-select-container"
-                onInputChange={(input, action) => { userSearchHandler(input) }}
+                defaultValue={newUserId}
+                onInputChange={(input, { action }) => {
+                  if (action === 'input-change') {
+                    setNewUserId(null); userSearchHandler(input)
+                  }
+                }}
                 options={users}
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
