@@ -11,7 +11,7 @@ import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import userSchema from './payloadSchemas/user'
-import SORT_METHODS from '../constants/queryOptions'
+import { SORT_METHODS } from '../constants/queryOptions'
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
