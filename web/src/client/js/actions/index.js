@@ -75,6 +75,7 @@ export const ActionTypes = {
   RECEIVE_REINVITED_USER: 'RECEIVE_REINVITED_USER',
   REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
+  SORT_USERS: 'SORT_USERS',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
   RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
@@ -181,7 +182,8 @@ export const Users = {
   removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
   initiateReinvite: makeActionCreator(ActionTypes.INITIATE_USER_REINVITE, 'userId'),
   receiveSuccessfulReinvite: makeActionCreator(ActionTypes.RECEIVE_REINVITED_USER, 'userId'),
-  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
+  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id'),
+  sort: makeActionCreator(ActionTypes.SORT_USERS, 'sortBy', 'sortMethod')
 }
 
 export const UserProjectAssignments = {

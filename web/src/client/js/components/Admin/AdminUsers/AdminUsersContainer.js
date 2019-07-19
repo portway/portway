@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -12,6 +12,8 @@ import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
+import { sortUsers } from 'Actions/user'
+import Store from '../../../reducers'
 
 const AdminUsersContainer = ({
   createUser,
@@ -23,17 +25,9 @@ const AdminUsersContainer = ({
   uiConfirm,
   uiCreateUserMode
 }) => {
-  const page = parseParams(location.search).page || 1
-  const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page), [page])
-  const [sortBy, setSortBy] = useState('createdAt')
-  const [sortMethod, setSortMethod] = useState(QUERY_PARAMS.ASCENDING)
-
-  // Update the params on state change
-  useEffect(() => {
-    history.push({ search: `?sortBy=${sortBy}&sortMethod=${sortMethod}&page=${page}` })
-    // @todo handle the sort action here, but not on the first load? that should
-    // already be the default
-  }, [history, sortBy, sortMethod, page])
+  const params = parseParams(location.search)
+  const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.ASCENDING } = params
+  const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
 
   function addUserHandler(values) {
     createUser(values)
@@ -57,14 +51,16 @@ const AdminUsersContainer = ({
     console.info('Change page', page)
   }
 
-  function sortUsersHandler(id) {
-    if (sortBy === id) {
-      sortMethod === QUERY_PARAMS.ASCENDING ?
-        setSortMethod(QUERY_PARAMS.DESCENDING) : setSortMethod(QUERY_PARAMS.ASCENDING)
-      return
+  function sortUsersHandler(selectedSortProperty) {
+    let newSortMethod
+    if (sortBy === selectedSortProperty && sortMethod === QUERY_PARAMS.ASCENDING) {
+      newSortMethod = QUERY_PARAMS.DESCENDING
+    } else {
+      newSortMethod = QUERY_PARAMS.ASCENDING
     }
-    setSortBy(id)
-    setSortMethod(QUERY_PARAMS.ASCENDING)
+
+    history.push({ search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}` })
+    Store.dispatch(sortUsers(sortBy, sortMethod))
   }
 
   function setCreateMode(value) {
