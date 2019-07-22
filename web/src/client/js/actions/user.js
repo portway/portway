@@ -9,10 +9,10 @@ const USERS_PER_SEARCH = 10
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchUsers = (page = 1) => {
+export const fetchUsers = (page = 1, sortBy = 'createdAt', sortMethod = 'ASC') => {
   return async (dispatch) => {
     dispatch(Users.request(page))
-    const { data, totalPages } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}`)
+    const { data, totalPages } = await fetch(`users?page=${page}&perPage=${USERS_PER_PAGE}&sortBy=${sortBy}&sortMethod=${sortMethod}`)
     return dispatch(Users.receive(data, page, totalPages))
   }
 }
@@ -114,5 +114,11 @@ export const searchByName = (partialNameString) => {
     dispatch(Users.initiateSearchByName(partialNameString))
     const { data } = await fetch(`users?nameSearch=${partialNameString}&page=1&perPage=${USERS_PER_SEARCH}`)
     return dispatch(Users.receiveSearchResultsByName(data, partialNameString))
+  }
+}
+
+export const sortUsers = (sortBy, sortMethod) => {
+  return (dispatch) => {
+    return dispatch(Users.sort(sortBy, sortMethod))
   }
 }
