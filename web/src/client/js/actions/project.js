@@ -102,7 +102,7 @@ export const fetchProjectAssignees = (projectId) => {
 export const createProjectAssignee = (projectId, body) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.create(projectId))
-    const { data, status } = await add(`projects/${projectId}/assignments`, body)
+    const { data, status } = await add(`projects/${projectId}/assignments?includeUser=true`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return

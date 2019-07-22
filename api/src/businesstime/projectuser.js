@@ -18,7 +18,7 @@ async function create(body) {
   return createdProjectUser.get({ plain: true })
 }
 
-async function addUserIdToProject(userId, projectId, roleId, orgId) {
+async function addUserIdToProject(userId, projectId, roleId, orgId, options) {
   const db = getDb()
 
   const values = await Promise.all([
@@ -43,7 +43,14 @@ async function addUserIdToProject(userId, projectId, roleId, orgId) {
     raw: true
   })
   // findOrCreate returns [result, status]
-  return result[0]
+  const projectUser = publicFields(result[0])
+
+  if (options.includeUser) {
+    const publicUser = pick(user, resourcePublicFields[resourceTypes.USER] )
+    projectUser.user = publicUser
+  }
+
+  return projectUser
 }
 
 async function updateProjectUserById(id, roleId, orgId) {
