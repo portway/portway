@@ -20,6 +20,7 @@ const paramSchema = Joi.compile({
 const querySchema = Joi.compile({
   page: Joi.number(),
   perPage: Joi.number(),
+  nameSearch: Joi.string(),
   sortBy: Joi.string().valid(['name', 'createdAt']),
   sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
 })
@@ -96,8 +97,8 @@ const usersController = function(router) {
 }
 
 const getUsers = async function(req, res, next) {
-  const { page = 1, perPage = 20, sortBy, sortMethod } = req.query
-  const options = { page, perPage, sortBy, sortMethod }
+  const { page = 1, perPage = 20, nameSearch, sortBy, sortMethod } = req.query
+  const options = { page, perPage, sortBy, sortMethod, nameSearch }
 
   try {
     const { users, count } = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
