@@ -70,19 +70,29 @@ async function validatePasswordResetKey(userId, resetKey) {
 
 async function createPendingUser(email, name, orgId) {
   const resetKey = passwordResetKey.generate()
-  const createdUser = await BusinessUser.create({
-    email,
-    name,
-    orgRoleId: ORGANIZATION_ROLE_IDS.USER,
-    orgId,
-    resetKey
-  })
 
-  const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
+  //look for existing soft-deleted user
+  const previouslyDeletedUser = await BusinessUser.findSoftDeletedByEmail(email)
 
-  await emailCoordinator.sendInvitationEmail(createdUser.email, token, orgId)
+  let user
 
-  return pick(createdUser, PUBLIC_FIELDS)
+  if (previouslyDeletedUser) {
+    user = await BusinessUser.restoreSoftDeleted(previouslyDeletedUser.id, resetKey)
+  } else {
+    user = await BusinessUser.create({
+      email,
+      name,
+      orgRoleId: ORGANIZATION_ROLE_IDS.USER,
+      orgId,
+      resetKey
+    })
+  }
+
+  const token = tokenIntegrator.generatePasswordResetToken(user.id, resetKey)
+
+  await emailCoordinator.sendInvitationEmail(user.email, token, orgId)
+
+  return pick(user, PUBLIC_FIELDS)
 }
 
 async function deleteById(userId, orgId) {

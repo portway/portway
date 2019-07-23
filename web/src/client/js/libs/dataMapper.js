@@ -19,7 +19,7 @@
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments, searchByName } from 'Actions/user'
 import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
-import { fetchOrganization } from 'Actions/organization'
+import { fetchOrganization, fetchOrganizationBilling } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
 
 function returnNull() {
@@ -225,6 +225,17 @@ export default {
         },
         getDataFromState: (state) => {
           return state.organizations.organizationsById[currentOrgId]
+        }
+      }
+    },
+    billing: function() {
+      return {
+        fetchAction: fetchOrganizationBilling(currentOrgId),
+        getLoadingStatusFromState: (state) => {
+          return state.organizations.loading.billingById[currentOrgId]
+        },
+        getDataFromState: (state) => {
+          return state.organizations.organizationsBillingById[currentOrgId]
         }
       }
     }

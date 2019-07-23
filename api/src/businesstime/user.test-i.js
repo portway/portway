@@ -219,4 +219,59 @@ describe('BusinessUser', () => {
       await expect(BusinessUser.deleteById(0)).rejects.toThrow()
     })
   })
+
+  describe('#findSoftDeletedByEmail', () => {
+    let targetUser
+    let user
+
+    beforeAll(async () => {
+      targetUser = (await UserFactory.createMany(1))[0]
+      targetUser.destroy()
+      user = await BusinessUser.findSoftDeletedByEmail(targetUser.email)
+    })
+
+    it('should return a user as POJO', () => {
+      expect(user.id).toBe(targetUser.id)
+      expect(user.constructor).toBe(Object)
+    })
+  })
+
+  describe('#findSoftDeletedByEmail', () => {
+    let targetUser
+    let user
+
+    beforeAll(async () => {
+      targetUser = (await UserFactory.createMany(1))[0]
+      targetUser.destroy()
+      user = await BusinessUser.findSoftDeletedByEmail(targetUser.email)
+    })
+
+    it('should return a user as POJO', () => {
+      expect(user.id).toBe(targetUser.id)
+      expect(user.constructor).toBe(Object)
+    })
+  })
+
+  describe('#restoreSoftDeleted', () => {
+    let targetUser
+    let user
+    const resetKey = 'test-reset-key'
+
+    beforeAll(async () => {
+      targetUser = (await UserFactory.createMany(1))[0]
+      targetUser.destroy()
+      user = await BusinessUser.restoreSoftDeleted(targetUser.id, resetKey)
+    })
+
+    it('should return a pending POJO user', () => {
+      expect(user.pending).toBe(true)
+      expect(user.constructor).toBe(Object)
+    })
+
+    it('should remove soft deletion from the user, making them retrievable again', async () => {
+      const foundUser = await BusinessUser.findById(targetUser.id)
+      expect(foundUser).toBeDefined()
+      expect(foundUser.resetKey).toBe(resetKey)
+    })
+  })
 })

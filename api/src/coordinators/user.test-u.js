@@ -193,6 +193,11 @@ describe('user coordinator', () => {
       expect(passwordResetKey.generate.mock.calls.length).toBe(1)
     })
 
+    it('should call BusinessUser.findSoftDeletedByEmail with the passed in email', () => {
+      expect(BusinessUser.findSoftDeletedByEmail.mock.calls.length).toBe(1)
+      expect(BusinessUser.findSoftDeletedByEmail.mock.calls[0][0]).toBe(email)
+    })
+
     it('should call BusinessUser.create with the correct body', () => {
       const mockResetKey = passwordResetKey.generate.mock.results[0].value
       expect(BusinessUser.create.mock.calls.length).toBe(1)
@@ -224,6 +229,25 @@ describe('user coordinator', () => {
 
     it('should return the created user with only public fields exposed', () => {
       expect(Object.keys(createdUser)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.USER]))
+    })
+
+    describe('when there is a returned soft-deleted user', () => {
+      beforeAll(async () => {
+        BusinessUser.setFindSoftDeletedReturnToMockValue()
+        await userCoordinator.createPendingUser(email, name, orgId)
+      })
+
+      afterAll(() => {
+        BusinessUser.resetFindSoftDeletedReturnValue()
+      })
+
+      it('should call BusinessUser.restoreSoftDeleted with the previously deleted user id and the reset key', () => {
+        const mockResetKey = passwordResetKey.generate.mock.results[0].value
+        const mockUserId = BusinessUser.create.mock.results[0].value.id
+        expect(BusinessUser.restoreSoftDeleted.mock.calls.length).toBe(1)
+        expect(BusinessUser.restoreSoftDeleted.mock.calls[0][0]).toBe(mockUserId)
+        expect(BusinessUser.restoreSoftDeleted.mock.calls[0][1]).toBe(mockResetKey)
+      })
     })
   })
 

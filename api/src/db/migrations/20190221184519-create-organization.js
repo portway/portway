@@ -20,6 +20,9 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
+      stripeId: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -26,7 +26,6 @@ const PROJECT_TOKEN_PUBLIC_FIELDS = ['token', 'name', 'projectId', 'roleId'].con
 
 const ORGANIZATION_PUBLIC_FIELDS = ['name', 'ownerId', 'allowUserProjectCreation'].concat(globalPublicFields)
 
-
 export default {
   [resourceTypes.PROJECT_DOCUMENT]: Object.freeze(PROJECT_DOCUMENT_PUBLIC_FIELDS),
   [resourceTypes.DOCUMENT]: Object.freeze(DOCUMENT_PUBLIC_FIELDS),
