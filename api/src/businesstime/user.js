@@ -59,6 +59,20 @@ async function findAllSanitized(orgId, options) {
     ...paginationOptions
   }
 
+  if (options.nameSearch) {
+    query.where = {
+      [db.Op.and]: [
+        {
+          ...query.where
+        }, {
+          name: {
+            [db.Op.iLike]: `%${options.nameSearch}%`
+          }
+        }
+      ]
+    }
+  }
+
   const result = await db.model(MODEL_NAME).findAndCountAll(query)
 
   return { users: result.rows.map(publicFields), count: result.count }
