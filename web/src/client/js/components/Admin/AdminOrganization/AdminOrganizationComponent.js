@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 
-const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
+const AdminOrganizationComponent = ({ errors, organization, submitHandler }) => {
   const [name, setName] = useState(organization.name)
-  const [allowUserProjectCreation, setAllowUserProjectCreation] = useState(organization.allowUserProjectCreation)
+  const [allowAdminProjectCreation, setAllowAdminProjectCreation] = useState(organization.allowAdminProjectCreation)
 
   function formSubmitHandler(e) {
     e.preventDefault()
-    submitHandler({ name, allowUserProjectCreation })
+    submitHandler({ name, allowAdminProjectCreation })
   }
 
   const helpText = 'Checking this box allows anyone in your organization to create projects'
@@ -38,9 +38,9 @@ const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
           id="orgProjectCreation"
           label={`Everyone in ${organization.name} can create projects`}
           large={true}
-          name="organization[allowUserProjectCreation]"
-          onChange={(e) => { setAllowUserProjectCreation(e.target.checked) }}
-          value={allowUserProjectCreation}
+          name="organization[allowAdminProjectCreation]"
+          onChange={(e) => { setAllowAdminProjectCreation(e.target.checked) }}
+          value={allowAdminProjectCreation}
         />
       </section>
       <div className="btn-group">
@@ -50,15 +50,15 @@ const UserOrganizationComponent = ({ errors, organization, submitHandler }) => {
   )
 }
 
-UserOrganizationComponent.propTypes = {
+AdminOrganizationComponent.propTypes = {
   errors: PropTypes.object,
   organization: PropTypes.object.isRequired,
   submitHandler: PropTypes.func.isRequired
 }
 
-UserOrganizationComponent.defaultProps = {
+AdminOrganizationComponent.defaultProps = {
   errors: {},
   organization: {}
 }
 
-export default UserOrganizationComponent
+export default AdminOrganizationComponent

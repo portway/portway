@@ -4,17 +4,17 @@ import { Redirect } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_IDS, PATH_PROJECTS, PRODUCT_NAME } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
-import UserBillingComponent from './UserBillingComponent'
+import AdminBillingComponent from './AdminBillingComponent'
 
-const UserBillingContainer = () => {
+const AdminBillingContainer = () => {
   return (
     <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
       <Helmet>
         <title>Account Settings: Billing – {PRODUCT_NAME}</title>
       </Helmet>
-      <UserBillingComponent />
+      <AdminBillingComponent />
     </OrgPermission>
   )
 }
 
-export default UserBillingContainer
+export default AdminBillingContainer

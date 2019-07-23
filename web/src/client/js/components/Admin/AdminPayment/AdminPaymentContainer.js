@@ -6,13 +6,13 @@ import { uiToggleStripeForm } from 'Actions/ui'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-import UserPaymentComponent from './UserPaymentComponent'
+import AdminPaymentComponent from './AdminPaymentComponent'
 
-const UserPaymentContainer = ({ isStripeOpen, isSubmitting, uiToggleStripeForm }) => {
+const AdminPaymentContainer = ({ isStripeOpen, isSubmitting, uiToggleStripeForm }) => {
   const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
 
   return (
-    <UserPaymentComponent
+    <AdminPaymentComponent
       isStripeOpen={isStripeOpen}
       isSubmitting={isSubmitting}
       openStripeHandler={uiToggleStripeForm}
@@ -21,7 +21,7 @@ const UserPaymentContainer = ({ isStripeOpen, isSubmitting, uiToggleStripeForm }
   )
 }
 
-UserPaymentContainer.propTypes = {
+AdminPaymentContainer.propTypes = {
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   uiToggleStripeForm: PropTypes.func.isRequired,
@@ -36,4 +36,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { uiToggleStripeForm }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPaymentContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPaymentContainer)

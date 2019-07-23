@@ -1,8 +1,8 @@
 import React from 'react'
 
-import './_UserSeatsStyles.scss'
+import './_AdminSeatsStyles.scss'
 
-const UserSeatsComponent = () => {
+const AdminSeatsComponent = () => {
   return (
     <div className="admin-seats">
       <div className="admin-seats__status">
@@ -14,7 +14,7 @@ const UserSeatsComponent = () => {
   )
 }
 
-UserSeatsComponent.propTypes = {
+AdminSeatsComponent.propTypes = {
 }
 
-export default UserSeatsComponent
+export default AdminSeatsComponent
