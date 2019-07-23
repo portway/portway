@@ -11,7 +11,6 @@ import reqInfoExtractor from '../libs/middleware/reqInfoExtractorMiddleware'
 
 // Controllers that use default auth
 const AUTHENTICATED_CONTROLLERS = {
-  '/billing': { fileName: 'billing' },
   '/projects': {
     fileName: 'projects',
     childRoutes: {
@@ -40,7 +39,10 @@ const AUTHENTICATED_CONTROLLERS = {
     }
   },
   '/organizations': {
-    fileName: 'organizations'
+    fileName: 'organizations',
+    childRoutes: {
+      '/:orgId/billing': { fileName: 'orgBilling' }
+    }
   }
 }
 

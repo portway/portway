@@ -1,7 +1,8 @@
 export default {
   create: jest.fn(() => getGenericMockOrganizationData()),
   updateById: jest.fn(() => getGenericMockOrganizationData()),
-  findSanitizedById: jest.fn(() => getGenericMockOrganizationData())
+  findSanitizedById: jest.fn(() => getGenericMockOrganizationData()),
+  findById: jest.fn(() => getGenericMockOrganizationData())
 }
 
 const getGenericMockOrganizationData = () => {

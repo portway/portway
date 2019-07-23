@@ -2,9 +2,11 @@ import { ActionTypes } from '../actions'
 
 const initialState = {
   organizationsById: {},
+  organizationsBillingById: {},
   loading: {
     list: null,
-    byId: {}
+    byId: {},
+    billingById: {}
   }
 }
 
@@ -34,6 +36,35 @@ export const organizations = (state = initialState, action) => {
       const byId = { ...state.loading.byId, [id]: false }
       return { ...state, organizationsById, loading: { ...state.loading, byId: byId } }
     }
+
+    // Org billing
+    case ActionTypes.REQUEST_ORGANIZATION_BILLING: {
+      const id = action.id
+      const billingById = { ...state.loading.billingById, [id]: true }
+      return {
+        ...state,
+        loading: { ...state.loading, billingById }
+      }
+    }
+    case ActionTypes.RECEIVE_ORGANIZATION_BILLING:
+    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING: {
+      const billingById = { ...state.loading.billingById, [action.id]: false }
+      const organizationsBillingById = { ...state.organizationsBillingById, [action.id]: action.data }
+      return {
+        ...state,
+        organizationsBillingById,
+        loading: { ...state.loading, billingById }
+      }
+    }
+    case ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE: {
+      const id = action.id
+      const billingById = { ...state.loading.billingById, [id]: true }
+      return {
+        ...state,
+        loading: { ...state.loading, billingById }
+      }
+    }
+
     default: {
       return state
     }

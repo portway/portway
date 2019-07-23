@@ -1,6 +1,6 @@
 import React from 'react'
 import UserSeatsContainer from 'Components/User/UserSeats/UserSeatsContainer'
-import UserPaymentComponent from 'Components/User/UserPayment/UserPaymentComponent'
+import UserPaymentContainer from 'Components/User/UserPayment/UserPaymentContainer'
 
 import './_UserBillingStyles.scss'
 
@@ -20,7 +20,7 @@ class UserBillingComponent extends React.PureComponent {
         </section>
         <section>
           <h2>Payment information</h2>
-          <UserPaymentComponent />
+          <UserPaymentContainer />
         </section>
       </>
     )

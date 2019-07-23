@@ -22,6 +22,10 @@ const initialState = {
   users: {
     creating: false,
     inviting: false
+  },
+  billing: {
+    isSubmitting: false,
+    isStripeOpen: false
   }
 }
 
@@ -148,6 +152,40 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
+
+    // Billing / Stripe form
+    // -------------------------------------------------------------------------
+    // Disable the form for submission once submitting the form
+    case ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE: {
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          isSubmitting: true
+        }
+      }
+    }
+    // Close the Stripe form when we receive a successful round trip
+    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING: {
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          isStripeOpen: false
+        }
+      }
+    }
+    // Toggle the Stripe form open and closed
+    case ActionTypes.UI_TOGGLE_STRIPE_FORM: {
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          isStripeOpen: action.value
+        }
+      }
+    }
+
     default:
       return { ...state }
   }

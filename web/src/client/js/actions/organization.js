@@ -23,3 +23,27 @@ export const updateOrganization = (orgId, body) => {
       dispatch(Organizations.receiveOneUpdated(data))
   }
 }
+
+export const fetchOrganizationBilling = (orgId) => {
+  return async (dispatch) => {
+    dispatch(Organizations.requestBilling(orgId))
+    const { data, status } = await fetch(`organizations/${orgId}/billing`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveBilling(orgId, data))
+  }
+}
+
+export const updateOrganizationBilling = (orgId, body) => {
+  return async (dispatch) => {
+    dispatch(Organizations.initiateBillingUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/billing`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveUpdatedBilling(orgId, data))
+  }
+}

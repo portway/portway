@@ -66,5 +66,20 @@ describe('OrganizationBusiness', () => {
         expect(organization.constructor).toBe(Object)
       })
     })
+
+    describe('#findById', () => {
+      let targetOrganizationId
+      let organization
+
+      beforeAll(async () => {
+        targetOrganizationId = factoryOrganizations[0].get('id')
+        organization = await OrganizationBusiness.findById(targetOrganizationId)
+      })
+
+      it('should return organization as POJO', () => {
+        expect(organization.id).toBe(targetOrganizationId)
+        expect(organization.constructor).toBe(Object)
+      })
+    })
   })
 })

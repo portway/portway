@@ -38,6 +38,11 @@ async function findByEmail(email) {
   return user && user.get({ plain: true })
 }
 
+async function findSoftDeletedByEmail(email) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findOne({ where: { email }, paranoid: false, raw: true })
+}
+
 async function findById(id) {
   const db = getDb()
   return await db.model(MODEL_NAME).findByPk(id, { raw: true })
@@ -98,6 +103,22 @@ async function updateOrgRole(id, orgRoleId, orgId) {
   return updatedUser && publicFields(updatedUser)
 }
 
+async function restoreSoftDeleted(id, resetKey) {
+  const db = getDb()
+  const user = await db.model(MODEL_NAME).findOne({ where: { id }, paranoid: false })
+
+  if (!user) throw ono({ code: 404 }, `Cannot restore soft deleted user, user not found with id: ${id}`)
+
+  user.setDataValue('deletedAt', null)
+  user.setDataValue('password', null)
+  user.setDataValue('pending', true)
+  user.setDataValue('resetKey', resetKey)
+
+  const savedUser = await user.save({ paranoid: false })
+
+  return publicFields(savedUser)
+}
+
 async function deleteById(id, orgId) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
@@ -110,11 +131,13 @@ async function deleteById(id, orgId) {
 export default {
   create,
   findByEmail,
+  findSoftDeletedByEmail,
   findById,
   findAllSanitized,
   findSanitizedById,
   updateByEmail,
   updateById,
   updateOrgRole,
+  restoreSoftDeleted,
   deleteById
 }

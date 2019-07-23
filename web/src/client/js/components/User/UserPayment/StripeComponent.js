@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import Select from 'react-select'
 import {
   injectStripe,
@@ -9,7 +8,6 @@ import {
   CardCVCElement
 } from 'react-stripe-elements'
 
-import { PATH_SETTINGS } from 'Shared/constants'
 import CountryList from 'Shared/countryList'
 
 const elementStyles = {
@@ -56,8 +54,7 @@ class StripeComponent extends React.Component {
     return (
       <form
         id="payment-form"
-        action="http://localHost:3001/api/billing"
-        method="post"
+        method="put"
         onSubmit={this.billingSubmitHandler.bind(this)}
         ref={this.formRef}>
 
@@ -166,8 +163,10 @@ class StripeComponent extends React.Component {
 
         <div className="field field__row field--with-space">
           <div className="field__control field__control--submit">
-            <input className="btn" type="submit" value="Update payment information" />
-            <Link to={PATH_SETTINGS}>Cancel</Link>
+            <input className="btn" type="submit" value="Update payment information" disabled={this.props.isSubmitting} />
+            {this.props.cancelHandler &&
+            <button className="btn btn--blank btn--small" onClick={this.props.cancelHandler}>Cancel</button>
+            }
           </div>
         </div>
 
@@ -176,14 +175,15 @@ class StripeComponent extends React.Component {
   }
 
   stripeTokenHandler(token) {
-    const form = document.getElementById('payment-form')
-    const hiddenInput = document.createElement('input')
-    hiddenInput.setAttribute('type', 'hidden')
-    hiddenInput.setAttribute('name', 'token')
-    hiddenInput.setAttribute('value', token.id)
-    form.appendChild(hiddenInput)
-    // Submit the form
-    form.submit()
+    if (!this.props.isSubmitting) {
+      const form = document.getElementById('payment-form')
+      const hiddenInput = document.createElement('input')
+      hiddenInput.setAttribute('type', 'hidden')
+      hiddenInput.setAttribute('name', 'token')
+      hiddenInput.setAttribute('value', token.id)
+      form.appendChild(hiddenInput)
+      this.props.updateBillingHandler(token)
+    }
   }
 
   billingSubmitHandler(e) {
@@ -214,7 +214,10 @@ class StripeComponent extends React.Component {
 }
 
 StripeComponent.propTypes = {
-  stripe: PropTypes.object
+  cancelHandler: PropTypes.func,
+  isSubmitting: PropTypes.bool,
+  stripe: PropTypes.object,
+  updateBillingHandler: PropTypes.func.isRequired,
 }
 
 export default injectStripe(StripeComponent)
