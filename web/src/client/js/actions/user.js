@@ -43,6 +43,10 @@ export const createUser = (values) => {
       dispatch(Validation.create('user', data, status))
       return
     }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     dispatch(Users.receiveOneCreated(data))
     // If we're trying to be an admin
     dispatch(updateUserRole(data.id, role))

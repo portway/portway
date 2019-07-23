@@ -7,7 +7,7 @@ const token = getCookieValue('token')
 // process.env.API_PUBLIC_URL
 // eslint-disable-next-line no-undef
 const baseURL = new URL('api/', VAR_API_URL)
-const globalErrorCodes = [403, 404, 500]
+const globalErrorCodes = [403, 404, 500, 503]
 const validationCodes = [400, 409]
 
 const axiosInstance = axios.create({
