@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       roleId: DataTypes.INTEGER
     },
     {
-      paranoid: true,
+      // We're actually deleting these, since they're just referencing two other models and don't contain any lose-able data,
+      // no need to keep them around
+      // paranoid: true,
       freezeTableName: true,
       tableName: 'ProjectsUsers'
     }
