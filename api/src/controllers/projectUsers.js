@@ -29,6 +29,7 @@ const projectUsersController = function(router) {
     '/',
     validateParams(paramSchema),
     validateBody(bodySchema, { includeDetails: true }),
+    validateQuery(querySchema),
     createPerm,
     createProjectUser
   )
@@ -80,13 +81,15 @@ const createProjectUser = async (req, res, next) => {
   const { body } = req
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { includeUser } = req.query
 
   try {
     const projectUser = await BusinessProjectUser.addUserIdToProject(
       body.userId,
       projectId,
       body.roleId,
-      orgId
+      orgId,
+      { includeUser }
     )
     res.status(201).json({ data: projectUser })
   } catch (e) {

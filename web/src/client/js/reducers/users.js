@@ -100,7 +100,13 @@ export const users = (state = initialState, action) => {
       const id = action.userId
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...usersById } = state.usersById
-      return { ...state, usersById, loading: { ...state.loading, list: false } }
+      const userIdsByPage = Object.keys(state.userIdsByPage).reduce((cur, pageNum) => {
+        const validIds = state.userIdsByPage[pageNum].filter(pageUserId => pageUserId !== id)
+        cur[pageNum] = validIds
+        return cur
+      }, {})
+
+      return { ...state, usersById, userIdsByPage, loading: { ...state.loading, list: false } }
     }
     case ActionTypes.SORT_USERS: {
       if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {

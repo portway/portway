@@ -37,11 +37,12 @@ const AdminUsersContainer = ({
     reinviteUser(userId)
   }
 
-  function removeUserHandler(userdId) {
+  function removeUserHandler(userId) {
+    const user = users.find(user => user.id === userId)
     const message = (
-      <span>Delete <span className="highlight danger">{users[userdId].name}</span>?</span>
+      <span>Delete <span className="highlight danger">{user.name}</span>?</span>
     )
-    const confirmedAction = () => { removeUser(userdId) }
+    const confirmedAction = () => { removeUser(userId) }
     const confirmedLabel = 'Yes, delete this user'
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
