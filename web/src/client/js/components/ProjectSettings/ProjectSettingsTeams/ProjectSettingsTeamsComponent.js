@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
+import { debounce } from 'lodash'
 
 import Constants from 'Shared/constants'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
@@ -27,11 +28,12 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
                 classNamePrefix="react-select"
                 className="react-select-container"
                 defaultValue={newUserId}
-                onInputChange={(input, { action }) => {
+                onInputChange={debounce((input, { action }) => {
                   if (action === 'input-change') {
-                    setNewUserId(null); userSearchHandler(input)
+                    setNewUserId(null)
+                    userSearchHandler(input)
                   }
-                }}
+                }, 400)}
                 options={users}
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
