@@ -2,7 +2,7 @@
 import resourceTypes from './resourceTypes'
 import globalPublicFields from './globalPublicFields'
 
-const PROJECT_DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId'].concat(globalPublicFields)
+const PROJECT_DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId', 'lastPublishedAt'].concat(globalPublicFields)
 
 const DOCUMENT_PUBLIC_FIELDS = PROJECT_DOCUMENT_PUBLIC_FIELDS.concat(['fields'])
 

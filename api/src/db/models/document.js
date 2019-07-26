@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     publishedVersionId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
-    projectId: DataTypes.INTEGER
+    projectId: DataTypes.INTEGER,
+    lastPublishedAt: DataTypes.DATE
   }, {
     paranoid: true
   })

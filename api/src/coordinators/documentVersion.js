@@ -21,7 +21,8 @@ const publishDocumentVersion = async function(docId, projectId, orgId) {
     })
   }))
   return await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
-    publishedVersionId: docVersion.id
+    publishedVersionId: docVersion.id,
+    lastPublishedAt: new Date()
   })
 }
 
