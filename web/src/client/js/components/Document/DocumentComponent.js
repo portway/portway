@@ -8,20 +8,16 @@ import { AddIcon, ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
+import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
-import './Document.scss'
+import './_Document.scss'
 
 const DocumentComponent = ({
   document, fieldCreationHandler, nameChangeHandler, isPublishing,
   publishDocumentHandler, removeDocumentHandler }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
-  const contentDropdown = {
-    className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon />,
-    label: 'Insert'
-  }
   const dataDropdown = {
     className: 'btn btn--blank btn--with-circular-icon',
     icon: <AddIcon />,
@@ -61,28 +57,10 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
-        <div className={menuClasses}>
-          <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
-            <DropdownItem label="Text" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
-          </DropdownComponent>
-          <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
-            <DropdownItem label="Text" type="submenu">
-              <DropdownSubmenu align="right">
-                <DropdownItem label="Textbox" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
-                <DropdownItem label="String" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
-              </DropdownSubmenu>
-            </DropdownItem>
-            <DropdownItem label="Number" type="submenu">
-              <DropdownSubmenu align="right">
-                <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
-              </DropdownSubmenu>
-            </DropdownItem>
-          </DropdownComponent>
-          <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-            <DropdownItem label="Duplicate document" type="button" />
-            <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
-          </DropdownComponent>
-        </div>
+        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
+          <DropdownItem label="Duplicate document" type="button" />
+          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
+        </DropdownComponent>
         <button
           className="btn btn--small btn--with-icon"
           disabled={isPublishing}
@@ -93,6 +71,24 @@ const DocumentComponent = ({
           <span className="label">Publish</span>
         </button>
       </header>
+      <div className="document__editor">
+        <FieldTextComponent />
+      </div>
+      <div className={menuClasses}>
+        <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
+          <DropdownItem label="Text" type="submenu">
+            <DropdownSubmenu align="right">
+              <DropdownItem label="Textbox" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
+              <DropdownItem label="String" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
+            </DropdownSubmenu>
+          </DropdownItem>
+          <DropdownItem label="Number" type="submenu">
+            <DropdownSubmenu align="right">
+              <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
+            </DropdownSubmenu>
+          </DropdownItem>
+        </DropdownComponent>
+      </div>
       <DocumentFieldsContainer />
     </div>
   )

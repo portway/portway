@@ -5,7 +5,7 @@ import cx from 'classnames'
 import Constants from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
 
-import './DocumentField.scss'
+import './_DocumentField.scss'
 
 const DocumentFieldComponent = ({
   children,
@@ -38,10 +38,16 @@ const DocumentFieldComponent = ({
     'document-field--string': field.type === Constants.FIELD_TYPES.STRING,
   })
 
+  const fieldLabels = {
+    [Constants.FIELD_TYPES.TEXT]: 'Text area',
+    [Constants.FIELD_TYPES.STRING]: 'String',
+    [Constants.FIELD_TYPES.NUMBER]: 'Number',
+  }
+
   // Field name handling
   const fieldLengthFactor = 6.5
   const fieldNameMaxLength = 50
-  const fieldMinimumWidth = 100
+  const fieldMinimumWidth = 150 // this is set as a var in _DocumentField.scss as well
   function returnInitialNameLength(length) {
     if (length > fieldNameMaxLength) {
       return
@@ -63,6 +69,7 @@ const DocumentFieldComponent = ({
       <div className="document-field__component">
         {showName &&
         <div className="document-field__name">
+          <span className="document-field__name-label">{fieldLabels[field.type]}</span>
           <input
             defaultValue={field.name}
             maxLength={fieldNameMaxLength}
@@ -81,14 +88,14 @@ const DocumentFieldComponent = ({
         </div>
         }
         {children}
-      </div>
-      <div className="document-field__tools">
-        <div className="document-field__tool-options">
-          {onDestroy &&
-          <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
-            <TrashIcon />
-          </button>
-          }
+        <div className="document-field__tools">
+          <div className="document-field__tool-options">
+            {onDestroy &&
+            <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
+              <TrashIcon />
+            </button>
+            }
+          </div>
         </div>
       </div>
     </li>

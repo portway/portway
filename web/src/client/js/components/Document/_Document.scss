@@ -22,10 +22,13 @@
     align-items: center;
     border-bottom: thin solid var(--document-header-border);
     display: flex;
-    height: 65px;
+    height: 63px;
     justify-content: space-between;
     margin-bottom: ($brandWidth / 2);
     padding: 0 ($brandWidth / 2) 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
 
   &__button-expand {
@@ -81,7 +84,10 @@
       opacity: 0.4;
       pointer-events: none;
     }
+  }
 
+  &__editor {
+    padding: 0 $brandWidth / 2;
   }
 
   &__fields {
