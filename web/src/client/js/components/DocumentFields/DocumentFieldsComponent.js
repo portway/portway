@@ -22,7 +22,6 @@ const DocumentFieldsComponent = ({
   fieldDestroyHandler,
   isPublishing
 }) => {
-  const showFieldName = fields.length > 1
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
@@ -51,7 +50,6 @@ const DocumentFieldsComponent = ({
           dragLeaveHandler={dragLeaveHandler}
           dragOverHandler={dragOverHandler}
           dropHandler={dropHandler}
-          showName={showFieldName}
           onRename={fieldRenameHandler}
           onDestroy={() => { fieldDestroyHandler(field.id) }}>
           {fieldTypeComponent}

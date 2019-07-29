@@ -18,7 +18,6 @@ const DocumentFieldComponent = ({
   field,
   index,
   isNewField,
-  showName,
   onDestroy,
   onRename
 }) => {
@@ -29,6 +28,8 @@ const DocumentFieldComponent = ({
       nameRef.current.focus()
     }
   }, [isNewField])
+
+  const showName = field.type !== Constants.FIELD_TYPES.TEXT
 
   const fieldClasses = cx({
     'document-field': true,

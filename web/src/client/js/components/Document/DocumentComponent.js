@@ -8,7 +8,6 @@ import { AddIcon, ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
-import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './_Document.scss'
@@ -26,8 +25,7 @@ const DocumentComponent = ({
   const docKey = document ? document.id : 0
   const dataDropdown = {
     className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon />,
-    label: 'Add data'
+    icon: <AddIcon />
   }
   const dropdownButton = {
     className: 'btn btn--blank btn--with-circular-icon',
@@ -80,9 +78,7 @@ const DocumentComponent = ({
           <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
       </header>
-      <div className="document__editor">
-        <FieldTextComponent field={{}} onChange={() => {}} />
-      </div>
+      <DocumentFieldsContainer />
       <div className={menuClasses}>
         <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
           <DropdownItem label="Text" type="submenu">
@@ -98,7 +94,6 @@ const DocumentComponent = ({
           </DropdownItem>
         </DropdownComponent>
       </div>
-      <DocumentFieldsContainer />
     </div>
   )
 }

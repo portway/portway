@@ -10,6 +10,7 @@ const FieldStringComponent = ({ field, onChange }) => {
       defaultValue={field.value}
       onChange={(e) => { onChange(field.id, e.target.value) }}
       onFocus={(e) => { e.target.select() }}
+      placeholder="A string value..."
       type="text" />
   )
 }

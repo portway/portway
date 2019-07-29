@@ -1,24 +1,37 @@
-.document-field--text, .document__editor {
+@import 'CSS/inc/_vars.scss';
+
+.document-field__text {
+  --document-field-min-height: 64px;
+  width: 100%;
 
   // Override the SimpleMDE styling
   .CodeMirror {
     border: none;
     padding: 0;
     border-radius: 0;
+    min-height: var(--document-field-min-height);
 
     pre {
       padding: 0;
     }
 
+    .CodeMirror-scroll {
+      min-height: var(--document-field-min-height);
+    }
+
+    .CodeMirror-sizer {
+      min-height: var(--document-field-min-height) !important;
+    }
+
     .CodeMirror-code {
       .cm-header-1 {
-        font-size: 200%;
-        line-height: 200%;
+        font-size: 160%;
+        line-height: 160%;
       }
 
       .cm-header-2 {
-        font-size: 160%;
-        line-height: 160%;
+        font-size: 140%;
+        line-height: 140%;
       }
 
       .cm-header-3 {

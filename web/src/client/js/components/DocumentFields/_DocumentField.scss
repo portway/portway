@@ -2,7 +2,7 @@
 @import 'CSS/inc/_mixins.scss';
 
 :root {
-  --field-background: #{$white};
+  --field-background: #{$white-bis};
   --field-name-width: 150px;
   @media (prefers-color-scheme: dark) {
     --field-background: #{$black-bis};
@@ -10,49 +10,64 @@
 }
 
 .document-field {
-  background-color: var(--field-background);
-  border: thin dashed var(--base-border-color);
-  border-bottom: none;
   cursor: grab;
   outline: 0;
 
-  input {
-    background-color: transparent;
-    &::selection {
-      // color: #fff;
-    }
+  &--text {
+    margin: ($sideGutterWidth / 2) 0;
   }
 
-  &:first-child {
-    // border-top-left-radius: $borderRadius;
-    // border-top-right-radius: $borderRadius;
-  }
+  &--number, &--string {
+    background-color: var(--field-background);
+    border: thin solid var(--base-border-color);
+    border-bottom: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
 
-  &:last-child {
-    border-bottom: thin dashed var(--base-border-color);
-    // border-bottom-left-radius: $borderRadius;
-    // border-bottom-right-radius: $borderRadius;
-    margin-bottom: $sideGutterWidth;
-  }
-
-  &:focus-within {
-    background-color: $white-bis;
-  }
-
-  &--new {
-    background-color: $primary-light;
-    border: thin solid $gray;
-    &:focus-within {
-      background-color: $primary-light;
-    }
-    input, textarea, .CodeMirror {
-      background-color: $primary-light;
+    input {
+      background-color: transparent;
       &::selection {
-        background-color: $primary;
-        color: #fff;
+        // color: #fff;
       }
     }
-  }
+
+    &:first-child {
+      // border-top-left-radius: $borderRadius;
+      // border-top-right-radius: $borderRadius;
+    }
+
+    &:last-child {
+      border-bottom: thin solid var(--base-border-color);
+      // border-bottom-left-radius: $borderRadius;
+      // border-bottom-right-radius: $borderRadius;
+      // margin-bottom: $sideGutterWidth;
+    }
+
+    &:focus-within {
+      background-color: $white-bis;
+    }
+
+    // New data fields
+    &--new {
+      background-color: $primary-light;
+      border: thin solid transparent;
+
+      .document-field__name {
+        border-right: thin solid lighten($primary-light, 4%);
+      }
+
+      &:focus-within {
+        background-color: $primary-light;
+      }
+      input {
+        background-color: $primary-light;
+        &::selection {
+          background-color: $primary;
+          color: #fff;
+        }
+      }
+    }
+
+  } // string, number
 
   &--dragging {
     cursor: grabbing;
@@ -76,7 +91,7 @@
 
   &__name {
     align-items: flex-start;
-    border-right: thin dashed var(--base-border-color);
+    border-right: thin solid var(--base-border-color);
     display: flex;
     flex: 0 0 var(--field-name-width);
     flex-direction: column;
