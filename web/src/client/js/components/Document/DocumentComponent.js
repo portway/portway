@@ -14,8 +14,14 @@ import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsCon
 import './_Document.scss'
 
 const DocumentComponent = ({
-  document, fieldCreationHandler, nameChangeHandler, isPublishing,
-  publishDocumentHandler, removeDocumentHandler }) => {
+  document,
+  fieldCreationHandler,
+  isPublishing,
+  nameChangeHandler,
+  publishDocumentHandler,
+  removeDocumentHandler,
+  toggleFullScreenHandler,
+}) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
   const dataDropdown = {
@@ -38,7 +44,10 @@ const DocumentComponent = ({
     <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
       <header className="document__header">
-        <button className="btn btn--blank document__button-expand" title="Expand to full screen">
+        <button
+          className="btn btn--blank document__button-expand"
+          onClick={toggleFullScreenHandler}
+          title="Expand to full screen">
           <ExpandIcon />
         </button>
         <div className="document__title-container">
@@ -72,7 +81,7 @@ const DocumentComponent = ({
         </DropdownComponent>
       </header>
       <div className="document__editor">
-        <FieldTextComponent />
+        <FieldTextComponent field={{}} onChange={() => {}} />
       </div>
       <div className={menuClasses}>
         <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
@@ -98,10 +107,11 @@ const DocumentComponent = ({
 DocumentComponent.propTypes = {
   document: PropTypes.object,
   fieldCreationHandler: PropTypes.func.isRequired,
-  nameChangeHandler: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
+  nameChangeHandler: PropTypes.func.isRequired,
   publishDocumentHandler: PropTypes.func.isRequired,
-  removeDocumentHandler: PropTypes.func.isRequired
+  removeDocumentHandler: PropTypes.func.isRequired,
+  toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 
 DocumentComponent.defaultProps = {
