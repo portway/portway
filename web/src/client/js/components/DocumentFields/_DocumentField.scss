@@ -11,40 +11,45 @@
 
 .document-field {
   background-color: var(--field-background);
-  border: thin solid var(--base-border-color);
+  border: thin dashed var(--base-border-color);
   border-bottom: none;
   cursor: grab;
   outline: 0;
 
+  input {
+    background-color: transparent;
+    &::selection {
+      // color: #fff;
+    }
+  }
+
   &:first-child {
-    border-top-left-radius: $borderRadius;
-    border-top-right-radius: $borderRadius;
+    // border-top-left-radius: $borderRadius;
+    // border-top-right-radius: $borderRadius;
   }
 
   &:last-child {
-    border-bottom: thin solid var(--base-border-color);
-    border-bottom-left-radius: $borderRadius;
-    border-bottom-right-radius: $borderRadius;
+    border-bottom: thin dashed var(--base-border-color);
+    // border-bottom-left-radius: $borderRadius;
+    // border-bottom-right-radius: $borderRadius;
     margin-bottom: $sideGutterWidth;
   }
 
-  &:focus, &:focus-within {
-    border: thin solid $action;
-    .using-mouse & {
-      border: thin solid $gray;
-    }
+  &:focus-within {
+    background-color: $white-bis;
   }
 
   &--new {
-    background-color: $white-bis;
+    background-color: $primary-light;
     border: thin solid $gray;
-    input, textarea, .CodeMirror {
-      background-color: $white-bis;
+    &:focus-within {
+      background-color: $primary-light;
     }
-    .document-field__name {
-      input {
-        background-color: $primary-light;
-        color: $primary-dark;
+    input, textarea, .CodeMirror {
+      background-color: $primary-light;
+      &::selection {
+        background-color: $primary;
+        color: #fff;
       }
     }
   }
@@ -58,8 +63,8 @@
   }
 
   &--dragged-over {
-    opacity: 0.5;
     * {
+      opacity: 0.5;
       pointer-events: none;
     }
   }
@@ -71,7 +76,7 @@
 
   &__name {
     align-items: flex-start;
-    border-right: thin solid var(--base-border-color);
+    border-right: thin dashed var(--base-border-color);
     display: flex;
     flex: 0 0 var(--field-name-width);
     flex-direction: column;
@@ -89,14 +94,16 @@
       font-size: 1.3rem; // 13px
       min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
       outline: none;
-      &::selection {
-        background-color: lighten($action-light, 80%);
-        color: $black-bis;
-      }
-      &:focus {
-        background-color: darken($action-light, 20%);
-      }
     }
+  }
+
+  &__content {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding: .6rem;
   }
 
   &__tools {
@@ -106,7 +113,14 @@
   }
 
   &__tool-options {
+    align-items: center;
+    display: flex;
+    padding: 0 1rem;
     visibility: hidden;
+  }
+
+  &__dragger {
+    padding-left: 1.2rem;
   }
 
   &:hover, &:focus, &:focus-within {

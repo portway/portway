@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import Constants from 'Shared/constants'
-import { TrashIcon } from 'Components/Icons'
+import { DragIcon, TrashIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
 
@@ -87,7 +87,7 @@ const DocumentFieldComponent = ({
             type="text" />
         </div>
         }
-        {children}
+        <div className="document-field__content">{children}</div>
         <div className="document-field__tools">
           <div className="document-field__tool-options">
             {onDestroy &&
@@ -95,6 +95,9 @@ const DocumentFieldComponent = ({
               <TrashIcon />
             </button>
             }
+            <div className="document-field__dragger">
+              <DragIcon fill="#d9dbdb" />
+            </div>
           </div>
         </div>
       </div>

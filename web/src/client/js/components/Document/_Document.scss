@@ -25,10 +25,15 @@
     height: 63px;
     justify-content: space-between;
     margin-bottom: ($brandWidth / 2);
-    padding: 0 ($brandWidth / 2) 0 0;
+    padding: 0 ($brandWidth / 4) 0 0;
     position: sticky;
     top: 0;
     z-index: 10;
+
+    .dropdown {
+      padding-left: 1.2rem;
+    }
+
   }
 
   &__button-expand {
@@ -87,19 +92,25 @@
   }
 
   &__editor {
+    margin-bottom: $brandWidth / 2;
     padding: 0 $brandWidth / 2;
   }
 
   &__fields {
-    list-style: none;
-    margin: 0;
-    padding: $brandWidth / 2;
+    padding: $brandWidth / 3;
     transition: opacity 0.2s ease-in-out;
 
     // When publishing a document, disable everything
     &--disabled {
       opacity: 0.4;
       pointer-events: none;
+    }
+
+    ol {
+      // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
   }

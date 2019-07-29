@@ -69,9 +69,11 @@ const DocumentFieldsComponent = ({
     'document__fields--disabled': isPublishing
   })
   return (
-    <ol className={fieldsClasses}>
-      {renderFields()}
-    </ol>
+    <div className={fieldsClasses}>
+      <ol>
+        {renderFields()}
+      </ol>
+    </div>
   )
 }
 

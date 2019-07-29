@@ -57,10 +57,6 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
-        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-          <DropdownItem label="Duplicate document" type="button" />
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
-        </DropdownComponent>
         <button
           className="btn btn--small btn--with-icon"
           disabled={isPublishing}
@@ -70,6 +66,10 @@ const DocumentComponent = ({
           {!isPublishing && <PublishIcon fill="#ffffff" />}
           <span className="label">Publish</span>
         </button>
+        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
+          <DropdownItem label="Duplicate document" type="button" />
+          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
+        </DropdownComponent>
       </header>
       <div className="document__editor">
         <FieldTextComponent />

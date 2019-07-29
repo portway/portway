@@ -46,16 +46,16 @@ const DocumentFieldsContainer = ({
   // Drag and drop
   function dragStartHandler(e) {
     setDraggingElement(e.currentTarget)
-    e.currentTarget.classList.add('field--dragging')
+    e.currentTarget.classList.add('document-field--dragging')
     e.dataTransfer.effectAllowed = 'move'
     e.dataTransfer.setData('text/html', e.target)
   }
   function dragEnterHandler(e) {
-    e.currentTarget.classList.add('field--dragged-over')
+    e.currentTarget.classList.add('document-field--dragged-over')
     e.dataTransfer.dropEffect = 'move'
   }
   function dragLeaveHandler(e) {
-    e.currentTarget.classList.remove('field--dragged-over')
+    e.currentTarget.classList.remove('document-field--dragged-over')
   }
   function dragOverHandler(e) {
     if (e.preventDefault) {
@@ -65,7 +65,7 @@ const DocumentFieldsContainer = ({
     return false
   }
   function dragEndHandler(e) {
-    e.currentTarget.classList.remove('field--dragging')
+    e.currentTarget.classList.remove('document-field--dragging')
   }
   function dropHandler(e) {
     if (e.stopPropagation) {
@@ -74,7 +74,7 @@ const DocumentFieldsContainer = ({
     const fieldIdToUpdate = draggingElement.dataset.id
     const from = Number(draggingElement.dataset.order)
     const to = Number(e.currentTarget.dataset.order)
-    e.currentTarget.classList.remove('field--dragging', 'field--dragged-over')
+    e.currentTarget.classList.remove('document-field--dragging', 'document-field--dragged-over')
     if (to === from) { return }
     const fieldData = [...orderedFields]
     fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
