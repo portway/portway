@@ -74,7 +74,7 @@
     align-items: center;
     display: flex;
     justify-content: flex-end;
-    padding: 0 $brandWidth / 2;
+    padding-right: $sideGutterWidth / 2;
 
     // When publishing a document, disable everything
     &--disabled {

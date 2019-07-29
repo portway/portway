@@ -1,7 +1,7 @@
 @import 'CSS/inc/_vars.scss';
 
 :root {
-  --project-background: #{$white-bis};
+  --project-background: #{$white};
   --project-toolbar-background: #{$white-ter};
   @media (prefers-color-scheme: dark) {
     --project-background: #{$black-bis};

@@ -61,6 +61,28 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
+        <div className={menuClasses}>
+          <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
+            <DropdownItem label="Text" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
+          </DropdownComponent>
+          <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
+            <DropdownItem label="Text" type="submenu">
+              <DropdownSubmenu align="right">
+                <DropdownItem label="Textbox" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
+                <DropdownItem label="String" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
+              </DropdownSubmenu>
+            </DropdownItem>
+            <DropdownItem label="Number" type="submenu">
+              <DropdownSubmenu align="right">
+                <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
+              </DropdownSubmenu>
+            </DropdownItem>
+          </DropdownComponent>
+          <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
+            <DropdownItem label="Duplicate document" type="button" />
+            <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
+          </DropdownComponent>
+        </div>
         <button
           className="btn btn--small btn--with-icon"
           disabled={isPublishing}
@@ -71,28 +93,6 @@ const DocumentComponent = ({
           <span className="label">Publish</span>
         </button>
       </header>
-      <div className={menuClasses}>
-        <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
-          <DropdownItem label="Text" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
-        </DropdownComponent>
-        <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
-          <DropdownItem label="Text" type="submenu">
-            <DropdownSubmenu align="right">
-              <DropdownItem label="Textbox" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
-              <DropdownItem label="String" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
-            </DropdownSubmenu>
-          </DropdownItem>
-          <DropdownItem label="Number" type="submenu">
-            <DropdownSubmenu align="right">
-              <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
-            </DropdownSubmenu>
-          </DropdownItem>
-        </DropdownComponent>
-        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-          <DropdownItem label="Duplicate document" type="button" />
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
-        </DropdownComponent>
-      </div>
       <DocumentFieldsContainer />
     </div>
   )
