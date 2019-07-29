@@ -113,15 +113,13 @@ export const documents = (state = initialState, action) => {
       }
     }
     // Update the document's publishedAt property
-    /**
     case ActionTypes.RECEIVE_PUBLISHED_DOCUMENT: {
       const listDoc = state.projectDocumentsById[action.data.projectId][action.data.id]
       const updatedDoc = {
         ...listDoc,
         name: action.data.name,
         updatedAt: action.data.updatedAt,
-        // @todo plug in publishedAt
-        // publishedAt: action.data.publishedAt
+        lastPublishedAt: action.data.lastPublishedAt
       }
       const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
@@ -130,7 +128,6 @@ export const documents = (state = initialState, action) => {
         projectDocumentsById
       }
     }
-    */
     case ActionTypes.REMOVE_DOCUMENT: {
       const { documentId, projectId } = action
       const byId = { ...state.loading.byId, [documentId]: false }

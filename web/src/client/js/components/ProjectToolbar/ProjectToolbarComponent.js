@@ -48,8 +48,8 @@ const ProjectToolbarComponent = ({ document, projectId, projectUsers }) => {
       {document &&
       <div className="project-toolbar__document-info">
         Last update:&nbsp;<span title={moment(document.updatedAt).format('MMMM do, YYYY - h:mma')}>{moment(document.updatedAt).fromNow()}</span>
-        {document.publishedVersionId &&
-        <b>&nbsp; Published</b>
+        {document.publishedVersionId && document.lastPublishedAt &&
+        <b>&nbsp; Published {moment(document.lastPublishedAt).fromNow()}</b>
         }
       </div>
       }

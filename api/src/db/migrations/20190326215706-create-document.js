@@ -30,6 +30,9 @@ module.exports = {
           key: 'id'
         }
       },
+      lastPublishedAt: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
