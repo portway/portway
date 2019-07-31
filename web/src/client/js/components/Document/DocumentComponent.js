@@ -10,22 +10,22 @@ import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dro
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
-import './Document.scss'
+import './_Document.scss'
 
 const DocumentComponent = ({
-  document, fieldCreationHandler, nameChangeHandler, isPublishing,
-  publishDocumentHandler, removeDocumentHandler }) => {
+  document,
+  fieldCreationHandler,
+  isPublishing,
+  nameChangeHandler,
+  publishDocumentHandler,
+  removeDocumentHandler,
+  toggleFullScreenHandler,
+}) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
-  const contentDropdown = {
-    className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon />,
-    label: 'Insert'
-  }
   const dataDropdown = {
     className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon />,
-    label: 'Add data'
+    icon: <AddIcon />
   }
   const dropdownButton = {
     className: 'btn btn--blank btn--with-circular-icon',
@@ -42,7 +42,10 @@ const DocumentComponent = ({
     <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
       <header className="document__header">
-        <button className="btn btn--blank document__button-expand" title="Expand to full screen">
+        <button
+          className="btn btn--blank document__button-expand"
+          onClick={toggleFullScreenHandler}
+          title="Expand to full screen">
           <ExpandIcon />
         </button>
         <div className="document__title-container">
@@ -70,11 +73,13 @@ const DocumentComponent = ({
           {!isPublishing && <PublishIcon fill="#ffffff" />}
           <span className="label">Publish</span>
         </button>
-      </header>
-      <div className={menuClasses}>
-        <DropdownComponent align="right" button={contentDropdown} className="document__field-dropdown">
-          <DropdownItem label="Text" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
+        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
+          <DropdownItem label="Duplicate document" type="button" />
+          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
         </DropdownComponent>
+      </header>
+      <DocumentFieldsContainer />
+      <div className={menuClasses}>
         <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
           <DropdownItem label="Text" type="submenu">
             <DropdownSubmenu align="right">
@@ -88,12 +93,7 @@ const DocumentComponent = ({
             </DropdownSubmenu>
           </DropdownItem>
         </DropdownComponent>
-        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-          <DropdownItem label="Duplicate document" type="button" />
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
-        </DropdownComponent>
       </div>
-      <DocumentFieldsContainer />
     </div>
   )
 }
@@ -102,10 +102,11 @@ const DocumentComponent = ({
 DocumentComponent.propTypes = {
   document: PropTypes.object,
   fieldCreationHandler: PropTypes.func.isRequired,
-  nameChangeHandler: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
+  nameChangeHandler: PropTypes.func.isRequired,
   publishDocumentHandler: PropTypes.func.isRequired,
-  removeDocumentHandler: PropTypes.func.isRequired
+  removeDocumentHandler: PropTypes.func.isRequired,
+  toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 
 DocumentComponent.defaultProps = {

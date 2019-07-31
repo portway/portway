@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import ProjectToolbarComponent from './ProjectToolbarComponent'
 import { currentUserId } from 'Libs/currentIds'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-const ProjectToolbarContainer = ({ match }) => {
+const ProjectToolbarContainer = ({ isFullScreen, match }) => {
   const projectId = match.params.projectId
   const documentId = match.params.documentId
   const { data: document } = useDataService(dataMapper.documents.id(projectId, documentId), [projectId, documentId])
@@ -26,11 +27,27 @@ const ProjectToolbarContainer = ({ match }) => {
     })
   }
 
-  return <ProjectToolbarComponent document={document} projectId={projectId} projectUsers={projectUsers} />
+  return (
+    <ProjectToolbarComponent
+      document={document}
+      isFullScreen={isFullScreen}
+      projectId={projectId}
+      projectUsers={projectUsers}
+    />
+  )
 }
 
 ProjectToolbarContainer.propTypes = {
+  isFullScreen: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired
 }
 
-export default withRouter(ProjectToolbarContainer)
+const mapStateToProps = (state) => {
+  return {
+    isFullScreen: state.ui.document.isFullScreen
+  }
+}
+
+export default withRouter(
+  connect(mapStateToProps)(ProjectToolbarContainer)
+)

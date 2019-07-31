@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { groupBy } from 'Shared/utilities'
-import { uiConfirm } from 'Actions/ui'
+import { uiConfirm, uiToggleFullScreen } from 'Actions/ui'
 import { deleteDocument, publishDocument, updateDocument } from 'Actions/document'
 import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
@@ -16,8 +16,18 @@ import { FIELD_LABELS, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/cons
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField, deleteDocument, fields, history,
-  location, match, publishDocument, ui, updateDocument, uiConfirm
+  createField,
+  deleteDocument,
+  documents,
+  fields,
+  history,
+  isFullScreen,
+  location,
+  match,
+  publishDocument,
+  uiConfirm,
+  uiToggleFullScreen,
+  updateDocument,
 }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [
     location.pathname
@@ -31,7 +41,7 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (ui.documents.creating || match.params.documentId === Constants.PATH_DOCUMENT_NEW_PARAM) {
+  if (documents.creating || match.params.documentId === Constants.PATH_DOCUMENT_NEW_PARAM) {
     return null
   }
 
@@ -86,6 +96,9 @@ const DocumentContainer = ({
     const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
+  function toggleFullScreenHandler() {
+    uiToggleFullScreen(!isFullScreen)
+  }
 
   return (
     <>
@@ -96,10 +109,11 @@ const DocumentContainer = ({
       <DocumentComponent
         document={document}
         fieldCreationHandler={fieldCreationHandler}
-        isPublishing={ui.documents.isPublishing}
+        isPublishing={documents.isPublishing}
         nameChangeHandler={nameChangeHandler}
         publishDocumentHandler={publishDocumentHandler}
-        removeDocumentHandler={removeDocumentHandler} />
+        removeDocumentHandler={removeDocumentHandler}
+        toggleFullScreenHandler={toggleFullScreenHandler} />
     </>
   )
 }
@@ -107,20 +121,23 @@ const DocumentContainer = ({
 DocumentContainer.propTypes = {
   createField: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
+  documents: PropTypes.object.isRequired,
   fields: PropTypes.object,
   history: PropTypes.object.isRequired,
+  isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   publishDocument: PropTypes.func.isRequired,
-  ui: PropTypes.object.isRequired,
+  uiConfirm: PropTypes.func.isRequired,
+  uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
     fields: state.documentFields[state.documents.currentDocumentId],
-    ui: state.ui,
+    documents: state.ui.documents,
+    isFullScreen: state.ui.document.isFullScreen
   }
 }
 
@@ -129,7 +146,8 @@ const mapDispatchToProps = {
   deleteDocument,
   publishDocument,
   updateDocument,
-  uiConfirm
+  uiConfirm,
+  uiToggleFullScreen
 }
 
 export default withRouter(

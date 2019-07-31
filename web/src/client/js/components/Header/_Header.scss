@@ -78,6 +78,7 @@
       height: $sideGutterWidth;
       justify-content: center;
       min-width: $sideGutterWidth;
+      z-index: 11;
     }
   } // navbar
 }

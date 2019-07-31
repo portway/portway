@@ -5,6 +5,7 @@
   background-color: $white-bis;
   border-bottom: thin solid var(--base-border-color);
   display: flex;
+  min-height: 40px;
   padding: 0 $sideGutterWidth / 4;
 
   &__team {

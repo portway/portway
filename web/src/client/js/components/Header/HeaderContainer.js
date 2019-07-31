@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { PRODUCT_LOGO, PRODUCT_NAME } from 'Shared/constants'
@@ -11,16 +12,25 @@ const brand = {
   default: true // if this is our branding
 }
 
-function HeaderContainer({ location }) {
+function HeaderContainer({ isFullScreen, location }) {
   const section = location.pathname.split('/')[1]
   const projectId = section === 'project' ? location.pathname.split('/')[2] : null
   return (
-    <HeaderComponent brand={brand} projectId={projectId} section={section} />
+    <HeaderComponent brand={brand} isFullScreen={isFullScreen} projectId={projectId} section={section} />
   )
 }
 
 HeaderContainer.propTypes = {
-  location: PropTypes.object.isRequired
+  isFullScreen: PropTypes.bool.isRequired,
+  location: PropTypes.object.isRequired,
 }
 
-export default withRouter(HeaderContainer)
+const mapStateToProps = (state) => {
+  return {
+    isFullScreen: state.ui.document.isFullScreen
+  }
+}
+
+export default withRouter(
+  connect(mapStateToProps)(HeaderContainer)
+)

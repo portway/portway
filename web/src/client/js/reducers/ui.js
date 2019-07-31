@@ -8,6 +8,9 @@ const initialState = {
     confirmedAction: null,
     confirmedLabel: ''
   },
+  document: {
+    isFullScreen: false,
+  },
   documents: {
     creating: false,
     isPublishing: false,
@@ -46,6 +49,27 @@ export const ui = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }
+    }
+
+    // Document full screen
+    // -------------------------------------------------------------------------
+    case ActionTypes.UI_DOCUMENT_FULL_SCREEN: {
+      if (action.value) {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen()
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        }
+      }
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          isFullScreen: action.value
+        }
+      }
     }
 
     // Document publishng

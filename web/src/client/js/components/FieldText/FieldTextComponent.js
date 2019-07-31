@@ -44,7 +44,9 @@ const FieldTextComponent = ({ field, onChange }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor])
   return (
-    <textarea ref={textRef} />
+    <div className="document-field__text">
+      <textarea ref={textRef} />
+    </div>
   )
 }
 

@@ -1,0 +1,147 @@
+@import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
+
+:root {
+  --field-background: #{$white-bis};
+  --field-name-width: 150px;
+  @media (prefers-color-scheme: dark) {
+    --field-background: #{$black-bis};
+  }
+}
+
+.document-field {
+  cursor: grab;
+  outline: 0;
+
+  &--text {
+    margin: ($sideGutterWidth / 2) 0;
+  }
+
+  &--number, &--string {
+    background-color: var(--field-background);
+    border: thin solid var(--base-border-color);
+    border-bottom: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+
+    input {
+      background-color: transparent;
+      &::selection {
+        // color: #fff;
+      }
+    }
+
+    &:first-child {
+      // border-top-left-radius: $borderRadius;
+      // border-top-right-radius: $borderRadius;
+    }
+
+    &:last-child {
+      border-bottom: thin solid var(--base-border-color);
+      // border-bottom-left-radius: $borderRadius;
+      // border-bottom-right-radius: $borderRadius;
+      // margin-bottom: $sideGutterWidth;
+    }
+
+    &:focus-within {
+      background-color: $white-bis;
+    }
+
+    // New data fields
+    &--new {
+      background-color: $primary-light;
+      border: thin solid transparent;
+
+      .document-field__name {
+        border-right: thin solid lighten($primary-light, 4%);
+      }
+
+      &:focus-within {
+        background-color: $primary-light;
+      }
+      input {
+        background-color: $primary-light;
+        &::selection {
+          background-color: $primary;
+          color: #fff;
+        }
+      }
+    }
+
+  } // string, number
+
+  &--dragging {
+    cursor: grabbing;
+    opacity: 0.05;
+    * {
+      pointer-events: none;
+    }
+  }
+
+  &--dragged-over {
+    * {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__component {
+    align-items: stretch;
+    display: flex;
+  }
+
+  &__name {
+    align-items: flex-start;
+    border-right: thin solid var(--base-border-color);
+    display: flex;
+    flex: 0 0 var(--field-name-width);
+    flex-direction: column;
+    justify-content: center;
+    padding: .6rem;
+    &-label {
+      border-bottom: thin solid $gray-light;
+      font-size: 1.1rem;
+      margin-bottom: .5rem;
+    }
+    input {
+      border: none;
+      color: $gray-dark;
+      font-family: $serif !important;
+      font-size: 1.3rem; // 13px
+      min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
+      outline: none;
+    }
+  }
+
+  &__content {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding: .6rem;
+  }
+
+  &__tools {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__tool-options {
+    align-items: center;
+    display: flex;
+    padding: 0 1rem;
+    visibility: hidden;
+  }
+
+  &__dragger {
+    padding-left: 1.2rem;
+  }
+
+  &:hover, &:focus, &:focus-within {
+    .document-field__tool-options {
+      visibility: visible;
+    }
+  }
+
+}

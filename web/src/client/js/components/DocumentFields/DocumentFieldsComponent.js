@@ -22,7 +22,6 @@ const DocumentFieldsComponent = ({
   fieldDestroyHandler,
   isPublishing
 }) => {
-  const showFieldName = fields.length > 1
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
@@ -38,24 +37,25 @@ const DocumentFieldsComponent = ({
       default:
         break
     }
-    return (
-      <DocumentFieldComponent
-        key={field.id}
-        index={index}
-        isNewField={createdFieldId === field.id}
-        field={field}
-        dragStartHandler={dragStartHandler}
-        dragEndHandler={dragEndHandler}
-        dragEnterHandler={dragEnterHandler}
-        dragLeaveHandler={dragLeaveHandler}
-        dragOverHandler={dragOverHandler}
-        dropHandler={dropHandler}
-        showName={showFieldName}
-        onRename={fieldRenameHandler}
-        onDestroy={() => { fieldDestroyHandler(field.id) }}>
-        {fieldTypeComponent}
-      </DocumentFieldComponent>
-    )
+    if (field) {
+      return (
+        <DocumentFieldComponent
+          key={field.id}
+          index={index}
+          isNewField={createdFieldId === field.id}
+          field={field}
+          dragStartHandler={dragStartHandler}
+          dragEndHandler={dragEndHandler}
+          dragEnterHandler={dragEnterHandler}
+          dragLeaveHandler={dragLeaveHandler}
+          dragOverHandler={dragOverHandler}
+          dropHandler={dropHandler}
+          onRename={fieldRenameHandler}
+          onDestroy={() => { fieldDestroyHandler(field.id) }}>
+          {fieldTypeComponent}
+        </DocumentFieldComponent>
+      )
+    }
   }
   function renderFields() {
     const fieldArray = []
@@ -69,9 +69,11 @@ const DocumentFieldsComponent = ({
     'document__fields--disabled': isPublishing
   })
   return (
-    <ol className={fieldsClasses}>
-      {renderFields()}
-    </ol>
+    <div className={fieldsClasses}>
+      <ol>
+        {renderFields()}
+      </ol>
+    </div>
   )
 }
 

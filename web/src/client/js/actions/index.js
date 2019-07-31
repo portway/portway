@@ -89,6 +89,7 @@ export const ActionTypes = {
   RECEIVE_UPDATED_ORGANIZATION_BILLING: 'RECEIVE_UPDATED_ORGANIZATION_BILLING',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
+  UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -210,6 +211,7 @@ export const UI = {
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
+  toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
   toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value')
