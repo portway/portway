@@ -4,33 +4,42 @@
 
 export default function auditLog({
   userId,
-  primaryModel = '',
+  primaryModel,
   primaryId,
-  secondaryModel = '',
+  secondaryModel,
   secondaryId,
   action
 }) {
+  if (!typeof primaryModel === 'string') {
+    throw new Error('Could not log audit data, primary model is required')
+  }
+
   let message
+  const primaryDisplayModel = primaryModel.toLowerCase()
+  const secondaryDisplayModel = secondaryModel && secondaryModel.toLowerCase()
 
   switch (action) {
     case auditActions.ADDED_PRIMARY:
-      message = `added ${primaryModel.toLowerCase()}`
+      message = `added ${primaryDisplayModel}`
       break
     case auditActions.ADDED_PRIMARY_TO_SECONDARY:
-      message = `added ${primaryModel.toLowerCase()} to ${secondaryModel.toLowerCase()}`
+      message = `added ${primaryDisplayModel} to ${secondaryDisplayModel}`
       break
     case auditActions.UPDATED_PRIMARY:
-      message = `updated ${primaryModel.toLowerCase()}`
+      message = `updated ${primaryDisplayModel}`
       break
-    case auditActions.DELETED_PRIMARY:
-      message = `deleted ${primaryModel.toLowerCase()}`
+    case auditActions.UPDATED_PRIMARY_FOR_SECONDARY:
+      message = `updated ${primaryDisplayModel} for ${secondaryDisplayModel}`
       break
-    case auditActions.DELETED_PRIMARY_FROM_SECONDARY:
-      message = `deleted ${primaryModel.toLowerCase()} from ${secondaryModel.toLowerCase()}`
+    case auditActions.REMOVED_PRIMARY:
+      message = `removed ${primaryDisplayModel}`
+      break
+    case auditActions.REMOVED_PRIMARY_FROM_SECONDARY:
+      message = `removed ${primaryDisplayModel} from ${secondaryDisplayModel}`
       break
   }
 
-  console.info({
+  console.info('AUDIT:', JSON.stringify({
     userId,
     timestamp: Date.now(),
     message,
@@ -38,13 +47,14 @@ export default function auditLog({
     primaryId,
     secondaryModel,
     secondaryId
-  })
+  }))
 }
 
 export const auditActions = {
-  ADD_PRIMARY: 'ADD_PRIMARY',
-  ADD_SECONDARY: 'ADD_SECONDARY',
-  UPDATE_PRIMARY: 'UPDATE_PRIMARY',
-  DELETE_PRIMARY: 'DELETE_PRIMARY',
-  DELETE_PRIMARY_FROM_SECONDARY: 'DELETE_PRIMARY_FROM_SECONDARY'
+  ADDED_PRIMARY: 'ADDED_PRIMARY',
+  ADDED_PRIMARY_TO_SECONDARY: 'ADDED_PRIMARY_TO_SECONDARY',
+  UPDATED_PRIMARY: 'UPDATED_PRIMARY',
+  UPDATED_PRIMARY_FOR_SECONDARY: 'UPDATED_PRIMARY_FOR_SECONDARY',
+  REMOVED_PRIMARY: 'REMOVED_PRIMARY',
+  REMOVED_PRIMARY_FROM_SECONDARY: 'REMOVED_PRIMARY_FROM_SECONDARY'
 }

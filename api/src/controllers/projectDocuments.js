@@ -6,6 +6,7 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields } from './payloadSchemas/helpers'
 import documentSchema from './payloadSchemas/document'
+import auditLog, { auditActions } from '../integrators/audit'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
@@ -35,7 +36,7 @@ const projectDocumentsController = function(router) {
     validateParams(paramSchema),
     validateBody(documentSchema, { includeDetails: true }),
     updatePerm,
-    replaceProjectDocument
+    updateProjectDocument
   )
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectDocument)
 }
@@ -75,12 +76,13 @@ const addProjectDocument = async function(req, res, next) {
   try {
     const document = await BusinessDocument.createForProject(projectId, body)
     res.status(201).json({ data: document })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Document', primaryId: document.id, action: auditActions.ADDED_PRIMARY })
   } catch (e) {
     next(e)
   }
 }
 
-const replaceProjectDocument = async function(req, res, next) {
+const updateProjectDocument = async function(req, res, next) {
   const { id, projectId } = req.params
   const { body } = req
   const { orgId } = req.requestorInfo
@@ -88,6 +90,7 @@ const replaceProjectDocument = async function(req, res, next) {
   try {
     const document = await BusinessDocument.updateByIdForProject(id, projectId, orgId, body)
     res.json({ data: document })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Document', primaryId: document.id, action: auditActions.UPDATED_PRIMARY })
   } catch (e) {
     next(e)
   }
@@ -100,6 +103,7 @@ const deleteProjectDocument = async function(req, res, next) {
   try {
     await BusinessDocument.deleteByIdForProject(id, projectId, orgId)
     res.status(204).send()
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Document', primaryId: id, action: auditActions.REMOVED_PRIMARY })
   } catch (e) {
     next(e)
   }

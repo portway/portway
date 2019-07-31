@@ -96,7 +96,8 @@ const updateProject = async function(req, res, next) {
 
   try {
     const project = await BusinessProject.updateById(id, body, req.requestorInfo.orgId)
-    res.json({ data: project })
+    res.status(200).json({ data: project })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Project', primaryId: project.id, action: auditActions.UPDATED_PRIMARY })
   } catch (e) {
     next(e)
   }
@@ -108,6 +109,7 @@ const deleteProject = async function(req, res, next) {
   try {
     await projectCoordinator.deleteById(id, req.requestorInfo.orgId)
     res.status(204).send()
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Project', primaryId: id, action: auditActions.REMOVED_PRIMARY })
   } catch (e) {
     next(e)
   }
