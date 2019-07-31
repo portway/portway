@@ -10,9 +10,9 @@ import useDataService from 'Hooks/useDataService'
 import { ORGANIZATION_ROLE_IDS, PRODUCT_NAME, PATH_PROJECTS } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import { updateOrganization } from 'Actions/organization'
-import UserOrganizationComponent from './UserOrganizationComponent'
+import AdminOrganizationComponent from './AdminOrganizationComponent'
 
-const UserOrganizationContainer = ({ errors, updateOrganization }) => {
+const AdminOrganizationContainer = ({ errors, updateOrganization }) => {
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   if (!currentOrg) return null
 
@@ -25,12 +25,12 @@ const UserOrganizationContainer = ({ errors, updateOrganization }) => {
       <Helmet>
         <title>Account Settings: Organization Info – {PRODUCT_NAME}</title>
       </Helmet>
-      <UserOrganizationComponent errors={errors} organization={currentOrg} submitHandler={submitHandler} />
+      <AdminOrganizationComponent errors={errors} organization={currentOrg} submitHandler={submitHandler} />
     </OrgPermission>
   )
 }
 
-UserOrganizationContainer.propTypes = {
+AdminOrganizationContainer.propTypes = {
   errors: PropTypes.object,
   updateOrganization: PropTypes.func.isRequired
 }
@@ -43,4 +43,4 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { updateOrganization }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserOrganizationContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminOrganizationContainer)

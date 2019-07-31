@@ -4,7 +4,7 @@ import moment from 'moment'
 import cx from 'classnames'
 
 import StripeContainer from './StripeContainer'
-import './_UserPaymentStyles.scss'
+import './_AdminPaymentStyles.scss'
 
 const amexLogo = require('./icons/amex.png')
 const dinersClubLogo = require('./icons/diners-club.png')
@@ -26,7 +26,7 @@ function renderCardLogo(brand) {
   return <img className="admin-payment__card-image" src={cardIcons[brand]} alt={`${brand} card logo`} width="64" height="40" />
 }
 
-const UserPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
+const AdminPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
   if (!isStripeOpen && Object.keys(orgBilling).length === 0) {
     return (
       <div className="admin-payment">
@@ -76,15 +76,15 @@ const UserPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, o
   }
 }
 
-UserPaymentComponent.propTypes = {
+AdminPaymentComponent.propTypes = {
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   openStripeHandler: PropTypes.func.isRequired,
   orgBilling: PropTypes.object,
 }
 
-UserPaymentComponent.defaultProps = {
+AdminPaymentComponent.defaultProps = {
   orgBilling: {}
 }
 
-export default UserPaymentComponent
+export default AdminPaymentComponent

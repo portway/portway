@@ -81,7 +81,7 @@ module.exports = {
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
   // Paths
   PATH_APP: '/d',
-  PATH_BILLING: '/settings/billing',
+  PATH_BILLING: '/admin/billing',
   PATH_ADMIN: '/admin',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',
