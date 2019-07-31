@@ -9,6 +9,7 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields } from './payloadSchemas/helpers'
 import projectSchema from './payloadSchemas/project'
+import auditLog, { auditActions } from '../integrators/audit'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.PROJECT,
@@ -81,6 +82,7 @@ const addProject = async function(req, res, next) {
       body.orgId
     )
     res.status(201).json({ data: project })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Project', primaryId: project.id, action: auditActions.ADDED_PRIMARY })
   } catch (e) {
     next(e)
   }
