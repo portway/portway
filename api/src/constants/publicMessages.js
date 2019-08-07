@@ -4,5 +4,6 @@ export default {
   BAD_REQUEST: 'Bad Request',
   INVALID_PAYLOAD: 'Invalid Request Payload Input',
   INVALID_PARAM: 'Invalid Request Url Parameter',
-  SERVER_ERROR: 'Server Error'
+  SERVER_ERROR: 'Server Error',
+  INVALID_PAYMENT: 'Invalid Payment'
 }
