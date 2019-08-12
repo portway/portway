@@ -114,7 +114,7 @@ const deleteDocumentField = async function(req, res, next) {
 }
 
 const auditLogDocumentUpdate = function(requestorId, documentId) {
-  auditLog({ userId: requestorId, primaryModel: 'Document', primaryId: documentId, action: auditActions.UPDATED_PRIMARY })
+  auditLog({ userId: requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: documentId, action: auditActions.UPDATED_PRIMARY })
 }
 
 export default documentFields

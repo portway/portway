@@ -43,9 +43,9 @@ const updateUserOrgRole = async function(req, res, next) {
     res.status(204).json()
     auditLog({
       userId: req.requestorInfo.requestorId,
-      primaryModel: 'Role',
+      primaryModel: RESOURCE_TYPES.ROLE,
       primaryId: orgRoleId,
-      secondaryModel: 'User',
+      secondaryModel: RESOURCE_TYPES.USER,
       secondaryId: userId,
       action: auditActions.UPDATED_PRIMARY_FOR_SECONDARY
     })

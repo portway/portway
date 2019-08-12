@@ -81,9 +81,9 @@ const createProjectUser = async (req, res, next) => {
     res.status(201).json({ data: projectUser })
     auditLog({
       userId: req.requestorInfo.requestorId,
-      primaryModel: 'User',
+      primaryModel: RESOURCE_TYPES.USER,
       primaryId: body.userId,
-      secondaryModel: 'Project',
+      secondaryModel: RESOURCE_TYPES.PROJECT,
       secondaryId: projectId,
       action: auditActions.ADDED_PRIMARY_TO_SECONDARY
     })
@@ -118,9 +118,9 @@ const deleteProjectUser = async function(req, res, next) {
     res.status(204).send()
     auditLog({
       userId: req.requestorInfo.requestorId,
-      primaryModel: 'User',
+      primaryModel: RESOURCE_TYPES.USER,
       primaryId: id,
-      secondaryModel: 'Project',
+      secondaryModel: RESOURCE_TYPES.PROJECT,
       secondaryId: projectId,
       action: auditActions.REMOVED_PRIMARY_FROM_SECONDARY
     })

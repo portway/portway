@@ -76,7 +76,7 @@ const addProjectDocument = async function(req, res, next) {
   try {
     const document = await BusinessDocument.createForProject(projectId, body)
     res.status(201).json({ data: document })
-    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Document', primaryId: document.id, action: auditActions.ADDED_PRIMARY })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: document.id, action: auditActions.ADDED_PRIMARY })
   } catch (e) {
     next(e)
   }
@@ -90,7 +90,7 @@ const updateProjectDocument = async function(req, res, next) {
   try {
     const document = await BusinessDocument.updateByIdForProject(id, projectId, orgId, body)
     res.json({ data: document })
-    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Document', primaryId: document.id, action: auditActions.UPDATED_PRIMARY })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: document.id, action: auditActions.UPDATED_PRIMARY })
   } catch (e) {
     next(e)
   }
@@ -103,7 +103,7 @@ const deleteProjectDocument = async function(req, res, next) {
   try {
     await BusinessDocument.deleteByIdForProject(id, projectId, orgId)
     res.status(204).send()
-    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: 'Document', primaryId: id, action: auditActions.REMOVED_PRIMARY })
+    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: id, action: auditActions.REMOVED_PRIMARY })
   } catch (e) {
     next(e)
   }
