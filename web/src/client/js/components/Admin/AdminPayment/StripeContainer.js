@@ -31,8 +31,6 @@ class StripeContainer extends React.Component {
       this.setState({
         stripe: window.Stripe(this.state.stripeKey)
       })
-    } else {
-      this.insertStripe()
     }
   }
 
