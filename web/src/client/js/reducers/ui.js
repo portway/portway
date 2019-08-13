@@ -195,6 +195,7 @@ export const ui = (state = initialState, action) => {
         ...state,
         billing: {
           ...state.billing,
+          isSubmitting: false,
           isStripeOpen: false
         }
       }
