@@ -9,7 +9,17 @@ const createCustomer = async function(body) {
     customer = await stripe.customers.create(body)
   } catch (err) {
     if (err.type === 'StripeCardError') {
-      throw ono(err, { code: 402, errorType: err.code, publicMessage: err.message })
+      throw ono(err, {
+        code: 402,
+        error: 'Invalid payment value',
+        errorType: "ValidationError",
+        errorDetails: [
+          {
+            message: err.message,
+            key: 'stripe'
+          }
+        ]
+      })
     }
     throw ono(err, { code: 500 })
   }
@@ -35,7 +45,17 @@ const updateCustomer = async function(customerId, body) {
     customer = await stripe.customers.update(customerId, body)
   } catch (err) {
     if (err.type === 'StripeCardError') {
-      throw ono(err, { code: 402, errorType: err.code, publicMessage: err.message })
+      throw ono(err, {
+        code: 402,
+        error: 'Invalid payment value',
+        errorType: "ValidationError",
+        errorDetails: [
+          {
+            message: err.message,
+            key: 'stripe'
+          }
+        ]
+      })
     }
     throw ono(err, { code: 500 })
   }

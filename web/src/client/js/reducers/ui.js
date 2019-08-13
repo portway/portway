@@ -199,6 +199,16 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
+    // A validation / 402 happened with Stripe
+    case ActionTypes.RECEIVE_BILLING_ERROR: {
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          isSubmitting: false
+        }
+      }
+    }
     // Toggle the Stripe form open and closed
     case ActionTypes.UI_TOGGLE_STRIPE_FORM: {
       return {
