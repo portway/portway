@@ -6,6 +6,7 @@ import BusinessField from '../businesstime/field'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields, partialFields } from './payloadSchemas/helpers'
+import auditLog, { auditActions } from '../integrators/audit'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
@@ -79,6 +80,7 @@ const addDocumentField = async function(req, res, next) {
   try {
     const field = await BusinessField.createForDocument(documentId, body)
     res.status(201).json({ data: field })
+    auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {
     next(e)
   }
@@ -92,6 +94,7 @@ const updateDocumentField = async function(req, res, next) {
   try {
     const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, body)
     res.status(200).json({ data: field })
+    auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {
     next(e)
   }
@@ -104,9 +107,14 @@ const deleteDocumentField = async function(req, res, next) {
   try {
     await BusinessField.deleteByIdForDocument(id, documentId, orgId)
     res.status(204).send()
+    auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {
     next(e)
   }
+}
+
+const auditLogDocumentUpdate = function(requestorId, documentId) {
+  auditLog({ userId: requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: documentId, action: auditActions.UPDATED_PRIMARY })
 }
 
 export default documentFields
