@@ -8,11 +8,12 @@ import dataMapper from 'Libs/dataMapper'
 
 import AdminPaymentComponent from './AdminPaymentComponent'
 
-const AdminPaymentContainer = ({ isStripeOpen, isSubmitting, uiToggleStripeForm }) => {
+const AdminPaymentContainer = ({ errors, isStripeOpen, isSubmitting, uiToggleStripeForm }) => {
   const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
 
   return (
     <AdminPaymentComponent
+      errors={errors}
       isStripeOpen={isStripeOpen}
       isSubmitting={isSubmitting}
       openStripeHandler={uiToggleStripeForm}
@@ -22,6 +23,7 @@ const AdminPaymentContainer = ({ isStripeOpen, isSubmitting, uiToggleStripeForm 
 }
 
 AdminPaymentContainer.propTypes = {
+  errors: PropTypes.object,
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   uiToggleStripeForm: PropTypes.func.isRequired,
@@ -29,8 +31,9 @@ AdminPaymentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    errors: state.validation.organization,
     isSubmitting: state.ui.billing.isSubmitting,
-    isStripeOpen: state.ui.billing.isStripeOpen
+    isStripeOpen: state.ui.billing.isStripeOpen,
   }
 }
 

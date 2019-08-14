@@ -40,6 +40,11 @@ export const updateOrganizationBilling = (orgId, body) => {
   return async (dispatch) => {
     dispatch(Organizations.initiateBillingUpdate(orgId))
     const { data, status } = await update(`organizations/${orgId}/billing`, body)
+    if (validationCodes.includes(status)) {
+      dispatch(Validation.create('organization', data, status))
+      dispatch(Organizations.receiveBillingError())
+      return
+    }
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
       return

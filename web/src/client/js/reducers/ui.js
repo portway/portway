@@ -195,7 +195,18 @@ export const ui = (state = initialState, action) => {
         ...state,
         billing: {
           ...state.billing,
+          isSubmitting: false,
           isStripeOpen: false
+        }
+      }
+    }
+    // A validation / 402 happened with Stripe
+    case ActionTypes.RECEIVE_BILLING_ERROR: {
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          isSubmitting: false
         }
       }
     }

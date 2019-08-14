@@ -4,6 +4,8 @@ const getPublicMessage = function(code) {
   switch (code) {
     case 400:
       return PUBLIC_MESSAGES.BAD_REQUEST
+    case 402:
+      return PUBLIC_MESSAGES.INVALID_PAYMENT
     case 404:
       return PUBLIC_MESSAGES.NOT_FOUND
     case 500:

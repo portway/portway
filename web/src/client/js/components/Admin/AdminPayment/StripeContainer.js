@@ -21,13 +21,26 @@ class StripeContainer extends React.Component {
       stripe: null
     }
     // Load stripe library dynamically
-    if (typeof Stripe === 'undefined') {
-      const stripeScript = document.createElement('script')
-      stripeScript.onerror = this.stripeErrorHandler.bind(this)
-      stripeScript.onload = this.stripeLoadedHandler.bind(this)
-      stripeScript.src = 'https://js.stripe.com/v3/'
-      document.body.appendChild(stripeScript)
+    if (!window.Stripe) {
+      this.insertStripe()
     }
+  }
+
+  componentDidMount() {
+    if (window.Stripe) {
+      this.setState({
+        stripe: window.Stripe(this.state.stripeKey)
+      })
+    }
+  }
+
+  insertStripe() {
+    const stripeScript = document.createElement('script')
+    stripeScript.src = 'https://js.stripe.com/v3/'
+    stripeScript.async = true
+    stripeScript.onerror = this.stripeErrorHandler.bind(this)
+    stripeScript.onload = this.stripeLoadedHandler.bind(this)
+    document.body.appendChild(stripeScript)
   }
 
   render() {

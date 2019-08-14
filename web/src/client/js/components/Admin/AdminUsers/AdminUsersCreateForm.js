@@ -22,7 +22,6 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
   ]
 
   function isNameOrEmailBlank() {
-    console.log(name === undefined || email === undefined)
     return name === undefined || email === undefined
   }
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import cx from 'classnames'
 
+import ValidationComponent from 'Components/Validation/ValidationComponent'
 import StripeContainer from './StripeContainer'
 import './_AdminPaymentStyles.scss'
 
@@ -26,7 +27,7 @@ function renderCardLogo(brand) {
   return <img className="admin-payment__card-image" src={cardIcons[brand]} alt={`${brand} card logo`} width="64" height="40" />
 }
 
-const AdminPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
+const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
   if (!isStripeOpen && Object.keys(orgBilling).length === 0) {
     return (
       <div className="admin-payment">
@@ -43,6 +44,7 @@ const AdminPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, 
       <div className="admin-payment">
         <>
           <p>Enter your new card information. We will use this new form of payment from now on.</p>
+          <ValidationComponent errors={errors.stripe} />
           <StripeContainer cancelHandler={() => { openStripeHandler(false) }} isSubmitting={isSubmitting} />
         </>
       </div>
@@ -77,6 +79,7 @@ const AdminPaymentComponent = ({ isStripeOpen, isSubmitting, openStripeHandler, 
 }
 
 AdminPaymentComponent.propTypes = {
+  errors: PropTypes.object,
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   openStripeHandler: PropTypes.func.isRequired,
@@ -84,6 +87,7 @@ AdminPaymentComponent.propTypes = {
 }
 
 AdminPaymentComponent.defaultProps = {
+  errors: [],
   orgBilling: {}
 }
 

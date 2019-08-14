@@ -4,6 +4,8 @@ import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, SUPPORT_EMAIL } from 'Shared
 export const getNotificationTitle = function(notification) {
   if (notification.type === NOTIFICATION_TYPES.ERROR) {
     switch (notification.code) {
+      case 402:
+        return 'Payment error'
       case 403:
         return 'Access denied'
       case 404:
