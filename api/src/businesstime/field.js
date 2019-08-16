@@ -40,10 +40,20 @@ async function createForDocument(docId, body) {
     createFieldBody = body
   }
 
+  let value
+
+  if (createFieldBody.type === FIELD_TYPES.IMAGE) {
+    // upload image to s3 and set url on field body
+    const url = 'http://www.bonkeybong.com/image.jpg'
+    value = url
+  } else {
+    value = body.value
+  }
+
   const createdField = await document.createField(createFieldBody)
 
   const fieldValue = await createdField.addFieldValue({
-    value: body.value,
+    value,
     structuredValue: body.structuredValue,
     orgId
   })

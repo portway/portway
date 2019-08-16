@@ -7,6 +7,7 @@ import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
+import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
@@ -33,6 +34,9 @@ const DocumentFieldsComponent = ({
         break
       case Constants.FIELD_TYPES.STRING:
         fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
+        break
+      case Constants.FIELD_TYPES.IMAGE:
+        fieldTypeComponent = <FieldImageComponent field={field} onChange={fieldChangeHandler} />
         break
       default:
         break

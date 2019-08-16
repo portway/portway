@@ -92,6 +92,11 @@ const DocumentComponent = ({
               <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
             </DropdownSubmenu>
           </DropdownItem>
+          <DropdownItem label="Image" type="submenu">
+            <DropdownSubmenu align="right">
+              <DropdownItem label="Image" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.IMAGE) }} />
+            </DropdownSubmenu>
+          </DropdownItem>
         </DropdownComponent>
       </div>
     </div>

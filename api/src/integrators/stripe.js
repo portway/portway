@@ -12,7 +12,7 @@ const createCustomer = async function(body) {
       throw ono(err, {
         code: 402,
         error: 'Invalid payment value',
-        errorType: "ValidationError",
+        errorType: 'ValidationError',
         errorDetails: [
           {
             message: err.message,
