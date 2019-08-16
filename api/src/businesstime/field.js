@@ -8,6 +8,7 @@ import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import { uploadFile } from '../integrator/s3'
 
 const MODEL_NAME = 'Field'
 
@@ -43,8 +44,8 @@ async function createForDocument(docId, body) {
   let value
 
   if (createFieldBody.type === FIELD_TYPES.IMAGE) {
-    // upload image to s3 and set url on field body
-    const url = 'http://www.bonkeybong.com/image.jpg'
+    const url = uploadFile(file)
+    console.log(url)
     value = url
   } else {
     value = body.value
