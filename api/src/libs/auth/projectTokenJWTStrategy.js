@@ -18,7 +18,7 @@ export function Strategy(options, verify) {
   }
 
   if (!verify) {
-    throw new TypeError('Danger authentication strategy requires a verify function')
+    throw new TypeError('Portway authentication strategy requires a verify function')
   }
 
   passport.Strategy.call(this)
