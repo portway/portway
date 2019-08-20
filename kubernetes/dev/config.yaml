@@ -18,6 +18,8 @@ items:
 - apiVersion: v1
   data:
     web.static_port: "3000"
+    web.api_url: "api:3001"
+    web.api_public_url: "api:3001"
   kind: ConfigMap
   metadata:
     name: web-config

@@ -17,7 +17,7 @@ spec:
         app: web
     spec:
       containers:
-      - image: portway/web
+      - image: bonkeybong/portway_web
         imagePullPolicy: "Never"
         name: web
         args: [ "start" ]

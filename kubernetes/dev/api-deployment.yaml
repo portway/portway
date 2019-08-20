@@ -17,7 +17,7 @@ spec:
         app: api
     spec:
       containers:
-      - image: portway/api
+      - image: bonkeybong/portway_api
         imagePullPolicy: "Never"
         name: api
         args: [ "start"  ]
