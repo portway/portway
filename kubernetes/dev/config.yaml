@@ -4,6 +4,13 @@ items:
 - apiVersion: v1
   data:
     api.port: "3001"
+    api.db-host: "db"
+    api.db-port: "5432"
+    api.db-user: "bonkey"
+    api.db-name: "dev"
+    api.aws-ses-region: "us-west-2"
+    api.sender-email-address: "no-reply@portway.app"
+    api.client-url: "web:3000"
   kind: ConfigMap
   metadata:
     name: api-config
