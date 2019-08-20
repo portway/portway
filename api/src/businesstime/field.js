@@ -8,7 +8,7 @@ import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import { uploadFile } from '../integrator/s3'
+import { uploadFile } from '../integrators/s3'
 
 const MODEL_NAME = 'Field'
 

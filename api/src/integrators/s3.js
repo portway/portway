@@ -8,8 +8,6 @@ AWS.config.update({ region: AWS_SES_REGION })
 
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' })
 
-s3.updateBucketName(S3_IMAGE_BUCKET)
-
 export const uploadFile = async function(file) {
   const type = mime.lookup(file.path)
 
