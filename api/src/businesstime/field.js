@@ -8,7 +8,7 @@ import apiErrorTypes from '../constants/apiErrorTypes'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-import { uploadFile } from '../integrators/s3'
+import { uploadImage } from '../integrators/s3'
 
 const MODEL_NAME = 'Field'
 
@@ -18,7 +18,7 @@ const publicFields = (instance) => {
   return pick(instance, PUBLIC_FIELDS)
 }
 
-async function createForDocument(docId, body) {
+async function createForDocument(docId, body, file) {
   const db = getDb()
   const { orgId } = body
 
@@ -44,8 +44,7 @@ async function createForDocument(docId, body) {
   let value
 
   if (createFieldBody.type === FIELD_TYPES.IMAGE) {
-    const url = uploadFile(file)
-    console.log(url)
+    const url = await uploadImage(file)
     value = url
   } else {
     value = body.value
