@@ -8,6 +8,7 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields, partialFields } from './payloadSchemas/helpers'
 import auditLog, { auditActions } from '../integrators/audit'
+import fieldCoordinator from '../coordinators/field'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
@@ -80,7 +81,7 @@ const addDocumentField = async function(req, res, next) {
   body.orgId = orgId
 
   try {
-    const field = await BusinessField.createForDocument(documentId, body, file)
+    const field = await fieldCoordinator.addFieldToDocument(documentId, body, file)
     res.status(201).json({ data: field })
     auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {

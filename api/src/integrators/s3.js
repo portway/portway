@@ -23,5 +23,5 @@ export const uploadImage = async function(file) {
     throw ono(err, { code: 503 }, 'AWS s3 failed to upload file')
   }
 
-  return res
+  return res.Location
 }
