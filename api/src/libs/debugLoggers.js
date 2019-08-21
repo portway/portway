@@ -3,6 +3,6 @@
  */
 import debug from 'debug'
 
-const ROOT_NAMESPACE = 'danger'
+const ROOT_NAMESPACE = 'portway'
 
 export const permissions = debug(`${ROOT_NAMESPACE}:permissions`)

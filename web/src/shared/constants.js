@@ -60,12 +60,12 @@ const QUERY_PARAMS = {
 
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
-  PRODUCT_NAME: 'Project Danger',
-  PRODUCT_ID: 'project-danger',
+  PRODUCT_NAME: 'Portway',
+  PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
   PRODUCT_API_URL: 'http://localhost:3001/api',
   // Documentation
-  DOCUMENTATION_URL: 'https://docs.project-danger.com/',
+  DOCUMENTATION_URL: 'https://docs.portway.app/',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
@@ -103,6 +103,6 @@ module.exports = {
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support
-  SUPPORT_EMAIL: 'support@project-danger.com',
-  SUPPORT_LINK: 'https://support.project-danger.com/',
+  SUPPORT_EMAIL: 'support@portway.app',
+  SUPPORT_LINK: 'https://support.portway.app/',
 }
