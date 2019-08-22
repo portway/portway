@@ -58,10 +58,11 @@ const DocumentFieldsContainer = ({
     e.currentTarget.classList.remove('document-field--dragged-over')
   }
   function dragOverHandler(e) {
+    e.currentTarget.classList.add('document-field--dragged-over')
+    e.dataTransfer.dropEffect = 'move'
     if (e.preventDefault) {
       e.preventDefault()
     }
-    e.dataTransfer.dropEffect = 'move'
     return false
   }
   function dragEndHandler(e) {

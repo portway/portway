@@ -4,22 +4,18 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { groupBy } from 'Shared/utilities'
 import { uiConfirm, uiToggleFullScreen } from 'Actions/ui'
 import { deleteDocument, publishDocument, updateDocument } from 'Actions/document'
-import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import Constants from 'Shared/constants'
 
-import { FIELD_LABELS, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
+import { PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  createField,
   deleteDocument,
   documents,
-  fields,
   history,
   isFullScreen,
   location,
@@ -55,27 +51,6 @@ const DocumentContainer = ({
   }
 
   /**
-   * If we have fields, break them up by type for field names
-   */
-  let fieldsByType
-
-  if (fields) {
-    fieldsByType = groupBy(fields, 'type')
-  } else {
-    fieldsByType = {}
-  }
-
-  function fieldCreationHandler(fieldType) {
-    const typeFieldsInDocument = fieldsByType[fieldType]
-    const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
-    const newName = FIELD_LABELS[fieldType] + (value + 1)
-    createField(document.id, fieldType, {
-      name: newName,
-      type: fieldType
-    })
-  }
-
-  /**
    * Otherwise we render the document, and update its values onChange
    */
   function nameChangeHandler(e) {
@@ -108,7 +83,6 @@ const DocumentContainer = ({
 
       <DocumentComponent
         document={document}
-        fieldCreationHandler={fieldCreationHandler}
         isPublishing={documents.isPublishing}
         nameChangeHandler={nameChangeHandler}
         publishDocumentHandler={publishDocumentHandler}
@@ -119,7 +93,6 @@ const DocumentContainer = ({
 }
 
 DocumentContainer.propTypes = {
-  createField: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documents: PropTypes.object.isRequired,
   fields: PropTypes.object,
@@ -142,7 +115,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  createField,
   deleteDocument,
   publishDocument,
   updateDocument,
