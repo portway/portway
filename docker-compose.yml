@@ -16,7 +16,7 @@ services:
       - ./web/src/server/.env
     environment:
       NODE_ENV: development
-    container_name: danger-web
+    container_name: portway-web
 
   api:
     build:
@@ -36,7 +36,7 @@ services:
       API_PORT: 3001
     depends_on:
       - db
-    container_name: danger-api
+    container_name: portway-api
 
   db:
     image: postgres:11.2-alpine

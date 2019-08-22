@@ -1,7 +1,7 @@
 {
-  "name": "project-danger-web",
+  "name": "portway-web",
   "version": "1.0.0",
-  "description": "Project Danger Web Client",
+  "description": "Portway Web Client",
   "main": "src/server/app.js",
   "scripts": {
     "analyze": "NODE_ENV=production webpack --env.production --config ./config/webpack.prod.js --profile --json > stats.json && ./node_modules/webpack-bundle-analyzer/lib/bin/analyzer.js stats.json",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:BonkeyBong/project-danger.git"
+    "url": "git@github.com:BonkeyBong/portway.git"
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",

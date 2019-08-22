@@ -1,10 +1,10 @@
 openapi: '3.0.2'
 info:
   version: 1.0.0
-  title: Project Danger API
-  description: Public API spec for Project Danger
+  title: Portway API
+  description: Public API spec for Portway
   contact:
-    name: Project Danger Team
+    name: Portway Team
     email: info@bonkeybong.com
     url: http://www.bonkeybong.com
 servers:
@@ -375,7 +375,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
+
   /projects/{projectId}/assignments/{id}:
     get:
       description: Returns a project user assignment based on a single ID
@@ -476,7 +476,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  
+
 
   /documents/{documentId}/fields:
     get:
@@ -858,4 +858,4 @@ components:
         message:
           type: string
         key:
-          type: string      
+          type: string
