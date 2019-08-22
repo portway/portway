@@ -10,7 +10,7 @@ items:
     api.db-name: "dev"
     api.aws-ses-region: "us-west-2"
     api.sender-email-address: "no-reply@portway.app"
-    api.client-url: "http://web-service:3000"
+    api.client-url: "http://portway.local"
   kind: ConfigMap
   metadata:
     name: api-config
@@ -19,7 +19,7 @@ items:
   data:
     web.static_port: "3000"
     web.api_url: "http://api:3001"
-    web.api_public_url: "http://api-service:3001"
+    web.api_public_url: "http://api.portway.local"
   kind: ConfigMap
   metadata:
     name: web-config
