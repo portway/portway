@@ -39,7 +39,7 @@ const FieldTextComponent = ({ field, onChange }) => {
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
     }
-  // We're disavling the dependency here because adding field.id or onChange here
+  // We're disabling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor])

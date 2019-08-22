@@ -78,20 +78,6 @@
     display: block;
   }
 
-  &__menus {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    padding-right: $sideGutterWidth / 2;
-    margin: $sideGutterWidth / 2 0 128px;
-
-    // When publishing a document, disable everything
-    &--disabled {
-      opacity: 0.4;
-      pointer-events: none;
-    }
-  }
-
   &__fields {
     padding: 0 $brandWidth / 3;
     transition: opacity 0.2s ease-in-out;

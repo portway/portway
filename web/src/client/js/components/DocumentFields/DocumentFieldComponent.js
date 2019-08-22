@@ -117,7 +117,6 @@ DocumentFieldComponent.propTypes = {
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,
-  showName: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired
 }

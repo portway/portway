@@ -2,6 +2,8 @@
 
 .document-field__text {
   --document-field-min-height: 64px;
+  margin: auto;
+  max-width: 1366px;
   width: 100%;
 
   // Override the SimpleMDE styling
