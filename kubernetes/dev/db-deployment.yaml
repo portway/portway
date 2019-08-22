@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  labels:
+    app: db
+spec:
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        run: db
+        app: db
+    spec:
+      containers:
+      - image: postgres:11.2-alpine
+        imagePullPolicy: "IfNotPresent"
+        name: db
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.db-name
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.db-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db_user_password
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - name: postgres-persistent-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-persistent-storage
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim

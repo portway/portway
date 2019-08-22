@@ -15,6 +15,7 @@ spec:
       labels:
         run: api
         app: api
+        test: one
     spec:
       containers:
       - image: bonkeybong/portway_api
@@ -32,6 +33,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.db-host
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.db-name
         - name: DB_PORT
           valueFrom:
             configMapKeyRef:
