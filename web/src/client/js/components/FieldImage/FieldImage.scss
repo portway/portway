@@ -1,0 +1,10 @@
+@import 'CSS/inc/_mixins.scss';
+
+.document-field--number {
+  input[type="image"] {
+    border: none;
+    padding: 8px 0;
+    width: 100%;
+    @include focus(transparent);
+  }
+}
