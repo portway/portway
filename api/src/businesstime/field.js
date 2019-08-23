@@ -50,6 +50,8 @@ async function createForDocument(docId, body) {
 
   await createdField.setFieldValue(fieldValue.id)
 
+  await document.markUpdated()
+
   return await findByIdForDocument(createdField.id, docId, orgId)
 }
 
