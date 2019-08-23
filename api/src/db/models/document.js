@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   Document.prototype.markUpdated = function(valueBody) {
-    this.updatedAt = Date.now()
+    this.setDataValue('updatedAt', Date.now())
     return this.save()
   }
 
