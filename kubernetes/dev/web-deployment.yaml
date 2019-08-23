@@ -17,7 +17,7 @@ spec:
         app: web
     spec:
       containers:
-      - image: danger/web
+      - image: portway/web
         imagePullPolicy: "Never"
         name: web
         args: [ "start" ]

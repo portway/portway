@@ -1,7 +1,7 @@
 {
-  "name": "project-danger-api",
+  "name": "portway-api",
   "version": "1.0.0",
-  "description": "Project Danger API",
+  "description": "Portway API",
   "scripts": {
     "serve": "NODE_ENV=development nodemon --exec babel-node --require node_modules/dotenv/config -- src/server.js",
     "build": "NODE_ENV=production babel ./src -d dist/ --copy-files",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/BonkeyBong/project-danger.git"
+    "url": "git+ssh://git@github.com/BonkeyBong/portway.git"
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",

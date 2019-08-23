@@ -1,20 +1,18 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
-import cx from 'classnames'
 
-import Constants from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { AddIcon, ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
+import { ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
-import { DropdownComponent, DropdownItem, DropdownSubmenu } from 'Components/Dropdown/Dropdown'
+import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
+import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
 
 import './_Document.scss'
 
 const DocumentComponent = ({
   document,
-  fieldCreationHandler,
   isPublishing,
   nameChangeHandler,
   publishDocumentHandler,
@@ -23,20 +21,12 @@ const DocumentComponent = ({
 }) => {
   const titleRef = useRef()
   const docKey = document ? document.id : 0
-  const dataDropdown = {
-    className: 'btn btn--blank btn--with-circular-icon',
-    icon: <AddIcon />
-  }
   const dropdownButton = {
     className: 'btn btn--blank btn--with-circular-icon',
     icon: <MoreIcon />
   }
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
-  })
-  const menuClasses = cx({
-    'document__menus': true,
-    'document__menus--disabled': isPublishing
   })
   return (
     <div className="document" key={docKey}>
@@ -79,26 +69,7 @@ const DocumentComponent = ({
         </DropdownComponent>
       </header>
       <DocumentFieldsContainer />
-      <div className={menuClasses}>
-        <DropdownComponent align="right" button={dataDropdown} className="document__document-data-dropdown">
-          <DropdownItem label="Text" type="submenu">
-            <DropdownSubmenu align="right">
-              <DropdownItem label="Textbox" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.TEXT) }} />
-              <DropdownItem label="String" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.STRING) }} />
-            </DropdownSubmenu>
-          </DropdownItem>
-          <DropdownItem label="Number" type="submenu">
-            <DropdownSubmenu align="right">
-              <DropdownItem label="Number" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.NUMBER) }} />
-            </DropdownSubmenu>
-          </DropdownItem>
-          <DropdownItem label="Image" type="submenu">
-            <DropdownSubmenu align="right">
-              <DropdownItem label="Image" type="button" onClick={() => { fieldCreationHandler(Constants.FIELD_TYPES.IMAGE) }} />
-            </DropdownSubmenu>
-          </DropdownItem>
-        </DropdownComponent>
-      </div>
+      <ContentMenuContainer />
     </div>
   )
 }
@@ -106,7 +77,6 @@ const DocumentComponent = ({
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
-  fieldCreationHandler: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   publishDocumentHandler: PropTypes.func.isRequired,
