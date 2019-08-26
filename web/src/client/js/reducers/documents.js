@@ -146,6 +146,21 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
+    // When fields are added/updated/removed, adjust the updatedAt field
+    // accordingly, only client-side... next request for document will get the
+    // right date
+    case ActionTypes.RECEIVE_CREATED_FIELD:
+    case ActionTypes.RECEIVE_UPDATED_FIELD:
+    case ActionTypes.REMOVE_FIELD: {
+      const documentToUpdate = state.projectDocumentsById[action.projectId][action.documentId]
+      documentToUpdate.updatedAt = Date.now()
+      const project = { ...state.projectDocumentsById[action.projectId], [action.documentId]: documentToUpdate }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.projectId]: project }
+      return {
+        ...state,
+        projectDocumentsById
+      }
+    }
     default:
       return state
   }
