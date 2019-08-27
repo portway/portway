@@ -21,6 +21,7 @@ const FieldImageComponent = ({ field, onChange }) => {
   const [draggedOver, setDraggedOver] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [warning, setWarning] = useState(null)
+  const [editMode, setEditMode] = useState(!field.value)
   const imageNodeRef = useRef()
 
   function uploadImage(file) {
@@ -94,6 +95,13 @@ const FieldImageComponent = ({ field, onChange }) => {
 
   return (
     <div className="document-field__image">
+      {!editMode &&
+      <div className="document-field__image-container">
+        <img src={field.value} alt={field.name} />
+        <button className="btn" onClick={() => { setEditMode(true) }}>Change image</button>
+      </div>
+      }
+      {editMode &&
       <form
         className={formClasses}
         onDragEnter={dragEnterHandler}
@@ -104,7 +112,7 @@ const FieldImageComponent = ({ field, onChange }) => {
         <label>
           <p>Drag and drop an image</p>
           <span className="btn btn--small">Or select a file</span>
-          <input hidden type="file" accept="image/*" onChange={fileChangeHandler} defaultValue={field.value} />
+          <input hidden type="file" accept="image/*" defaultValue={field.value} onChange={fileChangeHandler} defaultValue={field.value} />
           {warning &&
           <p className="small warning">{warning}</p>
           }
@@ -117,6 +125,7 @@ const FieldImageComponent = ({ field, onChange }) => {
         </div>
         }
       </form>
+      }
     </div>
   )
 }
