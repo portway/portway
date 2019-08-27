@@ -19,7 +19,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
   function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
       name: value
-    })
+    }, false, ' ')
   }
 
   function createDocumentHandler(value) {
@@ -36,8 +36,10 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
     reader.readAsText(file)
     reader.onloadend = function() {
       // Create a new document, preventing the redirect, and with a body
+      // Remove the file extension
+      const fileName = file.name.replace(/\.[^/.]+$/, "")
       const markdownBody = reader.result
-      createDocument(match.params.projectId, history, { name: file.name }, true, markdownBody)
+      createDocument(match.params.projectId, history, { name: fileName }, true, markdownBody)
     }
   }
 

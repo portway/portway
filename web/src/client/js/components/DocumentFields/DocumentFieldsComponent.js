@@ -23,11 +23,17 @@ const DocumentFieldsComponent = ({
   fieldDestroyHandler,
   isPublishing
 }) => {
+
+  const textFields = fields.filter((field) => {
+    return field.type === Constants.FIELD_TYPES.TEXT
+  })
+  const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocus={lastTextFieldId} />
         break
       case Constants.FIELD_TYPES.NUMBER:
         fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />

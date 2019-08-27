@@ -5,7 +5,7 @@ import SimpleMDE from 'simplemde'
 import './SimpleMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ field, onChange }) => {
+const FieldTextComponent = ({ field, onChange, autoFocus }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
@@ -38,6 +38,10 @@ const FieldTextComponent = ({ field, onChange }) => {
     if (editor) {
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
+      if (field.id === autoFocus) {
+        editor.codemirror.focus()
+        editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
+      }
     }
   // We're disabling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits
@@ -51,6 +55,7 @@ const FieldTextComponent = ({ field, onChange }) => {
 }
 
 FieldTextComponent.propTypes = {
+  autoFocus: PropTypes.number,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }
