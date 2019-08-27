@@ -51,6 +51,10 @@ const DocumentFieldsContainer = ({
     e.dataTransfer.setData('text/html', e.target)
   }
   function dragEnterHandler(e) {
+    if (e.dataTransfer.types.includes('Files')) {
+      e.preventDefault()
+      return
+    }
     e.currentTarget.classList.add('document-field--dragged-over')
     e.dataTransfer.dropEffect = 'move'
   }
@@ -58,6 +62,10 @@ const DocumentFieldsContainer = ({
     e.currentTarget.classList.remove('document-field--dragged-over')
   }
   function dragOverHandler(e) {
+    if (e.dataTransfer.types.includes('Files')) {
+      e.preventDefault()
+      return
+    }
     e.currentTarget.classList.add('document-field--dragged-over')
     e.dataTransfer.dropEffect = 'move'
     if (e.preventDefault) {
@@ -71,6 +79,10 @@ const DocumentFieldsContainer = ({
   function dropHandler(e) {
     if (e.stopPropagation) {
       e.stopPropagation()
+    }
+    if (e.dataTransfer.types.includes('Files')) {
+      e.preventDefault()
+      return
     }
     const fieldIdToUpdate = draggingElement.dataset.id
     const from = Number(draggingElement.dataset.order)

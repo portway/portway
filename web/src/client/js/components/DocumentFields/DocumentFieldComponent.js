@@ -29,7 +29,7 @@ const DocumentFieldComponent = ({
     }
   }, [isNewField])
 
-  const showName = field.type !== Constants.FIELD_TYPES.TEXT
+  const showName = field.type !== Constants.FIELD_TYPES.TEXT && field.type !== Constants.FIELD_TYPES.IMAGE
 
   const fieldClasses = cx({
     'document-field': true,

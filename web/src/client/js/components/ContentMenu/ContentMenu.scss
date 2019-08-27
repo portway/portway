@@ -9,18 +9,22 @@
   }
 }
 
+$contentMenuWidth: 250px;
+
 .content-menu {
-  bottom: $sideGutterWidth;
-  position: fixed;
-  right: $sideGutterWidth / 2;
+  position: relative;
+  margin: $sideGutterWidth / 2 auto 0;
+  padding-bottom: $sideGutterWidth / 2;
+  text-align: center;
+  width: $contentMenuWidth;
   z-index: 10;
 
   &__button {
     // Add icon
     .icon {
-      height: 48px;
+      height: 40px;
       transition: transform 0.1s ease-out;
-      width: 48px;
+      width: 40px;
       .icon-add {
         height: 18px;
         width: 18px;
@@ -43,8 +47,7 @@
     max-height: 200px;
     overflow: auto;
     position: absolute;
-    right: $sideGutterWidth;
-    width: 250px;
+    width: $contentMenuWidth;
     &[hidden] {
       display: block;
       opacity: 0;
@@ -61,6 +64,7 @@
   }
 
   &__group {
+    text-align: left;
     &:first-child {
       .content-menu__group-name {
         border-top: none;

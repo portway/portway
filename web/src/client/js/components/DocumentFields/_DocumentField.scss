@@ -14,7 +14,30 @@
   outline: 0;
 
   &--text {
-    margin: ($sideGutterWidth / 2) 0;
+    margin: ($sideGutterWidth / 2) 64px;
+    .document-field__component {
+      flex-direction: column;
+    }
+    .document-field__tool-options {
+      justify-content: center;
+    }
+  }
+
+  &--image {
+    margin: ($sideGutterWidth / 2) 32px;
+    position: relative;
+    .document-field__component {
+      flex-direction: column;
+    }
+    .document-field__tools {
+      bottom: 18px;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+    }
+    .document-field__tool-options {
+      justify-content: center;
+    }
   }
 
   &--number, &--string {
@@ -22,6 +45,7 @@
     border: thin solid var(--base-border-color);
     border-bottom: none;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    margin: 0 24px;
 
     input {
       background-color: transparent;
@@ -144,5 +168,39 @@
       visibility: visible;
     }
   }
+
+  /**
+   * For drag areas (files, etc)
+   * ------------------------------------------------------------------------ */
+  &__drop-area {
+    border: thin solid $gray-light;
+    border-radius: $borderRadius;
+    padding: $sideGutterWidth;
+
+    label {
+      text-align: center;
+    }
+
+    &--active {
+      background-color: $gray-light;
+    }
+
+    &--uploading {
+      border: thin solid transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+  }
+
+  &__progress {
+    position: relative;
+    .spinner {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
 
 }
