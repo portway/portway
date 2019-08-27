@@ -28,7 +28,7 @@ const documentFields = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    multer().single('file'),
+    multer({ dest: 'uploads/' }).single('file'),
     validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type'), { includeDetails: true }),
     createPerm,
     addDocumentField

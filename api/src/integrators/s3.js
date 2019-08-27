@@ -1,5 +1,10 @@
 import AWS from 'aws-sdk'
 import ono from 'ono'
+import fs from 'fs'
+import util from 'util'
+
+const readFile = util.promisify(fs.readFile)
+const unlink = util.promisify(fs.unlink)
 
 const { S3_IMAGE_BUCKET, AWS_SES_REGION } = process.env
 
@@ -15,12 +20,15 @@ export const uploadImage = async function(file) {
         Bucket: S3_IMAGE_BUCKET,
         Key: file.originalname,
         ContentType: 'application/octet-stream',
-        Body: file.buffer,
+        Body: await readFile(file.path),
         ACL: 'public-read'
       })
       .promise()
   } catch (err) {
     throw ono(err, { code: 503 }, 'AWS s3 failed to upload file')
+  } finally {
+    // async function, but don't await it, just fire and move on
+    unlink(file.path)
   }
 
   return res.Location
