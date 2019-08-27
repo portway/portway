@@ -38,6 +38,7 @@ const documentFields = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
+    multer().single('file'),
     validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), { includeDetails: true }),
     updatePerm,
     updateDocumentField
@@ -91,11 +92,11 @@ const addDocumentField = async function(req, res, next) {
 
 const updateDocumentField = async function(req, res, next) {
   const { id, documentId } = req.params
-  const { body } = req
+  const { body, file } = req
   const { orgId } = req.requestorInfo
 
   try {
-    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, body)
+    const field = await fieldCoordinator.updateDocumentField(id, documentId, orgId, body, file)
     res.status(200).json({ data: field })
     auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {
