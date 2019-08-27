@@ -37,12 +37,14 @@ const DocumentFieldComponent = ({
     'document-field--text': field.type === Constants.FIELD_TYPES.TEXT,
     'document-field--number': field.type === Constants.FIELD_TYPES.NUMBER,
     'document-field--string': field.type === Constants.FIELD_TYPES.STRING,
+    'document-field--image': field.type === Constants.FIELD_TYPES.IMAGE,
   })
 
   const fieldLabels = {
     [Constants.FIELD_TYPES.TEXT]: 'Text area',
     [Constants.FIELD_TYPES.STRING]: 'String',
     [Constants.FIELD_TYPES.NUMBER]: 'Number',
+    [Constants.FIELD_TYPES.IMAGE]: 'Photo',
   }
 
   // Field name handling
