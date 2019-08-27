@@ -113,7 +113,6 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
     setDraggedOver(false)
     const dt = e.dataTransfer
     const files = [...dt.files]
-    console.log(files)
     files.forEach((file) => {
       if (!ALLOWED_FILES.includes(file.type)) return
       draggedDocumentHandler(file)
