@@ -121,7 +121,7 @@ async function updateByIdForDocument(id, docId, orgId, body) {
 
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
-  console.log(body.value)
+
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
   return await findByIdForDocument(field.id, docId, orgId)
