@@ -31,6 +31,11 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
     uiDocumentCreate(value)
   }
 
+  function fieldMoveHandler(oldDocumentId, newDocumentId, fieldId) {
+    if (oldDocumentId === newDocumentId) return
+    console.log(`Move field: ${fieldId} from document: ${oldDocumentId} to document: ${newDocumentId}.`)
+  }
+
   const sortedDocuments = []
   if (documents) {
     Object.keys(documents).forEach((doc) => {
@@ -47,6 +52,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       createChangeHandler={createDocumentAction}
       creating={ui.documents.creating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedDocuments}
+      fieldMoveHandler={fieldMoveHandler}
       projectId={Number(match.params.projectId)}/>
   )
 }

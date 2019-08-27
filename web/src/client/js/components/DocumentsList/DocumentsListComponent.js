@@ -13,7 +13,7 @@ import './DocumentsList.scss'
 
 const { PROJECT_ROLE_IDS } = Constants
 
-const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, projectId }) => {
+const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, fieldMoveHandler, projectId }) => {
   const listItemRef = useRef()
   const nameRef = useRef()
 
@@ -78,7 +78,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
 
   function renderDocumentsList() {
     return documents.map((doc, index) => {
-      return <DocumentsListItem disable={creating} key={`d-${doc.id}-${index}`} document={doc} />
+      return <DocumentsListItem disable={creating} fieldMoveHandler={fieldMoveHandler} key={`d-${doc.id}-${index}`} document={doc} />
     })
   }
 
@@ -112,6 +112,7 @@ DocumentsListComponent.propTypes = {
   creating: PropTypes.bool.isRequired,
   createCallback: PropTypes.func.isRequired,
   documents: PropTypes.array.isRequired,
+  fieldMoveHandler: PropTypes.func.isRequired,
   projectId: PropTypes.number.isRequired
 }
 

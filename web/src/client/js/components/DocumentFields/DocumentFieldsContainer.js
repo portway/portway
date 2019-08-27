@@ -48,6 +48,8 @@ const DocumentFieldsContainer = ({
     setDraggingElement(e.currentTarget)
     e.currentTarget.classList.add('document-field--dragging')
     e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('fieldid', e.currentTarget.dataset.id)
+    e.dataTransfer.setData('documentid', documentId)
     e.dataTransfer.setData('text/html', e.target)
   }
   function dragEnterHandler(e) {
@@ -74,6 +76,7 @@ const DocumentFieldsContainer = ({
     return false
   }
   function dragEndHandler(e) {
+    e.persist()
     e.currentTarget.classList.remove('document-field--dragging')
   }
   function dropHandler(e) {

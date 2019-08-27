@@ -23,10 +23,7 @@ const FieldImageComponent = ({ field, onChange }) => {
   const [warning, setWarning] = useState(null)
   const imageNodeRef = useRef()
 
-  console.log(field)
-
   function uploadImage(file) {
-    console.log(file)
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
       setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)

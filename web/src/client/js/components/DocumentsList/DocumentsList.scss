@@ -23,6 +23,11 @@
   &__item {
     border-top: thin solid var(--base-border-color);
     transition: opacity 0.2s ease-in-out;
+    &--active {
+      .btn {
+        background-color: var(--document-list-active-item);
+      }
+    }
     // New item is a fake list item
     &--new {
       .documents-list__button {
@@ -53,7 +58,7 @@
       &:focus {
         background-color: var(--document-list-active-item);
       }
-    }
+    } // new
   }
   &__button {
     align-items: flex-start;
