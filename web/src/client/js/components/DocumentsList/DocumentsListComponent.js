@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -12,8 +12,10 @@ import ProjectPermission from 'Components/Permission/ProjectPermission'
 import './DocumentsList.scss'
 
 const { PROJECT_ROLE_IDS } = Constants
+const ALLOWED_FILES = ["text/markdown"]
 
-const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, fieldMoveHandler, projectId }) => {
+const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, draggedDocumentHandler, fieldMoveHandler, projectId }) => {
+  const [draggedOver, setDraggedOver] = useState(false)
   const listItemRef = useRef()
   const nameRef = useRef()
 
@@ -82,13 +84,55 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
     })
   }
 
+  function dragEnterHandler(e) {
+    e.preventDefault()
+    if (e.dataTransfer.types.includes('text/html')) {
+      return
+    }
+    setDraggedOver(true)
+  }
+
+  function dragOverHandler(e) {
+    e.preventDefault()
+    if (e.dataTransfer.types.includes('text/html')) {
+      return
+    }
+    setDraggedOver(true)
+  }
+
+  function dragLeaveHandler(e) {
+    e.preventDefault()
+    setDraggedOver(false)
+  }
+
+  function dropHandler(e) {
+    e.preventDefault()
+    if (e.dataTransfer.types.includes('text/html')) {
+      return
+    }
+    setDraggedOver(false)
+    const dt = e.dataTransfer
+    const files = [...dt.files]
+    console.log(files)
+    files.forEach((file) => {
+      if (!ALLOWED_FILES.includes(file.type)) return
+      draggedDocumentHandler(file)
+    })
+  }
+
   const classes = cx({
     'documents-list': true,
-    'documents-list--creating': creating
+    'documents-list--creating': creating,
+    'documents-list--dragged-over': draggedOver
   })
 
   return (
-    <div className={classes}>
+    <div
+      className={classes}
+      onDragEnter={dragEnterHandler}
+      onDragOver={dragOverHandler}
+      onDragLeave={dragLeaveHandler}
+      onDrop={dropHandler}>
       <ProjectPermission
         projectId={projectId}
         acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}
@@ -103,6 +147,9 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
           {renderDocumentsList()}
         </ol>
       </nav>
+      <div className="documents-list__drag-notice">
+        <p className="note">Drag and drop Markdown files here to create new documents for each</p>
+      </div>
     </div>
   )
 }
@@ -112,6 +159,7 @@ DocumentsListComponent.propTypes = {
   creating: PropTypes.bool.isRequired,
   createCallback: PropTypes.func.isRequired,
   documents: PropTypes.array.isRequired,
+  draggedDocumentHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   projectId: PropTypes.number.isRequired
 }

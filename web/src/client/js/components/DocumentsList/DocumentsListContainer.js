@@ -31,6 +31,16 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
     uiDocumentCreate(value)
   }
 
+  function draggedDocumentHandler(file) {
+    const reader = new FileReader()
+    reader.readAsText(file)
+    reader.onloadend = function() {
+      // Create a new document, preventing the redirect, and with a body
+      const markdownBody = reader.result
+      createDocument(match.params.projectId, history, { name: file.name }, true, markdownBody)
+    }
+  }
+
   function fieldMoveHandler(oldDocumentId, newDocumentId, fieldId) {
     if (oldDocumentId === newDocumentId) return
     console.log(`Move field: ${fieldId} from document: ${oldDocumentId} to document: ${newDocumentId}.`)
@@ -52,6 +62,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       createChangeHandler={createDocumentAction}
       creating={ui.documents.creating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedDocuments}
+      draggedDocumentHandler={draggedDocumentHandler}
       fieldMoveHandler={fieldMoveHandler}
       projectId={Number(match.params.projectId)}/>
   )

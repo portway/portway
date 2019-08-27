@@ -13,7 +13,6 @@ export const createField = (documentId, fieldType, body) => {
 }
 
 export const updateField = (documentId, fieldId, body) => {
-  console.log(documentId, fieldId, body)
   return async (dispatch) => {
     dispatch(Fields.initiateUpdate(fieldId))
     const { data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body)
