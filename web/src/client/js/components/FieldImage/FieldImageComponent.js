@@ -112,7 +112,7 @@ const FieldImageComponent = ({ field, onChange }) => {
         <label>
           <p>Drag and drop an image</p>
           <span className="btn btn--small">Or select a file</span>
-          <input hidden type="file" accept="image/*" defaultValue={field.value} onChange={fileChangeHandler} defaultValue={field.value} />
+          <input hidden type="file" accept="image/*" onChange={fileChangeHandler} />
           {warning &&
           <p className="small warning">{warning}</p>
           }
