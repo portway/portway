@@ -7,7 +7,10 @@ const addFieldToDocument = async function(docId, body, file) {
 
   switch (body.type) {
     case FIELD_TYPES.IMAGE:
-      const url = await uploadImage(file)
+      let url
+      if (file) {
+        url = await uploadImage(file)
+      }
       fieldBody.value = url
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.NUMBER:

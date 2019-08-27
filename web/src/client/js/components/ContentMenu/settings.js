@@ -12,7 +12,7 @@ const settings = {
       },
       {
         label: 'Photo',
-        key: FIELD_TYPES.TEXT,
+        key: FIELD_TYPES.IMAGE,
         icon: <ProjectIcon />
       },
       {
