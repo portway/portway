@@ -1,4 +1,5 @@
 import PUBLIC_MESSAGES from '../../constants/publicMessages'
+import multer from 'multer'
 
 const getPublicMessage = function(code) {
   switch (code) {
@@ -25,14 +26,20 @@ const getPublicMessage = function(code) {
 
 export default function(error, req, res, next) {
   const {
-    code,
     status,
     statusCode,
     expose,
     errorType,
     errorDetails,
-    message,
-    publicMessage } = error
+    message } = error
+
+  let { code, publicMessage } = error
+
+  // multer errors pass a string on the code field rather than a status code, grab these and force a 400
+  if (error instanceof multer.MulterError) {
+    publicMessage = code === 'LIMIT_FILE_SIZE' ? 'File too large' : 'Invalid file'
+    code = 400
+  }
 
   const responseCode = code || status || statusCode || 500
 
