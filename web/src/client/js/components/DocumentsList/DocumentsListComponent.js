@@ -12,7 +12,7 @@ import ProjectPermission from 'Components/Permission/ProjectPermission'
 import './DocumentsList.scss'
 
 const { PROJECT_ROLE_IDS } = Constants
-const ALLOWED_FILES = ["text/markdown"]
+const ALLOWED_FILES = ["text/markdown", "text/plain"]
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, draggedDocumentHandler, fieldMoveHandler, projectId }) => {
   const [draggedOver, setDraggedOver] = useState(false)
