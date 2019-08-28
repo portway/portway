@@ -23,8 +23,7 @@ const DocumentFieldsComponent = ({
   fieldDestroyHandler,
   isPublishing
 }) => {
-
-  const [editModeFieldId, setEditModeFieldId ] = useState(null)
+  const [editModeFieldId, setEditModeFieldId] = useState(null)
   const textFields = fields.filter((field) => {
     return field.type === Constants.FIELD_TYPES.TEXT
   })
@@ -34,7 +33,7 @@ const DocumentFieldsComponent = ({
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocus={lastTextFieldId} />
+        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocusElement={lastTextFieldId} />
         break
       case Constants.FIELD_TYPES.NUMBER:
         fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />
@@ -47,8 +46,8 @@ const DocumentFieldsComponent = ({
           <FieldImageComponent
             field={field}
             onChange={fieldChangeHandler}
-            editMode={editModeFieldId === field.id || !field.value}
-            exitEditMode={() => { setEditModeFieldId(null) }}/>
+            editMode={editModeFieldId === field.id || editModeFieldId === null && !field.value}
+            exitEditMode={() => { setEditModeFieldId(field.id, false) }}/>
         break
       default:
         break
@@ -68,7 +67,7 @@ const DocumentFieldsComponent = ({
           dropHandler={dropHandler}
           onRename={fieldRenameHandler}
           onDestroy={() => { fieldDestroyHandler(field.id) }}
-          toggleEditMode={(fieldId) => { setEditModeFieldId(fieldId) }}>
+          toggleEditMode={(fieldId, value) => { setEditModeFieldId(fieldId, value) }}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )

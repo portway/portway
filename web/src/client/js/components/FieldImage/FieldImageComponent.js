@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -7,14 +7,14 @@ import { MAX_FILE_SIZE } from 'Shared/constants'
 import './FieldImage.scss'
 
 const ALLOWED_TYPES = [
-  "image/apng",
-  "image/bmp",
-  "image/gif",
-  "image/jpeg",
-  "image/png",
-  "image/svg+xml",
-  "image/webp",
-  "image/x-icon",
+  'image/apng',
+  'image/bmp',
+  'image/gif',
+  'image/jpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/webp',
+  'image/x-icon'
 ]
 
 const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
@@ -22,6 +22,13 @@ const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
   const [uploading, setUploading] = useState(false)
   const [warning, setWarning] = useState(null)
   const imageNodeRef = useRef()
+
+  useEffect(() => {
+    console.log('running', field.value, !editMode)
+    if (field.value && !editMode) {
+      setUploading(false)
+    }
+  }, [uploading, editMode, field.value])
 
   function uploadImage(file) {
     setWarning(null)

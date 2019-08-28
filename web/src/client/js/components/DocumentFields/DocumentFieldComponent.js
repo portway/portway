@@ -100,7 +100,7 @@ const DocumentFieldComponent = ({
             </button>
             }
             {field.type === Constants.FIELD_TYPES.IMAGE &&
-            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { toggleEditMode(field.id) }}>
+            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { toggleEditMode(field.id, true) }}>
               <SettingsIcon />
             </button>
             }

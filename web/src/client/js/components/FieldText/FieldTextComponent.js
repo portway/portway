@@ -5,7 +5,7 @@ import SimpleMDE from 'simplemde'
 import './SimpleMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ field, onChange, autoFocus }) => {
+const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
@@ -38,7 +38,7 @@ const FieldTextComponent = ({ field, onChange, autoFocus }) => {
     if (editor) {
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
-      if (field.id === autoFocus) {
+      if (field.id === autoFocusElement) {
         editor.codemirror.focus()
         editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
       }
@@ -55,7 +55,7 @@ const FieldTextComponent = ({ field, onChange, autoFocus }) => {
 }
 
 FieldTextComponent.propTypes = {
-  autoFocus: PropTypes.number,
+  autoFocusElement: PropTypes.number,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }

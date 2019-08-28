@@ -15,7 +15,14 @@ export const createField = (documentId, fieldType, body) => {
 export const updateField = (documentId, fieldId, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateUpdate(fieldId))
-    const { data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body)
+    let data
+    let status
+    // if we're getting FormData here, it's a file upload, pass the FormData as the body
+    if (body.value instanceof FormData) {
+      ({ data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body.value))
+    } else {
+      ({ data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body))
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
       dispatch(Fields.receiveOneUpdated(data))

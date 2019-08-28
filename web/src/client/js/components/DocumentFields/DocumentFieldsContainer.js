@@ -37,6 +37,7 @@ const DocumentFieldsContainer = ({
     const confirmedAction = () => { removeField(documentId, fieldId) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
+
   function fieldChangeHandler(fieldId, body) {
     // leave this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
