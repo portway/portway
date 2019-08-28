@@ -44,47 +44,51 @@ const DocumentFieldsContainer = ({
   }
 
   // Drag and drop
+  let dragCount = 0
+
   function dragStartHandler(e) {
     setDraggingElement(e.currentTarget)
     e.currentTarget.classList.add('document-field--dragging')
     e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.setData('fieldid', e.currentTarget.dataset.id)
     e.dataTransfer.setData('documentid', documentId)
     e.dataTransfer.setData('text/html', e.target)
   }
   function dragEnterHandler(e) {
+    e.preventDefault()
     if (e.dataTransfer.types.includes('Files')) {
-      e.preventDefault()
-      return
+      return false
     }
+    dragCount++
     e.currentTarget.classList.add('document-field--dragged-over')
-    e.dataTransfer.dropEffect = 'move'
   }
   function dragLeaveHandler(e) {
-    e.currentTarget.classList.remove('document-field--dragged-over')
+    e.preventDefault()
+    dragCount--
+    if (dragCount === 0) {
+      e.currentTarget.classList.remove('document-field--dragged-over')
+    }
   }
   function dragOverHandler(e) {
+    e.preventDefault()
+    if (e.currentTarget === draggingElement) return
     if (e.dataTransfer.types.includes('Files')) {
-      e.preventDefault()
       return
     }
     e.currentTarget.classList.add('document-field--dragged-over')
-    e.dataTransfer.dropEffect = 'move'
-    if (e.preventDefault) {
-      e.preventDefault()
-    }
-    return false
   }
   function dragEndHandler(e) {
-    e.persist()
+    e.preventDefault()
+    e.currentTarget.classList.remove('document-field--dragged-over')
     e.currentTarget.classList.remove('document-field--dragging')
   }
   function dropHandler(e) {
+    e.preventDefault()
     if (e.stopPropagation) {
       e.stopPropagation()
     }
     if (e.dataTransfer.types.includes('Files')) {
-      e.preventDefault()
       return
     }
     const fieldIdToUpdate = draggingElement.dataset.id
@@ -98,6 +102,8 @@ const DocumentFieldsContainer = ({
     setDraggingElement(null)
     // Trigger action with documentId, fieldId
     updateFieldOrder(documentId, fieldIdToUpdate, to)
+    // Reset drag count
+    dragCount = 0
   }
 
   // Prop handler

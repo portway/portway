@@ -12,10 +12,13 @@ import ProjectPermission from 'Components/Permission/ProjectPermission'
 import './DocumentsList.scss'
 
 const { PROJECT_ROLE_IDS } = Constants
-const ALLOWED_FILES = ["text/markdown", "text/plain"]
+const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
 const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, draggedDocumentHandler, fieldMoveHandler, projectId }) => {
-  const [draggedOver, setDraggedOver] = useState(false)
+  // Keep track of how many things being dragged
+  let dragCount = 0
+
+  const [dragActive, setDragActive] = useState(false)
   const listItemRef = useRef()
   const nameRef = useRef()
 
@@ -80,51 +83,58 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
 
   function renderDocumentsList() {
     return documents.map((doc, index) => {
-      return <DocumentsListItem disable={creating} fieldMoveHandler={fieldMoveHandler} key={`d-${doc.id}-${index}`} document={doc} />
+      return <DocumentsListItem disable={creating} disableDragging={dragActive} fieldMoveHandler={fieldMoveHandler} key={`d-${doc.id}-${index}`} document={doc} />
     })
   }
 
   function dragEnterHandler(e) {
     e.preventDefault()
-    if (e.dataTransfer.types.includes('text/html')) {
-      return
+    if (!e.dataTransfer.types.includes('Files')) {
+      return false
     }
-    setDraggedOver(true)
-  }
-
-  function dragOverHandler(e) {
-    e.preventDefault()
-    if (e.dataTransfer.types.includes('text/html')) {
-      return
-    }
-    setDraggedOver(true)
+    dragCount++
+    setDragActive(true)
   }
 
   function dragLeaveHandler(e) {
     e.preventDefault()
-    setDraggedOver(false)
+    if (!e.dataTransfer.types.includes('Files')) {
+      return false
+    }
+    dragCount--
+    if (dragCount < 0) {
+      setDragActive(false)
+    }
+  }
+
+  function dragOverHandler(e) {
+    e.preventDefault()
+    if (!e.dataTransfer.types.includes('Files')) {
+      return false
+    }
+    setDragActive(true)
   }
 
   function dropHandler(e) {
     e.preventDefault()
-    if (e.dataTransfer.types.includes('text/html')) {
-      return
+    if (!e.dataTransfer.types.includes('Files')) {
+      return false
     }
-    setDraggedOver(false)
+    setDragActive(false)
     const dt = e.dataTransfer
     const files = [...dt.files]
     files.forEach((file) => {
       if (!ALLOWED_FILES.includes(file.type)) return
       draggedDocumentHandler(file)
     })
+    dragCount = 0
   }
 
   const classes = cx({
     'documents-list': true,
     'documents-list--creating': creating,
-    'documents-list--dragged-over': draggedOver
+    'documents-list--dragged-over': dragActive
   })
-
   return (
     <div
       className={classes}

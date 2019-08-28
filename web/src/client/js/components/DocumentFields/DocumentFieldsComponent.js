@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -24,6 +24,7 @@ const DocumentFieldsComponent = ({
   isPublishing
 }) => {
 
+  const [editModeFieldId, setEditModeFieldId ] = useState(null)
   const textFields = fields.filter((field) => {
     return field.type === Constants.FIELD_TYPES.TEXT
   })
@@ -42,7 +43,12 @@ const DocumentFieldsComponent = ({
         fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
         break
       case Constants.FIELD_TYPES.IMAGE:
-        fieldTypeComponent = <FieldImageComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent =
+          <FieldImageComponent
+            field={field}
+            onChange={fieldChangeHandler}
+            editMode={editModeFieldId === field.id || !field.value}
+            exitEditMode={() => { setEditModeFieldId(null) }}/>
         break
       default:
         break
@@ -61,7 +67,8 @@ const DocumentFieldsComponent = ({
           dragOverHandler={dragOverHandler}
           dropHandler={dropHandler}
           onRename={fieldRenameHandler}
-          onDestroy={() => { fieldDestroyHandler(field.id) }}>
+          onDestroy={() => { fieldDestroyHandler(field.id) }}
+          toggleEditMode={(fieldId) => { setEditModeFieldId(fieldId) }}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import Constants from 'Shared/constants'
-import { DragIcon, TrashIcon } from 'Components/Icons'
+import { DragIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
 
@@ -19,7 +19,8 @@ const DocumentFieldComponent = ({
   index,
   isNewField,
   onDestroy,
-  onRename
+  onRename,
+  toggleEditMode
 }) => {
   const nameRef = useRef()
   useEffect(() => {
@@ -98,8 +99,15 @@ const DocumentFieldComponent = ({
               <TrashIcon />
             </button>
             }
+            {field.type === Constants.FIELD_TYPES.IMAGE &&
+            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { toggleEditMode(field.id) }}>
+              <SettingsIcon />
+            </button>
+            }
             <div className="document-field__dragger">
-              <DragIcon fill="#d9dbdb" />
+              <button className="btn btn--blank btn--with-circular-icon">
+                <DragIcon />
+              </button>
             </div>
           </div>
         </div>
@@ -120,7 +128,8 @@ DocumentFieldComponent.propTypes = {
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
-  onRename: PropTypes.func.isRequired
+  onRename: PropTypes.func.isRequired,
+  toggleEditMode: PropTypes.func.isRequired,
 }
 
 export default DocumentFieldComponent

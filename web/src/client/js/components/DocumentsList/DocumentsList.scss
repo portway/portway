@@ -21,8 +21,10 @@
     background-color: var(--document-list-item-hover);
     .documents-list__drag-notice {
       display: block;
+      pointer-events: none;
     }
-    .documents-list__list {
+    .documents-list__item {
+      filter: blur(4px);
       opacity: 0.3;
       pointer-events: none;
     }
@@ -31,6 +33,7 @@
   &__drag-notice {
     display: none;
     left: 50%;
+    pointer-events: none;
     position: absolute;
     text-align: center;
     top: 50%;

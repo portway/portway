@@ -17,11 +17,10 @@ const ALLOWED_TYPES = [
   "image/x-icon",
 ]
 
-const FieldImageComponent = ({ field, onChange }) => {
+const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
   const [draggedOver, setDraggedOver] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [warning, setWarning] = useState(null)
-  const [editMode, setEditMode] = useState(!field.value)
   const imageNodeRef = useRef()
 
   function uploadImage(file) {
@@ -89,16 +88,16 @@ const FieldImageComponent = ({ field, onChange }) => {
 
   const formClasses = cx({
     'document-field__drop-area': true,
+    'document-field__drop-area--with-value': field.value && editMode,
     'document-field__drop-area--active': draggedOver,
     'document-field__drop-area--uploading': uploading
   })
 
   return (
     <div className="document-field__image">
-      {!editMode &&
+      {field.value &&
       <div className="document-field__image-container">
         <img src={field.value} alt={field.name} />
-        <button className="btn" onClick={() => { setEditMode(true) }}>Change image</button>
       </div>
       }
       {editMode &&
@@ -113,6 +112,8 @@ const FieldImageComponent = ({ field, onChange }) => {
           <p>Drag and drop an image</p>
           <span className="btn btn--small">Or select a file</span>
           <input hidden type="file" accept="image/*" onChange={fileChangeHandler} />
+          <br />
+          <button className="btn btn--blank" onClick={exitEditMode}>Cancel</button>
           {warning &&
           <p className="small warning">{warning}</p>
           }
@@ -131,8 +132,10 @@ const FieldImageComponent = ({ field, onChange }) => {
 }
 
 FieldImageComponent.propTypes = {
+  editMode: PropTypes.bool.isRequired,
   field: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  exitEditMode: PropTypes.func.isRequired,
 }
 
 export default FieldImageComponent
