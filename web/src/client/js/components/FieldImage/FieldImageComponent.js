@@ -48,6 +48,7 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = function() {
+      field.value = reader.result
       imageNodeRef.current.src = reader.result
     }
   }
@@ -84,7 +85,10 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
     }
     setDraggedOver(false)
     setUploading(true)
-    settingsHandler(field.id)
+    // If we're in settings mode, get out of it
+    if (settingsMode) {
+      settingsHandler(field.id)
+    }
     const dt = e.dataTransfer
     const files = dt.files
     uploadImage(files[0])
@@ -100,7 +104,9 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
   return (
     <div className="document-field__image">
       <div className="document-field__image-container">
+        {field.value &&
         <img src={field.value} alt={field.name} ref={imageNodeRef} />
+        }
         {(uploading || updating) &&
         <div className="document-field__progress">
           <SpinnerComponent color="#ffffff" width="36" height="36" />

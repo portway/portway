@@ -101,7 +101,7 @@ const DocumentFieldComponent = ({
               <TrashIcon />
             </button>
             }
-            {field.type === Constants.FIELD_TYPES.IMAGE &&
+            {field.type === Constants.FIELD_TYPES.IMAGE && field.value &&
             <button className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
               <SettingsIcon />
             </button>
