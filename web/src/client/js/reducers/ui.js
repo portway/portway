@@ -31,13 +31,12 @@ const initialState = {
     isStripeOpen: false
   },
   spinner: {
-    spinning: true
+    spinning: false
   }
 }
 
 export const ui = (state = initialState, action) => {
   switch (action.type) {
-
     // If you need to update spinner in combo with something else, do it below
     // these two global on/offs
     // Global Spinner state on
@@ -67,7 +66,7 @@ export const ui = (state = initialState, action) => {
           creating: false
         },
         spinner: {
-        ...state.spinner,
+          ...state.spinner,
           spinning: false
         }
       }
