@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -7,14 +7,14 @@ import { MAX_FILE_SIZE } from 'Shared/constants'
 import './FieldImage.scss'
 
 const ALLOWED_TYPES = [
-  "image/apng",
-  "image/bmp",
-  "image/gif",
-  "image/jpeg",
-  "image/png",
-  "image/svg+xml",
-  "image/webp",
-  "image/x-icon",
+  'image/apng',
+  'image/bmp',
+  'image/gif',
+  'image/jpeg',
+  'image/png',
+  'image/svg+xml',
+  'image/webp',
+  'image/x-icon'
 ]
 
 const FieldImageComponent = ({ field, onChange }) => {
@@ -23,6 +23,10 @@ const FieldImageComponent = ({ field, onChange }) => {
   const [warning, setWarning] = useState(null)
   const [editMode, setEditMode] = useState(!field.value)
   const imageNodeRef = useRef()
+
+  useEffect(() => {
+    setEditMode(false)
+  }, [field.value])
 
   function uploadImage(file) {
     setWarning(null)
@@ -95,37 +99,41 @@ const FieldImageComponent = ({ field, onChange }) => {
 
   return (
     <div className="document-field__image">
-      {!editMode &&
-      <div className="document-field__image-container">
-        <img src={field.value} alt={field.name} />
-        <button className="btn" onClick={() => { setEditMode(true) }}>Change image</button>
-      </div>
-      }
-      {editMode &&
-      <form
-        className={formClasses}
-        onDragEnter={dragEnterHandler}
-        onDragOver={dragOverHandler}
-        onDragLeave={dragLeaveHandler}
-        onDrop={dropHandler}>
-        {!uploading &&
-        <label>
-          <p>Drag and drop an image</p>
-          <span className="btn btn--small">Or select a file</span>
-          <input hidden type="file" accept="image/*" onChange={fileChangeHandler} />
-          {warning &&
-          <p className="small warning">{warning}</p>
-          }
-        </label>
-        }
-        {uploading &&
-        <div className="document-field__progress">
-          <div className="document-field__preview-image" ref={imageNodeRef} />
-          <SpinnerComponent color="#ffffff" width="36" height="36" />
+      {!editMode && (
+        <div className="document-field__image-container">
+          <img src={field.value} alt={field.name} />
+          <button
+            className="btn"
+            onClick={() => {
+              setEditMode(true)
+            }}>
+            Change image
+          </button>
         </div>
-        }
-      </form>
-      }
+      )}
+      {editMode && (
+        <form
+          className={formClasses}
+          onDragEnter={dragEnterHandler}
+          onDragOver={dragOverHandler}
+          onDragLeave={dragLeaveHandler}
+          onDrop={dropHandler}>
+          {!uploading && (
+            <label>
+              <p>Drag and drop an image</p>
+              <span className="btn btn--small">Or select a file</span>
+              <input hidden type="file" accept="image/*" onChange={fileChangeHandler} />
+              {warning && <p className="small warning">{warning}</p>}
+            </label>
+          )}
+          {uploading && (
+            <div className="document-field__progress">
+              <div className="document-field__preview-image" ref={imageNodeRef} />
+              <SpinnerComponent color="#ffffff" width="36" height="36" />
+            </div>
+          )}
+        </form>
+      )}
     </div>
   )
 }
