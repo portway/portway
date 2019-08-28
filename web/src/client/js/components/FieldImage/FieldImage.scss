@@ -3,6 +3,10 @@
 .document-field__image {
   width: 100%;
 
+  &-container {
+    position: relative;
+  }
+
   img {
     height: auto;
     max-width: 100%;
@@ -15,8 +19,15 @@
     justify-content: center;
     width: 100%;
   }
-}
 
-.document-field__preview-image {
-  opacity: 0.2;
+  .document-field__progress {
+    background: var(--field-edit-mode-background);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+  }
+
 }

@@ -20,7 +20,8 @@ const DocumentFieldComponent = ({
   isNewField,
   onDestroy,
   onRename,
-  toggleEditMode
+  settingsHandler,
+  settingsMode,
 }) => {
   const nameRef = useRef()
   useEffect(() => {
@@ -93,6 +94,7 @@ const DocumentFieldComponent = ({
         }
         <div className="document-field__content">{children}</div>
         <div className="document-field__tools">
+          {!settingsMode &&
           <div className="document-field__tool-options">
             {onDestroy &&
             <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
@@ -100,7 +102,7 @@ const DocumentFieldComponent = ({
             </button>
             }
             {field.type === Constants.FIELD_TYPES.IMAGE &&
-            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { toggleEditMode(field.id, true) }}>
+            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
               <SettingsIcon />
             </button>
             }
@@ -110,6 +112,7 @@ const DocumentFieldComponent = ({
               </button>
             </div>
           </div>
+          }
         </div>
       </div>
     </li>
@@ -129,7 +132,8 @@ DocumentFieldComponent.propTypes = {
   isNewField: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired,
-  toggleEditMode: PropTypes.func.isRequired,
+  settingsHandler: PropTypes.func.isRequired,
+  settingsMode: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldComponent

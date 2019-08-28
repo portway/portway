@@ -21,13 +21,23 @@ const DocumentFieldsComponent = ({
   fieldChangeHandler,
   fieldRenameHandler,
   fieldDestroyHandler,
-  isPublishing
+  isPublishing,
+  updating
 }) => {
-  const [editModeFieldId, setEditModeFieldId] = useState(null)
+  const [settingsForField, setSettingsForField] = useState(null)
+
   const textFields = fields.filter((field) => {
     return field.type === Constants.FIELD_TYPES.TEXT
   })
   const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+
+  function toggleSettingsFor(fieldId) {
+    if (settingsForField === fieldId) {
+      setSettingsForField(null)
+      return
+    }
+    setSettingsForField(fieldId)
+  }
 
   function renderFieldType(field, index) {
     let fieldTypeComponent
@@ -46,8 +56,9 @@ const DocumentFieldsComponent = ({
           <FieldImageComponent
             field={field}
             onChange={fieldChangeHandler}
-            editMode={editModeFieldId === field.id || editModeFieldId === null && !field.value}
-            exitEditMode={() => { setEditModeFieldId(field.id, false) }}/>
+            settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+            settingsMode={settingsForField === field.id}
+            updating={updating} />
         break
       default:
         break
@@ -67,7 +78,8 @@ const DocumentFieldsComponent = ({
           dropHandler={dropHandler}
           onRename={fieldRenameHandler}
           onDestroy={() => { fieldDestroyHandler(field.id) }}
-          toggleEditMode={(fieldId, value) => { setEditModeFieldId(fieldId, value) }}>
+          settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+          settingsMode={settingsForField === field.id}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )
@@ -105,7 +117,8 @@ DocumentFieldsComponent.propTypes = {
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
-  isPublishing: PropTypes.bool.isRequired
+  isPublishing: PropTypes.bool.isRequired,
+  updating: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldsComponent

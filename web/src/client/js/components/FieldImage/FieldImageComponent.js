@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -17,18 +17,11 @@ const ALLOWED_TYPES = [
   'image/x-icon'
 ]
 
-const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
+const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, updating }) => {
   const [draggedOver, setDraggedOver] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [warning, setWarning] = useState(null)
   const imageNodeRef = useRef()
-
-  useEffect(() => {
-    console.log('running', field.value, !editMode)
-    if (field.value && !editMode) {
-      setUploading(false)
-    }
-  }, [uploading, editMode, field.value])
 
   function uploadImage(file) {
     setWarning(null)
@@ -43,17 +36,19 @@ const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
     const formData = new FormData()
     formData.append('file', file)
     onChange(field.id, formData)
-    setUploading(true)
     previewImage(file)
+    // This is a hack to trigger immediate state change to "uploading",
+    // because "updating" in UI state takes a second or two
+    setTimeout(() => {
+      setUploading(false)
+    }, 1000)
   }
 
   function previewImage(file) {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = function() {
-      const image = document.createElement('img')
-      image.src = reader.result
-      imageNodeRef.current.appendChild(image)
+      imageNodeRef.current.src = reader.result
     }
   }
 
@@ -88,6 +83,8 @@ const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
       return
     }
     setDraggedOver(false)
+    setUploading(true)
+    settingsHandler(field.id)
     const dt = e.dataTransfer
     const files = dt.files
     uploadImage(files[0])
@@ -95,42 +92,41 @@ const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
 
   const formClasses = cx({
     'document-field__drop-area': true,
-    'document-field__drop-area--with-value': field.value && editMode,
+    'document-field__drop-area--with-value': field.value,
     'document-field__drop-area--active': draggedOver,
-    'document-field__drop-area--uploading': uploading
+    'document-field__drop-area--uploading': updating
   })
 
   return (
     <div className="document-field__image">
-      {field.value &&
       <div className="document-field__image-container">
-        <img src={field.value} alt={field.name} />
+        <img src={field.value} alt={field.name} ref={imageNodeRef} />
+        {(uploading || updating) &&
+        <div className="document-field__progress">
+          <SpinnerComponent color="#ffffff" width="36" height="36" />
+        </div>
+        }
       </div>
-      }
-      {editMode &&
+      {(settingsMode || !field.value) &&
       <form
         className={formClasses}
         onDragEnter={dragEnterHandler}
         onDragOver={dragOverHandler}
         onDragLeave={dragLeaveHandler}
         onDrop={dropHandler}>
-        {!uploading &&
+        {!updating &&
         <label>
           <p>Drag and drop an image</p>
           <span className="btn btn--small">Or select a file</span>
           <input hidden type="file" accept="image/*" onChange={fileChangeHandler} />
           <br />
-          <button className="btn btn--blank" onClick={exitEditMode}>Cancel</button>
+          {settingsMode &&
+          <button className="btn btn--blank" onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>Cancel</button>
+          }
           {warning &&
           <p className="small warning">{warning}</p>
           }
         </label>
-        }
-        {uploading &&
-        <div className="document-field__progress">
-          <div className="document-field__preview-image" ref={imageNodeRef} />
-          <SpinnerComponent color="#ffffff" width="36" height="36" />
-        </div>
         }
       </form>
       }
@@ -139,10 +135,11 @@ const FieldImageComponent = ({ editMode, field, onChange, exitEditMode }) => {
 }
 
 FieldImageComponent.propTypes = {
-  editMode: PropTypes.bool.isRequired,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  exitEditMode: PropTypes.func.isRequired,
+  settingsHandler: PropTypes.func.isRequired,
+  settingsMode: PropTypes.bool.isRequired,
+  updating: PropTypes.bool.isRequired,
 }
 
 export default FieldImageComponent
