@@ -152,7 +152,7 @@ export const documents = (state = initialState, action) => {
     case ActionTypes.RECEIVE_CREATED_FIELD:
     case ActionTypes.RECEIVE_UPDATED_FIELD:
     case ActionTypes.REMOVE_FIELD: {
-      const documentToUpdate = state.projectDocumentsById[action.projectId][action.documentId]
+      const documentToUpdate = { ...state.projectDocumentsById[action.projectId][action.documentId] }
       documentToUpdate.updatedAt = Date.now()
       const project = { ...state.projectDocumentsById[action.projectId], [action.documentId]: documentToUpdate }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.projectId]: project }
