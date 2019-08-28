@@ -49,7 +49,6 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
     reader.readAsDataURL(file)
     reader.onloadend = function() {
       field.value = reader.result
-      imageNodeRef.current.src = reader.result
     }
   }
 
