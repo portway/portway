@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
-import { NavLink, Redirect } from 'react-router-dom'
+import { Link, NavLink, Redirect } from 'react-router-dom'
 
 import {
   ORGANIZATION_ROLE_IDS,
@@ -32,11 +32,11 @@ const PANEL_PATHS = {
 }
 
 const AdminDashboardComponent = ({ section }) => {
-  function isSubSection(path, match, location) {
+  function isSubSection(match, location) {
     // Return true if we're on the right page
     if (match && match.isExact) return true
     // Return true if we want to also be active on a slightly different URL
-    if (path === ADMIN_PATHS.USER) return true
+    if (location.pathname.split('/')[2] === ADMIN_PATHS.USER) return true
   }
 
   return (
@@ -49,7 +49,12 @@ const AdminDashboardComponent = ({ section }) => {
       <main>
         <Panel>
           <PanelNavigation>
-            <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`}>Users</NavLink>
+            {section === 'user' &&
+            <Link to={`${PATH_ADMIN}/users`} className="link--back">
+              <span className="label">Back to Users</span>
+            </Link>
+            }
+            <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>Users</NavLink>
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>Organization</NavLink>
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>Billing</NavLink>

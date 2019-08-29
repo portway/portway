@@ -16,7 +16,7 @@ const DocumentFieldsContainer = ({
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
-  const { documentId } = match.params
+  const { projectId, documentId } = match.params
   const { data: fields = {} } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   // Convert fields object to a sorted array for rendering
@@ -34,14 +34,14 @@ const DocumentFieldsContainer = ({
   function fieldDestroyHandler(fieldId) {
     const message = <span>Are you sure you want to delete <span className="highlight">{fields[fieldId].name}</span>?</span>
     const confirmedLabel = 'Yes, delete it.'
-    const confirmedAction = () => { removeField(documentId, fieldId) }
+    const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
   function fieldChangeHandler(fieldId, body) {
     // leave this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
-    updateField(documentId, fieldId, body)
+    updateField(projectId, documentId, fieldId, body)
   }
 
   // Drag and drop

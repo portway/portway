@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
+import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import TextField from 'Components/Form/TextField'
 import Checkbox from 'Components/Form/Checkbox'
 
@@ -11,6 +12,7 @@ const AdminOrganizationComponent = ({ errors, organization, submitHandler }) => 
   function formSubmitHandler(e) {
     e.preventDefault()
     submitHandler({ name, allowAdminProjectCreation })
+    return false
   }
 
   const helpText = 'Checking this box allows anyone in your organization to create projects'
@@ -44,7 +46,7 @@ const AdminOrganizationComponent = ({ errors, organization, submitHandler }) => 
         />
       </section>
       <div className="btn-group">
-        <button className="btn btn-primary">Update Organization</button>
+        <button className="btn btn-primary">Update Organization <SpinnerContainer color="#ffffff" /></button>
       </div>
     </form>
   )
