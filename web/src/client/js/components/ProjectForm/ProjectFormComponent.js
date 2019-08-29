@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { UserIcon } from 'Components/Icons'
 import TextField from 'Components/Form/TextField'
-import DropdownSelectComponent from 'Components/DropdownSelect/DropdownSelectComponent'
 
-const ProjectFormComponent = ({ errors, formOptions, teamOptions }) => {
+const ProjectFormComponent = ({ errors, formOptions }) => {
   return (
     <form className="project-form" onSubmit={formOptions.submitHandler}>
       <TextField
@@ -24,25 +22,6 @@ const ProjectFormComponent = ({ errors, formOptions, teamOptions }) => {
         errors={errors.description}
         value={formOptions.values.projectDescription}
         onChange={formOptions.changeHandler} />
-      {teamOptions && (
-        <div className="form-field">
-          <label htmlFor="projectUsers">Team (optional)</label>
-          <DropdownSelectComponent
-            button={{
-              className: 'btn--white',
-              label: 'Add team members',
-              icon: <UserIcon width="20" height="20" />
-            }}
-            menu={{
-              hasAutoComplete: true,
-              isOpen: true,
-              multiSelect: true,
-              onChange: teamOptions.changeHandler,
-              options: teamOptions.users,
-              value: teamOptions.selectedUsers
-            }} />
-        </div>
-      )}
       <div className="btn-group">
         <input type="submit" className="btn" disabled={formOptions.values.projectName === ''} value={formOptions.submitLabel} />
         {formOptions.cancelHandler && (
@@ -62,20 +41,6 @@ ProjectFormComponent.propTypes = {
     submitHandler: PropTypes.func.isRequired,
     cancelLabel: PropTypes.string,
     cancelHandler: PropTypes.func
-  }),
-  teamOptions: PropTypes.shape({
-    users: PropTypes.arrayOf(
-      PropTypes.shape({
-        value: PropTypes.string,
-        label: PropTypes.string
-      })
-    ),
-    selectedUsers: PropTypes.arrayOf(
-      PropTypes.shape({
-        value: PropTypes.string,
-        label: PropTypes.string
-      })
-    )
   })
 }
 
