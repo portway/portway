@@ -17,6 +17,7 @@ const initialState = {
   },
   fields: {
     creating: false,
+    updating: false,
     type: -1
   },
   tokens: {
@@ -87,6 +88,12 @@ export const ui = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }
+    }
+    case ActionTypes.INITIATE_FIELD_UPDATE: {
+      return { ...state, fields: { ...state.fields, updating: true } }
+    }
+    case ActionTypes.RECEIVE_UPDATED_FIELD: {
+      return { ...state, fields: { ...state.fields, updating: false } }
     }
 
     // Document full screen

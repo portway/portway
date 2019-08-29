@@ -7,7 +7,6 @@ import ValidationContainer from 'Components/Validation/ValidationContainer'
 import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
-import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
 
 import './_Document.scss'
 
@@ -69,7 +68,6 @@ const DocumentComponent = ({
         </DropdownComponent>
       </header>
       <DocumentFieldsContainer />
-      <ContentMenuContainer />
     </div>
   )
 }

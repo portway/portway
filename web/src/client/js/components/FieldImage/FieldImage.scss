@@ -1,10 +1,35 @@
 @import 'CSS/inc/_mixins.scss';
 
-.document-field--number {
-  input[type="image"] {
-    border: none;
-    padding: 8px 0;
-    width: 100%;
-    @include focus(transparent);
+.document-field__image {
+  width: 100%;
+
+  &-container {
+    position: relative;
+    text-align: center;
   }
+
+  img {
+    height: auto;
+    margin: auto;
+    max-width: 100%;
+  }
+
+  form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .document-field__progress {
+    background: var(--field-edit-mode-background);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+  }
+
 }

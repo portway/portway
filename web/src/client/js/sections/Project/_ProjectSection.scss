@@ -47,10 +47,13 @@
     }
     &-document-container {
       background-color: var(--project-background);
+      display: flex;
       flex: 1;
-      height: calc(100vh - #{$ribbonHeight + $headerHeight});
+      flex-direction: column;
+      height: calc(100vh - #{$ribbonHeight + $headerHeight} - 40px); // footer height
       overflow-y: auto;
       overscroll-behavior: contain;
+      position: relative;
       &--full-screen {
         height: 100vh;
       }

@@ -12,7 +12,7 @@ import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
-  creating, createdFieldId, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
+  creating, createdFieldId, isPublishing, match, removeField, updateField, updateFieldOrder, updating, uiConfirm
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
@@ -37,6 +37,7 @@ const DocumentFieldsContainer = ({
     const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
+
   function fieldChangeHandler(fieldId, body) {
     // leave this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
@@ -44,33 +45,52 @@ const DocumentFieldsContainer = ({
   }
 
   // Drag and drop
+  let dragCount = 0
+
   function dragStartHandler(e) {
     setDraggingElement(e.currentTarget)
     e.currentTarget.classList.add('document-field--dragging')
     e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.dropEffect = 'move'
+    e.dataTransfer.setData('fieldid', e.currentTarget.dataset.id)
+    e.dataTransfer.setData('documentid', documentId)
     e.dataTransfer.setData('text/html', e.target)
   }
   function dragEnterHandler(e) {
+    e.preventDefault()
+    if (e.dataTransfer.types.includes('Files')) {
+      return false
+    }
+    dragCount++
     e.currentTarget.classList.add('document-field--dragged-over')
-    e.dataTransfer.dropEffect = 'move'
   }
   function dragLeaveHandler(e) {
-    e.currentTarget.classList.remove('document-field--dragged-over')
+    e.preventDefault()
+    dragCount--
+    if (dragCount === 0) {
+      e.currentTarget.classList.remove('document-field--dragged-over')
+    }
   }
   function dragOverHandler(e) {
-    e.currentTarget.classList.add('document-field--dragged-over')
-    e.dataTransfer.dropEffect = 'move'
-    if (e.preventDefault) {
-      e.preventDefault()
+    e.preventDefault()
+    if (e.currentTarget === draggingElement) return
+    if (e.dataTransfer.types.includes('Files')) {
+      return
     }
-    return false
+    e.currentTarget.classList.add('document-field--dragged-over')
   }
   function dragEndHandler(e) {
+    e.preventDefault()
+    e.currentTarget.classList.remove('document-field--dragged-over')
     e.currentTarget.classList.remove('document-field--dragging')
   }
   function dropHandler(e) {
+    e.preventDefault()
     if (e.stopPropagation) {
       e.stopPropagation()
+    }
+    if (e.dataTransfer.types.includes('Files')) {
+      return
     }
     const fieldIdToUpdate = draggingElement.dataset.id
     const from = Number(draggingElement.dataset.order)
@@ -82,7 +102,9 @@ const DocumentFieldsContainer = ({
     setOrderedFields(fieldData)
     setDraggingElement(null)
     // Trigger action with documentId, fieldId
-    updateFieldOrder(projectId, documentId, fieldIdToUpdate, to)
+    updateFieldOrder(documentId, fieldIdToUpdate, to)
+    // Reset drag count
+    dragCount = 0
   }
 
   // Prop handler
@@ -108,7 +130,8 @@ const DocumentFieldsContainer = ({
       fieldChangeHandler={debouncedValueChangeHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
       fieldDestroyHandler={fieldDestroyHandler}
-      isPublishing={isPublishing} />
+      isPublishing={isPublishing}
+      updating={updating} />
   )
 }
 
@@ -120,14 +143,16 @@ DocumentFieldsContainer.propTypes = {
   removeField: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired
+  uiConfirm: PropTypes.func.isRequired,
+  updating: PropTypes.bool.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
     creating: state.ui.fields.creating,
     createdFieldId: state.documentFields.lastCreatedFieldId,
-    isPublishing: state.ui.documents.isPublishing
+    isPublishing: state.ui.documents.isPublishing,
+    updating: state.ui.fields.updating,
   }
 }
 
