@@ -49,6 +49,25 @@ const NavigatorContainer = ({ history, location }) => {
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut('t', toggleCallback)
 
+  const NoOptionsMessage = (props) => {
+    // eslint-disable-next-line react/prop-types
+    const { innerRef, innerProps } = props
+    return (
+      <div className="navigator__empty-item" ref={innerRef} {...innerProps}>
+        <OrgPermission
+          acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+          acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
+          <Link to={PATH_PROJECT_CREATE}
+            className="btn btn--small btn--blank navigator__project-btn"
+            onClick={collapseCallback}
+            title="Create a new project">
+            Get started by creating a project
+          </Link>
+        </OrgPermission>
+      </div>
+    )
+  }
+
   // Customizing React-Select components
   const Option = (props) => {
     // eslint-disable-next-line react/prop-types
@@ -97,7 +116,7 @@ const NavigatorContainer = ({ history, location }) => {
             ref={selectRef}
             className={`navigator__select`}
             classNamePrefix="react-select"
-            components={{ Option }}
+            components={{ NoOptionsMessage, Option }}
             menuIsOpen={true}
             onChange={(value) => {
               history.push({

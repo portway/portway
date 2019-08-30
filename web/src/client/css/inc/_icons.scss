@@ -20,3 +20,18 @@
   }
 
 }
+
+.icon-with-background {
+  --icon-background: #{$white-bis};
+  @media (prefers-color-scheme: dark) {
+    --icon-background: #{$black-ter};
+  }
+  align-items: center;
+  background-color: var(--icon-background);
+  border-radius: 50% 50%;
+  display: inline-flex;
+  // height: 65px;
+  justify-content: center;
+  padding: 36px;
+  // width: 65px;
+}
