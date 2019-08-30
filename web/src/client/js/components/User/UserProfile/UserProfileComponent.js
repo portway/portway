@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { UserIcon } from 'Components/Icons'
 import TextField from 'Components/Form/TextField'
 import FileField from 'Components/Form/FileField'
+import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 
 import './_UserProfile.scss'
 
@@ -14,6 +15,7 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
   function formSubmitHandler(e) {
     e.preventDefault()
     submitHandler({ name, email })
+    return false
   }
 
   const emailHelpText = `Remember, your email address is your username! We will validate this email before changing it.`
@@ -53,7 +55,7 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
         </div>
       </section>
       <div className="btn-group">
-        <button className="btn btn-primary">Update My Profile</button>
+        <button className="btn btn-primary">Update My Profile <SpinnerContainer color="#ffffff" /></button>
       </div>
     </form>
   )

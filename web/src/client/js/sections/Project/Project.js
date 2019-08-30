@@ -5,6 +5,7 @@ import cx from 'classnames'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
+import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
 
 const Project = ({ isFullScreen }) => {
@@ -22,6 +23,7 @@ const Project = ({ isFullScreen }) => {
         }
         <div className={documentsClasses}>
           <DocumentContainer />
+          <ContentMenuContainer />
         </div>
       </div>
       <ProjectToolbarContainer />

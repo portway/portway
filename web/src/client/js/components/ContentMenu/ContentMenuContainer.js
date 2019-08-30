@@ -13,11 +13,14 @@ import ContentMenuComponent from './ContentMenuComponent'
 import settings from './settings'
 
 const ContentMenuContainer = ({ createField, fields, location }) => {
+  const { data: project } = useDataService(currentResource('project', location.pathname), [
+    location.pathname
+  ])
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
 
-  if (!document) return null
+  if (!project || !document) return null
 
   /**
    * If we have fields, break them up by type for field names
@@ -34,7 +37,7 @@ const ContentMenuContainer = ({ createField, fields, location }) => {
     const typeFieldsInDocument = fieldsByType[fieldType]
     const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
     const newName = FIELD_LABELS[fieldType] + (value + 1)
-    createField(document.id, fieldType, {
+    createField(project.id, document.id, fieldType, {
       name: newName,
       type: fieldType
     })

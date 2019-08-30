@@ -12,14 +12,9 @@ const settings = {
       },
       {
         label: 'Photo',
-        key: FIELD_TYPES.TEXT,
+        key: FIELD_TYPES.IMAGE,
         icon: <ProjectIcon />
-      },
-      {
-        label: 'Video',
-        key: FIELD_TYPES.TEXT,
-        icon: <ProjectIcon />
-      },
+      }
     ],
     'Data': [
       {

@@ -8,6 +8,7 @@
     --document-header-bg: #{$black-bis};
     --document-header-border: #{$black-er};
   }
+  flex: 1;
   position: relative;
 
   &__no-document {
@@ -79,7 +80,6 @@
   }
 
   &__fields {
-    padding: 0 $brandWidth / 3;
     transition: opacity 0.2s ease-in-out;
 
     // When publishing a document, disable everything

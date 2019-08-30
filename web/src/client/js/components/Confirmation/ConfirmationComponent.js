@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import useClickOutside from 'Hooks/useClickOutside'
@@ -7,6 +7,20 @@ import './Confirmation.scss'
 const ConfirmationComponent = ({ cancelAction, confirmedAction, confirmedLabel, message }) => {
   const confirmationRef = useRef()
   useClickOutside(confirmationRef, cancelAction)
+
+  // Close or confirm on keydown
+  function keyEventHandler(e) {
+    if (e.keyCode === 13) {
+      confirmedAction()
+    }
+  }
+  useEffect(() => {
+    window.addEventListener('keydown', keyEventHandler, false)
+    return function cleanup() {
+      window.removeEventListener('keydown', keyEventHandler, false)
+    }
+  })
+
   return (
     <div className="confirmation" role="alert">
       <div className="confirmation__dialog" ref={confirmationRef}>

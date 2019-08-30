@@ -15,6 +15,32 @@
 }
 
 .documents-list {
+  min-height: 100%;
+
+  &--dragged-over {
+    background-color: var(--document-list-item-hover);
+    .documents-list__drag-notice {
+      display: block;
+      pointer-events: none;
+    }
+    .documents-list__item {
+      filter: blur(4px);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+
+  &__drag-notice {
+    display: none;
+    left: 50%;
+    pointer-events: none;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+  }
+
   &__list {
     list-style: none;
     margin: 0;
@@ -23,6 +49,11 @@
   &__item {
     border-top: thin solid var(--base-border-color);
     transition: opacity 0.2s ease-in-out;
+    &--active {
+      .btn {
+        background-color: var(--document-list-active-item);
+      }
+    }
     // New item is a fake list item
     &--new {
       .documents-list__button {
@@ -53,7 +84,7 @@
       &:focus {
         background-color: var(--document-list-active-item);
       }
-    }
+    } // new
   }
   &__button {
     align-items: flex-start;

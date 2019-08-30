@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import Constants from 'Shared/constants'
-import { DragIcon, TrashIcon } from 'Components/Icons'
+import { DragIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
 
@@ -19,7 +19,9 @@ const DocumentFieldComponent = ({
   index,
   isNewField,
   onDestroy,
-  onRename
+  onRename,
+  settingsHandler,
+  settingsMode,
 }) => {
   const nameRef = useRef()
   useEffect(() => {
@@ -29,7 +31,7 @@ const DocumentFieldComponent = ({
     }
   }, [isNewField])
 
-  const showName = field.type !== Constants.FIELD_TYPES.TEXT
+  const showName = field.type !== Constants.FIELD_TYPES.TEXT && field.type !== Constants.FIELD_TYPES.IMAGE
 
   const fieldClasses = cx({
     'document-field': true,
@@ -37,12 +39,14 @@ const DocumentFieldComponent = ({
     'document-field--text': field.type === Constants.FIELD_TYPES.TEXT,
     'document-field--number': field.type === Constants.FIELD_TYPES.NUMBER,
     'document-field--string': field.type === Constants.FIELD_TYPES.STRING,
+    'document-field--image': field.type === Constants.FIELD_TYPES.IMAGE,
   })
 
   const fieldLabels = {
     [Constants.FIELD_TYPES.TEXT]: 'Text area',
     [Constants.FIELD_TYPES.STRING]: 'String',
     [Constants.FIELD_TYPES.NUMBER]: 'Number',
+    [Constants.FIELD_TYPES.IMAGE]: 'Photo',
   }
 
   // Field name handling
@@ -90,16 +94,25 @@ const DocumentFieldComponent = ({
         }
         <div className="document-field__content">{children}</div>
         <div className="document-field__tools">
+          {!settingsMode &&
           <div className="document-field__tool-options">
             {onDestroy &&
             <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
               <TrashIcon />
             </button>
             }
+            {field.type === Constants.FIELD_TYPES.IMAGE && field.value &&
+            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
+              <SettingsIcon />
+            </button>
+            }
             <div className="document-field__dragger">
-              <DragIcon fill="#d9dbdb" />
+              <button className="btn btn--blank btn--with-circular-icon">
+                <DragIcon />
+              </button>
             </div>
           </div>
+          }
         </div>
       </div>
     </li>
@@ -118,7 +131,9 @@ DocumentFieldComponent.propTypes = {
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
-  onRename: PropTypes.func.isRequired
+  onRename: PropTypes.func.isRequired,
+  settingsHandler: PropTypes.func.isRequired,
+  settingsMode: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldComponent

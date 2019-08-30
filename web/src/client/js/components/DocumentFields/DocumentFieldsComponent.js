@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -21,13 +21,29 @@ const DocumentFieldsComponent = ({
   fieldChangeHandler,
   fieldRenameHandler,
   fieldDestroyHandler,
-  isPublishing
+  isPublishing,
+  updating
 }) => {
+  const [settingsForField, setSettingsForField] = useState(null)
+
+  const textFields = fields.filter((field) => {
+    return field.type === Constants.FIELD_TYPES.TEXT
+  })
+  const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+
+  function toggleSettingsFor(fieldId) {
+    if (settingsForField === fieldId) {
+      setSettingsForField(null)
+      return
+    }
+    setSettingsForField(fieldId)
+  }
+
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocusElement={lastTextFieldId} />
         break
       case Constants.FIELD_TYPES.NUMBER:
         fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />
@@ -36,7 +52,13 @@ const DocumentFieldsComponent = ({
         fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
         break
       case Constants.FIELD_TYPES.IMAGE:
-        fieldTypeComponent = <FieldImageComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent =
+          <FieldImageComponent
+            field={field}
+            onChange={fieldChangeHandler}
+            settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+            settingsMode={settingsForField === field.id}
+            updating={updating} />
         break
       default:
         break
@@ -55,7 +77,9 @@ const DocumentFieldsComponent = ({
           dragOverHandler={dragOverHandler}
           dropHandler={dropHandler}
           onRename={fieldRenameHandler}
-          onDestroy={() => { fieldDestroyHandler(field.id) }}>
+          onDestroy={() => { fieldDestroyHandler(field.id) }}
+          settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+          settingsMode={settingsForField === field.id}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )
@@ -93,7 +117,8 @@ DocumentFieldsComponent.propTypes = {
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
-  isPublishing: PropTypes.bool.isRequired
+  isPublishing: PropTypes.bool.isRequired,
+  updating: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldsComponent
