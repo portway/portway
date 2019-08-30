@@ -19,7 +19,6 @@ const DocumentComponent = ({
   removeDocumentHandler,
   toggleFullScreenHandler,
 }) => {
-  const documentRef = useRef()
   const titleRef = useRef()
 
   // If we've exited fullscreen, but the UI is still in fullscreen
@@ -47,7 +46,7 @@ const DocumentComponent = ({
     nameChangeHandler(e)
   })
   return (
-    <div className="document" key={docKey} ref={documentRef}>
+    <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
       <header className="document__header">
         <button
