@@ -10,6 +10,8 @@ import { requiredFields, partialFields } from './payloadSchemas/helpers'
 import auditLog, { auditActions } from '../integrators/audit'
 import fieldCoordinator from '../coordinators/field'
 
+const MAX_FILE_SIZE = 10e7
+
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
   (req) => {
@@ -28,7 +30,12 @@ const documentFields = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
-    multer().single('file'),
+    multer({
+      dest: 'uploads/',
+      limits: {
+        fileSize: MAX_FILE_SIZE
+      }
+    }).single('file'),
     validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type'), { includeDetails: true }),
     createPerm,
     addDocumentField
@@ -38,8 +45,15 @@ const documentFields = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    multer().single('file'),
-    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), { includeDetails: true }),
+    multer({
+      dest: 'uploads/',
+      limits: {
+        fileSize: MAX_FILE_SIZE
+      }
+    }).single('file'),
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), {
+      includeDetails: true
+    }),
     updatePerm,
     updateDocumentField
   )
