@@ -99,15 +99,6 @@ export const ui = (state = initialState, action) => {
     // Document full screen
     // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_FULL_SCREEN: {
-      if (action.value) {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen()
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen()
-        }
-      }
       return {
         ...state,
         document: {

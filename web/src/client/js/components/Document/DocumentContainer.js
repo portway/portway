@@ -71,7 +71,7 @@ const DocumentContainer = ({
     const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
-  function toggleFullScreenHandler() {
+  function toggleFullScreenHandler(e) {
     uiToggleFullScreen(!isFullScreen)
   }
 
@@ -83,6 +83,7 @@ const DocumentContainer = ({
 
       <DocumentComponent
         document={document}
+        isFullScreen={isFullScreen}
         isPublishing={documents.isPublishing}
         nameChangeHandler={nameChangeHandler}
         publishDocumentHandler={publishDocumentHandler}

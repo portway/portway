@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { debounce } from 'Shared/utilities'
@@ -12,6 +12,7 @@ import './_Document.scss'
 
 const DocumentComponent = ({
   document,
+  isFullScreen,
   isPublishing,
   nameChangeHandler,
   publishDocumentHandler,
@@ -19,6 +20,23 @@ const DocumentComponent = ({
   toggleFullScreenHandler,
 }) => {
   const titleRef = useRef()
+
+  // If we've exited fullscreen, but the UI is still in fullscreen
+  // This happens when hitting the escape key when in fullscreen
+  useEffect(() => {
+    function fullScreenChangeHandler(e) {
+      const fullscreenElement = window.document.fullscreenElement || window.document.webkitCurrentFullScreenElement
+      if (!fullscreenElement && isFullScreen) toggleFullScreenHandler()
+      return
+    }
+    window.document.addEventListener('fullscreenchange', fullScreenChangeHandler, false)
+    window.document.addEventListener('webkitfullscreenchange', fullScreenChangeHandler, false)
+    return function cleanup() {
+      window.document.removeEventListener('fullscreenchange', fullScreenChangeHandler, false)
+      window.document.removeEventListener('webkitfullscreenchange', fullScreenChangeHandler, false)
+    }
+  })
+
   const docKey = document ? document.id : 0
   const dropdownButton = {
     className: 'btn btn--blank btn--with-circular-icon',
@@ -33,7 +51,19 @@ const DocumentComponent = ({
       <header className="document__header">
         <button
           className="btn btn--blank document__button-expand"
-          onClick={toggleFullScreenHandler}
+          onClick={() => {
+            // This has to be here because of Safari
+            // You have to call fullscreen functions on the actual element onClick
+            if (window.document.fullscreenElement || window.document.webkitFullscreenElement) {
+              const exitFullscreen = window.document.exitFullscreen || window.document.webkitExitFullscreen
+              exitFullscreen.call(window.document)
+            } else {
+              const documentEl = window.document.documentElement
+              const requestFullscreen = documentEl.webkitRequestFullscreen || documentEl.requestFullscreen
+              requestFullscreen.call(documentEl)
+            }
+            toggleFullScreenHandler()
+          }}
           title="Expand to full screen">
           <ExpandIcon />
         </button>
@@ -75,6 +105,7 @@ const DocumentComponent = ({
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
+  isFullScreen: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   publishDocumentHandler: PropTypes.func.isRequired,
