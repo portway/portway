@@ -39,11 +39,11 @@ function ProjectsListComponent({ deleteHandler, projects }) {
   if (projectList.length === 0) {
     return (
       <div className="project-list__empty-state">
-        <div className="project-list__empty-state-content">
-          <div className="icon-with-background">
-            <ProjectIcon width="48" height="48" />
+        <div className="notice">
+          <div className="notice__icon">
+            <ProjectIcon width="32" height="32" />
           </div>
-          <h2>Create your first project</h2>
+          <h2 className="notice__header">Create your first project</h2>
           <p>Let’s get you going! Create a project and start adding or importing documents</p>
           <Link to={PATH_PROJECT_CREATE} className="btn">Get started</Link>
         </div>

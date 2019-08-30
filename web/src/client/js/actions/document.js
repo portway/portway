@@ -23,7 +23,7 @@ export const fetchDocument = (documentId) => {
   }
 }
 
-export const createDocument = (projectId, history, body, preventRedirect=false, withBody=null) => {
+export const createDocument = (projectId, history, body, preventRedirect = false, withBody = null) => {
   return async (dispatch) => {
     dispatch(Documents.create(projectId, body))
     const { data, status } = await add(`projects/${projectId}/documents`, body)

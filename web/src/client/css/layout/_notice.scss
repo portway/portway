@@ -1,0 +1,29 @@
+@import '../inc/vars';
+
+.notice {
+  align-items: center;
+  border-radius: $borderRadius;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  &__icon {
+    align-items: center;
+    background-color: $action-light;
+    border-radius: 50% 50%;
+    display: flex;
+    height: 64px;
+    justify-content: center;
+    margin: 1rem 0 2rem 0;
+    width: 64px;
+  }
+
+  &__headline {
+    margin: 0;
+  }
+
+  &__action {
+    margin: 1rem 0 2rem;
+  }
+
+}

@@ -59,6 +59,7 @@ export default {
   },
   fields: {
     list: function(documentId) {
+      console.log('Fields called', documentId)
       if (!documentId) return returnNull()
       return {
         fetchAction: fetchDocument(documentId),
