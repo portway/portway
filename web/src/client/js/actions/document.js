@@ -31,14 +31,14 @@ export const createDocument = (projectId, history, body, preventRedirect = false
       dispatch(Validation.create('document', data, status))
       return
     }
-    dispatch(Documents.receiveOneCreated(data))
     if (withBody) {
-      dispatch(createField(data.id, FIELD_TYPES.TEXT, {
+      await dispatch(createField(projectId, data.id, FIELD_TYPES.TEXT, {
         name: 'text-area-1',
         type: FIELD_TYPES.TEXT,
         value: withBody
       }))
     }
+    dispatch(Documents.receiveOneCreated(data))
     if (!preventRedirect) {
       history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
     }
