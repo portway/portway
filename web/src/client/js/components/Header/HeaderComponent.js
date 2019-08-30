@@ -11,7 +11,6 @@ import {
 } from 'Shared/constants'
 
 import Navigator from 'Components/Navigator/NavigatorContainer'
-import GlobalSearchContainer from 'Components/GlobalSearch/GlobalSearchContainer'
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
@@ -43,7 +42,6 @@ const HeaderComponent = ({ brand, isFullScreen, section }) => {
               <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
             </OrgPermission>
           </div>
-          <GlobalSearchContainer />
           <div className="navbar__user">
             <UserMenuContainer />
           </div>
