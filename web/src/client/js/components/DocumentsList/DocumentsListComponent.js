@@ -4,7 +4,7 @@ import cx from 'classnames'
 
 import Constants from 'Shared/constants'
 import useClickOutside from 'Hooks/useClickOutside'
-import { AddIcon, RemoveIcon } from 'Components/Icons'
+import { AddIcon, RemoveIcon, DocumentIcon } from 'Components/Icons'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
@@ -82,6 +82,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   }
 
   function renderDocumentsList() {
+    if (documents.length === 0) return null
     return documents.map((doc, index) => {
       return <DocumentsListItem disable={creating} disableDragging={dragActive} fieldMoveHandler={fieldMoveHandler} key={`d-${doc.id}-${index}`} document={doc} />
     })
@@ -146,16 +147,32 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
         projectId={projectId}
         acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}
         elseRender={(
-          <ToolbarComponent action={{}} filter sort />
+          <ToolbarComponent action={{}} />
         )}>
-        <ToolbarComponent action={toolbarAction} filter sort />
+        <ToolbarComponent action={toolbarAction} />
       </ProjectPermission>
+      {documents.length === 0 && !creating &&
+      <div className="documents-list__empty-state">
+        <div className="documents-list__empty-state-content notice">
+          <div className="notice__icon">
+            <DocumentIcon width="32" height="32" />
+          </div>
+          <h2 className="notice__headline">Get started</h2>
+          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+            <p>Create a new document, or drag a bunch of text documents here to get started.</p>
+            <button className="btn btn--small notice__action" onClick={() => { createCallback(true) }}>Create document</button>
+          </ProjectPermission>
+        </div>
+      </div>
+      }
+      {(documents.length > 0 || creating) &&
       <nav>
         <ol className="documents-list__list">
           {renderNewDocument()}
           {renderDocumentsList()}
         </ol>
       </nav>
+      }
       <div className="documents-list__drag-notice">
         <p className="note">Drag and drop Markdown files here to create new documents for each</p>
       </div>

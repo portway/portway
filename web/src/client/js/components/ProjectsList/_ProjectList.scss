@@ -12,6 +12,9 @@ $horizontalPadding: 1.3%;
     --project-border-color: #{$black-er};
     --project-actions-color: #{$black-er};
   }
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 
   .project-list {
     display: grid;
@@ -20,6 +23,23 @@ $horizontalPadding: 1.3%;
     list-style: none;
     margin: 0;
     padding: 2rem 0;
+
+    &__empty-state {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 4rem 0;
+      text-align: center;
+    }
+
+    &__empty-state-content {
+      border: thin dashed var(--project-border-color);
+      border-radius: $borderRadius;
+      padding: 6rem 2rem;
+      width: 80%;
+    }
 
     &__item {
       background-color: var(--base-background);
