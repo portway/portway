@@ -12,7 +12,7 @@ import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
-  creating, createdFieldId, isPublishing, match, removeField, updateField, updateFieldOrder, updating, uiConfirm
+  creating, createdFieldId, fieldsUpdating, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
@@ -131,7 +131,7 @@ const DocumentFieldsContainer = ({
       fieldRenameHandler={debouncedNameChangeHandler}
       fieldDestroyHandler={fieldDestroyHandler}
       isPublishing={isPublishing}
-      updating={updating} />
+      fieldsUpdating={fieldsUpdating} />
   )
 }
 
@@ -144,7 +144,7 @@ DocumentFieldsContainer.propTypes = {
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
-  updating: PropTypes.bool.isRequired,
+  fieldsUpdating: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -152,7 +152,7 @@ const mapStateToProps = (state) => {
     creating: state.ui.fields.creating,
     createdFieldId: state.documentFields.lastCreatedFieldId,
     isPublishing: state.ui.documents.isPublishing,
-    updating: state.ui.fields.updating,
+    fieldsUpdating: state.ui.fields.fieldsUpdating,
   }
 }
 

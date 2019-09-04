@@ -17,7 +17,7 @@ const initialState = {
   },
   fields: {
     creating: false,
-    updating: false,
+    fieldsUpdating: {},
     type: -1
   },
   tokens: {
@@ -90,10 +90,13 @@ export const ui = (state = initialState, action) => {
       return { ...state, documents: { ...state.documents, creating: false } }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
-      return { ...state, fields: { ...state.fields, updating: true } }
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [action.fieldId]: true }
+      return { ...state, fields: { ...state.fields, fieldsUpdating } }
     }
     case ActionTypes.RECEIVE_UPDATED_FIELD: {
-      return { ...state, fields: { ...state.fields, updating: false } }
+      const { id } = action.data
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [id]: false }
+      return { ...state, fields: { ...state.fields, fieldsUpdating } }
     }
 
     // Document full screen
