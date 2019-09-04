@@ -3,6 +3,9 @@ import { getCookieValue } from '../utilities/cookieParser'
 
 const token = getCookieValue('token')
 
+const EXTENDED_TIMEOUT = 50000
+
+
 // Webpack's DefinePlugin sets VAR_API_URL during build from
 // process.env.API_PUBLIC_URL
 // eslint-disable-next-line no-undef
@@ -12,7 +15,7 @@ const validationCodes = [400, 409, 402]
 
 const axiosInstance = axios.create({
   baseURL: baseURL.toString(),
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     Authorization: `Bearer ${token}`
   }
@@ -30,7 +33,7 @@ async function fetch(resource) {
 
 async function add(resource, body) {
   try {
-    const { data: { data }, status } = await axiosInstance.post(resource, body)
+    const { data: { data }, status } = await axiosInstance.post(resource, body, { timeout: EXTENDED_TIMEOUT })
     return { data, status }
   } catch (error) {
     const { data, status } = error.response
@@ -40,7 +43,7 @@ async function add(resource, body) {
 
 async function update(resource, body) {
   try {
-    const { data: { data }, status } = await axiosInstance.put(resource, body)
+    const { data: { data }, status } = await axiosInstance.put(resource, body, { timeout: EXTENDED_TIMEOUT })
     return { data, status }
   } catch (error) {
     const { data, status } = error.response
