@@ -19,6 +19,12 @@
 
   &--dragged-over {
     background-color: var(--document-list-item-hover);
+    .toolbar {
+      display: none;
+    }
+    .documents-list__empty-state {
+      display: none;
+    }
     .documents-list__drag-notice {
       display: block;
       pointer-events: none;
@@ -28,6 +34,14 @@
       opacity: 0.3;
       pointer-events: none;
     }
+  }
+
+  &__empty-state {
+    border-top: thin solid var(--base-border-color);
+    padding: $sideGutterWidth / 4;
+  }
+  &__empty-state-content {
+    padding: $sideGutterWidth / 4;
   }
 
   &__drag-notice {

@@ -25,9 +25,9 @@ class ProjectsContainer extends React.PureComponent {
           acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
           acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}
           elseRender={(
-            <ToolbarComponent action={{}} filter sort />
+            <ToolbarComponent action={{}} />
           )}>
-          <ToolbarComponent action={toolbarAction} filter sort />
+          <ToolbarComponent action={toolbarAction} />
         </OrgPermission>
         <ProjectsListContainer />
       </main>

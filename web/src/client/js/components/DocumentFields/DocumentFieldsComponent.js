@@ -17,12 +17,12 @@ const DocumentFieldsComponent = ({
   dragLeaveHandler,
   dragOverHandler,
   dropHandler,
-  fields,
   fieldChangeHandler,
-  fieldRenameHandler,
   fieldDestroyHandler,
+  fieldRenameHandler,
+  fields,
+  fieldsUpdating,
   isPublishing,
-  updating
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
@@ -58,7 +58,7 @@ const DocumentFieldsComponent = ({
             onChange={fieldChangeHandler}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
-            updating={updating} />
+            updating={fieldsUpdating[field.id]} />
         break
       default:
         break
@@ -118,7 +118,7 @@ DocumentFieldsComponent.propTypes = {
   fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  updating: PropTypes.bool.isRequired,
+  fieldsUpdating: PropTypes.object.isRequired,
 }
 
 export default DocumentFieldsComponent

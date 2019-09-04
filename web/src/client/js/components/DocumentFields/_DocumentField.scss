@@ -173,12 +173,15 @@
   }
 
   /**
-   * For drag areas (files, etc)
+   * For drag areas (files, etc) overriding FileUploaderComponent styles
    * ------------------------------------------------------------------------ */
-  &__drop-area {
+  .file-uploader {
+    align-items: center;
     border: thin solid $gray-light;
     border-radius: $borderRadius;
+    display: flex;
     padding: $sideGutterWidth;
+    width: 100%;
 
     label {
       text-align: center;
@@ -190,10 +193,9 @@
       left: 0;
       position: absolute;
       top: 0;
-      width: 100%;
     }
 
-    &--active {
+    &--dragged-over {
       background-color: $gray-light;
     }
 
@@ -202,17 +204,17 @@
       border-radius: 0;
       padding: 0;
     }
-  }
 
-  &__progress {
-    position: relative;
-    .spinner {
-      left: 50%;
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
+    &__status {
+      position: relative;
+      .spinner {
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
-  }
 
+  }
 
 }
