@@ -12,6 +12,7 @@ const validationCodes = [400, 409, 402]
 
 const axiosInstance = axios.create({
   baseURL: baseURL.toString(),
+  timeout: 0,
   headers: {
     Authorization: `Bearer ${token}`
   }
@@ -29,7 +30,7 @@ async function fetch(resource) {
 
 async function add(resource, body) {
   try {
-    const { data: { data }, status } = await axiosInstance.post(resource, body, { timeout: EXTENDED_TIMEOUT })
+    const { data: { data }, status } = await axiosInstance.post(resource, body)
     return { data, status }
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
@@ -39,7 +40,7 @@ async function add(resource, body) {
 
 async function update(resource, body) {
   try {
-    const { data: { data }, status } = await axiosInstance.put(resource, body, { timeout: EXTENDED_TIMEOUT })
+    const { data: { data }, status } = await axiosInstance.put(resource, body)
     return { data, status }
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
