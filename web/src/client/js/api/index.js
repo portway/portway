@@ -3,8 +3,6 @@ import { getCookieValue } from '../utilities/cookieParser'
 
 const token = getCookieValue('token')
 
-const EXTENDED_TIMEOUT = 1
-
 // Webpack's DefinePlugin sets VAR_API_URL during build from
 // process.env.API_PUBLIC_URL
 // eslint-disable-next-line no-undef
@@ -14,7 +12,6 @@ const validationCodes = [400, 409, 402]
 
 const axiosInstance = axios.create({
   baseURL: baseURL.toString(),
-  timeout: 1,
   headers: {
     Authorization: `Bearer ${token}`
   }
