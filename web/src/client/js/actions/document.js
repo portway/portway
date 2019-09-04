@@ -31,6 +31,10 @@ export const createDocument = (projectId, history, body, preventRedirect=false, 
       dispatch(Validation.create('document', data, status))
       return
     }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     dispatch(Documents.receiveOneCreated(data))
     if (withBody) {
       dispatch(createField(data.id, FIELD_TYPES.TEXT, {
@@ -48,7 +52,11 @@ export const createDocument = (projectId, history, body, preventRedirect=false, 
 export const publishDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.publish(documentId))
-    const { data } = await add(`documents/${documentId}/publish`)
+    const { data, status } = await add(`documents/${documentId}/publish`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     dispatch(Documents.receivePublishedVersion(data))
   }
 }
@@ -57,6 +65,10 @@ export const updateDocument = (projectId, documentId, body) => {
   return async (dispatch) => {
     dispatch(Documents.update(projectId, documentId, body))
     const { data, status } = await update(`projects/${projectId}/documents/${documentId}`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('document', data, status)) :
       dispatch(Documents.receiveOneUpdated(data))

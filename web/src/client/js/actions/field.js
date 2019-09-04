@@ -6,6 +6,10 @@ export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateCreate(documentId, fieldType))
     const { data, status } = await add(`documents/${documentId}/fields`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
@@ -22,6 +26,10 @@ export const updateField = (projectId, documentId, fieldId, body) => {
       ({ data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body.value))
     } else {
       ({ data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body))
+    }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
     }
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
