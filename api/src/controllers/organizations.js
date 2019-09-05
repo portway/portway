@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
+import multer from 'multer'
 
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessOrganization from '../businesstime/organization'
@@ -9,6 +10,9 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import orgSchema from './payloadSchemas/organization'
+import avatarCoordinator from '../coordinators/avatar'
+
+const MAX_AVATAR_FILE_SIZE = 1024 * 1000
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
@@ -54,6 +58,19 @@ const organizationsController = function(router) {
   router.post('/', validateBody(requiredFields(RESOURCE_TYPES.ORGANIZATION, 'name')), createPerm, addOrganization)
   router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getOrganization)
   router.put('/:id', validateParams(paramSchema), validateBody(orgSchema), conditionalUpdatePerm, updateOrganization)
+  router.put(
+    '/:id/avatar',
+    validateParams(paramSchema),
+    multer({
+      dest: 'uploads/',
+      limits: {
+        fileSize: MAX_AVATAR_FILE_SIZE
+      }
+    }).single('file'),
+    validateBody({}),
+    conditionalUpdatePerm,
+    updateOrganizationAvatar
+  )
 }
 
 const getOrganization = async function(req, res, next) {
@@ -86,6 +103,18 @@ const updateOrganization = async function(req, res, next) {
   try {
     const org = await BusinessOrganization.updateById(id, body)
     res.status(200).json({ data: org })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const updateOrganizationAvatar = async function(req, res, next) {
+  const { id } = req.params
+  const { file } = req
+
+  try {
+    const avatarUrl = await avatarCoordinator.updateOrganizationAvatar(id, file)
+    res.status(200).json({ data: avatarUrl })
   } catch (e) {
     next(e)
   }
