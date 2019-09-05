@@ -11,6 +11,7 @@ items:
     api.aws-ses-region: "us-west-2"
     api.sender-email-address: "no-reply@portway.app"
     api.client-url: "http://portway.local"
+    api.s3-content-bucket: 'portway-content-dev'
   kind: ConfigMap
   metadata:
     name: api-config
