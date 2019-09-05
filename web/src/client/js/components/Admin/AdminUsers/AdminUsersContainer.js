@@ -19,6 +19,7 @@ const AdminUsersContainer = ({
   history,
   isCreating,
   isInviting,
+  reinviteUser,
   removeUser,
   uiConfirm,
   uiCreateUserMode

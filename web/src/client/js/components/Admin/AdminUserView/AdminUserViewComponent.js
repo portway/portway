@@ -56,12 +56,8 @@ const AdminUserViewComponent = ({
 
   return (
     <div className="admin-user">
-      <header className="header header--with-button">
+      <header className="header">
         <h2>{user.name}</h2>
-        <Link to={`${PATH_ADMIN}/users`} className="btn btn--blank btn--with-circular-icon admin-user__back-btn">
-          <span className="label">Back to Users</span>
-          <RemoveIcon />
-        </Link>
       </header>
       <section>
         <h2>General Information</h2>

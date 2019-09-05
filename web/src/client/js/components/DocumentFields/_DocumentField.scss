@@ -3,6 +3,7 @@
 
 :root {
   --field-background: #{$white-bis};
+  --field-edit-mode-background: rgba(255, 255, 255, .9);
   --field-name-width: 150px;
   @media (prefers-color-scheme: dark) {
     --field-background: #{$black-bis};
@@ -14,7 +15,30 @@
   outline: 0;
 
   &--text {
-    margin: ($sideGutterWidth / 2) 0;
+    margin: ($sideGutterWidth / 2) 64px;
+    .document-field__component {
+      flex-direction: column;
+    }
+    .document-field__tool-options {
+      justify-content: center;
+    }
+  }
+
+  &--image {
+    margin: ($sideGutterWidth / 2) 32px;
+    position: relative;
+    .document-field__component {
+      flex-direction: column;
+    }
+    .document-field__tools {
+      bottom: 18px;
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+    }
+    .document-field__tool-options {
+      justify-content: center;
+    }
   }
 
   &--number, &--string {
@@ -22,6 +46,7 @@
     border: thin solid var(--base-border-color);
     border-bottom: none;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    margin: 0 24px;
 
     input {
       background-color: transparent;
@@ -71,15 +96,16 @@
 
   &--dragging {
     cursor: grabbing;
-    opacity: 0.05;
+    opacity: 0.7;
     * {
       pointer-events: none;
     }
   }
 
   &--dragged-over {
+    border: thin dashed $action;
+    opacity: 0.5;
     * {
-      opacity: 0.5;
       pointer-events: none;
     }
   }
@@ -125,6 +151,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
+    z-index: 2;
   }
 
   &__tool-options {
@@ -135,13 +163,58 @@
   }
 
   &__dragger {
-    padding-left: 1.2rem;
+    // padding-left: 1.2rem;
   }
 
   &:hover, &:focus, &:focus-within {
     .document-field__tool-options {
       visibility: visible;
     }
+  }
+
+  /**
+   * For drag areas (files, etc) overriding FileUploaderComponent styles
+   * ------------------------------------------------------------------------ */
+  .file-uploader {
+    align-items: center;
+    border: thin solid $gray-light;
+    border-radius: $borderRadius;
+    display: flex;
+    padding: $sideGutterWidth;
+    width: 100%;
+
+    label {
+      text-align: center;
+    }
+
+    &--with-value {
+      background-color: var(--field-edit-mode-background);
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+
+    &--dragged-over {
+      background-color: $gray-light;
+    }
+
+    &--uploading {
+      border: thin solid transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    &__status {
+      position: relative;
+      .spinner {
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
   }
 
 }

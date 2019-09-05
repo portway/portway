@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
+import multer from 'multer'
 
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessField from '../businesstime/field'
@@ -7,6 +8,9 @@ import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields, partialFields } from './payloadSchemas/helpers'
 import auditLog, { auditActions } from '../integrators/audit'
+import fieldCoordinator from '../coordinators/field'
+
+const MAX_FILE_SIZE = 10e7
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
@@ -26,6 +30,12 @@ const documentFields = function(router) {
   router.post(
     '/',
     validateParams(paramSchema),
+    multer({
+      dest: 'uploads/',
+      limits: {
+        fileSize: MAX_FILE_SIZE
+      }
+    }).single('file'),
     validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type'), { includeDetails: true }),
     createPerm,
     addDocumentField
@@ -35,7 +45,15 @@ const documentFields = function(router) {
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), { includeDetails: true }),
+    multer({
+      dest: 'uploads/',
+      limits: {
+        fileSize: MAX_FILE_SIZE
+      }
+    }).single('file'),
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), {
+      includeDetails: true
+    }),
     updatePerm,
     updateDocumentField
   )
@@ -71,14 +89,14 @@ const getDocumentField = async function(req, res, next) {
 }
 
 const addDocumentField = async function(req, res, next) {
-  const { body } = req
+  const { body, file } = req
   const { documentId } = req.params
   const { orgId } = req.requestorInfo
   // Overwrite orgId even if they passed anything in
   body.orgId = orgId
 
   try {
-    const field = await BusinessField.createForDocument(documentId, body)
+    const field = await fieldCoordinator.addFieldToDocument(documentId, body, file)
     res.status(201).json({ data: field })
     auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {
@@ -88,11 +106,11 @@ const addDocumentField = async function(req, res, next) {
 
 const updateDocumentField = async function(req, res, next) {
   const { id, documentId } = req.params
-  const { body } = req
+  const { body, file } = req
   const { orgId } = req.requestorInfo
 
   try {
-    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, body)
+    const field = await fieldCoordinator.updateDocumentField(id, documentId, orgId, body, file)
     res.status(200).json({ data: field })
     auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {

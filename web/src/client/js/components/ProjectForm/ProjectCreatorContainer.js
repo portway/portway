@@ -7,14 +7,8 @@ import Store from '../../reducers'
 import { createProject } from 'Actions/project'
 import ProjectFormComponent from './ProjectFormComponent'
 import Constants from 'Shared/constants'
-import useDataService from 'Hooks/useDataService'
-import dataMapper from 'Libs/dataMapper'
-import { currentUserId } from 'Libs/currentIds'
 
 const ProjectCreatorContainer = ({ errors, history }) => {
-  const { data: users } = useDataService(dataMapper.users.list())
-  const { data: currentUser } = useDataService(dataMapper.users.current())
-
   const [formValues, setFormValues] = useState({
     projectName: '',
     projectDescription: ''
@@ -52,35 +46,9 @@ const ProjectCreatorContainer = ({ errors, history }) => {
     values: formValues
   }
 
-  // Selected users are team members on this project and only exposed
-  // if the user has permission to add team members
-  const [selectedUsers, setSelectedUsers] = useState([])
-  function teamMemberHandler(option) {
-    setSelectedUsers(option)
-  }
-  // Options for the Team which is completely optional
-  // Though all properties are required.
-  const usersWithoutMe = Object.values(users).filter(user => user.id !== currentUserId)
-  const userOptions = usersWithoutMe.map((user) => {
-    return {
-      value: String(user.id),
-      label: user.name
-    }
-  })
-
-  const teamOptions = {
-    users: userOptions,
-    selectedUsers: selectedUsers,
-    changeHandler: teamMemberHandler
-  }
-
   return (
     <div>
-      <ProjectFormComponent
-        errors={errors}
-        formOptions={formOptions}
-        teamOptions={teamOptions}
-        currentUser={currentUser} />
+      <ProjectFormComponent errors={errors} formOptions={formOptions} />
     </div>
   )
 }

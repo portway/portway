@@ -7,11 +7,13 @@ import ProjectToolbarComponent from './ProjectToolbarComponent'
 import { currentUserId } from 'Libs/currentIds'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import currentResource from 'Libs/currentResource'
 
 const ProjectToolbarContainer = ({ isFullScreen, match }) => {
   const projectId = match.params.projectId
-  const documentId = match.params.documentId
-  const { data: document } = useDataService(dataMapper.documents.id(projectId, documentId), [projectId, documentId])
+  const { data: document } = useDataService(currentResource('document', location.pathname), [
+    location.pathname
+  ])
   const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.projects.projectAssignments(projectId), [projectId])
   const { data: users, loading: userLoading } = useDataService(dataMapper.users.list())
 

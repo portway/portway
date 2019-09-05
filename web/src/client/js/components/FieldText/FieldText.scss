@@ -2,6 +2,8 @@
 
 .document-field__text {
   --document-field-min-height: 64px;
+  margin: auto;
+  max-width: 1366px;
   width: 100%;
 
   // Override the SimpleMDE styling
@@ -9,14 +11,18 @@
     border: none;
     padding: 0;
     border-radius: 0;
+    height: auto;
     min-height: var(--document-field-min-height);
+    overflow: visible;
 
     pre {
       padding: 0;
     }
 
     .CodeMirror-scroll {
+      height: auto !important;
       min-height: var(--document-field-min-height);
+      overflow: visible !important;
     }
 
     .CodeMirror-sizer {

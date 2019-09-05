@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -7,6 +7,7 @@ import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
+import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
@@ -16,23 +17,48 @@ const DocumentFieldsComponent = ({
   dragLeaveHandler,
   dragOverHandler,
   dropHandler,
-  fields,
   fieldChangeHandler,
-  fieldRenameHandler,
   fieldDestroyHandler,
-  isPublishing
+  fieldRenameHandler,
+  fields,
+  fieldsUpdating,
+  isPublishing,
 }) => {
+  const [settingsForField, setSettingsForField] = useState(null)
+
+  const textFields = fields.filter((field) => {
+    return field.type === Constants.FIELD_TYPES.TEXT
+  })
+  const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+
+  function toggleSettingsFor(fieldId) {
+    if (settingsForField === fieldId) {
+      setSettingsForField(null)
+      return
+    }
+    setSettingsForField(fieldId)
+  }
+
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocusElement={lastTextFieldId} />
         break
       case Constants.FIELD_TYPES.NUMBER:
         fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />
         break
       case Constants.FIELD_TYPES.STRING:
         fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
+        break
+      case Constants.FIELD_TYPES.IMAGE:
+        fieldTypeComponent =
+          <FieldImageComponent
+            field={field}
+            onChange={fieldChangeHandler}
+            settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+            settingsMode={settingsForField === field.id}
+            updating={fieldsUpdating[field.id]} />
         break
       default:
         break
@@ -51,7 +77,9 @@ const DocumentFieldsComponent = ({
           dragOverHandler={dragOverHandler}
           dropHandler={dropHandler}
           onRename={fieldRenameHandler}
-          onDestroy={() => { fieldDestroyHandler(field.id) }}>
+          onDestroy={() => { fieldDestroyHandler(field.id) }}
+          settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+          settingsMode={settingsForField === field.id}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )
@@ -89,7 +117,8 @@ DocumentFieldsComponent.propTypes = {
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
-  isPublishing: PropTypes.bool.isRequired
+  isPublishing: PropTypes.bool.isRequired,
+  fieldsUpdating: PropTypes.object.isRequired,
 }
 
 export default DocumentFieldsComponent

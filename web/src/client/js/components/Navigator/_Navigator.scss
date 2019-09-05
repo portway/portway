@@ -28,6 +28,14 @@ $navigatorPlaceholderWidth: 56px;
     }
   }
 
+  &__empty-item {
+    color: $gray;
+    padding: 1rem;
+    a {
+      text-decoration: underline;
+    }
+  }
+
   &__project-btn {
     color: $gray;
     &:not([disabled]) {

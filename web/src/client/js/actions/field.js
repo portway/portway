@@ -2,23 +2,30 @@ import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
 import { Fields, Notifications, Validation } from './index'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 
-export const createField = (documentId, fieldType, body) => {
+export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateCreate(documentId, fieldType))
     const { data, status } = await add(`documents/${documentId}/fields`, body)
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
-      dispatch(Fields.receiveOneCreated(data))
+      dispatch(Fields.receiveOneCreated(projectId, documentId, data))
   }
 }
 
-export const updateField = (documentId, fieldId, body) => {
+export const updateField = (projectId, documentId, fieldId, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateUpdate(fieldId))
-    const { data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body)
+    let data
+    let status
+    // if we're getting FormData here, it's a file upload, pass the FormData as the body
+    if (body.value instanceof FormData) {
+      ({ data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body.value))
+    } else {
+      ({ data, status } = await update(`documents/${documentId}/fields/${fieldId}`, body))
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
-      dispatch(Fields.receiveOneUpdated(data))
+      dispatch(Fields.receiveOneUpdated(projectId, documentId, data))
   }
 }
 
@@ -29,7 +36,7 @@ export const updateFieldOrder = (documentId, fieldId, newOrder) => {
   }
 }
 
-export const removeField = (documentId, fieldId) => {
+export const removeField = (projectId, documentId, fieldId) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())
     const { data, status } = await remove(`documents/${documentId}/fields/${fieldId}`)
@@ -37,6 +44,6 @@ export const removeField = (documentId, fieldId) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.FIELD, status))
       return
     }
-    dispatch(Fields.removeOne(documentId, fieldId))
+    dispatch(Fields.removeOne(projectId, documentId, fieldId))
   }
 }

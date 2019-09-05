@@ -19,7 +19,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
   function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
       name: value
-    })
+    }, false, ' ')
   }
 
   function createDocumentHandler(value) {
@@ -29,6 +29,23 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       history.push({ pathname: `${PATH_PROJECT}/${match.params.projectId}${PATH_DOCUMENT_NEW}` })
     }
     uiDocumentCreate(value)
+  }
+
+  function draggedDocumentHandler(file) {
+    const reader = new FileReader()
+    reader.readAsText(file)
+    reader.onloadend = function() {
+      // Create a new document, preventing the redirect, and with a body
+      // Remove the file extension
+      const fileName = file.name.replace(/\.[^/.]+$/, '')
+      const markdownBody = reader.result
+      createDocument(match.params.projectId, history, { name: fileName }, true, markdownBody)
+    }
+  }
+
+  function fieldMoveHandler(oldDocumentId, newDocumentId, fieldId) {
+    if (oldDocumentId === newDocumentId) return
+    console.log(`Move field: ${fieldId} from document: ${oldDocumentId} to document: ${newDocumentId}.`)
   }
 
   const sortedDocuments = []
@@ -47,6 +64,8 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       createChangeHandler={createDocumentAction}
       creating={ui.documents.creating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedDocuments}
+      draggedDocumentHandler={draggedDocumentHandler}
+      fieldMoveHandler={fieldMoveHandler}
       projectId={Number(match.params.projectId)}/>
   )
 }

@@ -1,7 +1,8 @@
 const FIELD_TYPES = {
   STRING: 1,
   TEXT: 2,
-  NUMBER: 3
+  NUMBER: 3,
+  IMAGE: 4
 }
 
 const ORGANIZATION_ROLE_IDS = {
@@ -70,12 +71,14 @@ module.exports = {
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
     [FIELD_TYPES.TEXT]: 'text-area-',
-    [FIELD_TYPES.NUMBER]: 'number-'
+    [FIELD_TYPES.NUMBER]: 'number-',
+    [FIELD_TYPES.IMAGE]: 'image-'
   },
   FIELD_TYPES: FIELD_TYPES,
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New Document',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  MAX_FILE_SIZE: 10000000,
   // Notifications
   NOTIFICATION_TYPES: NOTIFICATION_TYPES,
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,

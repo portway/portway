@@ -17,6 +17,7 @@ const initialState = {
   },
   fields: {
     creating: false,
+    fieldsUpdating: {},
     type: -1
   },
   tokens: {
@@ -29,11 +30,49 @@ const initialState = {
   billing: {
     isSubmitting: false,
     isStripeOpen: false
+  },
+  spinner: {
+    spinning: false
   }
 }
 
 export const ui = (state = initialState, action) => {
   switch (action.type) {
+    // If you need to update spinner in combo with something else, do it below
+    // these two global on/offs
+    // Global Spinner state on
+    case ActionTypes.INITIATE_USER_UPDATE:
+    case ActionTypes.INITIATE_USER_CREATE:
+    case ActionTypes.INITIATE_USER_REMOVE:
+    case ActionTypes.INITIATE_ORGANIZATION_UPDATE: {
+      return {
+        ...state,
+        spinner: {
+          ...state.spinner,
+          spinning: true
+        }
+      }
+    }
+
+    // Global Spinner state off
+    case ActionTypes.RECEIVE_UPDATED_USER:
+    case ActionTypes.RECEIVE_CREATED_USER:
+    case ActionTypes.REMOVE_USER:
+    case ActionTypes.RECEIVE_UPDATED_USER_ROLE:
+    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION: {
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          creating: false
+        },
+        spinner: {
+          ...state.spinner,
+          spinning: false
+        }
+      }
+    }
+
     // Document and field creation
     // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_CREATE: {
@@ -50,19 +89,19 @@ export const ui = (state = initialState, action) => {
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }
     }
+    case ActionTypes.INITIATE_FIELD_UPDATE: {
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [action.fieldId]: true }
+      return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+    case ActionTypes.RECEIVE_UPDATED_FIELD: {
+      const { id } = action.data
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [id]: false }
+      return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
 
     // Document full screen
     // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_FULL_SCREEN: {
-      if (action.value) {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen()
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen()
-        }
-      }
       return {
         ...state,
         document: {
@@ -80,6 +119,9 @@ export const ui = (state = initialState, action) => {
         documents: {
           ...state.documents,
           isPublishing: true
+        },
+        spinner: {
+          spinning: true
         }
       }
     }
@@ -89,6 +131,9 @@ export const ui = (state = initialState, action) => {
         documents: {
           ...state.documents,
           isPublishing: false
+        },
+        spinner: {
+          spinning: false
         }
       }
     }
@@ -137,23 +182,33 @@ export const ui = (state = initialState, action) => {
       }
     }
 
-    case ActionTypes.RECEIVE_CREATED_USER: {
+    // Reinviting user
+    case ActionTypes.INITIATE_USER_REINVITE: {
       return {
         ...state,
         users: {
           ...state.users,
-          creating: false
+          inviting: true
+        },
+        spinner: {
+          ...state.spinner,
+          spinning: true
         }
       }
     }
 
-    // Reinviting user
-    case ActionTypes.INITIATE_USER_REINVITE: {
-      return { ...state, users: { ...state.users, inviting: true } }
-    }
-
     case ActionTypes.RECEIVE_REINVITED_USER: {
-      return { ...state, users: { ...state.users, inviting: false } }
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          inviting: false
+        },
+        spinner: {
+          ...state.spinner,
+          spinning: false
+        }
+      }
     }
 
     // Project tokens

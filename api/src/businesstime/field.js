@@ -50,6 +50,9 @@ async function createForDocument(docId, body) {
 
   await createdField.setFieldValue(fieldValue.id)
 
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
+
   return await findByIdForDocument(createdField.id, docId, orgId)
 }
 
@@ -106,7 +109,7 @@ async function findByIdForDocument(id, docId, orgId) {
 async function updateByIdForDocument(id, docId, orgId, body) {
   const db = getDb()
 
-  const document = await db.model('Document').findOne({ where: { id: docId, orgId }, raw: true })
+  const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
 
   if (!document) {
     throw ono({ code: 404 }, `Cannot update field, document not found with id: ${docId}`)
@@ -121,13 +124,24 @@ async function updateByIdForDocument(id, docId, orgId, body) {
 
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
+
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
+
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
 
   return await findByIdForDocument(field.id, docId, orgId)
 }
 
 async function deleteByIdForDocument(id, docId, orgId) {
   const db = getDb()
+
+  const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot delete field, document not found with id: ${docId}`)
+  }
+
   const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
@@ -136,11 +150,20 @@ async function deleteByIdForDocument(id, docId, orgId) {
 
   await field.destroy()
 
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
+
   await normalizeFieldOrderAndGetCount(docId, orgId)
 }
 
 async function updateOrderById(id, docId, orgId, newPosition) {
   const db = getDb()
+
+  const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot update order, document not found with id: ${docId}`)
+  }
 
   if (newPosition < 0) {
     const message = `Cannot update order, minimum order position is 0`
@@ -206,6 +229,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
     await transaction.rollback()
     throw err
   }
+
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
 }
 
 export function getFieldValueInclude(db) {
@@ -225,6 +251,7 @@ function validateFieldValueByType(fieldValue, type) {
   switch (type) {
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.TEXT:
+    case FIELD_TYPES.IMAGE:
       isValidType = typeof fieldValue === 'string'
       break
     case FIELD_TYPES.NUMBER:
