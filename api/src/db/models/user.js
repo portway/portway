@@ -7,7 +7,8 @@ export default function(sequelize, DataTypes) {
       password: DataTypes.STRING,
       orgId: DataTypes.INTEGER,
       orgRoleId: DataTypes.INTEGER,
-      resetKey: DataTypes.STRING
+      resetKey: DataTypes.STRING,
+      avatar: DataTypes.STRING
     },
     {
       paranoid: true,
