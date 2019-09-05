@@ -8,7 +8,7 @@ const updateOrganizationAvatar = async function(orgId, file) {
     throw ono({ code: 400 }, 'Could not update organization avatar, there was no file attached')
   }
   const url = await uploadAvatar({ orgId, file })
-  const org = BusinessOrganization.updateById(orgId, { avatar: url })
+  const org = await BusinessOrganization.updateById(orgId, { avatar: url })
   return org.avatar
 }
 

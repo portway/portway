@@ -113,8 +113,8 @@ const updateOrganizationAvatar = async function(req, res, next) {
   const { file } = req
 
   try {
-    const avatarUrl = await avatarCoordinator.updateOrganizationAvatar(id, file)
-    res.status(200).json({ data: avatarUrl })
+    const avatar = await avatarCoordinator.updateOrganizationAvatar(id, file)
+    res.status(200).json({ data: { avatar } })
   } catch (e) {
     next(e)
   }

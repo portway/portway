@@ -34,7 +34,6 @@ export const uploadContent = async function(documentId, orgId, file) {
     // async function, but don't await it, just fire and move on
     unlink(file.path)
   }
-
   return res.Location
 }
 
