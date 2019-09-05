@@ -17,7 +17,7 @@ const updateUserAvatar = async function(orgId, userId, file) {
     throw ono({ code: 400 }, 'Could not update user avatar, there was no file attached')
   }
   const url = await uploadAvatar({ orgId, userId, file })
-  const user = await BusinessUser.updateById(orgId, { avatar: url })
+  const user = await BusinessUser.updateById(userId, { avatar: url }, orgId)
   return user.avatar
 }
 
