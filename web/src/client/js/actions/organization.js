@@ -18,6 +18,10 @@ export const updateOrganization = (orgId, body) => {
   return async (dispatch) => {
     dispatch(Organizations.initiateUpdate(orgId))
     const { data, status } = await update(`organizations/${orgId}`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('organization', data, status)) :
       dispatch(Organizations.receiveOneUpdated(data))
