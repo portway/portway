@@ -96,6 +96,11 @@ input, textarea {
   color: var(--base-color);
 }
 
+hr {
+  border: none;
+  border-top: thin solid var(--base-border-color);
+}
+
 [contenteditable] {
   &:focus {
     outline: none;

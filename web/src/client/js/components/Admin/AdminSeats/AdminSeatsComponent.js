@@ -6,8 +6,10 @@ const AdminSeatsComponent = () => {
   return (
     <div className="admin-seats">
       <div className="admin-seats__status">
-        <span className="admin-seats__status__label"><b>3</b> out of <b>10</b> Seats</span>
-        <meter className="admin-seats__status__meter" value="3" min="1" max="10" low="3" high="9" optimum="7">3/10</meter>
+        <span className="admin-seats__status__label"><b>1</b> out of <b>5</b> Seats</span>
+        <meter className="admin-seats__status__meter" value="2" low="1" high="4" optimum="3" min="1" max="5">
+          1/5
+        </meter>
         <button className="btn btn--small">Add seats</button>
       </div>
     </div>
