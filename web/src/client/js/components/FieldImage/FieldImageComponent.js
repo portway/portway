@@ -60,12 +60,34 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
         fileChangeHandler={uploadImage}
         fileUploadedHandler={() => { settingsHandler(field.id) }}>
         {settingsMode &&
-        <button className="btn btn--blank" onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>Cancel</button>
+        <button
+          className="btn btn--blank document-field__settings__button"
+          onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
+          Cancel
+        </button>
         }
         {warning &&
         <p className="small warning">{warning}</p>
         }
       </FileUploaderComponent>
+      }
+      {settingsMode && field.value &&
+      <div className="document-field__settings">
+        <label>
+          <span className="document-field__settings__label">Photo name:</span>
+          <input
+            className="document-field__settings__input"
+            defaultValue={field.name}
+            onChange={(e) => { onChange(field.id, { name: e.currentTarget.value }) }}
+            type="text"
+          />
+        </label>
+        <button
+          className="btn btn--small document-field__settings__button"
+          onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
+          Exit settings
+        </button>
+      </div>
       }
     </div>
   )

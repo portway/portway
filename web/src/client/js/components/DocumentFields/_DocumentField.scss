@@ -29,6 +29,7 @@
     position: relative;
     .document-field__component {
       flex-direction: column;
+      position: relative;
     }
     .document-field__tools {
       bottom: 18px;
@@ -113,6 +114,37 @@
   &__component {
     align-items: stretch;
     display: flex;
+  }
+
+  &__settings {
+    align-items: center;
+    background: $black-bis;
+    bottom: 0;
+    color: $white-bis;
+    display: flex;
+    justify-content: space-between;
+    left: 0;
+    padding: 1rem 2rem;
+    position: absolute;
+    width: 100%;
+    z-index: 3;
+  }
+
+  &__settings__label {
+    font-size: 1.2rem;
+    padding-right: 1rem;
+  }
+
+  &__settings__input {
+    background: none;
+    border: none;
+    border-bottom: thin solid $black-ter;
+    color: $white-bis;
+    font-size: 1.2rem;
+  }
+
+  &__settings__button {
+    font-size: 1.2rem;
   }
 
   &__name {
