@@ -10,6 +10,8 @@ export const getNotificationTitle = function(notification) {
         return 'Access denied'
       case 404:
         return 'Not found...'
+      case 408:
+        return 'Request timed out'
       case 500:
         return 'Internal error...'
       default:

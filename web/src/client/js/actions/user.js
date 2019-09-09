@@ -9,14 +9,22 @@ import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from
  */
 export const fetchUsers = async (dispatch) => {
   dispatch(Users.request())
-  const { data } = await fetch('users')
+  const { data, status } = await fetch('users')
+  if (globalErrorCodes.includes(status)) {
+    dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+    return
+  }
   return dispatch(Users.receive(data))
 }
 
 export const fetchUser = (id) => {
   return async (dispatch) => {
     dispatch(Users.requestOne(id))
-    const { data } = await fetch(`users/${id}`)
+    const { data, status } = await fetch(`users/${id}`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     return dispatch(Users.receiveOne(data))
   }
 }
@@ -39,6 +47,10 @@ export const createUser = (values) => {
       dispatch(Validation.create('user', data, status))
       return
     }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     dispatch(Users.receiveOneCreated(data))
     // If we're trying to be an admin
     dispatch(updateUserRole(data.id, role))
@@ -49,6 +61,10 @@ export const updateUser = (userId, body) => {
   return async (dispatch) => {
     dispatch(Users.initiateUpdate(userId))
     const { data, status } = await update(`users/${userId}`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('user', data, status)) :
       dispatch(Users.receiveOneUpdated(data))
@@ -71,6 +87,10 @@ export const updateUserRole = (userId, orgRoleId) => {
   return async (dispatch) => {
     dispatch(Users.initiateUpdate(userId))
     const { data, status } = await update(`users/${userId}/orgRole`, { orgRoleId: orgRoleId })
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('user', data, status)) :
       dispatch(Users.receiveUpdatedRole(userId, orgRoleId))
@@ -100,7 +120,11 @@ export const logoutUser = (id) => {
 export const fetchUserProjectAssignments = (userId) => {
   return async (dispatch) => {
     dispatch(UserProjectAssignments.request(userId))
-    const { data } = await fetch(`users/${userId}/assignments`)
+    const { data, status } = await fetch(`users/${userId}/assignments`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     return dispatch(UserProjectAssignments.receive(userId, data))
   }
 }
