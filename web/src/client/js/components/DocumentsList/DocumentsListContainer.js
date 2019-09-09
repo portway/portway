@@ -12,7 +12,7 @@ import { uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
 
 const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui, match }) => {
-  const { data: documents } = useDataService(dataMapper.documents.list(match.params.projectId), [
+  const { data: documents, loading } = useDataService(dataMapper.documents.list(match.params.projectId), [
     match.params.projectId
   ])
 
@@ -45,7 +45,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
 
   function fieldMoveHandler(oldDocumentId, newDocumentId, fieldId) {
     if (oldDocumentId === newDocumentId) return
-    console.log(`Move field: ${fieldId} from document: ${oldDocumentId} to document: ${newDocumentId}.`)
+    console.info(`Move field: ${fieldId} from document: ${oldDocumentId} to document: ${newDocumentId}.`)
   }
 
   const sortedDocuments = []
@@ -66,6 +66,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       documents={sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
       fieldMoveHandler={fieldMoveHandler}
+      loading={loading}
       projectId={Number(match.params.projectId)}/>
   )
 }

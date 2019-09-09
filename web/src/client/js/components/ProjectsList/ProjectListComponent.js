@@ -8,8 +8,10 @@ import useClickOutside from 'Hooks/useClickOutside'
 import ProjectsListItem from './ProjectsListItem'
 import './_ProjectList.scss'
 
-function ProjectsListComponent({ deleteHandler, projects }) {
+function ProjectsListComponent({ deleteHandler, loading, projects }) {
   const [activeProjectId, setActiveProjectId] = useState(null)
+
+  console.log(loading)
 
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
@@ -36,7 +38,7 @@ function ProjectsListComponent({ deleteHandler, projects }) {
       handleDelete={() => { deleteHandler(projectId) }} />
   })
 
-  if (projectList.length === 0) {
+  if (!loading && projectList.length === 0) {
     return (
       <div className="project-list__empty-state">
         <div className="notice">
@@ -58,7 +60,12 @@ function ProjectsListComponent({ deleteHandler, projects }) {
 
 ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
   projects: PropTypes.object.isRequired
+}
+
+ProjectsListComponent.defaultProps = {
+  loading: true,
 }
 
 export default ProjectsListComponent

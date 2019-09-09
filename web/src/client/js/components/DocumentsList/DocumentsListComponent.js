@@ -14,7 +14,16 @@ import './DocumentsList.scss'
 const { PROJECT_ROLE_IDS } = Constants
 const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
-const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, draggedDocumentHandler, fieldMoveHandler, projectId }) => {
+const DocumentsListComponent = ({
+  createChangeHandler,
+  creating,
+  createCallback,
+  documents,
+  draggedDocumentHandler,
+  fieldMoveHandler,
+  loading,
+  projectId
+}) => {
   // Keep track of how many things being dragged
   let dragCount = 0
 
@@ -151,7 +160,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
         )}>
         <ToolbarComponent action={toolbarAction} />
       </ProjectPermission>
-      {documents.length === 0 && !creating &&
+      {documents.length === 0 && !loading && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
@@ -187,11 +196,13 @@ DocumentsListComponent.propTypes = {
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
-  projectId: PropTypes.number.isRequired
+  loading: PropTypes.bool.isRequired,
+  projectId: PropTypes.number.isRequired,
 }
 
 DocumentsListComponent.defaultProps = {
-  documents: {}
+  documents: {},
+  loading: true,
 }
 
 export default DocumentsListComponent
