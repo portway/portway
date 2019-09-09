@@ -11,8 +11,6 @@ import './_ProjectList.scss'
 function ProjectsListComponent({ deleteHandler, loading, projects }) {
   const [activeProjectId, setActiveProjectId] = useState(null)
 
-  console.log(loading)
-
   const nodeRef = useRef()
   const collapseCallback = useCallback(() => {
     setActiveProjectId(null)
