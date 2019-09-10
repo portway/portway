@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "portway.fullname" . }}-test-connection"
+  labels:
+{{ include "portway.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "portway.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
