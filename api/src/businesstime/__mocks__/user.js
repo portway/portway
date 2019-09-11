@@ -5,7 +5,8 @@ const getGenericMockUserData = () => {
     email: 'not-a-real-email@email.com',
     orgId: 666,
     password: 'not-a-real-hashed-password',
-    resetKey: 'not-a-real-reset-key'
+    resetKey: 'not-a-real-reset-key',
+    avatar: 'not-a-real-user-avatar'
   }
 }
 

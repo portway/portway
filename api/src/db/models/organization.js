@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
-      stripeId: DataTypes.STRING
+      stripeId: DataTypes.STRING,
+      avatar: DataTypes.STRING
     },
     {
       paranoid: true

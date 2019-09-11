@@ -27,6 +27,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      password: {
+        type: Sequelize.STRING
+      },
+      resetKey: {
+        type: Sequelize.STRING
+      },
+      avatar: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -34,12 +43,6 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      resetKey: {
-        type: Sequelize.STRING
       },
       deletedAt: {
         type: Sequelize.DATE
