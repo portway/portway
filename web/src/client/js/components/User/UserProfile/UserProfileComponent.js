@@ -11,14 +11,23 @@ import './_UserProfile.scss'
 const UserProfileComponent = ({ errors, user, submitHandler }) => {
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
+  const [preview, setPreview] = useState(user.avatar)
+  const [avatar, setAvatar] = useState(user.avatar)
 
   function formSubmitHandler(e) {
     e.preventDefault()
-    submitHandler({ name, email })
+    submitHandler({ name, email, avatar })
     return false
   }
 
   const emailHelpText = `Remember, your email address is your username! We will validate this email before changing it.`
+
+  function renderUserAvatar() {
+    if (preview) {
+      return <img src={preview} alt={`${name}'s avatar`} width="32" height="32" />
+    }
+    return <UserIcon width="32" height="32" />
+  }
 
   return (
     <form onSubmit={formSubmitHandler}>
@@ -50,8 +59,26 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
       <section>
         <h2>Your Image</h2>
         <div className="user-profile__image">
-          <UserIcon width="32" height="32" />
-          <FileField id="userAvatar" name="avatar" />
+          {renderUserAvatar()}
+          <FileField
+            accept="image/png, image/jpeg"
+            id="userAvatar"
+            errors={errors.avatar}
+            name="avatar"
+            onChange={(e) => {
+              const data = e.target.files
+              const files = Array.from(data)
+              const formData = new FormData()
+              formData.append('file', files[0])
+              setAvatar(files[0])
+              // Show preview
+              const reader = new FileReader()
+              reader.readAsDataURL(files[0])
+              reader.onloadend = function() {
+                setPreview(reader.result)
+              }
+            }}
+          />
         </div>
       </section>
       <div className="btn-group">

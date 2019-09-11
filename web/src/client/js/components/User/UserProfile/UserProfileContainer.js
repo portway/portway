@@ -12,6 +12,7 @@ const UserProfileContainer = ({ errors, updateUser }) => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
   function submitHandler(values) {
+    console.log(values)
     updateUser(currentUser.id, values)
   }
 

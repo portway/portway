@@ -27,6 +27,7 @@ const UserMenuContainer = () => {
 
   const name = `${currentUser.name}`
   const button = {
+    backgroundImage: currentUser.avatar,
     className: 'btn--blank user-menu__button',
     label: `${name}'s avatar`
   }
