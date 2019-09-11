@@ -5,6 +5,11 @@ const FIELD_TYPES = {
   IMAGE: 4
 }
 
+const PLAN_TYPES = {
+  SINGLE: 'single',
+  MULTIPLE: 'multiple'
+}
+
 const ORGANIZATION_ROLE_IDS = {
   OWNER: 1,
   ADMIN: 2,
@@ -103,6 +108,8 @@ module.exports = {
   PROJECT_ACCESS_LEVELS: PROJECT_ACCESS_LEVELS,
   PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
+  // Plans
+  PLAN_TYPES: PLAN_TYPES,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support
