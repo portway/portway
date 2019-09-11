@@ -56,6 +56,7 @@ const DocumentFieldsComponent = ({
           <FieldImageComponent
             field={field}
             onChange={fieldChangeHandler}
+            onRename={fieldRenameHandler}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]} />

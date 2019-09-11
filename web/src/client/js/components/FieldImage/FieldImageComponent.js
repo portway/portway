@@ -16,7 +16,7 @@ const ALLOWED_TYPES = [
   'image/x-icon'
 ]
 
-const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, updating }) => {
+const FieldImageComponent = ({ field, onChange, onRename, settingsHandler, settingsMode, updating }) => {
   const [warning, setWarning] = useState(null)
   const imageNodeRef = useRef()
 
@@ -78,7 +78,7 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
           <input
             className="document-field__settings__input"
             defaultValue={field.name}
-            onChange={(e) => { onChange(field.id, { name: e.currentTarget.value }) }}
+            onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
             type="text"
           />
         </label>
@@ -96,6 +96,7 @@ const FieldImageComponent = ({ field, onChange, settingsHandler, settingsMode, u
 FieldImageComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
+  onRename: PropTypes.func.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
