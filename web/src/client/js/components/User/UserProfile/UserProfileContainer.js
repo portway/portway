@@ -9,14 +9,20 @@ import useDataService from 'Hooks/useDataService'
 import UserProfileComponent from './UserProfileComponent'
 
 const UserProfileContainer = ({ errors, updateUser }) => {
-  const { data: currentUser } = useDataService(dataMapper.users.current())
+  const { data: currentUser, loading } = useDataService(dataMapper.users.current())
 
   function submitHandler(values) {
-    console.log(values)
     updateUser(currentUser.id, values)
   }
 
-  return <UserProfileComponent errors={errors} user={currentUser} submitHandler={submitHandler} />
+  return (
+    <UserProfileComponent
+      errors={errors}
+      loading={loading}
+      submitHandler={submitHandler}
+      user={currentUser}
+    />
+  )
 }
 
 UserProfileContainer.propTypes = {

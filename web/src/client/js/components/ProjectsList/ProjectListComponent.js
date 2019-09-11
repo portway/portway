@@ -58,7 +58,7 @@ function ProjectsListComponent({ deleteHandler, loading, projects }) {
 
 ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   projects: PropTypes.object.isRequired
 }
 

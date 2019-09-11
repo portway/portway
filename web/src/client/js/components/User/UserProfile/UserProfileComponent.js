@@ -8,7 +8,7 @@ import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 
 import './_UserProfile.scss'
 
-const UserProfileComponent = ({ errors, user, submitHandler }) => {
+const UserProfileComponent = ({ errors, loading, user, submitHandler }) => {
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const [preview, setPreview] = useState(user.avatar)
@@ -16,6 +16,7 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
 
   function formSubmitHandler(e) {
     e.preventDefault()
+    console.log(name, email, avatar)
     submitHandler({ name, email, avatar })
     return false
   }
@@ -70,7 +71,7 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
               const files = Array.from(data)
               const formData = new FormData()
               formData.append('file', files[0])
-              setAvatar(files[0])
+              setAvatar(formData)
               // Show preview
               const reader = new FileReader()
               reader.readAsDataURL(files[0])
@@ -82,7 +83,7 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
         </div>
       </section>
       <div className="btn-group">
-        <button className="btn btn-primary">Update My Profile <SpinnerContainer color="#ffffff" /></button>
+        <button className="btn btn-primary" disabled={loading}>Update My Profile <SpinnerContainer color="#ffffff" /></button>
       </div>
     </form>
   )
@@ -90,11 +91,13 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
 
 UserProfileComponent.propTypes = {
   errors: PropTypes.object,
+  loading: PropTypes.bool,
+  submitHandler: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  submitHandler: PropTypes.func.isRequired
 }
 
 UserProfileComponent.defaultProps = {
+  loading: true,
   user: {}
 }
 
