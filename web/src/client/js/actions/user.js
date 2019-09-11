@@ -71,10 +71,10 @@ export const updateUser = (userId, body) => {
   }
 }
 
-export const updateUserAvatar = (userId, body) => {
+export const updateUserAvatar = (userId, formData) => {
   return async (dispatch) => {
     dispatch(Users.initiateUpdate(userId))
-    const { data, status } = await update(`users/${userId}/avatar`, body)
+    const { data, status } = await update(`users/${userId}/avatar`, formData)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return

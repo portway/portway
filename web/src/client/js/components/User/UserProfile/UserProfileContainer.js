@@ -19,7 +19,7 @@ const UserProfileContainer = ({ errors, updateUser, updateUserAvatar }) => {
       })
     }
     if (values.avatar !== undefined) {
-      updateUserAvatar(currentUser.id, { avatar: values.avatar })
+      updateUserAvatar(currentUser.id, values.avatar)
     }
   }
 
