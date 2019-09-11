@@ -35,7 +35,7 @@
   position: fixed;
   left: 100vw;
   top: $headerHeight + $ribbonHeight + ($brandWidth / 2);
-  z-index: 10;
+  z-index: 20;
 
   &__list {
     list-style: none;
