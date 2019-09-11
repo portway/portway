@@ -71,6 +71,20 @@ export const updateUser = (userId, body) => {
   }
 }
 
+export const updateUserAvatar = (userId, body) => {
+  return async (dispatch) => {
+    dispatch(Users.initiateUpdate(userId))
+    const { data, status } = await update(`users/${userId}/avatar`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    validationCodes.includes(status) ?
+      dispatch(Validation.create('user', data, status)) :
+      dispatch(Users.receiveOneUpdated(data))
+  }
+}
+
 export const removeUser = (userId) => {
   return async (dispatch) => {
     dispatch(Users.initiateRemove(userId))

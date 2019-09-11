@@ -2,17 +2,25 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { updateUser } from 'Actions/user'
+import { updateUser, updateUserAvatar } from 'Actions/user'
 import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import UserProfileComponent from './UserProfileComponent'
 
-const UserProfileContainer = ({ errors, updateUser }) => {
+const UserProfileContainer = ({ errors, updateUser, updateUserAvatar }) => {
   const { data: currentUser, loading } = useDataService(dataMapper.users.current())
 
   function submitHandler(values) {
-    updateUser(currentUser.id, values)
+    if (values.email !== currentUser.email || values.name !== currentUser.name) {
+      updateUser(currentUser.id, {
+        name: values.name,
+        email: values.email
+      })
+    }
+    if (values.avatar !== undefined) {
+      updateUserAvatar(currentUser.id, { avatar: values.avatar })
+    }
   }
 
   return (
@@ -27,7 +35,8 @@ const UserProfileContainer = ({ errors, updateUser }) => {
 
 UserProfileContainer.propTypes = {
   errors: PropTypes.object,
-  updateUser: PropTypes.func.isRequired
+  updateUser: PropTypes.func.isRequired,
+  updateUserAvatar: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -36,6 +45,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { updateUser }
+const mapDispatchToProps = { updateUser, updateUserAvatar }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileContainer)
