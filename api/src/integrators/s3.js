@@ -34,6 +34,37 @@ export const uploadContent = async function(documentId, orgId, file) {
     // async function, but don't await it, just fire and move on
     unlink(file.path)
   }
+  return res.Location
+}
+
+export const uploadAvatar = async function({ orgId, userId, file }) {
+  const hashId = getHashIdFromOrgId(orgId)
+
+  let key
+  let res
+
+  if (userId) {
+    key = `${hashId}/u/${userId}/${Date.now()}-${file.originalname}`
+  } else {
+    key = `${hashId}/o/${Date.now()}-${file.originalname}`
+  }
+
+  try {
+    res = await s3
+      .upload({
+        Bucket: S3_CONTENT_BUCKET,
+        Key: key,
+        ContentType: 'application/octet-stream',
+        Body: await readFile(file.path),
+        ACL: 'public-read'
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, 'AWS s3 failed to upload file')
+  } finally {
+    // async function, but don't await it, just fire and move on
+    unlink(file.path)
+  }
 
   return res.Location
 }

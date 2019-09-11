@@ -4,7 +4,8 @@ kind: Service
 metadata:
   name: web-service
   annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+# Makes the load balancer internal only
+#    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: web

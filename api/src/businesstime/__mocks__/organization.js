@@ -8,6 +8,7 @@ export default {
 const getGenericMockOrganizationData = () => {
   return {
     id: 10101010,
-    name: 'not-a-real-organization-name'
+    name: 'not-a-real-organization-name',
+    avatar: 'not-a-real-organization-avatar'
   }
 }

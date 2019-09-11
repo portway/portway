@@ -63,6 +63,7 @@ const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeH
       <div className="admin-payment">
         {!isStripeOpen && orgBilling && orgBilling.source.brand &&
         <>
+          <p>You will be billed <b>$10</b> on <b>September 19, 2019</b></p>
           <div className="admin-payment__method">
             {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
             <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>

@@ -14,6 +14,7 @@ export async function connect({ user, password, host, port, db }) {
   if (connectedDb) return connectedDb
 
   const dbUri = `postgres://${user}:${password}@${host}:${port}/${db}`
+  console.info(`Connecting to database ${dbUri}`)
 
   const sequelize = new Sequelize(dbUri, { logging: dbLogger, operatorsAliases: false })
 

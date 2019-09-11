@@ -17,7 +17,7 @@ spec:
         app: web
     spec:
       containers:
-      - image: portway/web
+      - image: bonkeybong/portway_web
         imagePullPolicy: "Never"
         name: web
         args: [ "start" ]
@@ -27,6 +27,21 @@ spec:
             configMapKeyRef:
               name: web-config
               key: web.static_port
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.api_url
+        - name: API_PUBLIC_URL
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.api_public_url
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: token-secrets
+              key: jwt_secret
         ports:
         - containerPort: 3000
           protocol: TCP
