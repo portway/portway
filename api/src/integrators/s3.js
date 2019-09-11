@@ -68,3 +68,18 @@ export const uploadAvatar = async function({ orgId, userId, file }) {
 
   return res.Location
 }
+
+export const deleteContent = async function(key) {
+  try {
+    await s3
+      .deleteObject({
+        Bucket: S3_CONTENT_BUCKET,
+        Key: key
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, 'AWS s3 failed to delete file')
+  }
+
+  console.info(`Successfully deleted S3 content with key: ${key}`)
+}
