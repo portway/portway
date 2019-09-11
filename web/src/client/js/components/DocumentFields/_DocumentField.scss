@@ -138,9 +138,10 @@
   &__settings__input {
     background: none;
     border: none;
-    border-bottom: thin solid $black-ter;
     color: $white-bis;
     font-size: 1.2rem;
+    @include focus(transparent, transparent);
+    border-bottom: thin solid $black-ter;
   }
 
   &__settings__button {

@@ -65,22 +65,23 @@ const DocumentFieldsComponent = ({
         break
     }
     if (field) {
+      const settingsModeForField = settingsForField === field.id
       return (
         <DocumentFieldComponent
           key={field.id}
           index={index}
           isNewField={createdFieldId === field.id}
           field={field}
-          dragStartHandler={dragStartHandler}
-          dragEndHandler={dragEndHandler}
-          dragEnterHandler={dragEnterHandler}
-          dragLeaveHandler={dragLeaveHandler}
-          dragOverHandler={dragOverHandler}
-          dropHandler={dropHandler}
+          dragStartHandler={settingsModeForField ? null : dragStartHandler}
+          dragEndHandler={settingsModeForField ? null : dragEndHandler}
+          dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
+          dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
+          dragOverHandler={settingsModeForField ? null : dragOverHandler}
+          dropHandler={settingsModeForField ? null : dropHandler}
           onRename={fieldRenameHandler}
           onDestroy={() => { fieldDestroyHandler(field.id) }}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-          settingsMode={settingsForField === field.id}>
+          settingsMode={settingsModeForField}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )

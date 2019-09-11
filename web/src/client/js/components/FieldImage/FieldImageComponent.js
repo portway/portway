@@ -85,7 +85,7 @@ const FieldImageComponent = ({ field, onChange, onRename, settingsHandler, setti
         <button
           className="btn btn--small document-field__settings__button"
           onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
-          Exit settings
+          Save settings
         </button>
       </div>
       }
