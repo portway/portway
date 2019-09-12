@@ -1,7 +1,7 @@
 @import 'CSS/inc/_vars.scss';
 
 .project-users {
-  --project-users-border-color: #{$gray-light};
+  --project-users-border-color: #{$white};
   @media (prefers-color-scheme: dark) {
     --project-users-border-color: #{$black};
   }
