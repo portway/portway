@@ -1,26 +1,29 @@
 @import 'CSS/inc/_vars.scss';
 
 .project-users {
-  --project-users-border-color: #{$white};
+  --project-users-border-color: #{$gray-light};
   @media (prefers-color-scheme: dark) {
     --project-users-border-color: #{$black};
   }
   &__collapsed-list {
+    display: flex;
     margin: 0;
     padding: 0;
   }
   &__collapsed-item {
     align-items: center;
-    background: $gray-dark;
-    border: thin solid var(--project-users-border-color);
+    background-color: $gray-dark;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    // border: thin solid var(--project-users-border-color);
     border-radius: 50% 50%;
     color: var(--project-users-border-color);
     display: inline-flex;
     font-size: .9rem;
     font-weight: 700;
-    height: 24px;
+    height: 26px;
     justify-content: center;
     margin-right: -6px;
-    width: 24px;
+    width: 26px;
   }
 }

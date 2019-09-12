@@ -4,25 +4,35 @@ import PropTypes from 'prop-types'
 import { UserIcon } from 'Components/Icons'
 import TextField from 'Components/Form/TextField'
 import FileField from 'Components/Form/FileField'
-import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 
 import './_UserProfile.scss'
 
-const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHandler }) => {
-  const [name, setName] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
-  const [preview, setPreview] = useState(user.avatar)
-  const [avatar, setAvatar] = useState(user.avatar)
+const UserProfileComponent = ({ avatarUpdateHandler, errors, loading, user, submitHandler }) => {
+  const [name, setName] = useState(null)
+  const [email, setEmail] = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [avatar, setAvatar] = useState(null)
+  const [formChanged, setFormChanged] = useState(false)
+  const [avatarChanged, setAvatarChanged] = useState(false)
 
   function formSubmitHandler(e) {
     e.preventDefault()
-    submitHandler({ name, email })
+    if (name || email) {
+      submitHandler({ name, email })
+      setFormChanged(false)
+    }
     return false
   }
 
-  function avatarUpdateHandler(e) {
+  function formAvatarHandler(e) {
     e.preventDefault()
-    avatarHandler({ avatar })
+    if (avatar) {
+      avatarUpdateHandler({ avatar })
+      setAvatarChanged(false)
+      setPreview(null)
+      setAvatar(null)
+      e.target.reset()
+    }
     return false
   }
 
@@ -36,6 +46,9 @@ const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHand
     return <UserIcon width="32" height="32" />
   }
 
+  const disabledUserButton = !formChanged || loading
+  const disabledAvatarButton = !avatarChanged || loading
+
   return (
     <>
       <section>
@@ -46,7 +59,10 @@ const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHand
             id="userName"
             label="Full name"
             name="name"
-            onBlur={(e) => { setName(e.target.value)} }
+            onChange={(e) => {
+              setFormChanged(true)
+              setName(e.target.value)
+            }}
             placeholder="Enter your full name"
             required
             value={user.name}
@@ -57,20 +73,23 @@ const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHand
             id="userEmail"
             label="Email address"
             name="email"
-            onBlur={(e) => { setEmail(e.target.value)} }
+            onChange={(e) => {
+              setAvatarChanged(true)
+              setEmail(e.target.value)
+            }}
             placeholder="name@domain.com"
             required
             type="email"
             value={user.email}
           />
+          <div className="btn-group">
+            <button className="btn btn--small" disabled={disabledUserButton}>Update My Profile</button>
+          </div>
         </form>
-        <div className="btn-group">
-          <button className="btn btn--small" disabled={loading}>Update My Profile <SpinnerContainer color="#ffffff" /></button>
-        </div>
       </section>
       <hr />
       <section>
-        <form onSubmit={avatarUpdateHandler}>
+        <form onSubmit={formAvatarHandler}>
           <h2>Your Avatar</h2>
           <div className="user-profile__image">
             {renderUserAvatar()}
@@ -85,6 +104,7 @@ const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHand
                 const files = Array.from(data)
                 const formData = new FormData()
                 formData.append('file', files[0])
+                setAvatarChanged(true)
                 setAvatar(formData)
                 // Show preview
                 const reader = new FileReader()
@@ -96,7 +116,7 @@ const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHand
             />
           </div>
           <div className="btn-group">
-            <button className="btn btn--small" disabled={loading}>Update My Avatar <SpinnerContainer color="#ffffff" /></button>
+            <button className="btn btn--small" disabled={disabledAvatarButton}>Update My Avatar</button>
           </div>
         </form>
       </section>
@@ -105,7 +125,7 @@ const UserProfileComponent = ({ avatarHandler, errors, loading, user, submitHand
 }
 
 UserProfileComponent.propTypes = {
-  avatarHandler: PropTypes.func.isRequired,
+  avatarUpdateHandler: PropTypes.func.isRequired,
   errors: PropTypes.object,
   loading: PropTypes.bool,
   submitHandler: PropTypes.func.isRequired,

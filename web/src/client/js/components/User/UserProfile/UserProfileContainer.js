@@ -12,19 +12,21 @@ const UserProfileContainer = ({ errors, updateUser, updateUserAvatar }) => {
   const { data: currentUser, loading } = useDataService(dataMapper.users.current())
 
   function submitHandler(values) {
+    if (values.name === null) values.name = currentUser.name
+    if (values.email === null) values.email = currentUser.email
     updateUser(currentUser.id, {
       name: values.name,
       email: values.email
     })
   }
 
-  function avatarHandler(value) {
+  function avatarUpdateHandler(value) {
     updateUserAvatar(currentUser.id, value.avatar)
   }
 
   return (
     <UserProfileComponent
-      avatarHandler={avatarHandler}
+      avatarUpdateHandler={avatarUpdateHandler}
       errors={errors}
       loading={loading}
       submitHandler={submitHandler}
