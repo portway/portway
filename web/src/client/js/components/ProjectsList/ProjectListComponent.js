@@ -34,7 +34,10 @@ function ProjectsListComponent({ deleteHandler, history, loading, projects }) {
       key={projectId}
       projectId={projectId}
       project={projects[projectId]}
-      handleDelete={() => { deleteHandler(projectId) }} />
+      handleDelete={(e) => {
+        e.preventDefault()
+        deleteHandler(projectId)
+      }} />
   })
 
   if (!loading && projectList.length === 0) {

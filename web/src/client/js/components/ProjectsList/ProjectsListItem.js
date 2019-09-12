@@ -12,7 +12,7 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
   const itemRef = useRef()
 
   function itemClickHandler(e) {
-    if (e.currentTarget === itemRef.current) {
+    if (e.target === itemRef.current) {
       history.push(`${PATH_PROJECT}/${projectId}`)
     }
   }
@@ -23,7 +23,6 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
       onClick={itemClickHandler}
       onKeyDown={itemClickHandler}
       tabIndex={0}
-      ref={itemRef}
       role="button">
       <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
         <div className="project-list__title">
@@ -39,7 +38,7 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
           <ProjectUsersContainer collapsed={true} projectId={projectId} />
         </div>
       </Link>
-      <div className="project-list__actions">
+      <div className="project-list__actions" ref={itemRef}>
         <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
           <Link to={`/project/${projectId}/settings`} className="btn btn--blank btn--with-circular-icon">
             <SettingsIcon />
