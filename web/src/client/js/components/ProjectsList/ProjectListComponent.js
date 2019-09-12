@@ -8,7 +8,7 @@ import useClickOutside from 'Hooks/useClickOutside'
 import ProjectsListItem from './ProjectsListItem'
 import './_ProjectList.scss'
 
-function ProjectsListComponent({ deleteHandler, loading, projects }) {
+function ProjectsListComponent({ deleteHandler, history, loading, projects }) {
   const [activeProjectId, setActiveProjectId] = useState(null)
 
   const nodeRef = useRef()
@@ -30,6 +30,7 @@ function ProjectsListComponent({ deleteHandler, loading, projects }) {
       activeProjectId={activeProjectId}
       animate={true}
       callback={projectToggleHandler}
+      history={history}
       key={projectId}
       projectId={projectId}
       project={projects[projectId]}
@@ -58,6 +59,7 @@ function ProjectsListComponent({ deleteHandler, loading, projects }) {
 
 ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
+  history: PropTypes.object,
   loading: PropTypes.bool,
   projects: PropTypes.object.isRequired
 }

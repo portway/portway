@@ -135,10 +135,10 @@ button,
       &:hover,
       &:active {
         background-color: transparent;
-        border: thin solid transparent !important;
-        box-shadow: none !important;
+        border: thin solid transparent;
+        box-shadow: none;
         color: inherit;
-        outline: 0 !important;
+        outline: 0;
       }
     }
   }

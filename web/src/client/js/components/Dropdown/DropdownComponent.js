@@ -22,9 +22,11 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut(shortcut, toggleCallback)
 
-  let buttonStyle
+  let buttonStyle = {}
   if (button.backgroundImage) {
-    buttonStyle = `background-image: url('${button.backgroundImage}');`
+    buttonStyle = {
+      backgroundImage: `url('${button.backgroundImage}')`
+    }
   }
 
   return (

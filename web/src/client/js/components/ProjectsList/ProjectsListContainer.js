@@ -22,7 +22,7 @@ const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
   }
   return (
     <div className="project-list-container">
-      <ProjectsListComponent projects={projects} deleteHandler={handleDelete} loading={loading} />
+      <ProjectsListComponent history={history} projects={projects} deleteHandler={handleDelete} loading={loading} />
     </div>
   )
 }

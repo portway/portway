@@ -32,17 +32,19 @@ const UserMenuContainer = () => {
     label: `${name}'s avatar`
   }
   return (
-    <DropdownComponent className="user-menu__dropdown" button={button} align="right">
-      <DropdownItem type="banner" className="user-menu__banner">
-        <span className="user-menu__username">{name}</span>
-        <span className="user-menu__organization">{currentOrg.name}</span>
-        <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
-      </DropdownItem>
-      <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
-        <DropdownItem label="Administration" type="link" href={PATH_ADMIN} />
-      </OrgPermission>
-      <DropdownItem label="Sign out" type="button" divider onClick={() => { logoutAction() }} />
-    </DropdownComponent>
+    <div className="user-menu">
+      <DropdownComponent className="user-menu__dropdown" button={button} align="right">
+        <DropdownItem type="banner" className="user-menu__banner">
+          <span className="user-menu__username">{name}</span>
+          <span className="user-menu__organization">{currentOrg.name}</span>
+          <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
+        </DropdownItem>
+        <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+          <DropdownItem label="Administration" type="link" href={PATH_ADMIN} />
+        </OrgPermission>
+        <DropdownItem label="Sign out" type="button" divider onClick={() => { logoutAction() }} />
+      </DropdownComponent>
+    </div>
   )
 }
 

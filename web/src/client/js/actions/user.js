@@ -81,7 +81,7 @@ export const updateUserAvatar = (userId, formData) => {
     }
     validationCodes.includes(status) ?
       dispatch(Validation.create('user', data, status)) :
-      dispatch(Users.receiveOneUpdated(data))
+      dispatch(Users.receiveUpdatedAvatar(userId, data))
   }
 }
 
