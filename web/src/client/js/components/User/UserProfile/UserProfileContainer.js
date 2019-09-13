@@ -16,7 +16,8 @@ const UserProfileContainer = ({ errors, updateUser, updateUserAvatar }) => {
   const userAvatarId = 'user-avatar'
 
   function submitHandler(values) {
-    if (values.name === null) values.name = currentUser.name
+    // @todo uncomment this
+    // if (values.name === null) values.name = currentUser.name
     if (values.email === null) values.email = currentUser.email
     updateUser(userProfileId, currentUser.id, {
       name: values.name,

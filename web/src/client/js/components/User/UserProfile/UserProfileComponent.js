@@ -29,6 +29,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
           name="name"
           onChange={(e) => { setName(e.target.value) }}
           placeholder="Enter your full name"
+          // @todo add back in required
           value={user.name}
         />
         <TextField
