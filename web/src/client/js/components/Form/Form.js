@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -16,17 +16,24 @@ const Form = ({
   onSubmit,
   submitLabel
 }) => {
+  const formRef = useRef()
+  const [formChanged, setFormChanged] = useState(false)
+
   function submitHandler(e) {
     e.preventDefault()
     onSubmit()
     return false
   }
 
-  const formRef = useRef()
+  function changeHandler(e) {
+    setFormChanged(true)
+  }
 
   const submitting = forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded
   const failed = forms[name] && forms[name].failed
   const succeeded = forms[name] && forms[name].succeeded
+
+  const buttonDisabledWhen = !formChanged || submitting || failed || succeeded
 
   if (forms[name] && forms[name].failed && !forms[name].succeeded) {
     // console.error('Form failed!')
@@ -38,7 +45,14 @@ const Form = ({
   }
 
   return (
-    <form ref={formRef} action={action} method={method} multipart={multipart} name={name} onSubmit={submitHandler}>
+    <form
+      ref={formRef}
+      action={action}
+      method={method}
+      multipart={multipart}
+      name={name}
+      onChange={changeHandler}
+      onSubmit={submitHandler}>
       {children}
       {failed &&
       <div>
@@ -46,7 +60,7 @@ const Form = ({
       </div>
       }
       <div className="btn-group">
-        <button className="btn btn--small" disabled={submitting || failed || succeeded}>{submitLabel}</button>
+        <button className="btn btn--small" disabled={buttonDisabledWhen}>{submitLabel}</button>
         {submitting && <SpinnerComponent />}
         {succeeded && <CheckIcon fill="#51a37d" />}
       </div>

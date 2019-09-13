@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
+import { MAX_AVATAR_SIZE } from 'Shared/constants'
 import { UserIcon } from 'Components/Icons'
 import Form from 'Components/Form/Form'
 import FileField from 'Components/Form/FileField'
@@ -10,6 +11,7 @@ import './_UserProfile.scss'
 const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
   const [preview, setPreview] = useState(null)
   const [avatar, setAvatar] = useState(null)
+  const [warning, setWarning] = useState(null)
 
   function formSubmitHandler(e) {
     if (avatar) {
@@ -43,6 +45,12 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
             onChange={(e) => {
               const data = e.target.files
               const files = Array.from(data)
+
+              if (files[0].size >= MAX_AVATAR_SIZE) {
+                setWarning(`File size must be less than ${MAX_AVATAR_SIZE / 10}K`)
+                return
+              }
+
               const formData = new FormData()
               formData.append('file', files[0])
               setAvatar(formData)
@@ -55,6 +63,9 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
             }}
           />
         </div>
+        {warning &&
+        <p className="small warning">{warning}</p>
+        }
       </Form>
     </section>
   )
