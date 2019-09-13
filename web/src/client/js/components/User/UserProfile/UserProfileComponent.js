@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { UserIcon } from 'Components/Icons'
+import Form from 'Components/Form/Form'
 import TextField from 'Components/Form/TextField'
 import FileField from 'Components/Form/FileField'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
@@ -12,16 +13,14 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
 
-  function formSubmitHandler(e) {
-    e.preventDefault()
+  function formSubmitHandler() {
     submitHandler({ name, email })
-    return false
   }
 
   const emailHelpText = `Remember, your email address is your username! We will validate this email before changing it.`
 
   return (
-    <form onSubmit={formSubmitHandler}>
+    <Form name="user-profile" onSubmit={formSubmitHandler}>
       <section>
         <h2>Your information</h2>
         <TextField
@@ -31,7 +30,6 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
           name="name"
           onBlur={(e) => { setName(e.target.value)} }
           placeholder="Enter your full name"
-          required
           value={user.name}
         />
         <TextField
@@ -57,7 +55,7 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
       <div className="btn-group">
         <button className="btn btn-primary">Update My Profile <SpinnerContainer color="#ffffff" /></button>
       </div>
-    </form>
+    </Form>
   )
 }
 
