@@ -11,9 +11,9 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
   const [email, setEmail] = useState(null)
 
   function formSubmitHandler() {
-    // if (name || email) {
+    if (name || email) {
       submitHandler({ name, email })
-    // }
+    }
   }
 
   const emailHelpText = `Remember, your email address is your username! We will validate this email before changing it.`
@@ -56,6 +56,7 @@ UserProfileComponent.propTypes = {
 }
 
 UserProfileComponent.defaultProps = {
+  errors: {},
   user: {}
 }
 

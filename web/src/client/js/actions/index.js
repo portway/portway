@@ -59,6 +59,7 @@ export const ActionTypes = {
   FORM_SUBMITTED: 'FORM_SUBMITTED',
   FORM_SUCCEEDED: 'FORM_SUCCEEDED',
   FORM_FAILED: 'FORM_FAILED',
+  FORM_RESET: 'FORM_RESET',
   // Validation
   CREATE_VALIDATION_ERRORS: 'CREATE_VALIDATION_ERRORS',
   CLEAR_VALIDATION_ERRORS: 'CLEAR_VALIDATION_ERRORS',
@@ -118,6 +119,7 @@ export const Form = {
   submitted: makeActionCreator(ActionTypes.FORM_SUBMITTED, 'name'),
   succeeded: makeActionCreator(ActionTypes.FORM_SUCCEEDED, 'name'),
   failed: makeActionCreator(ActionTypes.FORM_FAILED, 'name'),
+  reset: makeActionCreator(ActionTypes.FORM_RESET, 'name'),
 }
 
 export const Projects = {

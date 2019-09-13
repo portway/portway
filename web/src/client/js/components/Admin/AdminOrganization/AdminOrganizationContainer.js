@@ -11,19 +11,23 @@ import { ORGANIZATION_ROLE_IDS, PRODUCT_NAME, PATH_PROJECTS } from 'Shared/const
 import OrgPermission from 'Components/Permission/OrgPermission'
 import { updateOrganization, updateOrganizationAvatar } from 'Actions/organization'
 import AdminOrganizationComponent from './AdminOrganizationComponent'
+import AdminBrandingComponent from './AdminBrandingComponent'
 
 const AdminOrganizationContainer = ({ errors, updateOrganization, updateOrganizationAvatar }) => {
-  const { data: currentOrg, loading } = useDataService(dataMapper.organizations.current())
+  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   if (!currentOrg) return null
+
+  const orgProfileId = 'org-profile'
+  const orgAvatarId = 'org-avatar'
 
   function submitHandler(values) {
     if (values.name === null) values.name = currentOrg.name
     if (values.allowUserProjectCreation === null) values.allowUserProjectCreation = currentOrg.allowUserProjectCreation
-    updateOrganization(currentOrg.id, values)
+    updateOrganization(orgProfileId, currentOrg.id, values)
   }
 
   function avatarUpdateHandler(value) {
-    updateOrganizationAvatar(currentOrg.id, value.avatar)
+    updateOrganizationAvatar(orgAvatarId, currentOrg.id, value.avatar)
   }
 
   return (
@@ -31,13 +35,21 @@ const AdminOrganizationContainer = ({ errors, updateOrganization, updateOrganiza
       <Helmet>
         <title>Account Settings: Organization Info – {PRODUCT_NAME}</title>
       </Helmet>
-      <AdminOrganizationComponent
-        avatarUpdateHandler={avatarUpdateHandler}
-        errors={errors}
-        loading={loading}
-        organization={currentOrg}
-        submitHandler={submitHandler}
-      />
+      <>
+        <AdminOrganizationComponent
+          errors={errors}
+          formId={orgProfileId}
+          organization={currentOrg}
+          submitHandler={submitHandler}
+        />
+        <hr />
+        <AdminBrandingComponent
+          errors={errors}
+          formId={orgAvatarId}
+          organization={currentOrg}
+          submitHandler={avatarUpdateHandler}
+        />
+      </>
     </OrgPermission>
   )
 }

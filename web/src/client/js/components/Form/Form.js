@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -18,26 +18,30 @@ const Form = ({
 }) => {
   const formRef = useRef()
   const [formChanged, setFormChanged] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [failed, setFailed] = useState(false)
+  const [succeeded, setSucceeded] = useState(false)
+
+  useEffect(() => {
+    setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)
+    setFailed(forms[name] && forms[name].failed)
+    setSucceeded(forms[name] && forms[name].succeeded && !forms[name].failed)
+  })
 
   function submitHandler(e) {
     e.preventDefault()
     onSubmit()
+    setFormChanged(false)
     return false
   }
 
-  const debouncedChangeHandler = debounce(1000, () => {
-    if (!formChanged) {
-      setFormChanged(true)
-    }
+  const debouncedChangeHandler = debounce(200, () => {
+    setFormChanged(true)
   })
 
-  const submitting = forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded
-  const failed = forms[name] && forms[name].failed
-  const succeeded = forms[name] && forms[name].succeeded && !forms[name].failed
+  const buttonDisabledWhen = !formChanged || submitting || succeeded
 
-  const buttonDisabledWhen = !formChanged || submitting || failed || succeeded
-
-  if (succeeded) {
+  if (succeeded && formRef.current) {
     formRef.current.reset()
   }
 

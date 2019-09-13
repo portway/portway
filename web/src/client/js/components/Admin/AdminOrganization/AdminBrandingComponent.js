@@ -6,14 +6,14 @@ import { UserIcon } from 'Components/Icons'
 import Form from 'Components/Form/Form'
 import FileField from 'Components/Form/FileField'
 
-import './_UserProfile.scss'
+import './AdminOrganization.scss'
 
-const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
+const AdminBrandingComponent = ({ errors, formId, organization, submitHandler }) => {
   const [preview, setPreview] = useState(null)
   const [avatar, setAvatar] = useState(null)
   const [warning, setWarning] = useState(null)
 
-  function formSubmitHandler(e) {
+  function formAvatarHandler(e) {
     if (avatar) {
       submitHandler({ avatar })
       setPreview(null)
@@ -21,25 +21,25 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
     }
   }
 
-  const avatarHelpText = `Upload a square image - Formatted as PNG or JPG`
-
-  function renderUserAvatar() {
+  function renderOrganizationAvatar() {
     if (preview) {
-      return <img src={preview} alt={`${user.name}'s avatar`} width="32" height="32" />
+      return <img src={preview} alt={`${organization.name}'s avatar`} width="32" height="32" />
     }
     return <UserIcon width="32" height="32" />
   }
 
+  const avatarHelpText = `Upload a square image - Formatted as PNG or JPG`
+
   return (
     <section>
-      <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my avatar">
-        <h2>Your Avatar</h2>
-        <div className="user-profile__image">
-          {renderUserAvatar()}
+      <Form name={formId} onSubmit={formAvatarHandler} submitLabel={`Update ${organization.name}`}>
+        <h2>Branding</h2>
+        <div className="admin-organization__image">
+          {renderOrganizationAvatar()}
           <FileField
             accept="image/png, image/jpeg"
             help={avatarHelpText}
-            id="userAvatar"
+            id="orgAvatar"
             errors={errors.avatar}
             name="avatar"
             onChange={(e) => {
@@ -71,16 +71,16 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
   )
 }
 
-UserProfileComponent.propTypes = {
+AdminBrandingComponent.propTypes = {
   errors: PropTypes.object,
   formId: PropTypes.string,
-  submitHandler: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  organization: PropTypes.object.isRequired,
+  submitHandler: PropTypes.func.isRequired
 }
 
-UserProfileComponent.defaultProps = {
+AdminBrandingComponent.defaultProps = {
   errors: {},
-  user: {}
+  organization: {}
 }
 
-export default UserProfileComponent
+export default AdminBrandingComponent

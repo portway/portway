@@ -24,10 +24,17 @@ export const forms = (state = initialState, action) => {
       const byName = { ...state.byName, [name]: formObject }
       return { ...state, byName }
     }
-    // If a form submits, set its value to true
+    // If a form fails, set its value to true
     case ActionTypes.FORM_FAILED: {
       const { name } = action
       const formObject = { submitted: true, succeeded: false, failed: true }
+      const byName = { ...state.byName, [name]: formObject }
+      return { ...state, byName }
+    }
+    // If a form resets, set its values to false
+    case ActionTypes.FORM_RESET: {
+      const { name } = action
+      const formObject = { submitted: false, succeeded: false, failed: false }
       const byName = { ...state.byName, [name]: formObject }
       return { ...state, byName }
     }

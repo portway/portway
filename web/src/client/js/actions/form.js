@@ -9,6 +9,15 @@ export const formSubmitAction = (name) => {
 export const formSucceededAction = (name) => {
   return async (dispatch) => {
     dispatch(Form.succeeded(name))
+    setTimeout(() => {
+      dispatch(Form.reset(name))
+    }, 2000)
+  }
+}
+
+export const formResetAction = (name) => {
+  return async (dispatch) => {
+    dispatch(Form.reset(name))
   }
 }
 
