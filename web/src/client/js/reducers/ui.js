@@ -41,10 +41,8 @@ export const ui = (state = initialState, action) => {
     // If you need to update spinner in combo with something else, do it below
     // these two global on/offs
     // Global Spinner state on
-    case ActionTypes.INITIATE_USER_UPDATE:
     case ActionTypes.INITIATE_USER_CREATE:
-    case ActionTypes.INITIATE_USER_REMOVE:
-    case ActionTypes.INITIATE_ORGANIZATION_UPDATE: {
+    case ActionTypes.INITIATE_USER_REMOVE: {
       return {
         ...state,
         spinner: {
@@ -55,11 +53,9 @@ export const ui = (state = initialState, action) => {
     }
 
     // Global Spinner state off
-    case ActionTypes.RECEIVE_UPDATED_USER:
     case ActionTypes.RECEIVE_CREATED_USER:
     case ActionTypes.REMOVE_USER:
-    case ActionTypes.RECEIVE_UPDATED_USER_ROLE:
-    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION: {
+    case ActionTypes.RECEIVE_UPDATED_USER_ROLE: {
       return {
         ...state,
         users: {

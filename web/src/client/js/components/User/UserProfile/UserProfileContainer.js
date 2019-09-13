@@ -2,25 +2,43 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { updateUser } from 'Actions/user'
+import { updateUser, updateUserAvatar } from 'Actions/user'
 import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import UserProfileComponent from './UserProfileComponent'
 
-const UserProfileContainer = ({ errors, updateUser }) => {
-  const { data: currentUser } = useDataService(dataMapper.users.current())
+const UserProfileContainer = ({ errors, updateUser, updateUserAvatar }) => {
+  const { data: currentUser, loading } = useDataService(dataMapper.users.current())
 
   function submitHandler(values) {
-    updateUser(currentUser.id, values)
+    if (values.name === null) values.name = currentUser.name
+    if (values.email === null) values.email = currentUser.email
+    updateUser(currentUser.id, {
+      name: values.name,
+      email: values.email
+    })
   }
 
-  return <UserProfileComponent errors={errors} user={currentUser} submitHandler={submitHandler} />
+  function avatarUpdateHandler(value) {
+    updateUserAvatar(currentUser.id, value.avatar)
+  }
+
+  return (
+    <UserProfileComponent
+      avatarUpdateHandler={avatarUpdateHandler}
+      errors={errors}
+      loading={loading}
+      submitHandler={submitHandler}
+      user={currentUser}
+    />
+  )
 }
 
 UserProfileContainer.propTypes = {
   errors: PropTypes.object,
-  updateUser: PropTypes.func.isRequired
+  updateUser: PropTypes.func.isRequired,
+  updateUserAvatar: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -29,6 +47,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { updateUser }
+const mapDispatchToProps = { updateUser, updateUserAvatar }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileContainer)

@@ -22,6 +22,7 @@ $contentMenuWidth: 250px;
   &__button {
     // Add icon
     .icon {
+      background-color: $action;
       height: 40px;
       transition: transform 0.1s ease-out;
       width: 40px;
@@ -30,10 +31,20 @@ $contentMenuWidth: 250px;
         width: 18px;
       }
     }
+    &:hover:not([disabled]) {
+      .icon {
+        background-color: $action-light;
+      }
+    }
     &[aria-expanded="true"] {
       .icon {
-        background-color: $gray-dark;
+        background-color: $action-dark;
         transform: rotate(45deg);
+      }
+      &:hover:not([disabled]) {
+        .icon {
+          background-color: $action-dark;
+        }
       }
     }
   }
