@@ -2,11 +2,13 @@
 @import 'CSS/inc/_mixins.scss';
 
 .user-menu {
-  &__dropdown {
-    border-radius: 50% 50%;
-  }
-  &__button {
-    background: url('/images/icon/user-avatar.svg') no-repeat 50% 50%;
+
+  .btn--blank {
+    background-color: $gray-light;
+    background-image: url('/images/icon/user-avatar.svg');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 40px;
     border-radius: 50% 50%;
     display: block;
     height: 40px;
@@ -14,7 +16,22 @@
     overflow: hidden;
     text-indent: -9000px;
     width: 40px;
-    @include focus(transparent);
+    @include focus($gray-light, $gray);
+    border: thin solid $gray;
+    &:not([disabled]):hover {
+      border: thin solid $gray-light;
+    }
+    &[aria-expanded="true"] {
+      background-color: $gray;
+      border-color: $gray-dark;
+      &:hover {
+        border-color: $gray-dark;
+      }
+    }
+  }
+
+  &__dropdown {
+    border-radius: 50% 50%;
   }
   &__banner {
     --user-menu-banner-bg: #{$gray-light};

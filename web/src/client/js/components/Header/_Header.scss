@@ -16,7 +16,9 @@
       min-width: $sideGutterWidth;
       .navbar__logo {
         // the logo is a span with a background image applied from a database
-        background-size: 30%;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-size: 50%;
         display: block;
         height: $sideGutterWidth;
         width: $sideGutterWidth;

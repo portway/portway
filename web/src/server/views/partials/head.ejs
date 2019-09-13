@@ -10,13 +10,5 @@
     <% } %>
     <% }) %>
   <% } %>
-  <script>
-    function bodyDragHandler(e) {
-      e.preventDefault();
-      return false
-    }
-    window.ondragover = bodyDragHandler
-    window.ondrop = bodyDragHandler
-  </script>
 </head>
 <body class="<% if (typeof permalink !== 'undefined') { %><%= permalink %><% } %>">

@@ -18,7 +18,7 @@ import './_Header.scss'
 
 const renderBrandLogo = (logo) => {
   return {
-    background: `url('${logo}') no-repeat 50% 50%`
+    backgroundImage: `url('${logo}')`
   }
 }
 
