@@ -1,40 +1,55 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { formSubmitAction, formSucceededAction, formFailedAction } from 'Actions/form'
+import { CheckIcon } from 'Components/Icons'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
   action,
   children,
   errors,
   forms,
-  formSubmitAction,
-  formSucceededAction,
-  formFailedAction,
   name,
   method,
   multipart,
-  onSubmit
+  onSubmit,
+  submitLabel
 }) => {
   function submitHandler(e) {
     e.preventDefault()
-    formSubmitAction(name)
     onSubmit()
     return false
   }
 
+  const formRef = useRef()
+
+  const submitting = forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded
+  const failed = forms[name] && forms[name].failed
+  const succeeded = forms[name] && forms[name].succeeded
+
   if (forms[name] && forms[name].failed && !forms[name].succeeded) {
-    console.info('Form failed!')
+    // console.error('Form failed!')
   }
 
   if (forms[name] && !forms[name].failed && forms[name].succeeded) {
-    console.info('Form succeeded!')
+    // console.error('Form succeeded!')
+    formRef.current.reset()
   }
 
   return (
-    <form action={action} method={method} multipart={multipart} name={name} onSubmit={submitHandler}>
+    <form ref={formRef} action={action} method={method} multipart={multipart} name={name} onSubmit={submitHandler}>
       {children}
+      {failed &&
+      <div>
+        <p className="danger">Please check your form for errors</p>
+      </div>
+      }
+      <div className="btn-group">
+        <button className="btn btn--small" disabled={submitting || failed || succeeded}>{submitLabel}</button>
+        {submitting && <SpinnerComponent />}
+        {succeeded && <CheckIcon fill="#51a37d" />}
+      </div>
     </form>
   )
 }
@@ -44,18 +59,17 @@ Form.propTypes = {
   children: PropTypes.node,
   errors: PropTypes.object,
   forms: PropTypes.object,
-  formSubmitAction: PropTypes.func,
-  formSucceededAction: PropTypes.func,
-  formFailedAction: PropTypes.func,
   method: PropTypes.string,
   multipart: PropTypes.string,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
+  submitLabel: PropTypes.string,
 }
 
 Form.defaultProps = {
   errors: {},
-  multipart: 'false'
+  multipart: 'false',
+  submitLabel: 'Submit',
 }
 
 const mapStateToProps = (state) => {
@@ -65,6 +79,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { formSubmitAction, formSucceededAction, formFailedAction }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Form)
+export default connect(mapStateToProps)(Form)

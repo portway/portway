@@ -1,4 +1,4 @@
-import { Notifications, Users, UserProjectAssignments, Validation } from './index'
+import { Form, Notifications, Users, UserProjectAssignments, Validation } from './index'
 import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
 
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
@@ -57,31 +57,41 @@ export const createUser = (values) => {
   }
 }
 
-export const updateUser = (userId, body) => {
+export const updateUser = (formId, userId, body) => {
   return async (dispatch) => {
+    dispatch(Form.submitted(formId))
     dispatch(Users.initiateUpdate(userId))
     const { data, status } = await update(`users/${userId}`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('user', data, status)) :
+    if (validationCodes.includes(status)) {
+      dispatch(Form.failed(formId))
+      dispatch(Validation.create('user', data, status))
+    } else {
+      dispatch(Form.succeeded(formId))
       dispatch(Users.receiveOneUpdated(data))
+    }
   }
 }
 
-export const updateUserAvatar = (userId, formData) => {
+export const updateUserAvatar = (formId, userId, formData) => {
   return async (dispatch) => {
+    dispatch(Form.submitted(formId))
     dispatch(Users.initiateUpdate(userId))
     const { data, status } = await update(`users/${userId}/avatar`, formData)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('user', data, status)) :
+    if (validationCodes.includes(status)) {
+      dispatch(Form.failed(formId))
+      dispatch(Validation.create('user', data, status))
+    } else {
+      dispatch(Form.succeeded(formId))
       dispatch(Users.receiveUpdatedAvatar(userId, data))
+    }
   }
 }
 
