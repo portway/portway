@@ -2,13 +2,13 @@ import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { debounce } from 'Shared/utilities'
 import { CheckIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
   action,
   children,
-  errors,
   forms,
   name,
   method,
@@ -25,22 +25,19 @@ const Form = ({
     return false
   }
 
-  function changeHandler(e) {
-    setFormChanged(true)
-  }
+  const debouncedChangeHandler = debounce(1000, () => {
+    if (!formChanged) {
+      setFormChanged(true)
+    }
+  })
 
   const submitting = forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded
   const failed = forms[name] && forms[name].failed
-  const succeeded = forms[name] && forms[name].succeeded
+  const succeeded = forms[name] && forms[name].succeeded && !forms[name].failed
 
   const buttonDisabledWhen = !formChanged || submitting || failed || succeeded
 
-  if (forms[name] && forms[name].failed && !forms[name].succeeded) {
-    // console.error('Form failed!')
-  }
-
-  if (forms[name] && !forms[name].failed && forms[name].succeeded) {
-    // console.error('Form succeeded!')
+  if (succeeded) {
     formRef.current.reset()
   }
 
@@ -51,7 +48,7 @@ const Form = ({
       method={method}
       multipart={multipart}
       name={name}
-      onChange={changeHandler}
+      onChange={debouncedChangeHandler}
       onSubmit={submitHandler}>
       {children}
       {failed &&
@@ -61,7 +58,7 @@ const Form = ({
       }
       <div className="btn-group">
         <button className="btn btn--small" disabled={buttonDisabledWhen}>{submitLabel}</button>
-        {submitting && <SpinnerComponent />}
+        {submitting && <SpinnerComponent color="#e5e7e6" />}
         {succeeded && <CheckIcon fill="#51a37d" />}
       </div>
     </form>
@@ -71,7 +68,6 @@ const Form = ({
 Form.propTypes = {
   action: PropTypes.string,
   children: PropTypes.node,
-  errors: PropTypes.object,
   forms: PropTypes.object,
   method: PropTypes.string,
   multipart: PropTypes.string,
@@ -81,14 +77,12 @@ Form.propTypes = {
 }
 
 Form.defaultProps = {
-  errors: {},
   multipart: 'false',
   submitLabel: 'Submit',
 }
 
 const mapStateToProps = (state) => {
   return {
-    errors: state.validation,
     forms: state.forms.byName
   }
 }
