@@ -30,7 +30,7 @@ export default function(error, req, res, next) {
     statusCode,
     expose,
     errorType,
-    errorDetails,
+    errorDetails = [],
     message } = error
 
   let { code, publicMessage } = error
