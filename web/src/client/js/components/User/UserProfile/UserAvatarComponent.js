@@ -47,7 +47,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
               const files = Array.from(data)
 
               if (files[0].size >= MAX_AVATAR_SIZE) {
-                setWarning(`File size must be less than ${MAX_AVATAR_SIZE / 10}K`)
+                setWarning(`File size must be less than ${MAX_AVATAR_SIZE / 1000}K`)
                 return
               }
 
