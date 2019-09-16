@@ -55,6 +55,11 @@ export const ActionTypes = {
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
+  // Forms
+  FORM_SUBMITTED: 'FORM_SUBMITTED',
+  FORM_SUCCEEDED: 'FORM_SUCCEEDED',
+  FORM_FAILED: 'FORM_FAILED',
+  FORM_RESET: 'FORM_RESET',
   // Validation
   CREATE_VALIDATION_ERRORS: 'CREATE_VALIDATION_ERRORS',
   CLEAR_VALIDATION_ERRORS: 'CLEAR_VALIDATION_ERRORS',
@@ -108,6 +113,13 @@ export const Route = {
 export const Validation = {
   create: makeActionCreator(ActionTypes.CREATE_VALIDATION_ERRORS, 'resource', 'data', 'status'),
   clear: makeActionCreator(ActionTypes.CLEAR_VALIDATION_ERRORS, 'resource')
+}
+
+export const Form = {
+  submitted: makeActionCreator(ActionTypes.FORM_SUBMITTED, 'name'),
+  succeeded: makeActionCreator(ActionTypes.FORM_SUCCEEDED, 'name'),
+  failed: makeActionCreator(ActionTypes.FORM_FAILED, 'name'),
+  reset: makeActionCreator(ActionTypes.FORM_RESET, 'name'),
 }
 
 export const Projects = {

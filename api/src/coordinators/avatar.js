@@ -6,7 +6,10 @@ import { parse } from 'url'
 
 const updateOrganizationAvatar = async function(orgId, file) {
   if (!file) {
-    throw ono({ code: 400 }, 'Could not update organization avatar, there was no file attached')
+    throw ono(
+      { code: 415, publicMessage: 'File error', errorDetails: [{ key: 'file', message: 'No file attached' }] },
+      'Could not update organization avatar, there was no file attached'
+    )
   }
 
   const currentOrg = await BusinessOrganization.findSanitizedById(orgId)
@@ -28,7 +31,10 @@ const updateOrganizationAvatar = async function(orgId, file) {
 
 const updateUserAvatar = async function(orgId, userId, file) {
   if (!file) {
-    throw ono({ code: 400 }, 'Could not update user avatar, there was no file attached')
+    throw ono(
+      { code: 415, publicMessage: 'File error', errorDetails: [{ key: 'file', message: 'No file attached' }] },
+      'Could not update user avatar, there was no file attached'
+    )
   }
 
   const currentUser = await BusinessUser.findSanitizedById(userId, orgId)

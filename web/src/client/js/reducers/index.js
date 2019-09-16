@@ -4,6 +4,7 @@ import thunk from 'redux-thunk'
 
 import { documents } from './documents'
 import { documentFields } from './documentFields'
+import { forms } from './forms'
 import { validation } from './validation'
 import { notifications } from './notifications'
 import { projects } from './projects'
@@ -18,6 +19,7 @@ import { userProjects } from './userProjects'
 const rootReducer = combineReducers({
   documents,
   documentFields,
+  forms,
   validation,
   notifications,
   projects,
