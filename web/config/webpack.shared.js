@@ -16,7 +16,7 @@ const SharedConfig = {
     Shared: path.resolve(__dirname, '../src/shared'),
   },
   plugins: [
-    new FixStyleOnlyEntriesPlugin({ silent: true }),
+    new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../src/client/images'),
