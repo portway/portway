@@ -1,3 +1,7 @@
+import resourceTypes from '../../constants/resourceTypes'
+import resourcePublicFields from '../../constants/resourcePublicFields'
+import { pick } from '../../libs/utils'
+
 const getGenericMockUserData = () => {
   return {
     id: 8675309,
@@ -9,6 +13,8 @@ const getGenericMockUserData = () => {
     avatar: 'not-a-real-user-avatar'
   }
 }
+
+const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
 let findByIdReturnValue = getGenericMockUserData()
 let findSoftDeletedReturnValue = null
@@ -33,6 +39,7 @@ export default {
   findByEmail: jest.fn(() => getGenericMockUserData()),
   findSoftDeletedByEmail: jest.fn(() => findSoftDeletedReturnValue),
   findById: jest.fn(() => findByIdReturnValue),
+  findSanitizedById: jest.fn(() => pick(findByIdReturnValue, PUBLIC_FIELDS)),
   updateByEmail: jest.fn(() => getGenericMockUserData()),
   updateById: jest.fn(() => getGenericMockUserData()),
   create: jest.fn(() => getGenericMockUserData()),

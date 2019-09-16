@@ -67,7 +67,7 @@ describe('BusinessProjectUser', () => {
       })
     })
 
-    describe('with different orgIds', async () => {
+    describe('with different orgIds', () => {
       let user
       beforeAll(async () => {
         user = (await UserFactory.createMany(1, { orgId: constants.ORG_2_ID }))[0]
