@@ -36,9 +36,15 @@ export default function(error, req, res, next) {
   let { code, publicMessage } = error
 
   // multer errors pass a string on the code field rather than a status code, grab these and force a 400
+  // TODO: expand this to have specific file error messages for different multer codes
   if (error instanceof multer.MulterError) {
-    publicMessage = code === 'LIMIT_FILE_SIZE' ? 'File too large' : 'Invalid file'
+    publicMessage = 'File error'
     code = code === 'LIMIT_FILE_SIZE' ? 413 : 415
+    const fileMessage = code === 'LIMIT_FILE_SIZE' ? 'File too large' : 'Invalid file'
+    errorDetails.push({
+      message: fileMessage,
+      key: 'file'
+    })
   }
 
   const responseCode = code || status || statusCode || 500

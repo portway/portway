@@ -5,7 +5,10 @@ import ono from 'ono'
 
 const updateOrganizationAvatar = async function(orgId, file) {
   if (!file) {
-    throw ono({ code: 415 }, 'Could not update organization avatar, there was no file attached')
+    throw ono(
+      { code: 415, publicMessage: 'File error', errorDetails: [{ key: 'file', message: 'No file attached' }] },
+      'Could not update organization avatar, there was no file attached'
+    )
   }
   const url = await uploadAvatar({ orgId, file })
   const org = await BusinessOrganization.updateById(orgId, { avatar: url })
@@ -14,7 +17,10 @@ const updateOrganizationAvatar = async function(orgId, file) {
 
 const updateUserAvatar = async function(orgId, userId, file) {
   if (!file) {
-    throw ono({ code: 415 }, 'Could not update user avatar, there was no file attached')
+    throw ono(
+      { code: 415, publicMessage: 'File error', errorDetails: [{ key: 'file', message: 'No file attached' }] },
+      'Could not update user avatar, there was no file attached'
+    )
   }
   const url = await uploadAvatar({ orgId, userId, file })
   const user = await BusinessUser.updateById(userId, { avatar: url }, orgId)
