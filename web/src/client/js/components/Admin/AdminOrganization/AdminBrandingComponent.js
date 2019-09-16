@@ -40,7 +40,7 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
             accept="image/png, image/jpeg"
             help={avatarHelpText}
             id="orgAvatar"
-            errors={errors.avatar}
+            errors={errors.file}
             name="avatar"
             onChange={(e) => {
               const data = e.target.files

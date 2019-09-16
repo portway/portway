@@ -40,7 +40,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
             accept="image/png, image/jpeg"
             help={avatarHelpText}
             id="userAvatar"
-            errors={errors.avatar}
+            errors={errors.file}
             name="avatar"
             onChange={(e) => {
               const data = e.target.files
