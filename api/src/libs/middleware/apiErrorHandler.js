@@ -39,8 +39,8 @@ export default function(error, req, res, next) {
   // TODO: expand this to have specific file error messages for different multer codes
   if (error instanceof multer.MulterError) {
     publicMessage = 'File error'
-    code = code === 'LIMIT_FILE_SIZE' ? 413 : 415
     const fileMessage = code === 'LIMIT_FILE_SIZE' ? 'File too large' : 'Invalid file'
+    code = code === 'LIMIT_FILE_SIZE' ? 413 : 415
     errorDetails.push({
       message: fileMessage,
       key: 'file'
