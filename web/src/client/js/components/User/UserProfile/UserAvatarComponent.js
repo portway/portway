@@ -49,7 +49,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
         <>
           <ImageCropperComponent circle={true} image={preview} onComplete={cropCompleteHandler}>
             <p>
-              Your branding will look best as a square.<br />
+              Your profile image will look best as a square.<br />
               You can crop your image here before saving it.
             </p>
             <div className="btn-group">
@@ -70,8 +70,8 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
 
   return (
     <section>
-      <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my avatar">
-        <h2>Your Avatar</h2>
+      <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my profile image">
+        <h2>Your Profile Image</h2>
         <div className={classes}>
           {renderUserAvatar()}
           {!preview &&
