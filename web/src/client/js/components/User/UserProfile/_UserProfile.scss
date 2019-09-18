@@ -7,9 +7,12 @@
       margin-right: 1rem;
     }
 
-    img {
-      height: 40px;
-      width: 40px;
+    // With a preview (image cropper)
+    &--with-preview {
+      flex-direction: column;
+
+      img { margin: 0; }
+
     }
 
     // Override the file field for this one

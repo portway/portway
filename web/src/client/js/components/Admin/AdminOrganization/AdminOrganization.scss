@@ -8,6 +8,14 @@
       margin-right: 1rem;
     }
 
+    // With a preview (image cropper)
+    &--with-preview {
+      flex-direction: column;
+
+      img { margin: 0; }
+
+    }
+
   }
 
 }
