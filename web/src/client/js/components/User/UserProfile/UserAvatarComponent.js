@@ -33,7 +33,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
   function cropCompleteHandler(croppedImage) {
     // Overwrite the formData with the new cropped image
     const formData = new FormData()
-    formData.append('file', croppedImage.blobData, 'org-avatar.png')
+    formData.append('file', croppedImage.blobData, 'user-avatar.png')
     setAvatar(formData)
     imageRef.current.src = croppedImage.blobURL
   }
@@ -87,9 +87,6 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
                   return
                 }
 
-                const formData = new FormData()
-                formData.append('file', files[0])
-                setAvatar(formData)
                 // Show preview
                 const reader = new FileReader()
                 reader.readAsDataURL(files[0])
