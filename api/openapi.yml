@@ -721,14 +721,14 @@ components:
         - required:
             - id
             - name
-            - docId
+            - documentId
             - type
         - properties:
             id:
               type: integer
             name:
               type: string
-            docId:
+            documentId:
               type: integer
             type:
               type: integer

@@ -21,7 +21,7 @@ describe('documentVersion', () => {
         factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
 
         factoryFields = await FieldFactory.createMany(3, {
-          docId: factoryDocument.id,
+          documentId: factoryDocument.id,
           orgId: factoryDocument.orgId
         })
 
@@ -57,7 +57,7 @@ describe('documentVersion', () => {
           raw: true
         })
         expect(docVersion.id).toBe(document.publishedVersionId)
-        expect(docVersion.docId).toBe(document.id)
+        expect(docVersion.documentId).toBe(document.id)
       })
     })
     describe('with an invalid document id', () => {

@@ -7,16 +7,16 @@ jest.mock('../integrators/s3')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
-    const docId = 0
+    const documentId = 0
     const body = { type: 1, value: 'some-random-text', orgId: 0 }
 
     beforeAll(async () => {
-      await fieldCoordinator.addFieldToDocument(docId, body)
+      await fieldCoordinator.addFieldToDocument(documentId, body)
     })
 
-    it('should call BusinessField.createForDocument with the passed in docId and body', () => {
+    it('should call BusinessField.createForDocument with the passed in documentId and body', () => {
       expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
-      expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(docId)
+      expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
       expect(BusinessField.createForDocument.mock.calls[0][1]).toEqual(expect.objectContaining(body))
     })
 
@@ -26,7 +26,7 @@ describe('fieldCoordinator', () => {
 
       beforeAll(async () => {
         BusinessField.createForDocument.mockReset()
-        await fieldCoordinator.addFieldToDocument(docId, imageBody, file )
+        await fieldCoordinator.addFieldToDocument(documentId, imageBody, file )
       })
 
       it('should call uploadContent from the s3 integrator with the passed in file', () => {
@@ -34,10 +34,10 @@ describe('fieldCoordinator', () => {
         expect(uploadContent.mock.calls[0][2]).toEqual(file)
       })
 
-      it('should call BusinessField.createForDocument with the passed in docId and body with uploaded file url added', () => {
+      it('should call BusinessField.createForDocument with the passed in documentId and body with uploaded file url added', () => {
         const url = uploadContent.mock.results[0].value
         expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
-        expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(docId)
+        expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
         expect(BusinessField.createForDocument.mock.calls[0][1]).toEqual(expect.objectContaining({ ...imageBody, value: url }))
       })
     })
@@ -45,26 +45,26 @@ describe('fieldCoordinator', () => {
 
   describe('#updateDocumentField', () => {
     const fieldId = 999
-    const docId = 0
+    const documentId = 0
     const orgId = 111
     const body = { value: 'some-random-text', orgId: 0 }
 
     beforeAll(async () => {
       BusinessField.setFindByIdReturnValue({ type: 2 })
-      await fieldCoordinator.updateDocumentField(fieldId, docId, orgId, body)
+      await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, body)
     })
 
-    it('should call BusinessField.findByIdForDocument with the passed in fieldId, docId, orgId', () => {
+    it('should call BusinessField.findByIdForDocument with the passed in fieldId, documentId, orgId', () => {
       expect(BusinessField.updateByIdForDocument.mock.calls.length).toBe(1)
       expect(BusinessField.updateByIdForDocument.mock.calls[0][0]).toEqual(fieldId)
-      expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(docId)
+      expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(documentId)
       expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
     })
 
-    it('should call BusinessField.updateByIdForDocument with the passed in fieldId, docId, orgId, and body', () => {
+    it('should call BusinessField.updateByIdForDocument with the passed in fieldId, documentId, orgId, and body', () => {
       expect(BusinessField.updateByIdForDocument.mock.calls.length).toBe(1)
       expect(BusinessField.updateByIdForDocument.mock.calls[0][0]).toEqual(fieldId)
-      expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(docId)
+      expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(documentId)
       expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
       expect(BusinessField.updateByIdForDocument.mock.calls[0][3]).toEqual(
         expect.objectContaining(body)
@@ -79,7 +79,7 @@ describe('fieldCoordinator', () => {
         uploadContent.mockReset()
         BusinessField.setFindByIdReturnValue({ type: 4 })
         BusinessField.updateByIdForDocument.mockReset()
-        await fieldCoordinator.updateDocumentField(fieldId, docId, orgId, imageBody, file)
+        await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, imageBody, file)
       })
 
       it('should call uploadContent from the s3 integrator with the passed in file', () => {
@@ -87,11 +87,11 @@ describe('fieldCoordinator', () => {
         expect(uploadContent.mock.calls[0][2]).toEqual(file)
       })
 
-      it('should call BusinessField.updateByIdForDocument with the passed in docId and body with uploaded file url added', () => {
+      it('should call BusinessField.updateByIdForDocument with the passed in documentId and body with uploaded file url added', () => {
         const url = uploadContent.mock.results[0].value
         expect(BusinessField.updateByIdForDocument.mock.calls.length).toBe(1)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][0]).toEqual(fieldId)
-        expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(docId)
+        expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(documentId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][3]).toEqual(
           expect.objectContaining({ ...imageBody, value: url })

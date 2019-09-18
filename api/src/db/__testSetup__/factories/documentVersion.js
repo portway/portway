@@ -5,7 +5,7 @@ import constants from '../constants'
 const getDocumentVersionData = function(override = {}) {
   const defaultProps = {
     id: faker.random.number(),
-    docId: faker.random.number(),
+    documentId: faker.random.number(),
     orgId: constants.ORG_ID,
     versionNumber: faker.random.number()
   }

@@ -42,7 +42,7 @@ seedDocsWithFields.forEach((doc) => {
       id: fieldStartId,
       orgId: doc.orgId,
       name: field.name,
-      docId: dbDoc.id,
+      documentId: dbDoc.id,
       type: field.type,
       fieldValueId: fieldStartId,
       order: index,
