@@ -35,7 +35,10 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
     const formData = new FormData()
     formData.append('file', croppedImage.blobData, 'user-avatar.png')
     setAvatar(formData)
-    imageRef.current.src = croppedImage.blobURL
+    // This is for debugging purposes
+    if (imageRef && imageRef.current) {
+      imageRef.current.src = croppedImage.blobURL
+    }
   }
 
   const avatarHelpText = `Upload a square image - Formatted as PNG or JPG`

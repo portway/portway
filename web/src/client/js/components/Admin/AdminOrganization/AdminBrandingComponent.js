@@ -35,7 +35,10 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
     const formData = new FormData()
     formData.append('file', croppedImage.blobData, 'org-avatar.png')
     setAvatar(formData)
-    imageRef.current.src = croppedImage.blobURL
+    // This is for debugging purposes
+    if (imageRef && imageRef.current) {
+      imageRef.current.src = croppedImage.blobURL
+    }
   }
 
   function renderOrganizationAvatar() {
