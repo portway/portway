@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'projectId'
     })
     Document.hasMany(models.Field, {
-      foreignKey: 'docId'
+      foreignKey: 'documentId'
     })
   }
 

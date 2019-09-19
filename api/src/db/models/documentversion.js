@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const DocumentVersion = sequelize.define('DocumentVersion', {
     versionNumber: DataTypes.INTEGER,
-    docId: DataTypes.INTEGER,
+    documentId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER
   }, {
     paranoid: true,

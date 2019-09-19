@@ -12,7 +12,7 @@ const FIELD_PUBLIC_FIELDS = [
   'name',
   'value',
   'structuredValue',
-  'docId',
+  'documentId',
   'versionId',
   'type',
   'order'
