@@ -23,7 +23,7 @@ export const uploadContent = async function(documentId, orgId, file) {
       .upload({
         Bucket: S3_CONTENT_BUCKET,
         Key: `${hashId}/d/${documentId}/${Date.now()}-${file.originalname}`,
-        ContentType: 'application/octet-stream',
+        ContentType: file.mimetype,
         Body: await readFile(file.path),
         ACL: 'public-read'
       })
@@ -54,7 +54,7 @@ export const uploadAvatar = async function({ orgId, userId, file }) {
       .upload({
         Bucket: S3_CONTENT_BUCKET,
         Key: key,
-        ContentType: 'application/octet-stream',
+        ContentType: file.mimetype,
         Body: await readFile(file.path),
         ACL: 'public-read'
       })
