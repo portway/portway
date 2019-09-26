@@ -65,5 +65,10 @@ module.exports = (sequelize, DataTypes) => {
     return this[`get${modelName}`]()
   }
 
+  Field.prototype.markUpdated = function(valueBody) {
+    this.setDataValue('updatedAt', Date.now())
+    return this.save()
+  }
+
   return Field
 }

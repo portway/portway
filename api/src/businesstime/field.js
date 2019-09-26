@@ -127,6 +127,7 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
 
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
+  await updatedField.markUpdated()
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
 
