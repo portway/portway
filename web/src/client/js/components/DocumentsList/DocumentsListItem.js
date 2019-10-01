@@ -7,7 +7,7 @@ import cx from 'classnames'
 import Constants from 'Shared/constants'
 import { TimeIcon } from 'Components/Icons'
 
-const DocumentsListItem = ({ disable, disableDragging, document, fieldMoveHandler }) => {
+const DocumentsListItem = ({ disable, disableDragging, document, fieldCopyHandler, fieldMoveHandler }) => {
   const [draggedOver, setDraggedOver] = useState(false)
 
   function dropHandler(e) {
@@ -19,10 +19,18 @@ const DocumentsListItem = ({ disable, disableDragging, document, fieldMoveHandle
     const fieldId = Number(e.dataTransfer.getData('fieldid'))
     const oldDocumentId = Number(e.dataTransfer.getData('documentid'))
     const thisDocumentId = Number(document.id)
-    fieldMoveHandler(oldDocumentId, thisDocumentId, fieldId)
+    // If we're copying
+    // @todo: Safari bug - dropEffect should be good here on its own
+    // https://bugs.webkit.org/show_bug.cgi?id=101853
+    if (e.dataTransfer.dropEffect === 'copy' || e.dataTransfer.effectAllowed === 'copy') {
+      fieldCopyHandler(oldDocumentId, thisDocumentId, fieldId)
+    } else {
+      fieldMoveHandler(oldDocumentId, thisDocumentId, fieldId)
+    }
   }
 
   function dragEnterHandler(e) {
+    e.persist()
     e.preventDefault()
     if (!e.dataTransfer.types.includes('fieldid')) {
       return false
@@ -76,6 +84,7 @@ DocumentsListItem.propTypes = {
   disable: PropTypes.bool.isRequired,
   disableDragging: PropTypes.bool.isRequired,
   document: PropTypes.object.isRequired,
+  fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
 }
 

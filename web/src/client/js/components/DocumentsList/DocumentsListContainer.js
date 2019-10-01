@@ -8,10 +8,20 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
 import { createDocument } from 'Actions/document'
+import { copyField, moveField } from 'Actions/field'
 import { uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
 
-const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui, match }) => {
+const DocumentsListContainer = ({
+  createDocument,
+  copyField,
+  documentFields,
+  uiDocumentCreate,
+  history,
+  ui,
+  match,
+  moveField
+}) => {
   const { data: documents, loading } = useDataService(dataMapper.documents.list(match.params.projectId), [
     match.params.projectId
   ])
@@ -45,7 +55,14 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
 
   function fieldMoveHandler(oldDocumentId, newDocumentId, fieldId) {
     if (oldDocumentId === newDocumentId) return
-    console.info(`Move field: ${fieldId} from document: ${oldDocumentId} to document: ${newDocumentId}.`)
+    const field = documentFields[oldDocumentId][fieldId]
+    moveField(match.params.projectId, oldDocumentId, newDocumentId, field)
+  }
+
+  function fieldCopyHandler(oldDocumentId, newDocumentId, fieldId) {
+    if (oldDocumentId === newDocumentId) return
+    const field = documentFields[oldDocumentId][fieldId]
+    copyField(match.params.projectId, oldDocumentId, newDocumentId, field)
   }
 
   const sortedDocuments = []
@@ -65,6 +82,7 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
       creating={ui.documents.creating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
+      fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
       loading={loading}
       projectId={Number(match.params.projectId)}/>
@@ -73,19 +91,23 @@ const DocumentsListContainer = ({ createDocument, uiDocumentCreate, history, ui,
 
 DocumentsListContainer.propTypes = {
   createDocument: PropTypes.func.isRequired,
+  copyField: PropTypes.func.isRequired,
+  documentFields: PropTypes.object,
   uiDocumentCreate: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  moveField: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
-    ui: state.ui
+    ui: state.ui,
+    documentFields: state.documentFields.documentFieldsById,
   }
 }
 
-const mapDispatchToProps = { createDocument, uiDocumentCreate }
+const mapDispatchToProps = { createDocument, copyField, moveField, uiDocumentCreate }
 
 
 export default withRouter(

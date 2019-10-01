@@ -51,6 +51,10 @@ export const ActionTypes = {
   RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
   INITIATE_FIELD_ORDER: 'INITIATE_FIELD_ORDER',
   INITIATE_FIELD_REMOVE: 'INITIATE_FIELD_REMOVE',
+  INITIATE_FIELD_MOVE: 'INITIATE_FIELD_MOVE',
+  INITIATE_FIELD_COPY: 'INITIATE_FIELD_COPY',
+  FIELD_COPIED: 'FIELD_COPIED',
+  FIELD_MOVED: 'FIELD_MOVED',
   REMOVE_FIELD: 'REMOVE_FIELD',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
@@ -179,6 +183,12 @@ export const Fields = {
   initiateOrderUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_ORDER, 'documentId', 'fieldId', 'newOrder'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'projectId', 'documentId', 'data'),
+  // Move & Copy
+  initiateMove: makeActionCreator(ActionTypes.INITIATE_FIELD_MOVE, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  movedField: makeActionCreator(ActionTypes.FIELD_MOVED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  initiateCopy: makeActionCreator(ActionTypes.INITIATE_FIELD_COPY, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  copiedField: makeActionCreator(ActionTypes.FIELD_COPIED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId')
 }
