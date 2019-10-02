@@ -61,7 +61,7 @@ const Form = ({
       </div>
       }
       <div className="btn-group">
-        <button className="btn btn--small" disabled={buttonDisabledWhen}>{submitLabel}</button>
+        <input type="submit" className="btn btn--small" disabled={buttonDisabledWhen} value={submitLabel} />
         {submitting && <SpinnerComponent color="#e5e7e6" />}
         {succeeded && <CheckIcon fill="#51a37d" />}
       </div>

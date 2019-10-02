@@ -35,7 +35,8 @@ const AUTHENTICATED_CONTROLLERS = {
     childRoutes: {
       '/:userId/orgrole': { fileName: 'userOrgRole' },
       '/:userId/assignments': { fileName: 'userProjectAssignments' },
-      '/:userId/projects': { fileName: 'userProjects' }
+      '/:userId/projects': { fileName: 'userProjects' },
+      '/:userId/password': { fileName: 'userPassword' }
     }
   },
   '/organizations': {

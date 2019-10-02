@@ -98,6 +98,26 @@ export const updateUserAvatar = (formId, userId, formData) => {
   }
 }
 
+export const updatePassword = (formId, userId, body) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Users.initiateUpdate(userId))
+    const { data, status } = await update(`users/${userId}/password`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('user', data, status))
+    } else {
+      dispatch(formSucceededAction(formId))
+      dispatch(Users.receiveUpdatedPassword(userId, data))
+    }
+  }
+}
+
 export const removeUser = (userId) => {
   return async (dispatch) => {
     dispatch(Users.initiateRemove(userId))
