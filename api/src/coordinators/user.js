@@ -15,7 +15,7 @@ const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
 async function updatePassword(userId, currentPassword, newPassword, confirmNewPassword, orgId) {
   if (newPassword !== confirmNewPassword) {
-    throw ono({ code: 409 }, 'New password does not match confirmation password')
+    throw ono({ code: 409, errorDetails: [{ key: 'confirmNewPassword', message: 'New password does not match confirmation password' }] }, 'New password does not match confirmation password')
   }
 
   const user = await BusinessUser.findById(userId)
@@ -24,7 +24,7 @@ async function updatePassword(userId, currentPassword, newPassword, confirmNewPa
   }
 
   const valid = await passwords.validatePassword(currentPassword, user.password)
-  if (!valid) throw ono({ code: 401 }, `Invalid Password`)
+  if (!valid) throw ono({ code: 400, errorDetails: [{ key: 'password', message: 'Incorrect Password' }] }, `Password Error`)
 
   const hashedPassword = await passwords.generateHash(newPassword)
 
