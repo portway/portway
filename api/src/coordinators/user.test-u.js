@@ -56,6 +56,18 @@ describe('user coordinator', () => {
       expect(BusinessUser.updateById.mock.calls[0][1]).toEqual(expect.objectContaining({ password: mockHashedPassword }))
       expect(BusinessUser.updateById.mock.calls[0][2]).toEqual(orgId)
     })
+
+    describe('When the update password does not match the confirmation password', () => {
+      beforeAll(async () => {
+        BusinessUser.findById.mockClear()
+      })
+
+      it('should throw an error with status code 409', async () => {
+        await expect(userCoordinator
+          .updatePassword(userId, currentPassword, newPassword, 'someotherpassword', orgId))
+          .rejects.toThrow()
+      })
+    })
   })
 
   describe('#setInitialPassword', () => {
