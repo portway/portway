@@ -54,7 +54,7 @@ const UserSecurityComponent = ({ submitHandler, formId }) => {
               type="password"
             />
             <TextField
-              id="confirmPassword"
+              id="confirmNewPassword"
               label="Confirm Password"
               name="password"
               onBlur={(e) => { setConfirmNewPassword(e.target.value) }}

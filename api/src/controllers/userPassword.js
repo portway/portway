@@ -1,10 +1,9 @@
 import Joi from 'joi'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
-import BusinessUser from '../businesstime/user'
+import UserCoordinator from '../coordinators/user'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
-import ACCEPTABLE_ROLE_ID_UPDATE_VALUES from '../constants/acceptableRoleIdUpdateValues'
 import auditLog, { auditActions } from '../integrators/audit'
 
 const updatePerm = perms((req) => {
@@ -15,9 +14,9 @@ const updatePerm = perms((req) => {
 })
 
 const bodySchema = Joi.compile({
-  orgRoleId: Joi.number()
-    .valid([ACCEPTABLE_ROLE_ID_UPDATE_VALUES])
-    .required()
+  currentPassword: Joi.string(),
+  newPassword: Joi.string(),
+  confirmNewPassword: Joi.string()
 })
 
 const paramSchema = Joi.compile({
@@ -31,22 +30,22 @@ const userOrgRoleController = function(router) {
     updatePerm,
     validateParams(paramSchema),
     validateBody(bodySchema),
-    updateUserOrgRole
+    updateUserPassword
   )
 }
 
-const updateUserOrgRole = async function(req, res, next) {
-  const { orgRoleId } = req.body
+const updateUserPassword = async function(req, res, next) {
+  const { currentPassword, newPassword, confirmNewPassword } = req.body
   const { userId } = req.params
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessUser.updateOrgRole(userId, orgRoleId, orgId)
+    await UserCoordinator.updatePassword(userId, currentPassword, newPassword, confirmNewPassword, orgId)
     res.status(204).json()
     auditLog({
       userId: req.requestorInfo.requestorId,
-      primaryModel: RESOURCE_TYPES.ROLE,
-      primaryId: orgRoleId,
+      primaryModel: RESOURCE_TYPES.PASSWORD,
+      primaryId: null,
       secondaryModel: RESOURCE_TYPES.USER,
       secondaryId: userId,
       action: auditActions.UPDATED_PRIMARY_FOR_SECONDARY

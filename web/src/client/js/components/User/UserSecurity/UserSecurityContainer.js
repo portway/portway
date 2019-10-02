@@ -17,7 +17,7 @@ const UserSecurityContainer = ({ errors, updatePassword }) => {
     updatePassword(userPasswordFormId, currentUser.id, {
       currentPassword: values.currentPassword,
       newPassword: values.newPassword,
-      confirmPassword: values.confirmNewPassword
+      confirmNewPassword: values.confirmNewPassword
     })
   }
 
