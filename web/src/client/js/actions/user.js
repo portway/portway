@@ -102,6 +102,7 @@ export const updatePassword = (formId, userId, body) => {
   return async (dispatch) => {
     dispatch(formSubmitAction(formId))
     const { data, status } = await update(`users/${userId}/password`, body)
+    console.log(data, status)
     if (globalErrorCodes.includes(status)) {
       dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))

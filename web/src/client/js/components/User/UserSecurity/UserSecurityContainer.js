@@ -22,7 +22,7 @@ const UserSecurityContainer = ({ errors, updatePassword }) => {
   }
 
   if (!currentUser) return null
-  return <UserSecurityComponent errors={errors} user={currentUser} submitHandler={submitHandler} />
+  return <UserSecurityComponent errors={errors} formId={userPasswordFormId} user={currentUser} submitHandler={submitHandler} />
 }
 
 const mapStateToProps = (state) => {
