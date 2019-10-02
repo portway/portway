@@ -4,14 +4,12 @@ import PropTypes from 'prop-types'
 import Form from 'Components/Form/Form'
 import TextField from 'Components/Form/TextField'
 
-const UserSecurityComponent = ({ errors, formId, user, submitHandler }) => {
+const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
   const [currentPassword, setCurrentPassword] = useState(null)
   const [newPassword, setNewPassword] = useState(null)
   const [confirmNewPassword, setConfirmNewPassword] = useState(null)
 
-  console.log(errors)
-
-  function formSubmitHandler() {
+  function formSubmitHandler(e) {
     if (currentPassword && newPassword && confirmNewPassword) {
       submitHandler({ currentPassword, newPassword, confirmNewPassword })
     }
@@ -32,7 +30,7 @@ const UserSecurityComponent = ({ errors, formId, user, submitHandler }) => {
           type="password"
         />
         <TextField
-          errors={errors.password}
+          errors={errors.newPassword}
           id="newPassword"
           label="New Password"
           name="password"
@@ -42,11 +40,11 @@ const UserSecurityComponent = ({ errors, formId, user, submitHandler }) => {
           type="password"
         />
         <TextField
-          errors={errors.password}
+          errors={errors.confirmNewPassword}
           id="confirmNewPassword"
           label="Confirm Password"
           name="password"
-          onBlur={(e) => { setConfirmNewPassword(e.target.value) }}
+          onChange={(e) => { setConfirmNewPassword(e.target.value) }}
           placeholder="Enter your new password"
           required
           type="password"
@@ -60,7 +58,10 @@ UserSecurityComponent.propTypes = {
   errors: PropTypes.object,
   formId: PropTypes.string.isRequired,
   submitHandler: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+}
+
+UserSecurityComponent.defaultProps = {
+  errors: {},
 }
 
 export default UserSecurityComponent
