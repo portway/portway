@@ -11,6 +11,7 @@ import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
+  disabled,
   dragStartHandler,
   dragEndHandler,
   dragEnterHandler,
@@ -96,7 +97,7 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
-    'document__fields--disabled': isPublishing
+    'document__fields--disabled': isPublishing || disabled
   })
   return (
     <div className={fieldsClasses}>
@@ -109,6 +110,7 @@ const DocumentFieldsComponent = ({
 
 DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
+  disabled: PropTypes.bool.isRequired,
   dragStartHandler: PropTypes.func.isRequired,
   dragEndHandler: PropTypes.func.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,

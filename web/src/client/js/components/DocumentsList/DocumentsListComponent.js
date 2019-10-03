@@ -20,6 +20,7 @@ const DocumentsListComponent = ({
   createCallback,
   documents,
   draggedDocumentHandler,
+  fieldCopyHandler,
   fieldMoveHandler,
   loading,
   projectId
@@ -93,7 +94,16 @@ const DocumentsListComponent = ({
   function renderDocumentsList() {
     if (documents.length === 0) return null
     return documents.map((doc, index) => {
-      return <DocumentsListItem disable={creating} disableDragging={dragActive} fieldMoveHandler={fieldMoveHandler} key={`d-${doc.id}-${index}`} document={doc} />
+      return (
+        <DocumentsListItem
+          disable={creating}
+          disableDragging={dragActive}
+          fieldCopyHandler={fieldCopyHandler}
+          fieldMoveHandler={fieldMoveHandler}
+          key={`d-${doc.id}-${index}`}
+          document={doc}
+        />
+      )
     })
   }
 
@@ -195,6 +205,7 @@ DocumentsListComponent.propTypes = {
   createCallback: PropTypes.func.isRequired,
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
+  fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   projectId: PropTypes.number.isRequired,

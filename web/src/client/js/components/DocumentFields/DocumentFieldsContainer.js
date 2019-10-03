@@ -12,7 +12,7 @@ import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
-  creating, createdFieldId, fieldsUpdating, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
+  disabled, createdFieldId, fieldsUpdating, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
@@ -50,8 +50,7 @@ const DocumentFieldsContainer = ({
   function dragStartHandler(e) {
     setDraggingElement(e.currentTarget)
     e.currentTarget.classList.add('document-field--dragging')
-    e.dataTransfer.effectAllowed = 'move'
-    e.dataTransfer.dropEffect = 'move'
+    e.dataTransfer.effectAllowed = 'copyMove'
     e.dataTransfer.setData('fieldid', e.currentTarget.dataset.id)
     e.dataTransfer.setData('documentid', documentId)
     e.dataTransfer.setData('text/html', e.target)
@@ -73,6 +72,7 @@ const DocumentFieldsContainer = ({
   }
   function dragOverHandler(e) {
     e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
     if (e.currentTarget === draggingElement) return
     if (e.dataTransfer.types.includes('Files')) {
       return
@@ -118,7 +118,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
-      creating={creating}
+      disabled={disabled}
       createdFieldId={createdFieldId}
       dragStartHandler={dragStartHandler}
       dragEndHandler={dragEndHandler}
@@ -136,7 +136,7 @@ const DocumentFieldsContainer = ({
 }
 
 DocumentFieldsContainer.propTypes = {
-  creating: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   createdFieldId: PropTypes.number,
   isPublishing: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
@@ -149,7 +149,7 @@ DocumentFieldsContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    creating: state.ui.fields.creating,
+    disabled: state.ui.fields.disabled,
     createdFieldId: state.documentFields.lastCreatedFieldId,
     isPublishing: state.ui.documents.isPublishing,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
