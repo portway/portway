@@ -8,6 +8,7 @@ items:
     api.db-port: "25060"
     api.db-user: "doadmin"
     api.db-name: "defaultdb"
+    api.db-use-ssl: "true"
     api.aws-ses-region: "us-west-2"
     api.sender-email-address: "no-reply@portway.app"
     api.client-url: "http://dev.portway.app"

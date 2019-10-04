@@ -44,6 +44,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.db-port
+        - name: DB_USE_SSL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.db-use-ssl
         - name: DB_USER
           valueFrom:
             configMapKeyRef:
