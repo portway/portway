@@ -16,10 +16,9 @@ spec:
         run: web
         app: web
     spec:
-      imagePullSecrets:
-      - name: regcred    
       containers:
       - image: bonkeybong/portway_web
+        imagePullPolicy: "Never"
         name: web
         args: [ "start" ]
         env:

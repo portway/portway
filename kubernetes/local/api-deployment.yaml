@@ -17,12 +17,11 @@ spec:
         app: api
         test: one
     spec:
-      imagePullSecrets:
-      - name: regcred    
-      containers:    
-      - image: bonkeybong/portway_api:dev1
+      containers:
+      - image: bonkeybong/portway_api
+        imagePullPolicy: "Never"
         name: api
-        args: [ "start"  ]     
+        args: [ "start"  ]
         env:
         - name: API_PORT
           valueFrom:

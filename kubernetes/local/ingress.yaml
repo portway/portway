@@ -4,7 +4,7 @@ metadata:
   name: portway-ingress
 spec:
   rules:
-  - host: api.dev.portway.app
+  - host: api.portway.local
     http:
       paths:
       - backend:
