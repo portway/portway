@@ -55,6 +55,10 @@ auth.init(passport)
 //ROUTES
 //=============================================================================//
 
+app.use('/', (req, res) => {
+  res.json({ message: 'API Initialized' })
+})
+
 const router = express.Router()
 
 // Mount router at /api
