@@ -20,7 +20,7 @@ spec:
       imagePullSecrets:
       - name: regcred    
       containers:    
-      - image: bonkeybong/portway_api:dev2
+      - image: bonkeybong/portway_api:dev3
         name: api
         args: [ "start"  ]     
         env:
