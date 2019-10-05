@@ -20,7 +20,7 @@ items:
 - apiVersion: v1
   data:
     web.static_port: "3000"
-    web.api_url: "http://api:3001"
+    web.api_url: "http://api-service:3001"
     web.api_public_url: "http://api.dev.portway.app"
   kind: ConfigMap
   metadata:

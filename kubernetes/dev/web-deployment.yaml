@@ -15,6 +15,7 @@ spec:
       labels:
         run: web
         app: web
+        redeploy: "1"
     spec:
       imagePullSecrets:
       - name: regcred    
