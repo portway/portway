@@ -15,12 +15,12 @@ spec:
       labels:
         run: api
         app: api
-        test: one
+        redeploy: "1"
     spec:
       imagePullSecrets:
       - name: regcred    
       containers:    
-      - image: bonkeybong/portway_api:dev3
+      - image: bonkeybong/portway_api:dev4
         name: api
         args: [ "start"  ]     
         env:

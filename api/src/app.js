@@ -55,7 +55,12 @@ auth.init(passport)
 //ROUTES
 //=============================================================================//
 
-app.use('/', (req, res) => {
+// Mount a base router to respond to / requests
+// for verifying service is running at FQDN.
+// Added for letsencrypt verification of running service
+const baseRouter = express.Router()
+app.use('/', baseRouter)
+baseRouter.get('/', (req, res) => {
   res.json({ message: 'API Initialized' })
 })
 
