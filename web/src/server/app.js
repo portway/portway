@@ -40,7 +40,7 @@ app.use(passport.initialize())
 if (devMode) {
   app.use(express.static(join(__dirname, './public')))
 } else {
-  const oneDay = 86400000
+  const oneDay = 7.884e+9 // 3 months
   app.use(gzipStatic(join(__dirname, './public'), { maxAge: oneDay }))
 }
 

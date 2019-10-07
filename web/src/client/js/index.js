@@ -16,7 +16,7 @@ import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
 import LoadingComponent from 'Components/Loading/LoadingComponent'
 
-const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection' */ 'Sections/Projects/ProjectsSection'))
+const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection',  webpackPreload: true */ 'Sections/Projects/ProjectsSection'))
 const AdminSection = lazy(() => import(/* webpackChunkName: 'AdminSection' */ 'Sections/Admin/AdminSection'))
 const UserSection = lazy(() => import(/* webpackChunkName: 'UserSection' */ 'Sections/User/UserSection'))
 const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' */ 'Sections/Project/ProjectSection'))
