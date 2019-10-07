@@ -28,7 +28,7 @@ const HeaderComponent = ({ brand, isFullScreen, section }) => {
       <header className="masthead" role="banner">
         <nav className="navbar" role="navigation" aria-label="main navigation">
           <div className="navbar__brand">
-            <Link to={PATH_PROJECTS}>
+            <Link to={PATH_PROJECTS} aria-label="Your projects">
               <span className="navbar__logo" style={renderBrandLogo(brand.logo)} />
             </Link>
           </div>
