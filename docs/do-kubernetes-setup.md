@@ -126,6 +126,10 @@ Replace $POD_NAME with the pod name found in the previous step
 kubectl -n kube-system port-forward $POD_NAME 8443:8443
 ```
 
+Now open a browser and navigate to `https://127.0.0.1:8443` and bypass the security warning about the invalid cert
+
+Choose the “Token” auth and paste the token from the first step
+
 ## Resources
 **Resources**
 [How To Install Software on Kubernetes Clusters with Helm | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager)
