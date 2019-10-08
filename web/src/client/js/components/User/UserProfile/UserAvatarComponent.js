@@ -80,6 +80,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
               help={avatarHelpText}
               id="userAvatar"
               errors={errors.file}
+              label="Your profile image"
               name="avatar"
               onChange={(e) => {
                 const data = e.target.files

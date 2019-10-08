@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { lazy, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import Select from 'react-select'
+const Select = lazy(() => import('react-select'))
 
 import Constants from 'Shared/constants'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'

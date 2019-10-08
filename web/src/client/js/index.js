@@ -14,7 +14,6 @@ import HeaderContainer from 'Components/Header/HeaderContainer'
 import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryComponent'
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
-import LoadingComponent from 'Components/Loading/LoadingComponent'
 
 const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection',  webpackPreload: true */ 'Sections/Projects/ProjectsSection'))
 const AdminSection = lazy(() => import(/* webpackChunkName: 'AdminSection' */ 'Sections/Admin/AdminSection'))
@@ -32,9 +31,9 @@ const Index = () => {
           </Helmet>
           <ErrorBoundaryComponent>
             <ConfirmationContainer />
-            <HeaderContainer />
             <NotificationsContainer />
-            <Suspense fallback={<LoadingComponent />}>
+            <HeaderContainer />
+            <Suspense fallback={null}>
               <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
               <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
               <Route path={PATH_SETTINGS} component={UserSection} />

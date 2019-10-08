@@ -1,6 +1,7 @@
-import React, { useState, useRef, useCallback } from 'react'
-import Select from 'react-select'
+import React, { lazy, useState, useRef, useCallback } from 'react'
 import PropTypes from 'prop-types'
+
+const Select = lazy(() => import('react-select'))
 
 import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'

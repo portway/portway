@@ -10,9 +10,9 @@ import {
   PATH_SETTINGS
 } from 'Shared/constants'
 
-import Navigator from 'Components/Navigator/NavigatorContainer'
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
+import NavigatorContainer from 'Components/Navigator/NavigatorContainer'
 
 import './_Header.scss'
 
@@ -35,7 +35,7 @@ const HeaderComponent = ({ brand, isFullScreen, section }) => {
           <div className="navbar__content">
             {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
             {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
-            {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <Navigator />}
+            {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
           </div>
           <div className="navbar__misc">
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>

@@ -40,8 +40,8 @@ app.use(passport.initialize())
 if (devMode) {
   app.use(express.static(join(__dirname, './public')))
 } else {
-  const oneDay = 7.884e+9 // 3 months
-  app.use(gzipStatic(join(__dirname, './public'), { maxAge: oneDay }))
+  const expire = 3.154e+10 // 1 year - Google suggests this
+  app.use(gzipStatic(join(__dirname, './public'), { maxAge: expire }))
 }
 
 // Set up Express
