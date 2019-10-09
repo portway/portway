@@ -26,6 +26,7 @@ const SharedConfig = {
       inlineSource: /initialRender/,
       template: path.resolve(__dirname, '../src/client/index.html'),
       excludeChunks: ['index', 'registration']
+      // @todo order it so initialRender is first
     }),
     // new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
     new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
