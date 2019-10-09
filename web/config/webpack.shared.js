@@ -23,7 +23,8 @@ const SharedConfig = {
       filename: 'index.html',
       inlineSource: /initialRender/,
       template: path.resolve(__dirname, '../src/client/index.html'),
-      chunks: ['initialRender', 'app']
+      chunks: ['initialRender', 'app'],
+      chunksSortMode: 'manual'
     }),
     new HtmlWebpackInlineSourcePlugin(),
     new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
