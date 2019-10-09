@@ -15,12 +15,10 @@ spec:
       labels:
         run: web
         app: web
-        redeploy: "2"
     spec:
-      imagePullSecrets:
-      - name: regcred    
       containers:
-      - image: bonkeybong/portway_web:dev2
+      - image: bonkeybong/portway_web
+        imagePullPolicy: "Never"
         name: web
         args: [ "start" ]
         env:

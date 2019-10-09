@@ -21,4 +21,7 @@ connect({
   app.listen(port, () => {
     console.info('api running on port ' + port)
   })
+}).catch((err) => {
+  console.error('Error starting API')
+  console.error(err)
 })

@@ -8,19 +8,29 @@ const dbLogger = process.env.LOG_DB_COMMANDS === 'true'
   ? dbCommand => console.info(dbCommand)
   : false
 
+const ssl = process.env.DB_USE_SSL === 'true'
+
 let connectedDb
 
 export async function connect({ user, password, host, port, db }) {
   if (connectedDb) return connectedDb
 
   const dbUri = `postgres://${user}:${password}@${host}:${port}/${db}`
-  console.info(`Connecting to database ${dbUri}`)
+  console.info(`Connecting to database postgres://${user}:****@${host}:${port}/${db}`)
 
-  const sequelize = new Sequelize(dbUri, { logging: dbLogger, operatorsAliases: false })
+  const sequelize = new Sequelize(dbUri, {
+    logging: dbLogger,
+    operatorsAliases: false,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl
+    }
+  })
 
   try {
     await sequelize.authenticate()
   } catch (err) {
+    console.error(err)
     throw new Error('Unable to connect to the database:', err)
   }
 
