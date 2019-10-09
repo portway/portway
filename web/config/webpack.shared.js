@@ -51,12 +51,14 @@ const SharedConfig = {
   optimization: {
     splitChunks: {
       chunks: 'all',
-      maxInitialRequests: Infinity,
-      minSize: 0,
+      maxAsyncRequests: 5, // didn't have this before
+      maxInitialRequests: 10, // had Infinity for all the files could increase for http2
+      // maxSize: 200000, // didn't have this before
       cacheGroups: {
         vendor: {
           name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
+          maxSize: 200000, // didn't have this before
           name(module) {
             // get the name. E.g. node_modules/packageName/not/this/part.js
             // or node_modules/packageName
