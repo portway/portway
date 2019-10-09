@@ -1,8 +1,12 @@
+const devMode = process.env.NODE_ENV !== 'production'
+
 const AppController = function(router) {
   // Sending all requests to dashboard view, for Redux Router
-  router.get('*', (req, res, next) => {
-    res.render('./public/index.html')
-  })
+  if (!devMode) {
+    router.get('*', (req, res, next) => {
+      res.sendFile('app.html', { root: __dirname + '/../' })
+    })
+  }
 }
 
 export default AppController

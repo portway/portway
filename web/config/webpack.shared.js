@@ -2,7 +2,9 @@ const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
+// const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
+// We'll enable this in a future release. Leaving it here to know to check in on it
+// This currently doesn't work with beta 4 of HTMLWebpackPlugin, which we need
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const Constants = require('../src/shared/constants')
@@ -20,13 +22,12 @@ const SharedConfig = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Portway',
-      filename: 'index.html',
+      filename: '../app.html',
       inlineSource: /initialRender/,
       template: path.resolve(__dirname, '../src/client/index.html'),
-      chunks: ['initialRender', 'app'],
-      chunksSortMode: 'manual'
+      excludeChunks: ['index', 'registration']
     }),
-    new HtmlWebpackInlineSourcePlugin(),
+    // new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
     new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
     new CopyWebpackPlugin([
       {
