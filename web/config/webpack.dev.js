@@ -28,8 +28,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
         include: [path.resolve(__dirname, '../src/client/css')],
+        test: /\.(sa|sc|c)ss$/,
         use: [MiniCssExtractPlugin.loader, ...SharedConfig.styleLoaders]
       },
       {

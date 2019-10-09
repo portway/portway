@@ -1,6 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const Constants = require('../src/shared/constants')
@@ -16,6 +18,14 @@ const SharedConfig = {
     Shared: path.resolve(__dirname, '../src/shared'),
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Portway',
+      filename: 'index.html',
+      inlineSource: /initialRender/,
+      template: path.resolve(__dirname, '../src/client/index.html'),
+      chunks: ['initialRender', 'app']
+    }),
+    new HtmlWebpackInlineSourcePlugin(),
     new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
     new CopyWebpackPlugin([
       {
@@ -61,12 +71,6 @@ const SharedConfig = {
           test: /[\\/]node_modules[\\/]/,
           priority: -10
         },
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
       }
     }
   },

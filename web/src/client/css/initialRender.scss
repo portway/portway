@@ -1,0 +1,90 @@
+@import 'inc/vars';
+@import 'inc/fonts';
+
+:root {
+  color-scheme: light dark;
+  --base-background: #{$white};
+  --base-color: #{$black-bis};
+  --base-border-color: #{$gray-light};
+  --base-link-color: #{$action};
+  --base-link-hover-color: #{$action-light};
+  --base-link-active-color: #{$action-dark};
+  --link-color-gray: #{$gray-dark};
+  @media (prefers-color-scheme: dark) {
+    --base-background: #{$black-bis};
+    --base-color: #{$white};
+    --base-border-color: #{$black-er};
+    --base-link-color: #{$action};
+    --base-link-hover-color: #{$action-light};
+    --base-link-active-color: #{$action-dark};
+    --link-color-gray: #{$gray};
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Base body */
+html, body {
+  font-family: $sansSerif;
+  font-size: 62.5%; // base font
+  overscroll-behavior-y: none;
+}
+body {
+  background-color: var(--base-background);
+  color: var(--base-color);
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+/* Base text */
+a, .link {
+  color: $action;
+  &:hover {
+    color: lighten($action, 20%);
+  }
+  &:active {
+    color: darken($action, 20%);
+  }
+}
+
+/* Base buttons */
+button, .btn, .button {
+  --button-white-background: #{$white};
+  --button-white-border: #{$gray-light};
+  --button-white-border-hover: #{$white-ter};
+  --button-icon-background: #{$white-bis};
+  --button-icon-hover: #{$white-ter};
+  --button-icon-active: #{$gray};
+  --button-icon-expanded: #{$gray-light};
+  --button-label-expanded: #{$gray-dark};
+  @media (prefers-color-scheme: dark) {
+    --button-white-background: #{$black-bis};
+    --button-white-border: #{$black-er};
+    --button-white-border-hover: #{$black-er};
+    --button-icon-background: #{$black-ter};
+    --button-icon-hover: #{$gray-dark};
+    --button-icon-active: #{$black-er};
+    --button-icon-expanded: #{$black-er};
+    --button-label-expanded: #{$gray-dark};
+  }
+  align-items: center;
+  background-color: $action;
+  border-radius: $borderRadius;
+  border: thin solid transparent;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: $sansSerif;
+  font-weight: 500;
+  margin-bottom: 0;
+  margin-top: 0;
+  min-height: 38px;
+  padding: 0 37px;
+  text-decoration: none;
+  white-space: nowrap;
+  -webkit-appearance: none;
+}

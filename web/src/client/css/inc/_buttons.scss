@@ -1,27 +1,6 @@
 @import 'vars';
 @import 'mixins';
 
-:root {
-  --button-white-background: #{$white};
-  --button-white-border: #{$gray-light};
-  --button-white-border-hover: #{$white-ter};
-  --button-icon-background: #{$white-bis};
-  --button-icon-hover: #{$white-ter};
-  --button-icon-active: #{$gray};
-  --button-icon-expanded: #{$gray-light};
-  --button-label-expanded: #{$gray-dark};
-  @media (prefers-color-scheme: dark) {
-    --button-white-background: #{$black-bis};
-    --button-white-border: #{$black-er};
-    --button-white-border-hover: #{$black-er};
-    --button-icon-background: #{$black-ter};
-    --button-icon-hover: #{$gray-dark};
-    --button-icon-active: #{$black-er};
-    --button-icon-expanded: #{$black-er};
-    --button-label-expanded: #{$gray-dark};
-  }
-}
-
 .btn-group {
   align-items: center;
   display: flex;
@@ -38,22 +17,24 @@
 
 button,
 .btn, .button {
-  align-items: center;
-  background-color: $action;
-  border-radius: $borderRadius;
-  border: thin solid transparent;
-  color: #fff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: $sansSerif;
-  font-weight: 500;
-  margin-bottom: 0;
-  margin-top: 0;
-  min-height: 38px;
-  padding: 0 37px;
-  text-decoration: none;
-  white-space: nowrap;
-  -webkit-appearance: none;
+  // @todo Delete this because it's in initial render
+  //
+  // align-items: center;
+  // background-color: $action;
+  // border-radius: $borderRadius;
+  // border: thin solid transparent;
+  // color: #fff;
+  // cursor: pointer;
+  // display: inline-flex;
+  // font-family: $sansSerif;
+  // font-weight: 500;
+  // margin-bottom: 0;
+  // margin-top: 0;
+  // min-height: 38px;
+  // padding: 0 37px;
+  // text-decoration: none;
+  // white-space: nowrap;
+  // -webkit-appearance: none;
 
   p { color: $gray-dark; margin: 0; }
 
