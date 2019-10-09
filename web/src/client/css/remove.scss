@@ -1,0 +1,12 @@
+// this used to be app.css, but we're removing it and moving this stuff to
+// component css that is lazily loaded later
+
+// @todo get the important stuff into initialRender.scss and get that inlined
+
+@import 'inc/base';
+@import 'layout/headers';
+@import 'layout/containers';
+@import 'layout/menu';
+@import 'layout/tabs';
+@import 'layout/forms';
+@import 'layout/notice';
