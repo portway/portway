@@ -16,6 +16,30 @@ const app = express()
 const port = normalizePort(process.env.PORT || '3000')
 const devMode = process.env.NODE_ENV !== 'production'
 
+// Middlewares
+app.use(aliasMiddleware)
+app.use(logger('dev'))
+app.use(json())
+app.use(urlencoded({ extended: true }))
+app.use(cookieParser())
+app.use(passport.initialize())
+
+// Set up Express
+app.set('views', join(__dirname, 'views'))
+app.set('view engine', 'ejs')
+app.set('port', port)
+
+// Dont cache these items
+const cacheControl = ['manifest.json', 'service-worker.js', '.html']
+function setCustomCacheControl(res, path) {
+  cacheControl.forEach((item) => {
+    if (path.includes(item)) {
+      // Custom Cache-Control for web manifest
+      res.setHeader('Cache-Control', 'public, max-age=0')
+    }
+  })
+}
+
 // If we're in development mode, load the development Webpack config
 // and use the Webpack Express Middleware to run webpack when the server
 // starts.
@@ -27,31 +51,19 @@ if (devMode) {
   app.locals.bundles = entrypointBundles
 }
 
-// Middlewares
-app.use(aliasMiddleware)
-app.use(logger('dev'))
-app.use(json())
-app.use(urlencoded({ extended: true }))
-app.use(cookieParser())
-app.use(passport.initialize())
-
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
 if (devMode) {
   app.use(express.static(join(__dirname, './public')))
 } else {
   const expire = 3.154e+10 // 1 year - Google suggests this
-  app.use(gzipStatic(join(__dirname, './public'), { maxAge: expire }))
+  app.use(gzipStatic(join(__dirname, './public'), { maxAge: expire, setHeaders: setCustomCacheControl }))
+  // Note: Router for dev is controlled in webpackDevMiddlware lib due to
+  // reading files from memory
+  const router = express.Router()
+  controllerLoader(router)
+  app.use(router)
 }
-
-// Set up Express
-app.set('views', join(__dirname, 'views'))
-app.set('view engine', 'ejs')
-app.set('port', port)
-
-const router = express.Router()
-controllerLoader(router)
-app.use(router)
 
 // Server Events
 const onListening = () => {

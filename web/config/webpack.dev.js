@@ -9,9 +9,9 @@ module.exports = {
   mode: 'development',
   entry: entryPoints,
   output: {
-    path: path.resolve(__dirname, '../src/server/public'),
-    filename: 'js/[name].bundle.js',
     chunkFilename: 'js/[name].bundle.js',
+    filename: 'js/[name].bundle.js',
+    path: path.resolve(__dirname, '../src/server/public'),
     publicPath: '/'
   },
   plugins: SharedConfig.plugins.concat([
@@ -28,13 +28,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
         include: [path.resolve(__dirname, '../src/client/css')],
+        test: /\.(sa|sc|c)ss$/,
         use: [MiniCssExtractPlugin.loader, ...SharedConfig.styleLoaders]
       },
       {
-        test: /\.(sa|sc|c)ss$/,
         include: [path.resolve(__dirname, '../src/client/js')],
+        test: /\.(sa|sc|c)ss$/,
         use: ['style-loader', ...SharedConfig.styleLoaders]
       },
       ...SharedConfig.sharedLoaders

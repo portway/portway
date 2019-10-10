@@ -1,8 +1,13 @@
-const path = require('path')
-const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+// const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
+// We'll enable this in a future release. Leaving it here to know to check in on it
+// This currently doesn't work with beta 4 of HTMLWebpackPlugin, which we need
+const path = require('path')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const webpack = require('webpack')
+
 const Constants = require('../src/shared/constants')
 
 const SharedConfig = {
@@ -16,6 +21,14 @@ const SharedConfig = {
     Shared: path.resolve(__dirname, '../src/shared'),
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Portway',
+      filename: '../app.html',
+      // inlineSource: /initialRender/,
+      template: path.resolve(__dirname, '../src/client/index.html'),
+      excludeChunks: ['index', 'registration']
+      // @todo order it so initialRender is first
+    }),
     new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
     new CopyWebpackPlugin([
       {
@@ -27,8 +40,8 @@ const SharedConfig = {
         to: 'css/fonts/'
       },
       {
-        from: path.resolve(__dirname, '../src/client/manifest.webmanifest'),
-        to: 'manifest.webmanifest'
+        from: path.resolve(__dirname, '../src/client/manifest.json'),
+        to: 'manifest.json'
       }
     ]),
     new SWPrecacheWebpackPlugin({
@@ -42,7 +55,7 @@ const SharedConfig = {
         console.info(message)
       },
       minify: true,
-      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
+      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/, /\.html$/]
     }),
     new webpack.DefinePlugin({
       VAR_API_URL: JSON.stringify(process.env.API_PUBLIC_URL)

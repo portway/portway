@@ -19,6 +19,9 @@
     .document-field__component {
       flex-direction: column;
     }
+    .document-field__content {
+      display: block;
+    }
     .document-field__tool-options {
       justify-content: center;
     }
