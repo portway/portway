@@ -42,7 +42,8 @@ const AUTHENTICATED_CONTROLLERS = {
   '/organizations': {
     fileName: 'organizations',
     childRoutes: {
-      '/:orgId/billing': { fileName: 'orgBilling' }
+      '/:orgId/billing': { fileName: 'orgBilling' },
+      '/:orgId/plan': { fileName: 'orgPlan' }
     }
   }
 }

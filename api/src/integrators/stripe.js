@@ -48,7 +48,7 @@ const updateCustomer = async function(customerId, body) {
       throw ono(err, {
         code: 402,
         error: 'Invalid payment value',
-        errorType: "ValidationError",
+        errorType: 'ValidationError',
         errorDetails: [
           {
             message: err.message,
@@ -66,7 +66,7 @@ const updateCustomer = async function(customerId, body) {
 const createSubscription = async function(customerId, planId) {
   let subscription
   try {
-    subscription = stripe.subscriptions.create({
+    subscription = await stripe.subscriptions.create({
       customer: customerId,
       items: [{ plan: planId }]
     })

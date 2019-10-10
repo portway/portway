@@ -1,0 +1,4 @@
+export default {
+  SINGLE_USER: 'SINGLE_USER',
+  MULTI_USER: 'MULTI_USER'
+}

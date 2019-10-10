@@ -11,15 +11,22 @@ const formatBilling = (billingObj) => {
 }
 
 const subscribeOrgToPlan = async function(planId, orgId) {
+  const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
+
   const org = await BusinessOrganization.findById(orgId)
+  if (!org.stripeId) {
+    throw billingError
+  }
 
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
 
   if (!customer) {
-    throw ono({ code: 404 }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
+    throw billingError
   }
 
-  await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
+  await stripeIntegrator.createSubscription(customer.id, planId)
+
+  await BusinessOrganization.updateById(orgId, { plan: planId })
 }
 
 const updateOrgBilling = async function(token, orgId) {
