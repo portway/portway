@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
-import Select from 'react-select'
+const Select = lazy(() => import('react-select'))
 import {
   injectStripe,
   CardNumberElement,

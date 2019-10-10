@@ -30,7 +30,7 @@ Alternatively, you can run `npm run analyze`, however note step #2.
     ```
 2. Then, build and run the client in production from /web:
     ```bash
-    API_PUBLIC_URL=http://localhost:3001 npm run build && API_URL=http://localhost:3001 API_PUBLIC_URL=http://localhost:3001 JWT_SECRET=jwtauthsecret NODE_ENV=production node dist/server/app.js
+    ./run.sh local
     ```
 
 

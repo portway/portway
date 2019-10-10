@@ -1,6 +1,18 @@
 <%- include('../partials/head', { title: title, permalink: permalink, robots: 'noindex, nofollow' }); %>
 <div id="application" role="application">
-  <!-- Look at js/app.js -->
+  <!-- Overwrittem by js/app.js -->
+  <div>
+    <header class="masthead" role="banner">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar__brand"></div>
+        <div class="navbar__content"></div>
+        <div class="navbar__misc"></div>
+        <div class="navbar__user"></div>
+      </nav>
+    </header>
+    <main></main>
+  </div>
+  <!-- Overwrittem by js/app.js -->
 </div>
 <%- include('../partials/foot'); %>
 
