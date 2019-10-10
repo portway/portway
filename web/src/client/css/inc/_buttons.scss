@@ -1,22 +1,7 @@
 @import 'vars';
 @import 'mixins';
 
-.btn-group {
-  align-items: center;
-  display: flex;
-  justify-content: flex-start;
-  padding: ($sideGutterWidth / 2) 0;
-  .btn {
-    margin-right: 12px;
-  }
-}
-
-[role="button"] {
-  cursor: pointer;
-}
-
-button,
-.btn, .button {
+:root {
   --button-white-background: #{$white};
   --button-white-border: #{$gray-light};
   --button-white-border-hover: #{$white-ter};
@@ -35,6 +20,24 @@ button,
     --button-icon-expanded: #{$black-er};
     --button-label-expanded: #{$gray-dark};
   }
+}
+
+.btn-group {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  padding: ($sideGutterWidth / 2) 0;
+  .btn {
+    margin-right: 12px;
+  }
+}
+
+[role="button"] {
+  cursor: pointer;
+}
+
+button,
+.btn, .button {
   align-items: center;
   background-color: $action;
   border-radius: $borderRadius;

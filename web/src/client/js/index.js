@@ -16,7 +16,7 @@ import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryCompon
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
 
-const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection',  webpackPreload: true */ 'Sections/Projects/ProjectsSection'))
+const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection' */ 'Sections/Projects/ProjectsSection'))
 const AdminSection = lazy(() => import(/* webpackChunkName: 'AdminSection' */ 'Sections/Admin/AdminSection'))
 const UserSection = lazy(() => import(/* webpackChunkName: 'UserSection' */ 'Sections/User/UserSection'))
 const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' */ 'Sections/Project/ProjectSection'))
@@ -37,10 +37,10 @@ const Index = () => {
             <NotificationsContainer />
             <HeaderContainer />
             <Suspense fallback={null}>
-              <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
-              <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
-              <Route path={PATH_SETTINGS} component={UserSection} />
-              <Route path={PATH_ADMIN} component={AdminSection} />
+              <Route exact path={PATH_PROJECTS} component={props => <ProjectsSection {...props} />} />
+              <Route path={`${PATH_PROJECT}/:projectId`} component={props => <ProjectSection {...props} />} />
+              <Route path={PATH_SETTINGS} component={props => <UserSection {...props} />} />
+              <Route path={PATH_ADMIN} component={props => <AdminSection {...props} />} />
             </Suspense>
           </ErrorBoundaryComponent>
         </AppContainer>

@@ -30,20 +30,6 @@
     <link rel="apple-touch-icon" href="<%= require('./images/social/apple-touch-icon-57x57-precomposed.png') %>">
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.webmanifest">
-    <script>
-      window.addEventListener('load', function() {
-        const sk = document.querySelector('.skeletons')
-        switch (location.pathname) {
-          case '/d/projects':
-            sk.classList.add('projects')
-            break;
-          default:
-            sk.classList.add('projects')
-            break;
-        }
-        console.log(location)
-      }, false)
-    </script>
   </head>
   <body>
     <div id="application" role="application">
