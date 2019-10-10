@@ -15,6 +15,7 @@ describe('billing coordinator', () => {
 
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
+      BusinessOrganization.updateById.mockClear()
       BusinessOrganization.findById.mockImplementationOnce(() => {
         return { stripeId }
       })
@@ -34,10 +35,14 @@ describe('billing coordinator', () => {
     it('should call stripeIntegrator.createSubscription with the customer id and plan id', () => {
       const customerId = stripeIntegrator.getCustomer.mock.results[0].value.id
       expect(stripeIntegrator.createSubscription.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createSubscription.mock.calls[0][0]).toEqual({
-        customerId,
-        planId
-      })
+      expect(stripeIntegrator.createSubscription.mock.calls[0][0]).toEqual(customerId)
+      expect(stripeIntegrator.createSubscription.mock.calls[0][1]).toEqual(planId)
+    })
+
+    it('should call BusinessOrganization.updateById with the org id and plan id', () => {
+      expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(orgId)
+      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ plan: planId })
     })
 
     it('should resolve with undefined', () => {
