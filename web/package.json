@@ -86,7 +86,7 @@
     "react-helmet": "^5.2.1",
     "react-image-crop": "^8.3.0",
     "react-redux": "^6.0.0",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.1.2",
     "react-select": "^2.4.2",
     "react-stripe-elements": "^2.0.3",
     "redux": "^4.0.1",

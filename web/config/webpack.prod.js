@@ -42,6 +42,8 @@ module.exports = {
     alias: SharedConfig.resolvers
   },
   optimization: {
+    namedChunks: true,
+    // runtimeChunk: 'single',
     splitChunks: SharedConfig.optimization.splitChunks,
     minimizer: [
       new TerserPlugin({ parallel: true, sourceMap: true }),

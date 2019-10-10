@@ -79,6 +79,7 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
               help={avatarHelpText}
               id="orgAvatar"
               errors={errors.file}
+              label={`${organization.name}’s logo`}
               name="avatar"
               onChange={(e) => {
                 const data = e.target.files

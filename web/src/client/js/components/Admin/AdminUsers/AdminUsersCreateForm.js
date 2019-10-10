@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { lazy, useState } from 'react'
 import PropTypes from 'prop-types'
-import Select from 'react-select'
+
+const Select = lazy(() => import('react-select'))
 
 import { debounce } from 'Shared/utilities'
 import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
@@ -36,7 +37,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
           id="userName"
           label="Full name"
           name="name"
-          onChange={(e) => debounce(200, setName(e.target.value))}
+          onChange={e => debounce(200, setName(e.target.value))}
           onBlur={(e) => { setName(e.target.value)} }
           placeholder="Enter a full name"
           required
@@ -46,7 +47,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
           id="userEmail"
           label="Email address"
           name="email"
-          onChange={(e) => debounce(200, setEmail(e.target.value))}
+          onChange={e => debounce(200, setEmail(e.target.value))}
           onBlur={(e) => { setEmail(e.target.value)} }
           placeholder="name@domain.com"
           required

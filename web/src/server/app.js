@@ -56,8 +56,8 @@ function setCustomCacheControl(res, path) {
 if (devMode) {
   app.use(express.static(join(__dirname, './public')))
 } else {
-  const oneDay = 86400000
-  app.use(gzipStatic(join(__dirname, './public'), { maxAge: oneDay, setHeaders: setCustomCacheControl }))
+  const expire = 3.154e+10 // 1 year - Google suggests this
+  app.use(gzipStatic(join(__dirname, './public'), { maxAge: expire, setHeaders: setCustomCacheControl }))
   // Note: Router for dev is controlled in webpackDevMiddlware lib due to
   // reading files from memory
   const router = express.Router()

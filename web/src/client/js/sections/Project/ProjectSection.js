@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import { PATH_DOCUMENT, PATH_PROJECT, PATH_PROJECT_CREATE } from 'Shared/constants'
 
-import Project from './Project'
-import ProjectCreate from './ProjectCreate'
-import ProjectSettings from './ProjectSettings'
+const Project = lazy(() => import(/* webpackChunkName: 'Project' */ './Project'))
+const ProjectCreate = lazy(() => import(/* webpackChunkName: 'ProjectCreate' */ './ProjectCreate'))
+const ProjectSettings = lazy(() => import(/* webpackChunkName: 'ProjectSettings' */ './ProjectSettings'))
 
 import './_ProjectSection.scss'
 
