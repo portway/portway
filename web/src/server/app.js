@@ -40,13 +40,24 @@ if (devMode) {
   app.locals.bundles = entrypointBundles
 }
 
+// Dont cache these items
+const cacheControl = ['manifest.webmanifest', 'service-worker.js']
+function setCustomCacheControl(res, path) {
+  cacheControl.forEach((item) => {
+    if (path.includes(item)) {
+      // Custom Cache-Control for web manifest
+      res.setHeader('Cache-Control', 'public, max-age=0')
+    }
+  })
+}
+
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
 if (devMode) {
   app.use(express.static(join(__dirname, './public')))
 } else {
   const oneDay = 86400000
-  app.use(gzipStatic(join(__dirname, './public'), { maxAge: oneDay }))
+  app.use(gzipStatic(join(__dirname, './public'), { maxAge: oneDay, setHeaders: setCustomCacheControl }))
   // Note: Router for dev is controlled in webpackDevMiddlware lib due to
   // reading files from memory
   const router = express.Router()
