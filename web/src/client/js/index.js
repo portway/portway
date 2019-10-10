@@ -21,6 +21,8 @@ const AdminSection = lazy(() => import(/* webpackChunkName: 'AdminSection' */ 'S
 const UserSection = lazy(() => import(/* webpackChunkName: 'UserSection' */ 'Sections/User/UserSection'))
 const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' */ 'Sections/Project/ProjectSection'))
 
+import 'CSS/app.scss'
+
 const Index = () => {
   useDetectInputMode()
   return (
