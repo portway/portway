@@ -7,7 +7,7 @@ import { validateBody, validateParams } from '../libs/middleware/payloadValidati
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
-import PLANS from '../constants/plans'
+import { PLANS } from '../constants/plans'
 
 const bodySchema = Joi.compile({
   plan: Joi.string().valid(Object.keys(PLANS)).required()

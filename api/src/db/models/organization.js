@@ -1,4 +1,4 @@
-import PLANS from '../../constants/plans'
+import { PLANS } from '../../constants/plans'
 
 module.exports = (sequelize, DataTypes) => {
   const Organization = sequelize.define(

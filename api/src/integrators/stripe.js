@@ -63,12 +63,13 @@ const updateCustomer = async function(customerId, body) {
   return customer
 }
 
-const createSubscription = async function(customerId, planId) {
+const createSubscription = async function({ customerId, planId, trialPeriodDays }) {
   let subscription
   try {
     subscription = await stripe.subscriptions.create({
       customer: customerId,
-      items: [{ plan: planId }]
+      items: [{ plan: planId }],
+      trial_period_days: trialPeriodDays
     })
   } catch (err) {
     throw ono(err, { code: 500 })

@@ -30,7 +30,7 @@ const subscribeOrgToPlan = async function(planId, orgId) {
     throw billingError
   }
 
-  await stripeIntegrator.createSubscription(customer.id, planId)
+  await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
 
   await BusinessOrganization.updateById(orgId, { plan: planId })
 }
