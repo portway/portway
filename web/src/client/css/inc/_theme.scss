@@ -61,6 +61,12 @@ a {
   }
 }
 
+.title {
+  color: var(--base-color);
+}
+.navbar {
+  background: var(--base-background);
+}
 
 // Bulma hero override
 .hero {

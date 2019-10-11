@@ -3,16 +3,21 @@
 @import 'inc/theme';
 @import 'inc/type';
 
-body.home {
-  background: var(--color-brand-light);
+html, body {
+  background: var(--base-background);
+  color: var(--base-color);
+  &.home {
+    background: var(--color-brand-light);
+  }
 }
 
 .login-form {
   width: 400px;
   label {
-    color: var(--color-gray-10);
+    color: var(--base-color);
   }
   .help {
+    color: var(--base-color);
     .theme--salmon &, .theme--yellow & {
       color: var(--color-brand-darker);
     }
