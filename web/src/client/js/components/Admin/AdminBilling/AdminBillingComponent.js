@@ -41,7 +41,7 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
           <h2 id="rg1-label">Your plan: <span className="admin-plans__title">{planTitle}</span></h2>
           <ul className="admin-plans" role="radiogroup" aria-labelledby="rg1-label">
             <li className="admin-plans__item">
-              <button type="button" className="btn" ref={singleRef} role="radio" aria-checked={plan === PLAN_TYPES.SINGLE} onClick={formChangeHandler}>
+              <button aria-label="Select a single-user plan" type="button" className="btn" ref={singleRef} role="radio" aria-checked={plan === PLAN_TYPES.SINGLE} onClick={formChangeHandler}>
                 <div className="admin-plans__content">
                   <h3>Single-user</h3>
                   <div className="admin-plans__description">
@@ -60,7 +60,7 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
               </button>
             </li>
             <li className="admin-plans__item">
-              <button type="button" className="btn" ref={multiRef} role="radio" aria-checked={plan === PLAN_TYPES.MULTIPLE} onClick={formChangeHandler}>
+              <button aria-label="Select a multi-user plan" type="button" className="btn" ref={multiRef} role="radio" aria-checked={plan === PLAN_TYPES.MULTIPLE} onClick={formChangeHandler}>
                 <div className="admin-plans__content">
                   <h3>Multi-user</h3>
                   <div className="admin-plans__description">
@@ -81,7 +81,7 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
               </button>
             </li>
           </ul>
-          <button className="admin-plans__submit" disabled={!formChanged}>Update plan</button>
+          <button aria-label="Update your plan" className="admin-plans__submit" disabled={!formChanged}>Update plan</button>
         </form>
       </section>
       <hr />

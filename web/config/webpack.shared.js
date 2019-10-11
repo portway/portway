@@ -27,8 +27,8 @@ const SharedConfig = {
         to: 'css/fonts/'
       },
       {
-        from: path.resolve(__dirname, '../src/client/manifest.webmanifest'),
-        to: 'manifest.webmanifest'
+        from: path.resolve(__dirname, '../src/client/manifest.json'),
+        to: 'manifest.json'
       }
     ]),
     new SWPrecacheWebpackPlugin({

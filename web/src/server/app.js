@@ -35,13 +35,24 @@ app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(passport.initialize())
 
+// Dont cache these items
+const cacheControl = ['manifest.json', 'service-worker.js', '.html']
+function setCustomCacheControl(res, path) {
+  cacheControl.forEach((item) => {
+    if (path.includes(item)) {
+      // Custom Cache-Control for web manifest
+      res.setHeader('Cache-Control', 'public, max-age=0')
+    }
+  })
+}
+
 // Set public directory for static assets
 // NOTE – This has to be after sassMiddleware for sass compilation to work
 if (devMode) {
   app.use(express.static(join(__dirname, './public')))
 } else {
   const expire = 3.154e+10 // 1 year - Google suggests this
-  app.use(gzipStatic(join(__dirname, './public'), { maxAge: expire }))
+  app.use(gzipStatic(join(__dirname, './public'), { maxAge: expire, setHeaders: setCustomCacheControl }))
 }
 
 // Set up Express
