@@ -24,7 +24,7 @@ const NotificationComponent = ({ dismissHandler, id, notification }) => {
   }
   return (
     <li ref={notificationRef} className={notificationClasses} role="alertdialog" aria-labelledby={title} aria-describedby={desc}>
-      <button className="btn btn--blank btn--with-circular-icon notifications__remove" onClick={dismissNotification}>
+      <button aria-label="Dismiss notification" className="btn btn--blank btn--with-circular-icon notifications__remove" onClick={dismissNotification}>
         <RemoveIcon />
       </button>
       <div className="notifications__content">

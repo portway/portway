@@ -29,6 +29,7 @@ const AdminUserViewComponent = ({
     return (
       <div className="table__tools">
         <button
+          aria-label="Remove project"
           className="btn btn--blank btn--with-circular-icon btn--danger"
           onClick={() => removeProjectHandler(projectId, assignmentId) }>
           <RemoveIcon />
