@@ -7,7 +7,13 @@ import { BILLING_PUBLIC_FIELDS, BILLING_SOURCE_PUBLIC_FIELDS } from '../constant
 
 const formatBilling = (billingObj) => {
   const publicBillingFields = pick(billingObj, BILLING_PUBLIC_FIELDS)
-  return { ...publicBillingFields, source: pick(billingObj.sources.data[0], BILLING_SOURCE_PUBLIC_FIELDS) }
+
+  let source
+  if (billingObj.sources.data[0]) {
+    source = pick(billingObj.sources.data[0], BILLING_SOURCE_PUBLIC_FIELDS)
+  }
+
+  return { ...publicBillingFields, source }
 }
 
 const subscribeOrgToPlan = async function(planId, orgId) {

@@ -28,7 +28,7 @@ function renderCardLogo(brand) {
 }
 
 const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
-  if (!isStripeOpen && Object.keys(orgBilling).length === 0) {
+  if (!isStripeOpen && !orgBilling.source) {
     return (
       <div className="admin-payment">
         <>
