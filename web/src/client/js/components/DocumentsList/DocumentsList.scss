@@ -15,6 +15,12 @@
 
   min-height: 100%;
 
+  .toolbar {
+    @media (prefers-color-scheme: dark) {
+      background-color: hsl(61, 1%, 23%);
+    }
+  }
+
   &--dragged-over {
     background-color: var(--document-list-item-hover);
     .toolbar {

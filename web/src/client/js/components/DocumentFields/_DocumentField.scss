@@ -6,7 +6,7 @@
   --field-edit-mode-background: rgba(255, 255, 255, .9);
   --field-name-width: 150px;
   @media (prefers-color-scheme: dark) {
-    --field-background: var(--color-gray-10);
+    --field-background: hsl(61, 1%, 23%);
   }
   cursor: grab;
   outline: 0;

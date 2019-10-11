@@ -4,8 +4,8 @@
   --project-background: var(--color-white);
   --project-toolbar-background: var(--color-gray-4);
   @media (prefers-color-scheme: dark) {
-    --project-background: var(--color-gray-10);
-    --project-toolbar-background: var(--color-gray-8);
+    --project-background: var(--base-background);
+    --project-toolbar-background: var(--base-border-color);
   }
   padding: 0;
 

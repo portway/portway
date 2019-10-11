@@ -41,13 +41,13 @@
   --base-link-active-color: var(--color-blue-dark);
   --link-color-gray: var(--color-gray-7);
   @media (prefers-color-scheme: dark) {
-    --base-background: var(--color-gray-10);
-    --base-color: var(--color-white);
-    --base-border-color: var(--color-gray-9);
+    --base-background: hsl(61, 1%, 21%);
+    --base-color: hsl(106, 0%, 89%);
+    --base-border-color: hsl(106, 0%, 34%);
     --base-link-color: var(--color-blue);
     --base-link-hover-color: var(--color-cyan);
     --base-link-active-color: var(--color-blue-dark);
-    --link-color-gray: var(--color-gray-6);
+    --link-color-gray: hsl(61, 1%, 41%);
   }
 }
 
@@ -94,13 +94,13 @@
   --base-link-active-color: var(--color-blue-dark);
   --link-color-gray: var(--color-gray-7);
   @media (prefers-color-scheme: dark) {
-    --base-background: var(--color-gray-10);
-    --base-color: var(--color-white);
-    --base-border-color: var(--color-gray-9);
+    --base-background: hsl(61, 1%, 21%);
+    --base-color: hsl(106, 0%, 89%);
+    --base-border-color: hsl(106, 0%, 34%);
     --base-link-color: var(--color-blue);
     --base-link-hover-color: var(--color-cyan);
     --base-link-active-color: var(--color-blue-dark);
-    --link-color-gray: var(--color-gray-6);
+    --link-color-gray: hsl(61, 1%, 41%);
   }
 }
 
@@ -147,12 +147,12 @@
   --base-link-active-color: var(--color-blue-dark);
   --link-color-gray: var(--color-gray-7);
   @media (prefers-color-scheme: dark) {
-    --base-background: var(--color-gray-10);
-    --base-color: var(--color-white);
-    --base-border-color: var(--color-gray-9);
+    --base-background: hsl(61, 1%, 21%);
+    --base-color: hsl(106, 0%, 89%);
+    --base-border-color: hsl(106, 0%, 34%);
     --base-link-color: var(--color-blue);
     --base-link-hover-color: var(--color-cyan);
     --base-link-active-color: var(--color-blue-dark);
-    --link-color-gray: var(--color-gray-6);
+    --link-color-gray: hsl(61, 1%, 41%);
   }
 }

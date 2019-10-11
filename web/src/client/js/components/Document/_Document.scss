@@ -5,8 +5,8 @@
   --document-header-bg: var(--color-white);
   --document-header-border: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
-    --document-header-bg: var(--color-gray-10);
-    --document-header-border: var(--color-gray-9);
+    --document-header-bg: hsl(61, 1%, 23%);
+    --document-header-border: var(--base-border-color);
   }
   flex: 1;
   position: relative;
