@@ -2,12 +2,12 @@
 @import 'CSS/inc/_mixins.scss';
 
 .masthead {
-  border-top: $ribbonHeight solid $highlight;
+  border-top: $ribbonHeight solid var(--color-brand);
   height: $headerHeight + $ribbonHeight;
 
   .navbar {
     align-items: center;
-    // border-bottom: thin solid $gray-light;
+    // border-bottom: thin solid var(--color-gray-5);
     border-bottom: thin solid var(--base-border-color);
     display: flex;
 

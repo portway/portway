@@ -1,16 +1,13 @@
 @import '../inc/vars';
 @import '../inc/mixins';
 
-:root {
-  --form-background: #{$white};
-  --form-placeholder-color: #{$gray};
-  @media (prefers-color-scheme: dark) {
-    --form-background: #{$black-er};
-    --form-placeholder-color: #{$black-bis};
-  }
-}
-
 form, .form {
+  --form-background: var(--color-white);
+  --form-placeholder-color: var(--color-gray-6);
+  @media (prefers-color-scheme: dark) {
+    --form-background: var(--color-gray-9);
+    --form-placeholder-color: var(--color-gray-10);
+  }
   padding: 0 5px;
 
   &__section {
@@ -44,7 +41,7 @@ form, .form {
     margin-bottom: 18px;
 
     &__help {
-      color: $gray-dark;
+      color: var(--color-gray-7);
       padding: 4px;
       width: 300px;
     }
@@ -105,10 +102,10 @@ form, .form {
     &--error {
       .field {
         label, .field__label {
-          color: $danger;
+          color: var(--color-red);
         }
         input, textarea {
-          border-left: 6px solid $danger;
+          border-left: 6px solid var(--color-red);
         }
       }
     } // form-field--eror
@@ -146,10 +143,10 @@ form, .form {
     }
     &.focus {
       // StripeElement
-      border: thin solid $action;
+      border: thin solid var(--color-blue);
     }
     &:focus {
-      @include focus(var(--form-background), $action);
+      @include focus(var(--form-background), var(--color-blue));
     }
   }
 

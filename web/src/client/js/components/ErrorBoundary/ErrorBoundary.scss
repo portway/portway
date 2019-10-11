@@ -1,7 +1,7 @@
 @import 'CSS/inc/_vars.scss';
 
 .error-boundary {
-  background-color: $primary-light;
+  background-color: var(--color-brand-light);
   align-items: center;
   display: flex;
   flex-direction: column;

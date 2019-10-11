@@ -59,13 +59,13 @@ html, body {
 // @todo change the sketch file then delete this comment
 h1,
 .h-first-level {
-  color: $primary;
+  color: var(--color-green);
   font-family: $serif !important;
   font-size: 2.4rem; // 24px
   font-weight: 700;
   line-height: 1.8rem; // 18px
   a {
-    color: $primary;
+    color: var(--color-green);
     text-decoration: none;
   }
 }
@@ -112,7 +112,7 @@ b, strong {
   line-height: 1.4rem; // 14px
   padding: .5rem 0; // 5px
   &--danger, &--error {
-    color: $danger;
+    color: var(--color-red);
   }
 }
 
@@ -125,10 +125,10 @@ b, strong {
 }
 
 .danger {
-  color: $danger;
+  color: var(--color-red);
 }
 .warning {
-  color: $warning;
+  color: var(--color-orange);
 }
 
 time {
@@ -140,33 +140,33 @@ time {
 }
 
 .pill {
-  background-color: $gray-light;
+  background-color: var(--color-gray-5);
   border-radius: $borderRadius;
-  color: $black-bis;
+  color: var(--color-gray-10);
   display: inline-block;
   font-size: 90%;
   margin: 0 $iconMargin;
   padding: 3px $iconMargin;
   text-decoration: none;
   &--highlight {
-    background-color: $highlight;
-    color: $white;
+    background-color: var(--color-brand);
+    color: var(--color-white);
   }
   &--green {
-    background-color: $primary;
-    color: $white;
+    background-color: var(--color-green);
+    color: var(--color-white);
   }
   &--orange {
-    background-color: $highlight;
-    color: $white;
+    background-color: var(--color-brand);
+    color: var(--color-white);
   }
   &--blue {
-    background-color: $action;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
   }
   &--danger {
-    background-color: $danger;
-    color: $white;
+    background-color: var(--color-red);
+    color: var(--color-white);
   }
 }
 

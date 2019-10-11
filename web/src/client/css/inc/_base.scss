@@ -9,26 +9,6 @@
 @import 'hacks';
 @import 'react-select';
 
-:root {
-  color-scheme: light dark;
-  --base-background: #{$white};
-  --base-color: #{$black-bis};
-  --base-border-color: #{$gray-light};
-  --base-link-color: #{$action};
-  --base-link-hover-color: #{$action-light};
-  --base-link-active-color: #{$action-dark};
-  --link-color-gray: #{$gray-dark};
-  @media (prefers-color-scheme: dark) {
-    --base-background: #{$black-bis};
-    --base-color: #{$white};
-    --base-border-color: #{$black-er};
-    --base-link-color: #{$action};
-    --base-link-hover-color: #{$action-light};
-    --base-link-active-color: #{$action-dark};
-    --link-color-gray: #{$gray};
-  }
-}
-
 * {
   box-sizing: border-box;
 }
@@ -47,22 +27,22 @@ body {
 }
 
 a, .link {
-  color: $action;
+  color: var(--color-blue);
   &:hover {
-    color: lighten($action, 20%);
+    color: var(--color-cyan);
   }
   &:active {
-    color: darken($action, 20%);
+    color: var(--color-blue-dark);
   }
 
   &--gray {
     color: var(--link-color-gray);
     text-decoration: none;
     &:hover {
-      color: lighten($gray-dark, 20%);
+      color: var(--color-gray-6);
     }
     &:active {
-      color: darken($gray-dark, 20%);
+      color: var(--color-gray-8);
     }
   }
 

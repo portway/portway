@@ -1,6 +1,6 @@
 @import 'CSS/inc/_vars.scss';
 
 .message {
-  background-color: $gray-light;
+  background-color: var(--color-gray-5);
   margin: 1em 0;
 }

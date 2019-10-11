@@ -1,15 +1,12 @@
 @import 'CSS/inc/_vars.scss';
 
-:root {
-  --project-background: #{$white};
-  --project-toolbar-background: #{$white-ter};
-  @media (prefers-color-scheme: dark) {
-    --project-background: #{$black-bis};
-    --project-toolbar-background: #{$black-ter};
-  }
-}
-
 .project {
+  --project-background: var(--color-white);
+  --project-toolbar-background: var(--color-gray-4);
+  @media (prefers-color-scheme: dark) {
+    --project-background: var(--color-gray-10);
+    --project-toolbar-background: var(--color-gray-8);
+  }
   padding: 0;
 
   .toolbar__start {
@@ -78,7 +75,7 @@
 
     &-settings-link {
       align-items: center;
-      color: $black-bis;
+      color: var(--color-gray-10);
       display: inline-flex;
       font-size: 1.2rem;
       height: 30px;
@@ -86,7 +83,7 @@
       text-decoration: none;
       &:hover {
         background-color: var(--base-border-color);
-        color: $black-bis;
+        color: var(--color-gray-10);
       }
     }
 

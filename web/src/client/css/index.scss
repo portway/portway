@@ -1,14 +1,20 @@
+@import 'inc/color';
 @import 'inc/vars';
 @import 'inc/theme';
 @import 'inc/type';
 
 body.home {
-  background: $primary-light;
+  background: var(--color-brand-light);
 }
 
 .login-form {
   width: 400px;
   label {
-    color: $black-bis;
+    color: var(--color-gray-10);
+  }
+  .help {
+    .theme--salmon &, .theme--yellow & {
+      color: var(--color-brand-darker);
+    }
   }
 }

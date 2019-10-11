@@ -10,7 +10,7 @@
       // -webkit-appearance: none; // fixes chrome / opera
       // -moz-appearance: none;
       // appearance: none;
-      background: $gray-light; // Firefox
+      background: var(--color-gray-5); // Firefox
       border-radius: $borderRadius;
       display: block;
       margin: .25rem 0 1rem 0;
@@ -18,7 +18,7 @@
 
       // Safari
       &::-webkit-meter-bar {
-        background: $gray-light;
+        background: var(--color-gray-5);
         border-radius: $borderRadius;
       }
       &::-webkit-meter-optimum-value,
@@ -27,28 +27,28 @@
         border-radius: $borderRadius;
       }
       &::-webkit-meter-optimum-value {
-        background: $primary;
+        background: var(--color-green);
       }
       &::-webkit-meter-suboptimum-value {
-        background: $highlight;
+        background: var(--color-brand);
       }
       &::-webkit-meter-even-less-good-value  {
-        background: $danger;
+        background: var(--color-red);
       }
 
       // Firefox
       &::-moz-meter-bar {
-        background: $gray-light;
+        background: var(--color-gray-5);
         border-radius: $borderRadius;
       }
       &:-moz-meter-optimum::-moz-meter-bar {
-        background: $primary;
+        background: var(--color-green);
       }
       &:-moz-meter-sub-optimum::-moz-meter-bar {
-        background: $highlight;
+        background: var(--color-brand);
       }
       &:-moz-meter-sub-sub-optimum::-moz-meter-bar {
-        background: $danger;
+        background: var(--color-red);
       }
 
     }

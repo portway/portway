@@ -1,27 +1,6 @@
 @import 'vars';
 @import 'mixins';
 
-:root {
-  --button-white-background: #{$white};
-  --button-white-border: #{$gray-light};
-  --button-white-border-hover: #{$white-ter};
-  --button-icon-background: #{$white-bis};
-  --button-icon-hover: #{$white-ter};
-  --button-icon-active: #{$gray};
-  --button-icon-expanded: #{$gray-light};
-  --button-label-expanded: #{$gray-dark};
-  @media (prefers-color-scheme: dark) {
-    --button-white-background: #{$black-bis};
-    --button-white-border: #{$black-er};
-    --button-white-border-hover: #{$black-er};
-    --button-icon-background: #{$black-ter};
-    --button-icon-hover: #{$gray-dark};
-    --button-icon-active: #{$black-er};
-    --button-icon-expanded: #{$black-er};
-    --button-label-expanded: #{$gray-dark};
-  }
-}
-
 .btn-group {
   align-items: center;
   display: flex;
@@ -38,8 +17,26 @@
 
 button,
 .btn, .button {
+  --button-white-background: var(--color-white);
+  --button-white-border: var(--color-gray-5);
+  --button-white-border-hover: var(--color-gray-4);
+  --button-icon-background: var(--color-gray-3);
+  --button-icon-hover: var(--color-gray-4);
+  --button-icon-active: var(--color-gray-6);
+  --button-icon-expanded: var(--color-gray-5);
+  --button-label-expanded: var(--color-gray-7);
+  @media (prefers-color-scheme: dark) {
+    --button-white-background: var(--color-gray-10);
+    --button-white-border: var(--color-gray-9);
+    --button-white-border-hover: var(--color-gray-9);
+    --button-icon-background: var(--color-gray-8);
+    --button-icon-hover: var(--color-gray-7);
+    --button-icon-active: var(--color-gray-9);
+    --button-icon-expanded: var(--color-gray-9);
+    --button-label-expanded: var(--color-gray-7);
+  }
   align-items: center;
-  background-color: $action;
+  background-color: var(--color-blue);
   border-radius: $borderRadius;
   border: thin solid transparent;
   color: #fff;
@@ -55,17 +52,17 @@ button,
   white-space: nowrap;
   -webkit-appearance: none;
 
-  p { color: $gray-dark; margin: 0; }
+  p { color: var(--color-gray-7); margin: 0; }
 
-  @include focus($action);
+  @include focus(var(--color-blue));
 
   &:not([disabled]) {
     &:hover {
-      background-color: $action-light;
+      background-color: var(--color-cyan);
       color: #fff;
     }
     &:active {
-      background-color: $action-dark;
+      background-color: var(--color-blue-dark);
       color: #fff;
     }
   }
@@ -86,21 +83,21 @@ button,
   }
 
   &--primary {
-    @include focus($primary, $primary);
-    background-color: $primary;
-    border: thin solid $primary;
+    @include focus(var(--color-green), var(--color-green));
+    background-color: var(--color-green);
+    border: thin solid var(--color-green);
     &:not([disabled]) {
       &:hover {
-        background-color: lighten($primary, 10%);
-        color: $white;
+        background-color: var(--color-brand-light);
+        color: var(--color-white);
       }
       &:active {
-        background-color: $primary-dark;
-        color: $white;
+        background-color: var(--color-green-dark);
+        color: var(--color-white);
       }
     }
     &[aria-expanded="true"] {
-      background-color: $primary-dark;
+      background-color: var(--color-green-dark);
     }
   }
 
@@ -176,7 +173,7 @@ button,
         transform: rotate(-180deg);
       }
       .label {
-        color: $gray;
+        color: var(--color-gray-6);
       }
     }
   }
@@ -218,16 +215,16 @@ button,
   }
 
   &--warning {
-    color: $warning;
+    color: var(--color-orange);
     &:hover {
-      color: darken($warning, 20%);
+      color: var(--color-orange-dark);
     }
   }
 
   &--danger {
-    color: $danger;
+    color: var(--color-red);
     &:hover {
-      color: darken($danger, 20%);
+      color: var(--color-red-dark);
     }
   }
 

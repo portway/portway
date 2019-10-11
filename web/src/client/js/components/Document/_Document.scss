@@ -2,11 +2,11 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
-  --document-header-bg: #{$white};
-  --document-header-border: #{$gray-light};
+  --document-header-bg: var(--color-white);
+  --document-header-border: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
-    --document-header-bg: #{$black-bis};
-    --document-header-border: #{$black-er};
+    --document-header-bg: var(--color-gray-10);
+    --document-header-border: var(--color-gray-9);
   }
   flex: 1;
   position: relative;
@@ -41,7 +41,7 @@
     padding: 0 ($brandWidth / 8);
     .icon-expand {
       path {
-        fill: $gray-dark;
+        fill: var(--color-gray-7);
       }
     }
   }
@@ -56,7 +56,7 @@
   &__title {
     background-color: transparent;
     border: none;
-    color: $primary;
+    color: var(--color-green);
     flex: 1;
     font-family: $serif;
     font-size: 1.8rem;
@@ -69,6 +69,13 @@
     width: 100%;
     -webkit-appearance: none;
 
+    .theme--default & {
+      color: var(--color-green);
+    }
+    .theme--salmon &, .theme--yellow & {
+      color: var(--color-brand-dark);
+    }
+
     &:focus {
       color: var(--base-color);
     }
@@ -76,7 +83,7 @@
   }
 
   &__publish-date {
-    color: $gray-dark;
+    color: var(--color-gray-7);
     display: block;
   }
 
@@ -99,7 +106,7 @@
 
   // Validation for document
   .validation {
-    // background-color: $gray-light;
+    // background-color: var(--color-gray-5);
   }
 
 }

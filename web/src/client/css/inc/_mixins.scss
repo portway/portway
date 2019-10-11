@@ -1,13 +1,13 @@
 @import 'vars';
 
 :root {
-  --focus-border-color: #{$action};
-  --focus-shadow-one: #{$white-bis};
-  --focus-shadow-two: #{$action-light};
+  --focus-border-color: var(--color-blue);
+  --focus-shadow-one: var(--color-gray-3);
+  --focus-shadow-two: var(--color-cyan);
   @media (prefers-color-scheme: dark) {
-    --focus-border-color: #{$white};
-    --focus-shadow-one: #{$black-bis};
-    --focus-shadow-two: #{$action};
+    --focus-border-color: var(--color-white);
+    --focus-shadow-one: var(--color-gray-10);
+    --focus-shadow-two: var(--color-blue);
   }
 }
 
