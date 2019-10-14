@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       stripeId: DataTypes.STRING,
       avatar: DataTypes.STRING,
-      plan: DataTypes.ENUM(Object.keys(PLANS))
+      plan: DataTypes.ENUM(Object.keys(PLANS)),
+      subscriptionStatus: DataTypes.STRING
     },
     {
       paranoid: true

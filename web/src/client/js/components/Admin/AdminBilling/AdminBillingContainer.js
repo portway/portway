@@ -1,14 +1,18 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
 import { ORGANIZATION_ROLE_IDS, PATH_PROJECTS, PRODUCT_NAME } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminBillingComponent from './AdminBillingComponent'
+import { updateOrganizationPlan } from 'Actions/organization'
+import { currentOrgId } from 'Libs/currentIds'
 
-const AdminBillingContainer = () => {
+const AdminBillingContainer = ({ updateOrganizationPlan }) => {
   function planChangeHandler(val) {
-    console.log(`Change to ${val} plan`)
+    updateOrganizationPlan(currentOrgId, { plan: val })
   }
 
   return (
@@ -21,4 +25,10 @@ const AdminBillingContainer = () => {
   )
 }
 
-export default AdminBillingContainer
+AdminBillingContainer.propTypes = {
+  updateOrganizationPlan: PropTypes.func.isRequired
+}
+
+const mapDispatchToProps = { updateOrganizationPlan }
+
+export default connect(null, mapDispatchToProps)(AdminBillingContainer)

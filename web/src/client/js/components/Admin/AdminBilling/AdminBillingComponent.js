@@ -9,7 +9,7 @@ import { CheckIcon } from 'Components/Icons'
 import './_AdminBillingStyles.scss'
 
 const AdminBillingComponent = ({ planChangeHandler }) => {
-  const [plan, setPlan] = useState(PLAN_TYPES.SINGLE)
+  const [plan, setPlan] = useState(PLAN_TYPES.SINGLE_USER)
   const [formChanged, setFormChange] = useState(false)
 
   // Ref for each plan item
@@ -17,13 +17,13 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
   const multiRef = useRef()
 
   // @todo only adjust this title to what the server says we have plan wise
-  const planTitle = plan === PLAN_TYPES.SINGLE ? 'Single-user plan' : 'Multi-user plan'
+  const planTitle = plan === PLAN_TYPES.SINGLE_USER ? 'Single-user plan' : 'Multi-user plan'
 
   function formChangeHandler(e) {
     if (e.currentTarget === singleRef.current) {
-      setPlan(PLAN_TYPES.SINGLE)
+      setPlan(PLAN_TYPES.SINGLE_USER)
     } else {
-      setPlan(PLAN_TYPES.MULTIPLE)
+      setPlan(PLAN_TYPES.MULTI_USER)
     }
     setFormChange(true)
   }
@@ -41,7 +41,7 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
           <h2 id="rg1-label">Your plan: <span className="admin-plans__title">{planTitle}</span></h2>
           <ul className="admin-plans" role="radiogroup" aria-labelledby="rg1-label">
             <li className="admin-plans__item">
-              <button type="button" className="btn" ref={singleRef} role="radio" aria-checked={plan === PLAN_TYPES.SINGLE} onClick={formChangeHandler}>
+              <button type="button" className="btn" ref={singleRef} role="radio" aria-checked={plan === PLAN_TYPES.SINGLE_USER} onClick={formChangeHandler}>
                 <div className="admin-plans__content">
                   <h3>Single-user</h3>
                   <div className="admin-plans__description">
@@ -56,11 +56,11 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
                     </ul>
                   </div>
                 </div>
-                <span className="admin-plans__price">$10/mo {plan === PLAN_TYPES.SINGLE && <>(Your plan)</>}</span>
+                <span className="admin-plans__price">$10/mo {plan === PLAN_TYPES.SINGLE_USER && <>(Your plan)</>}</span>
               </button>
             </li>
             <li className="admin-plans__item">
-              <button type="button" className="btn" ref={multiRef} role="radio" aria-checked={plan === PLAN_TYPES.MULTIPLE} onClick={formChangeHandler}>
+              <button type="button" className="btn" ref={multiRef} role="radio" aria-checked={plan === PLAN_TYPES.MULTI_USER} onClick={formChangeHandler}>
                 <div className="admin-plans__content">
                   <h3>Multi-user</h3>
                   <div className="admin-plans__description">
@@ -77,7 +77,7 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
                     </ul>
                   </div>
                 </div>
-                <span className="admin-plans__price">$50/mo {plan === PLAN_TYPES.MULTIPLE && <>(Your plan)</>}</span>
+                <span className="admin-plans__price">$50/mo {plan === PLAN_TYPES.MULTI_USER && <>(Your plan)</>}</span>
               </button>
             </li>
           </ul>

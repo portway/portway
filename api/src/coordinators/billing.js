@@ -2,7 +2,7 @@ import ono from 'ono'
 
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
-import { pick } from '../libs/utils';
+import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS, BILLING_SOURCE_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 
 const formatBilling = (billingObj) => {
@@ -13,7 +13,12 @@ const formatBilling = (billingObj) => {
     source = pick(billingObj.sources.data[0], BILLING_SOURCE_PUBLIC_FIELDS)
   }
 
-  return { ...publicBillingFields, source }
+  let subscriptionStatus
+  if (billingObj.subscriptions.data[0]) {
+    subscriptionStatus = billingObj.subscriptions.data[0].status
+  }
+
+  return { ...publicBillingFields, source, subscriptionStatus }
 }
 
 const subscribeOrgToPlan = async function(planId, orgId) {
@@ -30,9 +35,9 @@ const subscribeOrgToPlan = async function(planId, orgId) {
     throw billingError
   }
 
-  await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
+  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
 
-  await BusinessOrganization.updateById(orgId, { plan: planId })
+  await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
 }
 
 const updateOrgBilling = async function(token, orgId) {

@@ -29,6 +29,9 @@ module.exports = {
       plan: {
         type: Sequelize.STRING
       },
+      subscriptionStatus: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
