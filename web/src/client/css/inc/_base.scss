@@ -101,6 +101,52 @@ hr {
   border-top: thin solid var(--base-border-color);
 }
 
+meter {
+  // -webkit-appearance: none; // fixes chrome / opera
+  // -moz-appearance: none;
+  // appearance: none;
+  background: $gray-light; // Firefox
+  border-radius: $borderRadius;
+  display: block;
+  width: 100%;
+
+  // Safari
+  &::-webkit-meter-bar {
+    background: $gray-light;
+    border-radius: $borderRadius;
+  }
+  &::-webkit-meter-optimum-value,
+  &::-webkit-meter-suboptimum-value,
+  &::-webkit-meter-even-less-good-value {
+    border-radius: $borderRadius;
+  }
+  &::-webkit-meter-optimum-value {
+    background: $primary;
+  }
+  &::-webkit-meter-suboptimum-value {
+    background: $highlight;
+  }
+  &::-webkit-meter-even-less-good-value  {
+    background: $danger;
+  }
+
+  // Firefox
+  &::-moz-meter-bar {
+    background: $gray-light;
+    border-radius: $borderRadius;
+  }
+  &:-moz-meter-optimum::-moz-meter-bar {
+    background: $primary;
+  }
+  &:-moz-meter-sub-optimum::-moz-meter-bar {
+    background: $highlight;
+  }
+  &:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+    background: $danger;
+  }
+
+}
+
 [contenteditable] {
   &:focus {
     outline: none;
