@@ -4,6 +4,7 @@ import zxcvbn from 'zxcvbn'
 
 import { MIN_PASSWORD_LENGTH } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
+import { CheckIcon } from 'Components/Icons'
 import PopoverComponent from 'Components/Popover/PopoverComponent'
 import Form from 'Components/Form/Form'
 import TextField from 'Components/Form/TextField'
@@ -79,6 +80,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           onChange={e => passwordValidationHandler(e.target.value)}
           placeholder="Enter a new password"
           required
+          status={newPassword && <CheckIcon fill="#51a37d" />}
           type="password"
         />
         {passwordStatus && passwordStatus.warning &&
@@ -101,6 +103,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           onChange={e => passwordMatchHandler(e.target.value)}
           placeholder="Enter your new password"
           required
+          status={confirmNewPassword && <CheckIcon fill="#51a37d" />}
           type="password"
         />
         {confirmStatus && confirmStatus.warning &&

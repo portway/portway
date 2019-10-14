@@ -4,25 +4,51 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const TextField = ({ help, id, label, large, name, errors, placeholder, required, type, value, onBlur, onChange }) => {
+const TextField = ({
+  errors,
+  help,
+  id,
+  label,
+  large,
+  name,
+  onBlur,
+  onChange,
+  placeholder,
+  required,
+  status,
+  type,
+  value,
+}) => {
   const textFieldClasses = cx({
     'form-field': true,
     'form-field--large': large,
     'form-field--error': errors.length > 0
   })
+  const fieldClasses = cx({
+    'field': true
+  })
+  const controlClasses = cx({
+    'field__control': true,
+    'field__control--with-status': status
+  })
   return (
     <div className={textFieldClasses}>
-      <div className="field">
+      <div className={fieldClasses}>
         <label htmlFor={id}>{label}</label>
-        <input
-          type={type}
-          name={name}
-          id={id}
-          placeholder={placeholder}
-          defaultValue={value}
-          onBlur={onBlur}
-          onChange={onChange}
-          required={required} />
+        <div className={controlClasses}>
+          <input
+            type={type}
+            name={name}
+            id={id}
+            placeholder={placeholder}
+            defaultValue={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            required={required} />
+          {status &&
+          <div className="field__status">{status}</div>
+          }
+        </div>
         <ValidationComponent errors={errors} />
       </div>
       {help && <div className="form-field__help small">{help}</div>}
@@ -31,18 +57,19 @@ const TextField = ({ help, id, label, large, name, errors, placeholder, required
 }
 
 TextField.propTypes = {
+  errors: PropTypes.array,
   help: PropTypes.string,
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   large: PropTypes.bool,
   name: PropTypes.string.isRequired,
-  errors: PropTypes.array,
-  placeholder: PropTypes.string,
-  type: PropTypes.string,
-  required: PropTypes.bool,
-  value: PropTypes.string,
   onBlur: PropTypes.func,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  status: PropTypes.node,
+  type: PropTypes.string,
+  value: PropTypes.string,
 }
 
 TextField.defaultProps = {
