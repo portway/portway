@@ -1,9 +1,0 @@
-{
-  "name": "Portway",
-  "short_name": "Portway",
-  "start_url": "/",
-  "display": "minimal-ui",
-  "background_color": "#fff",
-  "theme_color": "#fff",
-  "description": "A content repository"
-}

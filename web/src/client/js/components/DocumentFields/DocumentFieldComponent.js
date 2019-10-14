@@ -97,17 +97,17 @@ const DocumentFieldComponent = ({
           {!settingsMode &&
           <div className="document-field__tool-options">
             {onDestroy &&
-            <button className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
+            <button aria-label="Remove field" className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
               <TrashIcon />
             </button>
             }
             {field.type === Constants.FIELD_TYPES.IMAGE && field.value &&
-            <button className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
+            <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
               <SettingsIcon />
             </button>
             }
             <div className="document-field__dragger">
-              <button className="btn btn--blank btn--with-circular-icon">
+              <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon">
                 <DragIcon />
               </button>
             </div>

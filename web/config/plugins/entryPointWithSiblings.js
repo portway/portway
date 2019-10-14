@@ -41,7 +41,9 @@ class EntryPointPlugin {
             })
           }
           const name = bundle.names[0]
-          bundles[name] = {
+          // using maxSize in webpack will give our bundles weird names
+          // we can use just the bundle name by removing anything after ~
+          bundles[name.split('~')[0]] = {
             css: cssFiles.concat(siblingCssFiles),
             js: jsFiles.concat(siblingJsFiles)
           }

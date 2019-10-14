@@ -81,6 +81,7 @@ const DocumentsListComponent = ({
                 }
               }} />
             <button
+              aria-label="Remove document"
               className="btn btn--blank btn--with-circular-icon"
               onClick={() => { createCallback(false) }}>
               <RemoveIcon />
