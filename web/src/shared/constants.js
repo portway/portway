@@ -6,8 +6,9 @@ const FIELD_TYPES = {
 }
 
 const PLAN_TYPES = {
+  MULTI_USER: 'MULTI_USER',
   SINGLE_USER: 'SINGLE_USER',
-  MULTI_USER: 'MULTI_USER'
+  TRIAL: 'trialing',
 }
 
 const ORGANIZATION_ROLE_IDS = {

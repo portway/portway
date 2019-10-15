@@ -7,8 +7,9 @@ import { Helmet } from 'react-helmet'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
+import { withOrgPlanPermission } from 'Components/Permission/OrgPlanPermission'
 
-import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
+import { PRODUCT_NAME, PLAN_TYPES, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
@@ -111,6 +112,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { createUser, reinviteUser, removeUser, uiCreateUserMode, uiConfirm }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
+export default withOrgPlanPermission([PLAN_TYPES.MULTI_USER])(
+  withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
+  )
 )

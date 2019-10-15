@@ -237,7 +237,7 @@ export const Organizations = {
   receiveUpdatedBilling: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING, 'id', 'data'),
   receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR),
   initiatePlanUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_PLAN_UPDATE, 'id'),
-  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'plan')
+  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'id', 'plan')
 }
 
 export const UI = {

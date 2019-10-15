@@ -1,47 +1,55 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { PLAN_TYPES } from 'Shared/constants'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
+import Form from 'Components/Form/Form'
 import AdminSeatsContainer from 'Components/Admin/AdminSeats/AdminSeatsContainer'
 import AdminPaymentContainer from 'Components/Admin/AdminPayment/AdminPaymentContainer'
 
 import { CheckIcon } from 'Components/Icons'
 import './_AdminBillingStyles.scss'
 
-const AdminBillingComponent = ({ planChangeHandler }) => {
-  const [plan, setPlan] = useState(PLAN_TYPES.SINGLE_USER)
-  const [formChanged, setFormChange] = useState(false)
-
-  // Ref for each plan item
-  const singleRef = useRef()
-  const multiRef = useRef()
+const AdminBillingComponent = ({ formId, organizationPlan, planChangeHandler }) => {
+  const [plan, setPlan] = useState(organizationPlan)
+  const [formChanged, setFormChanged] = useState(false)
 
   // @todo only adjust this title to what the server says we have plan wise
   const planTitle = plan === PLAN_TYPES.SINGLE_USER ? 'Single-user plan' : 'Multi-user plan'
 
-  function formChangeHandler(e) {
-    if (e.currentTarget === singleRef.current) {
-      setPlan(PLAN_TYPES.SINGLE_USER)
-    } else {
-      setPlan(PLAN_TYPES.MULTI_USER)
-    }
-    setFormChange(true)
+  // Manually sets the Form's submit button to enabled, since we're not using
+  // a normal form field
+  function formChangeHandler(val) {
+    setFormChanged(true)
+    setPlan(val)
   }
 
-  function formSubmitHandler(e) {
-    e.preventDefault()
+  function formSubmitHandler() {
+    setFormChanged(false)
     planChangeHandler(plan)
-    return false
   }
 
   return (
     <>
       <section>
-        <form onSubmit={formSubmitHandler}>
+        <Form
+          bigSubmit
+          name={formId}
+          onSubmit={formSubmitHandler}
+          submitEnabled={formChanged}
+          submitLabel="Update Plan"
+        >
           <h2 id="rg1-label">Your plan: <span className="admin-plans__title">{planTitle}</span></h2>
           <ul className="admin-plans" role="radiogroup" aria-labelledby="rg1-label">
             <li className="admin-plans__item">
-              <button aria-label="Select a single-user plan" type="button" className="btn" ref={singleRef} role="radio" aria-checked={plan === PLAN_TYPES.SINGLE_USER} onClick={formChangeHandler}>
+              <button
+                aria-checked={plan === PLAN_TYPES.SINGLE_USER}
+                aria-label="Select a single-user plan"
+                className="btn"
+                onClick={() => formChangeHandler(PLAN_TYPES.SINGLE_USER)}
+                role="radio"
+                type="button"
+              >
                 <div className="admin-plans__content">
                   <h3>Single-user</h3>
                   <div className="admin-plans__description">
@@ -60,7 +68,14 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
               </button>
             </li>
             <li className="admin-plans__item">
-              <button aria-label="Select a multi-user plan" type="button" className="btn" ref={multiRef} role="radio" aria-checked={plan === PLAN_TYPES.MULTI_USER} onClick={formChangeHandler}>
+              <button
+                aria-checked={plan === PLAN_TYPES.MULTI_USER}
+                aria-label="Select a multi-user plan"
+                className="btn"
+                onClick={() => formChangeHandler(PLAN_TYPES.MULTI_USER)}
+                role="radio"
+                type="button"
+              >
                 <div className="admin-plans__content">
                   <h3>Multi-user</h3>
                   <div className="admin-plans__description">
@@ -81,15 +96,16 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
               </button>
             </li>
           </ul>
-          <button aria-label="Update your plan" className="admin-plans__submit" disabled={!formChanged}>Update plan</button>
-        </form>
+        </Form>
       </section>
       <hr />
-      <section>
-        <h2>Manage Seats</h2>
-        <AdminSeatsContainer />
-      </section>
-      <hr />
+      <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+        <section>
+          <h2>Manage Seats</h2>
+          <AdminSeatsContainer />
+        </section>
+        <hr />
+      </OrgPlanPermission>
       <section>
         <h2>Payment information</h2>
         <AdminPaymentContainer />
@@ -99,6 +115,8 @@ const AdminBillingComponent = ({ planChangeHandler }) => {
 }
 
 AdminBillingComponent.propTypes = {
+  formId: PropTypes.string,
+  organizationPlan: PropTypes.string,
   planChangeHandler: PropTypes.func,
 }
 
