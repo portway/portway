@@ -38,6 +38,7 @@ const AdminUsersComponent = ({
         <SpinnerContainer color="#d9dbdb" />
         {userId !== currentUserId &&
         <button
+          aria-label="Remove user"
           className="btn btn--blank btn--with-circular-icon"
           onClick={() => { removeUserHandler(userId) }}>
           <TrashIcon />

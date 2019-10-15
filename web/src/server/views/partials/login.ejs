@@ -1,15 +1,19 @@
 <form class="login-form" action="/sign-in" method="post">
-  <div class="field">
-    <label class="label is-small" for="email">Email</label>
-    <div class="control">
-      <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-login username">
+  <div class="form-field">
+    <div class="field">
+      <label class="label is-small" for="email">Email</label>
+      <div class="field__control">
+        <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-login username">
+      </div>
     </div>
   </div>
   <% if (typeof emailOnly === 'undefined' || emailOnly !== true) { %>
-  <div class="field">
-    <label class="label is-small" for="password">Password</label>
-    <div class="control">
-      <input class="input" name="password" type="password" placeholder="" autocomplete="section-login current-password">
+  <div class="form-field">
+    <div class="field">
+      <label class="label is-small" for="password">Password</label>
+      <div class="field__control">
+        <input class="input" name="password" type="password" placeholder="" autocomplete="section-login current-password">
+      </div>
     </div>
   </div>
   <% } %>

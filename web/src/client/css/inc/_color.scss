@@ -40,6 +40,9 @@
   --base-link-hover-color: var(--color-cyan);
   --base-link-active-color: var(--color-blue-dark);
   --link-color-gray: var(--color-gray-7);
+  --focus-border-color: var(--color-blue);
+  --focus-shadow-one: var(--color-gray-3);
+  --focus-shadow-two: var(--color-cyan);
   @media (prefers-color-scheme: dark) {
     --base-background: hsl(61, 1%, 21%);
     --base-color: hsl(106, 0%, 89%);
@@ -48,6 +51,9 @@
     --base-link-hover-color: var(--color-cyan);
     --base-link-active-color: var(--color-blue-dark);
     --link-color-gray: hsl(61, 1%, 41%);
+    --focus-border-color: var(--color-white);
+    --focus-shadow-one: var(--color-gray-10);
+    --focus-shadow-two: var(--color-blue);
   }
 }
 
@@ -93,6 +99,9 @@
   --base-link-hover-color: var(--color-cyan);
   --base-link-active-color: var(--color-blue-dark);
   --link-color-gray: var(--color-gray-7);
+  --focus-border-color: var(--color-blue);
+  --focus-shadow-one: var(--color-gray-3);
+  --focus-shadow-two: var(--color-cyan);
   @media (prefers-color-scheme: dark) {
     --base-background: hsl(61, 1%, 21%);
     --base-color: hsl(106, 0%, 89%);
@@ -101,6 +110,9 @@
     --base-link-hover-color: var(--color-cyan);
     --base-link-active-color: var(--color-blue-dark);
     --link-color-gray: hsl(61, 1%, 41%);
+    --focus-border-color: var(--color-white);
+    --focus-shadow-one: var(--color-gray-10);
+    --focus-shadow-two: var(--color-blue);
   }
 }
 
@@ -146,6 +158,9 @@
   --base-link-hover-color: var(--color-cyan);
   --base-link-active-color: var(--color-blue-dark);
   --link-color-gray: var(--color-gray-7);
+  --focus-border-color: var(--color-blue);
+  --focus-shadow-one: var(--color-gray-3);
+  --focus-shadow-two: var(--color-cyan);
   @media (prefers-color-scheme: dark) {
     --base-background: hsl(61, 1%, 21%);
     --base-color: hsl(106, 0%, 89%);
@@ -154,5 +169,8 @@
     --base-link-hover-color: var(--color-cyan);
     --base-link-active-color: var(--color-blue-dark);
     --link-color-gray: hsl(61, 1%, 41%);
+    --focus-border-color: var(--color-white);
+    --focus-shadow-one: var(--color-gray-10);
+    --focus-shadow-two: var(--color-blue);
   }
 }

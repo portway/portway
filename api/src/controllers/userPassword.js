@@ -5,6 +5,7 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import auditLog, { auditActions } from '../integrators/audit'
+import { MIN_PASSWORD_LENGTH } from '../constants/password'
 
 const updatePerm = perms((req) => {
   return {
@@ -15,8 +16,8 @@ const updatePerm = perms((req) => {
 
 const bodySchema = Joi.compile({
   currentPassword: Joi.string(),
-  newPassword: Joi.string(),
-  confirmNewPassword: Joi.string()
+  newPassword: Joi.string().min(MIN_PASSWORD_LENGTH),
+  confirmNewPassword: Joi.string().min(MIN_PASSWORD_LENGTH)
 })
 
 const paramSchema = Joi.compile({

@@ -2,6 +2,7 @@
 @import 'inc/vars';
 @import 'inc/theme';
 @import 'inc/type';
+@import 'layout/forms';
 
 body.home {
   background: var(--color-brand-light);
@@ -11,6 +12,33 @@ body.home {
   width: 400px;
   label {
     color: var(--color-gray-10);
+  }
+}
+
+.control {
+  align-items: center;
+  display: flex;
+}
+
+.popover__placeholder {
+  bottom: -24px;
+  position: absolute;
+
+  ul {
+    list-style: disc;
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+}
+
+.field__status {
+  display: none;
+  padding-left: 1rem;
+  svg {
+    path {
+      fill: $primary;
+    }
   }
 }
 

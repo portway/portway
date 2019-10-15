@@ -50,6 +50,7 @@ const DocumentComponent = ({
       <ValidationContainer resource="document" value="name" />
       <header className="document__header">
         <button
+          aria-label="Expand the editor to full screen"
           className="btn btn--blank document__button-expand"
           onClick={() => {
             // This has to be here because of Safari
