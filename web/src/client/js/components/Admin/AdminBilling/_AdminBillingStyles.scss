@@ -39,6 +39,7 @@
       flex-direction: column;
       justify-content: flex-start;
       margin: 0 1rem 0 0;
+      overflow: hidden;
       padding: 0;
       text-align: left;
       transform: scale(.98);
@@ -98,7 +99,7 @@
       font-weight: 700;
       margin: 2rem 0 0 0;
       padding: 1rem 2rem;
-      width: 100%;
+      width: 400%; // Safari bug
 
       [aria-checked="true"] & {
         background-color: var(--color-green);
