@@ -4,6 +4,8 @@
 :root {
   --form-background: #{$white};
   --form-placeholder-color: #{$gray};
+  --form-field-width: 325px;
+  --form-status-width: 50px;
   @media (prefers-color-scheme: dark) {
     --form-background: #{$black-er};
     --form-placeholder-color: #{$black-bis};
@@ -13,18 +15,63 @@
 form, .form {
   padding: 0 5px;
 
+  // Defaults
+  // ---------------------------------------------------------------------------
+  label, .field__label {
+    display: block;
+    font-weight: 700;
+    padding: 4px 0;
+  }
+
+  input[type="checkbox"], input[type="radio"] {
+    display: inline-block;
+    + label, .field__label {
+      display: inline-block;
+    }
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='number'],
+  input[type='password'],
+  .StripeElement {
+    background: var(--form-background);
+    border: thin solid var(--base-border-color);
+    border-radius: $borderRadius;
+    min-height: 38px;
+    padding: 8px;
+    width: 100%;
+    &::placeholder {
+      color: var(--form-placeholder-color);
+    }
+    &.focus {
+      // StripeElement
+      border: thin solid $action;
+    }
+    &:focus {
+      @include focus(var(--form-background), $action);
+    }
+  }
+
+  input[type='file'] {
+    border: none;
+  }
+
+  // Form markup
+  // ---------------------------------------------------------------------------
   &__section {
     border: thin solid var(--base-border-color);
     border-radius: $borderRadius;
     padding: 2rem;
   }
 
+  // Field is from Bulma, we should probably undo this and start over at some point
   .field {
     align-items: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    width: 300px;
+    width: var(--form-field-width);
     &__row {
       display: flex;
       width: 100%;
@@ -33,7 +80,20 @@ form, .form {
       }
     }
     &__control {
+      position: relative;
       width: 100%;
+      &--with-status {
+        align-items: center;
+        display: flex;
+        width: calc(var(--form-field-width) + var(--form-status-width));
+        input {
+          width: var(--form-field-width);
+        }
+      }
+    }
+    &__status {
+      padding-left: 1rem;
+      width: var(--form-status-width);
     }
     &--with-space {
       padding-top: 2.4rem;
@@ -114,47 +174,5 @@ form, .form {
     } // form-field--eror
 
   } // form-field
-
-  // Defaults
-  // ---------------------------------------------------------------------------
-  label, .field__label {
-    display: block;
-    font-weight: 700;
-    padding: 4px 0;
-  }
-
-  input[type="checkbox"], input[type="radio"] {
-    display: inline-block;
-    + label, .field__label {
-      display: inline-block;
-    }
-  }
-
-  input[type='text'],
-  input[type='email'],
-  input[type='number'],
-  input[type='password'],
-  .StripeElement {
-    background: var(--form-background);
-    border: thin solid var(--base-border-color);
-    border-radius: $borderRadius;
-    min-height: 38px;
-    padding: 8px;
-    width: 100%;
-    &::placeholder {
-      color: var(--form-placeholder-color);
-    }
-    &.focus {
-      // StripeElement
-      border: thin solid $action;
-    }
-    &:focus {
-      @include focus(var(--form-background), $action);
-    }
-  }
-
-  input[type='file'] {
-    border: none;
-  }
 
 }
