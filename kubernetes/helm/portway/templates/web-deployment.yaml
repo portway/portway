@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-web-deployment
+  name: web-deployment
   labels:
     app: web
 spec:
@@ -15,10 +15,12 @@ spec:
       labels:
         run: web
         app: web
+        redeploy: "2"
     spec:
+      imagePullSecrets:
+      - name: regcred    
       containers:
-      - image: bonkeybong/portway_web
-        imagePullPolicy: "Never"
+      - image: bonkeybong/portway_web:dev2
         name: web
         args: [ "start" ]
         env:
