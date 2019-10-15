@@ -10,7 +10,7 @@
       "Hooks/*": ["src/client/js/hooks/*"],
       "Libs/*": ["src/client/js/libs/*"],
       "Sections/*": ["src/client/js/sections/*"],
-      "Shared/*": ["src/shared/*"],
+      "Shared/*": ["src/shared/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

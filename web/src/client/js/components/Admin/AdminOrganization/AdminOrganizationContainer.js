@@ -9,15 +9,25 @@ import useDataService from 'Hooks/useDataService'
 
 import { ORGANIZATION_ROLE_IDS, PRODUCT_NAME, PATH_PROJECTS } from 'Shared/constants'
 import OrgPermission from 'Components/Permission/OrgPermission'
-import { updateOrganization } from 'Actions/organization'
+import { updateOrganization, updateOrganizationAvatar } from 'Actions/organization'
 import AdminOrganizationComponent from './AdminOrganizationComponent'
+import AdminBrandingComponent from './AdminBrandingComponent'
 
-const AdminOrganizationContainer = ({ errors, updateOrganization }) => {
+const AdminOrganizationContainer = ({ errors, updateOrganization, updateOrganizationAvatar }) => {
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   if (!currentOrg) return null
 
+  const orgProfileId = 'org-profile'
+  const orgAvatarId = 'org-avatar'
+
   function submitHandler(values) {
-    updateOrganization(currentOrg.id, values)
+    if (values.name === null) values.name = currentOrg.name
+    if (values.allowUserProjectCreation === null) values.allowUserProjectCreation = currentOrg.allowUserProjectCreation
+    updateOrganization(orgProfileId, currentOrg.id, values)
+  }
+
+  function avatarUpdateHandler(value) {
+    updateOrganizationAvatar(orgAvatarId, currentOrg.id, value.avatar)
   }
 
   return (
@@ -25,14 +35,29 @@ const AdminOrganizationContainer = ({ errors, updateOrganization }) => {
       <Helmet>
         <title>Account Settings: Organization Info – {PRODUCT_NAME}</title>
       </Helmet>
-      <AdminOrganizationComponent errors={errors} organization={currentOrg} submitHandler={submitHandler} />
+      <>
+        <AdminOrganizationComponent
+          errors={errors}
+          formId={orgProfileId}
+          organization={currentOrg}
+          submitHandler={submitHandler}
+        />
+        <hr />
+        <AdminBrandingComponent
+          errors={errors}
+          formId={orgAvatarId}
+          organization={currentOrg}
+          submitHandler={avatarUpdateHandler}
+        />
+      </>
     </OrgPermission>
   )
 }
 
 AdminOrganizationContainer.propTypes = {
   errors: PropTypes.object,
-  updateOrganization: PropTypes.func.isRequired
+  updateOrganization: PropTypes.func.isRequired,
+  updateOrganizationAvatar: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -41,6 +66,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { updateOrganization }
+const mapDispatchToProps = { updateOrganization, updateOrganizationAvatar }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminOrganizationContainer)

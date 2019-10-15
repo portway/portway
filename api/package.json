@@ -66,7 +66,7 @@
     "passport-local": "^1.0.0",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.42.0",
+    "sequelize": "^4.44.3",
     "sequelize-cli": "^5.5.0",
     "stripe": "^6.23.1",
     "uuid": "^3.3.2"

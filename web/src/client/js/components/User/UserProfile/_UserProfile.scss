@@ -1,10 +1,18 @@
 .user-profile {
   &__image {
-    align-items: center;
+    align-items: flex-start;
     display: flex;
 
-    .icon {
+    .icon, img {
       margin-right: 1rem;
+    }
+
+    // With a preview (image cropper)
+    &--with-preview {
+      flex-direction: column;
+
+      img { margin: 0; }
+
     }
 
     // Override the file field for this one

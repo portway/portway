@@ -41,7 +41,7 @@ const ProjectUsersComponent = ({ collapsed, users }) => {
 
 ProjectUsersComponent.propTypes = {
   collapsed: PropTypes.bool,
-  users: PropTypes.array.isRequired
+  users: PropTypes.array,
 }
 
 ProjectUsersComponent.defaultProps = {

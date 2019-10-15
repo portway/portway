@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Link, NavLink, Redirect } from 'react-router-dom'
 
 import { PATH_PROJECT } from 'Shared/constants'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
-import ProjectSettingsTeamsContainer from './ProjectSettingsTeams/ProjectSettingsTeamsContainer'
 import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
+
+const ProjectSettingsTeamsContainer = lazy(() => import(/* webpackChunkName: 'ProjectSettingsTeamsContainer' */ './ProjectSettingsTeams/ProjectSettingsTeamsContainer'))
 
 const SETTINGS_PATHS = {
   INFO: 'info',

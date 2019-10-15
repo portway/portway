@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
+import multer from 'multer'
 
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessUser from '../businesstime/user'
@@ -11,6 +12,9 @@ import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import userSchema from './payloadSchemas/user'
+import avatarCoordinator from '../coordinators/avatar'
+
+const MAX_AVATAR_FILE_SIZE = 1024 * 1000
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
@@ -85,6 +89,19 @@ const usersController = function(router) {
   )
   router.delete('/:id', validateParams(paramSchema), conditionalDeletePerm, deleteUser)
   router.post('/:id/resendinvite', validateParams(paramSchema), createPerm, resendInvite)
+  router.put(
+    '/:id/avatar',
+    validateParams(paramSchema),
+    multer({
+      dest: 'uploads/',
+      limits: {
+        fileSize: MAX_AVATAR_FILE_SIZE
+      }
+    }).single('file'),
+    validateBody({}),
+    conditionalUpdatePerm,
+    updateUserAvatar
+  )
 }
 
 const getUsers = async function(req, res, next) {
@@ -129,6 +146,19 @@ const updateUser = async function(req, res, next) {
   try {
     const user = await BusinessUser.updateById(id, body, orgId)
     res.status(200).json({ data: user })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const updateUserAvatar = async function(req, res, next) {
+  const { id } = req.params
+  const { file } = req
+  const { orgId } = req.requestorInfo
+
+  try {
+    const avatar = await avatarCoordinator.updateUserAvatar(orgId, id, file)
+    res.status(200).json({ data: { avatar } })
   } catch (e) {
     next(e)
   }

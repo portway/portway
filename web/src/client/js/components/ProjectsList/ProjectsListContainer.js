@@ -11,7 +11,7 @@ import { removeProject } from 'Actions/project'
 import ProjectsListComponent from './ProjectListComponent'
 
 const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
-  const { data: projects } = useDataService(dataMapper.projects.list())
+  const { data: projects, loading } = useDataService(dataMapper.projects.list())
   const handleDelete = (projectId) => {
     const message = (
       <span>Delete this project? <span className="highlight danger">WARNING: This will delete <i>everything</i>!</span></span>
@@ -22,7 +22,7 @@ const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
   }
   return (
     <div className="project-list-container">
-      <ProjectsListComponent projects={projects} deleteHandler={handleDelete} />
+      <ProjectsListComponent history={history} projects={projects} deleteHandler={handleDelete} loading={loading} />
     </div>
   )
 }

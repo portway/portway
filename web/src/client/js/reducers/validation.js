@@ -26,6 +26,14 @@ export const validation = (state = initialState, action) => {
       }
     }
     // Clear on initiating new API requests
+    // User
+    case ActionTypes.INITIATE_USER_UPDATE:
+    case ActionTypes.INITIATE_USER_REMOVE: {
+      return {
+        ...state,
+        user: {}
+      }
+    }
     // Project
     case ActionTypes.CREATE_PROJECT:
     case ActionTypes.INITIATE_PROJECT_UPDATE:

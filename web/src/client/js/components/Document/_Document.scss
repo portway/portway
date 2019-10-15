@@ -49,6 +49,7 @@
   &__title-container {
     align-items: center;
     display: flex;
+    height: $headerHeight - 2;
     flex: 1;
   }
 
@@ -60,8 +61,8 @@
     font-family: $serif;
     font-size: 1.8rem;
     font-weight: 700;
-    height: 2rem;
-    line-height: 1em;
+    height: 3rem;
+    line-height: 2em;
     padding: 0;
     outline: none;
     resize: none;

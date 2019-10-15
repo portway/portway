@@ -21,6 +21,14 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
   useClickOutside(nodeRef, collapseCallback)
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut(shortcut, toggleCallback)
+
+  let buttonStyle = {}
+  if (button.backgroundImage) {
+    buttonStyle = {
+      backgroundImage: `url('${button.backgroundImage}')`
+    }
+  }
+
   return (
     <div ref={nodeRef} className={`dropdown${className ? ' ' + className : ''}`}>
       <button
@@ -31,6 +39,7 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
         aria-expanded={expanded}
         aria-label={button.label}
         name={button.name}
+        style={buttonStyle}
         onClick={() => { setExpanded(!expanded)}}>
         {button.iconPlacement === 'before' || button.iconPlacement === undefined && button.icon}
         {button.label && <div className="label">{button.label}</div>}
@@ -53,6 +62,7 @@ DropdownComponent.propTypes = {
   align: PropTypes.string,
   autoCollapse: PropTypes.bool,
   button: PropTypes.shape({
+    backgroundImage: PropTypes.string,
     className: PropTypes.string,
     icon: PropTypes.element,
     iconPlacement: PropTypes.string,
@@ -69,6 +79,7 @@ DropdownComponent.propTypes = {
 DropdownComponent.defaultProps = {
   align: 'left',
   button: {
+    backgroundImage: null,
     iconPlacement: 'before',
   }
 }

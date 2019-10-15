@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cx from 'classnames'
@@ -13,6 +13,20 @@ const Project = ({ isFullScreen }) => {
     'project__documents-document-container': true,
     'project__documents-document-container--full-screen': isFullScreen
   })
+
+  useEffect(() => {
+    function bodyDragHandler(e) {
+      e.preventDefault()
+      return false
+    }
+    window.addEventListener('dragover', bodyDragHandler, false)
+    window.addEventListener('ondrop', bodyDragHandler, false)
+    return function cleanup() {
+      window.removeEventListener('dragover', bodyDragHandler, false)
+      window.removeEventListener('ondrop', bodyDragHandler, false)
+    }
+  })
+
   return (
     <main className="project">
       <div className="project__documents">

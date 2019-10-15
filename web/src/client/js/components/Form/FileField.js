@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const FileField = ({ help, id, label, large, name, errors, value, onChange }) => {
+const FileField = ({ accept, help, id, label, large, name, errors, value, onChange }) => {
   const fileFieldClasses = cx({
     'form-field': true,
     'form-field--file': true,
@@ -16,11 +16,13 @@ const FileField = ({ help, id, label, large, name, errors, value, onChange }) =>
       <div className="field">
         {label && <label htmlFor={id}>{label}</label>}
         <input
+          accept={accept}
           type="file"
           name={name}
           id={id}
           defaultValue={value}
-          onChange={onChange} />
+          onChange={onChange}
+        />
         <ValidationComponent errors={errors} />
       </div>
       {help && <div className="form-field__help small">{help}</div>}
@@ -29,6 +31,7 @@ const FileField = ({ help, id, label, large, name, errors, value, onChange }) =>
 }
 
 FileField.propTypes = {
+  accept: PropTypes.string,
   help: PropTypes.string,
   id: PropTypes.string.isRequired,
   label: PropTypes.string,

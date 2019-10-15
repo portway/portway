@@ -15,13 +15,14 @@ spec:
       labels:
         run: api
         app: api
-        test: one
+        redeploy: "1"
     spec:
-      containers:
-      - image: bonkeybong/portway_api
-        imagePullPolicy: "Never"
+      imagePullSecrets:
+      - name: regcred    
+      containers:    
+      - image: bonkeybong/portway_api:dev4
         name: api
-        args: [ "start"  ]
+        args: [ "start"  ]     
         env:
         - name: API_PORT
           valueFrom:
@@ -43,6 +44,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.db-port
+        - name: DB_USE_SSL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.db-use-ssl
         - name: DB_USER
           valueFrom:
             configMapKeyRef:

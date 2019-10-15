@@ -24,21 +24,48 @@ describe('user coordinator', () => {
   const orgId = 0
 
   describe('#updatePassword', () => {
+    const currentPassword = password
+    const newPassword = 'notswordfish'
+
     beforeAll(async () => {
-      await userCoordinator.updatePassword(email, password)
+      BusinessUser.findById.mockClear()
+      await userCoordinator.updatePassword(userId, currentPassword, newPassword, newPassword, orgId)
+    })
+
+    it('should call BusinessUser.findById with the correct id', () => {
+      expect(BusinessUser.findById.mock.calls.length).toBe(1)
+      expect(BusinessUser.findById.mock.calls[0][0]).toBe(userId)
+    })
+
+    it('should call passwords.validatePassword with the correct passwords', () => {
+      const mockUser = BusinessUser.findById.mock.results[0].value
+      expect(passwords.validatePassword.mock.calls.length).toBe(1)
+      expect(passwords.validatePassword.mock.calls[0][0]).toBe(password)
+      expect(passwords.validatePassword.mock.calls[0][1]).toBe(mockUser.password)
     })
 
     it('should call passwords.generateHash with the correct password', () => {
       expect(passwords.generateHash.mock.calls.length).toBe(1)
-      expect(passwords.generateHash.mock.calls[0][0]).toBe(password)
+      expect(passwords.generateHash.mock.calls[0][0]).toBe(newPassword)
     })
 
-    it('should call BusinessUser.updateByEmail with the correct email and body', () => {
+    it('should call BusinessUser.updateById with the correct data', () => {
       const mockHashedPassword = passwords.generateHash.mock.results[0].value
-      expect(BusinessUser.updateByEmail.mock.calls.length).toBe(1)
-      expect(BusinessUser.updateByEmail.mock.calls[0][0]).toBe(email)
-      expect(BusinessUser.updateByEmail.mock.calls[0][1]).toEqual({
-        password: mockHashedPassword
+      expect(BusinessUser.updateById.mock.calls.length).toBe(1)
+      expect(BusinessUser.updateById.mock.calls[0][0]).toBe(userId)
+      expect(BusinessUser.updateById.mock.calls[0][1]).toEqual(expect.objectContaining({ password: mockHashedPassword }))
+      expect(BusinessUser.updateById.mock.calls[0][2]).toEqual(orgId)
+    })
+
+    describe('When the update password does not match the confirmation password', () => {
+      beforeAll(async () => {
+        BusinessUser.findById.mockClear()
+      })
+
+      it('should throw an error with status code 409', async () => {
+        await expect(userCoordinator
+          .updatePassword(userId, currentPassword, newPassword, 'someotherpassword', orgId))
+          .rejects.toThrow()
       })
     })
   })
@@ -55,6 +82,9 @@ describe('user coordinator', () => {
     let token
 
     beforeAll(async () => {
+      BusinessUser.findById.mockClear()
+      BusinessUser.updateById.mockClear()
+      passwords.validatePassword.mockClear()
       passwords.generateHash.mockReset()
       BusinessUser.setFindByIdReturnValue(mockUserWithoutPassword)
       token = await userCoordinator.setInitialPassword(userId, password)
@@ -112,7 +142,7 @@ describe('user coordinator', () => {
         expect(BusinessUser.findByEmail.mock.calls[0][0]).toBe(email)
       })
 
-      it('should call passwords.validatePassword with the correct email and password', () => {
+      it('should call passwords.validatePassword with the correct passwords', () => {
         const mockUser = BusinessUser.findByEmail.mock.results[0].value
         expect(passwords.validatePassword.mock.calls.length).toBe(1)
         expect(passwords.validatePassword.mock.calls[0][0]).toBe(password)

@@ -16,7 +16,7 @@ const initialState = {
     isPublishing: false,
   },
   fields: {
-    creating: false,
+    disabled: false,
     fieldsUpdating: {},
     type: -1
   },
@@ -41,10 +41,8 @@ export const ui = (state = initialState, action) => {
     // If you need to update spinner in combo with something else, do it below
     // these two global on/offs
     // Global Spinner state on
-    case ActionTypes.INITIATE_USER_UPDATE:
     case ActionTypes.INITIATE_USER_CREATE:
-    case ActionTypes.INITIATE_USER_REMOVE:
-    case ActionTypes.INITIATE_ORGANIZATION_UPDATE: {
+    case ActionTypes.INITIATE_USER_REMOVE: {
       return {
         ...state,
         spinner: {
@@ -55,11 +53,9 @@ export const ui = (state = initialState, action) => {
     }
 
     // Global Spinner state off
-    case ActionTypes.RECEIVE_UPDATED_USER:
     case ActionTypes.RECEIVE_CREATED_USER:
     case ActionTypes.REMOVE_USER:
-    case ActionTypes.RECEIVE_UPDATED_USER_ROLE:
-    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION: {
+    case ActionTypes.RECEIVE_UPDATED_USER_ROLE: {
       return {
         ...state,
         users: {
@@ -80,7 +76,7 @@ export const ui = (state = initialState, action) => {
     }
     case ActionTypes.INITIATE_FIELD_CREATE: {
       // Tell everyone we're creating a field, and what type
-      return { ...state, fields: { ...state.fields, creating: true, type: action.fieldType } }
+      return { ...state, fields: { ...state.fields, disabled: true, type: action.fieldType } }
     }
     case ActionTypes.RECEIVE_CREATED_FIELD: {
       // Reset fields when a field is created
@@ -97,6 +93,30 @@ export const ui = (state = initialState, action) => {
       const { id } = action.data
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [id]: false }
       return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+
+    // Disable document fields
+    case ActionTypes.INITIATE_FIELD_MOVE:
+    case ActionTypes.INITIATE_FIELD_COPY: {
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          disabled: true
+        }
+      }
+    }
+
+    // Enable document fields
+    case ActionTypes.FIELD_MOVED:
+    case ActionTypes.FIELD_COPIED: {
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          disabled: false
+        }
+      }
     }
 
     // Document full screen

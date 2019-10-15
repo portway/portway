@@ -19,7 +19,7 @@ const ClipboardComponent = ({ copyHandler, copyRef }) => {
     }
   }
   return (
-    <button className="btn btn--blank btn--with-circular-icon" onClick={copyTokenToClipboard}>
+    <button aria-label="Copy this to clipboard" className="btn btn--blank btn--with-circular-icon" onClick={copyTokenToClipboard}>
       {copied && <CheckIcon fill="#51a37d" />}
       {!copied && <ClipboardIcon />}
     </button>

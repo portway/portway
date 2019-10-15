@@ -2,7 +2,8 @@
   "env": {
     "node": true,
     "jest": true,
-    "browser": true
+    "browser": true,
+    "es6": true
   },
   "parser": "babel-eslint",
   "parserOptions": {

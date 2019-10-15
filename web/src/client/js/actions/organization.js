@@ -1,4 +1,5 @@
 import { Organizations, Notifications, Validation } from './index'
+import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
 import { fetch, update, globalErrorCodes, validationCodes } from '../api'
 import { NOTIFICATION_TYPES, NOTIFICATION_RESOURCE } from 'Shared/constants'
 
@@ -14,13 +15,43 @@ export const fetchOrganization = (orgId) => {
   }
 }
 
-export const updateOrganization = (orgId, body) => {
+export const updateOrganization = (formId, orgId, body) => {
   return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
     dispatch(Organizations.initiateUpdate(orgId))
     const { data, status } = await update(`organizations/${orgId}`, body)
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('organization', data, status)) :
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('organization', data, status))
+    } else {
+      dispatch(formSucceededAction(formId))
       dispatch(Organizations.receiveOneUpdated(data))
+    }
+  }
+}
+
+export const updateOrganizationAvatar = (formId, orgId, formData) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Organizations.initiateUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/avatar`, formData)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('organization', data, status))
+    } else {
+      dispatch(formSucceededAction(formId))
+      dispatch(Organizations.receiveUpdatedAvatar(orgId, data))
+    }
   }
 }
 

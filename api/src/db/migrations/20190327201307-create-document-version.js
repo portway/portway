@@ -11,7 +11,7 @@ module.exports = {
       versionNumber: {
         type: Sequelize.INTEGER
       },
-      docId: {
+      documentId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Documents',

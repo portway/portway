@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       orgId: DataTypes.INTEGER,
       name: DataTypes.STRING,
-      docId: DataTypes.INTEGER,
+      documentId: DataTypes.INTEGER,
       versionId: {
         type: DataTypes.INTEGER,
         defaultValue: null,
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
   )
   Field.associate = function(models) {
     Field.belongsTo(models.Document, {
-      foreignKey: 'docId'
+      foreignKey: 'documentId'
     })
     Object.keys(fieldTypes.FIELD_TYPE_MODELS).forEach((typeNumber) => {
       const modelName = fieldTypes.FIELD_TYPE_MODELS[typeNumber]
@@ -63,6 +63,11 @@ module.exports = (sequelize, DataTypes) => {
   Field.prototype.getFieldValue = function() {
     const modelName = fieldTypes.FIELD_TYPE_MODELS[this.type]
     return this[`get${modelName}`]()
+  }
+
+  Field.prototype.markUpdated = function(valueBody) {
+    this.setDataValue('updatedAt', Date.now())
+    return this.save()
   }
 
   return Field

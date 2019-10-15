@@ -14,7 +14,17 @@ import './DocumentsList.scss'
 const { PROJECT_ROLE_IDS } = Constants
 const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
-const DocumentsListComponent = ({ createChangeHandler, creating, createCallback, documents, draggedDocumentHandler, fieldMoveHandler, projectId }) => {
+const DocumentsListComponent = ({
+  createChangeHandler,
+  creating,
+  createCallback,
+  documents,
+  draggedDocumentHandler,
+  fieldCopyHandler,
+  fieldMoveHandler,
+  loading,
+  projectId
+}) => {
   // Keep track of how many things being dragged
   let dragCount = 0
 
@@ -71,6 +81,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
                 }
               }} />
             <button
+              aria-label="Remove document"
               className="btn btn--blank btn--with-circular-icon"
               onClick={() => { createCallback(false) }}>
               <RemoveIcon />
@@ -84,7 +95,16 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
   function renderDocumentsList() {
     if (documents.length === 0) return null
     return documents.map((doc, index) => {
-      return <DocumentsListItem disable={creating} disableDragging={dragActive} fieldMoveHandler={fieldMoveHandler} key={`d-${doc.id}-${index}`} document={doc} />
+      return (
+        <DocumentsListItem
+          disable={creating}
+          disableDragging={dragActive}
+          fieldCopyHandler={fieldCopyHandler}
+          fieldMoveHandler={fieldMoveHandler}
+          key={`d-${doc.id}-${index}`}
+          document={doc}
+        />
+      )
     })
   }
 
@@ -151,7 +171,7 @@ const DocumentsListComponent = ({ createChangeHandler, creating, createCallback,
         )}>
         <ToolbarComponent action={toolbarAction} />
       </ProjectPermission>
-      {documents.length === 0 && !creating &&
+      {documents.length === 0 && !loading && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
@@ -186,12 +206,15 @@ DocumentsListComponent.propTypes = {
   createCallback: PropTypes.func.isRequired,
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
+  fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
-  projectId: PropTypes.number.isRequired
+  loading: PropTypes.bool.isRequired,
+  projectId: PropTypes.number.isRequired,
 }
 
 DocumentsListComponent.defaultProps = {
-  documents: {}
+  documents: {},
+  loading: true,
 }
 
 export default DocumentsListComponent

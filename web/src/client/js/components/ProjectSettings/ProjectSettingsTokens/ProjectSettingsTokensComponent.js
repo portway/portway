@@ -72,7 +72,13 @@ const ProjectSettingsTokensComponent = ({
                 <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents</span>
               </code>
             </pre>
-            <textarea ref={getEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
+            <textarea
+              ref={getEndpointRef}
+              aria-hidden={true}
+              className="visually-hidden"
+              readOnly
+              value={`curl -H "Authorization: Bearer ${selectedToken.token}" ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`}
+            />
           </dd>
           <dt className="project-settings__endpoint-name">
             <span className="project-settings__endpoint-method pill pill--orange">POST</span>
@@ -87,7 +93,13 @@ const ProjectSettingsTokensComponent = ({
                 <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents</span>
               </code>
             </pre>
-            <textarea ref={postEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My new document"}' -H "Content-Type: application/json" -X POST ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`} />
+            <textarea
+              ref={postEndpointRef}
+              aria-hidden={true}
+              className="visually-hidden"
+              readOnly
+              value={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My new document"}' -H "Content-Type: application/json" -X POST ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents`}
+            />
           </dd>
           <dt className="project-settings__endpoint-name">
             <span className="project-settings__endpoint-method pill pill--blue">PUT</span>
@@ -102,7 +114,13 @@ const ProjectSettingsTokensComponent = ({
                 <span className="project-settings__endpoint-url">{Constants.PRODUCT_API_URL}/projects/{projectId}/documents/&lt;DOCUMENT_ID&gt;</span>
               </code>
             </pre>
-            <textarea ref={putEndpointRef} className="visually-hidden" readOnly defaultValue={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My updated document name"}' -H "Content-Type: application/json" -X PUT ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents/<DOCUMENT_ID>`} />
+            <textarea
+              ref={putEndpointRef}
+              aria-hidden={true}
+              className="visually-hidden"
+              readOnly
+              value={`curl -H "Authorization: Bearer ${selectedToken.token}" -d '{"name":"My updated document name"}' -H "Content-Type: application/json" -X PUT ${Constants.PRODUCT_API_URL}/projects/${projectId}/documents/<DOCUMENT_ID>`}
+            />
           </dd>
         </dl>
       </section>

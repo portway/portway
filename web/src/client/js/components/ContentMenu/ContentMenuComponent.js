@@ -57,7 +57,7 @@ const ContentMenuComponent = ({ createFieldHandler, fields }) => {
         aria-label="Add a field"
         onClick={() => { setExpanded(!expanded) }}
         title="Add a custom field to your document">
-        <AddIcon width="24" height="24" />
+        <AddIcon fill="#ffffff" width="24" height="24" />
       </button>
       <div className="content-menu__content" hidden={!expanded} ref={contentRef}>
         {renderFieldGroups()}

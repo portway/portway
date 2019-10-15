@@ -23,7 +23,38 @@ export const uploadContent = async function(documentId, orgId, file) {
       .upload({
         Bucket: S3_CONTENT_BUCKET,
         Key: `${hashId}/d/${documentId}/${Date.now()}-${file.originalname}`,
-        ContentType: 'application/octet-stream',
+        ContentType: file.mimetype,
+        Body: await readFile(file.path),
+        ACL: 'public-read'
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, 'AWS s3 failed to upload file')
+  } finally {
+    // async function, but don't await it, just fire and move on
+    unlink(file.path)
+  }
+  return res.Location
+}
+
+export const uploadAvatar = async function({ orgId, userId, file }) {
+  const hashId = getHashIdFromOrgId(orgId)
+
+  let key
+  let res
+
+  if (userId) {
+    key = `${hashId}/u/${userId}/${Date.now()}-${file.originalname}`
+  } else {
+    key = `${hashId}/o/${Date.now()}-${file.originalname}`
+  }
+
+  try {
+    res = await s3
+      .upload({
+        Bucket: S3_CONTENT_BUCKET,
+        Key: key,
+        ContentType: file.mimetype,
         Body: await readFile(file.path),
         ACL: 'public-read'
       })
@@ -36,4 +67,19 @@ export const uploadContent = async function(documentId, orgId, file) {
   }
 
   return res.Location
+}
+
+export const deleteContent = async function(key) {
+  try {
+    await s3
+      .deleteObject({
+        Bucket: S3_CONTENT_BUCKET,
+        Key: key
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, 'AWS s3 failed to delete file')
+  }
+
+  console.info(`Successfully deleted S3 content with key: ${key}`)
 }

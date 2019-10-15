@@ -11,6 +11,7 @@ import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
+  disabled,
   dragStartHandler,
   dragEndHandler,
   dragEnterHandler,
@@ -56,6 +57,7 @@ const DocumentFieldsComponent = ({
           <FieldImageComponent
             field={field}
             onChange={fieldChangeHandler}
+            onRename={fieldRenameHandler}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]} />
@@ -64,22 +66,23 @@ const DocumentFieldsComponent = ({
         break
     }
     if (field) {
+      const settingsModeForField = settingsForField === field.id
       return (
         <DocumentFieldComponent
           key={field.id}
           index={index}
           isNewField={createdFieldId === field.id}
           field={field}
-          dragStartHandler={dragStartHandler}
-          dragEndHandler={dragEndHandler}
-          dragEnterHandler={dragEnterHandler}
-          dragLeaveHandler={dragLeaveHandler}
-          dragOverHandler={dragOverHandler}
-          dropHandler={dropHandler}
+          dragStartHandler={settingsModeForField ? null : dragStartHandler}
+          dragEndHandler={settingsModeForField ? null : dragEndHandler}
+          dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
+          dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
+          dragOverHandler={settingsModeForField ? null : dragOverHandler}
+          dropHandler={settingsModeForField ? null : dropHandler}
           onRename={fieldRenameHandler}
           onDestroy={() => { fieldDestroyHandler(field.id) }}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-          settingsMode={settingsForField === field.id}>
+          settingsMode={settingsModeForField}>
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )
@@ -94,7 +97,7 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
-    'document__fields--disabled': isPublishing
+    'document__fields--disabled': isPublishing || disabled
   })
   return (
     <div className={fieldsClasses}>
@@ -107,6 +110,7 @@ const DocumentFieldsComponent = ({
 
 DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
+  disabled: PropTypes.bool.isRequired,
   dragStartHandler: PropTypes.func.isRequired,
   dragEndHandler: PropTypes.func.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,

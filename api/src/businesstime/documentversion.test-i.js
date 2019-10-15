@@ -21,7 +21,7 @@ describe('BusinessDocument', () => {
     })
 
     it('should belong to the document', () => {
-      expect(documentVersion.docId).toBe(factoryDocument.id)
+      expect(documentVersion.documentId).toBe(factoryDocument.id)
     })
 
     it('should belong to the org', () => {

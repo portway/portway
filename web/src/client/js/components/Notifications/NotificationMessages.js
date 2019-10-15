@@ -10,6 +10,12 @@ export const getNotificationTitle = function(notification) {
         return 'Access denied'
       case 404:
         return 'Not found...'
+      case 408:
+        return 'Request timed out'
+      case 413:
+        return 'File too large'
+      case 415:
+        return 'Unsupported media type'
       case 500:
         return 'Internal error...'
       default:

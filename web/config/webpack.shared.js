@@ -16,7 +16,7 @@ const SharedConfig = {
     Shared: path.resolve(__dirname, '../src/shared'),
   },
   plugins: [
-    new FixStyleOnlyEntriesPlugin({ silent: true }),
+    new FixStyleOnlyEntriesPlugin({ silent: true, ignore: 'webpack-hot-middleware' }),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../src/client/images'),
@@ -27,8 +27,8 @@ const SharedConfig = {
         to: 'css/fonts/'
       },
       {
-        from: path.resolve(__dirname, '../src/client/manifest.webmanifest'),
-        to: 'manifest.webmanifest'
+        from: path.resolve(__dirname, '../src/client/manifest.json'),
+        to: 'manifest.json'
       }
     ]),
     new SWPrecacheWebpackPlugin({
@@ -49,17 +49,23 @@ const SharedConfig = {
     })
   ],
   optimization: {
-    namedChunks: true,
     splitChunks: {
       chunks: 'all',
-      maxInitialRequests: Infinity,
-      minChunks: 2,
-      minSize: 0,
+      maxAsyncRequests: 5, // didn't have this before
+      maxInitialRequests: 10, // had Infinity for all the files could increase for http2
+      // maxSize: 200000, // didn't have this before
       cacheGroups: {
         vendor: {
           name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          maxSize: 200000, // didn't have this before
+          name(module) {
+            // get the name. E.g. node_modules/packageName/not/this/part.js
+            // or node_modules/packageName
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+            // npm package names are URL-safe, but some servers don't like @ symbols
+            return `npm.${packageName.replace('@', '')}`
+          }
         },
         styles: {
           name: 'styles',

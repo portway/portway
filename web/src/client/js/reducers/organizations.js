@@ -36,6 +36,20 @@ export const organizations = (state = initialState, action) => {
       const byId = { ...state.loading.byId, [id]: false }
       return { ...state, organizationsById, loading: { ...state.loading, byId: byId } }
     }
+    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_AVATAR: {
+      const { id, data } = action
+      const updatedOrganization = { ...state.organizationsById[id], avatar: data.avatar }
+      const organizationsById = { ...state.organizationsById, [id]: updatedOrganization }
+      const byId = { ...state.loading.byId, [id]: false }
+      return {
+        ...state,
+        organizationsById,
+        loading: {
+          ...state.loading,
+          byId: byId
+        }
+      }
+    }
 
     // Org billing
     case ActionTypes.REQUEST_ORGANIZATION_BILLING: {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { Link, NavLink, Redirect } from 'react-router-dom'
@@ -13,8 +13,10 @@ import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminUsersContainer from './AdminUsers/AdminUsersContainer'
 import AdminUserViewContainer from './AdminUserView/AdminUserViewContainer'
-import AdminBillingContainer from './AdminBilling/AdminBillingContainer'
-import AdminOrganizationContainer from './AdminOrganization/AdminOrganizationContainer'
+
+// Lazy loading these because most users won't see these sections
+const AdminBillingContainer = lazy(() => import(/* webpackChunkName: 'AdminBillingContainer' */ './AdminBilling/AdminBillingContainer'))
+const AdminOrganizationContainer = lazy(() => import(/* webpackChunkName: 'AdminOrganizationContainer' */ './AdminOrganization/AdminOrganizationContainer'))
 
 const ADMIN_PATHS = {
   BILLING: 'billing',

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import SimpleMDE from 'simplemde'
+import EasyMDE from 'easymde'
 
-import './SimpleMDE.scss'
+import './EasyMDE.scss'
 import './FieldText.scss'
 
 const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
@@ -10,7 +10,7 @@ const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
   useEffect(() => {
-    setEditor(new SimpleMDE({
+    setEditor(new EasyMDE({
       autoDownloadFontAwesome: false,
       autofocus: false,
       autosave: {

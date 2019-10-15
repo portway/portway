@@ -6,7 +6,7 @@ const getFieldData = function(override = {}) {
   const defaultProps = {
     name: faker.random.word(),
     orgId: constants.ORG_ID,
-    docId: faker.random.number(),
+    documentId: faker.random.number(),
     type: 1
   }
   return { ...defaultProps, ...override }

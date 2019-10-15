@@ -1,27 +1,15 @@
 import React from 'react'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
+
+import './_Loading.scss'
 
 function LoadingComponent(props) {
-  if (props.error) {
-    // When the loader has errored
-    return (
-      <div>
-        Error! <button onClick={props.retry}>Retry</button>
-      </div>
-    )
-  } else if (props.timedOut) {
-    // When the loader has taken longer than the timeout
-    return (
-      <div>
-        Taking a long time... <button onClick={props.retry}>Retry</button>
-      </div>
-    )
-  } else if (props.pastDelay) {
-    // When the loader has taken longer than the delay
-    return <div>Loading...</div>
-  } else {
-    // When the loader has just started
-    return null
-  }
+  return (
+    <div className="loading">
+      <SpinnerComponent width="48" height="48" />
+      <p>Loading...</p>
+    </div>
+  )
 }
 
 export default LoadingComponent

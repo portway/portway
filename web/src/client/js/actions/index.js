@@ -51,10 +51,19 @@ export const ActionTypes = {
   RECEIVE_UPDATED_FIELD: 'RECEIVE_UPDATED_FIELD',
   INITIATE_FIELD_ORDER: 'INITIATE_FIELD_ORDER',
   INITIATE_FIELD_REMOVE: 'INITIATE_FIELD_REMOVE',
+  INITIATE_FIELD_MOVE: 'INITIATE_FIELD_MOVE',
+  INITIATE_FIELD_COPY: 'INITIATE_FIELD_COPY',
+  FIELD_COPIED: 'FIELD_COPIED',
+  FIELD_MOVED: 'FIELD_MOVED',
   REMOVE_FIELD: 'REMOVE_FIELD',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
+  // Forms
+  FORM_SUBMITTED: 'FORM_SUBMITTED',
+  FORM_SUCCEEDED: 'FORM_SUCCEEDED',
+  FORM_FAILED: 'FORM_FAILED',
+  FORM_RESET: 'FORM_RESET',
   // Validation
   CREATE_VALIDATION_ERRORS: 'CREATE_VALIDATION_ERRORS',
   CLEAR_VALIDATION_ERRORS: 'CLEAR_VALIDATION_ERRORS',
@@ -68,6 +77,8 @@ export const ActionTypes = {
   INITIATE_USER_UPDATE: 'INITIATE_USER_UPDATE',
   RECEIVE_UPDATED_USER: 'RECEIVE_UPDATED_USER',
   RECEIVE_UPDATED_USER_ROLE: 'RECEIVE_UPDATED_USER_ROLE',
+  RECEIVE_UPDATED_USER_AVATAR: 'RECEIVE_UPDATED_USER_AVATAR',
+  RECEIVE_UPDATED_USER_PASSWORD: 'RECEIVE_UPDATED_USER_PASSWORD',
   INITIATE_USER_CREATE: 'INITIATE_USER_CREATE',
   RECEIVE_CREATED_USER: 'RECEIVE_CREATED_USER',
   INITIATE_USER_REMOVE: 'INITIATE_USER_REMOVE',
@@ -83,6 +94,7 @@ export const ActionTypes = {
   RECEIVE_ORGANIZATION: 'RECEIVE_ORGANIZATION',
   INITIATE_ORGANIZATION_UPDATE: 'INITIATE_ORGANIZATION_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION: 'RECEIVE_UPDATED_ORGANIZATION',
+  RECEIVE_UPDATED_ORGANIZATION_AVATAR: 'RECEIVE_UPDATED_ORGANIZATION_AVATAR',
   REQUEST_ORGANIZATION_BILLING: 'REQUEST_ORGANIZATION_BILLING',
   RECEIVE_ORGANIZATION_BILLING: 'RECEIVE_ORGANIZATION_BILLING',
   INITIATE_ORGANIZATION_BILLING_UPDATE: 'INITIATE_ORGANIZATION_BILLING_UPDATE',
@@ -106,6 +118,13 @@ export const Route = {
 export const Validation = {
   create: makeActionCreator(ActionTypes.CREATE_VALIDATION_ERRORS, 'resource', 'data', 'status'),
   clear: makeActionCreator(ActionTypes.CLEAR_VALIDATION_ERRORS, 'resource')
+}
+
+export const Form = {
+  submitted: makeActionCreator(ActionTypes.FORM_SUBMITTED, 'name'),
+  succeeded: makeActionCreator(ActionTypes.FORM_SUCCEEDED, 'name'),
+  failed: makeActionCreator(ActionTypes.FORM_FAILED, 'name'),
+  reset: makeActionCreator(ActionTypes.FORM_RESET, 'name'),
 }
 
 export const Projects = {
@@ -165,6 +184,12 @@ export const Fields = {
   initiateOrderUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_ORDER, 'documentId', 'fieldId', 'newOrder'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'projectId', 'documentId', 'data'),
+  // Move & Copy
+  initiateMove: makeActionCreator(ActionTypes.INITIATE_FIELD_MOVE, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  movedField: makeActionCreator(ActionTypes.FIELD_MOVED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  initiateCopy: makeActionCreator(ActionTypes.INITIATE_FIELD_COPY, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  copiedField: makeActionCreator(ActionTypes.FIELD_COPIED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
+  // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId')
 }
@@ -183,6 +208,8 @@ export const Users = {
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_USER, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER, 'data'),
+  receiveUpdatedAvatar: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER_AVATAR, 'userId', 'data'),
+  receiveUpdatedPassword: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER_PASSWORD, 'userId', 'data'),
   receiveUpdatedRole: makeActionCreator(ActionTypes.RECEIVE_UPDATED_USER_ROLE, 'userId', 'orgRoleId'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_USER_REMOVE, 'userId'),
   removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
@@ -201,6 +228,7 @@ export const Organizations = {
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_UPDATE, 'id'),
   receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION, 'data'),
+  receiveUpdatedAvatar: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_AVATAR, 'id', 'data'),
   requestBilling: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION_BILLING, 'id'),
   receiveBilling: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_BILLING, 'id', 'data'),
   initiateBillingUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE, 'id'),

@@ -7,7 +7,6 @@
 
   .navbar {
     align-items: center;
-    // border-bottom: thin solid $gray-light;
     border-bottom: thin solid var(--base-border-color);
     display: flex;
 
@@ -16,10 +15,14 @@
       min-width: $sideGutterWidth;
       .navbar__logo {
         // the logo is a span with a background image applied from a database
-        background-size: 30%;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-size: cover;
+        border-radius: 50% 50%;
         display: block;
-        height: $sideGutterWidth;
-        width: $sideGutterWidth;
+        height: 40px;
+        margin: auto;
+        width: 40px;
       }
     }
 

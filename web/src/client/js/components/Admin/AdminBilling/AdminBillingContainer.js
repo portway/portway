@@ -7,12 +7,16 @@ import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminBillingComponent from './AdminBillingComponent'
 
 const AdminBillingContainer = () => {
+  function planChangeHandler(val) {
+    console.log(`Change to ${val} plan`)
+  }
+
   return (
     <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
       <Helmet>
         <title>Account Settings: Billing – {PRODUCT_NAME}</title>
       </Helmet>
-      <AdminBillingComponent />
+      <AdminBillingComponent planChangeHandler={planChangeHandler} />
     </OrgPermission>
   )
 }

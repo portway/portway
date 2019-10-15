@@ -18,7 +18,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      docId: {
+      documentId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Documents',

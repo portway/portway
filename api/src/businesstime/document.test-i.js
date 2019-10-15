@@ -309,7 +309,7 @@ describe('BusinessDocument', () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
       factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      factoryFields = await FieldFactory.createMany(3, { type: 3, docId: factoryDocument.id })
+      factoryFields = await FieldFactory.createMany(3, { type: 3, documentId: factoryDocument.id })
     })
 
     describe('when the target document has the passed in orgId', () => {
@@ -366,13 +366,13 @@ describe('BusinessDocument', () => {
       }))[0]
 
       await DocumentVersionFactory.createMany(1, {
-        docId: factoryDocument.id,
+        documentId: factoryDocument.id,
         id: versionId
       })
 
-      await FieldFactory.createMany(3, { type: 3, docId: factoryDocument.id })
+      await FieldFactory.createMany(3, { type: 3, documentId: factoryDocument.id })
       publishedFactoryFields = await FieldFactory.createMany(2, {
-        docId: factoryDocument.id,
+        documentId: factoryDocument.id,
         versionId,
         orgId: factoryDocument.orgId
       })
