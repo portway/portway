@@ -5,6 +5,8 @@ import cx from 'classnames'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
 const TextField = ({
+  ariaDescribedBy,
+  disabled,
   errors,
   help,
   id,
@@ -37,6 +39,9 @@ const TextField = ({
         <label htmlFor={id}>{label}</label>
         <div className={controlClasses}>
           <input
+            aria-describedby={ariaDescribedBy}
+            aria-required={required}
+            disabled={disabled}
             type={type}
             name={name}
             id={id}
@@ -57,7 +62,9 @@ const TextField = ({
 }
 
 TextField.propTypes = {
+  ariaDescribedBy: PropTypes.string,
   errors: PropTypes.array,
+  disabled: PropTypes.false,
   help: PropTypes.string,
   id: PropTypes.string.isRequired,
   label: PropTypes.string,

@@ -50,6 +50,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
   const passwordMatchHandler = debounce(500, (pw) => {
     if (pw !== newPassword) {
       setConfirmStatus({ warning: 'Your password doesn’t match.' })
+      setConfirmNewPassword(null)
       return
     } else {
       setConfirmStatus(null)
@@ -73,6 +74,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           type="password"
         />
         <TextField
+          ariaDescribedBy="pw-popover"
           errors={errors.newPassword}
           id="newPassword"
           label="New Password"
@@ -84,7 +86,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           type="password"
         />
         {passwordStatus && passwordStatus.warning &&
-        <PopoverComponent className="user-security__password-meter">
+        <PopoverComponent className="user-security__password-meter" name="pw-popover">
           <p className="user-security__password-status">{passwordStatus.warning}</p>
           {passwordStatus.suggestions &&
           <ul className="user-security__password-suggestion">
@@ -96,6 +98,8 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
         </PopoverComponent>
         }
         <TextField
+          ariaDescribedBy="co-popover"
+          disabled={newPassword === null}
           errors={errors.confirmNewPassword}
           id="confirmNewPassword"
           label="Confirm Password"
@@ -107,11 +111,11 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           type="password"
         />
         {confirmStatus && confirmStatus.warning &&
-        <PopoverComponent className="user-security__password-meter">
+        <PopoverComponent className="user-security__password-meter" name="co-popover">
           <p className="user-security__password-status">{confirmStatus.warning}</p>
         </PopoverComponent>
         }
-        {passwordScore &&
+        {passwordScore !== null &&
         <div className="user-security__password-score">
           <p className="user-security__password-score-title">Password strength</p>
           <meter low="1" optimum="4" min="1" max="4" value={passwordScore} />

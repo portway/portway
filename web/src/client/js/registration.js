@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'react-dom'
+import { render, unmountComponentAtNode } from 'react-dom'
 import zxcvbn from 'zxcvbn'
 
 import { debounce } from 'Shared/utilities'
@@ -26,8 +26,9 @@ const passwordScoreHandler = debounce(500, (e) => {
   const result = zxcvbn(pw)
   // Scores are 0 - 4
   if (result.score < 3) {
+    confirmField.setAttribute('disabled', true)
     const Popover = (
-      <PopoverComponent>
+      <PopoverComponent name="password-tip">
         <p>{result.feedback.warning}</p>
         {result.feedback.suggestions &&
         <ul>
@@ -41,25 +42,27 @@ const passwordScoreHandler = debounce(500, (e) => {
     render(Popover, document.getElementById('pw-messages'))
     return
   }
-  document.getElementById('pw-messages').innerHTML = ''
+  confirmField.removeAttribute('disabled')
+  unmountComponentAtNode(document.getElementById('pw-messages'))
   pwStatus.style.display = 'block'
 })
 
 const confirmPasswordHandler = debounce(200, (e) => {
   if (isPasswordMatch()) {
     confirmField.classList.remove('is-danger')
-    document.getElementById('co-messages').innerHTML = ''
+    unmountComponentAtNode(document.getElementById('co-messages'))
     coStatus.style.display = 'block'
     if (isRegReady()) {
       submitBtn.removeAttribute('disabled')
     }
   } else {
     const Popover = (
-      <PopoverComponent>
+      <PopoverComponent name="confirm-tip">
         <p>Your password’s do not match.</p>
       </PopoverComponent>
     )
     render(Popover, document.getElementById('co-messages'))
+    coStatus.style.display = 'none'
     submitBtn.setAttribute('disabled', true)
     return
   }
@@ -68,7 +71,7 @@ const confirmPasswordHandler = debounce(200, (e) => {
 // Disable the submit button unless we know the org name has a value
 submitBtn.setAttribute('disabled', true)
 passwordField.addEventListener('keyup', passwordScoreHandler, false)
-confirmField.addEventListener('keydown', confirmPasswordHandler, false)
+confirmField.addEventListener('keyup', confirmPasswordHandler, false)
 
 // Todo: Investigate why the globals.js doesnt work for this one
 if (process.env.NODE_ENV !== 'production' && module.hot) {
