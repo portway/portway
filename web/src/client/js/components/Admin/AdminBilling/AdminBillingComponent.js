@@ -13,7 +13,7 @@ const AdminBillingComponent = ({ organization }) => {
   return (
     <>
       <section id="plans">
-        {organization.subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING &&
+        {(organization.subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || organization.subscriptionStatus === null) &&
         <div className="admin-billing__notice">
           <h2>Trial Period</h2>
           <p>During your trial, you are limited to a single-user plan.</p>

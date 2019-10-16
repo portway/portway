@@ -29,7 +29,7 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
   const upgradePillClasses = cx({
     'pill': true,
     'pill--red': LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
-    'pill--gray': subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING,
+    'pill--gray': subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null,
   })
   if (!isFullScreen) {
     return (
@@ -46,7 +46,7 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
             {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
           </div>
           <div className="navbar__misc">
-            {subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING &&
+            {(subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className="pill pill--blue">TRIAL PERIOD</b>}>
               <NavLink to={PATH_BILLING} className={upgradePillClasses}>Upgrade your account</NavLink>
             </OrgPermission>
