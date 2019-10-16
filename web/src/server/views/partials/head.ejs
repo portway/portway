@@ -14,12 +14,12 @@
     :root {
       color-scheme: light dark;
       --base-background: #fff;
-      --base-color: #3b3d3e;
+      --base-color: hsl(0, 0%, 20%);
     }
     @media screen and (prefers-color-scheme: dark) {
       :root {
-        --base-background: #3b3d3e;
-        --base-color: #fff;
+        --base-background: hsl(61, 1%, 21%);
+        --base-color: hsl(106, 0%, 89%);
       }
     }
     * { box-sizing: border-box; }
@@ -32,7 +32,7 @@
       padding: 0;
     }
     .masthead {
-      border-top: 6px solid #f8963a;
+      border-top: 6px solid hsl(17, 93%, 65%);
       height: 71px;
     }
     .navbar {
@@ -118,5 +118,4 @@
   <link rel="preload" href="/css/fonts/aleo-v2-latin-700.woff" as="font">
   <link rel="preload" href="/css/fonts/aleo-v2-latin-regular.woff" as="font">
 </head>
-<!-- change theme-default to theme--salmon or theme--yellow -->
-<body class="theme--default <% if (typeof permalink !== 'undefined') { %><%= permalink %><% } %>">
+<body class="theme--salmon <% if (typeof permalink !== 'undefined') { %><%= permalink %><% } %>">

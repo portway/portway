@@ -39,6 +39,7 @@
     flex: 1;
     overflow-x: hidden;
     section {
+      position: relative;
       &:first-child {
         padding-top: 0;
       }
