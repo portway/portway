@@ -22,7 +22,7 @@ steps:
     stage: Development Builds
     title: Building API Docker Image
     type: build
-    image_name: bonkeybong/portway-api
+    image_name: bonkeybong/portway_api
     working_directory: ./api/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
@@ -30,7 +30,7 @@ steps:
     stage: Development Builds
     title: Building Web Docker Image
     type: build
-    image_name: bonkeybong/portway-web
+    image_name: bonkeybong/portway_web
     working_directory: ./web/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
@@ -81,15 +81,39 @@ steps:
     stage: Production Builds
     title: Building API Production Image
     type: build
-    image_name: bonkeybong/portway-api
+    image_name: bonkeybong/portway_api
     working_directory: ./api/
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    tag: '${{CF_SHORT_REVISION}}'
     dockerfile: Dockerfile-prod
   build_prod_web_image:
     stage: Production Builds
     title: Building Web Production Image
     type: build
-    image_name: bonkeybong/portway-web
+    image_name: bonkeybong/portway_web
     working_directory: ./web/
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    tag: '${{CF_SHORT_REVISION}}'
     dockerfile: Dockerfile-prod
+  push_web_to_registry:
+    stage: Production Builds
+    type: push
+    title: Push Web to Docker Registry
+    candidate: ${{build_prod_web_image}}
+    tag: '${{CF_SHORT_REVISION}}'
+    image_name: bonkeybong/portway_web
+    registry: bonkeybong
+    when:
+      branch:
+        only:
+          - masterdirk
+  push_api_to_registry:
+    stage: Production Builds
+    type: push
+    title: Push API to Docker Registry
+    candidate: ${{build_prod_api_image}}
+    tag: '${{CF_SHORT_REVISION}}'
+    image_name: bonkeybong/portway_api
+    registry: bonkeybong
+    when:
+      branch:
+        only:
+          - masterdirk
