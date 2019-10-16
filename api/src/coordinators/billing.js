@@ -4,39 +4,52 @@ import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS, BILLING_SOURCE_PUBLIC_FIELDS } from '../constants/billingPublicFields'
+import { PLANS } from '../constants/plans'
 
 const formatBilling = (billingObj) => {
   const publicBillingFields = pick(billingObj, BILLING_PUBLIC_FIELDS)
-
-  let source
-  if (billingObj.sources.data[0]) {
-    source = pick(billingObj.sources.data[0], BILLING_SOURCE_PUBLIC_FIELDS)
+  const billingSource = billingObj.sources.data[0]
+  let source = null
+  if (billingSource) {
+    source = {
+      addressCity: billingSource.address_city,
+      addressCountry: billingSource.addressCountry,
+      addressLine1: billingSource.address_line1,
+      addressLine2: billingSource.address_line2,
+      addressState: billingSource.address_state,
+      addressZip: billingSource.address_zip,
+      brand: billingSource.brand,
+      expMonth: billingSource.exp_month,
+      expYear: billingSource.exp_year,
+      last4: billingSource.last4,
+      name: billingSource.name
+    }
   }
 
-  const subscription = billingObj.subscriptions.data[0]
-  const payloadSubscription = {
+  const billingSubscription = billingObj.subscriptions.data[0]
+  const subscription = {
     status: null,
     flatCost: null,
     includedSeats: null,
     additionalSeatCost: null
   }
 
-  if (subscription) {
-    payloadSubscription.status = billingObj.subscriptions.data[0].status
+  if (billingSubscription) {
+    subscription.status = billingSubscription.status
 
-    if (subscription.plan.id === 'SINGLE_USER') {
-      payloadSubscription.flatCost = subscription.plan.amount
-      payloadSubscription.includedSeats = 1
+    if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
+      subscription.flatCost = billingSubscription.plan.amount
+      subscription.includedSeats = 1
     }
 
-    if (subscription.plan.id === 'MULTI_USER') {
-      payloadSubscription.flatCost = subscription.plan.tiers[0].flat_amount
-      payloadSubscription.includedSeats = subscription.plan.tiers[0].up_to
-      payloadSubscription.additionalSeatCost = subscription.plan.tiers[1].unit_amount
+    if (billingSubscription.plan.id === PLANS.MULTI_USER) {
+      subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
+      subscription.includedSeats = billingSubscription.plan.tiers[0].up_to
+      subscription.additionalSeatCost = billingSubscription.plan.tiers[1].unit_amount
     }
   }
 
-  return { ...publicBillingFields, source, subscription: payloadSubscription }
+  return { ...publicBillingFields, source, subscription }
 }
 
 const subscribeOrgToPlan = async function(planId, orgId) {
