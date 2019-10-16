@@ -1,21 +1,25 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
-:root {
-  --document-list-active-item: #{$white-bis};
-  --document-list-item-hover: #{rgba($white-ter, .2)};
-  --document-list-item-new: #{rgba($white-ter, .2)};
-  --document-list-item-color: #{$black-ter};
-  @media (prefers-color-scheme: dark) {
-    --document-list-active-item: #{$black-er};
-    --document-list-item-new: #{rgba($black-ter, .2)};
-    --document-list-item-hover: #{rgba($black-ter, .2)};
-    --document-list-item-color: #{$white-ter};
-  }
-}
-
 .documents-list {
+  --document-list-active-item: var(--color-gray-3);
+  --document-list-item-hover: rgba(var(--color-gray-4), .2);
+  --document-list-item-new: rgba(var(--color-gray-4), .2);
+  --document-list-item-color: var(--color-gray-8);
+  @media (prefers-color-scheme: dark) {
+    --document-list-active-item: var(--color-gray-9);
+    --document-list-item-new: rgba(var(--color-gray-8), .2);
+    --document-list-item-hover: rgba(var(--color-gray-8), .2);
+    --document-list-item-color: var(--color-gray-4);
+  }
+
   min-height: 100%;
+
+  .toolbar {
+    @media (prefers-color-scheme: dark) {
+      background-color: hsl(61, 1%, 23%);
+    }
+  }
 
   &--dragged-over {
     background-color: var(--document-list-item-hover);
@@ -79,7 +83,7 @@
         .btn--with-circular-icon {
           padding: 0;
           .icon {
-            // background-color: $white-ter;
+            // background-color: var(--color-gray-4);
             // height: 30px;
             margin-right: 0;
             // width: 30px;
@@ -133,17 +137,17 @@
   }
   &__date {
     align-items: center;
-    color: $gray;
+    color: var(--color-gray-6);
     display: flex;
     .active & {
-      color: $gray-dark;
+      color: var(--color-gray-7);
     }
     .icon {
       height: 16px;
       margin-right: $iconMargin;
       width: 16px;
       g {
-        stroke: $gray;
+        stroke: var(--color-gray-6);
       }
     }
   }
@@ -162,7 +166,7 @@
       &.active {
         background-color: transparent;
         .documents-list__name {
-          color: $black-ter;
+          color: var(--color-gray-8);
         }
       }
     }

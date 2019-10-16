@@ -1,16 +1,13 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
-:root {
-  --field-background: #{$white-bis};
+.document-field {
+  --field-background: var(--color-gray-3);
   --field-edit-mode-background: rgba(255, 255, 255, .9);
   --field-name-width: 150px;
   @media (prefers-color-scheme: dark) {
-    --field-background: #{$black-bis};
+    --field-background: hsl(61, 1%, 23%);
   }
-}
-
-.document-field {
   cursor: grab;
   outline: 0;
 
@@ -69,25 +66,25 @@
     }
 
     &:focus-within {
-      background-color: $white-bis;
+      background-color: var(--color-gray-3);
     }
 
     // New data fields
     &--new {
-      background-color: $primary-light;
+      background-color: var(--color-brand-light);
       border: thin solid transparent;
 
       .document-field__name {
-        border-right: thin solid lighten($primary-light, 4%);
+        border-right: thin solid var(--color-brand-light);
       }
 
       &:focus-within {
-        background-color: $primary-light;
+        background-color: var(--color-brand-light);
       }
       input {
-        background-color: $primary-light;
+        background-color: var(--color-brand-light);
         &::selection {
-          background-color: $primary;
+          background-color: var(--color-green);
           color: #fff;
         }
       }
@@ -104,7 +101,7 @@
   }
 
   &--dragged-over {
-    border: thin dashed $action;
+    border: thin dashed var(--color-blue);
     opacity: 0.5;
     * {
       pointer-events: none;
@@ -118,9 +115,9 @@
 
   &__settings {
     align-items: center;
-    background: $black-bis;
+    background: var(--color-gray-10);
     bottom: 0;
-    color: $white-bis;
+    color: var(--color-gray-3);
     display: flex;
     justify-content: space-between;
     left: 0;
@@ -138,10 +135,10 @@
   &__settings__input {
     background: none;
     border: none;
-    color: $white-bis;
+    color: var(--color-gray-3);
     font-size: 1.2rem;
     @include focus(transparent, transparent);
-    border-bottom: thin solid $black-ter;
+    border-bottom: thin solid var(--color-gray-8);
   }
 
   &__settings__button {
@@ -157,13 +154,13 @@
     justify-content: center;
     padding: .6rem;
     &-label {
-      border-bottom: thin solid $gray-light;
+      border-bottom: thin solid var(--color-gray-5);
       font-size: 1.1rem;
       margin-bottom: .5rem;
     }
     input {
       border: none;
-      color: $gray-dark;
+      color: var(--color-gray-7);
       font-family: $serif !important;
       font-size: 1.3rem; // 13px
       min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
@@ -210,7 +207,7 @@
    * ------------------------------------------------------------------------ */
   .file-uploader {
     align-items: center;
-    border: thin solid $gray-light;
+    border: thin solid var(--color-gray-5);
     border-radius: $borderRadius;
     display: flex;
     padding: $sideGutterWidth;
@@ -229,7 +226,7 @@
     }
 
     &--dragged-over {
-      background-color: $gray-light;
+      background-color: var(--color-gray-5);
     }
 
     &--uploading {

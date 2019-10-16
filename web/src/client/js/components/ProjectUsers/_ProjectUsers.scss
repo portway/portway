@@ -1,9 +1,9 @@
 @import 'CSS/inc/_vars.scss';
 
 .project-users {
-  --project-users-border-color: #{$white};
+  --project-users-border-color: var(--color-white);
   @media (prefers-color-scheme: dark) {
-    --project-users-border-color: #{$black};
+    --project-users-border-color: var(--color-black);
   }
   &__collapsed-list {
     display: flex;
@@ -12,7 +12,7 @@
   }
   &__collapsed-item {
     align-items: center;
-    background-color: $gray-dark;
+    background-color: var(--color-gray-7);
     background-size: 100%;
     background-repeat: no-repeat;
     // border: thin solid var(--project-users-border-color);

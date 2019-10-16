@@ -1,15 +1,12 @@
-:root {
-  --pre-background: #{$black-bis};
-  --pre-color: #{$gray};
-  --pre-comment-color: #{$black-ter};
-  @media (prefers-color-scheme: dark) {
-    --pre-background: #{$black-er};
-    --pre-color: #{$black-ter};
-    --pre-comment-color: #{$gray-dark};
-  }
-}
-
 pre {
+  --pre-background: var(--color-gray-10);
+  --pre-color: var(--color-gray-6);
+  --pre-comment-color: var(--color-gray-8);
+  @media (prefers-color-scheme: dark) {
+    --pre-background: var(--color-gray-9);
+    --pre-color: var(--color-gray-8);
+    --pre-comment-color: var(--color-gray-7);
+  }
   background-color: var(--pre-background);
   color: var(--pre-color);
   direction: ltr;
@@ -25,7 +22,7 @@ pre {
     // Command is Bash command
     &__command {
       &:before {
-        color: $white-bis;
+        color: var(--color-gray-3);
         content: '$ ';
       }
     }
@@ -36,7 +33,7 @@ pre {
     }
     // Code
     &__json {
-      color: $white;
+      color: var(--color-white);
     }
   }
 }

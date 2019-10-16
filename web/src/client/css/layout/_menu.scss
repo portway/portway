@@ -1,24 +1,21 @@
 @import '../inc/vars';
 @import '../inc/mixins';
 
-:root {
-  --menu-background: #{$white};
-  --menu-color: #{$black-bis};
-  --menu-border: #{$gray-dark};
-  --menu-hover: #{$white-ter};
-  --menu-dark: #{$black-bis};
-  --menu-highlight: #{lighten($black-bis, 5%)};
-  @media (prefers-color-scheme: dark) {
-    --menu-background: #{$black-bis};
-    --menu-color: #{$white};
-    --menu-border: #{$black-er};
-    --menu-hover: #{$black-ter};
-    --menu-dark: #{$black-er};
-    --menu-highlight: #{lighten($black-er, 5%)};
-  }
-}
-
 .menu {
+  --menu-background: var(--color-white);
+  --menu-color: var(--color-gray-10);
+  --menu-border: var(--color-gray-7);
+  --menu-hover: var(--color-gray-4);
+  --menu-dark: var(--color-gray-10);
+  --menu-highlight: var(--color-gray-9);
+  @media (prefers-color-scheme: dark) {
+    --menu-background: var(--color-gray-10);
+    --menu-color: var(--color-white);
+    --menu-border: var(--color-gray-9);
+    --menu-hover: var(--color-gray-8);
+    --menu-dark: var(--color-gray-9);
+    --menu-highlight: var(--color-gray-8);
+  }
   background: var(--menu-background);
   border: thin solid var(--menu-border);
   border-radius: $borderRadius;
@@ -82,7 +79,7 @@
 
   .menu--dark & {
     background-color: var(--menu-dark);
-    color: $white;
+    color: var(--color-white);
     padding: 0;
   }
 }
@@ -92,8 +89,8 @@
   @include focus(transparent);
   font-weight: 500;
   &:hover, &:focus {
-    background-color: $white-ter;
-    color: $black-bis;
+    background-color: var(--color-gray-4);
+    color: var(--color-gray-10);
     cursor: pointer;
     .menu__submenu {
       display: block;
@@ -129,10 +126,10 @@
     text-align: left;
     white-space: normal;
     &.btn--warning {
-      color: $warning;
+      color: var(--color-orange);
     }
     &.btn--danger {
-      color: $danger;
+      color: var(--color-red);
     }
     &:hover {
       background-color: var(--menu-hover);
@@ -140,7 +137,7 @@
     }
     &:active,
     &.active {
-      background-color: $gray;
+      background-color: var(--color-gray-6);
     }
     .menu--dark & {
       &:hover {

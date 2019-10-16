@@ -15,7 +15,7 @@ $size-large: 2.4rem;
 @import 'bulma/sass/elements/button.sass';
 @import 'bulma/sass/elements/image.sass';
 @import 'bulma/sass/elements/container.sass';
-@import 'bulma/sass/elements/form.sass';
+// @import 'bulma/sass/elements/form.sass';
 @import 'bulma/sass/elements/other.sass';
 // Bulma components
 @import 'bulma/sass/components/navbar.sass';
@@ -31,16 +31,16 @@ $size-large: 2.4rem;
 
 // Links
 a {
-  color: $action;
+  color: var(--color-blue);
   text-decoration: underline;
   &:hover {
-    color: lighten($action, 20%);
+    color: var(--color-cyan);
   }
   &:active {
-    color: $action-dark;
+    color: var(--color-blue-dark);
   }
   &:focus {
-    color: lighten($action, 20%);
+    color: var(--color-cyan);
   }
 }
 
@@ -54,21 +54,27 @@ a {
   }
   .navbar-logo {
     background: url('/images/logo.svg') no-repeat 50% 50%;
-    background-size: 30%;
+    // background-size: 30%; // @todo do we need this with other people's logo?
     display: inline-block;
     height: $sideGutterWidth;
     width: $sideGutterWidth;
   }
 }
 
+.title {
+  color: var(--base-color);
+}
+.navbar {
+  background: var(--base-background);
+}
 
 // Bulma hero override
 .hero {
   &.is-info {
-    background-color: $primary-light;
-    color: $black-ter;
+    background-color: var(--color-brand-light);
+    color: var(--color-gray-8);
     .title {
-      color: $black-bis;
+      color: var(--color-gray-10);
     }
   }
   .hero-body {
@@ -78,20 +84,26 @@ a {
   }
 }
 .hero-head {
-  background-color: $white;
-  border-top: 6px solid $highlight;
+  background-color: var(--color-white);
+  border-top: 6px solid var(--color-brand);
   .home & {
-    background-color: $primary-light;
+    background-color: var(--color-brand-light);
   }
   .navbar {
     .home & {
-      background-color: $primary-light;
+      background-color: var(--color-brand-light);
     }
     .navbar-start,
     .navbar-brand {
       a {
-        color: $primary;
+        color: var(--color-green);
         font-family: $serif;
+        .theme--salmon &, .theme--yellow & {
+          color: var(--color-brand);
+        }
+        .theme--salmon.home &, .theme--yellow.home & {
+          color: var(--color-white);
+        }
       }
     }
   }
@@ -99,21 +111,21 @@ a {
 
 // Bulma button override
 .button {
-  background-color: $action;
+  background-color: var(--color-blue);
   text-decoration: none;
   &:hover, &:focus {
-    background-color: lighten($action, 10%);
+    background-color: var(--color-cyan);
   }
   &:active {
-    background-color: $action-dark;
+    background-color: var(--color-blue-dark);
   }
   &.is-primary {
-    background-color: $primary;
+    background-color: var(--color-green);
     &:hover, &:focus {
-      background-color: lighten($primary, 10%);
+      background-color: var(--color-green);
     }
     &:active {
-      background-color: $primary-dark;
+      background-color: var(--color-green-dark);
     }
   }
 }
@@ -127,5 +139,3 @@ a {
 .field--with-space {
   padding-top: 24px;
 }
-
-

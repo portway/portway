@@ -1,17 +1,14 @@
 @import 'CSS/inc/_vars.scss';
 
-:root {
-  --content-menu-heading: #{$white-bis};
-  --content-menu-btn-hover: #{rgba($white-ter, .2)};
-  @media (prefers-color-scheme: dark) {
-    --content-menu-heading: #{$black-er};
-    --content-menu-btn-hover: #{rgba($black-ter, .2)};
-  }
-}
-
 $contentMenuWidth: 250px;
 
 .content-menu {
+  --content-menu-heading: var(--color-gray-3);
+  --content-menu-btn-hover: rgba(var(--color-gray-4), .2);
+  @media (prefers-color-scheme: dark) {
+    --content-menu-heading: var(--color-gray-9);
+    --content-menu-btn-hover: rgba(var(--color-gray-8), .2);
+  }
   position: relative;
   margin: $sideGutterWidth / 2 auto 0;
   padding-bottom: $sideGutterWidth / 2;
@@ -22,7 +19,7 @@ $contentMenuWidth: 250px;
   &__button {
     // Add icon
     .icon {
-      background-color: $action;
+      background-color: var(--color-blue);
       height: 40px;
       transition: transform 0.1s ease-out;
       width: 40px;
@@ -33,17 +30,17 @@ $contentMenuWidth: 250px;
     }
     &:hover:not([disabled]) {
       .icon {
-        background-color: $action-light;
+        background-color: var(--color-cyan);
       }
     }
     &[aria-expanded="true"] {
       .icon {
-        background-color: $action-dark;
+        background-color: var(--color-blue-dark);
         transform: rotate(45deg);
       }
       &:hover:not([disabled]) {
         .icon {
-          background-color: $action-dark;
+          background-color: var(--color-blue-dark);
         }
       }
     }

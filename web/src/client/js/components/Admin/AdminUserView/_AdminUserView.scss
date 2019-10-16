@@ -3,14 +3,14 @@
 .admin-user {
 
   &__back-btn {
-    color: $action;
+    color: var(--color-blue);
     font-size: 1.2rem;
   }
 
   &__definition-list {
     dt {
       align-items: center;
-      background-color: $white-ter;
+      background-color: var(--color-gray-4);
       display: inline-flex;
       font-weight: 500;
       margin-bottom: 1px;

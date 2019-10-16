@@ -1,31 +1,6 @@
 @import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
-// react-select css vars are in the root scope because there are a few different
-// types of react-select containers
-:root {
-  --react-select-background: #{$white-bis};
-  --react-select-border: #{$gray-light};
-  --react-select-control-background: #{$white};
-  --react-select-control-color: #{$black-bis};
-  --react-select-placeholder-color: #{$gray};
-  --react-select-option: #{$white-bis};
-  --react-select-option-focused: #{$white-ter};
-  --react-select-option-selected: transparent;
-  --react-select-notice-background: #{$white-bis};
-  @media (prefers-color-scheme: dark) {
-    --react-select-background: #{$black-bis};
-    --react-select-border: #{$black-er};
-    --react-select-control-background: #{$black-er}; // like _forms.scss
-    --react-select-control-color: #{$white};
-    --react-select-placeholder-color: #{$white-ter};
-    --react-select-option: #{$black-bis};
-    --react-select-option-focused: #{$black-ter};
-    --react-select-option-selected: transparent;
-    --react-select-notice-background: #{$black-bis};
-  }
-}
-
 .react-select-button {
   background-color: var(--react-select-background);
   padding: 14px 0 0;
@@ -55,6 +30,29 @@ form {
 }
 
 .react-select-container {
+  --react-select-background: var(--color-gray-3);
+  --react-select-border: var(--color-gray-5);
+  --react-select-control-background: var(--color-white);
+  --react-select-control-color: var(--color-gray-10);
+  --react-select-placeholder-color: var(--color-gray-6);
+  --react-select-option: var(--color-gray-3);
+  --react-select-option-focused: var(--color-gray-4);
+  --react-select-option-selected: transparent;
+  --react-select-notice-background: var(--color-gray-3);
+  @media (prefers-color-scheme: dark) {
+    --react-select-background: var(--color-gray-10);
+    --react-select-border: var(--color-gray-9);
+    --react-select-control-background: var(--color-gray-9); // like _forms.scss
+    --react-select-control-color: var(--color-white);
+    --react-select-placeholder-color: var(--color-gray-4);
+    --react-select-option: var(--color-gray-10);
+    --react-select-option-focused: var(--color-gray-8);
+    --react-select-option-selected: transparent;
+    --react-select-notice-background: var(--color-gray-10);
+  }
+}
+
+.react-select-container {
   .react-select {
     &__control {
       background-color: var(--react-select-control-background);
@@ -68,9 +66,9 @@ form {
         border-radius: $borderRadius;
       }
       &--is-focused {
-        border: thin solid $action;
+        border: thin solid var(--color-blue);
         box-shadow: none;
-        // box-shadow: inset 0 1px 2px var(--react-select-background), 0 0 0 0.2em $action-light;
+        // box-shadow: inset 0 1px 2px var(--react-select-background), 0 0 0 0.2em var(--color-cyan);
       }
     }
     &__value-container, &__single-value {
@@ -146,7 +144,7 @@ form {
         &:hover {
           border-color: var(--react-select-border);
         }
-        @include focus($action);
+        @include focus(var(--color-blue));
         + .react-select__menu {
           // border-top: none;
           border: none;
@@ -169,7 +167,7 @@ form {
         }
       }
       &--is-focused {
-        @include focus($action);
+        @include focus(var(--color-blue));
       }
     }
     &__placeholder {
@@ -204,7 +202,7 @@ form {
         background-color: var(--react-select-option-focused);
       }
       &--is-selected {
-        background-color: $gray;
+        background-color: var(--color-gray-6);
       }
     }
   }
