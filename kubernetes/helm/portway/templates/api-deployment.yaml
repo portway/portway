@@ -4,24 +4,24 @@ kind: Deployment
 metadata:
   name: api-deployment
   labels:
-    app: api
+    app: {{ .Values.serviceNames.api }}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: api
+      app: {{ .Values.serviceNames.api }}
   template:
     metadata:
       labels:
-        run: api
-        app: api
+        run: {{ .Values.serviceNames.api }}
+        app: {{ .Values.serviceNames.api }}
         redeploy: "1"
     spec:
       imagePullSecrets:
       - name: regcred    
       containers:    
       - image: bonkeybong/portway_api:dev4
-        name: api
+        name: {{ .Values.serviceNames.api }}
         args: [ "start"  ]     
         env:
         - name: API_PORT

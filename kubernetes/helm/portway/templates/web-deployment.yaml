@@ -4,24 +4,24 @@ kind: Deployment
 metadata:
   name: web-deployment
   labels:
-    app: web
+    app: {{ .Values.serviceNames.web }}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: web
+      app: {{ .Values.serviceNames.web }}
   template:
     metadata:
       labels:
-        run: web
-        app: web
+        run: {{ .Values.serviceNames.web }}
+        app: {{ .Values.serviceNames.web }}
         redeploy: "2"
     spec:
       imagePullSecrets:
       - name: regcred    
       containers:
       - image: bonkeybong/portway_web:dev2
-        name: web
+        name: {{ .Values.serviceNames.web }}
         args: [ "start" ]
         env:
         - name: STATIC_PORT
