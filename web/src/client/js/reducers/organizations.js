@@ -54,11 +54,20 @@ export const organizations = (state = initialState, action) => {
     // Org plan
     case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN: {
       const { id, plan } = action
-      const updatedOrganization = { ...state.organizationsById[id], plan: plan }
+      const updatedOrganization = { ...state.organizationsById[id], plan }
       const organizationsById = { ...state.organizationsById, [id]: updatedOrganization }
+
+      // when a plan is updated, clear out the billing info to trigger a re-fetch
+      // eslint-disable-next-line no-unused-vars
+      const { [id]: ___, ...restOrganizationsBillingById } = state.organizationsBillingById
+
+      const billingLoadingById = { ...state.loading.billingById, [id]: undefined }
+
       return {
         ...state,
-        organizationsById
+        organizationsById,
+        organizationsBillingById: restOrganizationsBillingById,
+        loading: { ...state.loading, billingById: billingLoadingById }
       }
     }
 
