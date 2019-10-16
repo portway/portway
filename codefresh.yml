@@ -93,6 +93,8 @@ steps:
     working_directory: ./web/
     tag: '${{CF_SHORT_REVISION}}'
     dockerfile: Dockerfile-prod
+    build_arguments:
+      - API_PUBLIC_URL=https://api.dev.portway.app
   push_web_to_registry:
     stage: Production Builds
     type: push
