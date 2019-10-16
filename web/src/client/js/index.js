@@ -48,14 +48,14 @@ const Index = () => {
             <NotificationsContainer />
             <HeaderContainer />
             <Suspense fallback={null}>
-              {currentOrg && !LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
+              {currentOrg && LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
               <>
               <Route exact path={PATH_PROJECTS} component={LockedViewContainer} />
               <Route exact path={`${PATH_PROJECT}/:projectId`} component={LockedViewContainer} />
               <Route exact path={PATH_SETTINGS} component={LockedViewContainer} />
               </>
               }
-              {currentOrg && LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
+              {currentOrg && !LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
               <>
               <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
               <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />

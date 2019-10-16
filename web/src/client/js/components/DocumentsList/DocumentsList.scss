@@ -5,7 +5,7 @@
   --document-list-active-item: var(--color-gray-3);
   --document-list-item-hover: rgba(var(--color-gray-4), .2);
   --document-list-item-new: rgba(var(--color-gray-4), .2);
-  --document-list-item-color: var(--color-gray-8);
+  --document-list-item-color: var(--color-gray-10);
   @media (prefers-color-scheme: dark) {
     --document-list-active-item: var(--color-gray-9);
     --document-list-item-new: rgba(var(--color-gray-8), .2);
@@ -137,17 +137,17 @@
   }
   &__date {
     align-items: center;
-    color: var(--color-gray-6);
+    color: var(--color-gray-8);
     display: flex;
     .active & {
-      color: var(--color-gray-7);
+      color: var(--color-gray-8);
     }
     .icon {
       height: 16px;
       margin-right: $iconMargin;
       width: 16px;
       g {
-        stroke: var(--color-gray-6);
+        stroke: var(--color-gray-7);
       }
     }
   }
