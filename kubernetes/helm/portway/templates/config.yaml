@@ -3,12 +3,12 @@ apiVersion: v1
 items:
 - apiVersion: v1
   data:
-    api.port: {{ .Values.apiPort }}
+    api.port: {{ .Values.apiPort | quote }}
     api.db-host: {{ .Values.db.host }}
-    api.db-port: {{ .Values.db.port }}
+    api.db-port: {{ .Values.db.port | quote }}
     api.db-user: {{ .Values.db.user }}
     api.db-name: {{ .Values.db.name }}
-    api.db-use-ssl: {{ .Values.db.useSsl }}
+    api.db-use-ssl: {{ .Values.db.useSsl | quote }}
     api.aws-ses-region: "us-west-2"
     api.sender-email-address: "no-reply@portway.app"
     api.client-url: {{ printf "https://%s" .Values.baseUrl }}

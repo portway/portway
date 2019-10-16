@@ -2,21 +2,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# replicaCount: 1
-
-# image:
-#   repository: nginx
-#   tag: stable
-#   pullPolicy: IfNotPresent
-
-# imagePullSecrets: []
-# nameOverride: ""
-# fullnameOverride: ""
-
-certName: letsencrypt-staging
+certName: letsencrypt-prod
 baseUrl: dev.portway.app
 apiPublicUrl: api.dev.portway.app
 apiPort: "3001"
+
+apiImage: bonkeybong/portway_api
+apiTag: dev4
+
+webImage: bonkeybong/portway_web
+webTag: dev2
 
 db:
   host: "dev-db-portway-do-user-2269753-0.db.ondigitalocean.com"
@@ -24,7 +19,6 @@ db:
   user: "doadmin"
   name: "defaultdb"
   useSsl: "true"
-
 
 serviceNames:
   api: api

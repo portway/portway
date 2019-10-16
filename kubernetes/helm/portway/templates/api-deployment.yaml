@@ -20,7 +20,7 @@ spec:
       imagePullSecrets:
       - name: regcred    
       containers:    
-      - image: bonkeybong/portway_api:dev4
+      - image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
         name: {{ .Values.serviceNames.api }}
         args: [ "start"  ]     
         env:

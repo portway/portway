@@ -20,7 +20,7 @@ spec:
       imagePullSecrets:
       - name: regcred    
       containers:
-      - image: bonkeybong/portway_web:dev2
+      - image: {{ printf "%s:%s" .Values.webImage .Values.webTag }}
         name: {{ .Values.serviceNames.web }}
         args: [ "start" ]
         env:
