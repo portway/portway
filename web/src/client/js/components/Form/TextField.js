@@ -64,7 +64,7 @@ const TextField = ({
 TextField.propTypes = {
   ariaDescribedBy: PropTypes.string,
   errors: PropTypes.array,
-  disabled: PropTypes.false,
+  disabled: PropTypes.bool,
   help: PropTypes.string,
   id: PropTypes.string.isRequired,
   label: PropTypes.string,

@@ -1,14 +1,5 @@
 @import 'CSS/inc/_vars.scss';
 
-:root {
-  --notification-width: 300px;
-  --notification-space: #{$brandWidth / 2};
-  --notification-background: #{$white-ter};
-  @media (prefers-color-scheme: dark) {
-    --notification-background: #{$black-er};
-  }
-}
-
 @keyframes slidein {
   0% {
     transform: translate3d(0, 0, 0);
@@ -31,6 +22,12 @@
 }
 
 .notifications {
+  --notification-width: 300px;
+  --notification-space: #{$brandWidth / 2};
+  --notification-background: var(--color-gray-4);
+  @media (prefers-color-scheme: dark) {
+    --notification-background: var(--color-gray-9);
+  }
   display: block;
   position: fixed;
   left: 100vw;
@@ -68,7 +65,7 @@
 
     &--error {
       .notifications__code {
-        color: $danger;
+        color: var(--color-red);
       }
     }
 

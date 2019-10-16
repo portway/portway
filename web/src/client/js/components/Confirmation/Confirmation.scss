@@ -1,13 +1,14 @@
 @import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_mixins.scss';
 
 .confirmation {
   --modal-alpha-bg: #{rgba(#fff, .8)};
-  --confirmation-bg: #{$white};
-  --confirmation-border: #{$gray};
+  --confirmation-bg: var(--color-white);
+  --confirmation-border: var(--color-gray-6);
   @media (prefers-color-scheme: dark) {
     --modal-alpha-bg: #{rgba(#3b3d3e, .8)};
-    --confirmation-bg: #{$black-er};
-    --confirmation-border: #{$black-ter};
+    --confirmation-bg: var(--color-gray-9);
+    --confirmation-border: var(--color-gray-8);
   }
   align-items: center;
   background: var(--modal-alpha-bg);
@@ -20,6 +21,10 @@
   width: 100%;
   z-index: 15;
 
+  .theme--salmon &, .theme--yellow & {
+    background: var(--color-brand-light);
+  }
+
   &__dialog {
     background-color: var(--confirmation-bg);
     border: thin solid var(--confirmation-border);
@@ -30,7 +35,7 @@
   }
 
   &__message {
-    color: $gray-dark;
+    color: var(--color-gray-7);
   }
   &__actions {
     display: flex;
@@ -43,17 +48,17 @@
   }
 
   &__cancel {
-    color: $gray-dark;
+    color: var(--color-gray-7);
   }
 
   .highlight {
-    color: $black-bis;
+    color: var(--color-gray-10);
     font-weight: 700;
     &.danger {
-      color: $danger;
+      color: var(--color-red);
     }
     &.warning {
-      color: $warning;
+      color: var(--color-orange);
     }
   }
 

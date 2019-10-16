@@ -4,15 +4,15 @@
 
   &__password-score {
     meter { width: 250px; }
-    meter[value="1"]::-webkit-meter-optimum-value { background: $danger; }
-    meter[value="2"]::-webkit-meter-optimum-value { background: yellow; }
-    meter[value="3"]::-webkit-meter-optimum-value { background: $warning; }
-    meter[value="4"]::-webkit-meter-optimum-value { background: $primary; }
+    meter[value="1"]::-webkit-meter-optimum-value { background: var(--color-red); }
+    meter[value="2"]::-webkit-meter-optimum-value { background: var(--color-yellow); }
+    meter[value="3"]::-webkit-meter-optimum-value { background: var(--color-orange); }
+    meter[value="4"]::-webkit-meter-optimum-value { background: var(--color-green); }
 
-    meter[value="1"]::-moz-meter-bar { background: $danger; }
-    meter[value="2"]::-moz-meter-bar { background: yellow; }
-    meter[value="3"]::-moz-meter-bar { background: $warning; }
-    meter[value="4"]::-moz-meter-bar { background: $primary; }
+    meter[value="1"]::-moz-meter-bar { background: var(--color-red); }
+    meter[value="2"]::-moz-meter-bar { background: var(--color-yellow); }
+    meter[value="3"]::-moz-meter-bar { background: var(--color-orange); }
+    meter[value="4"]::-moz-meter-bar { background: var(--color-green); }
   }
 
 }

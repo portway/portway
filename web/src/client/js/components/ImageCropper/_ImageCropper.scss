@@ -4,7 +4,7 @@
 .image-cropper {
   @include boxShadow();
   align-items: center;
-  background-color: $white-bis;
+  background-color: var(--color-gray-3);
   display: flex;
   justify-content: space-between;
   margin: 1rem 0 3rem;
