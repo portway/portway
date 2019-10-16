@@ -13,6 +13,9 @@ const getGenericStripeCustomerData = function() {
     id: 'some-stripe-customer-id',
     sources: {
       data: [{}]
+    },
+    subscriptions: {
+      data: [{}]
     }
   }
 }

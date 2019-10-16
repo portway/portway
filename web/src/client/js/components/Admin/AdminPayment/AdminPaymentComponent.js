@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import cx from 'classnames'
 
+import { PLAN_PRICING } from 'Shared/constants'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 import StripeContainer from './StripeContainer'
 import './_AdminPaymentStyles.scss'
@@ -27,8 +28,15 @@ function renderCardLogo(brand) {
   return <img className="admin-payment__card-image" src={cardIcons[brand]} alt={`${brand} card logo`} width="64" height="40" />
 }
 
-const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
-  if (!isStripeOpen && Object.keys(orgBilling).length === 0) {
+const AdminPaymentComponent = ({
+  errors,
+  isStripeOpen,
+  isSubmitting,
+  openStripeHandler,
+  organization,
+  orgBilling
+}) => {
+  if (!isStripeOpen && !orgBilling.source) {
     return (
       <div className="admin-payment">
         <>
@@ -52,6 +60,7 @@ const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeH
   }
 
   if (orgBilling && orgBilling.source) {
+    const cost = PLAN_PRICING[organization.plan] // @todo update with seats
     const expDateCalc = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month}-01`)
     const expDate = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month}-01`)
     const expiringSoon = moment() > expDateCalc.add(1, 'months')
@@ -63,7 +72,7 @@ const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeH
       <div className="admin-payment">
         {!isStripeOpen && orgBilling && orgBilling.source.brand &&
         <>
-          <p>You will be billed <b>$10</b> on <b>September 19, 2019</b></p>
+          <p>You will be billed <b>${cost}</b> on <b>September 19, 2019</b></p>
           <div className="admin-payment__method">
             {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
             <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>
@@ -84,6 +93,7 @@ AdminPaymentComponent.propTypes = {
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   openStripeHandler: PropTypes.func.isRequired,
+  organization: PropTypes.object,
   orgBilling: PropTypes.object,
 }
 

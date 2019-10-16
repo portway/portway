@@ -83,3 +83,18 @@ export const updateOrganizationBilling = (orgId, body) => {
     dispatch(Organizations.receiveUpdatedBilling(orgId, data))
   }
 }
+
+export const updateOrganizationPlan = (formId, orgId, body) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Organizations.initiatePlanUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/plan`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveUpdatedPlan(orgId, body.plan))
+    dispatch(formSucceededAction(formId))
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import cx from 'classnames'
 
 import { debounce } from 'Shared/utilities'
 import { CheckIcon } from 'Components/Icons'
@@ -8,16 +9,18 @@ import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
   action,
+  bigSubmit,
   children,
   forms,
   name,
   method,
   multipart,
   onSubmit,
-  submitLabel
+  submitEnabled,
+  submitLabel,
 }) => {
   const formRef = useRef()
-  const [formChanged, setFormChanged] = useState(false)
+  const [formChanged, setFormChanged] = useState(submitEnabled)
   const [submitting, setSubmitting] = useState(false)
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
@@ -40,6 +43,11 @@ const Form = ({
   })
 
   const buttonDisabledWhen = !formChanged || submitting || succeeded
+  const submitClasses = cx({
+    'btn': true,
+    'btn--small': !bigSubmit,
+    'btn--disabled': buttonDisabledWhen,
+  })
 
   if (succeeded && formRef.current) {
     formRef.current.reset()
@@ -61,7 +69,7 @@ const Form = ({
       </div>
       }
       <div className="btn-group">
-        <input type="submit" className="btn btn--small" disabled={buttonDisabledWhen} value={submitLabel} />
+        <input type="submit" className={submitClasses} disabled={buttonDisabledWhen && !submitEnabled} value={submitLabel} />
         {submitting && <SpinnerComponent color="#e5e7e6" />}
         {succeeded && <CheckIcon fill="#51a37d" />}
       </div>
@@ -71,12 +79,14 @@ const Form = ({
 
 Form.propTypes = {
   action: PropTypes.string,
+  bigSubmit: PropTypes.bool,
   children: PropTypes.node,
   forms: PropTypes.object,
   method: PropTypes.string,
   multipart: PropTypes.string,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
+  submitEnabled: PropTypes.bool,
   submitLabel: PropTypes.string,
 }
 

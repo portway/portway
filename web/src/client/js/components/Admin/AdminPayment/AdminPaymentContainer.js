@@ -9,6 +9,7 @@ import dataMapper from 'Libs/dataMapper'
 import AdminPaymentComponent from './AdminPaymentComponent'
 
 const AdminPaymentContainer = ({ errors, isStripeOpen, isSubmitting, uiToggleStripeForm }) => {
+  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
 
   return (
@@ -17,6 +18,7 @@ const AdminPaymentContainer = ({ errors, isStripeOpen, isSubmitting, uiToggleStr
       isStripeOpen={isStripeOpen}
       isSubmitting={isSubmitting}
       openStripeHandler={uiToggleStripeForm}
+      organization={currentOrg}
       orgBilling={orgBilling}
     />
   )

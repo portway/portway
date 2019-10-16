@@ -2,13 +2,16 @@ import signUpCoordinator from '../coordinators/signUp'
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
+import stripeIntegrator from '../integrators/stripe'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
+import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/organization')
 jest.mock('../integrators/token')
+jest.mock('../integrators/stripe')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/email')
 
@@ -43,6 +46,31 @@ describe('signUp coordinator', () => {
         resetKey: mockResetKey,
         orgRoleId: ORGANIZATION_ROLE_IDS.OWNER
       })
+    })
+
+    it('should call stripeIntegrator.createCustomer with the org name and a description containing owner email', () => {
+      const mockOrgName = BusinessOrganization.create.mock.results[0].value.name
+      expect(stripeIntegrator.createCustomer.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.createCustomer.mock.calls[0][0]).toEqual({ name: mockOrgName, description: expect.stringMatching(email) })
+    })
+
+    it('should call stripeIntegrator.createSubscription with the customer id, plan id, and trial period', () => {
+      const customerId = stripeIntegrator.createCustomer.mock.results[0].value.id
+      expect(stripeIntegrator.createSubscription.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.createSubscription.mock.calls[0][0]).toEqual({
+        customerId,
+        planId: PLANS.SINGLE_USER,
+        trialPeriodDays: TRIAL_PERIOD_DAYS
+      })
+    })
+
+    it('should call BusinessOrganization.updateById with the org id, owner id, stripe id, and plan', () => {
+      const stripeId = stripeIntegrator.createCustomer.mock.results[0].value.id
+      const mockOrgId = BusinessOrganization.create.mock.results[0].value.id
+      const mockOwnerId = BusinessUser.create.mock.results[0].value.id
+      expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(mockOrgId)
+      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ ownerId: mockOwnerId, plan: PLANS.SINGLE_USER, stripeId })
     })
 
     // eslint-disable-next-line max-len

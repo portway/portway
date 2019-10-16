@@ -2,8 +2,9 @@ import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Link, NavLink, Redirect } from 'react-router-dom'
 
-import { PATH_PROJECT } from 'Shared/constants'
+import { PATH_PROJECT, PLAN_TYPES } from 'Shared/constants'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
 import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
 
@@ -32,7 +33,9 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
       <PanelNavigation>
         <Link to={`${PATH_PROJECT}/${projectId}`} className="link--back">Back to Project</Link>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`}>Info</NavLink>
-        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink>
+        <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+          <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink>
+        </OrgPlanPermission>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>API Keys</NavLink>
       </PanelNavigation>
       <PanelContent contentKey={setting} contentMap={PANEL_PATHS} />

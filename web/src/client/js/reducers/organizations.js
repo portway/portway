@@ -51,6 +51,17 @@ export const organizations = (state = initialState, action) => {
       }
     }
 
+    // Org plan
+    case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN: {
+      const { id, plan } = action
+      const updatedOrganization = { ...state.organizationsById[id], plan: plan }
+      const organizationsById = { ...state.organizationsById, [id]: updatedOrganization }
+      return {
+        ...state,
+        organizationsById
+      }
+    }
+
     // Org billing
     case ActionTypes.REQUEST_ORGANIZATION_BILLING: {
       const id = action.id

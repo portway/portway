@@ -4,6 +4,8 @@ import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
+import stripeIntegrator from '../integrators/stripe'
+import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 
 const { CLIENT_URL } = process.env
 
@@ -20,7 +22,15 @@ async function createUserAndOrganization(name, email) {
     resetKey
   })
 
-  await BusinessOrganization.updateById(organization.id, { ownerId: createdUser.id })
+  const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}` })
+  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, trialPeriodDays: TRIAL_PERIOD_DAYS })
+
+  await BusinessOrganization.updateById(organization.id, {
+    ownerId: createdUser.id,
+    stripeId: customer.id,
+    plan: PLANS.SINGLE_USER,
+    subscriptionStatus: subscription.status
+  })
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
 
@@ -33,7 +43,6 @@ async function createUserAndOrganization(name, email) {
   const textBody = `Here is your link to finish signing-up for Portway: ${linkUrl}`
 
   const subject = 'Portway email confirmation'
-
 
   await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody, subject })
 }

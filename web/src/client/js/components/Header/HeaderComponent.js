@@ -22,7 +22,7 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const HeaderComponent = ({ brand, isFullScreen, section }) => {
+const HeaderComponent = ({ brand, isFullScreen, section, upgrade }) => {
   if (!isFullScreen) {
     return (
       <header className="masthead" role="banner">
@@ -38,9 +38,11 @@ const HeaderComponent = ({ brand, isFullScreen, section }) => {
             {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
           </div>
           <div className="navbar__misc">
+            {upgrade &&
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
             </OrgPermission>
+            }
           </div>
           <div className="navbar__user">
             <UserMenuContainer />
@@ -57,6 +59,7 @@ HeaderComponent.propTypes = {
   brand: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
   section: PropTypes.string.isRequired,
+  upgrade: PropTypes.bool || null,
 }
 
 export default HeaderComponent
