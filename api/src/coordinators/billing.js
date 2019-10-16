@@ -13,12 +13,30 @@ const formatBilling = (billingObj) => {
     source = pick(billingObj.sources.data[0], BILLING_SOURCE_PUBLIC_FIELDS)
   }
 
-  let subscriptionStatus
-  if (billingObj.subscriptions.data[0]) {
-    subscriptionStatus = billingObj.subscriptions.data[0].status
+  const subscription = billingObj.subscriptions.data[0]
+  const payloadSubscription = {
+    status: null,
+    flatCost: null,
+    includedSeats: null,
+    additionalSeatCost: null
   }
 
-  return { ...publicBillingFields, source, subscriptionStatus }
+  if (subscription) {
+    payloadSubscription.status = billingObj.subscriptions.data[0].status
+
+    if (subscription.plan.id === 'SINGLE_USER') {
+      payloadSubscription.flatCost = subscription.plan.amount
+      payloadSubscription.includedSeats = 1
+    }
+
+    if (subscription.plan.id === 'MULTI_USER') {
+      payloadSubscription.flatCost = subscription.plan.tiers[0].flat_amount
+      payloadSubscription.includedSeats = subscription.plan.tiers[0].up_to
+      payloadSubscription.additionalSeatCost = subscription.plan.tiers[1].unit_amount
+    }
+  }
+
+  return { ...publicBillingFields, source, subscription: payloadSubscription }
 }
 
 const subscribeOrgToPlan = async function(planId, orgId) {
