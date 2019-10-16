@@ -3,12 +3,12 @@ import ono from 'ono'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import { pick } from '../libs/utils'
-import { BILLING_PUBLIC_FIELDS, BILLING_SOURCE_PUBLIC_FIELDS } from '../constants/billingPublicFields'
+import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 import { PLANS } from '../constants/plans'
 
-const formatBilling = (billingObj) => {
-  const publicBillingFields = pick(billingObj, BILLING_PUBLIC_FIELDS)
-  const billingSource = billingObj.sources.data[0]
+const formatBilling = (customer) => {
+  const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
+  const billingSource = customer.sources.data[0]
   let source = null
   if (billingSource) {
     source = {
@@ -26,7 +26,8 @@ const formatBilling = (billingObj) => {
     }
   }
 
-  const billingSubscription = billingObj.subscriptions.data[0]
+  const billingSubscription = customer.subscriptions.data[0]
+
   const subscription = {
     status: null,
     flatCost: null,
@@ -36,6 +37,10 @@ const formatBilling = (billingObj) => {
 
   if (billingSubscription) {
     subscription.status = billingSubscription.status
+    subscription.planId = billingSubscription.plan.id
+    subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
+    subscription.currentPeriodEnd = billingSubscription.current_period_end
+    subscription.trialEnd = billingSubscription.trialEnd
 
     if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
       subscription.flatCost = billingSubscription.plan.amount
@@ -66,7 +71,10 @@ const subscribeOrgToPlan = async function(planId, orgId) {
     throw billingError
   }
 
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId })
+  const currentSubscription = customer.subscriptions.data[0]
+  const subscriptionId = currentSubscription && currentSubscription.id
+
+  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId, subscriptionId })
 
   await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
 }
