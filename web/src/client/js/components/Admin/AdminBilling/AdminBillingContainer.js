@@ -1,7 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Redirect } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
 import { ORGANIZATION_ROLE_IDS, PATH_PROJECTS, PRODUCT_NAME } from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
@@ -19,10 +18,6 @@ const AdminBillingContainer = () => {
       <AdminBillingComponent organization={currentOrg} />
     </OrgPermission>
   )
-}
-
-AdminBillingContainer.propTypes = {
-  updateOrganizationPlan: PropTypes.func.isRequired
 }
 
 
