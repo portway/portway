@@ -80,11 +80,12 @@ const AdminPaymentComponent = ({
       'admin-payment__card-expiration': true,
       'admin-payment__card-expiration--soon': expiringSoon
     })
+
     return (
       <div className="admin-payment">
         {!isStripeOpen && orgBilling && orgBilling.source.brand &&
         <>
-          <p>You will be billed <b>${cost}</b> on <b>{nextBillingDate.format('MMMM, YYYY')}</b></p>
+          <p>You will be billed <b>${cost}</b> on <b>{nextBillingDate.format('MMMM Do, YYYY')}</b></p>
           <div className="admin-payment__method">
             {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
             <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>
