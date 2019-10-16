@@ -45,7 +45,7 @@ const AdminBillingComponent = ({ formId, organizationPlan, planChangeHandler }) 
               <button
                 aria-checked={plan === PLAN_TYPES.SINGLE_USER}
                 aria-label="Select a single-user plan"
-                className="btn"
+                className="btn btn--white"
                 onClick={() => formChangeHandler(PLAN_TYPES.SINGLE_USER)}
                 role="radio"
                 type="button"
@@ -71,7 +71,7 @@ const AdminBillingComponent = ({ formId, organizationPlan, planChangeHandler }) 
               <button
                 aria-checked={plan === PLAN_TYPES.MULTI_USER}
                 aria-label="Select a multi-user plan"
-                className="btn"
+                className="btn btn--white"
                 onClick={() => formChangeHandler(PLAN_TYPES.MULTI_USER)}
                 role="radio"
                 type="button"
