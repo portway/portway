@@ -96,12 +96,9 @@ a {
     .navbar-start,
     .navbar-brand {
       a {
-        color: var(--color-gray-90);
+        color: var(--color-brand);
         font-family: var(--type-serif);
-        .theme--salmon &, .theme--yellow & {
-          color: var(--color-brand);
-        }
-        .theme--salmon.home &, .theme--yellow.home & {
+        .home & {
           color: var(--color-white);
         }
       }

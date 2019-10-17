@@ -18,9 +18,6 @@ html, body {
     color: var(--base-color);
   }
   .help {
-    color: var(--base-color);
-    .theme--salmon &, .theme--yellow & {
-      color: var(--color-brand-darker);
-    }
+    color: var(--base-brand-darker);
   }
 }

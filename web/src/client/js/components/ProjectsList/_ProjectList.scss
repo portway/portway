@@ -69,7 +69,7 @@
       flex: 1;
       justify-content: space-between;
       outline: none;
-      padding: 1rem 2rem 1rem 1rem;
+      padding: 1.5rem 2rem 1.5rem 1rem;
       text-decoration: none;
       &:focus {
         border: thin solid var(--focus-border-color);
@@ -84,6 +84,7 @@
     &__title-container {
       h3 {
         font-size: 1.5rem;
+        line-height: 1.5rem;
         margin: 0;
         padding: 0;
       }
