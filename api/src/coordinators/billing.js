@@ -41,6 +41,7 @@ const formatBilling = (customer) => {
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
     subscription.currentPeriodEnd = billingSubscription.current_period_end
     subscription.trialEnd = billingSubscription.trialEnd
+    subscription.currentSeats = billingSubscription.items.data[0].quantity
 
     if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
       subscription.flatCost = billingSubscription.plan.amount
@@ -57,7 +58,7 @@ const formatBilling = (customer) => {
   return { ...publicBillingFields, source, subscription }
 }
 
-const subscribeOrgToPlan = async function(planId, orgId) {
+const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
   const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
 
   const org = await BusinessOrganization.findById(orgId)
@@ -73,8 +74,27 @@ const subscribeOrgToPlan = async function(planId, orgId) {
 
   const currentSubscription = customer.subscriptions.data[0]
   const subscriptionId = currentSubscription && currentSubscription.id
+  const currentPlanId = currentSubscription && currentSubscription.plan.id
+  const currentSeatCount = currentSubscription && currentSubscription.items.data[0].quantity
 
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId, subscriptionId })
+  const updatePlanId = planId !== currentPlanId ? planId : undefined
+  let updateSeatCount = seats !== currentSeatCount ? seats : undefined
+
+  if (updatePlanId === PLANS.SINGLE_USER && currentSeatCount > 1) {
+    const message = 'There are multiple seats on the current plan, cannot downgrade to a single user plan'
+    throw ono({ publicMessage: message }, message)
+  }
+
+  if (updatePlanId === PLANS.SINGLE_USER) {
+    //always set seat count to 1 for single user plans
+    updateSeatCount = 1
+  }
+
+  if (!updatePlanId && !updateSeatCount) {
+    return
+  }
+
+  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: updatePlanId, seats: updateSeatCount, subscriptionId })
 
   await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
 }

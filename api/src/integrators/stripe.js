@@ -64,7 +64,7 @@ const updateCustomer = async function(customerId, body) {
   return customer
 }
 
-const createSubscription = async function({ customerId, planId, trialPeriodDays, subscriptionId }) {
+const createSubscription = async function({ customerId, planId, seats, trialPeriodDays, subscriptionId }) {
   let subscription
   try {
     if (subscriptionId) {
@@ -74,14 +74,20 @@ const createSubscription = async function({ customerId, planId, trialPeriodDays,
           {
             id: currentSubscription.items.data[0].id,
             plan: planId,
-            trial_period_days: trialPeriodDays
+            trial_period_days: trialPeriodDays,
+            quantity: seats
           }
         ]
       })
     } else {
       subscription = await stripe.subscriptions.create({
         customer: customerId,
-        items: [{ plan: planId }],
+        items: [
+          {
+            plan: planId,
+            quantity: seats
+          }
+        ],
         trial_period_days: trialPeriodDays
       })
     }

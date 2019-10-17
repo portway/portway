@@ -10,7 +10,8 @@ import ACTIONS from '../constants/actions'
 import { PLANS } from '../constants/plans'
 
 const bodySchema = Joi.compile({
-  plan: Joi.string().valid(Object.keys(PLANS)).required()
+  plan: Joi.string().valid(Object.keys(PLANS)),
+  seats: Joi.number()
 })
 
 const paramSchema = Joi.compile({
@@ -59,11 +60,11 @@ const orgPlanController = function(router) {
 }
 
 const updateOrgPlan = async function(req, res, next) {
-  const { plan } = req.body
+  const { plan, seats } = req.body
   const { orgId } = req.params
 
   try {
-    await billingCoordinator.subscribeOrgToPlan(plan, orgId)
+    await billingCoordinator.subscribeOrgToPlan({ plan, seats, orgId })
     res.status(204).send()
   } catch (e) {
     next(e)
