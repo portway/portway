@@ -1,12 +1,10 @@
-@import 'CSS/inc/_vars.scss';
-
 .project-toolbar {
   align-items: center;
-  background-color: $white-bis;
+  background-color: var(--base-border-color);
   border-bottom: thin solid var(--base-border-color);
   display: flex;
   min-height: 40px;
-  padding: 0 $sideGutterWidth / 4;
+  padding: 0 calc(var(--gutter-width) / 4);
 
   &__team {
     align-items: center;
@@ -15,14 +13,14 @@
     padding: 0 2rem;
 
     &-label {
-      color: $gray-dark;
+      color: var(--color-gray-30);
       padding-right: .5rem;
     }
   } // team
 
   &__document-info {
     align-items: center;
-    color: $gray-dark;
+    color: var(--color-gray-30);
     display: flex;
     flex: 1;
     font-size: 1.2rem;

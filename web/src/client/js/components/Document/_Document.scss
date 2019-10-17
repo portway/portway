@@ -1,12 +1,11 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document {
-  --document-header-bg: #{$white};
-  --document-header-border: #{$gray-light};
+  --document-header-bg: var(--color-white);
+  --document-header-border: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
-    --document-header-bg: #{$black-bis};
-    --document-header-border: #{$black-er};
+    --document-header-bg: hsl(61, 1%, 23%);
+    --document-header-border: var(--base-border-color);
   }
   flex: 1;
   position: relative;
@@ -25,8 +24,8 @@
     display: flex;
     height: 63px;
     justify-content: space-between;
-    margin-bottom: ($brandWidth / 2);
-    padding: 0 ($brandWidth / 4) 0 0;
+    margin-bottom: calc(var(--brand-width) / 2);
+    padding: 0 calc(var(--brand-width) / 4) 0 0;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -38,10 +37,10 @@
   }
 
   &__button-expand {
-    padding: 0 ($brandWidth / 8);
+    padding: 0 calc(var(--brand-width) / 8);
     .icon-expand {
       path {
-        fill: $gray-dark;
+        fill: var(--color-gray-30);
       }
     }
   }
@@ -49,20 +48,20 @@
   &__title-container {
     align-items: center;
     display: flex;
-    height: $headerHeight - 2;
+    height: calc(var(--header-height) - 2);
     flex: 1;
   }
 
   &__title {
     background-color: transparent;
     border: none;
-    color: $primary;
+    color: var(--color-brand-dark);
     flex: 1;
-    font-family: $serif;
+    font-family: var(--type-serif);
     font-size: 1.8rem;
     font-weight: 700;
     height: 3rem;
-    line-height: 2em;
+    line-height: 3rem;
     padding: 0;
     outline: none;
     resize: none;
@@ -76,7 +75,7 @@
   }
 
   &__publish-date {
-    color: $gray-dark;
+    color: var(--color-gray-7);
     display: block;
   }
 
@@ -98,8 +97,8 @@
   }
 
   // Validation for document
-  .validation {
-    // background-color: $gray-light;
-  }
+  // .validation {
+    // background-color: var(--color-gray-5);
+  // }
 
 }

@@ -1,0 +1,63 @@
+:root {
+  // color-scheme: light dark;
+  // Brand colors
+  --color-brand: hsl(17, 93%, 65%);
+  --color-brand-dark: hsl(16, 80%, 59%);
+  --color-brand-darker: hsl(16, 68%, 51%);
+  --color-brand-light: hsl(17, 100%, 76%);
+  --color-brand-lighter: hsl(17, 78%, 88%);
+  // Primary colors
+  --color-green-light: hsl(117, 49%, 79%);
+  --color-green: hsl(117, 49%, 59%);
+  --color-green-dark: hsl(125, 45%, 50%);
+  --color-cyan: hsl(190, 79%, 69%);
+  --color-cyan-dark: hsl(190, 60%, 58%);
+  --color-yellow: hsl(48, 88%, 60%);
+  --color-yellow-dark: hsl(51, 97%, 45%);
+  --color-red: hsl(357, 89%, 69%);
+  --color-red-dark: hsl(353, 72%, 57%);
+  --color-blue: hsl(230, 59%, 61%);
+  --color-blue-dark: hsl(230, 56%, 56%);
+  --color-purple: hsl(297, 42%, 58%);
+  --color-purple-dark: hsl(297, 38%, 52%);
+  --color-orange: hsl(34, 98%, 64%);
+  --color-orange-dark: hsl(32, 89%, 57%);
+  // Grays
+  --color-black: hsl(0, 0%, 26%);
+  --color-gray-90: hsl(0, 0%, 10%);
+  --color-gray-80: hsl(0, 0%, 20%);
+  --color-gray-70: hsl(0, 0%, 30%);
+  --color-gray-60: hsl(0, 0%, 40%);
+  --color-gray-50: hsl(0, 0%, 50%);
+  --color-gray-40: hsl(0, 0%, 60%);
+  --color-gray-30: hsl(0, 0%, 70%);
+  --color-gray-20: hsl(0, 0%, 80%);
+  --color-gray-15: hsl(0, 0%, 85%);
+  --color-gray-10: hsl(0, 0%, 90%);
+  --color-gray-5: hsl(0, 0%, 95%);
+  --color-gray-2: hsl(0, 0%, 98%);
+  --color-white: hsl(0, 0%, 100%);
+  // Salmon theme
+  --base-background: var(--color-white);
+  --base-color: var(--color-gray-60);
+  --base-border-color: var(--color-gray-5);
+  --base-link-color: var(--color-blue);
+  --base-link-hover-color: var(--color-cyan);
+  --base-link-active-color: var(--color-blue-dark);
+  --link-color-gray: var(--color-gray-30);
+  --focus-border-color: var(--color-blue);
+  --focus-shadow-one: var(--color-gray-5);
+  --focus-shadow-two: var(--color-cyan);
+  @media (prefers-color-scheme: dark) {
+    --base-background: hsl(61, 1%, 21%);
+    --base-color: hsl(106, 0%, 89%);
+    --base-border-color: hsl(106, 0%, 34%);
+    --base-link-color: var(--color-blue);
+    --base-link-hover-color: var(--color-cyan);
+    --base-link-active-color: var(--color-blue-dark);
+    --link-color-gray: hsl(61, 1%, 41%);
+    --focus-border-color: var(--color-white);
+    --focus-shadow-one: var(--color-gray-10);
+    --focus-shadow-two: var(--color-blue);
+  }
+}

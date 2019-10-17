@@ -12,20 +12,20 @@
   <% } %>
   <style>
     :root {
-      color-scheme: light dark;
-      --base-background: #fff;
-      --base-color: #3b3d3e;
+      /* @todo make sure that these colors match _colors.scss */
+      --body-background: hsl(0, 0, 100%);
+      --body-color: hsl(61, 1%, 21%);
     }
     @media screen and (prefers-color-scheme: dark) {
       :root {
-        --base-background: #3b3d3e;
-        --base-color: #fff;
+        --body-background: hsl(61, 1%, 21%);
+        --body-color: hsl(0, 0, 100%);
       }
     }
     * { box-sizing: border-box; }
     body {
-      background-color: var(--base-background);
-      color: var(--base-color);
+      background-color: var(--body-background);
+      color: var(--body-color);
       margin: 0;
       min-height: 100vh;
       overflow-x: hidden;
@@ -115,7 +115,7 @@
       100% { fill: #e8eae8; }
     }
   </style>
-  <link rel="preload" href="/css/fonts/aleo-v2-latin-700.woff" as="font">
-  <link rel="preload" href="/css/fonts/aleo-v2-latin-regular.woff" as="font">
+  <link rel="preload" href="/css/fonts/domine-v7-latin-regular.woff2" as="font">
+  <link rel="preload" href="/css/fonts/domine-v7-latin-700.woff2" as="font">
 </head>
 <body class="<% if (typeof permalink !== 'undefined') { %><%= permalink %><% } %>">

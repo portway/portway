@@ -1,23 +1,21 @@
 <form class="login-form" action="/sign-up/registration" method="post">
   <h1 class="title">Create your free account</h1>
-  <div class="field">
-    <label class="label" for="name">Your name</label>
-  </div>
-  <div class="field is-horizontal">
-    <div class="field-body">
-      <div class="field is-narrow">
-        <div class="control">
-          <input class="input" type="text" name="name" id="name" placeholder="Name" autocomplete="section-signup given-name" />
-        </div>
+  <div class="form-field">
+    <div class="field">
+      <label class="label" for="name">Your name</label>
+      <div class="field__control">
+        <input class="input" type="text" name="name" id="name" placeholder="Name" autocomplete="section-signup given-name" required />
       </div>
     </div>
   </div>
   <!-- /name -->
-  <div class="field">
-    <label class="label" for="email">Email address</label>
-    <div class="control">
-      <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-signup username">
-      <p class="help">Your email address will be your username</p>
+  <div class="form-field">
+    <div class="field">
+      <label class="label" for="email">Email address</label>
+      <div class="field__control">
+        <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-signup username" required>
+        <p class="help">Your email address will be your username</p>
+      </div>
     </div>
   </div>
   <div class="field field--with-space">

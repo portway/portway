@@ -1,21 +1,29 @@
-@import 'CSS/inc/_vars.scss';
+
 @import 'CSS/inc/_mixins.scss';
 
-:root {
-  --document-list-active-item: #{$white-bis};
-  --document-list-item-hover: #{rgba($white-ter, .2)};
-  --document-list-item-new: #{rgba($white-ter, .2)};
-  --document-list-item-color: #{$black-ter};
-  @media (prefers-color-scheme: dark) {
-    --document-list-active-item: #{$black-er};
-    --document-list-item-new: #{rgba($black-ter, .2)};
-    --document-list-item-hover: #{rgba($black-ter, .2)};
-    --document-list-item-color: #{$white-ter};
-  }
-}
-
 .documents-list {
+  --document-list-active-item: var(--color-gray-2);
+  --document-list-item-hover: var(--color-gray-2);
+  --document-list-item-new: var(--color-gray-2);
+  --document-list-item-color: var(--color-gray-60);
+  @media (prefers-color-scheme: dark) {
+    --document-list-active-item: var(--color-gray-90);
+    --document-list-item-new: var(--color-gray-90);
+    --document-list-item-hover: var(--color-gray-33);
+    --document-list-item-color: var(--color-gray-40);
+  }
+
   min-height: 100%;
+
+  .toolbar {
+    background-color: var(--base-background);
+    border-bottom: thin solid var(--base-border-color);
+    position: sticky;
+    top: 0;
+    @media (prefers-color-scheme: dark) {
+      background-color: hsl(61, 1%, 23%);
+    }
+  }
 
   &--dragged-over {
     background-color: var(--document-list-item-hover);
@@ -38,10 +46,10 @@
 
   &__empty-state {
     border-top: thin solid var(--base-border-color);
-    padding: $sideGutterWidth / 4;
+    padding: calc(var(--gutter-width) / 4);
   }
   &__empty-state-content {
-    padding: $sideGutterWidth / 4;
+    padding: calc(var(--gutter-width) / 4);
   }
 
   &__drag-notice {
@@ -63,6 +71,11 @@
   &__item {
     border-top: thin solid var(--base-border-color);
     transition: opacity 0.2s ease-in-out;
+
+    &:first-child {
+      border-top: none;
+    }
+
     &--active {
       .btn {
         background-color: var(--document-list-active-item);
@@ -70,6 +83,8 @@
     }
     // New item is a fake list item
     &--new {
+      border-bottom: thin solid var(--base-border-color);
+      border-top: none;
       .documents-list__button {
         align-items: flex-start;
         display: flex;
@@ -79,7 +94,7 @@
         .btn--with-circular-icon {
           padding: 0;
           .icon {
-            // background-color: $white-ter;
+            // background-color: var(--color-gray-4);
             // height: 30px;
             margin-right: 0;
             // width: 30px;
@@ -103,7 +118,7 @@
   &__button {
     align-items: flex-start;
     flex-direction: column;
-    padding: $sideGutterWidth / 4;
+    padding: calc(var(--gutter-width) / 4);
     white-space: normal;
     width: 100%;
     &:not([disabled]) {
@@ -126,24 +141,25 @@
   &__name {
     border: 0;
     color: var(--document-list-item-color);
-    padding-bottom: $sideGutterWidth / 4;
+    font-weight: 400;
+    padding-bottom: calc(var(--gutter-width) / 4);
     .active & {
       color: var(--document-list-item-color);
     }
   }
   &__date {
     align-items: center;
-    color: $gray;
+    color: var(--color-gray-20);
     display: flex;
     .active & {
-      color: $gray-dark;
+      color: var(--color-gray-30);
     }
     .icon {
       height: 16px;
-      margin-right: $iconMargin;
+      margin-right: var(--icon-margin);
       width: 16px;
       g {
-        stroke: $gray;
+        stroke: var(--color-gray-15);
       }
     }
   }
@@ -162,7 +178,7 @@
       &.active {
         background-color: transparent;
         .documents-list__name {
-          color: $black-ter;
+          color: var(--color-gray-80);
         }
       }
     }
