@@ -4,6 +4,12 @@ stages:
   - Build Images
   - Push to Docker Registry
 steps:
+  main_clone:
+    title: Cloning main repository...
+    stage: Clone Repo
+    type: git-clone
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_REVISION}}'
   build_prod_api_image:
     stage: Build Images
     title: Building API Production Image
