@@ -80,14 +80,23 @@ const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
   const updatePlanId = planId !== currentPlanId ? planId : undefined
   let updateSeatCount = seats !== currentSeatCount ? seats : undefined
 
-  if (updatePlanId === PLANS.SINGLE_USER && currentSeatCount > 1) {
-    const message = 'There are multiple seats on the current plan, cannot downgrade to a single user plan'
+  if (updatePlanId === PLANS.SINGLE_USER || (!updatePlanId && currentPlanId) && updateSeatCount > 1) {
+    const message = 'Cannot add seats to a single user plan'
     throw ono({ code: 409, publicMessage: message }, message)
   }
 
+  if (updatePlanId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
+    const message = 'Cannot downgrade from multi user to single user plan'
+    throw ono({ code: 409, publicMessage: message }, message)
+  }
+
+  // updatePlanId will only be defined if we're changing plans
   if (updatePlanId === PLANS.SINGLE_USER) {
-    //always set seat count to 1 for single user plans
+    //if we're changing plans to single user, always set seat count to 1
     updateSeatCount = 1
+  } else if (updatePlanId === PLANS.MULTI_USER) {
+    //if we're changing plans to multi user, always set initial seat count to 5
+    updateSeatCount = 5
   }
 
   //nothing is changing, return success and move on without updating stripe
