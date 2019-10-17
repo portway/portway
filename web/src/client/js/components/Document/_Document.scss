@@ -1,4 +1,3 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document {
@@ -25,8 +24,8 @@
     display: flex;
     height: 63px;
     justify-content: space-between;
-    margin-bottom: ($brandWidth / 2);
-    padding: 0 ($brandWidth / 4) 0 0;
+    margin-bottom: calc(var(--brand-width) / 2);
+    padding: 0 calc(var(--brand-width) / 4) 0 0;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -38,10 +37,10 @@
   }
 
   &__button-expand {
-    padding: 0 ($brandWidth / 8);
+    padding: 0 calc(var(--brand-width) / 8);
     .icon-expand {
       path {
-        fill: var(--color-gray-7);
+        fill: var(--color-gray-30);
       }
     }
   }
@@ -49,32 +48,25 @@
   &__title-container {
     align-items: center;
     display: flex;
-    height: $headerHeight - 2;
+    height: calc(var(--header-height) - 2);
     flex: 1;
   }
 
   &__title {
     background-color: transparent;
     border: none;
-    color: var(--color-green);
+    color: var(--color-brand-dark);
     flex: 1;
-    font-family: $serif;
+    font-family: var(--type-serif);
     font-size: 1.8rem;
     font-weight: 700;
     height: 3rem;
-    line-height: 2em;
+    line-height: 3rem;
     padding: 0;
     outline: none;
     resize: none;
     width: 100%;
     -webkit-appearance: none;
-
-    .theme--default & {
-      color: var(--color-green);
-    }
-    .theme--salmon &, .theme--yellow & {
-      color: var(--color-brand-dark);
-    }
 
     &:focus {
       color: var(--base-color);
@@ -105,8 +97,8 @@
   }
 
   // Validation for document
-  .validation {
+  // .validation {
     // background-color: var(--color-gray-5);
-  }
+  // }
 
 }

@@ -1,10 +1,8 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/animations/_rotateAndScale.scss';
 
-$navigatorWidth: 300px;
-$navigatorPlaceholderWidth: 56px;
-
 .navigator {
+  --navigator-width: 300px;
+  --navigator-placeholder-width: 56px;
   position: relative;
 
   .btn {
@@ -18,7 +16,7 @@ $navigatorPlaceholderWidth: 56px;
         animation-duration: 0.2s;
         animation-timing-function: ease;
         animation-name: rotateAndScale;
-        background-color: var(--color-gray-10);
+        background-color: var(--color-gray-50);
         svg {
           path {
             fill: var(--color-gray-5);
@@ -29,7 +27,7 @@ $navigatorPlaceholderWidth: 56px;
   }
 
   &__empty-item {
-    color: var(--color-gray-6);
+    color: var(--color-gray-5);
     padding: 1rem;
     a {
       text-decoration: underline;
@@ -37,11 +35,11 @@ $navigatorPlaceholderWidth: 56px;
   }
 
   &__project-btn {
-    color: var(--color-gray-6);
+    color: var(--color-gray-5);
     &:not([disabled]) {
       &:hover,
       &:active {
-        color: var(--color-gray-4);
+        color: var(--color-gray-10);
       }
     }
   }
@@ -49,7 +47,7 @@ $navigatorPlaceholderWidth: 56px;
   // Overwriting some values from _menu.scss
   .menu {
     padding: 0;
-    width: $navigatorWidth;
+    width: var(--navigator-width);
     &__item {
       align-items: center;
       border-top: thin solid rgba(255, 255, 255, .03);
@@ -60,19 +58,20 @@ $navigatorPlaceholderWidth: 56px;
         background-color: rgba(255, 255, 255, .03);
       }
       &--is-focused {
-        background-color: var(--color-purple);
+        background-color: var(--color-blue);
         &:hover {
-          background-color: var(--color-purple-dark);
+          background-color: var(--color-blue-dark);
         }
       }
       .icon {
         flex: 1;
-        margin-right: $iconMargin;
+        margin-right: var(--icon-margin);
       }
     }
   }
 
   &__settings {
+    color: var(--color-white);
     font-size: 1rem;
   }
 
@@ -102,12 +101,12 @@ $navigatorPlaceholderWidth: 56px;
         color: var(--color-gray-5);
         display: block !important;
         text-align: center;
-        min-width: $navigatorPlaceholderWidth;
+        min-width: var(--navigator-placeholder-width);
         input {
           caret-color: var(--color-blue);
           position: relative;
           z-index: 2;
-          min-width: $navigatorPlaceholderWidth;
+          min-width: var(--navigator-placeholder-width);
         }
       }
       &__value-container {
@@ -116,7 +115,7 @@ $navigatorPlaceholderWidth: 56px;
         padding: 0;
       }
       &__placeholder {
-        color: var(--color-gray-8);
+        color: var(--color-gray-10);
         text-align: center;
         z-index: 1;
       }

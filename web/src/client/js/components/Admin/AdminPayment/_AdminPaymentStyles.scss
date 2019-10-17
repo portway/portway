@@ -1,5 +1,3 @@
-@import 'CSS/inc/_vars.scss';
-
 .admin-payment {
   &__method {
     align-items: center;
@@ -10,8 +8,8 @@
     display: block;
     margin-right: 2rem;
   }
-  &__card-type {
-  }
+  // &__card-type {
+  // }
   &__card-ending-in {
     padding-left: 2rem;
   }
@@ -23,7 +21,7 @@
     font-weight: 700;
     padding: 0 0 0 .5rem;
     &--soon {
-      color: var(--color-red);
+      color: var(--color-red, red);
     }
   }
 
@@ -47,9 +45,6 @@
     &--submit {
       input {
         margin-right: 1rem;
-      }
-      a {
-        color: var(--color-gray-7);
       }
     }
   }

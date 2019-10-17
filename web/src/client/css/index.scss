@@ -1,5 +1,5 @@
-@import 'inc/color';
 @import 'inc/vars';
+@import 'inc/color';
 @import 'inc/theme';
 @import 'inc/type';
 @import 'layout/forms';
@@ -18,9 +18,6 @@ html, body {
     color: var(--base-color);
   }
   .help {
-    color: var(--base-color);
-    .theme--salmon &, .theme--yellow & {
-      color: var(--color-brand-darker);
-    }
+    color: var(--color-brand-darker);
   }
 }

@@ -1,8 +1,4 @@
-@import 'CSS/inc/_vars.scss';
-
 .admin {
-
-
   // Plans section
   &-plans {
     display: flex;
@@ -12,7 +8,7 @@
     padding: 0;
 
     &__title {
-      color: var(--color-green-dark);
+      color: var(--color-green-dark, green);
     }
 
     &__item {
@@ -31,9 +27,9 @@
     button:not([disabled]) {
       align-items: flex-start;
       background: transparent;
-      border: thin solid var(--base-border-color);
-      border-radius: $borderRadius;
-      color: var(--base-color);
+      border: thin solid var(--base-border-color, gray);
+      border-radius: var(--border-radius, 8px);
+      color: var(--base-color, black);
       display: flex;
       height: 100%;
       flex-direction: column;
@@ -50,12 +46,12 @@
 
       &:hover {
         background: transparent;
-        border: thin solid var(--base-border-color);
-        color: var(--base-color);
+        border: thin solid var(--base-border-color, gray);
+        color: var(--base-color, black);
       }
 
       &[aria-checked="true"] {
-        border: thin solid var(--color-green);
+        border: thin solid var(--color-green, green);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
         transform: scale(1);
       }
@@ -67,7 +63,7 @@
       flex: 1;
       padding: 2rem;
       h3 {
-        color: var(--color-gray-8);
+        color: var(--color-gray-10, gray);
         font-weight: 700;
         margin: 0 0 1rem;
       }
@@ -88,13 +84,13 @@
       }
       [aria-checked="true"] & {
         h3 {
-          color: var(--color-green);
+          color: var(--color-green, green);
         }
       }
     }
 
     &__price {
-      background-color: var(--base-border-color);
+      background-color: var(--base-border-color, gray);
       color: var(--color-white);
       font-weight: 700;
       margin: 2rem 0 0 0;
@@ -102,7 +98,7 @@
       width: 400%; // Safari bug
 
       [aria-checked="true"] & {
-        background-color: var(--color-green);
+        background-color: var(--color-green, green);
       }
     }
 

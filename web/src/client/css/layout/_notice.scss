@@ -1,8 +1,6 @@
-@import '../inc/vars';
-
 .notice {
   align-items: center;
-  border-radius: $borderRadius;
+  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
   text-align: center;

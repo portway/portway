@@ -1,11 +1,10 @@
-@import 'vars';
 @import 'mixins';
 
 .btn-group {
   align-items: center;
   display: flex;
   justify-content: flex-start;
-  padding: ($sideGutterWidth / 2) 0;
+  padding: calc(var(--gutter-width) / 2) 0;
   .btn {
     margin-right: 12px;
   }
@@ -18,31 +17,31 @@
 button,
 .btn, .button {
   --button-white-background: var(--color-white);
-  --button-white-border: var(--color-gray-5);
-  --button-white-border-hover: var(--color-gray-4);
-  --button-icon-background: var(--color-gray-3);
-  --button-icon-hover: var(--color-gray-4);
-  --button-icon-active: var(--color-gray-6);
+  --button-white-border: var(--color-gray-20);
+  --button-white-border-hover: var(--color-gray-15);
+  --button-icon-background: var(--color-gray-5);
+  --button-icon-hover: var(--color-gray-2);
+  --button-icon-active: var(--color-gray-10);
   --button-icon-expanded: var(--color-gray-5);
-  --button-label-expanded: var(--color-gray-7);
+  --button-label-expanded: var(--color-gray-30);
   @media (prefers-color-scheme: dark) {
     --button-white-background: var(--color-gray-10);
-    --button-white-border: var(--color-gray-9);
-    --button-white-border-hover: var(--color-gray-9);
+    --button-white-border: var(--color-gray-90);
+    --button-white-border-hover: var(--color-gray-90);
     --button-icon-background: hsl(61, 1%, 41%);
     --button-icon-hover: hsl(61, 0%, 49%);
-    --button-icon-active: var(--color-gray-9);
-    --button-icon-expanded: var(--color-gray-9);
-    --button-label-expanded: var(--color-gray-7);
+    --button-icon-active: var(--color-gray-90);
+    --button-icon-expanded: var(--color-gray-90);
+    --button-label-expanded: var(--color-gray-70);
   }
   align-items: center;
   background-color: var(--color-blue);
-  border-radius: $borderRadius;
+  border-radius: var(--border-radius);
   border: thin solid transparent;
   color: #fff;
   cursor: pointer;
   display: inline-flex;
-  font-family: $sansSerif;
+  font-family: var(--type-sans-serif);
   font-weight: 500;
   margin-bottom: 0;
   margin-top: 0;
@@ -88,7 +87,7 @@ button,
     border: thin solid var(--color-green);
     &:not([disabled]) {
       &:hover {
-        background-color: var(--color-brand-light);
+        background-color: var(--color-green-light);
         color: var(--color-white);
       }
       &:active {
@@ -173,7 +172,7 @@ button,
         transform: rotate(-180deg);
       }
       .label {
-        color: var(--color-gray-6);
+        color: var(--color-gray-60);
       }
     }
   }
