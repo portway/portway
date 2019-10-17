@@ -60,11 +60,11 @@ const orgPlanController = function(router) {
 }
 
 const updateOrgPlan = async function(req, res, next) {
-  const { plan, seats } = req.body
+  const { plan: planId, seats } = req.body
   const { orgId } = req.params
 
   try {
-    await billingCoordinator.subscribeOrgToPlan({ plan, seats, orgId })
+    await billingCoordinator.subscribeOrgToPlan({ planId, seats, orgId })
     res.status(204).send()
   } catch (e) {
     next(e)

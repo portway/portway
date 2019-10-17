@@ -82,7 +82,7 @@ const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
 
   if (updatePlanId === PLANS.SINGLE_USER && currentSeatCount > 1) {
     const message = 'There are multiple seats on the current plan, cannot downgrade to a single user plan'
-    throw ono({ publicMessage: message }, message)
+    throw ono({ code: 409, publicMessage: message }, message)
   }
 
   if (updatePlanId === PLANS.SINGLE_USER) {
@@ -90,6 +90,7 @@ const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
     updateSeatCount = 1
   }
 
+  //nothing is changing, return success and move on without updating stripe
   if (!updatePlanId && !updateSeatCount) {
     return
   }
