@@ -53,10 +53,12 @@ a {
   }
   .navbar-logo {
     background: url('/images/logo.svg') no-repeat 50% 50%;
-    // background-size: 30%; // @todo do we need this with other people's logo?
-    display: inline-block;
-    height: var(--gutter-width);
-    width: var(--gutter-width);
+    background-size: cover;
+    border-radius: 50% 50%;
+    display: block;
+    height: 40px;
+    margin: 0 9px 0 0;
+    width: 40px;
   }
 }
 
