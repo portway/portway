@@ -119,3 +119,13 @@ steps:
       branch:
         only:
           - masterdirk
+  deploy_to_dev_cluster:
+    stage: Production Builds
+    title: Deploy to Dev Cluster
+    image: codefresh/kube-helm
+    commands:
+      - helm upgrade --set webTag=${{CF_SHORT_REVISION}} apiTag=${{CF_SHORT_REVISION}} portway kubernetes/helm/portway
+    when:
+      branch:
+        only:
+          - masterdirk
