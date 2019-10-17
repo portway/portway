@@ -119,13 +119,23 @@ steps:
       branch:
         only:
           - masterdirk
+  deploy_to_dev_cf_step:
+    title: Deploy to Dev Cluster
+    stage: Production Builds
+    image: codefresh/cfstep-helm:2.14.3
+    environment:
+      - CHART_REF=kubernetes/helm/portway
+      - RELEASE_NAME=portway
+      - KUBE_CONTEXT=dev-kubernetes-portway
+      - VALUE_apiTag=$CF_SHORT_REVISION
+      - VALUE_webTag=$CF_SHORT_REVISION
   deploy_to_dev_cluster:
     stage: Production Builds
     title: Deploy to Dev Cluster
-    image: codefresh/kube-helm
+    image: codefresh/kube-helm:2.14.3
     commands:
-      - helm upgrade --set webTag=${{CF_SHORT_REVISION}} apiTag=${{CF_SHORT_REVISION}} portway kubernetes/helm/portway
+      - helm upgrade --set webTag=$CF_SHORT_REVISION apiTag=$CF_SHORT_REVISION portway kubernetes/helm/portway
     when:
       branch:
         only:
-          - masterdirk
+          - masterdirk1
