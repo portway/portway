@@ -91,11 +91,12 @@ a {
   .navbar {
     .home & {
       background-color: var(--color-brand-light);
+      border-bottom: none;
     }
     .navbar-start,
     .navbar-brand {
       a {
-        color: var(--color-green);
+        color: var(--color-gray-90);
         font-family: var(--type-serif);
         .theme--salmon &, .theme--yellow & {
           color: var(--color-brand);

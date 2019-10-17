@@ -19,7 +19,7 @@
 
     .CodeMirror-scroll {
       height: auto !important;
-      min-height: var(--document-field-min-height);
+      min-height: var(--document-field-min-height) !important;
       overflow: visible !important;
     }
 
@@ -28,29 +28,46 @@
     }
 
     .CodeMirror-code {
+      font-size: 1.7rem;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+      line-height: 2.7rem;
+
       .cm-header-1 {
-        font-size: 160%;
-        line-height: 160%;
+        font-size: 3.6rem;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        line-height: 4.4rem;
       }
 
       .cm-header-2 {
-        font-size: 140%;
-        line-height: 140%;
+        font-size: 2.8rem;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        line-height: 3.8rem;
       }
 
       .cm-header-3 {
-        font-size: 125%;
-        line-height: 125%;
+        font-size: 2.4rem;
+        font-weight: 500;
+        letter-spacing: 0.4px;
+        line-height: 3.2rem;
       }
 
       .cm-header-4 {
-        font-size: 110%;
-        line-height: 110%;
+        font-size: 2rem;
+        font-weight: 500;
+        letter-spacing: 0.4px;
+        line-height: 2.9rem;
       }
 
       .cm-comment {
         background: rgba(0, 0, 0, 0.05);
         border-radius: 2px;
+      }
+
+      .cm-strong {
+        font-weight: 800;
       }
 
       .cm-link {
@@ -59,6 +76,19 @@
 
       .cm-url {
         color: var(--color-gray-30);
+      }
+
+      .cm-formatting-list-ul {
+        color: var(--color-gray-20);
+      }
+
+      .cm-formatting-list-ol {
+        color: var(--color-gray-20);
+      }
+
+      .cm-formatting-quote {
+        border-left: 3px solid var(--color-gray-20);
+        padding: 0 0 0 8px;
       }
 
       .cm-strikethrough {
