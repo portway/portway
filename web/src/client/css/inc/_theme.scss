@@ -73,9 +73,9 @@ a {
 .hero {
   &.is-info {
     background-color: var(--color-brand-light);
-    color: var(--color-gray-8);
+    color: var(--color-gray-10);
     .title {
-      color: var(--color-gray-10);
+      color: var(--color-gray-80);
     }
   }
   .hero-body {
