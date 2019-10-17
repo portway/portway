@@ -1,5 +1,3 @@
-@import 'CSS/inc/_vars.scss';
-
 .document-field__text {
   --document-field-min-height: 64px;
   margin: auto;
@@ -56,11 +54,11 @@
       }
 
       .cm-link {
-        color: #7f8c8d;
+        color: var(--color-blue);
       }
 
       .cm-url {
-        color: #aab2b3;
+        color: var(--color-gray-30);
       }
 
       .cm-strikethrough {

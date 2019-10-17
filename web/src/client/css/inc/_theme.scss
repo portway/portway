@@ -27,7 +27,6 @@ $size-large: 2.4rem;
 // To help stay sane, look at the structure of the Bulma repo here for
 // the correct import paths. It doesn't match their documentation site perfectly
 // https://github.com/jgthms/bulma/tree/master/sass
-@import 'vars';
 
 // Links
 a {
@@ -56,8 +55,8 @@ a {
     background: url('/images/logo.svg') no-repeat 50% 50%;
     // background-size: 30%; // @todo do we need this with other people's logo?
     display: inline-block;
-    height: $sideGutterWidth;
-    width: $sideGutterWidth;
+    height: var(--gutter-width);
+    width: var(--gutter-width);
   }
 }
 
@@ -97,7 +96,7 @@ a {
     .navbar-brand {
       a {
         color: var(--color-green);
-        font-family: $serif;
+        font-family: var(--type-serif);
         .theme--salmon &, .theme--yellow & {
           color: var(--color-brand);
         }

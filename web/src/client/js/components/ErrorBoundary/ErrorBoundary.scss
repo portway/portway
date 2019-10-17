@@ -1,7 +1,6 @@
-@import 'CSS/inc/_vars.scss';
-
 .error-boundary {
-  background-color: var(--color-brand-light);
+  background-color: var(--color-brand-dark);
+  color: var(--color-white);
   align-items: center;
   display: flex;
   flex-direction: column;
