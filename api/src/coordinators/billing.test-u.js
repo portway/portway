@@ -15,7 +15,7 @@ describe('billing coordinator', () => {
     const subscriptionId = 'not-a-real-subscription-id'
     const planId = PLANS.SINGLE_USER
     const subscriptionStatus = 'active'
-    let mockCurrentSeatCount = 1
+    const mockCurrentSeatCount = 1
     const newSeatCount = 6
     let resolvedValue
     const mockSubscription = {
@@ -84,9 +84,75 @@ describe('billing coordinator', () => {
 
     describe('when no stripe customer is found', () => {
       it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockImplementationOnce(() => {})
         await expect(billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, seats: newSeatCount, orgId }))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when trying to change seat count on a single user plan', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockReturnValueOnce({
+          id: customerId,
+          subscriptions: {
+            data: [mockSubscription]
+          }
+        })
+        await expect(billingCoordinator.subscribeOrgToPlan({ seats: newSeatCount, orgId }))
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when trying to change seat count on a multi user plan', () => {
+      it('should throw an error if seat count is less than the multi user default amount', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockReturnValueOnce({
+          id: customerId,
+          subscriptions: {
+            data: [{ ...mockSubscription, plan: { id: PLANS.MULTI_USER } }]
+          }
+        })
+        await expect(
+          billingCoordinator.subscribeOrgToPlan({ seats: MULTI_USER_DEFAULT_SEAT_COUNT - 1, orgId })
+        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when trying to change plans from multi user to single user', () => {
+      it('should throw an error', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockReturnValueOnce({
+          id: customerId,
+          subscriptions: {
+            data: [{ ...mockSubscription, plan: { id: PLANS.MULTI_USER } }]
+          }
+        })
+        await expect(
+          billingCoordinator.subscribeOrgToPlan({ planId: PLANS.SINGLE_USER, orgId })
+        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when plans and seats are not changing', () => {
+      it('should return early', async () => {
+        stripeIntegrator.createSubscription.mockClear()
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockReturnValueOnce({
+          id: customerId,
+          subscriptions: {
+            data: [
+              {
+                ...mockSubscription,
+                plan: { id: PLANS.MULTI_USER },
+                items: { data: [{ quantity: 7 }] }
+              }
+            ]
+          }
+        })
+        await billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, orgId })
+        expect(stripeIntegrator.createSubscription.mock.calls.length).toBe(0)
       })
     })
   })
@@ -148,20 +214,6 @@ describe('billing coordinator', () => {
 
     beforeAll(async () => {
       stripeIntegrator.getCustomer.mockClear()
-      stripeIntegrator.getCustomer.mockReturnValueOnce({
-        id: 'some-stripe-customer-id',
-        sources: {
-          data: [{}]
-        },
-        subscriptions: {
-          data: [
-            {
-              plan: { data: [{}] },
-              items: { data: [{}] }
-            }
-          ]
-        }
-      })
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       orgBilling = await billingCoordinator.getOrgBilling(orgId)
