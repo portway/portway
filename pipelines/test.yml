@@ -1,4 +1,5 @@
 version: '1.0'
+mode: parallel
 stages:
   - Clone Repo
   - Development Builds
@@ -25,6 +26,11 @@ steps:
     working_directory: ./api/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
   build_web_image:
     stage: Development Builds
     title: Building Web Docker Image
@@ -33,6 +39,11 @@ steps:
     working_directory: ./web/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
   run_web_tests:
     stage: Tests
     image: ${{build_web_image}}
@@ -40,6 +51,11 @@ steps:
     working_directory: /web/
     cmd:
       - test
+    when:
+      steps:
+        - name: build_web_image
+          on:
+            - success
   run_api_tests:
     stage: Tests
     title: Running API Tests
@@ -69,3 +85,8 @@ steps:
           - DB_HOST=db-test
           - DB_PORT=5432
           - DB_NAME=test
+    when:
+      steps:
+        - name: build_api_image
+          on:
+            - success
