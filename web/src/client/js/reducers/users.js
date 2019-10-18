@@ -65,6 +65,16 @@ export const users = (state = initialState, action) => {
       const byId = { ...state.loading.byId, [id]: false }
       return { ...state, usersById, loading: { ...state.loading, byId: byId, list: false } }
     }
+    case ActionTypes.RECEIVE_UPDATED_USER_AVATAR: {
+      const { userId, data } = action
+      const userObj = { ...state.usersById[userId], avatar: data.avatar }
+      const byId = { ...state.loading.byId, [userId]: false }
+      return {
+        ...state,
+        usersById: { ...state.usersById, [userId]: userObj },
+        loading: { ...state.loading, byId: byId, list: false }
+      }
+    }
     case ActionTypes.RECEIVE_UPDATED_USER_ROLE: {
       const { userId, orgRoleId } = action
       const userObj = { ...state.usersById[userId], orgRoleId }

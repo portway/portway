@@ -9,26 +9,6 @@
 @import 'hacks';
 @import 'react-select';
 
-:root {
-  color-scheme: light dark;
-  --base-background: #{$white};
-  --base-color: #{$black-bis};
-  --base-border-color: #{$gray-light};
-  --base-link-color: #{$action};
-  --base-link-hover-color: #{$action-light};
-  --base-link-active-color: #{$action-dark};
-  --link-color-gray: #{$gray-dark};
-  @media (prefers-color-scheme: dark) {
-    --base-background: #{$black-bis};
-    --base-color: #{$white};
-    --base-border-color: #{$black-er};
-    --base-link-color: #{$action};
-    --base-link-hover-color: #{$action-light};
-    --base-link-active-color: #{$action-dark};
-    --link-color-gray: #{$gray};
-  }
-}
-
 * {
   box-sizing: border-box;
 }
@@ -47,22 +27,22 @@ body {
 }
 
 a, .link {
-  color: $action;
+  color: var(--color-blue);
   &:hover {
-    color: lighten($action, 20%);
+    color: var(--color-cyan);
   }
   &:active {
-    color: darken($action, 20%);
+    color: var(--color-blue-dark);
   }
 
   &--gray {
     color: var(--link-color-gray);
     text-decoration: none;
     &:hover {
-      color: lighten($gray-dark, 20%);
+      color: var(--color-gray-6);
     }
     &:active {
-      color: darken($gray-dark, 20%);
+      color: var(--color-gray-8);
     }
   }
 
@@ -94,6 +74,57 @@ input, textarea {
   background: var(--base-background);
   border: thin solid var(--base-border-color);
   color: var(--base-color);
+}
+
+hr {
+  border: none;
+  border-top: thin solid var(--base-border-color);
+}
+
+meter {
+  // -webkit-appearance: none; // fixes chrome / opera
+  // -moz-appearance: none;
+  // appearance: none;
+  background: var(--color-gray-5); // Firefox
+  border-radius: var(--border-radius);
+  display: block;
+  margin: .25rem 0 1rem 0;
+  width: 100%;
+
+  // Safari
+  &::-webkit-meter-bar {
+    background: var(--color-gray-5);
+    border-radius: var(--border-radius);
+  }
+  &::-webkit-meter-optimum-value,
+  &::-webkit-meter-suboptimum-value,
+  &::-webkit-meter-even-less-good-value {
+    border-radius: var(--border-radius);
+  }
+  &::-webkit-meter-optimum-value {
+    background: var(--color-green);
+  }
+  &::-webkit-meter-suboptimum-value {
+    background: var(--color-brand);
+  }
+  &::-webkit-meter-even-less-good-value  {
+    background: var(--color-red);
+  }
+
+  // Firefox
+  &::-moz-meter-bar {
+    background: var(--color-gray-5);
+    border-radius: var(--border-radius);
+  }
+  &:-moz-meter-optimum::-moz-meter-bar {
+    background: var(--color-green);
+  }
+  &:-moz-meter-sub-optimum::-moz-meter-bar {
+    background: var(--color-brand);
+  }
+  &:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+    background: var(--color-red);
+  }
 }
 
 [contenteditable] {

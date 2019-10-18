@@ -2,7 +2,7 @@
 import resourceTypes from './resourceTypes'
 import globalPublicFields from './globalPublicFields'
 
-const PROJECT_DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId'].concat(globalPublicFields)
+const PROJECT_DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId', 'lastPublishedAt'].concat(globalPublicFields)
 
 const DOCUMENT_PUBLIC_FIELDS = PROJECT_DOCUMENT_PUBLIC_FIELDS.concat(['fields'])
 
@@ -12,7 +12,7 @@ const FIELD_PUBLIC_FIELDS = [
   'name',
   'value',
   'structuredValue',
-  'docId',
+  'documentId',
   'versionId',
   'type',
   'order'
@@ -20,11 +20,11 @@ const FIELD_PUBLIC_FIELDS = [
 
 const PROJECT_USERS_PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId'].concat(globalPublicFields)
 
-const USER_PUBLIC_FIELDS = ['name', 'email', 'orgRoleId', 'pending'].concat(globalPublicFields)
+const USER_PUBLIC_FIELDS = ['name', 'email', 'orgRoleId', 'pending', 'avatar'].concat(globalPublicFields)
 
 const PROJECT_TOKEN_PUBLIC_FIELDS = ['token', 'name', 'projectId', 'roleId'].concat(globalPublicFields)
 
-const ORGANIZATION_PUBLIC_FIELDS = ['name', 'ownerId', 'allowUserProjectCreation'].concat(globalPublicFields)
+const ORGANIZATION_PUBLIC_FIELDS = ['name', 'ownerId', 'allowUserProjectCreation', 'avatar'].concat(globalPublicFields)
 
 export default {
   [resourceTypes.PROJECT_DOCUMENT]: Object.freeze(PROJECT_DOCUMENT_PUBLIC_FIELDS),

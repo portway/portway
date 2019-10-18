@@ -17,16 +17,16 @@ const publicFields = (instance) => {
   return pick(instance, PUBLIC_FIELDS)
 }
 
-async function createForDocument(docId, body) {
+async function createForDocument(documentId, body) {
   const db = getDb()
   const { orgId } = body
 
   validateFieldValueByType(body.value, body.type)
 
-  const document = await db.model('Document').findOne({ where: { id: docId, orgId } })
+  const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
 
   if (!document) {
-    throw ono({ code: 404 }, `Cannot create field, document not found with id: ${docId}`)
+    throw ono({ code: 404 }, `Cannot create field, document not found with id: ${documentId}`)
   }
 
   let createFieldBody
@@ -34,7 +34,7 @@ async function createForDocument(docId, body) {
   // For non-versioned fields, set order
   if (!body.versionId) {
     // make sure document fields are ordered correctly and get next order number for new field
-    const docFieldCount = await normalizeFieldOrderAndGetCount(docId, orgId)
+    const docFieldCount = await normalizeFieldOrderAndGetCount(documentId, orgId)
     createFieldBody = { ...body, order: docFieldCount }
   } else {
     createFieldBody = body
@@ -50,10 +50,13 @@ async function createForDocument(docId, body) {
 
   await createdField.setFieldValue(fieldValue.id)
 
-  return await findByIdForDocument(createdField.id, docId, orgId)
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
+
+  return await findByIdForDocument(createdField.id, documentId, orgId)
 }
 
-async function findAllPublishedForDocument(docId, orgId) {
+async function findAllPublishedForDocument(documentId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
@@ -67,7 +70,7 @@ async function findAllPublishedForDocument(docId, orgId) {
   })
 
   const fields = await db.model(MODEL_NAME).findAll({
-    where: { docId, orgId },
+    where: { documentId, orgId },
     order: db.col('order'),
     include
   })
@@ -75,13 +78,13 @@ async function findAllPublishedForDocument(docId, orgId) {
   return fields.map(publicFields)
 }
 
-async function findAllForDocument(docId, orgId) {
+async function findAllForDocument(documentId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
   const fields = await db.model(MODEL_NAME).findAll({
     where: {
-      docId,
+      documentId,
       orgId,
       versionId: null
     },
@@ -93,26 +96,26 @@ async function findAllForDocument(docId, orgId) {
 }
 
 
-async function findByIdForDocument(id, docId, orgId) {
+async function findByIdForDocument(id, documentId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
-  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId }, include })
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, documentId, orgId }, include })
   if (!field) return field
 
   return publicFields(field)
 }
 
-async function updateByIdForDocument(id, docId, orgId, body) {
+async function updateByIdForDocument(id, documentId, orgId, body) {
   const db = getDb()
 
-  const document = await db.model('Document').findOne({ where: { id: docId, orgId }, raw: true })
+  const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
 
   if (!document) {
-    throw ono({ code: 404 }, `Cannot update field, document not found with id: ${docId}`)
+    throw ono({ code: 404 }, `Cannot update field, document not found with id: ${documentId}`)
   }
 
-  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, documentId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${id}`)
 
   if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
@@ -121,14 +124,26 @@ async function updateByIdForDocument(id, docId, orgId, body) {
 
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
+
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
-  return await findByIdForDocument(field.id, docId, orgId)
+  await updatedField.markUpdated()
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
+
+  return await findByIdForDocument(field.id, documentId, orgId)
 }
 
-async function deleteByIdForDocument(id, docId, orgId) {
+async function deleteByIdForDocument(id, documentId, orgId) {
   const db = getDb()
-  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
+
+  const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot delete field, document not found with id: ${documentId}`)
+  }
+
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, documentId, orgId } })
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
@@ -136,11 +151,20 @@ async function deleteByIdForDocument(id, docId, orgId) {
 
   await field.destroy()
 
-  await normalizeFieldOrderAndGetCount(docId, orgId)
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
+
+  await normalizeFieldOrderAndGetCount(documentId, orgId)
 }
 
-async function updateOrderById(id, docId, orgId, newPosition) {
+async function updateOrderById(id, documentId, orgId, newPosition) {
   const db = getDb()
+
+  const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot update order, document not found with id: ${documentId}`)
+  }
 
   if (newPosition < 0) {
     const message = `Cannot update order, minimum order position is 0`
@@ -148,9 +172,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
   }
 
   // Normalize order before trying to get the current order in case the current order changes
-  const currentMax = (await normalizeFieldOrderAndGetCount(docId, orgId)) - 1
+  const currentMax = (await normalizeFieldOrderAndGetCount(documentId, orgId)) - 1
 
-  const field = await db.model(MODEL_NAME).findOne({ where: { id, docId, orgId } })
+  const field = await db.model(MODEL_NAME).findOne({ where: { id, documentId, orgId } })
   if (!field) throw ono({ code: 404 }, `Cannot update order, field not found with id: ${id}`)
 
   const currentPosition = field.order
@@ -176,7 +200,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         WHERE "order" >= ${currentPosition}
         AND "versionId" IS NULL
         AND "deletedAt" IS NULL
-        AND "docId" = ${docId}
+        AND "documentId" = ${documentId}
         AND "order" <= ${newPosition};`,
         { transaction }
       )
@@ -188,7 +212,7 @@ async function updateOrderById(id, docId, orgId, newPosition) {
         WHERE "order" >= ${newPosition}
         AND "versionId" IS NULL
         AND "deletedAt" IS NULL
-        AND "docId" = ${docId}
+        AND "documentId" = ${documentId}
         AND "order" < ${currentPosition};`,
         { transaction }
       )
@@ -206,6 +230,9 @@ async function updateOrderById(id, docId, orgId, newPosition) {
     await transaction.rollback()
     throw err
   }
+
+  // this is async, but don't wait for it, fire and move on
+  document.markUpdated()
 }
 
 export function getFieldValueInclude(db) {
@@ -225,6 +252,7 @@ function validateFieldValueByType(fieldValue, type) {
   switch (type) {
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.TEXT:
+    case FIELD_TYPES.IMAGE:
       isValidType = typeof fieldValue === 'string'
       break
     case FIELD_TYPES.NUMBER:
@@ -247,11 +275,11 @@ function validateNumberPrecision(value) {
   }
 }
 
-async function normalizeFieldOrderAndGetCount(docId, orgId) {
+async function normalizeFieldOrderAndGetCount(documentId, orgId) {
   const db = getDb()
 
   const docFields = await db.model(MODEL_NAME).findAll({
-    where: { docId, orgId, versionId: null },
+    where: { documentId, orgId, versionId: null },
     order: db.col('order'),
     attributes: ['id', 'order']
   })

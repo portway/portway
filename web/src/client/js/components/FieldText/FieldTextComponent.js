@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import SimpleMDE from 'simplemde'
+import EasyMDE from 'easymde'
 
-import './SimpleMDE.scss'
+import './EasyMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ field, onChange }) => {
+const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
   useEffect(() => {
-    setEditor(new SimpleMDE({
+    setEditor(new EasyMDE({
       autoDownloadFontAwesome: false,
       autofocus: false,
       autosave: {
@@ -38,17 +38,24 @@ const FieldTextComponent = ({ field, onChange }) => {
     if (editor) {
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
+      if (field.id === autoFocusElement) {
+        editor.codemirror.focus()
+        editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
+      }
     }
-  // We're disavling the dependency here because adding field.id or onChange here
+  // We're disabling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor])
   return (
-    <textarea ref={textRef} />
+    <div className="document-field__text">
+      <textarea ref={textRef} />
+    </div>
   )
 }
 
 FieldTextComponent.propTypes = {
+  autoFocusElement: PropTypes.number,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 }

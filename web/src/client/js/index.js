@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { Helmet } from 'react-helmet'
@@ -10,14 +10,16 @@ import useDetectInputMode from 'Hooks/useDetectInputMode'
 import registerServiceWorker from './utilities/registerServiceWorker'
 
 import AppContainer from 'Components/App/AppContainer'
+import HeaderContainer from 'Components/Header/HeaderContainer'
 import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryComponent'
+
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
-import HeaderContainer from 'Components/Header/HeaderContainer'
-import UserSection from 'Sections/User/UserSection'
-import AdminSection from 'Sections/Admin/AdminSection'
-import ProjectsSection from 'Sections/Projects/ProjectsSection'
-import ProjectSection from 'Sections/Project/ProjectSection'
+
+const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection',  webpackPreload: true */ 'Sections/Projects/ProjectsSection'))
+const AdminSection = lazy(() => import(/* webpackChunkName: 'AdminSection' */ 'Sections/Admin/AdminSection'))
+const UserSection = lazy(() => import(/* webpackChunkName: 'UserSection' */ 'Sections/User/UserSection'))
+const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' */ 'Sections/Project/ProjectSection'))
 
 const Index = () => {
   useDetectInputMode()
@@ -30,12 +32,14 @@ const Index = () => {
           </Helmet>
           <ErrorBoundaryComponent>
             <ConfirmationContainer />
-            <HeaderContainer />
             <NotificationsContainer />
-            <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
-            <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
-            <Route path={PATH_SETTINGS} component={UserSection} />
-            <Route path={PATH_ADMIN} component={AdminSection} />
+            <HeaderContainer />
+            <Suspense fallback={null}>
+              <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
+              <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
+              <Route path={PATH_SETTINGS} component={UserSection} />
+              <Route path={PATH_ADMIN} component={AdminSection} />
+            </Suspense>
           </ErrorBoundaryComponent>
         </AppContainer>
       </Router>

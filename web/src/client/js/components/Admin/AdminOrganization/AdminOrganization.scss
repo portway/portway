@@ -1,0 +1,21 @@
+.admin-organization {
+
+  &__image {
+    align-items: flex-start;
+    display: flex;
+
+    .icon, img {
+      margin-right: 1rem;
+    }
+
+    // With a preview (image cropper)
+    &--with-preview {
+      flex-direction: column;
+
+      img { margin: 0; }
+
+    }
+
+  }
+
+}

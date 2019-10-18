@@ -13,12 +13,22 @@ import emailCoordinator from '../coordinators/email'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
-// TODO: do we want this by id instead?
-async function updatePassword(email, password) {
-  const hashedPassword = await passwords.generateHash(password)
-  await BusinessUser.updateByEmail(email, {
-    password: hashedPassword
-  })
+async function updatePassword(userId, currentPassword, newPassword, confirmNewPassword, orgId) {
+  if (newPassword !== confirmNewPassword) {
+    throw ono({ code: 409, errorDetails: [{ key: 'confirmNewPassword', message: 'New password does not match confirmation password' }] }, 'New password does not match confirmation password')
+  }
+
+  const user = await BusinessUser.findById(userId)
+  if (!user) {
+    throw ono({ code: 404 }, `No user found with id: ${userId}`)
+  }
+
+  const valid = await passwords.validatePassword(currentPassword, user.password)
+  if (!valid) throw ono({ code: 400, errorDetails: [{ key: 'password', message: 'Incorrect Password' }] }, `Password Error`)
+
+  const hashedPassword = await passwords.generateHash(newPassword)
+
+  await BusinessUser.updateById(userId, { password: hashedPassword }, orgId)
 }
 
 async function setInitialPassword(id, password) {

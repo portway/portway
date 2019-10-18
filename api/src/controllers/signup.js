@@ -4,6 +4,7 @@ import { validateBody } from '../libs/middleware/payloadValidation'
 import signUpCoordinator from '../coordinators/signUp'
 import userCoordinator from '../coordinators/user'
 import auth from '../libs/auth/auth'
+import { MIN_PASSWORD_LENGTH } from '../constants/password'
 
 const signupPayloadSchema = Joi.compile({
   name: Joi.string().required(),
@@ -13,7 +14,7 @@ const signupPayloadSchema = Joi.compile({
 })
 
 const initialPasswordPayloadSchema = Joi.compile({
-  password: Joi.string().required()
+  password: Joi.string().min(MIN_PASSWORD_LENGTH).required()
 })
 
 const signupController = function(router) {

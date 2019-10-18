@@ -5,6 +5,7 @@ import { partialFields, requiredFields } from './payloadSchemas/helpers'
 import BusinessProjectUser from '../businesstime/projectuser'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
+import auditLog, { auditActions } from '../integrators/audit'
 
 const { listPerm, readPerm, updatePerm, deletePerm, createPerm } = crudPerms(
   RESOURCE_TYPES.PROJECT_USER,
@@ -92,6 +93,14 @@ const createProjectUser = async (req, res, next) => {
       { includeUser }
     )
     res.status(201).json({ data: projectUser })
+    auditLog({
+      userId: req.requestorInfo.requestorId,
+      primaryModel: RESOURCE_TYPES.USER,
+      primaryId: body.userId,
+      secondaryModel: RESOURCE_TYPES.PROJECT,
+      secondaryId: projectId,
+      action: auditActions.ADDED_PRIMARY_TO_SECONDARY
+    })
   } catch (e) {
     next(e)
   }
@@ -121,6 +130,14 @@ const deleteProjectUser = async function(req, res, next) {
   try {
     await BusinessProjectUser.deleteByIdForProject(id, projectId, orgId)
     res.status(204).send()
+    auditLog({
+      userId: req.requestorInfo.requestorId,
+      primaryModel: RESOURCE_TYPES.USER,
+      primaryId: id,
+      secondaryModel: RESOURCE_TYPES.PROJECT,
+      secondaryId: projectId,
+      action: auditActions.REMOVED_PRIMARY_FROM_SECONDARY
+    })
   } catch (e) {
     next(e)
   }

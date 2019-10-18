@@ -5,7 +5,7 @@ builddev:
 	docker-compose build
 
 rebuilddev:
-	docker-compose down && docker volume rm project-danger_postgres-data && docker-compose build --no-cache
+	docker-compose down && docker volume rm portway_postgres-data && docker-compose build --no-cache
 
 installweb:
 	docker-compose exec web npm install
@@ -14,7 +14,7 @@ installapi:
 	docker-compose exec api npm install
 
 cleardev:
-	docker-compose down && docker volume rm project-danger_postgres-data
+	docker-compose down && docker volume rm portway_postgres-data
 
 start:
 	docker-compose up
@@ -33,7 +33,7 @@ rebuildtest:
 # Run any sequelize command in the container via `make sequelize COMMAND`
 # or leave COMMAND blank for a list of sequelize commands
 sequelize:
-	docker container exec danger-api /api/node_modules/.bin/sequelize $(filter-out $@,$(MAKECMDGOALS))
+	docker container exec portway-api /api/node_modules/.bin/sequelize $(filter-out $@,$(MAKECMDGOALS))
 
 # This is a catchall for sequelize commands to silence Make from complaining
 # about "No rule to Make target". See SO link above

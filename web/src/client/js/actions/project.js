@@ -90,7 +90,8 @@ export const removeProject = (projectId, history) => {
 export const fetchProjectAssignees = (projectId) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.request(projectId))
-    const { data } = await fetch(`projects/${projectId}/assignments?includeUser=true`)
+    const { data, status } = await fetch(`projects/${projectId}/assignments?includeUser=true`)
+    const { data, status } = await fetch(`projects/${projectId}/assignments`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return
@@ -146,7 +147,11 @@ export const fetchProjectTokens = (projectId) => {
   return async (dispatch) => {
     // ... get the keys
     dispatch(ProjectTokens.request(projectId))
-    const { data } = await fetch(`projects/${projectId}/tokens`)
+    const { data, status } = await fetch(`projects/${projectId}/tokens`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     dispatch(ProjectTokens.receive(projectId, data))
   }
 }
@@ -155,6 +160,10 @@ export const createProjectToken = (projectId, body) => {
   return async (dispatch) => {
     dispatch(ProjectTokens.create(projectId))
     const { data, status } = await add(`projects/${projectId}/tokens`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('project', data, status)) :
       dispatch(ProjectTokens.receiveOneCreated(data))

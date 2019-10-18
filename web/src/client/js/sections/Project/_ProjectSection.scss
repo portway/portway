@@ -1,22 +1,19 @@
 @import 'CSS/inc/_vars.scss';
 
-:root {
-  --project-background: #{$white-bis};
-  --project-toolbar-background: #{$white-ter};
-  @media (prefers-color-scheme: dark) {
-    --project-background: #{$black-bis};
-    --project-toolbar-background: #{$black-ter};
-  }
-}
-
 .project {
+  --project-background: var(--color-white);
+  --project-toolbar-background: var(--color-gray-4);
+  @media (prefers-color-scheme: dark) {
+    --project-background: var(--base-background);
+    --project-toolbar-background: var(--base-border-color);
+  }
   padding: 0;
 
   .toolbar__start {
-    padding-left: $sideGutterWidth / 4;
+    padding-left: calc(var(--gutter-width) / 4);
   }
   .toolbar__end {
-    padding-right: $sideGutterWidth / 6;
+    padding-right: calc(var(--gutter-width) / 6);
   }
 
   /**
@@ -38,24 +35,30 @@
     display: flex;
     &-list-container {
       border-right: thin solid var(--base-border-color);
-      height: calc(100vh - #{$ribbonHeight + $headerHeight});
+      height: calc(100vh - (var(--ribbon-height) + var(--header-height)));
       overflow-y: auto;
       overscroll-behavior: contain;
       position: relative;
-      width: calc(#{$sideGutterWidth} + 300px);
+      width: calc(var(--gutter-width) + 300px);
       -webkit-overflow-scrolling: touch;
     }
     &-document-container {
       background-color: var(--project-background);
+      display: flex;
       flex: 1;
-      height: calc(100vh - #{$ribbonHeight + $headerHeight});
+      flex-direction: column;
+      height: calc(100vh - (var(--ribbon-height) + var(--header-height)) - 40px); // footer height
       overflow-y: auto;
       overscroll-behavior: contain;
+      position: relative;
+      &--full-screen {
+        height: 100vh;
+      }
     }
   }
 
   &__utilities {
-    bottom: $sideGutterWidth / 2;
+    bottom: calc(var(--gutter-width) / 2);
     display: flex;
     justify-content: center;
     position: absolute;
@@ -64,7 +67,7 @@
     &-button-pill {
       align-items: center;
       background-color: var(--base-background);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
       display: flex;
       padding: 0;
@@ -72,7 +75,7 @@
 
     &-settings-link {
       align-items: center;
-      color: $black-bis;
+      color: var(--color-gray-10);
       display: inline-flex;
       font-size: 1.2rem;
       height: 30px;
@@ -80,7 +83,7 @@
       text-decoration: none;
       &:hover {
         background-color: var(--base-border-color);
-        color: $black-bis;
+        color: var(--color-gray-10);
       }
     }
 

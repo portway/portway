@@ -17,28 +17,32 @@ import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer
 
 import './_ProjectToolbar.scss'
 
-const ProjectToolbarComponent = ({ document, projectId, projectUsers }) => {
+const ProjectToolbarComponent = ({ document, isFullScreen, projectId, projectUsers }) => {
   return (
     <footer className="project-toolbar">
-      <OrgPermission
-        acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-        acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
-        <Link
-          className="btn btn--blank btn--with-circular-icon"
-          title="Create a new project"
-          to={PATH_PROJECT_CREATE}>
-          <AddIcon />
-          <span className="label">New Project</span>
-        </Link>
-      </OrgPermission>
-      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectId={projectId}>
-        <NavLink to={`${PATH_PROJECT}/${projectId}/settings`}
-          className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
-          title="Adjust this project's settings">
-          <SettingsIcon />
-          <span className="label">Project Settings</span>
-        </NavLink>
-      </ProjectPermission>
+      {!isFullScreen &&
+      <>
+        <OrgPermission
+          acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+          acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
+          <Link
+            className="btn btn--blank btn--with-circular-icon"
+            title="Create a new project"
+            to={PATH_PROJECT_CREATE}>
+            <AddIcon />
+            <span className="label">New Project</span>
+          </Link>
+        </OrgPermission>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectId={projectId}>
+          <NavLink to={`${PATH_PROJECT}/${projectId}/settings`}
+            className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
+            title="Adjust this project's settings">
+            <SettingsIcon />
+            <span className="label">Project Settings</span>
+          </NavLink>
+        </ProjectPermission>
+      </>
+      }
       {projectUsers && projectUsers.length > 0 &&
       <div className="project-toolbar__team">
         <span className="project-toolbar__team-label">Your Team:</span>
@@ -48,8 +52,8 @@ const ProjectToolbarComponent = ({ document, projectId, projectUsers }) => {
       {document &&
       <div className="project-toolbar__document-info">
         Last update:&nbsp;<span title={moment(document.updatedAt).format('MMMM do, YYYY - h:mma')}>{moment(document.updatedAt).fromNow()}</span>
-        {document.publishedVersionId &&
-        <b>&nbsp; Published</b>
+        {document.publishedVersionId && document.lastPublishedAt &&
+        <b>&nbsp; Published {moment(document.lastPublishedAt).fromNow()}</b>
         }
       </div>
       }
@@ -59,6 +63,7 @@ const ProjectToolbarComponent = ({ document, projectId, projectUsers }) => {
 
 ProjectToolbarComponent.propTypes = {
   document: PropTypes.object,
+  isFullScreen: PropTypes.bool.isRequired,
   projectId: PropTypes.string.isRequired,
   projectUsers: PropTypes.array
 }

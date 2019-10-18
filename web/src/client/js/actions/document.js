@@ -1,5 +1,6 @@
-import { PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
+import { FIELD_TYPES, PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
 import { Documents, Validation, Notifications } from './index'
+import { createField } from './field'
 import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
 
 export const fetchDocuments = (projectId) => {
@@ -22,7 +23,7 @@ export const fetchDocument = (documentId) => {
   }
 }
 
-export const createDocument = (projectId, history, body) => {
+export const createDocument = (projectId, history, body, preventRedirect = false, withBody = null) => {
   return async (dispatch) => {
     dispatch(Documents.create(projectId, body))
     const { data, status } = await add(`projects/${projectId}/documents`, body)
@@ -30,15 +31,32 @@ export const createDocument = (projectId, history, body) => {
       dispatch(Validation.create('document', data, status))
       return
     }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    if (withBody) {
+      await dispatch(createField(projectId, data.id, FIELD_TYPES.TEXT, {
+        name: 'text-area-1',
+        type: FIELD_TYPES.TEXT,
+        value: withBody
+      }))
+    }
     dispatch(Documents.receiveOneCreated(data))
-    history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
+    if (!preventRedirect) {
+      history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
+    }
   }
 }
 
 export const publishDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.publish(documentId))
-    const { data } = await add(`documents/${documentId}/publish`)
+    const { data, status } = await add(`documents/${documentId}/publish`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     dispatch(Documents.receivePublishedVersion(data))
   }
 }
@@ -47,6 +65,10 @@ export const updateDocument = (projectId, documentId, body) => {
   return async (dispatch) => {
     dispatch(Documents.update(projectId, documentId, body))
     const { data, status } = await update(`projects/${projectId}/documents/${documentId}`, body)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
     validationCodes.includes(status) ?
       dispatch(Validation.create('document', data, status)) :
       dispatch(Documents.receiveOneUpdated(data))

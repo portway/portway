@@ -10,6 +10,7 @@ const FieldNumberComponent = ({ field, onChange }) => {
       defaultValue={field.value}
       onChange={(e) => { onChange(field.id, Number.parseFloat(e.target.value)) }}
       onFocus={(e) => { e.target.select() }}
+      placeholder="A number value..."
       type="number" />
   )
 }

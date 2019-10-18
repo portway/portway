@@ -1,9 +1,0 @@
-{
-  "name": "Project Danger",
-  "short_name": "Danger",
-  "start_url": "/",
-  "display": "minimal-ui",
-  "background_color": "#fff",
-  "theme_color": "#fff",
-  "description": "A content repository"
-}

@@ -1,0 +1,11 @@
+.admin-seats {
+  &__status {
+    &__label {
+      display: block;
+      font-size: 1.2rem;
+    }
+    &__meter {
+      margin: .25rem 0 1rem 0;
+    }
+  }
+}

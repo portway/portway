@@ -12,11 +12,11 @@ import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
-  creating, createdFieldId, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
+  disabled, createdFieldId, fieldsUpdating, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
-  const { documentId } = match.params
+  const { projectId, documentId } = match.params
   const { data: fields = {} } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
 
   // Convert fields object to a sorted array for rendering
@@ -34,47 +34,68 @@ const DocumentFieldsContainer = ({
   function fieldDestroyHandler(fieldId) {
     const message = <span>Are you sure you want to delete <span className="highlight">{fields[fieldId].name}</span>?</span>
     const confirmedLabel = 'Yes, delete it.'
-    const confirmedAction = () => { removeField(documentId, fieldId) }
+    const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
+
   function fieldChangeHandler(fieldId, body) {
     // leave this console in to make sure we're not hammering the API because of useEffect
     console.info(`Field: ${fieldId} trigger changeHandler`)
-    updateField(documentId, fieldId, body)
+    updateField(projectId, documentId, fieldId, body)
   }
 
   // Drag and drop
+  let dragCount = 0
+
   function dragStartHandler(e) {
     setDraggingElement(e.currentTarget)
-    e.currentTarget.classList.add('field--dragging')
-    e.dataTransfer.effectAllowed = 'move'
+    e.currentTarget.classList.add('document-field--dragging')
+    e.dataTransfer.effectAllowed = 'copyMove'
+    e.dataTransfer.setData('fieldid', e.currentTarget.dataset.id)
+    e.dataTransfer.setData('documentid', documentId)
     e.dataTransfer.setData('text/html', e.target)
   }
   function dragEnterHandler(e) {
-    e.currentTarget.classList.add('field--dragged-over')
-    e.dataTransfer.dropEffect = 'move'
+    e.preventDefault()
+    if (e.dataTransfer.types.includes('Files')) {
+      return false
+    }
+    dragCount++
+    e.currentTarget.classList.add('document-field--dragged-over')
   }
   function dragLeaveHandler(e) {
-    e.currentTarget.classList.remove('field--dragged-over')
+    e.preventDefault()
+    dragCount--
+    if (dragCount === 0) {
+      e.currentTarget.classList.remove('document-field--dragged-over')
+    }
   }
   function dragOverHandler(e) {
-    if (e.preventDefault) {
-      e.preventDefault()
-    }
+    e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
-    return false
+    if (e.currentTarget === draggingElement) return
+    if (e.dataTransfer.types.includes('Files')) {
+      return
+    }
+    e.currentTarget.classList.add('document-field--dragged-over')
   }
   function dragEndHandler(e) {
-    e.currentTarget.classList.remove('field--dragging')
+    e.preventDefault()
+    e.currentTarget.classList.remove('document-field--dragged-over')
+    e.currentTarget.classList.remove('document-field--dragging')
   }
   function dropHandler(e) {
+    e.preventDefault()
     if (e.stopPropagation) {
       e.stopPropagation()
+    }
+    if (e.dataTransfer.types.includes('Files')) {
+      return
     }
     const fieldIdToUpdate = draggingElement.dataset.id
     const from = Number(draggingElement.dataset.order)
     const to = Number(e.currentTarget.dataset.order)
-    e.currentTarget.classList.remove('field--dragging', 'field--dragged-over')
+    e.currentTarget.classList.remove('document-field--dragging', 'document-field--dragged-over')
     if (to === from) { return }
     const fieldData = [...orderedFields]
     fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
@@ -82,6 +103,8 @@ const DocumentFieldsContainer = ({
     setDraggingElement(null)
     // Trigger action with documentId, fieldId
     updateFieldOrder(documentId, fieldIdToUpdate, to)
+    // Reset drag count
+    dragCount = 0
   }
 
   // Prop handler
@@ -95,7 +118,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
-      creating={creating}
+      disabled={disabled}
       createdFieldId={createdFieldId}
       dragStartHandler={dragStartHandler}
       dragEndHandler={dragEndHandler}
@@ -107,26 +130,29 @@ const DocumentFieldsContainer = ({
       fieldChangeHandler={debouncedValueChangeHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
       fieldDestroyHandler={fieldDestroyHandler}
-      isPublishing={isPublishing} />
+      isPublishing={isPublishing}
+      fieldsUpdating={fieldsUpdating} />
   )
 }
 
 DocumentFieldsContainer.propTypes = {
-  creating: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   createdFieldId: PropTypes.number,
   isPublishing: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired
+  uiConfirm: PropTypes.func.isRequired,
+  fieldsUpdating: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
-    creating: state.ui.fields.creating,
+    disabled: state.ui.fields.disabled,
     createdFieldId: state.documentFields.lastCreatedFieldId,
-    isPublishing: state.ui.documents.isPublishing
+    isPublishing: state.ui.documents.isPublishing,
+    fieldsUpdating: state.ui.fields.fieldsUpdating,
   }
 }
 

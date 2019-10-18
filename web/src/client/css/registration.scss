@@ -1,15 +1,44 @@
 @import 'inc/vars';
+@import 'inc/color';
 @import 'inc/theme';
 @import 'inc/type';
+@import 'layout/forms';
 
 body.home {
-  background: $primary-light;
+  background: var(--color-brand-light);
 }
 
 .login-form {
   width: 400px;
   label {
-    color: $black-bis;
+    color: var(--color-gray-10);
+  }
+}
+
+.control {
+  align-items: center;
+  display: flex;
+}
+
+.popover__placeholder {
+  bottom: -24px;
+  position: absolute;
+
+  ul {
+    list-style: disc;
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+}
+
+.field__status {
+  display: none;
+  padding-left: 1rem;
+  svg {
+    path {
+      fill: $primary;
+    }
   }
 }
 

@@ -7,12 +7,12 @@ const token = getCookieValue('token')
 // process.env.API_PUBLIC_URL
 // eslint-disable-next-line no-undef
 const baseURL = new URL('api/', VAR_API_URL)
-const globalErrorCodes = [403, 404, 500, 503]
-const validationCodes = [400, 409]
+const globalErrorCodes = [403, 404, 408, 500, 503]
+const validationCodes = [400, 402, 409, 413, 415]
 
 const axiosInstance = axios.create({
   baseURL: baseURL.toString(),
-  timeout: 5000,
+  timeout: 0,
   headers: {
     Authorization: `Bearer ${token}`
   }
@@ -23,7 +23,7 @@ async function fetch(resource) {
     const { data: { data, page, perPage, total, totalPages }, status } = await axiosInstance.get(resource)
     return { data, status, page, perPage, total, totalPages }
   } catch (error) {
-    const { data, status } = error.response
+    const { data, status } = error.response || { status: 408, data: {} }
     return { data, status }
   }
 }
@@ -33,7 +33,7 @@ async function add(resource, body) {
     const { data: { data }, status } = await axiosInstance.post(resource, body)
     return { data, status }
   } catch (error) {
-    const { data, status } = error.response
+    const { data, status } = error.response || { status: 408, data: {} }
     return { data, status }
   }
 }
@@ -43,7 +43,7 @@ async function update(resource, body) {
     const { data: { data }, status } = await axiosInstance.put(resource, body)
     return { data, status }
   } catch (error) {
-    const { data, status } = error.response
+    const { data, status } = error.response || { status: 408, data: {} }
     return { data, status }
   }
 }
@@ -56,7 +56,7 @@ async function remove(resource) {
     await axiosInstance.delete(resource)
     return {} // keep this here ^
   } catch (error) {
-    const { data, status } = error.response
+    const { data, status } = error.response || { status: 408, data: {} }
     return { data, status }
   }
 }

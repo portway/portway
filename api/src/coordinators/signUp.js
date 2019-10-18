@@ -27,12 +27,12 @@ async function createUserAndOrganization(name, email) {
   const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
   const htmlBody = `
-    <H2>Here's your link to finish signing up for Project Danger:</h2>
+    <H2>Here's your link to finish signing up for Portway:</h2>
     <div>${linkUrl}</div>
   `
-  const textBody = `Here is your link to finish signing-up for Project Danger: ${linkUrl}`
+  const textBody = `Here is your link to finish signing-up for Portway: ${linkUrl}`
 
-  const subject = 'Project Danger email confirmation'
+  const subject = 'Portway email confirmation'
 
 
   await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody, subject })

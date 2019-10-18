@@ -1,9 +1,12 @@
 import PUBLIC_MESSAGES from '../../constants/publicMessages'
+import multer from 'multer'
 
 const getPublicMessage = function(code) {
   switch (code) {
     case 400:
       return PUBLIC_MESSAGES.BAD_REQUEST
+    case 402:
+      return PUBLIC_MESSAGES.INVALID_PAYMENT
     case 404:
       return PUBLIC_MESSAGES.NOT_FOUND
     case 500:
@@ -23,14 +26,26 @@ const getPublicMessage = function(code) {
 
 export default function(error, req, res, next) {
   const {
-    code,
     status,
     statusCode,
     expose,
     errorType,
-    errorDetails,
-    message,
-    publicMessage } = error
+    errorDetails = [],
+    message } = error
+
+  let { code, publicMessage } = error
+
+  // multer errors pass a string on the code field rather than a status code, grab these and force a 400
+  // TODO: expand this to have specific file error messages for different multer codes
+  if (error instanceof multer.MulterError) {
+    publicMessage = 'File error'
+    const fileMessage = code === 'LIMIT_FILE_SIZE' ? 'File too large' : 'Invalid file'
+    code = code === 'LIMIT_FILE_SIZE' ? 413 : 415
+    errorDetails.push({
+      message: fileMessage,
+      key: 'file'
+    })
+  }
 
   const responseCode = code || status || statusCode || 500
 

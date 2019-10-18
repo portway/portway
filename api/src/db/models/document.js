@@ -4,7 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     publishedVersionId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
-    projectId: DataTypes.INTEGER
+    projectId: DataTypes.INTEGER,
+    lastPublishedAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   }, {
     paranoid: true
   })
@@ -16,8 +18,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'projectId'
     })
     Document.hasMany(models.Field, {
-      foreignKey: 'docId'
+      foreignKey: 'documentId'
     })
   }
+
+  Document.prototype.markUpdated = function(valueBody) {
+    this.setDataValue('updatedAt', Date.now())
+    return this.save()
+  }
+
   return Document
 }

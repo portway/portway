@@ -1,7 +1,13 @@
 const FIELD_TYPES = {
   STRING: 1,
   TEXT: 2,
-  NUMBER: 3
+  NUMBER: 3,
+  IMAGE: 4
+}
+
+const PLAN_TYPES = {
+  SINGLE: 'single',
+  MULTIPLE: 'multiple'
 }
 
 const ORGANIZATION_ROLE_IDS = {
@@ -60,28 +66,32 @@ const QUERY_PARAMS = {
 
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
-  PRODUCT_NAME: 'Project Danger',
-  PRODUCT_ID: 'project-danger',
+  PRODUCT_NAME: 'Portway',
+  PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
   PRODUCT_API_URL: 'http://localhost:3001/api',
   // Documentation
-  DOCUMENTATION_URL: 'https://docs.project-danger.com/',
+  DOCUMENTATION_URL: 'https://docs.portway.app/',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
     [FIELD_TYPES.TEXT]: 'text-area-',
-    [FIELD_TYPES.NUMBER]: 'number-'
+    [FIELD_TYPES.NUMBER]: 'number-',
+    [FIELD_TYPES.IMAGE]: 'image-'
   },
   FIELD_TYPES: FIELD_TYPES,
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New Document',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  MAX_FILE_SIZE: 10000000,
+  MAX_AVATAR_SIZE: 1024 * 1000,
+  MIN_PASSWORD_LENGTH: 8,
   // Notifications
   NOTIFICATION_TYPES: NOTIFICATION_TYPES,
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
   // Paths
   PATH_APP: '/d',
-  PATH_BILLING: '/settings/billing',
+  PATH_BILLING: '/admin/billing',
   PATH_ADMIN: '/admin',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',
@@ -100,9 +110,11 @@ module.exports = {
   PROJECT_ACCESS_LEVELS: PROJECT_ACCESS_LEVELS,
   PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
+  // Plans
+  PLAN_TYPES: PLAN_TYPES,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support
-  SUPPORT_EMAIL: 'support@project-danger.com',
-  SUPPORT_LINK: 'https://support.project-danger.com/',
+  SUPPORT_EMAIL: 'support@portway.app',
+  SUPPORT_LINK: 'https://support.portway.app/',
 }

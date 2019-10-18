@@ -1,0 +1,1 @@
+export const HASH_ID_SALT = 'TAKINGCAREOFBONKNESS'

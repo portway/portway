@@ -1,7 +1,7 @@
 {
-  "name": "project-danger-api",
+  "name": "portway-api",
   "version": "1.0.0",
-  "description": "Project Danger API",
+  "description": "Portway API",
   "scripts": {
     "serve": "NODE_ENV=development nodemon --exec babel-node --require node_modules/dotenv/config -- src/server.js",
     "build": "NODE_ENV=production babel ./src -d dist/ --copy-files",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/BonkeyBong/project-danger.git"
+    "url": "git+ssh://git@github.com/BonkeyBong/portway.git"
   },
   "author": "BonkeyBong, LLC",
   "license": "ISC",
@@ -55,17 +55,19 @@
     "bignumber.js": "^8.1.1",
     "debug": "^4.1.1",
     "express": "^4.16.4",
+    "hashids": "^1.2.2",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
     "morgan": "^1.9.1",
+    "multer": "^1.4.2",
     "ono": "^5.0.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.42.0",
-    "sequelize-cli": "^5.4.0",
+    "sequelize": "^4.44.3",
+    "sequelize-cli": "^5.5.0",
     "stripe": "^6.23.1",
     "uuid": "^3.3.2"
   },

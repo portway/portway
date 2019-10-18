@@ -1,35 +1,35 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { UserIcon } from 'Components/Icons'
+import Form from 'Components/Form/Form'
 import TextField from 'Components/Form/TextField'
-import FileField from 'Components/Form/FileField'
 
 import './_UserProfile.scss'
 
-const UserProfileComponent = ({ errors, user, submitHandler }) => {
-  const [name, setName] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
+const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
+  const [name, setName] = useState(null)
+  const [email, setEmail] = useState(null)
 
-  function formSubmitHandler(e) {
-    e.preventDefault()
-    submitHandler({ name, email })
+  function formSubmitHandler() {
+    if (name || email) {
+      submitHandler({ name, email })
+    }
   }
 
   const emailHelpText = `Remember, your email address is your username! We will validate this email before changing it.`
 
   return (
-    <form onSubmit={formSubmitHandler}>
-      <section>
+    <section>
+      <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my profile">
         <h2>Your information</h2>
         <TextField
           errors={errors.name}
           id="userName"
           label="Full name"
           name="name"
-          onBlur={(e) => { setName(e.target.value)} }
+          onChange={(e) => { setName(e.target.value) }}
           placeholder="Enter your full name"
-          required
+          // @todo add back in required
           value={user.name}
         />
         <TextField
@@ -38,34 +38,26 @@ const UserProfileComponent = ({ errors, user, submitHandler }) => {
           id="userEmail"
           label="Email address"
           name="email"
-          onBlur={(e) => { setEmail(e.target.value)} }
+          onChange={(e) => { setEmail(e.target.value) }}
           placeholder="name@domain.com"
           required
           type="email"
           value={user.email}
         />
-      </section>
-      <section>
-        <h2>Your Image</h2>
-        <div className="user-profile__image">
-          <UserIcon width="32" height="32" />
-          <FileField id="userAvatar" name="avatar" />
-        </div>
-      </section>
-      <div className="btn-group">
-        <button className="btn btn-primary">Update My Profile</button>
-      </div>
-    </form>
+      </Form>
+    </section>
   )
 }
 
 UserProfileComponent.propTypes = {
   errors: PropTypes.object,
+  formId: PropTypes.string,
+  submitHandler: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  submitHandler: PropTypes.func.isRequired
 }
 
 UserProfileComponent.defaultProps = {
+  errors: {},
   user: {}
 }
 

@@ -8,12 +8,16 @@ const initialState = {
     confirmedAction: null,
     confirmedLabel: ''
   },
+  document: {
+    isFullScreen: false,
+  },
   documents: {
     creating: false,
     isPublishing: false,
   },
   fields: {
-    creating: false,
+    disabled: false,
+    fieldsUpdating: {},
     type: -1
   },
   tokens: {
@@ -26,11 +30,45 @@ const initialState = {
   billing: {
     isSubmitting: false,
     isStripeOpen: false
+  },
+  spinner: {
+    spinning: false
   }
 }
 
 export const ui = (state = initialState, action) => {
   switch (action.type) {
+    // If you need to update spinner in combo with something else, do it below
+    // these two global on/offs
+    // Global Spinner state on
+    case ActionTypes.INITIATE_USER_CREATE:
+    case ActionTypes.INITIATE_USER_REMOVE: {
+      return {
+        ...state,
+        spinner: {
+          ...state.spinner,
+          spinning: true
+        }
+      }
+    }
+
+    // Global Spinner state off
+    case ActionTypes.RECEIVE_CREATED_USER:
+    case ActionTypes.REMOVE_USER:
+    case ActionTypes.RECEIVE_UPDATED_USER_ROLE: {
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          creating: false
+        },
+        spinner: {
+          ...state.spinner,
+          spinning: false
+        }
+      }
+    }
+
     // Document and field creation
     // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_CREATE: {
@@ -38,7 +76,7 @@ export const ui = (state = initialState, action) => {
     }
     case ActionTypes.INITIATE_FIELD_CREATE: {
       // Tell everyone we're creating a field, and what type
-      return { ...state, fields: { ...state.fields, creating: true, type: action.fieldType } }
+      return { ...state, fields: { ...state.fields, disabled: true, type: action.fieldType } }
     }
     case ActionTypes.RECEIVE_CREATED_FIELD: {
       // Reset fields when a field is created
@@ -46,6 +84,51 @@ export const ui = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       return { ...state, documents: { ...state.documents, creating: false } }
+    }
+    case ActionTypes.INITIATE_FIELD_UPDATE: {
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [action.fieldId]: true }
+      return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+    case ActionTypes.RECEIVE_UPDATED_FIELD: {
+      const { id } = action.data
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [id]: false }
+      return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+
+    // Disable document fields
+    case ActionTypes.INITIATE_FIELD_MOVE:
+    case ActionTypes.INITIATE_FIELD_COPY: {
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          disabled: true
+        }
+      }
+    }
+
+    // Enable document fields
+    case ActionTypes.FIELD_MOVED:
+    case ActionTypes.FIELD_COPIED: {
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          disabled: false
+        }
+      }
+    }
+
+    // Document full screen
+    // -------------------------------------------------------------------------
+    case ActionTypes.UI_DOCUMENT_FULL_SCREEN: {
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          isFullScreen: action.value
+        }
+      }
     }
 
     // Document publishng
@@ -56,6 +139,9 @@ export const ui = (state = initialState, action) => {
         documents: {
           ...state.documents,
           isPublishing: true
+        },
+        spinner: {
+          spinning: true
         }
       }
     }
@@ -65,6 +151,9 @@ export const ui = (state = initialState, action) => {
         documents: {
           ...state.documents,
           isPublishing: false
+        },
+        spinner: {
+          spinning: false
         }
       }
     }
@@ -113,23 +202,33 @@ export const ui = (state = initialState, action) => {
       }
     }
 
-    case ActionTypes.RECEIVE_CREATED_USER: {
+    // Reinviting user
+    case ActionTypes.INITIATE_USER_REINVITE: {
       return {
         ...state,
         users: {
           ...state.users,
-          creating: false
+          inviting: true
+        },
+        spinner: {
+          ...state.spinner,
+          spinning: true
         }
       }
     }
 
-    // Reinviting user
-    case ActionTypes.INITIATE_USER_REINVITE: {
-      return { ...state, users: { ...state.users, inviting: true } }
-    }
-
     case ActionTypes.RECEIVE_REINVITED_USER: {
-      return { ...state, users: { ...state.users, inviting: false } }
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          inviting: false
+        },
+        spinner: {
+          ...state.spinner,
+          spinning: false
+        }
+      }
     }
 
     // Project tokens
@@ -171,7 +270,18 @@ export const ui = (state = initialState, action) => {
         ...state,
         billing: {
           ...state.billing,
+          isSubmitting: false,
           isStripeOpen: false
+        }
+      }
+    }
+    // A validation / 402 happened with Stripe
+    case ActionTypes.RECEIVE_BILLING_ERROR: {
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          isSubmitting: false
         }
       }
     }

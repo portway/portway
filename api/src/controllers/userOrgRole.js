@@ -5,6 +5,7 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACCEPTABLE_ROLE_ID_UPDATE_VALUES from '../constants/acceptableRoleIdUpdateValues'
+import auditLog, { auditActions } from '../integrators/audit'
 
 const updatePerm = perms((req) => {
   return {
@@ -40,6 +41,14 @@ const updateUserOrgRole = async function(req, res, next) {
   try {
     await BusinessUser.updateOrgRole(userId, orgRoleId, orgId)
     res.status(204).json()
+    auditLog({
+      userId: req.requestorInfo.requestorId,
+      primaryModel: RESOURCE_TYPES.ROLE,
+      primaryId: orgRoleId,
+      secondaryModel: RESOURCE_TYPES.USER,
+      secondaryId: userId,
+      action: auditActions.UPDATED_PRIMARY_FOR_SECONDARY
+    })
   } catch (e) {
     next(e)
   }

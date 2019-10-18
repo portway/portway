@@ -1,0 +1,113 @@
+.content-menu {
+  --content-menu-width: 250px;
+  --content-menu-heading: var(--color-gray-5);
+  --content-menu-btn-hover: var(--color-gray-2);
+  @media (prefers-color-scheme: dark) {
+    --content-menu-heading: var(--color-gray-90);
+    --content-menu-btn-hover: var(--color-gray-80);
+  }
+  position: relative;
+  margin: calc(var(--gutter-width) / 2) auto 0;
+  padding-bottom: calc(var(--gutter-width) / 2);
+  text-align: center;
+  width: var(--content-menu-width);
+  z-index: 10;
+
+  &__button {
+    // Add icon
+    .icon {
+      background-color: var(--color-blue);
+      height: 40px;
+      transition: transform 0.1s ease-out;
+      width: 40px;
+      .icon-add {
+        height: 18px;
+        width: 18px;
+      }
+    }
+    &:hover:not([disabled]) {
+      .icon {
+        background-color: var(--color-cyan);
+      }
+    }
+    &[aria-expanded="true"] {
+      .icon {
+        background-color: var(--color-gray-15);
+        transform: rotate(45deg);
+      }
+      &:hover:not([disabled]) {
+        .icon {
+          background-color: var(--color-gray-15);
+        }
+      }
+    }
+  }
+
+  &__content {
+    background-color: var(--base-background);
+    border: thin solid var(--base-border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    bottom: var(--gutter-width);
+    max-height: 200px;
+    overflow: auto;
+    position: absolute;
+    width: var(--content-menu-width);
+    &[hidden] {
+      display: block;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out, visibility 0s linear 0.2s;
+      visibility: hidden;
+    }
+    &:not([hidden]) {
+      opacity: 1;
+      transform: translateY(0);
+      transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+      visibility: visible;
+    }
+  }
+
+  &__group {
+    text-align: left;
+    &:first-child {
+      .content-menu__group-name {
+        border-top: none;
+      }
+    }
+  }
+
+  &__group-name {
+    background-color: var(--content-menu-heading);
+    border-bottom: thin solid var(--base-border-color);
+    border-top: thin solid var(--base-border-color);
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    width: 100%;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item-button {
+    font-size: 1.2rem;
+    justify-content: flex-start;
+    width: 100%;
+    &.btn--with-icon {
+      .label {
+        flex: 0;
+      }
+    }
+    &.btn--blank {
+      &:hover {
+        background-color: var(--content-menu-btn-hover);
+      }
+    }
+  }
+
+}

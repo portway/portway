@@ -28,11 +28,11 @@ export const documentFields = (state = initialState, action) => {
       return { ...state, documentFieldsById, loading: { ...state.loading, byDocument } }
     }
     case ActionTypes.RECEIVE_CREATED_FIELD: {
-      const { id, docId } = action.data
-      const documentFields = state.documentFieldsById[docId] || {}
+      const { id, documentId } = action.data
+      const documentFields = state.documentFieldsById[documentId] || {}
       const documentFieldsById = {
         ...state.documentFieldsById,
-        [docId]: { ...documentFields, [id]: action.data }
+        [documentId]: { ...documentFields, [id]: action.data }
       }
       const lastCreatedFieldId = id
       return { ...state, documentFieldsById, lastCreatedFieldId }
@@ -43,11 +43,11 @@ export const documentFields = (state = initialState, action) => {
       return { ...state, loading: { ...state.loading, byId: loadingById } }
     }
     case ActionTypes.RECEIVE_UPDATED_FIELD: {
-      const { id, docId } = action.data
-      const documentFields = state.documentFieldsById[docId] || {}
+      const { id, documentId } = action.data
+      const documentFields = state.documentFieldsById[documentId] || {}
       const documentFieldsById = {
         ...state.documentFieldsById,
-        [docId]: { ...documentFields, [id]: action.data }
+        [documentId]: { ...documentFields, [id]: action.data }
       }
       const lastCreatedFieldId = initialState.lastCreatedFieldId
       const loadingById = { ...state.loading.byId, [id]: false }

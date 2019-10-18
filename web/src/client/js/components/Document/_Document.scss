@@ -1,0 +1,104 @@
+@import 'CSS/inc/_mixins.scss';
+
+.document {
+  --document-header-bg: var(--color-white);
+  --document-header-border: var(--color-gray-5);
+  @media (prefers-color-scheme: dark) {
+    --document-header-bg: hsl(61, 1%, 23%);
+    --document-header-border: var(--base-border-color);
+  }
+  flex: 1;
+  position: relative;
+
+  &__no-document {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+  }
+
+  &__header {
+    background-color: var(--document-header-bg);
+    align-items: center;
+    border-bottom: thin solid var(--document-header-border);
+    display: flex;
+    height: 63px;
+    justify-content: space-between;
+    margin-bottom: calc(var(--brand-width) / 2);
+    padding: 0 calc(var(--brand-width) / 4) 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    .dropdown {
+      padding-left: 1.2rem;
+    }
+
+  }
+
+  &__button-expand {
+    padding: 0 calc(var(--brand-width) / 8);
+    .icon-expand {
+      path {
+        fill: var(--color-gray-30);
+      }
+    }
+  }
+
+  &__title-container {
+    align-items: center;
+    display: flex;
+    height: calc(var(--header-height) - 2);
+    flex: 1;
+  }
+
+  &__title {
+    background-color: transparent;
+    border: none;
+    color: var(--color-brand-dark);
+    flex: 1;
+    font-family: var(--type-serif);
+    font-size: 1.8rem;
+    font-weight: 700;
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0;
+    outline: none;
+    resize: none;
+    width: 100%;
+    -webkit-appearance: none;
+
+    &:focus {
+      color: var(--base-color);
+    }
+
+  }
+
+  &__publish-date {
+    color: var(--color-gray-7);
+    display: block;
+  }
+
+  &__fields {
+    transition: opacity 0.2s ease-in-out;
+
+    // When publishing a document, disable everything
+    &--disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+  }
+
+  // Validation for document
+  // .validation {
+    // background-color: var(--color-gray-5);
+  // }
+
+}

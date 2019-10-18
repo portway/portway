@@ -1,14 +1,23 @@
 @import 'inc/vars';
+@import 'inc/color';
 @import 'inc/theme';
 @import 'inc/type';
+@import 'layout/forms';
 
-body.home {
-  background: $primary-light;
+html, body {
+  background: var(--base-background);
+  color: var(--base-color);
+  &.home {
+    background: var(--color-brand-light);
+  }
 }
 
 .login-form {
   width: 400px;
   label {
-    color: $black-bis;
+    color: var(--base-color);
+  }
+  .help {
+    color: var(--color-brand-darker);
   }
 }

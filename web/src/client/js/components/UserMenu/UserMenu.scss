@@ -1,12 +1,16 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .user-menu {
-  &__dropdown {
-    border-radius: 50% 50%;
+  --user-menu-banner-bg: var(--color-gray-5);
+  @media (prefers-color-scheme: dark) {
+    --user-menu-banner-bg: var(--color-gray-90);
   }
-  &__button {
-    background: url('/images/icon/user-avatar.svg') no-repeat 50% 50%;
+
+  .btn--blank {
+    background-color: var(--color-gray-5);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 40px;
     border-radius: 50% 50%;
     display: block;
     height: 40px;
@@ -14,13 +18,24 @@
     overflow: hidden;
     text-indent: -9000px;
     width: 40px;
-    @include focus(transparent);
+    @include focus(var(--color-gray-5), var(--color-gray-2));
+    border: thin solid var(--color-gray-30);
+    &:not([disabled]):hover {
+      border: thin solid var(--color-gray-60);
+    }
+    &[aria-expanded="true"] {
+      background-color: var(--color-gray-10);
+      border-color: var(--color-blue);
+      &:hover {
+        border-color: var(--color-blue);
+      }
+    }
+  }
+
+  &__dropdown {
+    border-radius: 50% 50%;
   }
   &__banner {
-    --user-menu-banner-bg: #{$gray-light};
-    @media (prefers-color-scheme: dark) {
-      --user-menu-banner-bg: #{$black-er};
-    }
     background-color: var(--user-menu-banner-bg);
     padding: 8px 14px;
   }
@@ -29,11 +44,11 @@
     font-weight: 700;
   }
   &__organization {
-    color: $gray-dark;
+    color: var(--color-gray-30);
   }
   &__link {
     background-color: transparent !important;
-    color: $action !important;
+    color: var(--color-blue) !important;
     margin: 0 !important;
     padding: 4px 0 !important;
   }

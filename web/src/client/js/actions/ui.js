@@ -8,6 +8,11 @@ export const uiDocumentCreate = (value) => {
     dispatch(UI.documentCreate(value))
   }
 }
+export const uiToggleFullScreen = (value) => {
+  return async (dispatch) => {
+    dispatch(UI.toggleFullScreen(value))
+  }
+}
 
 // Projects
 export const uiCreateTokenMode = (value) => {

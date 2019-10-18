@@ -1,5 +1,5 @@
 import Stripe from 'stripe'
-import ono from 'ono';
+import ono from 'ono'
 const stripe = Stripe(process.env.STRIPE_SECRET)
 
 const createCustomer = async function(body) {
@@ -8,6 +8,19 @@ const createCustomer = async function(body) {
   try {
     customer = await stripe.customers.create(body)
   } catch (err) {
+    if (err.type === 'StripeCardError') {
+      throw ono(err, {
+        code: 402,
+        error: 'Invalid payment value',
+        errorType: 'ValidationError',
+        errorDetails: [
+          {
+            message: err.message,
+            key: 'stripe'
+          }
+        ]
+      })
+    }
     throw ono(err, { code: 500 })
   }
 
@@ -31,6 +44,19 @@ const updateCustomer = async function(customerId, body) {
   try {
     customer = await stripe.customers.update(customerId, body)
   } catch (err) {
+    if (err.type === 'StripeCardError') {
+      throw ono(err, {
+        code: 402,
+        error: 'Invalid payment value',
+        errorType: "ValidationError",
+        errorDetails: [
+          {
+            message: err.message,
+            key: 'stripe'
+          }
+        ]
+      })
+    }
     throw ono(err, { code: 500 })
   }
 
