@@ -154,10 +154,10 @@ time {
   text-decoration: none;
   &--gray {
     background-color: var(--color-gray-5);
-    color: var(--color-gray-7);
+    color: var(--color-gray-10);
     &:hover {
-      border: thin solid var(--color-gray-6);
-      color: var(--color-gray-7);
+      border: thin solid var(--color-gray-15);
+      color: var(--color-gray-10);
     }
   }
   &--green {
