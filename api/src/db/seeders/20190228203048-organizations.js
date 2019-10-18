@@ -10,7 +10,10 @@ const bulkOrgs = [
     name: 'BonkeyBong',
     ownerId: seedIds.BONKEY_USER_ID,
     createdAt: TODAY,
-    updatedAt: TODAY
+    updatedAt: TODAY,
+    plan: 'SINGLE_USER',
+    subscriptionStatus: 'active',
+    stripeId: 'cus_FDJOIxZ9aMzLGX'
   },
   {
     id: PROJ_X_ORG_ID,
