@@ -1,5 +1,5 @@
 {
-  "background_color": "#fff",
+  "background_color": "#F98355",
   "description": "A content repository",
   "display": "minimal-ui",
   "icons": [
@@ -12,5 +12,5 @@
   "name": "Portway",
   "short_name": "Portway",
   "start_url": "/",
-  "theme_color": "#fff"
+  "theme_color": "#F98355"
 }

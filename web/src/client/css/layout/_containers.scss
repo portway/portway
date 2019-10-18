@@ -1,17 +1,15 @@
-@import '../inc/vars';
-
 // Main content container for each section component
 // Based on a 640/768 ratio in Sketch file
 main {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - #{$headerHeight + $ribbonHeight}); // 12px top padding
+  min-height: calc(100vh - (var(--header-height) + var(--ribbon-height))); // 12px top padding
   padding: 12px 24px 0;
   @include media('>=medium') {
-    padding: 12px $sideGutterWidth 0;
+    padding: 12px var(--gutter-width) 0;
   }
 }
 
 .section, section {
-  padding: ($sideGutterWidth / 2) 0;
+  padding: calc(var(--gutter-width) / 2) 0;
 }

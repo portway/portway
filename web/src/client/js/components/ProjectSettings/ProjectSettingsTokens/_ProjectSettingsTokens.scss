@@ -1,10 +1,8 @@
-@import 'CSS/inc/_vars.scss';
-
 // Tokens
 .project-settings {
-  --endpoint-name-background: var(--color-gray-4);
+  --endpoint-name-background: var(--color-gray-40);
   @media (prefers-color-scheme: dark) {
-    --endpoint-name-background: var(--color-gray-7);
+    --endpoint-name-background: var(--color-gray-70);
   }
 
   // Token list
@@ -37,7 +35,7 @@
     &__field {
       align-items: center;
       border: thin solid var(--base-border-color);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       display: flex;
       width: 100%;
       .pill {
@@ -49,7 +47,7 @@
       }
       input {
         border: none;
-        color: var(--color-gray-7);
+        color: var(--color-gray-70);
         font-size: 1.3rem;
         padding: 2px 6px;
       }
@@ -83,7 +81,7 @@
       width: 100%;
     }
     &-token {
-      color: var(--color-gray-7);
+      color: var(--color-gray-10);
     }
     &-url {
       color: var(--color-green);

@@ -1,5 +1,3 @@
-@import 'CSS/inc/_vars.scss';
-
 .admin-user {
 
   &__back-btn {
@@ -10,7 +8,7 @@
   &__definition-list {
     dt {
       align-items: center;
-      background-color: var(--color-gray-4);
+      background-color: var(--color-gray-2);
       display: inline-flex;
       font-weight: 500;
       margin-bottom: 1px;

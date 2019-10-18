@@ -1,0 +1,29 @@
+.admin-billing {
+
+  &__notice {
+    background-color: var(--color-gray-80);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    color: var(--color-white);
+    left: 50%;
+    padding: 2rem;
+    position: absolute;
+    top: 20%;
+    transform: translate3d(-50%, 0, 0);
+    width: 75%;
+    z-index: 1;
+
+    a {
+      color: var(--color-cyan);
+    }
+
+    &--danger {
+      background-color: var(--color-red);
+      a {
+        color: var(--color-gray-80);
+      }
+    }
+
+  }
+
+}

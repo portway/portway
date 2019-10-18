@@ -1,9 +1,8 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document-field {
-  --field-background: var(--color-gray-3);
-  --field-edit-mode-background: rgba(255, 255, 255, .9);
+  --field-background: var(--color-gray-2);
+  --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
   @media (prefers-color-scheme: dark) {
     --field-background: hsl(61, 1%, 23%);
@@ -12,7 +11,7 @@
   outline: 0;
 
   &--text {
-    margin: ($sideGutterWidth / 2) 64px;
+    margin: calc(var(--gutter-width) / 2) var(--gutter-width);
     .document-field__component {
       flex-direction: column;
     }
@@ -22,7 +21,7 @@
   }
 
   &--image {
-    margin: ($sideGutterWidth / 2) 32px;
+    margin: calc(var(--gutter-width) / 2);
     position: relative;
     .document-field__component {
       flex-direction: column;
@@ -48,25 +47,25 @@
 
     input {
       background-color: transparent;
-      &::selection {
+      // &::selection {
         // color: #fff;
-      }
+      // }
     }
 
-    &:first-child {
-      // border-top-left-radius: $borderRadius;
-      // border-top-right-radius: $borderRadius;
-    }
+    // &:first-child {
+      // border-top-left-radius: var(--border-radius);
+      // border-top-right-radius: var(--border-radius);
+    // }
 
     &:last-child {
       border-bottom: thin solid var(--base-border-color);
-      // border-bottom-left-radius: $borderRadius;
-      // border-bottom-right-radius: $borderRadius;
-      // margin-bottom: $sideGutterWidth;
+      // border-bottom-left-radius: var(--border-radius);
+      // border-bottom-right-radius: var(--border-radius);
+      // margin-bottom: var(--gutter-width);
     }
 
     &:focus-within {
-      background-color: var(--color-gray-3);
+      background-color: var(--color-gray-5);
     }
 
     // New data fields
@@ -115,9 +114,9 @@
 
   &__settings {
     align-items: center;
-    background: var(--color-gray-10);
+    background: var(--color-gray-70);
     bottom: 0;
-    color: var(--color-gray-3);
+    color: var(--color-gray-2);
     display: flex;
     justify-content: space-between;
     left: 0;
@@ -135,10 +134,10 @@
   &__settings__input {
     background: none;
     border: none;
-    color: var(--color-gray-3);
+    color: var(--color-gray-5);
     font-size: 1.2rem;
     @include focus(transparent, transparent);
-    border-bottom: thin solid var(--color-gray-8);
+    border-bottom: thin solid var(--color-gray-80);
   }
 
   &__settings__button {
@@ -160,8 +159,8 @@
     }
     input {
       border: none;
-      color: var(--color-gray-7);
-      font-family: $serif !important;
+      color: var(--color-gray-10);
+      font-family: var(--type-serif) !important;
       font-size: 1.3rem; // 13px
       min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
       outline: none;
@@ -192,9 +191,9 @@
     visibility: hidden;
   }
 
-  &__dragger {
+  // &__dragger {
     // padding-left: 1.2rem;
-  }
+  // }
 
   &:hover, &:focus, &:focus-within {
     .document-field__tool-options {
@@ -208,9 +207,9 @@
   .file-uploader {
     align-items: center;
     border: thin solid var(--color-gray-5);
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
     display: flex;
-    padding: $sideGutterWidth;
+    padding: var(--gutter-width);
     width: 100%;
 
     label {

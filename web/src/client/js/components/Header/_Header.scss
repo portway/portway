@@ -1,9 +1,8 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .masthead {
-  border-top: $ribbonHeight solid var(--color-brand);
-  height: $headerHeight + $ribbonHeight;
+  border-top: var(--ribbon-height) solid var(--color-brand);
+  height: calc(var(--header-height) + var(--ribbon-height));
 
   @media (prefers-color-scheme: dark) {
     background-color: hsl(61, 2%, 14%);
@@ -16,7 +15,7 @@
 
     // Brand area is top left, with logo
     &__brand {
-      min-width: $sideGutterWidth;
+      min-width: var(--gutter-width);
       .navbar__logo {
         // the logo is a span with a background image applied from a database
         background-repeat: no-repeat;
@@ -35,7 +34,7 @@
       align-items: center;
       flex: 1 0 auto;
       display: flex;
-      height: $sideGutterWidth;
+      height: var(--gutter-width);
       justify-content: space-between;
       padding: 0 12px 0 0;
       .navbar-brand-name {
@@ -61,7 +60,7 @@
       align-items: center;
       display: flex;
       flex: 1;
-      height: $sideGutterWidth;
+      height: var(--gutter-width);
       padding-left: 16px;
       .icon {
         height: 24px;
@@ -73,7 +72,7 @@
       align-items: center;
       color: var(--base-color);
       display: flex;
-      height: $sideGutterWidth;
+      height: var(--gutter-width);
       padding: 0 1rem;
       text-decoration: none;
     }
@@ -83,9 +82,9 @@
       align-items: center;
       border-left: thin solid var(--base-border-color);
       display: flex;
-      height: $sideGutterWidth;
+      height: var(--gutter-width);
       justify-content: center;
-      min-width: $sideGutterWidth;
+      min-width: var(--gutter-width);
       z-index: 11;
     }
   } // navbar

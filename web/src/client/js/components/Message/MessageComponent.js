@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './MessageComponent.scss'
+import './_MessageComponent.scss'
 
 class MessageComponent extends React.PureComponent {
   render() {
