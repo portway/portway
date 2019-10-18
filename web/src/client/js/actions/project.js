@@ -91,7 +91,6 @@ export const fetchProjectAssignees = (projectId) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.request(projectId))
     const { data, status } = await fetch(`projects/${projectId}/assignments?includeUser=true`)
-    const { data, status } = await fetch(`projects/${projectId}/assignments`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return

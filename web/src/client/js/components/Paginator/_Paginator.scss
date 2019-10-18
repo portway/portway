@@ -1,11 +1,11 @@
 @import 'CSS/inc/_vars.scss';
 
 .paginator {
-  --paginator-page-bg: #{$white};
-  --paginator-current-bg: #{$white-ter};
+  // --paginator-page-bg: #{$white};
+  // --paginator-current-bg: #{$white-ter};
   @media (prefers-color-scheme: dark) {
-    --paginator-page-bg: #{$black-ter};
-    --paginator-current-bg: #{$black-bis};
+    // --paginator-page-bg: #{$black-ter};
+    // --paginator-current-bg: #{$black-bis};
   }
 
   &__list {
@@ -20,7 +20,7 @@
 
   &__page {
     background-color: var(--paginator-page-bg);
-    border-radius: $borderRadius;
+    // border-radius: $borderRadius;
     margin: 0 .25rem;
     padding: 3px;
     min-width: 24px;
