@@ -27,7 +27,7 @@ const PaginatorComponent = ({ changeHandler, page, pages }) => {
         </li>
       )
     }
-    return listItems
+    return listItems.length > 1 ? listItems : null
   }
 
   return (
