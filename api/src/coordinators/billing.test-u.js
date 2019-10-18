@@ -27,18 +27,14 @@ describe('billing coordinator', () => {
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.updateById.mockClear()
-      BusinessOrganization.findById.mockImplementationOnce(() => {
-        return { stripeId }
-      })
+      BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       stripeIntegrator.getCustomer.mockClear()
-      stripeIntegrator.getCustomer.mockImplementationOnce(() => {
-        return {
-          id: customerId,
-          subscriptions: {
-            data: [
-              mockSubscription
-            ]
-          }
+      stripeIntegrator.getCustomer.mockReturnValueOnce({
+        id: customerId,
+        subscriptions: {
+          data: [
+            mockSubscription
+          ]
         }
       })
       stripeIntegrator.createSubscription.mockClear()
@@ -76,6 +72,22 @@ describe('billing coordinator', () => {
 
     it('should resolve with undefined', () => {
       expect(resolvedValue).toBe(undefined)
+    })
+
+    describe('when there is no stripeId on the org', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockClear()
+        await expect(billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, seats: newSeatCount, orgId }))
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when no stripe customer is found', () => {
+      it('should throw an error with status code 409 ', async () => {
+        stripeIntegrator.getCustomer.mockImplementationOnce(() => {})
+        await expect(billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, seats: newSeatCount, orgId }))
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
     })
   })
 
@@ -137,7 +149,7 @@ describe('billing coordinator', () => {
     beforeAll(async () => {
       stripeIntegrator.getCustomer.mockClear()
       BusinessOrganization.findById.mockClear()
-      BusinessOrganization.findById.mockImplementationOnce(() => { return { stripeId } })
+      BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       orgBilling = await billingCoordinator.getOrgBilling(orgId)
     })
 
