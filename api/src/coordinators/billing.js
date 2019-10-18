@@ -138,7 +138,6 @@ const getOrgBilling = async function(orgId) {
   if (!org.stripeId) return {}
 
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
-  console.log(customer)
 
   return formatBilling(customer)
 }

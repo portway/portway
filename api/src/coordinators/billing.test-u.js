@@ -148,6 +148,20 @@ describe('billing coordinator', () => {
 
     beforeAll(async () => {
       stripeIntegrator.getCustomer.mockClear()
+      stripeIntegrator.getCustomer.mockReturnValueOnce({
+        id: 'some-stripe-customer-id',
+        sources: {
+          data: [{}]
+        },
+        subscriptions: {
+          data: [
+            {
+              plan: { data: [{}] },
+              items: { data: [{}] }
+            }
+          ]
+        }
+      })
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       orgBilling = await billingCoordinator.getOrgBilling(orgId)

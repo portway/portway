@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import cx from 'classnames'
 
-import { PLAN_PRICING } from 'Shared/constants'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 import StripeContainer from './StripeContainer'
 import './_AdminPaymentStyles.scss'
@@ -30,7 +29,7 @@ function renderCardLogo(brand) {
 
 function getTotalCost(subscription) {
   // TODO calculate total cost from flatCost + seatCount*costPerSeat
-  return subscription.flatCost
+  return subscription.flatCost || '000'
 }
 
 function toCurrencyString(num) {
