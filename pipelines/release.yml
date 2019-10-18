@@ -1,0 +1,46 @@
+version: '1.0'
+stages:
+  - Clone Repo
+  - Build Images
+  - Push to Docker Registry
+steps:
+  main_clone:
+    title: Cloning main repository...
+    stage: Clone Repo
+    type: git-clone
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_REVISION}}'
+  build_prod_api_image:
+    stage: Build Images
+    title: Building API Production Image
+    type: build
+    image_name: bonkeybong/portway_api
+    working_directory: ./api/
+    tag: '${{CF_RELEASE_TAG}}'
+    dockerfile: Dockerfile-prod
+  build_prod_web_image:
+    stage: Build Images
+    title: Building Web Production Image
+    type: build
+    image_name: bonkeybong/portway_web
+    working_directory: ./web/
+    tag: '${{CF_RELEASE_TAG}}'
+    dockerfile: Dockerfile-prod
+    build_arguments:
+      - API_PUBLIC_URL=https://api.dev.portway.app
+  push_web_to_registry:
+    stage: Push to Docker Registry
+    type: push
+    title: Push Web to Docker Registry
+    candidate: ${{build_prod_web_image}}
+    tag: '${{CF_RELEASE_TAG}}'
+    image_name: bonkeybong/portway_web
+    registry: bonkeybong
+  push_api_to_registry:
+    stage: Push to Docker Registry
+    type: push
+    title: Push API to Docker Registry
+    candidate: ${{build_prod_api_image}}
+    tag: '${{CF_RELEASE_TAG}}'
+    image_name: bonkeybong/portway_api
+    registry: bonkeybong

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { currentUserId } from 'Libs/currentIds'
-import { withOrgPlanPermission } from 'Components/Permission/OrgPlanPermission'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 
-import { PRODUCT_NAME, PLAN_TYPES, QUERY_PARAMS } from 'Shared/constants'
+import { PATH_ORGANIZATION, PRODUCT_NAME, PLAN_TYPES, QUERY_PARAMS } from 'Shared/constants'
 import { createUser, reinviteUser, removeUser } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 import AdminUsersComponent from './AdminUsersComponent'
@@ -68,7 +69,7 @@ const AdminUsersContainer = ({
   }
 
   return (
-    <>
+    <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]} elseRender={<Redirect to={PATH_ORGANIZATION} />}>
       <Helmet>
         <title>Admin: Users – {PRODUCT_NAME}</title>
       </Helmet>
@@ -86,7 +87,7 @@ const AdminUsersContainer = ({
         sortUsersHandler={sortUsersHandler}
         users={users}
       />
-    </>
+    </OrgPlanPermission>
   )
 }
 
@@ -112,8 +113,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { createUser, reinviteUser, removeUser, uiCreateUserMode, uiConfirm }
 
-export default withOrgPlanPermission([PLAN_TYPES.MULTI_USER])(
-  withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
-  )
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)
 )

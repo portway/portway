@@ -1,19 +1,16 @@
-@import 'CSS/inc/_vars.scss';
-
-$contentMenuWidth: 250px;
-
 .content-menu {
-  --content-menu-heading: var(--color-gray-3);
-  --content-menu-btn-hover: rgba(var(--color-gray-4), .2);
+  --content-menu-width: 250px;
+  --content-menu-heading: var(--color-gray-5);
+  --content-menu-btn-hover: var(--color-gray-2);
   @media (prefers-color-scheme: dark) {
-    --content-menu-heading: var(--color-gray-9);
-    --content-menu-btn-hover: rgba(var(--color-gray-8), .2);
+    --content-menu-heading: var(--color-gray-90);
+    --content-menu-btn-hover: var(--color-gray-80);
   }
   position: relative;
-  margin: $sideGutterWidth / 2 auto 0;
-  padding-bottom: $sideGutterWidth / 2;
+  margin: calc(var(--gutter-width) / 2) auto 0;
+  padding-bottom: calc(var(--gutter-width) / 2);
   text-align: center;
-  width: $contentMenuWidth;
+  width: var(--content-menu-width);
   z-index: 10;
 
   &__button {
@@ -35,12 +32,12 @@ $contentMenuWidth: 250px;
     }
     &[aria-expanded="true"] {
       .icon {
-        background-color: var(--color-blue-dark);
+        background-color: var(--color-gray-15);
         transform: rotate(45deg);
       }
       &:hover:not([disabled]) {
         .icon {
-          background-color: var(--color-blue-dark);
+          background-color: var(--color-gray-15);
         }
       }
     }
@@ -49,13 +46,13 @@ $contentMenuWidth: 250px;
   &__content {
     background-color: var(--base-background);
     border: thin solid var(--base-border-color);
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-    bottom: $sideGutterWidth;
+    bottom: var(--gutter-width);
     max-height: 200px;
     overflow: auto;
     position: absolute;
-    width: $contentMenuWidth;
+    width: var(--content-menu-width);
     &[hidden] {
       display: block;
       opacity: 0;

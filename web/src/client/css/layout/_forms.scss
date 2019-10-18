@@ -1,9 +1,8 @@
-@import '../inc/vars';
 @import '../inc/mixins';
 
 form, .form {
   --form-background: var(--color-white);
-  --form-placeholder-color: var(--color-gray-6);
+  --form-placeholder-color: var(--color-gray-20);
   --form-field-width: 325px;
   --form-status-width: 50px;
   @media (prefers-color-scheme: dark) {
@@ -33,8 +32,8 @@ form, .form {
   input[type='password'],
   .StripeElement {
     background: var(--form-background);
-    border: thin solid var(--base-border-color);
-    border-radius: $borderRadius;
+    border: thin solid var(--color-gray-20);
+    border-radius: var(--border-radius);
     min-height: 38px;
     padding: 8px;
     width: 100%;
@@ -58,7 +57,7 @@ form, .form {
   // ---------------------------------------------------------------------------
   &__section {
     border: thin solid var(--base-border-color);
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
     padding: 2rem;
   }
 
@@ -129,7 +128,7 @@ form, .form {
       flex-direction: row;
       .field {
         input {
-          border-radius: $borderRadius;
+          border-radius: var(--border-radius);
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
         }

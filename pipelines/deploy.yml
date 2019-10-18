@@ -1,0 +1,11 @@
+version: '1.0'
+steps:  
+  deploy_to_dev_cf_step:
+    title: Deploy to Dev Cluster
+    image: codefresh/cfstep-helm:2.14.3
+    environment:
+      - CHART_REF=kubernetes/helm/portway
+      - RELEASE_NAME=portway
+      - KUBE_CONTEXT=dev-kubernetes-portway
+      - VALUE_apiTag=$CF_SHORT_REVISION
+      - VALUE_webTag=$CF_SHORT_REVISION

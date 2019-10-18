@@ -1,13 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink, Link } from 'react-router-dom'
+import cx from 'classnames'
 
 import {
+  LOCKED_ACCOUNT_STATUSES,
   ORGANIZATION_ROLE_IDS,
   PATH_ADMIN,
   PATH_BILLING,
   PATH_PROJECTS,
-  PATH_SETTINGS
+  PATH_SETTINGS,
+  SUBSCRIPTION_STATUS,
 } from 'Shared/constants'
 
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
@@ -22,7 +25,12 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const HeaderComponent = ({ brand, isFullScreen, section, upgrade }) => {
+const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) => {
+  const upgradePillClasses = cx({
+    'pill': true,
+    'pill--red': LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
+    'pill--gray': subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null,
+  })
   if (!isFullScreen) {
     return (
       <header className="masthead" role="banner">
@@ -38,9 +46,14 @@ const HeaderComponent = ({ brand, isFullScreen, section, upgrade }) => {
             {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
           </div>
           <div className="navbar__misc">
-            {upgrade &&
+            {(subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className="pill pill--blue">TRIAL PERIOD</b>}>
+              <NavLink to={PATH_BILLING} className={upgradePillClasses}>Upgrade your account</NavLink>
+            </OrgPermission>
+            }
+            {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={PATH_BILLING} className="pill pill--orange">Upgrade your account</NavLink>
+              <NavLink to={PATH_BILLING} className={upgradePillClasses}>Your account needs attention</NavLink>
             </OrgPermission>
             }
           </div>
@@ -59,7 +72,7 @@ HeaderComponent.propTypes = {
   brand: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
   section: PropTypes.string.isRequired,
-  upgrade: PropTypes.bool || null,
+  subscriptionStatus: PropTypes.string || null,
 }
 
 export default HeaderComponent

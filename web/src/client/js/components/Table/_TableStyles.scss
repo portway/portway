@@ -1,10 +1,8 @@
-@import 'CSS/inc/_vars.scss';
-
 .table {
   --column-width-min: 50px;
   --row-height-min: 50px;
   --cell-padding: .5rem;
-  --row-alternate-bg-color: var(--color-gray-3);
+  --row-alternate-bg-color: var(--color-gray-2);
   @media (prefers-color-scheme: dark) {
     --row-alternate-bg-color: rgba(0, 0, 0, .1);
   }
@@ -15,17 +13,17 @@
   }
   &__heading-cell {
     align-self: center;
-    color: var(--color-gray-7);
+    color: var(--color-gray-70);
     font-weight: 500;
     padding: var(--cell-padding);
   }
   &__heading-btn {
     &--sortable {
-      color: var(--color-gray-8);
+      color: var(--color-gray-80);
       text-decoration: underline;
     }
     &--sorted {
-      color: var(--color-gray-10);
+      color: var(--color-gray-30);
     }
     &--ascending {
       + .icon {

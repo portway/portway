@@ -1,10 +1,9 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .user-menu {
-  --user-menu-banner-bg: var(--color-gray-4);
+  --user-menu-banner-bg: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
-    --user-menu-banner-bg: var(--color-gray-9);
+    --user-menu-banner-bg: var(--color-gray-90);
   }
 
   .btn--blank {
@@ -19,16 +18,16 @@
     overflow: hidden;
     text-indent: -9000px;
     width: 40px;
-    @include focus(var(--color-gray-5), var(--color-gray-6));
-    border: thin solid var(--color-gray-6);
+    @include focus(var(--color-gray-5), var(--color-gray-2));
+    border: thin solid var(--color-gray-30);
     &:not([disabled]):hover {
-      border: thin solid var(--color-gray-5);
+      border: thin solid var(--color-gray-60);
     }
     &[aria-expanded="true"] {
-      background-color: var(--color-gray-6);
-      border-color: var(--color-gray-7);
+      background-color: var(--color-gray-10);
+      border-color: var(--color-blue);
       &:hover {
-        border-color: var(--color-gray-7);
+        border-color: var(--color-blue);
       }
     }
   }
@@ -45,7 +44,7 @@
     font-weight: 700;
   }
   &__organization {
-    color: var(--color-gray-8);
+    color: var(--color-gray-30);
   }
   &__link {
     background-color: transparent !important;

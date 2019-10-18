@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { PRODUCT_NAME, PLAN_TYPES } from 'Shared/constants'
+import { PRODUCT_NAME } from 'Shared/constants'
 
 import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
@@ -21,6 +21,7 @@ function HeaderContainer({ isFullScreen, location }) {
   }
   const section = location.pathname.split('/')[1]
   const projectId = section === 'project' ? location.pathname.split('/')[2] : null
+  const subscriptionStatus = currentOrg ? currentOrg.subscriptionStatus : null
 
   return (
     <HeaderComponent
@@ -28,7 +29,7 @@ function HeaderContainer({ isFullScreen, location }) {
       isFullScreen={isFullScreen}
       projectId={projectId}
       section={section}
-      upgrade={currentOrg && currentOrg.subscriptionStatus === PLAN_TYPES.TRIAL || null}
+      subscriptionStatus={subscriptionStatus}
     />
   )
 }

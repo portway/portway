@@ -1,4 +1,3 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .react-select-button {
@@ -30,15 +29,15 @@ form {
 }
 
 .react-select-container {
-  --react-select-background: var(--color-gray-3);
+  --react-select-background: var(--color-gray-10);
   --react-select-border: var(--color-gray-5);
   --react-select-control-background: var(--color-white);
   --react-select-control-color: var(--color-gray-10);
-  --react-select-placeholder-color: var(--color-gray-6);
-  --react-select-option: var(--color-gray-3);
-  --react-select-option-focused: var(--color-gray-4);
+  --react-select-placeholder-color: var(--color-gray-5);
+  --react-select-option: var(--color-gray-2);
+  --react-select-option-focused: var(--color-gray-5);
   --react-select-option-selected: transparent;
-  --react-select-notice-background: var(--color-gray-3);
+  --react-select-notice-background: var(--color-gray-2);
   @media (prefers-color-scheme: dark) {
     --react-select-background: var(--color-gray-10);
     --react-select-border: var(--color-gray-9);
@@ -57,13 +56,13 @@ form {
     &__control {
       background-color: var(--react-select-control-background);
       border: thin solid var(--react-select-border);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       cursor: text;
       color: var(--react-select-control-color);
       max-height: 38px;
       min-height: 38px;
       &--menu-is-open {
-        border-radius: $borderRadius;
+        border-radius: var(--border-radius);
       }
       &--is-focused {
         border: thin solid var(--color-blue);
@@ -95,7 +94,7 @@ form {
     }
     &__menu {
       background-color: var(--react-select-control-background);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       margin: 2px 0 0;
     }
     &__menu-list {
@@ -134,13 +133,13 @@ form {
       background-color: var(--react-select-control-background);
       // Mimic the inputs from _forms.scss
       border: thin solid var(--react-select-border);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       cursor: text;
       // When menuIsOpen == true, we format this to look like a list with an
       // autocomplete search at the top
       &--menu-is-open {
         margin: 0 12px 12px;
-        border-radius: $borderRadius;
+        border-radius: var(--border-radius);
         &:hover {
           border-color: var(--react-select-border);
         }
@@ -185,7 +184,7 @@ form {
       }
     }
     // Regular React Select menu (not auto-open)
-    &__menu {}
+    // &__menu {}
     // React Select menu list
     &__menu-list {
       padding: 0;
