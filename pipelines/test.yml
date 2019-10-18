@@ -18,6 +18,11 @@ steps:
     commands:
       - mv api/.dockerignore ./apidockerignore
       - mv web/.dockerignore ./webdockerignore
+    when:
+      steps:
+        - name: main_clone
+          on:
+            - success
   build_api_image:
     stage: Development Builds
     title: Building API Docker Image
