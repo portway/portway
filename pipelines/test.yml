@@ -3,7 +3,6 @@ stages:
   - Clone Repo
   - Development Builds
   - Tests
-  - Production Builds
 steps:
   main_clone:
     title: Cloning main repository...
@@ -22,7 +21,7 @@ steps:
     stage: Development Builds
     title: Building API Docker Image
     type: build
-    image_name: bonkeybong/portway-api
+    image_name: bonkeybong/portway_api
     working_directory: ./api/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
@@ -30,7 +29,7 @@ steps:
     stage: Development Builds
     title: Building Web Docker Image
     type: build
-    image_name: bonkeybong/portway-web
+    image_name: bonkeybong/portway_web
     working_directory: ./web/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
@@ -70,26 +69,3 @@ steps:
           - DB_HOST=db-test
           - DB_PORT=5432
           - DB_NAME=test
-  replace_dockerignore:
-    stage: Production Builds
-    image: alpine
-    title: Replace Docker Ignore File
-    commands:
-      - mv ./apidockerignore api/.dockerignore
-      - mv ./webdockerignore web/.dockerignore
-  build_prod_api_image:
-    stage: Production Builds
-    title: Building API Production Image
-    type: build
-    image_name: bonkeybong/portway-api
-    working_directory: ./api/
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-    dockerfile: Dockerfile-prod
-  build_prod_web_image:
-    stage: Production Builds
-    title: Building Web Production Image
-    type: build
-    image_name: bonkeybong/portway-web
-    working_directory: ./web/
-    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-    dockerfile: Dockerfile-prod

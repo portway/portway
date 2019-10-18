@@ -86,7 +86,7 @@ meter {
   // -moz-appearance: none;
   // appearance: none;
   background: var(--color-gray-5); // Firefox
-  border-radius: $borderRadius;
+  border-radius: var(--border-radius);
   display: block;
   margin: .25rem 0 1rem 0;
   width: 100%;
@@ -94,12 +94,12 @@ meter {
   // Safari
   &::-webkit-meter-bar {
     background: var(--color-gray-5);
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
   }
   &::-webkit-meter-optimum-value,
   &::-webkit-meter-suboptimum-value,
   &::-webkit-meter-even-less-good-value {
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
   }
   &::-webkit-meter-optimum-value {
     background: var(--color-green);
@@ -114,7 +114,7 @@ meter {
   // Firefox
   &::-moz-meter-bar {
     background: var(--color-gray-5);
-    border-radius: $borderRadius;
+    border-radius: var(--border-radius);
   }
   &:-moz-meter-optimum::-moz-meter-bar {
     background: var(--color-green);

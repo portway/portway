@@ -1,7 +1,7 @@
 .admin-billing {
 
   &__notice {
-    background-color: var(--color-gray-10);
+    background-color: var(--color-gray-80);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     color: var(--color-white);
@@ -20,7 +20,7 @@
     &--danger {
       background-color: var(--color-red);
       a {
-        color: var(--color-gray-10);
+        color: var(--color-gray-80);
       }
     }
 

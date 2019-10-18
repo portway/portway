@@ -1,5 +1,3 @@
-@import 'CSS/inc/_vars.scss';
-
 .admin-plans-selector {
 
   &--disabled {
@@ -32,9 +30,9 @@
     button:not([disabled]) {
       align-items: flex-start;
       background: transparent;
-      border: thin solid var(--base-border-color);
-      border-radius: $borderRadius;
-      color: var(--base-color);
+      border: thin solid var(--base-border-color, gray);
+      border-radius: var(--border-radius, 8px);
+      color: var(--base-color, black);
       display: flex;
       height: 100%;
       flex-direction: column;
@@ -51,12 +49,12 @@
 
       &:hover {
         background: transparent;
-        border: thin solid var(--base-border-color);
-        color: var(--base-color);
+        border: thin solid var(--base-border-color, gray);
+        color: var(--base-color, black);
       }
 
       &[aria-checked="true"] {
-        border: thin solid var(--color-green);
+        border: thin solid var(--color-green, green);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
         transform: scale(1);
       }
@@ -73,7 +71,7 @@
     flex: 1;
     padding: 2rem;
     h3 {
-      color: var(--color-gray-8);
+      color: var(--color-gray-80);
       font-weight: 700;
       margin: 0 0 1rem;
     }

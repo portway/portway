@@ -1,44 +1,17 @@
 // New CSS variables to replace the below ones
 :root {
+  // Border-radius should be the same everywhere
   --border-radius: 2px;
   --box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+  // brandWidth and gutter width are for the side gutters, and side boxes of the header
+  // we use this measurement in a bunch of places, usually dividing or multiplying by it
+  --brand-width: 64px;
+  --gutter-width: 64px;
+  // This is the top ribbon and header height
+  --ribbon-height: 6px;
+  --header-height: 65px;
+  // Icon margin is usually used when an icon is next to some type
 }
 
-/*
- * We are currently using Bulma for our base css
- * These variables are to customize Bulma's defaults
- * https://bulma.io/documentation/customize/variables/
- * ---------------------------------------------------- */
-
-// Initial vars
-// Override any of these
-// https://github.com/jgthms/bulma/blob/master/sass/utilities/initial-variables.sass
-
+// For include-media
 // http://screensiz.es/ipad-pro
-$breakpoints: (
-  small: 320px,
-  medium: 768px,
-  large: 1366px,
-  huge: 1920px
-);
-$padding: 0.25em 0.5em;
-
-// 64 is the magic number for many things
-$brandWidth: 64px;
-$sideGutterWidth: 64px;
-
-// Border-radius should be the same everywhere
-$borderRadius: 2px;
-
-// Orange line and header height
-$ribbonHeight: 6px;
-$headerHeight: 65px;
-
-// Type
-$sansSerif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-  'Open Sans', 'Helvetica Neue', sans-serif;
-$serif: 'Aleo', Georgia, serif;
-$baseFontSize: 1.5rem; //15px
-
-// Icons
-$iconMargin: 0.6rem;
