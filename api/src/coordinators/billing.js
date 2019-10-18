@@ -4,7 +4,7 @@ import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
-import { PLANS } from '../constants/plans'
+import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
 
 const formatBilling = (customer) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -75,14 +75,26 @@ const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
   const currentSubscription = customer.subscriptions.data[0]
   const subscriptionId = currentSubscription && currentSubscription.id
   const currentPlanId = currentSubscription && currentSubscription.plan.id
-  const currentSeatCount = currentSubscription && currentSubscription.items.data[0].quantity
+  const currentSeats = currentSubscription && currentSubscription.items.data[0].quantity
 
-  const updatePlanId = planId !== currentPlanId ? planId : undefined
-  let updateSeatCount = seats !== currentSeatCount ? seats : undefined
+  let updateSeats
+  let updatePlanId
 
-  if (updatePlanId === PLANS.SINGLE_USER || (!updatePlanId && currentPlanId) && updateSeatCount > 1) {
-    const message = 'Cannot add seats to a single user plan'
+  if (planId && planId !== currentPlanId) {
+    // We're Changing plans, single user plans get 1, multi user plans get default seat count
+    updateSeats = planId === PLANS.SINGLE_USER ? 1 : MULTI_USER_DEFAULT_SEAT_COUNT
+    updatePlanId = planId
+  } else if (currentPlanId === PLANS.SINGLE_USER) {
+    // Not changing plans, and user is currently on a single user plan, don't allow seat changes
+    const message = 'Cannot set seats on a single user plan'
     throw ono({ code: 409, publicMessage: message }, message)
+  } else if (currentPlanId === PLANS.MULTI_USER && seats && seats !== currentSeats) {
+    // Not changing plans, and user is currently on a multi user plan, allow seat changes 5 or above
+    if (seats < MULTI_USER_DEFAULT_SEAT_COUNT) {
+      const message = `Cannot have less than ${MULTI_USER_DEFAULT_SEAT_COUNT} seats on a multi user plan`
+      throw ono({ code: 409, publicMessage: message }, message)
+    }
+    updateSeats = seats
   }
 
   if (updatePlanId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
@@ -90,21 +102,12 @@ const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
     throw ono({ code: 409, publicMessage: message }, message)
   }
 
-  // updatePlanId will only be defined if we're changing plans
-  if (updatePlanId === PLANS.SINGLE_USER) {
-    //if we're changing plans to single user, always set seat count to 1
-    updateSeatCount = 1
-  } else if (updatePlanId === PLANS.MULTI_USER) {
-    //if we're changing plans to multi user, always set initial seat count to 5
-    updateSeatCount = 5
-  }
-
   //nothing is changing, return success and move on without updating stripe
-  if (!updatePlanId && !updateSeatCount) {
+  if (!updatePlanId && !updateSeats) {
     return
   }
 
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: updatePlanId, seats: updateSeatCount, subscriptionId })
+  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: updatePlanId, seats: updateSeats, subscriptionId })
 
   await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
 }

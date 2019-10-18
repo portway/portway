@@ -1,6 +1,7 @@
 import billingCoordinator from './billing'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
+import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
 
 jest.mock('../integrators/stripe')
 jest.mock('../businesstime/organization')
@@ -9,9 +10,19 @@ describe('billing coordinator', () => {
   const orgId = 999
 
   describe('#subscribeOrgToPlan', () => {
-    const planId = 'not-a-real-plan-id'
+    const customerId = 'not-a-real-customer-id'
     const stripeId = '1234abcd'
+    const subscriptionId = 'not-a-real-subscription-id'
+    const planId = PLANS.SINGLE_USER
+    const subscriptionStatus = 'active'
+    let mockCurrentSeatCount = 1
+    const newSeatCount = 6
     let resolvedValue
+    const mockSubscription = {
+      id: subscriptionId,
+      plan: { id: planId },
+      items: { data: [{ quantity: mockCurrentSeatCount }] }
+    }
 
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
@@ -19,7 +30,22 @@ describe('billing coordinator', () => {
       BusinessOrganization.findById.mockImplementationOnce(() => {
         return { stripeId }
       })
-      resolvedValue = await billingCoordinator.subscribeOrgToPlan(planId, orgId)
+      stripeIntegrator.getCustomer.mockClear()
+      stripeIntegrator.getCustomer.mockImplementationOnce(() => {
+        return {
+          id: customerId,
+          subscriptions: {
+            data: [
+              mockSubscription
+            ]
+          }
+        }
+      })
+      stripeIntegrator.createSubscription.mockClear()
+      stripeIntegrator.createSubscription.mockImplementationOnce(() => {
+        return { ...mockSubscription, status: subscriptionStatus }
+      })
+      resolvedValue = await billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, seats: newSeatCount, orgId })
     })
 
     it('should call BusinessOrganization.findById with the passed in org id', () => {
@@ -32,16 +58,20 @@ describe('billing coordinator', () => {
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
     })
 
-    it('should call stripeIntegrator.createSubscription with the customer id and plan id', () => {
-      const customerId = stripeIntegrator.getCustomer.mock.results[0].value.id
+    it('should call stripeIntegrator.createSubscription with customerId, planId, default seat count for multi-user plan, and subscription id', () => {
       expect(stripeIntegrator.createSubscription.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createSubscription.mock.calls[0][0]).toEqual({ customerId, planId })
+      expect(stripeIntegrator.createSubscription.mock.calls[0][0]).toEqual({
+        customerId,
+        planId: PLANS.MULTI_USER,
+        seats: MULTI_USER_DEFAULT_SEAT_COUNT,
+        subscriptionId
+      })
     })
 
     it('should call BusinessOrganization.updateById with the org id and plan id', () => {
       expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
       expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(orgId)
-      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ plan: planId })
+      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ plan: PLANS.MULTI_USER, subscriptionStatus })
     })
 
     it('should resolve with undefined', () => {

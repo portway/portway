@@ -15,7 +15,12 @@ const getGenericStripeCustomerData = function() {
       data: [{}]
     },
     subscriptions: {
-      data: [{}]
+      data: [
+        {
+          plan: { data: [{}] },
+          items: { data: [{}] }
+        }
+      ]
     }
   }
 }
