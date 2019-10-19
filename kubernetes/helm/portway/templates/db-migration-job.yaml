@@ -20,6 +20,8 @@ spec:
         helm.sh/chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
       restartPolicy: Never
+      imagePullSecrets:
+      - name: regcred
       containers:
       - name: db-migrate
         image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
