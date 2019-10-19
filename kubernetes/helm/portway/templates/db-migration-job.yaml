@@ -23,7 +23,7 @@ spec:
       containers:
       - name: db-migrate
         image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
-        args: ["npm run migrate"]
+        args: ["migrate"]
         env:
         - name: DB_HOST
           valueFrom:
