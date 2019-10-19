@@ -4,7 +4,7 @@ import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
-import { PLANS } from '../constants/plans'
+import { PLANS, STRIPE_STATUS } from '../constants/plans'
 
 const formatBilling = (customer) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -91,6 +91,19 @@ const updateOrgBilling = async function(token, orgId) {
   } else {
     customer = await stripeIntegrator.createCustomer({ source: token, name: org.name })
     await BusinessOrganization.updateById(orgId, { stripeId: customer.id })
+  }
+
+  const currentSubscription = customer.subscriptions.data[0]
+
+  if (!currentSubscription) {
+    // Somehow the user doesn't have a subscription yet, they now have billing info saved, give them a single user one
+    const updatedSubscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER })
+    BusinessOrganization.updateById(orgId, { plan: PLANS.SINGLE_USER, subscriptionStatus: updatedSubscription.status })
+  } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
+    // User is trialing, or has a payment issue, re-subscribe them to their current plan
+    const currentPlan = currentSubscription.plan.id
+    const updatedSubscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: currentPlan })
+    BusinessOrganization.updateById(orgId, { plan: PLANS.SINGLE_USER, subscriptionStatus: updatedSubscription.status })
   }
 
   return formatBilling(customer)
