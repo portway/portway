@@ -2,11 +2,10 @@ const path = require('path');
 
 const basePathParts = [__dirname]
 
-if (process.env.NODE_ENV === 'production') {
-  basePathParts.push('dist')
-}
+const src = (process.env.NODE_ENV === 'production') ? 'dist' : 'src'
+basePathParts.push(src)
 
-const basePath = path.join(...basePathParts, 'src', 'db')
+const basePath = path.join(...basePathParts, 'db')
 
 module.exports = {
   'config': path.join(basePath, 'config', 'config.js'),
