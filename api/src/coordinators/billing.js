@@ -74,9 +74,7 @@ const subscribeOrgToPlan = async function(planId, orgId) {
   const currentSubscription = customer.subscriptions.data[0]
   const subscriptionId = currentSubscription && currentSubscription.id
 
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId, subscriptionId })
-
-  await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
+  await updateOrgSubscription({ customerId: customer.id, planId, subscriptionId, orgId })
 }
 
 const updateOrgBilling = async function(token, orgId) {
@@ -97,16 +95,17 @@ const updateOrgBilling = async function(token, orgId) {
 
   if (!currentSubscription) {
     // Somehow the user doesn't have a subscription yet, they now have billing info saved, give them a single user one
-    const updatedSubscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER })
-    BusinessOrganization.updateById(orgId, { plan: PLANS.SINGLE_USER, subscriptionStatus: updatedSubscription.status })
+    await updateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, orgId })
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
     const currentPlan = currentSubscription.plan.id
-    const updatedSubscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: currentPlan })
-    BusinessOrganization.updateById(orgId, { plan: PLANS.SINGLE_USER, subscriptionStatus: updatedSubscription.status })
+    await updateOrgSubscription({ customerId: customer.id, planId: currentPlan, orgId })
   }
 
-  return formatBilling(customer)
+  // refetch customer with current billing and subscription information
+  const updatedCustomer = await stripeIntegrator.getCustomer(customer.id)
+
+  return formatBilling(updatedCustomer)
 }
 
 const getOrgBilling = async function(orgId) {
@@ -122,8 +121,14 @@ const getOrgBilling = async function(orgId) {
   return formatBilling(customer)
 }
 
+const updateOrgSubscription = async function({ customerId, planId, trialPeriodDays, subscriptionId, orgId }) {
+  const updatedSubscription = await stripeIntegrator.updateSubscription({ customerId, planId, trialPeriodDays, subscriptionId })
+  await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: updatedSubscription.status })
+}
+
 export default {
   subscribeOrgToPlan,
   updateOrgBilling,
-  getOrgBilling
+  getOrgBilling,
+  updateOrgSubscription
 }

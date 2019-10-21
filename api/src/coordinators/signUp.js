@@ -6,6 +6,7 @@ import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
+import billingCoordinator from '../coordinators/billing'
 
 const { CLIENT_URL } = process.env
 
@@ -23,13 +24,11 @@ async function createUserAndOrganization(name, email) {
   })
 
   const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}` })
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, trialPeriodDays: TRIAL_PERIOD_DAYS })
+  await billingCoordinator.updateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, trialPeriodDays: TRIAL_PERIOD_DAYS })
 
   await BusinessOrganization.updateById(organization.id, {
     ownerId: createdUser.id,
-    stripeId: customer.id,
-    plan: PLANS.SINGLE_USER,
-    subscriptionStatus: subscription.status
+    stripeId: customer.id
   })
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
