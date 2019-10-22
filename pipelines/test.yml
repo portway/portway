@@ -1,47 +1,68 @@
 version: '1.0'
+mode: parallel
 stages:
-  - Clone Repo
-  - Development Builds
-  - Tests
+  - Setup Repo
+  - Web Build and Test
+  - API Build and test
 steps:
   main_clone:
     title: Cloning main repository...
-    stage: Clone Repo
+    stage: Setup Repo
     type: git-clone
     repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
     revision: '${{CF_REVISION}}'
   hide_dockerignore:
-    stage: Development Builds
+    stage: Setup Repo
     image: alpine
     title: Hide Docker Ignore File
     commands:
       - mv api/.dockerignore ./apidockerignore
       - mv web/.dockerignore ./webdockerignore
+    when:
+      steps:
+        - name: main_clone
+          on:
+            - success
   build_api_image:
-    stage: Development Builds
+    stage: API Build and test
     title: Building API Docker Image
     type: build
     image_name: bonkeybong/portway_api
     working_directory: ./api/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
   build_web_image:
-    stage: Development Builds
+    stage: Web Build and Test
     title: Building Web Docker Image
     type: build
     image_name: bonkeybong/portway_web
     working_directory: ./web/
     tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
     dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
   run_web_tests:
-    stage: Tests
+    stage: Web Build and Test
     image: ${{build_web_image}}
     title: Running Web Tests
     working_directory: /web/
     cmd:
       - test
+    when:
+      steps:
+        - name: build_web_image
+          on:
+            - success
   run_api_tests:
-    stage: Tests
+    stage: API Build and test
     title: Running API Tests
     type: composition
     composition:
@@ -69,3 +90,8 @@ steps:
           - DB_HOST=db-test
           - DB_PORT=5432
           - DB_NAME=test
+    when:
+      steps:
+        - name: build_api_image
+          on:
+            - success
