@@ -18,7 +18,7 @@ async function create(body) {
   return createdProjectUser.get({ plain: true })
 }
 
-async function addUserIdToProject(userId, projectId, roleId, orgId, options) {
+async function addUserIdToProject(userId, projectId, roleId, orgId, options = {}) {
   const db = getDb()
 
   const values = await Promise.all([
@@ -67,7 +67,7 @@ async function updateProjectUserById(id, roleId, orgId) {
   )
 }
 
-async function findAllByProjectId(projectId, orgId, options) {
+async function findAllByProjectId(projectId, orgId, options = {}) {
   const db = getDb()
   const { includeUser } = options
 

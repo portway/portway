@@ -48,6 +48,16 @@ async function findById(id) {
   return await db.model(MODEL_NAME).findByPk(id, { raw: true })
 }
 
+/**
+ * Get sanitized, paginated/searched users
+ * @param {String} orgId
+ * @param {Object} options
+ *    {Integer} page
+ *    {Integer} perPage number of records per page
+ *    {String} sortBy
+ *    {String} sortMethod
+ *    {String} nameSearch search user's names
+ */
 async function findAllSanitized(orgId, options) {
   const paginationOptions = getPaginationOptions(options.page, options.perPage)
   const sortOptions = getSortOptions(options.sortBy, options.sortMethod)
