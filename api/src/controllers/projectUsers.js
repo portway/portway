@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import ono from 'ono'
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import { partialFields, requiredFields } from './payloadSchemas/helpers'
 import BusinessProjectUser from '../businesstime/projectuser'
 import crudPerms from '../libs/middleware/reqCrudPerms'
@@ -19,17 +19,28 @@ const paramSchema = Joi.compile({
   id: Joi.number()
 })
 
+const querySchema = Joi.compile({
+  includeUser: Joi.boolean().default(false)
+})
+
 const projectUsersController = function(router) {
   // all routes are nested at projects/:projectId/assignments and receive req.params.projectId
-  router.get('/', validateParams(paramSchema), listPerm, getProjectUsers)
+  router.get('/', validateParams(paramSchema), validateQuery(querySchema), listPerm, getProjectUsers)
   router.post(
     '/',
     validateParams(paramSchema),
     validateBody(bodySchema, { includeDetails: true }),
+    validateQuery(querySchema),
     createPerm,
     createProjectUser
   )
-  router.get('/:id', validateParams(paramSchema), readPerm, getProjectUser)
+  router.get(
+    '/:id',
+    validateParams(paramSchema),
+    validateQuery(querySchema),
+    readPerm,
+    getProjectUser
+  )
   router.put(
     '/:id',
     validateParams(paramSchema),
@@ -44,9 +55,10 @@ const projectUsersController = function(router) {
 const getProjectUsers = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { includeUser } = req.query
 
   try {
-    const projectUsers = await BusinessProjectUser.findAllByProjectId(projectId, orgId)
+    const projectUsers = await BusinessProjectUser.findAllByProjectId(projectId, orgId, { includeUser })
     res.json({ data: projectUsers })
   } catch (e) {
     next(e)
@@ -70,13 +82,15 @@ const createProjectUser = async (req, res, next) => {
   const { body } = req
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { includeUser } = req.query
 
   try {
     const projectUser = await BusinessProjectUser.addUserIdToProject(
       body.userId,
       projectId,
       body.roleId,
-      orgId
+      orgId,
+      { includeUser }
     )
     res.status(201).json({ data: projectUser })
     auditLog({
