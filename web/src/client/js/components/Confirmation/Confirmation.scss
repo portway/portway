@@ -1,17 +1,16 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .confirmation {
-  --modal-alpha-bg: #{rgba(#fff, .8)};
-  --confirmation-bg: var(--color-white);
-  --confirmation-border: var(--color-gray-6);
+  --modal-alpha-bg: rgba(#fff, .8);
+  --confirmation-bg: var(--color-white, white);
+  --confirmation-border: var(--color-gray-20, gray);
   @media (prefers-color-scheme: dark) {
-    --modal-alpha-bg: #{rgba(#3b3d3e, .8)};
-    --confirmation-bg: var(--color-gray-9);
-    --confirmation-border: var(--color-gray-8);
+    --modal-alpha-bg: rgba(#3b3d3e, .8);
+    --confirmation-bg: var(--color-gray-90, black);
+    --confirmation-border: var(--color-gray-80, gray);
   }
   align-items: center;
-  background: var(--modal-alpha-bg);
+  background: var(--modal-alpha-bg, white);
   display: flex;
   height: 100%;
   justify-content: center;
@@ -21,21 +20,17 @@
   width: 100%;
   z-index: 15;
 
-  .theme--salmon &, .theme--yellow & {
-    background: var(--color-brand-light);
-  }
-
   &__dialog {
-    background-color: var(--confirmation-bg);
-    border: thin solid var(--confirmation-border);
-    border-radius: $borderRadius;
+    background-color: var(--confirmation-bg, black);
+    border: thin solid var(--confirmation-border, gray);
+    border-radius: var(--border-radius, 8px);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     padding: 24px;
     width: 50vw;
   }
 
   &__message {
-    color: var(--color-gray-7);
+    color: var(--color-gray-80, gray);
   }
   &__actions {
     display: flex;
@@ -48,17 +43,17 @@
   }
 
   &__cancel {
-    color: var(--color-gray-7);
+    color: var(--color-gray-40, gray);
   }
 
   .highlight {
-    color: var(--color-gray-10);
+    color: var(--color-blue, gray);
     font-weight: 700;
     &.danger {
-      color: var(--color-red);
+      color: var(--color-red, red);
     }
     &.warning {
-      color: var(--color-orange);
+      color: var(--color-orange, orange);
     }
   }
 

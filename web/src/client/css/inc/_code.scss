@@ -1,11 +1,11 @@
 pre {
-  --pre-background: var(--color-gray-10);
-  --pre-color: var(--color-gray-6);
-  --pre-comment-color: var(--color-gray-8);
+  --pre-background: var(--color-gray-80);
+  --pre-color: var(--color-gray-10);
+  --pre-comment-color: var(--color-gray-50);
   @media (prefers-color-scheme: dark) {
-    --pre-background: var(--color-gray-9);
-    --pre-color: var(--color-gray-8);
-    --pre-comment-color: var(--color-gray-7);
+    --pre-background: var(--color-gray-90);
+    --pre-color: var(--color-gray-10);
+    --pre-comment-color: var(--color-gray-20);
   }
   background-color: var(--pre-background);
   color: var(--pre-color);

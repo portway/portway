@@ -7,22 +7,21 @@ import './_ProjectUsers.scss'
 
 const ProjectUsersComponent = ({ collapsed, users }) => {
   const userColors = [
+    'var(--color-green-light)',
     'var(--color-green)',
     'var(--color-green-dark)',
     'var(--color-cyan)',
     'var(--color-cyan-dark)',
     'var(--color-yellow)',
     'var(--color-yellow-dark)',
-    'var(--color-cyan)',
-    'var(--color-cyan-dark)',
     'var(--color-red)',
     'var(--color-red-dark)',
     'var(--color-blue)',
     'var(--color-blue-dark)',
     'var(--color-purple)',
     'var(--color-purple-dark)',
-    'var(--color-blue)',
-    'var(--color-blue-dark)',
+    'var(--color-orange)',
+    'var(--color-orange-dark)',
   ]
   const collapsedUsers = users.slice(0, 2)
   const collapsedDiff = users.length - collapsedUsers.length
