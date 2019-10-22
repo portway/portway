@@ -10,7 +10,10 @@ const initialState = {
 export const projectAssignments = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.REQUEST_PROJECT_ASSIGNEES: {
-      const assignmentsByProjectId = { ...state.loading.assignmentsByProjectId, [action.projectId]: true }
+      const assignmentsByProjectId = {
+        ...state.loading.assignmentsByProjectId,
+        [action.projectId]: true
+      }
       return { ...state, loading: { ...state.loading, assignmentsByProjectId } }
     }
     case ActionTypes.RECEIVE_PROJECT_ASSIGNEES: {
@@ -18,7 +21,10 @@ export const projectAssignments = (state = initialState, action) => {
         object[assignment.userId] = assignment
         return object
       }, {})
-      const assignmentsByProjectId = { ...state.assignmentsByProjectId, [action.projectId]: assignmentsObject }
+      const assignmentsByProjectId = {
+        ...state.assignmentsByProjectId,
+        [action.projectId]: assignmentsObject
+      }
       const loadingById = { ...state.loading.assignmentsByProjectId, [action.projectId]: false }
       return {
         ...state,
@@ -30,12 +36,21 @@ export const projectAssignments = (state = initialState, action) => {
       }
     }
     case ActionTypes.INITIATE_PROJECT_ASSIGNEE_UPDATE: {
-      const assignmentsByProjectId = { ...state.loading.assignmentsByProjectId, [action.projectId]: true }
+      const assignmentsByProjectId = {
+        ...state.loading.assignmentsByProjectId,
+        [action.projectId]: true
+      }
       return { ...state, loading: { ...state.loading, assignmentsByProjectId } }
     }
     case ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE: {
-      const loadingById = { ...state.loading.assignmentsByProjectId, [action.data.projectId]: false }
-      const updatedAssignment = { ...state.assignmentsByProjectId[action.data.projectId], [action.data.userId]: action.data }
+      const loadingById = {
+        ...state.loading.assignmentsByProjectId,
+        [action.data.projectId]: false
+      }
+      const updatedAssignment = {
+        ...state.assignmentsByProjectId[action.data.projectId],
+        [action.data.userId]: action.data
+      }
       return {
         ...state,
         assignmentsByProjectId: {
@@ -49,13 +64,22 @@ export const projectAssignments = (state = initialState, action) => {
       }
     }
     case ActionTypes.CREATE_PROJECT_ASSIGNEE: {
-      const assignmentsByProjectId = { ...state.loading.assignmentsByProjectId, [action.projectId]: true }
+      const assignmentsByProjectId = {
+        ...state.loading.assignmentsByProjectId,
+        [action.projectId]: true
+      }
       return { ...state, loading: { ...state.loading, assignmentsByProjectId } }
     }
     case ActionTypes.RECEIVE_CREATED_PROJECT_ASSIGNEE: {
       const loadingById = { ...state.loading.assignmentsByProjectId, [action.projectId]: false }
-      const projectAssignment = { ...state.assignmentsByProjectId[action.projectId], [action.data.userId]: action.data }
-      const assignmentsByProjectId = { ...state.assignmentsByProjectId, [action.projectId]: projectAssignment }
+      const projectAssignment = {
+        ...state.assignmentsByProjectId[action.projectId],
+        [action.data.userId]: action.data
+      }
+      const assignmentsByProjectId = {
+        ...state.assignmentsByProjectId,
+        [action.projectId]: projectAssignment
+      }
       return {
         ...state,
         assignmentsByProjectId,
@@ -66,7 +90,10 @@ export const projectAssignments = (state = initialState, action) => {
       }
     }
     case ActionTypes.INITIATE_PROJECT_ASSIGNEE_REMOVE: {
-      const assignmentsByProjectId = { ...state.loading.assignmentsByProjectId, [action.projectId]: true }
+      const assignmentsByProjectId = {
+        ...state.loading.assignmentsByProjectId,
+        [action.projectId]: true
+      }
       return { ...state, loading: { ...state.loading, assignmentsByProjectId } }
     }
     case ActionTypes.REMOVE_PROJECT_ASSIGNEE: {
@@ -75,7 +102,10 @@ export const projectAssignments = (state = initialState, action) => {
       const projectAssignees = state.assignmentsByProjectId[action.projectId] || {}
       // eslint-disable-next-line no-unused-vars, no-undef
       const { [action.userId]: ___, ...restProjectAssignees } = projectAssignees
-      const assignmentsByProjectId = { ...state.assignmentsByProjectId, [action.projectId]: restProjectAssignees }
+      const assignmentsByProjectId = {
+        ...state.assignmentsByProjectId,
+        [action.projectId]: restProjectAssignees
+      }
       return {
         ...state,
         assignmentsByProjectId,
