@@ -17,7 +17,7 @@
  * A view can optionally take arguments to the function, for instance to fetch a resource by id
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
-import { fetchUser, fetchUsers, fetchUserProjectAssignments } from 'Actions/user'
+import { fetchUser, fetchUsers, fetchUserProjectAssignments, searchByName } from 'Actions/user'
 import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
 import { fetchOrganization, fetchOrganizationBilling } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
@@ -106,7 +106,20 @@ export default {
         }
       }
     },
+    projectUsers: function(projectId) {
+      if (!projectId) return returnNull()
+      return {
+        fetchAction: fetchProjectAssignees(projectId),
+        getLoadingStatusFromState: (state) => {
+          return state.projectUsers.loading.usersByProjectId[projectId]
+        },
+        getDataFromState: (state) => {
+          return state.projectUsers.usersByProjectId[projectId]
+        }
+      }
+    },
     projectAssignments: function(projectId) {
+      if (!projectId) return returnNull()
       return {
         fetchAction: fetchProjectAssignees(projectId),
         getLoadingStatusFromState: (state) => {
@@ -130,14 +143,17 @@ export default {
     }
   },
   users: {
-    list: function() {
+    list: function(page, sortBy, sortMethod) {
       return {
-        fetchAction: fetchUsers,
+        fetchAction: fetchUsers(page, sortBy, sortMethod),
         getLoadingStatusFromState: (state) => {
-          return state.users.loading.list
+          return state.users.loading.byPage[page]
         },
         getDataFromState: (state) => {
-          return state.users.usersById
+          const ids = state.users.userIdsByPage[page]
+          const users = ids && ids.map(id => state.users.usersById[id])
+          const totalPages = state.users.totalPages
+          return { users, totalPages }
         }
       }
     },
@@ -183,6 +199,19 @@ export default {
         },
         getDataFromState: (state) => {
           return state.userAssignments.assignmentsByUserId[currentUserId]
+        }
+      }
+    },
+    searchByName: function(partialNameString) {
+      return {
+        fetchAction: searchByName(partialNameString),
+        getLoadingStatusFromState: (state) => {
+          return state.users.loading.byNameString[partialNameString]
+        },
+        getDataFromState: (state) => {
+          const ids = state.users.userSearchResultIdsByNameString[partialNameString]
+          const users = ids && ids.map(id => state.users.usersById[id])
+          return users
         }
       }
     }
