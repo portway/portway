@@ -15,7 +15,21 @@ const getGenericStripeCustomerData = function() {
       data: [{}]
     },
     subscriptions: {
-      data: [{}]
+      data: [{
+        plan: {
+          id: '123',
+          amount: '456',
+          tiers: [
+            {
+              flat_amount: '12',
+              up_to: '12'
+            },
+            {
+              unit_amount: '123'
+            }
+          ]
+        }
+      }]
     }
   }
 }
