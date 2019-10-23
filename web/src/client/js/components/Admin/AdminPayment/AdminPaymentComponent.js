@@ -49,8 +49,6 @@ const AdminPaymentComponent = ({
   organization,
   orgBilling
 }) => {
-  console.log(orgBilling)
-
   if (!isStripeOpen && !orgBilling.source) {
     return (
       <div className="admin-payment">
