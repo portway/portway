@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import cx from 'classnames'
 
-import { PLAN_PRICING } from 'Shared/constants'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 import StripeContainer from './StripeContainer'
 import './_AdminPaymentStyles.scss'
@@ -46,6 +45,8 @@ const AdminPaymentComponent = ({
   organization,
   orgBilling
 }) => {
+  console.log(orgBilling)
+
   if (!isStripeOpen && !orgBilling.source) {
     return (
       <div className="admin-payment">
