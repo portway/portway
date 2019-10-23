@@ -1,16 +1,15 @@
 @import '../inc/mixins';
 
 .menu {
-  --menu-background: var(--theme-overlay-dark);
+  --menu-background: var(--theme-overlay-light);
   --menu-color: var(--theme-text-color);
   --menu-border: var(--color-gray-30);
-  --menu-hover: var(--color-gray-2);
+  --menu-hover-color: var(--theme-base);
+  --menu-hover: var(--color-blue);
   --menu-dark: var(--color-gray-80);
   --menu-highlight: var(--color-gray-90);
   @media (prefers-color-scheme: dark) {
-    --menu-color: var(--color-white);
     --menu-border: var(--color-gray-90);
-    --menu-hover: var(--color-gray-80);
     --menu-dark: var(--color-gray-90);
     --menu-highlight: var(--color-gray-80);
   }
@@ -131,7 +130,7 @@
     }
     &:hover {
       background-color: var(--menu-hover);
-      color: var(--menu-color);
+      color: var(--menu-hover-color);
     }
     &:active,
     &.active {
