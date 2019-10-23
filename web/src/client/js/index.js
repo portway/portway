@@ -47,7 +47,7 @@ const Index = () => {
   )
 }
 
-render(<Index />, document.getElementById('application'))
+// render(<Index />, document.getElementById('application'))
 
 registerServiceWorker()
 
