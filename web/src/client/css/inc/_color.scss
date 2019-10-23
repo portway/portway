@@ -37,7 +37,16 @@
   --color-gray-5: hsl(0, 0%, 95%);
   --color-gray-2: hsl(0, 0%, 98%);
   --color-white: hsl(0, 0%, 100%);
-  // Salmon theme
+
+  // Light theme
+  --theme-header-color: hsl(0, 0%, 10%);       // bold text color
+  --theme-text-color: hsl(0, 0%, 20%);         // darker text color
+  --theme-overlay-light: var(--color-gray-2);    // 1 top layer modal/menu
+  --theme-overlay-dark: var(--color-gray-5);     // 2 overlay layer
+  --theme-surface: var(--color-gray-2);          // 3 background color
+  --theme-base: var(--color-white);              // 4 base layer
+  --theme-overflow: var(--color-white);          // 5 lightest
+
   --base-background: var(--color-white);
   --base-color: var(--color-gray-60);
   --base-border-color: var(--color-gray-5);
@@ -49,6 +58,15 @@
   --focus-shadow-one: var(--color-gray-5);
   --focus-shadow-two: var(--color-cyan);
   @media (prefers-color-scheme: dark) {
+    // Dark theme
+    --theme-header-color: rgba(255, 255, 255, 90%); // bold text color
+    --theme-text-color: rgba(255, 255, 255, 85%);   // darker text color
+    --theme-overlay-light: hsl(218, 7%, 24%);       // 1 top layer modal/menu
+    --theme-overlay-dark: hsl(223, 7%, 19%);        // 2 overlay layer
+    --theme-surface: hsl(220, 7%, 16%);             // 3 background color
+    --theme-base: hsl(225, 6%, 13%);                // 4 base layer
+    --theme-overflow: hsl(0, 0%, 5%);               // 5 darkest
+
     --base-background: hsl(61, 1%, 21%);
     --base-color: hsl(106, 0%, 89%);
     --base-border-color: hsl(106, 0%, 34%);
