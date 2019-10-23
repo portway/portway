@@ -1,6 +1,7 @@
 import React, { lazy, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 const Select = lazy(() => import('react-select'))
+import { debounce } from 'lodash'
 
 import Constants from 'Shared/constants'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
@@ -9,7 +10,7 @@ import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 import './_ProjectSettingsTeams.scss'
 
-const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
+const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler, userSearchHandler }) => {
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
   const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
@@ -26,7 +27,13 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
               <Select
                 classNamePrefix="react-select"
                 className="react-select-container"
-                noOptionsMessage={() => { return 'Your entire team is on the project' }}
+                defaultValue={newUserId}
+                onInputChange={debounce((input, { action }) => {
+                  if (action === 'input-change') {
+                    setNewUserId(null)
+                    userSearchHandler(input)
+                  }
+                }, 400)}
                 options={users}
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
@@ -61,6 +68,7 @@ ProjectSettingsTeamsComponent.propTypes = {
   createAssignmentHandler: PropTypes.func.isRequired,
   removeAssignmentHandler: PropTypes.func.isRequired,
   updateAssignmentHandler: PropTypes.func.isRequired,
+  userSearchHandler: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
   projectUsers: PropTypes.array.isRequired
 }

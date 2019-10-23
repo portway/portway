@@ -61,8 +61,7 @@ describe('BusinessProjectUser', () => {
       it('should assign the user', () => {
         expect(projectUser).toEqual(expect.objectContaining({
           userId: users[0].id,
-          projectId,
-          orgId: constants.ORG_ID
+          projectId
         }))
       })
     })
@@ -84,7 +83,7 @@ describe('BusinessProjectUser', () => {
       })
     })
 
-    describe('assign a project from a different org', async () => {
+    describe('assign a project from a different org', () => {
       let user
       beforeAll(async () => {
         user = (await UserFactory.createMany(1, { orgId: constants.ORG_2_ID }))[0]

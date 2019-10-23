@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
+import AdminUsersCreateForm from './AdminUsersCreateForm'
+import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import Table from 'Components/Table/Table'
-import AdminUsersCreateForm from './AdminUsersCreateForm'
 
 import './_AdminUsers.scss'
 
@@ -17,13 +18,15 @@ const AdminUsersComponent = ({
   errors,
   isCreating,
   isInviting,
+  pageChangeHandler,
   reinviteUserHandler,
   removeUserHandler,
   setCreateMode,
   sortBy,
   sortMethod,
   sortUsersHandler,
-  users
+  users,
+  totalPages
 }) => {
   const userHeadings = {
     name: { label: 'Name', sortable: true },
@@ -61,8 +64,8 @@ const AdminUsersComponent = ({
 
   // Create a nice user row object
   const userRows = {}
-  Object.values(users).forEach((user) => {
-    userRows[user.id] = [
+  users.forEach((user, index) => {
+    userRows[index] = [
       <Link to={`${PATH_ADMIN}/user/${user.id}`} key={user.id}>{user.name}</Link>,
       ORGANIZATION_ROLE_NAMES[user.orgRoleId],
       user.pending ? renderPendingUser(user.id) : moment(user.createdAt).format('YYYY MMM DD'),
@@ -90,12 +93,15 @@ const AdminUsersComponent = ({
           />
         }
         {!isCreating &&
+          <>
           <Table
             headings={userHeadings}
             rows={userRows}
             sortCallback={sortUsersHandler}
             sortedBy={sortBy}
             sortMethod={sortMethod} />
+          <PaginatorContainer totalPages={totalPages} />
+          </>
         }
       </section>
     </div>
@@ -108,13 +114,15 @@ AdminUsersComponent.propTypes = {
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
+  pageChangeHandler: PropTypes.func.isRequired,
   reinviteUserHandler: PropTypes.func,
   removeUserHandler: PropTypes.func,
   setCreateMode: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
-  users: PropTypes.object.isRequired
+  users: PropTypes.array.isRequired,
+  totalPages: PropTypes.number
 }
 
 export default AdminUsersComponent

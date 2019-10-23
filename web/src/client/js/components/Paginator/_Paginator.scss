@@ -1,0 +1,38 @@
+.paginator {
+  --paginator-page-bg: var(--color-white);
+  --paginator-current-bg: var(--color-gray-5);
+  @media (prefers-color-scheme: dark) {
+    --paginator-page-bg: var(--color-gray-90);
+    --paginator-current-bg: var(--color-gray-50);
+  }
+
+  &__list {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__page {
+    background-color: var(--paginator-page-bg);
+    border-radius: var(--border-radius);
+    margin: 0 .25rem;
+    padding: 3px;
+    min-width: 24px;
+    text-align: center;
+
+    .btn {
+      min-height: unset;
+    }
+
+    &--current {
+      background-color: var(--paginator-current-bg);
+      font-weight: bold;
+    }
+
+  }
+
+}

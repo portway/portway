@@ -2,7 +2,7 @@ import Joi from 'joi'
 import ono from 'ono'
 import multer from 'multer'
 
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import userCoordinator from '../coordinators/user'
@@ -12,12 +12,21 @@ import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import userSchema from './payloadSchemas/user'
+import { SORT_METHODS } from '../constants/queryOptions'
 import avatarCoordinator from '../coordinators/avatar'
 
 const MAX_AVATAR_FILE_SIZE = 1024 * 1000
 
 const paramSchema = Joi.compile({
   id: Joi.number().required()
+})
+
+const querySchema = Joi.compile({
+  page: Joi.number(),
+  perPage: Joi.number(),
+  nameSearch: Joi.string(),
+  sortBy: Joi.string().valid(['name', 'createdAt']),
+  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
 })
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
@@ -77,7 +86,7 @@ const conditionalDeletePerm = async (req, res, next) => {
 }
 
 const usersController = function(router) {
-  router.get('/', listPerm, getUsers)
+  router.get('/', validateQuery(querySchema), listPerm, getUsers)
   router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getUser)
   router.post('/', validateBody(bodySchema, { includeDetails: true }), createPerm, createUser)
   router.put(
@@ -105,9 +114,12 @@ const usersController = function(router) {
 }
 
 const getUsers = async function(req, res, next) {
+  const { page = 1, perPage = 20, nameSearch, sortBy, sortMethod } = req.query
+  const options = { page, perPage, sortBy, sortMethod, nameSearch }
+
   try {
-    const users = await BusinessUser.findAllSanitized(req.requestorInfo.orgId)
-    res.json({ data: users })
+    const { users, count } = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
+    res.json({ data: users, page, perPage, total: count, totalPages: Math.ceil(count / perPage) })
   } catch (e) {
     next(e)
   }
