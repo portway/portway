@@ -152,5 +152,5 @@ docker-compose run --no-deps api ./run.sh start
 
 Web build for dev environment:
 ```
-docker build --build-arg API_PUBLIC_URL=https://api.dev.portway.app -t bonkeybong/portway_web:dev2 -f web/Dockerfile-prod web/
+docker build -t bonkeybong/portway_web:dev2 -f web/Dockerfile-prod web/
 ```

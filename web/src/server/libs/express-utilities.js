@@ -1,6 +1,5 @@
 import { makePermalinkWithString } from '../libs/string-utilities'
 import constants from '../../shared/constants'
-const apiUrl = process.env.API_URL
 
 export const renderBundles = (req, pageTitle, bundleKey) => {
   let flash
@@ -27,8 +26,7 @@ export const renderBundles = (req, pageTitle, bundleKey) => {
     flash: flash,
     permalink: makePermalinkWithString(pageTitle),
     css: bundleKey ? req.app.locals.bundles[bundleKey].css : undefined,
-    js: bundleKey ? req.app.locals.bundles[bundleKey].js : undefined,
-    apiUrl: apiUrl
+    js: bundleKey ? req.app.locals.bundles[bundleKey].js : undefined
   }
 }
 
