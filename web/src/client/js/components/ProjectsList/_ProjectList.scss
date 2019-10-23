@@ -39,7 +39,7 @@
     }
 
     &__item {
-      background-color: var(--base-background);
+      background-color: var(--theme-surface);
       border: thin solid var(--project-border-color);
       border-radius: var(--border-radius);
       display: flex;
@@ -64,7 +64,7 @@
     &__link {
       align-items: center;
       border: thin solid transparent;
-      color: var(--base-color);
+      color: var(--theme-text-color);
       display: flex;
       flex: 1;
       justify-content: space-between;
@@ -76,7 +76,7 @@
         color: var(--base-link-color);
         .using-mouse & {
           border: thin solid transparent;
-          color: var(--base-color);
+          color: var(--theme-text-color);
         }
       }
     }

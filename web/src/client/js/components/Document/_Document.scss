@@ -1,12 +1,6 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
-  --document-header-bg: var(--color-white);
-  --document-header-border: var(--color-gray-5);
-  @media (prefers-color-scheme: dark) {
-    --document-header-bg: hsl(61, 1%, 23%);
-    --document-header-border: var(--base-border-color);
-  }
   flex: 1;
   position: relative;
 
@@ -18,9 +12,9 @@
   }
 
   &__header {
-    background-color: var(--document-header-bg);
+    background-color: var(--theme-surface);
     align-items: center;
-    border-bottom: thin solid var(--document-header-border);
+    border-bottom: thin solid var(--base-border-color);
     display: flex;
     height: 63px;
     justify-content: space-between;
@@ -69,7 +63,7 @@
     -webkit-appearance: none;
 
     &:focus {
-      color: var(--base-color);
+      color: var(--theme-text-color);
     }
 
   }

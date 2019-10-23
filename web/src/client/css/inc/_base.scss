@@ -18,8 +18,8 @@ body {
   overscroll-behavior-y: none;
 }
 body {
-  background-color: var(--base-background);
-  color: var(--base-color);
+  background-color: var(--theme-surface);
+  color: var(--theme-text-color);
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
@@ -71,9 +71,9 @@ a, .link {
 }
 
 input, textarea {
-  background: var(--base-background);
+  background: var(--theme-base);
   border: thin solid var(--base-border-color);
-  color: var(--base-color);
+  color: var(--theme-text-color);
 }
 
 hr {

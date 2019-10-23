@@ -1,12 +1,7 @@
 @import 'CSS/inc/_vars.scss';
 
 .project {
-  --project-background: var(--color-white);
-  --project-toolbar-background: var(--color-gray-4);
-  @media (prefers-color-scheme: dark) {
-    --project-background: var(--base-background);
-    --project-toolbar-background: var(--base-border-color);
-  }
+  --project-toolbar-background: var(--theme-overlay-light);
   padding: 0;
 
   .toolbar__start {
@@ -43,7 +38,6 @@
       -webkit-overflow-scrolling: touch;
     }
     &-document-container {
-      background-color: var(--project-background);
       display: flex;
       flex: 1;
       flex-direction: column;
@@ -66,7 +60,7 @@
 
     &-button-pill {
       align-items: center;
-      background-color: var(--base-background);
+      background-color: var(--theme-surface);
       border-radius: var(--border-radius);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
       display: flex;

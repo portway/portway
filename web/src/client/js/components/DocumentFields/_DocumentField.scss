@@ -1,12 +1,8 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document-field {
-  --field-background: var(--color-gray-2);
   --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
-  @media (prefers-color-scheme: dark) {
-    --field-background: hsl(61, 1%, 23%);
-  }
   cursor: grab;
   outline: 0;
 
@@ -39,7 +35,7 @@
   }
 
   &--number, &--string {
-    background-color: var(--field-background);
+    background-color: var(--theme-overlay-light);
     border: thin solid var(--base-border-color);
     border-bottom: none;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -159,7 +155,7 @@
     }
     input {
       border: none;
-      color: var(--color-gray-10);
+      color: var(--theme-text-color);
       font-family: var(--type-serif) !important;
       font-size: 1.3rem; // 13px
       min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
@@ -217,7 +213,7 @@
     }
 
     &--with-value {
-      background-color: var(--field-edit-mode-background);
+      background-color: var(--theme-overlay-dark);
       height: 100%;
       left: 0;
       position: absolute;
