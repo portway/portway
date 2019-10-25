@@ -44,9 +44,6 @@ const SharedConfig = {
       },
       minify: true,
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/]
-    }),
-    new webpack.DefinePlugin({
-      VAR_API_URL: JSON.stringify(process.env.API_PUBLIC_URL)
     })
   ],
   optimization: {
