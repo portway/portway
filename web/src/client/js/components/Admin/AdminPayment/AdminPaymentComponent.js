@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import cx from 'classnames'
 
-import { PLAN_PRICING } from 'Shared/constants'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 import StripeContainer from './StripeContainer'
 import './_AdminPaymentStyles.scss'
@@ -29,8 +28,12 @@ function renderCardLogo(brand) {
 }
 
 function getTotalCost(subscription) {
-  // TODO calculate total cost from flatCost + seatCount*costPerSeat
-  return subscription.flatCost
+  if (subscription.flatCost) {
+    // @todo calculate total cost from flatCost + seatCount*costPerSeat
+    return subscription.flatCost
+  } else {
+    return '000'
+  }
 }
 
 function toCurrencyString(num) {
@@ -70,7 +73,7 @@ const AdminPaymentComponent = ({
   }
 
   if (orgBilling && orgBilling.source) {
-    const cost = orgBilling.subscription && toCurrencyString(getTotalCost(orgBilling.subscription)) // @todo update with seats
+    const cost = orgBilling.subscription && toCurrencyString(getTotalCost(orgBilling.subscription))
     const expDateCalc = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
     const expDate = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
     const expiringSoon = moment() > expDateCalc.add(1, 'months')

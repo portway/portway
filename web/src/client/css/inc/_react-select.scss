@@ -30,10 +30,10 @@ form {
 
 .react-select-container {
   --react-select-background: var(--color-gray-10);
-  --react-select-border: var(--color-gray-5);
+  --react-select-border: var(--color-gray-20);
   --react-select-control-background: var(--color-white);
-  --react-select-control-color: var(--color-gray-10);
-  --react-select-placeholder-color: var(--color-gray-5);
+  --react-select-control-color: var(--base-color);
+  --react-select-placeholder-color: var(--color-gray-20);
   --react-select-option: var(--color-gray-2);
   --react-select-option-focused: var(--color-gray-5);
   --react-select-option-selected: transparent;

@@ -17,14 +17,14 @@ const AdminBillingComponent = ({ organization }) => {
         <div className="admin-billing__notice">
           <h2>Trial Period</h2>
           <p>During your trial, you are limited to a single-user plan.</p>
-          <p><a href="#payment">Add your payment</a> information to activate your account or to upgrade to a multi-user plan.</p>
+          <p>Add your payment information below to activate your account or to upgrade to a multi-user plan.</p>
         </div>
         }
         {LOCKED_ACCOUNT_STATUSES.includes(organization.subscriptionStatus) &&
         <div className="admin-billing__notice admin-billing__notice--danger">
           <h2>Past Due</h2>
           <p>We cannot successfully bill you with your current payment information.</p>
-          <p><a href="#payment">Please update your payment information</a> to activate your account.</p>
+          <p>Please update your payment information below to activate your account.</p>
         </div>
         }
         <AdminPlanSelectorContainer />
