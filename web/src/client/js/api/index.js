@@ -3,10 +3,11 @@ import { getCookieValue } from '../utilities/cookieParser'
 
 const token = getCookieValue('token')
 
-// Webpack's DefinePlugin sets VAR_API_URL during build from
-// process.env.API_PUBLIC_URL
+// Express renders the app html page and sets API_PUBLIC_URL in order to keep
+// this webpack bundle API-location agnostic. To set the API url, the node.js
+// express server needs process.env.API_PUBLIC_URL set
 // eslint-disable-next-line no-undef
-const baseURL = new URL('api/', VAR_API_URL)
+const baseURL = new URL('api/', API_PUBLIC_URL)
 const globalErrorCodes = [403, 404, 408, 500, 503]
 const validationCodes = [400, 402, 409, 413, 415]
 

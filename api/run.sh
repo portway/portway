@@ -13,6 +13,9 @@ case $1 in
     npm run migrate
     npm run serve
     ;;
+  migrate)
+    npm run migrate
+    ;;
   *)
     echo "$@"
     exec "$@"

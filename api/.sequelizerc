@@ -1,8 +1,15 @@
 const path = require('path');
 
+const basePathParts = [__dirname]
+
+const src = (process.env.NODE_ENV === 'production') ? 'dist' : 'src'
+basePathParts.push(src)
+
+const basePath = path.join(...basePathParts, 'db')
+
 module.exports = {
-  'config': path.resolve('src', 'db', 'config', 'config.js'),
-  'models-path': path.resolve('src', 'db', 'models'),
-  'seeders-path': path.resolve('src', 'db', 'seeders'),
-  'migrations-path': path.resolve('src', 'db', 'migrations')
+  'config': path.join(basePath, 'config', 'config.js'),
+  'models-path': path.join(basePath, 'models'),
+  'seeders-path': path.join(basePath, 'seeders'),
+  'migrations-path': path.join(basePath, 'migrations')
 }
