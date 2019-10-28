@@ -82,8 +82,10 @@
         justify-content: space-between;
         padding-bottom: 10px;
         &:not([disabled]) {
-          &:hover {
-            background-color: var(--document-list-item-new);
+          @media (hover: hover) {
+            &:hover {
+              background-color: var(--document-list-item-new);
+            }
           }
         }
         .btn--with-circular-icon {
@@ -117,15 +119,19 @@
     white-space: normal;
     width: 100%;
     &:not([disabled]) {
-      &:hover {
-        background-color: var(--document-list-item-hover);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--document-list-item-hover);
+        }
       }
     }
     &.active {
       background-color: var(--document-list-active-item);
       &:not([disabled]) {
-        &:hover {
-          background-color: var(--document-list-active-item);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--document-list-active-item);
+          }
         }
       }
       &:focus {

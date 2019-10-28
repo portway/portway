@@ -28,8 +28,11 @@ body {
 
 a, .link {
   color: var(--color-blue);
-  &:hover {
-    color: var(--color-cyan);
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-cyan);
+    }
   }
   &:active {
     color: var(--color-blue-dark);
@@ -38,8 +41,10 @@ a, .link {
   &--gray {
     color: var(--link-color-gray);
     text-decoration: none;
-    &:hover {
-      color: var(--color-gray-6);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-gray-6);
+      }
     }
     &:active {
       color: var(--color-gray-8);

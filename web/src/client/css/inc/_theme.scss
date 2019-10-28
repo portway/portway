@@ -32,8 +32,11 @@ $size-large: 2.4rem;
 a {
   color: var(--color-blue);
   text-decoration: underline;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  @media (hover: hover) {
   &:hover {
-    color: var(--color-cyan);
+      color: var(--color-cyan);
+    }
   }
   &:active {
     color: var(--color-blue-dark);
@@ -112,6 +115,7 @@ a {
 .button {
   background-color: var(--color-blue);
   text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
   &:hover, &:focus {
     background-color: var(--color-cyan);
   }

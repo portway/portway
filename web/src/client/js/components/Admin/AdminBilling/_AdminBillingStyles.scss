@@ -44,10 +44,12 @@
       white-space: normal;
       width: 100%;
 
-      &:hover {
-        background: transparent;
-        border: thin solid var(--base-border-color, gray);
-        color: var(--theme-text-color, black);
+      @media (hover: hover) {
+        &:hover {
+          background: transparent;
+          border: thin solid var(--base-border-color, gray);
+          color: var(--theme-text-color, black);
+        }
       }
 
       &[aria-checked="true"] {

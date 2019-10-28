@@ -140,8 +140,10 @@ form {
       &--menu-is-open {
         margin: 0 12px 12px;
         border-radius: var(--border-radius);
-        &:hover {
-          border-color: var(--react-select-border);
+        @media (hover: hover) {
+          &:hover {
+            border-color: var(--react-select-border);
+          }
         }
         @include focus(var(--color-blue));
         + .react-select__menu {

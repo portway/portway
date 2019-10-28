@@ -13,11 +13,16 @@ html, body {
 }
 
 .login-form {
+  // Overwrite root CSS vars for the homepage
+  --focus-border-color: var(--color-brand-darker);
+  --focus-shadow-one: var(--color-gray-5);
+  --focus-shadow-two: var(--color-brand);
   width: 400px;
   label {
     color: var(--theme-text-color);
   }
   .help {
-    color: var(--color-brand-darker);
+    color: var(--color-gray-2);
+    font-size: small;
   }
 }

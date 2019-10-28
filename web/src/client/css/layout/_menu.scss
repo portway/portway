@@ -128,17 +128,21 @@
     &.btn--danger {
       color: var(--color-red);
     }
-    &:hover {
-      background-color: var(--menu-hover);
-      color: var(--menu-hover-color);
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--menu-hover);
+        color: var(--menu-hover-color);
+      }
     }
     &:active,
     &.active {
       background-color: var(--color-gray-6);
     }
     .menu--dark & {
-      &:hover {
-        background-color: var(--menu-highlight);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--menu-highlight);
+        }
       }
     }
   }

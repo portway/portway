@@ -31,12 +31,14 @@ form, .form {
   input[type='number'],
   input[type='password'],
   .StripeElement {
+    appearance: none;
     background: var(--form-background);
     border: thin solid var(--color-gray-20);
     border-radius: var(--border-radius);
     min-height: 38px;
     padding: 8px;
     width: 100%;
+    -webkit-appearance: none;
     &::placeholder {
       color: var(--form-placeholder-color);
     }
@@ -44,9 +46,7 @@ form, .form {
       // StripeElement
       border: thin solid var(--color-blue);
     }
-    &:focus {
-      @include focus(var(--form-background), var(--color-blue));
-    }
+    @include focus(var(--form-background), var(--color-blue));
   }
 
   input[type='file'] {

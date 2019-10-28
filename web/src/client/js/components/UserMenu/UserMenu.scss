@@ -17,14 +17,18 @@
     width: 40px;
     @include focus(var(--theme-overlay-light), var(--color-gray-2));
     border: thin solid var(--color-gray-30);
-    &:not([disabled]):hover {
-      border: thin solid var(--color-gray-60);
+    @media (hover: hover) {
+      &:not([disabled]):hover {
+        border: thin solid var(--color-gray-60);
+      }
     }
     &[aria-expanded="true"] {
       background-color: var(--color-gray-10);
       border-color: var(--color-blue);
-      &:hover {
-        border-color: var(--color-blue);
+      @media (hover: hover) {
+        &:hover {
+          border-color: var(--color-blue);
+        }
       }
     }
   }
