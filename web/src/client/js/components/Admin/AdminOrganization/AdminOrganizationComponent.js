@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Form from 'Components/Form/Form'
-import TextField from 'Components/Form/TextField'
-import Checkbox from 'Components/Form/Checkbox'
+import FormField from 'Components/Form/FormField'
 
 import './AdminOrganization.scss'
 
@@ -25,7 +24,7 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
     <section>
       <Form name={formId} onSubmit={formSubmitHandler} submitLabel={`Update ${organization.name}’s avatar`}>
         <h2>General information</h2>
-        <TextField
+        <FormField
           errors={errors.name}
           id="orgName"
           label="Organization Name"
@@ -37,7 +36,7 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
           required
           value={organization.name}
         />
-        <Checkbox
+        <FormField
           errors={errors.privacy}
           help={helpText}
           id="orgProjectCreation"
@@ -47,6 +46,7 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
           onChange={(e) => {
             setAllowUserProjectCreation(e.target.checked)
           }}
+          type="checkbox"
           value={organization.allowUserProjectCreation}
         />
       </Form>
