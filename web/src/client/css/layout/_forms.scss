@@ -115,8 +115,9 @@ form, .form {
         align-items: flex-end;
         flex-direction: row;
         width: 100%;
-        > div {
-          margin-right: 1rem;
+        .field__control {
+          flex: 0;
+          width: auto;
         }
       }
     } // form-field--horizontal

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Form from 'Components/Form/Form'
-import TextField from 'Components/Form/TextField'
+import FormField from 'Components/Form/FormField'
 
 import './_UserProfile.scss'
 
@@ -22,7 +22,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
     <section>
       <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my profile">
         <h2>Your information</h2>
-        <TextField
+        <FormField
           errors={errors.name}
           id="userName"
           label="Full name"
@@ -32,7 +32,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
           // @todo add back in required
           value={user.name}
         />
-        <TextField
+        <FormField
           errors={errors.email}
           help={emailHelpText}
           id="userEmail"
