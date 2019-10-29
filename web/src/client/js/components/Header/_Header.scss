@@ -4,10 +4,6 @@
   border-top: var(--ribbon-height) solid var(--color-brand);
   height: calc(var(--header-height) + var(--ribbon-height));
 
-  @media (prefers-color-scheme: dark) {
-    background-color: hsl(61, 2%, 14%);
-  }
-
   .navbar {
     align-items: center;
     border-bottom: thin solid var(--base-border-color);
@@ -70,7 +66,7 @@
 
     &__project-settings-link {
       align-items: center;
-      color: var(--base-color);
+      color: var(--theme-text-color);
       display: flex;
       height: var(--gutter-width);
       padding: 0 1rem;

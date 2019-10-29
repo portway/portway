@@ -1,5 +1,6 @@
 import { currentUserId } from 'Libs/currentIds'
 import { Validation, Projects, ProjectAssignees, ProjectTokens, Notifications } from './index'
+import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
 import { fetch, add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
 
@@ -57,17 +58,23 @@ export const createProject = (body, history) => {
   }
 }
 
-export const updateProject = (projectId, body) => {
+export const updateProject = (formId, projectId, body) => {
   return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
     dispatch(Projects.initiateUpdate())
     const { data, status } = await update(`projects/${projectId}`, body)
     if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('project', data, status)) :
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('project', data, status))
+    } else {
+      dispatch(formSucceededAction(formId))
       dispatch(Projects.receiveOneUpdated(data))
+    }
   }
 }
 

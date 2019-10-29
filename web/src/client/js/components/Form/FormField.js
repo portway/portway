@@ -4,7 +4,12 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const TextField = ({
+// const TEXT_FIELD_TYPES = ['text', 'email', 'number']
+const CHECKED_FIELD_TYPES = ['checkbox', 'radio']
+const FILE_FIELD_TYPES = ['file']
+
+const FormField = ({
+  accept,
   ariaDescribedBy,
   disabled,
   errors,
@@ -21,9 +26,12 @@ const TextField = ({
   type,
   value,
 }) => {
-  const textFieldClasses = cx({
+  const formFieldClasses = cx({
     'form-field': true,
     'form-field--large': large,
+    'form-field--file': type === 'file',
+    'form-field--checkbox': type === 'checkbox',
+    'form-field--horizontal': type === 'checkbox',
     'form-field--error': errors.length > 0
   })
   const fieldClasses = cx({
@@ -34,22 +42,25 @@ const TextField = ({
     'field__control--with-status': status
   })
   return (
-    <div className={textFieldClasses}>
+    <div className={formFieldClasses}>
       <div className={fieldClasses}>
         <label htmlFor={id}>{label}</label>
         <div className={controlClasses}>
           <input
+            accept={FILE_FIELD_TYPES.includes(type) ? accept : null}
             aria-describedby={ariaDescribedBy}
             aria-required={required}
-            disabled={disabled}
-            type={type}
-            name={name}
-            id={id}
-            placeholder={placeholder}
+            defaultChecked={CHECKED_FIELD_TYPES.includes(type) ? value : null}
             defaultValue={value}
+            disabled={disabled}
+            id={id}
+            name={name}
             onBlur={onBlur}
             onChange={onChange}
-            required={required} />
+            placeholder={placeholder}
+            required={required}
+            type={type}
+          />
           {status &&
           <div className="field__status">{status}</div>
           }
@@ -61,7 +72,8 @@ const TextField = ({
   )
 }
 
-TextField.propTypes = {
+FormField.propTypes = {
+  accept: PropTypes.string,
   ariaDescribedBy: PropTypes.string,
   errors: PropTypes.array,
   disabled: PropTypes.bool,
@@ -76,12 +88,12 @@ TextField.propTypes = {
   required: PropTypes.bool,
   status: PropTypes.node,
   type: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.string || PropTypes.bool,
 }
 
-TextField.defaultProps = {
+FormField.defaultProps = {
   errors: [],
   type: 'text'
 }
 
-export default TextField
+export default FormField

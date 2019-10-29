@@ -1,5 +1,5 @@
 .CodeMirror {
-  color: var(--base-color);
+  color: var(--theme-text-color);
 }
 
 .CodeMirror-lines {
@@ -220,7 +220,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 .CodeMirror {
   position: relative;
   overflow: hidden;
-  background: var(--base-background);
+  background: var(--theme-surface);
 }
 
 .CodeMirror-scroll {

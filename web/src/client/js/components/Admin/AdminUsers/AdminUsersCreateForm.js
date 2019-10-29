@@ -6,7 +6,7 @@ const Select = lazy(() => import('react-select'))
 import { debounce } from 'Shared/utilities'
 import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
-import TextField from 'Components/Form/TextField'
+import FormField from 'Components/Form/FormField'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
 const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
@@ -32,7 +32,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
     <form onSubmit={formSubmitHandler}>
       <section>
         <h2>Add a User</h2>
-        <TextField
+        <FormField
           errors={errors.name}
           id="userName"
           label="Full name"
@@ -42,7 +42,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
           placeholder="Enter a full name"
           required
         />
-        <TextField
+        <FormField
           errors={errors.email}
           id="userEmail"
           label="Email address"

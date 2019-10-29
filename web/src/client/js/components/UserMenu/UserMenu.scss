@@ -1,13 +1,10 @@
 @import 'CSS/inc/_mixins.scss';
 
 .user-menu {
-  --user-menu-banner-bg: var(--color-gray-5);
-  @media (prefers-color-scheme: dark) {
-    --user-menu-banner-bg: var(--color-gray-90);
-  }
+  --user-menu-banner-bg: var(--theme-overlay-dark);
 
   .btn--blank {
-    background-color: var(--color-gray-5);
+    background-color: var(--theme-overlay-light);
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: 40px;
@@ -18,16 +15,20 @@
     overflow: hidden;
     text-indent: -9000px;
     width: 40px;
-    @include focus(var(--color-gray-5), var(--color-gray-2));
+    @include focus(var(--theme-overlay-light), var(--color-gray-2));
     border: thin solid var(--color-gray-30);
-    &:not([disabled]):hover {
-      border: thin solid var(--color-gray-60);
+    @media (hover: hover) {
+      &:not([disabled]):hover {
+        border: thin solid var(--color-gray-60);
+      }
     }
     &[aria-expanded="true"] {
       background-color: var(--color-gray-10);
       border-color: var(--color-blue);
-      &:hover {
-        border-color: var(--color-blue);
+      @media (hover: hover) {
+        &:hover {
+          border-color: var(--color-blue);
+        }
       }
     }
   }

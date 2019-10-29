@@ -12,14 +12,22 @@
   <% } %>
   <style>
     :root {
-      /* @todo make sure that these colors match _colors.scss */
-      --body-background: hsl(0, 0, 100%);
-      --body-color: hsl(61, 1%, 21%);
+      /* @todo make sure that these colors match the theme in _colors.scss */
+      --body-background: hsl(0, 0%, 99%);
+      --body-color: hsl(0, 0%, 20%);
+      --skeleton-border-color: hsl(0, 0%, 95%);
+      --skeleton-background-color: hsl(0, 0%, 99%);
+      --skeleton-flash-color: hsla(0, 0%, 90%, .5);
+      --logo-text-color: hsl(0, 0%, 99%);
     }
     @media screen and (prefers-color-scheme: dark) {
       :root {
-        --body-background: hsl(61, 1%, 21%);
-        --body-color: hsl(0, 0, 100%);
+        --body-background: hsl(220, 7%, 16%);
+        --body-color: rgba(255, 255, 255, 85%);
+        --skeleton-border-color: hsl(218, 7%, 24%);
+        --skeleton-background-color: hsl(223, 7%, 19%);
+        --skeleton-flash-color: hsl(218, 7%, 24%);
+        --logo-text-color: hsl(220, 7%, 16%);
       }
     }
     * { box-sizing: border-box; }
@@ -32,18 +40,18 @@
       padding: 0;
     }
     .masthead {
-      border-top: 6px solid #f8963a;
+      border-top: 6px solid hsl(17, 93%, 65%);
       height: 71px;
     }
     .navbar {
       align-items: center;
-      border-bottom: thin solid #e5e7e6;
+      border-bottom: thin solid var(--skeleton-border-color);
       display: flex;
       height: 64px;
       justify-content: space-between;
     }
     .navbar__icon {
-      background-color: #e5e7e6;
+      background-color: var(--skeleton-background-color);
       border-radius: 50%;
       height: 40px;
       overflow: hidden;
@@ -61,7 +69,7 @@
       }
     .navbar__user {
       align-items: center;
-      border-left: thin solid #e5e7e6;
+      border-left: thin solid var(--skeleton-background-color);
       height: 100%;
       display: flex;
       justify-content: center;
@@ -86,7 +94,7 @@
     .skeleton{
       animation: loading 5s linear infinite;
       background-repeat: no-repeat;
-      background: linear-gradient(90deg, #fff, #e8eae8, #fff);
+      background: linear-gradient(90deg, var(--body-background), var(--skeleton-flash-color), var(--body-background));
       background-size: 300% 300%;
       display: block;
       height: 100%;
@@ -109,10 +117,13 @@
       justify-content: center;
       width: 100%;
     }
+      .logo-p {
+        fill: var(--logo-text-color);
+      }
     @keyframes logo {
-      0% { fill: #e8eae8; }
-      50% { fill: rgba(232, 234, 232, .2); }
-      100% { fill: #e8eae8; }
+      0% { fill: var(--skeleton-flash-color); }
+      50% { fill: var(--body-background); }
+      100% { fill: var(--skeleton-flash-color); }
     }
   </style>
   <link rel="preload" href="/css/fonts/domine-v7-latin-regular.woff2" as="font">

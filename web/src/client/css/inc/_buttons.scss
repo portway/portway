@@ -50,15 +50,18 @@ button,
   text-decoration: none;
   white-space: nowrap;
   -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 
   p { color: var(--color-gray-7); margin: 0; }
 
   @include focus(var(--color-blue));
 
   &:not([disabled]) {
-    &:hover {
-      background-color: var(--color-cyan);
-      color: #fff;
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--color-cyan);
+        color: #fff;
+      }
     }
     &:active {
       background-color: var(--color-blue-dark);
@@ -86,9 +89,11 @@ button,
     background-color: var(--color-green);
     border: thin solid var(--color-green);
     &:not([disabled]) {
-      &:hover {
-        background-color: var(--color-green-light);
-        color: var(--color-white);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-green-light);
+          color: var(--color-white);
+        }
       }
       &:active {
         background-color: var(--color-green-dark);
@@ -106,10 +111,12 @@ button,
     border: thin solid var(--button-white-border);
     color: inherit;
     &:not([disabled]) {
-      &:hover {
-        background-color: var(--button-white-background);
-        border: thin solid var(--button-white-border-hover);
-        color: inherit;
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--button-white-background);
+          border: thin solid var(--button-white-border-hover);
+          color: inherit;
+        }
       }
       &:active {
         background-color: var(--button-white-background);
@@ -127,8 +134,18 @@ button,
     color: inherit;
     padding: 0;
     @include focus(transparent);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          background-color: transparent;
+          border: thin solid transparent;
+          box-shadow: none;
+          color: inherit;
+          outline: 0;
+        }
+      }
+    }
     &:not([disabled]) {
-      &:hover,
       &:active {
         background-color: transparent;
         border: thin solid transparent;
@@ -189,10 +206,12 @@ button,
       flex-wrap: nowrap;
       padding: 2px 8px 2px 8px;
     }
+    @media (hover: hover) {
     &:hover {
-      &:not([disabled]) {
-        .icon {
-          background-color: var(--button-icon-hover);
+        &:not([disabled]) {
+          .icon {
+            background-color: var(--button-icon-hover);
+          }
         }
       }
     }
@@ -215,15 +234,19 @@ button,
 
   &--warning {
     color: var(--color-orange);
-    &:hover {
-      color: var(--color-orange-dark);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-orange-dark);
+      }
     }
   }
 
   &--danger {
     color: var(--color-red);
-    &:hover {
-      color: var(--color-red-dark);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-red-dark);
+      }
     }
   }
 

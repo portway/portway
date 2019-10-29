@@ -29,7 +29,7 @@
       background: transparent;
       border: thin solid var(--base-border-color, gray);
       border-radius: var(--border-radius, 8px);
-      color: var(--base-color, black);
+      color: var(--theme-text-color, black);
       display: flex;
       height: 100%;
       flex-direction: column;
@@ -44,10 +44,12 @@
       white-space: normal;
       width: 100%;
 
-      &:hover {
-        background: transparent;
-        border: thin solid var(--base-border-color, gray);
-        color: var(--base-color, black);
+      @media (hover: hover) {
+        &:hover {
+          background: transparent;
+          border: thin solid var(--base-border-color, gray);
+          color: var(--theme-text-color, black);
+        }
       }
 
       &[aria-checked="true"] {
