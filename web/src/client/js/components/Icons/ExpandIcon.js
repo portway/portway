@@ -3,10 +3,21 @@ import PropTypes from 'prop-types'
 
 function ExpandIcon({ className, fill, height, width }) {
   // xmlns="http://www.w3.org/2000/svg"
+  const style = {
+    stroke: fill,
+    strokeWidth: 2,
+    fill: 'none',
+    fillRule: 'evenodd',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round'
+  }
   return (
     <div className="icon">
       <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 36 36" className={className}>
-        <path fill={fill} d="m28.5 7.5h-8.5c-.8284271 0-1.5-.67157288-1.5-1.5s.6715729-1.5 1.5-1.5h11.5v11.5c0 .8284271-.6715729 1.5-1.5 1.5s-1.5-.6715729-1.5-1.5zm-21 21h8.5c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-11.5v-11.5c0-.8284271.67157288-1.5 1.5-1.5s1.5.6715729 1.5 1.5z" transform="matrix(0 1 -1 0 36 0)"/>
+        <g style={style} transform="translate(2 2)">
+          <path d="m-.0001 19.3937v11.637h11.637m-11.637-.0002 12-12"/>
+          <path d="m31.0301 11.6359v-11.636h-11.636m-.364 12.0003 12-12"/>
+        </g>
       </svg>
     </div>
   )
