@@ -5,7 +5,7 @@ import cx from 'classnames'
 import { MAX_AVATAR_SIZE } from 'Shared/constants'
 import { UserIcon } from 'Components/Icons'
 import Form from 'Components/Form/Form'
-import FileField from 'Components/Form/FileField'
+import FormField from 'Components/Form/FormField'
 import ImageCropperComponent from 'Components/ImageCropper/ImageCropperComponent'
 
 import './_UserProfile.scss'
@@ -75,7 +75,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
         <div className={classes}>
           {renderUserAvatar()}
           {!preview &&
-            <FileField
+            <FormField
               accept="image/png, image/jpeg"
               help={avatarHelpText}
               id="userAvatar"
@@ -98,6 +98,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
                   setPreview(reader.result)
                 }
               }}
+              type="file"
             />
           }
         </div>

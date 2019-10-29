@@ -1,17 +1,15 @@
 @import '../inc/mixins';
 
 .menu {
-  --menu-background: var(--color-white);
-  --menu-color: var(--color-gray-60);
+  --menu-background: var(--theme-overlay-light);
+  --menu-color: var(--theme-text-color);
   --menu-border: var(--color-gray-30);
-  --menu-hover: var(--color-gray-2);
+  --menu-hover-color: var(--theme-base);
+  --menu-hover: var(--color-blue);
   --menu-dark: var(--color-gray-80);
   --menu-highlight: var(--color-gray-90);
   @media (prefers-color-scheme: dark) {
-    --menu-background: var(--color-gray-10);
-    --menu-color: var(--color-white);
     --menu-border: var(--color-gray-90);
-    --menu-hover: var(--color-gray-80);
     --menu-dark: var(--color-gray-90);
     --menu-highlight: var(--color-gray-80);
   }
@@ -130,17 +128,21 @@
     &.btn--danger {
       color: var(--color-red);
     }
-    &:hover {
-      background-color: var(--menu-hover);
-      color: var(--menu-color);
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--menu-hover);
+        color: var(--menu-hover-color);
+      }
     }
     &:active,
     &.active {
       background-color: var(--color-gray-6);
     }
     .menu--dark & {
-      &:hover {
-        background-color: var(--menu-highlight);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--menu-highlight);
+        }
       }
     }
   }
