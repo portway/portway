@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function ClipboardIcon({ className, fill, height, width }) {
+function ImageIcon({ className, fill, height, width }) {
   // xmlns="http://www.w3.org/2000/svg"
   const style = {
     stroke: fill,
@@ -14,28 +14,28 @@ function ClipboardIcon({ className, fill, height, width }) {
   return (
     <div className="icon">
       <svg className={className} xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 36 36">
-        <g style={style} transform="translate(6 2)">
-          <path d="m20.3007 5.5337h3.699v26.466h-24v-26.466h3.7"/>
-          <path d="m19.748 2.7671h-4.483c-.264-1.568-1.621-2.767-3.264-2.767-1.644 0-3.001 1.199-3.265 2.767h-4.483l-1.107 5.534h1.107 15.495 1.106z"/>
-          <path d="m5.0009 14.4214h14m-14 5.729h14m-14 5.7295h14"/>
+        <g style={style} transform="translate(2 2)">
+          <path d="m.48484849 31.5151515h31.03030301v-31.03030301h-31.03030301z"/>
+          <path d="m14.0606061 10.1818182c0 2.1420606-1.7367273 3.8787879-3.8787879 3.8787879-2.14206062 0-3.8787879-1.7367273-3.8787879-3.8787879 0-2.14206062 1.73672728-3.8787879 3.8787879-3.8787879 2.1420606 0 3.8787879 1.73672728 3.8787879 3.8787879z"/>
+          <path d="m.48484849 31.5151515 21.33333331-18.4242424 9.6969697 7.7575757"/>
         </g>
       </svg>
     </div>
   )
 }
 
-ClipboardIcon.propTypes = {
+ImageIcon.propTypes = {
   className: PropTypes.string,
   fill: PropTypes.string,
   height: PropTypes.string,
   width: PropTypes.string
 }
 
-ClipboardIcon.defaultProps = {
-  className: 'icon-clipboard',
+ImageIcon.defaultProps = {
+  className: 'icon-image',
   fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#e5e7e6' : '#3b3d3e',
   height: '18',
   width: '18'
 }
 
-export default ClipboardIcon
+export default ImageIcon

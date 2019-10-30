@@ -10,6 +10,7 @@ import {
   PRODUCT_NAME,
   PLAN_TYPES,
 } from 'Shared/constants'
+import { TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
@@ -63,11 +64,17 @@ const AdminDashboardComponent = ({ organization, section }) => {
             </Link>
             }
             <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>Users</NavLink>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>
+                <TeamsIcon width="22" height="22" /> Users
+              </NavLink>
             </OrgPlanPermission>
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>Organization</NavLink>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>Billing</NavLink>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>
+                <OrganizationIcon width="22" height="22" /> Organization
+              </NavLink>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>
+                <BillingIcon width="22" height="22" /> Billing
+              </NavLink>
             </OrgPermission>
           </PanelNavigation>
           <PanelContent contentKey={section} contentMap={PANEL_PATHS} />

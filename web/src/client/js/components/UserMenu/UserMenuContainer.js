@@ -13,7 +13,7 @@ import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './UserMenu.scss'
-import UserAvatar from '../../../images/icon/user-avatar.svg'
+import { UserIcon } from 'Components/Icons/UserIcon'
 
 function logoutAction() {
   Store.dispatch(logoutUser(currentUserId))
@@ -28,7 +28,7 @@ const UserMenuContainer = () => {
 
   const name = `${currentUser.name}`
   const button = {
-    backgroundImage: currentUser.avatar || UserAvatar,
+    backgroundImage: currentUser.avatar || UserIcon,
     className: 'btn--blank user-menu__button',
     label: `${name}'s avatar`
   }
