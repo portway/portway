@@ -1,4 +1,4 @@
-@import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_include-media.scss';
 
 .project {
   --project-toolbar-background: var(--theme-overlay-light);
@@ -26,27 +26,67 @@
     z-index: 100;
   }
 
+  // Documents list is by itself on small screens, and then a sidebar on medium +
   &__documents {
-    display: flex;
+    overflow: hidden;
+    position: relative;
+    width: 100vw;
+    @include media('>medium') {
+      overflow: unset;
+      display: flex;
+      // width: auto;
+    }
     &-list-container {
       border-right: thin solid var(--base-border-color);
       height: calc(100vh - (var(--ribbon-height) + var(--header-height)));
       overflow-y: auto;
       overscroll-behavior: contain;
       position: relative;
-      width: calc(var(--gutter-width) + 300px);
+      transform: translate3d(0, 0, 0);
+      transition: transform 0.2s ease-in-out;
+      width: 100vw;
+      z-index: 1;
       -webkit-overflow-scrolling: touch;
+      // &--list-only {
+      //   transform: translate3d(0, 0, 0);
+      // }
+      // &--document-only {
+      //   transform: translate3d(-100vw, 0, 0);
+      // }
+      @include media('>medium') {
+        transform: translate3d(0, 0, 0);
+        width: calc(var(--gutter-width) + 300px);
+      }
     }
     &-document-container {
+      background-color: var(--theme-surface);
       display: flex;
-      flex: 1;
       flex-direction: column;
       height: calc(100vh - (var(--ribbon-height) + var(--header-height)) - 40px); // footer height
+      left: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      position: relative;
+      position: absolute;
+      transform: translate3d(100vw, 0, 0);
+      transition: transform 0.2s ease-out;
+      top: 63px;
+      width: 100vw;
+      z-index: 2;
+      &--list-only {
+        transform: translate3d(100vw, 0, 0);
+      }
+      &--document-only {
+        transform: translate3d(0, 0, 0);
+      }
       &--full-screen {
         height: 100vh;
+      }
+      @include media('>medium') {
+        flex: 1;
+        position: relative;
+        top: auto;
+        transform: translate3d(0, 0, 0);
+        width: auto;
       }
     }
   }
