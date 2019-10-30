@@ -15,10 +15,14 @@
     margin-right: var(--brand-width);
     width: 20%;
     a {
-      display: block;
+      align-items: center;
+      display: flex;
       color: var(--theme-header-color);
       padding: 8px 7px;
       text-decoration: none;
+      .icon {
+        margin-right: .75rem;
+      }
       &.link--back {
         display: flex;
         // margin: 0;

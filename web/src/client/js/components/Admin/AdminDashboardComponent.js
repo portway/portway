@@ -9,6 +9,7 @@ import {
   PATH_PROJECTS,
   PRODUCT_NAME,
 } from 'Shared/constants'
+import { TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminUsersContainer from './AdminUsers/AdminUsersContainer'
@@ -56,10 +57,16 @@ const AdminDashboardComponent = ({ section }) => {
               <span className="label">Back to Users</span>
             </Link>
             }
-            <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>Users</NavLink>
+            <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>
+              <TeamsIcon width="22" height="22" /> Users
+            </NavLink>
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>Organization</NavLink>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>Billing</NavLink>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>
+                <OrganizationIcon width="22" height="22" /> Organization
+              </NavLink>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>
+                <BillingIcon width="22" height="22" /> Billing
+              </NavLink>
             </OrgPermission>
           </PanelNavigation>
           <PanelContent contentKey={section} contentMap={PANEL_PATHS} />

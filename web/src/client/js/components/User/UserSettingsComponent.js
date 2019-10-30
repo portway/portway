@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 
 import { PATH_SETTINGS, PRODUCT_NAME } from 'Shared/constants'
 
+import { LockIcon, UserIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import UserProfileContainer from './UserProfile/UserProfileContainer'
 import UserSecurityContainer from './UserSecurity/UserSecurityContainer'
@@ -29,8 +30,12 @@ const UserSettingsComponent = ({ section }) => {
       <main>
         <Panel>
           <PanelNavigation>
-            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.PROFILE}`}>My Profile</NavLink>
-            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.SECURITY}`}>Security</NavLink>
+            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.PROFILE}`}>
+              <UserIcon width="22" height="22" /> My Profile
+            </NavLink>
+            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.SECURITY}`}>
+              <LockIcon width="22" height="22" /> Security
+            </NavLink>
           </PanelNavigation>
           <PanelContent contentKey={section} contentMap={PANEL_PATHS} />
         </Panel>

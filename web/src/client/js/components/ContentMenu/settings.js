@@ -1,6 +1,6 @@
 import React from 'react'
 import { FIELD_TYPES } from 'Shared/constants'
-import { ProjectIcon } from 'Components/Icons'
+import { TextIcon, StringIcon, ImageIcon, NumberIcon } from 'Components/Icons'
 
 const settings = {
   fields: {
@@ -8,24 +8,24 @@ const settings = {
       {
         label: 'Body',
         key: FIELD_TYPES.TEXT,
-        icon: <ProjectIcon />
+        icon: <TextIcon />
       },
       {
         label: 'Photo',
         key: FIELD_TYPES.IMAGE,
-        icon: <ProjectIcon />
+        icon: <ImageIcon />
       }
     ],
     'Data': [
       {
         label: 'String',
         key: FIELD_TYPES.STRING,
-        icon: <ProjectIcon />
+        icon: <StringIcon />
       },
       {
         label: 'Number',
         key: FIELD_TYPES.NUMBER,
-        icon: <ProjectIcon />
+        icon: <NumberIcon />
       }
     ]
   }
