@@ -13,7 +13,8 @@ import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './UserMenu.scss'
-import { UserIcon } from 'Components/Icons/UserIcon'
+
+const UserIcon = require('../../../images/icon/user.svg')
 
 function logoutAction() {
   Store.dispatch(logoutUser(currentUserId))
