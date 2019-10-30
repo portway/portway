@@ -82,7 +82,8 @@ const ProjectSettingsTeamContainer = ({ location }) => {
         removeAssignmentHandler={removeAssignmentHandler}
         updateAssignmentHandler={updateAssignmentHandler}
         userSearchHandler={userSearchHandler}
-        users={userOptions} />
+        users={userOptions}
+        projectId={projectId} />
     </>
   )
 }
