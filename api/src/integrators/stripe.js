@@ -64,7 +64,7 @@ const updateCustomer = async function(customerId, body) {
   return customer
 }
 
-const createSubscription = async function({ customerId, planId, seats, trialPeriodDays, subscriptionId }) {
+const createOrUpdateSubscription = async function({ customerId, planId, seats, trialPeriodDays, subscriptionId }) {
   let subscription
   try {
     if (subscriptionId) {
@@ -102,5 +102,5 @@ export default {
   createCustomer,
   getCustomer,
   updateCustomer,
-  createSubscription
+  createOrUpdateSubscription
 }

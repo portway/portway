@@ -58,7 +58,7 @@ const formatBilling = (customer) => {
   return { ...publicBillingFields, source, subscription }
 }
 
-const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
+const subscribeOrgToPlan = async function({ planId, orgId }) {
   const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
 
   const org = await BusinessOrganization.findById(orgId)
@@ -75,41 +75,59 @@ const subscribeOrgToPlan = async function({ planId, seats, orgId }) {
   const currentSubscription = customer.subscriptions.data[0]
   const subscriptionId = currentSubscription && currentSubscription.id
   const currentPlanId = currentSubscription && currentSubscription.plan.id
-  const currentSeats = currentSubscription && currentSubscription.items.data[0].quantity
 
-  let updateSeats
-  let updatePlanId
-
-  if (planId && planId !== currentPlanId) {
-    // We're Changing plans, single user plans get 1, multi user plans get default seat count
-    updateSeats = planId === PLANS.SINGLE_USER ? 1 : MULTI_USER_DEFAULT_SEAT_COUNT
-    updatePlanId = planId
-  } else if (currentPlanId === PLANS.SINGLE_USER) {
-    // Not changing plans, and user is currently on a single user plan, don't allow seat changes
-    const message = 'Cannot set seats on a single user plan'
-    throw ono({ code: 409, publicMessage: message }, message)
-  } else if (currentPlanId === PLANS.MULTI_USER && seats && seats !== currentSeats) {
-    // Not changing plans, and user is currently on a multi user plan, allow seat changes 5 or above
-    if (seats < MULTI_USER_DEFAULT_SEAT_COUNT) {
-      const message = `Cannot have less than ${MULTI_USER_DEFAULT_SEAT_COUNT} seats on a multi user plan`
-      throw ono({ code: 409, publicMessage: message }, message)
-    }
-    updateSeats = seats
-  }
-
-  if (updatePlanId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
+  if (planId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
     const message = 'Cannot downgrade from multi user to single user plan'
     throw ono({ code: 409, publicMessage: message }, message)
   }
 
   //nothing is changing, return success and move on without updating stripe
-  if (!updatePlanId && !updateSeats) {
+  if (planId === currentPlanId) {
     return
   }
 
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId: updatePlanId, seats: updateSeats, subscriptionId })
+  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, planId, subscriptionId })
 
   await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
+}
+
+const updatePlanSeats = async function(seats, orgId) {
+  const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot update plan seats, organization: ${orgId} does not have saved billing information`)
+
+  const org = await BusinessOrganization.findById(orgId)
+  if (!org.stripeId) {
+    throw billingError
+  }
+
+  const customer = await stripeIntegrator.getCustomer(org.stripeId)
+
+  if (!customer) {
+    throw billingError
+  }
+
+  const currentSubscription = customer.subscriptions.data[0]
+
+  if (!currentSubscription) {
+    throw ono({ code: 409, publicMessage: 'No Subscription: Organization must be subscribed to a plan to update seat count' })
+  }
+
+  const subscriptionId = currentSubscription.id
+  const currentSeats = currentSubscription.items.data[0].quantity
+  const currentPlanId = currentSubscription.plan.id
+
+  if (currentPlanId === PLANS.SINGLE_USER) {
+    const message = 'Cannot set seats on a single user plan'
+    throw ono({ code: 409, publicMessage: message }, message)
+  }
+
+  //nothing is changing, return success and move on without updating stripe
+  if (seats === currentSeats) {
+    return
+  }
+
+  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, seats, subscriptionId })
+
+  await BusinessOrganization.updateById(orgId, { subscriptionStatus: subscription.status })
 }
 
 const updateOrgBilling = async function(token, orgId) {
@@ -144,6 +162,7 @@ const getOrgBilling = async function(orgId) {
 
 export default {
   subscribeOrgToPlan,
+  updatePlanSeats,
   updateOrgBilling,
   getOrgBilling
 }

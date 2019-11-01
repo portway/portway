@@ -1,6 +1,6 @@
 export default {
   createCustomer: jest.fn(() => getGenericStripeCustomerData()),
-  createSubscription: jest.fn(() => {
+  createOrUpdateSubscription: jest.fn(() => {
     return {}
   }),
   getCustomer: jest.fn(() => getGenericStripeCustomerData()),
