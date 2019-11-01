@@ -66,23 +66,28 @@
       left: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
+      padding-bottom: 65px;
       position: absolute;
-      transform: translate3d(100vw, 0, 0);
+      transform: translate3d(0, 20px, 0);
       transition: transform 0.2s ease-out;
       top: 63px;
+      visibility: hidden;
       width: 100vw;
       z-index: 2;
       &--list-only {
-        transform: translate3d(100vw, 0, 0);
+        transform: translate3d(0, 20px, 0);
+        visibility: hidden;
       }
       &--document-only {
         transform: translate3d(0, 0, 0);
+        visibility: visible;
       }
       &--full-screen {
         height: 100vh;
       }
       @include media('>medium') {
         flex: 1;
+        padding-bottom: 0;
         position: relative;
         top: auto;
         transform: translate3d(0, 0, 0);
