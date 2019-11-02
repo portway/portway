@@ -58,7 +58,9 @@ const formatBilling = (customer) => {
   return { ...publicBillingFields, source, subscription }
 }
 
-const subscribeOrgToPlan = async function({ planId, orgId }) {
+const subscribeOrgToPlan = async function(planId, orgId) {
+  let seats
+
   const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
 
   const org = await BusinessOrganization.findById(orgId)
@@ -86,7 +88,11 @@ const subscribeOrgToPlan = async function({ planId, orgId }) {
     return
   }
 
-  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, planId, subscriptionId })
+  if (planId === PLANS.MULTI_USER) {
+    seats = 5
+  }
+
+  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, planId, subscriptionId, seats })
 
   await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
 }

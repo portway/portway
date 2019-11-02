@@ -86,39 +86,39 @@ describe('billing coordinator', () => {
       it('should throw an error with status code 409 ', async () => {
         BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockImplementationOnce(() => {})
-        await expect(billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, seats: newSeatCount, orgId }))
+        await expect(billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
 
-    describe('when trying to change seat count on a single user plan', () => {
-      it('should throw an error with status code 409 ', async () => {
-        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
-        stripeIntegrator.getCustomer.mockReturnValueOnce({
-          id: customerId,
-          subscriptions: {
-            data: [mockSubscription]
-          }
-        })
-        await expect(billingCoordinator.subscribeOrgToPlan({ seats: newSeatCount, orgId }))
-          .rejects.toEqual(expect.objectContaining({ code: 409 }))
-      })
-    })
+    // describe('when trying to change seat count on a single user plan', () => {
+    //   it('should throw an error with status code 409 ', async () => {
+    //     BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+    //     stripeIntegrator.getCustomer.mockReturnValueOnce({
+    //       id: customerId,
+    //       subscriptions: {
+    //         data: [mockSubscription]
+    //       }
+    //     })
+    //     await expect(billingCoordinator.subscribeOrgToPlan({ seats: newSeatCount, orgId }))
+    //       .rejects.toEqual(expect.objectContaining({ code: 409 }))
+    //   })
+    // })
 
-    describe('when trying to change seat count on a multi user plan', () => {
-      it('should throw an error if seat count is less than the multi user default amount', async () => {
-        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
-        stripeIntegrator.getCustomer.mockReturnValueOnce({
-          id: customerId,
-          subscriptions: {
-            data: [{ ...mockSubscription, plan: { id: PLANS.MULTI_USER } }]
-          }
-        })
-        await expect(
-          billingCoordinator.subscribeOrgToPlan({ seats: MULTI_USER_DEFAULT_SEAT_COUNT - 1, orgId })
-        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
-      })
-    })
+    // describe('when trying to change seat count on a multi user plan', () => {
+    //   it('should throw an error if seat count is less than the multi user default amount', async () => {
+    //     BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+    //     stripeIntegrator.getCustomer.mockReturnValueOnce({
+    //       id: customerId,
+    //       subscriptions: {
+    //         data: [{ ...mockSubscription, plan: { id: PLANS.MULTI_USER } }]
+    //       }
+    //     })
+    //     await expect(
+    //       billingCoordinator.subscribeOrgToPlan({ seats: MULTI_USER_DEFAULT_SEAT_COUNT - 1, orgId })
+    //     ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+    //   })
+    // })
 
     describe('when trying to change plans from multi user to single user', () => {
       it('should throw an error', async () => {
@@ -130,12 +130,12 @@ describe('billing coordinator', () => {
           }
         })
         await expect(
-          billingCoordinator.subscribeOrgToPlan({ planId: PLANS.SINGLE_USER, orgId })
+          billingCoordinator.subscribeOrgToPlan(PLANS.SINGLE_USER, orgId)
         ).rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
 
-    describe('when plans and seats are not changing', () => {
+    describe('when plans are not changing', () => {
       it('should return early', async () => {
         stripeIntegrator.createOrUpdateSubscription.mockClear()
         BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
@@ -151,8 +151,112 @@ describe('billing coordinator', () => {
             ]
           }
         })
-        await billingCoordinator.subscribeOrgToPlan({ planId: PLANS.MULTI_USER, orgId })
+        await billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
         expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(0)
+      })
+    })
+  })
+
+  describe('#updatePlanSeats', () => {
+    const customerId = 'not-a-real-customer-id'
+    const stripeId = '1234abcd'
+    const subscriptionId = 'not-a-real-subscription-id'
+    const planId = PLANS.MULTI_USER
+    const subscriptionStatus = 'active'
+    const mockCurrentSeatCount = 1
+    const newSeatCount = 6
+    let resolvedValue
+    const mockSubscription = {
+      id: subscriptionId,
+      plan: { id: planId },
+      items: { data: [{ quantity: mockCurrentSeatCount }] }
+    }
+
+    beforeAll(async () => {
+      BusinessOrganization.findById.mockClear()
+      BusinessOrganization.updateById.mockClear()
+      BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+      stripeIntegrator.getCustomer.mockClear()
+      stripeIntegrator.getCustomer.mockReturnValueOnce({
+        id: customerId,
+        subscriptions: {
+          data: [mockSubscription]
+        }
+      })
+      stripeIntegrator.createOrUpdateSubscription.mockClear()
+      stripeIntegrator.createOrUpdateSubscription.mockImplementationOnce(() => {
+        return { ...mockSubscription, status: subscriptionStatus }
+      })
+      resolvedValue = await billingCoordinator.updatePlanSeats(newSeatCount, orgId)
+    })
+
+    it('should call BusinessOrganization.findById with the passed in org id', () => {
+      expect(BusinessOrganization.findById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.findById.mock.calls[0][0]).toEqual(orgId)
+    })
+
+    it('should call stripeIntegrator.getCustomer with the org stripeId', () => {
+      expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
+    })
+
+    it('should call stripeIntegrator.createOrUpdateSubscription with customerId, new seat count, and subscription id', () => {
+      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual({
+        customerId,
+        seats: newSeatCount,
+        subscriptionId
+      })
+    })
+
+    it('should call BusinessOrganization.updateById with the org id and subscription status', () => {
+      expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(orgId)
+      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({
+        subscriptionStatus
+      })
+    })
+
+    it('should resolve with undefined', () => {
+      expect(resolvedValue).toBe(undefined)
+    })
+
+    describe('when there is no stripeId on the org', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockClear()
+        await expect(
+          billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
+        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when no stripe customer is found', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockImplementationOnce(() => {})
+        await expect(
+          billingCoordinator.updatePlanSeats(newSeatCount, orgId)
+        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when trying to change seat count on a single user plan', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockReturnValueOnce({
+          id: customerId,
+          subscriptions: {
+            data: [
+              {
+                id: subscriptionId,
+                plan: { id: PLANS.SINGLE_USER },
+                items: { data: [{ quantity: 1 }] }
+              }
+            ]
+          }
+        })
+        await expect(billingCoordinator.updatePlanSeats(newSeatCount, orgId))
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
   })
