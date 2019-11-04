@@ -30,6 +30,11 @@ const formatBilling = (customer) => {
 
   const subscription = {
     status: null,
+    planId: null,
+    billincCycleAnchor: null,
+    currentPeriodEnd: null,
+    trialEnd: null,
+    currentSeats: null,
     flatCost: null,
     includedSeats: null,
     additionalSeatCost: null
@@ -184,7 +189,7 @@ const createOrUpdateOrgSubscription = async function({ customerId, planId, trial
   const orgUpdateObj = {
     subscriptionStatus: updatedSubscription.status
   }
-
+  console.log(updatedSubscription)
   // only update the cached plan id on the org if we're actually changing that value
   if (planId) {
     orgUpdateObj.plan = planId
