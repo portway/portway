@@ -7,10 +7,9 @@ import { validateBody, validateParams } from '../libs/middleware/payloadValidati
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
-import { PLANS } from '../constants/plans'
 
 const bodySchema = Joi.compile({
-  plan: Joi.string().valid(Object.keys(PLANS)).required()
+  seats: Joi.number().min(5).required()
 })
 
 const paramSchema = Joi.compile({
@@ -25,7 +24,7 @@ const conditionalUpdatePerm = async (req, res, next) => {
     return next(
       ono(
         { code: 404 },
-        'Cannot update plan, requestor does not belong to the target organization '
+        'Cannot update plan seats, requestor does not belong to the target organization '
       )
     )
   }
@@ -35,7 +34,7 @@ const conditionalUpdatePerm = async (req, res, next) => {
 
   if (org.ownerId !== req.requestorInfo.requestorId) {
     return next(
-      ono({ code: 404 }, 'Cannot update plan, requestor is not the current organization owner')
+      ono({ code: 404 }, 'Cannot update plan seats, requestor is not the current organization owner')
     )
   }
 
@@ -47,27 +46,27 @@ const conditionalUpdatePerm = async (req, res, next) => {
   })(req, res, next)
 }
 
-const orgPlanController = function(router) {
+const orgSeatController = function(router) {
   // all routes are nested at organizations/:orgId and receive req.params.orgId
   router.put(
     '/',
     validateParams(paramSchema),
     validateBody(bodySchema),
     conditionalUpdatePerm,
-    subscribeOrgToPlan
+    updateSeats
   )
 }
 
-const subscribeOrgToPlan = async function(req, res, next) {
-  const { plan: planId } = req.body
+const updateSeats = async function(req, res, next) {
+  const { seats } = req.body
   const { orgId } = req.params
 
   try {
-    await billingCoordinator.subscribeOrgToPlan(planId, orgId)
+    await billingCoordinator.updatePlanSeats(seats, orgId)
     res.status(204).send()
   } catch (e) {
     next(e)
   }
 }
 
-export default orgPlanController
+export default orgSeatController

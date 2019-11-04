@@ -24,7 +24,7 @@ async function createUserAndOrganization(name, email) {
   })
 
   const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}` })
-  await billingCoordinator.updateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, trialPeriodDays: TRIAL_PERIOD_DAYS })
+  await billingCoordinator.createOrupdateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, trialPeriodDays: TRIAL_PERIOD_DAYS })
 
   await BusinessOrganization.updateById(organization.id, {
     ownerId: createdUser.id,

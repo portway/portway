@@ -16,3 +16,4 @@ export const STRIPE_STATUS = {
   CANCELED: 'canceled',
   UNPAID: 'unpaid'
 }
+export const MULTI_USER_DEFAULT_SEAT_COUNT = 5

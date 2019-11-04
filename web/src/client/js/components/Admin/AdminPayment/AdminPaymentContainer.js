@@ -10,7 +10,7 @@ import AdminPaymentComponent from './AdminPaymentComponent'
 
 const AdminPaymentContainer = ({ errors, isStripeOpen, isSubmitting, uiToggleStripeForm }) => {
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
-  const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
+  const { data: orgBilling } = useDataService(dataMapper.organizations.billing(), [currentOrg.plan])
 
   return (
     <AdminPaymentComponent
