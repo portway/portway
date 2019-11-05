@@ -3,8 +3,9 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { PATH_PROJECT, PROJECT_ROLE_IDS, PLAN_TYPES } from 'Shared/constants'
 import { ProjectIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer'
 
@@ -34,9 +35,11 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
             }
           </div>
         </div>
-        <div className="project-list__team">
-          <ProjectUsersContainer collapsed={true} projectId={projectId} />
-        </div>
+        <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+          <div className="project-list__team">
+            <ProjectUsersContainer collapsed={true} projectId={projectId} />
+          </div>
+        </OrgPlanPermission>
       </Link>
       <div className="project-list__actions" ref={itemRef}>
         <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>

@@ -35,7 +35,8 @@ export const ORGANIZATION_ROLES = {
       [actions.READ_MY]: true,
       [actions.UPDATE_MY]: true,
       [actions.UPDATE_MY_BILLING]: true,
-      [actions.READ_MY_BILLING]: true
+      [actions.READ_MY_BILLING]: true,
+      [actions.UPDATE_MY_PLAN]: true
     },
     [resourceTypes.PROJECT]: {
       [actions.LIST]: true,

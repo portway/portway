@@ -8,9 +8,11 @@ import {
   PATH_ADMIN,
   PATH_PROJECTS,
   PRODUCT_NAME,
+  PLAN_TYPES,
 } from 'Shared/constants'
 import { TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminUsersContainer from './AdminUsers/AdminUsersContainer'
 import AdminUserViewContainer from './AdminUserView/AdminUserViewContainer'
@@ -26,15 +28,19 @@ const ADMIN_PATHS = {
   USERS: 'users',
 }
 
-const PANEL_PATHS = {
-  [ADMIN_PATHS.USER]: <AdminUserViewContainer />,
-  [ADMIN_PATHS.USERS]: <AdminUsersContainer />,
-  [ADMIN_PATHS.BILLING]: <AdminBillingContainer />,
-  [ADMIN_PATHS.ORGANIZATION]: <AdminOrganizationContainer />,
-  default: <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} />
-}
+const AdminDashboardComponent = ({ organization, section }) => {
+  if (!organization) return null
 
-const AdminDashboardComponent = ({ section }) => {
+  const PANEL_PATHS = {
+    [ADMIN_PATHS.USER]: <AdminUserViewContainer />,
+    [ADMIN_PATHS.USERS]: <AdminUsersContainer />,
+    [ADMIN_PATHS.BILLING]: <AdminBillingContainer />,
+    [ADMIN_PATHS.ORGANIZATION]: <AdminOrganizationContainer />,
+    default: organization.plan === PLAN_TYPES.MULTI_USER ?
+      <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} /> :
+      <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`} />
+  }
+
   function isSubSection(match, location) {
     // Return true if we're on the right page
     if (match && match.isExact) return true
@@ -57,15 +63,17 @@ const AdminDashboardComponent = ({ section }) => {
               <span className="label">Back to Users</span>
             </Link>
             }
-            <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>
-              <TeamsIcon width="22" height="22" /> Users
-            </NavLink>
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>
-                <OrganizationIcon width="22" height="22" /> Organization
+            <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} aria-label="Users" isActive={isSubSection}>
+                <TeamsIcon width="22" height="22" /> <span className="label">Users</span>
               </NavLink>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>
-                <BillingIcon width="22" height="22" /> Billing
+            </OrgPlanPermission>
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`} aria-label="Organization">
+                <OrganizationIcon width="22" height="22" /> <span className="label">Organization</span>
+              </NavLink>
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`} aria-label="Billing">
+                <BillingIcon width="22" height="22" /> <span className="label">Billing</span>
               </NavLink>
             </OrgPermission>
           </PanelNavigation>
@@ -77,7 +85,8 @@ const AdminDashboardComponent = ({ section }) => {
 }
 
 AdminDashboardComponent.propTypes = {
-  section: PropTypes.string
+  organization: PropTypes.object,
+  section: PropTypes.string,
 }
 
 export default AdminDashboardComponent

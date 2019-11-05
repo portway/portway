@@ -71,7 +71,7 @@ FormField.propTypes = {
   type: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.bool
+    PropTypes.bool,
   ]),
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import Stripe from 'stripe'
 import ono from 'ono'
 const stripe = Stripe(process.env.STRIPE_SECRET)
@@ -21,7 +22,7 @@ const createCustomer = async function(body) {
         ]
       })
     }
-    throw ono(err, { code: 500 })
+    throw ono(err, { code: 502 })
   }
 
   return customer
@@ -33,7 +34,7 @@ const getCustomer = async function(customerId) {
   try {
     customer = await stripe.customers.retrieve(customerId)
   } catch (err) {
-    throw ono(err, { code: 500 })
+    throw ono(err, { code: 502 })
   }
 
   return customer
@@ -48,7 +49,7 @@ const updateCustomer = async function(customerId, body) {
       throw ono(err, {
         code: 402,
         error: 'Invalid payment value',
-        errorType: "ValidationError",
+        errorType: 'ValidationError',
         errorDetails: [
           {
             message: err.message,
@@ -57,21 +58,41 @@ const updateCustomer = async function(customerId, body) {
         ]
       })
     }
-    throw ono(err, { code: 500 })
+    throw ono(err, { code: 502 })
   }
 
   return customer
 }
 
-const createSubscription = async function(customerId, planId) {
+const createOrUpdateSubscription = async function({ customerId, planId, seats, trialPeriodDays, subscriptionId }) {
   let subscription
   try {
-    subscription = stripe.subscriptions.create({
-      customer: customerId,
-      items: [{ plan: planId }]
-    })
+    if (subscriptionId) {
+      const currentSubscription = await stripe.subscriptions.retrieve(subscriptionId)
+      subscription = await stripe.subscriptions.update(subscriptionId, {
+        items: [
+          {
+            id: currentSubscription.items.data[0].id,
+            plan: planId,
+            trial_period_days: trialPeriodDays,
+            quantity: seats
+          }
+        ]
+      })
+    } else {
+      subscription = await stripe.subscriptions.create({
+        customer: customerId,
+        items: [
+          {
+            plan: planId,
+            quantity: seats
+          }
+        ],
+        trial_period_days: trialPeriodDays
+      })
+    }
   } catch (err) {
-    throw ono(err, { code: 500 })
+    throw ono(err, { code: 502 })
   }
 
   return subscription
@@ -81,5 +102,5 @@ export default {
   createCustomer,
   getCustomer,
   updateCustomer,
-  createSubscription
+  createOrUpdateSubscription
 }
