@@ -16,7 +16,6 @@ describe('billing coordinator', () => {
     const planId = PLANS.SINGLE_USER
     const subscriptionStatus = 'active'
     const mockCurrentSeatCount = 1
-
     let resolvedValue
     const mockSubscription = {
       id: subscriptionId,
@@ -90,35 +89,6 @@ describe('billing coordinator', () => {
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
-
-    // describe('when trying to change seat count on a single user plan', () => {
-    //   it('should throw an error with status code 409 ', async () => {
-    //     BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
-    //     stripeIntegrator.getCustomer.mockReturnValueOnce({
-    //       id: customerId,
-    //       subscriptions: {
-    //         data: [mockSubscription]
-    //       }
-    //     })
-    //     await expect(billingCoordinator.subscribeOrgToPlan({ seats: newSeatCount, orgId }))
-    //       .rejects.toEqual(expect.objectContaining({ code: 409 }))
-    //   })
-    // })
-
-    // describe('when trying to change seat count on a multi user plan', () => {
-    //   it('should throw an error if seat count is less than the multi user default amount', async () => {
-    //     BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
-    //     stripeIntegrator.getCustomer.mockReturnValueOnce({
-    //       id: customerId,
-    //       subscriptions: {
-    //         data: [{ ...mockSubscription, plan: { id: PLANS.MULTI_USER } }]
-    //       }
-    //     })
-    //     await expect(
-    //       billingCoordinator.subscribeOrgToPlan({ seats: MULTI_USER_DEFAULT_SEAT_COUNT - 1, orgId })
-    //     ).rejects.toEqual(expect.objectContaining({ code: 409 }))
-    //   })
-    // })
 
     describe('when trying to change plans from multi user to single user', () => {
       it('should throw an error', async () => {

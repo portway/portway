@@ -430,7 +430,7 @@ describe('BusinessField', () => {
       ).rejects.toEqual(expect.objectContaining({ code: 409 }))
     })
 
-    describe('order re-assignment', async () => {
+    describe('order re-assignment', () => {
       let fieldA
       let fieldB
       let fieldC

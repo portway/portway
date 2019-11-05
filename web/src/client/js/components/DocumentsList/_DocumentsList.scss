@@ -2,27 +2,17 @@
 @import 'CSS/inc/_mixins.scss';
 
 .documents-list {
-  --document-list-active-item: var(--color-gray-2);
-  --document-list-item-hover: var(--color-gray-2);
-  --document-list-item-new: var(--color-gray-2);
-  --document-list-item-color: var(--color-gray-60);
-  @media (prefers-color-scheme: dark) {
-    --document-list-active-item: var(--color-gray-90);
-    --document-list-item-new: var(--color-gray-90);
-    --document-list-item-hover: var(--color-gray-33);
-    --document-list-item-color: var(--color-gray-40);
-  }
+  --document-list-active-item: var(--theme-overlay-dark);
+  --document-list-item-hover: var(--theme-overlay-light);
+  --document-list-item-new: var(--theme-base);
 
   min-height: 100%;
 
   .toolbar {
-    background-color: var(--base-background);
+    background-color: var(--theme-surface);
     border-bottom: thin solid var(--base-border-color);
     position: sticky;
     top: 0;
-    @media (prefers-color-scheme: dark) {
-      background-color: hsl(61, 1%, 23%);
-    }
   }
 
   &--dragged-over {
@@ -91,6 +81,13 @@
         flex-direction: row;
         justify-content: space-between;
         padding-bottom: 10px;
+        &:not([disabled]) {
+          @media (hover: hover) {
+            &:hover {
+              background-color: var(--document-list-item-new);
+            }
+          }
+        }
         .btn--with-circular-icon {
           padding: 0;
           .icon {
@@ -122,15 +119,19 @@
     white-space: normal;
     width: 100%;
     &:not([disabled]) {
-      &:hover {
-        background-color: var(--document-list-item-hover);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--document-list-item-hover);
+        }
       }
     }
     &.active {
       background-color: var(--document-list-active-item);
       &:not([disabled]) {
-        &:hover {
-          background-color: var(--document-list-active-item);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--document-list-active-item);
+          }
         }
       }
       &:focus {
@@ -140,16 +141,16 @@
   }
   &__name {
     border: 0;
-    color: var(--document-list-item-color);
+    color: var(--theme-text-color);
     font-weight: 400;
     padding-bottom: calc(var(--gutter-width) / 4);
     .active & {
-      color: var(--document-list-item-color);
+      color: var(--theme-header-color);
     }
   }
   &__date {
     align-items: center;
-    color: var(--color-gray-20);
+    color: var(--theme-text-color);
     display: flex;
     .active & {
       color: var(--color-gray-30);

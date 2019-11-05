@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react'
+import { useRouteMatch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cx from 'classnames'
+
+import { PATH_PROJECT, PATH_DOCUMENT } from 'Shared/constants'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
@@ -9,8 +12,17 @@ import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
 
 const Project = ({ isFullScreen }) => {
+  const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
+  const isDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/:documentId`)
+  const listClasses = cx({
+    'project__documents-list-container': true,
+    'project__documents-list-container--list-only': isDocumentList && isDocumentList.isExact,
+    'project__documents-list-container--document-only': isDocumentView && isDocumentView.isExact,
+  })
   const documentsClasses = cx({
     'project__documents-document-container': true,
+    'project__documents-document-container--list-only': isDocumentList && isDocumentList.isExact,
+    'project__documents-document-container--document-only': isDocumentView && isDocumentView.isExact,
     'project__documents-document-container--full-screen': isFullScreen
   })
 
@@ -31,7 +43,7 @@ const Project = ({ isFullScreen }) => {
     <main className="project">
       <div className="project__documents">
         {!isFullScreen &&
-        <div className="project__documents-list-container">
+        <div className={listClasses}>
           <DocumentsListContainer />
         </div>
         }
