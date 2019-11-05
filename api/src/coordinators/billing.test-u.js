@@ -16,7 +16,7 @@ describe('billing coordinator', () => {
     const planId = PLANS.SINGLE_USER
     const subscriptionStatus = 'active'
     const mockCurrentSeatCount = 1
-    const newSeatCount = 6
+
     let resolvedValue
     const mockSubscription = {
       id: subscriptionId,
