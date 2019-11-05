@@ -12,7 +12,10 @@ const ProjectSettingsContainer = ({ match }) => {
       projectId={match.params.projectId}
       acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}
       elseRender={(<Redirect to={PATH_PROJECTS} />)}>
-      <ProjectSettingsComponent projectId={match.params.projectId} setting={match.params.setting} />
+      <ProjectSettingsComponent
+        projectId={match.params.projectId}
+        setting={match.params.setting}
+      />
     </ProjectPermission>
   )
 }

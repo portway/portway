@@ -1,19 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
+import { currentUserId } from 'Libs/currentIds'
+import { PATH_ORGANIZATION, PRODUCT_NAME, PLAN_TYPES, QUERY_PARAMS } from 'Shared/constants'
+import { parseParams } from 'Utilities/queryParams'
+
+import { createUser, reinviteUser, removeUser, sortUsers } from 'Actions/user'
+import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
+
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import { currentUserId } from 'Libs/currentIds'
-import { parseParams } from '../../../utilities/queryParams'
-import { PRODUCT_NAME, QUERY_PARAMS } from 'Shared/constants'
-import { createUser, reinviteUser, removeUser } from 'Actions/user'
-import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import AdminUsersComponent from './AdminUsersComponent'
-import { sortUsers } from 'Actions/user'
-import Store from '../../../reducers'
 
 const AdminUsersContainer = ({
   createUser,
@@ -23,6 +25,7 @@ const AdminUsersContainer = ({
   isInviting,
   reinviteUser,
   removeUser,
+  sortUsers,
   uiConfirm,
   uiCreateUserMode
 }) => {
@@ -62,7 +65,7 @@ const AdminUsersContainer = ({
     }
 
     history.push({ search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}` })
-    Store.dispatch(sortUsers(sortBy, sortMethod))
+    sortUsers(sortBy, sortMethod)
   }
 
   function setCreateMode(value) {
@@ -70,7 +73,7 @@ const AdminUsersContainer = ({
   }
 
   return (
-    <>
+    <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]} elseRender={<Redirect to={PATH_ORGANIZATION} />}>
       <Helmet>
         <title>Admin: Users – {PRODUCT_NAME}</title>
       </Helmet>
@@ -90,7 +93,7 @@ const AdminUsersContainer = ({
         users={users}
         totalPages={totalPages}
       />
-    </>
+    </OrgPlanPermission>
   )
 }
 
@@ -102,6 +105,7 @@ AdminUsersContainer.propTypes = {
   errors: PropTypes.object,
   reinviteUser: PropTypes.func.isRequired,
   removeUser: PropTypes.func.isRequired,
+  sortUsers: PropTypes.func.isRequired,
   uiCreateUserMode: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
 }
@@ -114,7 +118,14 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { createUser, reinviteUser, removeUser, uiCreateUserMode, uiConfirm }
+const mapDispatchToProps = {
+  createUser,
+  reinviteUser,
+  removeUser,
+  sortUsers,
+  uiCreateUserMode,
+  uiConfirm
+}
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(AdminUsersContainer)

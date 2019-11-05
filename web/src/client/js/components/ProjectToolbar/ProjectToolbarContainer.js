@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import { PLAN_TYPES } from 'Shared/constants'
 import ProjectToolbarComponent from './ProjectToolbarComponent'
 import { currentUserId } from 'Libs/currentIds'
 import useDataService from 'Hooks/useDataService'
@@ -11,6 +12,7 @@ import currentResource from 'Libs/currentResource'
 
 const ProjectToolbarContainer = ({ isFullScreen, match }) => {
   const projectId = match.params.projectId
+  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
@@ -19,14 +21,15 @@ const ProjectToolbarContainer = ({ isFullScreen, match }) => {
 
   // Create a list of projectUsers if we have any
   let projectUsers = []
-  const myUserId = String(currentUserId)
-
-  if (!userLoading && !assignmentsLoading && projectAssignments) {
-    projectUsers = Object.keys(projectAssignments).filter((userId) => {
-      if (userId !== myUserId) {
-        return users[userId]
-      }
-    })
+  if (currentOrg.plan === PLAN_TYPES.MULTI_USER) {
+    const myUserId = String(currentUserId)
+    if (!userLoading && !assignmentsLoading && projectAssignments) {
+      projectUsers = Object.keys(projectAssignments).filter((userId) => {
+        if (userId !== myUserId) {
+          return users[userId]
+        }
+      })
+    }
   }
 
   return (

@@ -130,6 +130,7 @@ time {
 
 .pill {
   background-color: var(--color-gray-5);
+  border: thin solid transparent;
   border-radius: var(--border-radius);
   color: var(--color-gray-10);
   display: inline-block;
@@ -137,25 +138,45 @@ time {
   margin: 0 var(--icon-margin);
   padding: 3px var(--icon-margin);
   text-decoration: none;
-  &--highlight {
-    background-color: var(--color-brand);
-    color: var(--color-white);
+  &--gray {
+    background-color: var(--color-gray-5);
+    color: var(--color-gray-80);
+    &:hover {
+      border: thin solid var(--color-gray-15);
+      color: var(--color-gray-80);
+    }
   }
   &--green {
     background-color: var(--color-green);
     color: var(--color-white);
+    &:hover {
+      border: thin solid var(--color-green-dark);
+      color: var(--color-white);
+    }
   }
   &--orange {
-    background-color: var(--color-brand);
+    background-color: var(--color-orange);
     color: var(--color-white);
+    &:hover {
+      border: thin solid var(--color-orange-dark);
+      color: var(--color-white);
+    }
   }
   &--blue {
     background-color: var(--color-blue);
     color: var(--color-white);
+    &:hover {
+      border: thin solid var(--color-blue-dark);
+      color: var(--color-white);
+    }
   }
-  &--danger {
+  &--red {
     background-color: var(--color-red);
     color: var(--color-white);
+    &:hover {
+      border: thin solid var(--color-red-dark);
+      color: var(--color-white);
+    }
   }
 }
 

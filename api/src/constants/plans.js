@@ -1,0 +1,8 @@
+export const PLANS = {
+  SINGLE_USER: 'SINGLE_USER',
+  MULTI_USER: 'MULTI_USER'
+}
+
+export const TRIAL_PERIOD_DAYS = 10
+
+export const MULTI_USER_DEFAULT_SEAT_COUNT = 5

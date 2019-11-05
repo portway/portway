@@ -30,11 +30,11 @@ const UserSettingsComponent = ({ section }) => {
       <main>
         <Panel>
           <PanelNavigation>
-            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.PROFILE}`}>
-              <UserIcon width="22" height="22" /> My Profile
+            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.PROFILE}`} aria-label="My Profile">
+              <UserIcon width="22" height="22" /> <span className="label">My Profile</span>
             </NavLink>
-            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.SECURITY}`}>
-              <LockIcon width="22" height="22" /> Security
+            <NavLink to={`${PATH_SETTINGS}/${USER_PATHS.SECURITY}`} aria-label="Security">
+              <LockIcon width="22" height="22" /> <span className="label">Security</span>
             </NavLink>
           </PanelNavigation>
           <PanelContent contentKey={section} contentMap={PANEL_PATHS} />

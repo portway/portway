@@ -103,6 +103,8 @@ export const ActionTypes = {
   INITIATE_ORGANIZATION_BILLING_UPDATE: 'INITIATE_ORGANIZATION_BILLING_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION_BILLING: 'RECEIVE_UPDATED_ORGANIZATION_BILLING',
   RECEIVE_BILLING_ERROR: 'RECEIVE_BILLING_ERROR',
+  INITIATE_ORGANIZATION_PLAN_UPDATE: 'INITIATE_ORGANIZATION_PLAN_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_PLAN: 'RECEIVE_UPDATED_ORGANIZATION_PLAN',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
@@ -239,7 +241,9 @@ export const Organizations = {
   receiveBilling: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_BILLING, 'id', 'data'),
   initiateBillingUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE, 'id'),
   receiveUpdatedBilling: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING, 'id', 'data'),
-  receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR)
+  receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR),
+  initiatePlanUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_PLAN_UPDATE, 'id'),
+  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'id', 'plan')
 }
 
 export const UI = {

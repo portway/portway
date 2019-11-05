@@ -1,29 +1,32 @@
-.admin {
-  // Plans section
-  &-plans {
+.admin-plans-selector {
+
+  &--disabled {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  &__title {
+    color: var(--color-green-dark);
+  }
+
+  &__list {
     display: flex;
     flex-wrap: nowrap;
     list-style: none;
     margin: 0;
     padding: 0;
+  }
 
-    &__title {
-      color: var(--color-green-dark, green);
+  &__item {
+    flex: 1 1 100%;
+    margin-right: 2rem;
+    width: 50%;
+
+    &:last-child {
+      margin: 0;
     }
 
-    &__item {
-      flex: 1 1 100%;
-      margin-right: 2rem;
-      width: 50%;
-      &:last-child {
-        margin: 0;
-      }
-    }
-
-    &__submit {
-      margin: 2rem 0 0;
-    }
-
+    // Override button
     button:not([disabled]) {
       align-items: flex-start;
       background: transparent;
@@ -59,51 +62,54 @@
       }
 
     } // button
+  }
 
-    // text
-    &__content {
-      flex: 1;
-      padding: 2rem;
-      h3 {
-        color: var(--color-gray-10, gray);
-        font-weight: 700;
-        margin: 0 0 1rem;
-      }
-      p {
-        color: unset;
-      }
-      ul {
-        list-style: none;
-        margin: 1rem 0;
-        padding-left: 0;
-        li {
-          align-items: center;
-          display: flex;
-          .icon {
-            margin-right: .5rem;
-          }
-        }
-      }
-      [aria-checked="true"] & {
-        h3 {
-          color: var(--color-green, green);
-        }
-      }
-    }
+  &__submit {
+    margin: 2rem 0 0;
+  }
 
-    &__price {
-      background-color: var(--base-border-color, gray);
-      color: var(--color-white);
+  // text
+  &__content {
+    flex: 1;
+    padding: 2rem;
+    h3 {
+      color: var(--color-gray-80);
       font-weight: 700;
-      margin: 2rem 0 0 0;
-      padding: 1rem 2rem;
-      width: 400%; // Safari bug
-
-      [aria-checked="true"] & {
-        background-color: var(--color-green, green);
+      margin: 0 0 1rem;
+    }
+    p {
+      color: unset;
+    }
+    ul {
+      list-style: none;
+      margin: 1rem 0;
+      padding-left: 0;
+      li {
+        align-items: center;
+        display: flex;
+        .icon {
+          margin-right: .5rem;
+        }
       }
     }
+    [aria-checked="true"] & {
+      h3 {
+        color: var(--color-green);
+      }
+    }
+  }
 
+  &__price {
+    background-color: var(--base-border-color);
+    color: var(--color-white);
+    font-weight: 700;
+    margin: 2rem 0 0 0;
+    padding: 1rem 2rem;
+    width: 400%; // Safari bug
+
+    [aria-checked="true"] & {
+      background-color: var(--color-green);
+    }
   }
 
 }

@@ -88,7 +88,10 @@ FormField.propTypes = {
   required: PropTypes.bool,
   status: PropTypes.node,
   type: PropTypes.string,
-  value: PropTypes.string || PropTypes.bool,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ])
 }
 
 FormField.defaultProps = {
