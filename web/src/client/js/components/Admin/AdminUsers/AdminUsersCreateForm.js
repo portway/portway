@@ -53,7 +53,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
           required
           type="email"
         />
-        <div className="form-field">
+        <div className="field-container">
           <div className="field">
             <label htmlFor="orgRole">Select a Role</label>
             <div className="control">

@@ -26,6 +26,10 @@ body {
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 a, .link {
   color: var(--color-blue);
   -webkit-tap-highlight-color: rgba(0,0,0,0);

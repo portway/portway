@@ -13,7 +13,7 @@ import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './UserMenu.scss'
-import { UserIcon } from 'Components/Icons/UserIcon'
+import { UserIcon } from 'Components/Icons'
 
 function logoutAction() {
   Store.dispatch(logoutUser(currentUserId))

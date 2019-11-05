@@ -6,11 +6,8 @@ import ValidationComponent from 'Components/Validation/ValidationComponent'
 
 // const TEXT_FIELD_TYPES = ['text', 'email', 'number']
 const CHECKED_FIELD_TYPES = ['checkbox', 'radio']
-const FILE_FIELD_TYPES = ['file']
 
 const FormField = ({
-  accept,
-  ariaDescribedBy,
   disabled,
   errors,
   help,
@@ -18,24 +15,20 @@ const FormField = ({
   label,
   large,
   name,
-  onBlur,
-  onChange,
-  placeholder,
-  required,
   status,
   type,
   value,
+  ...props
 }) => {
   const formFieldClasses = cx({
-    'form-field': true,
-    'form-field--large': large,
-    'form-field--file': type === 'file',
-    'form-field--checkbox': type === 'checkbox',
-    'form-field--horizontal': type === 'checkbox',
-    'form-field--error': errors.length > 0
+    'field-container': true,
   })
   const fieldClasses = cx({
-    'field': true
+    'field': true,
+    'field--checkbox': type === 'checkbox',
+    'field--error': errors.length > 0,
+    'field--file': type === 'file',
+    'field--large': large,
   })
   const controlClasses = cx({
     'field__control': true,
@@ -47,19 +40,13 @@ const FormField = ({
         <label htmlFor={id}>{label}</label>
         <div className={controlClasses}>
           <input
-            accept={FILE_FIELD_TYPES.includes(type) ? accept : null}
-            aria-describedby={ariaDescribedBy}
-            aria-required={required}
             defaultChecked={CHECKED_FIELD_TYPES.includes(type) ? value : null}
             defaultValue={value}
             disabled={disabled}
             id={id}
             name={name}
-            onBlur={onBlur}
-            onChange={onChange}
-            placeholder={placeholder}
-            required={required}
             type={type}
+            {...props}
           />
           {status &&
           <div className="field__status">{status}</div>
@@ -67,14 +54,12 @@ const FormField = ({
         </div>
         <ValidationComponent errors={errors} />
       </div>
-      {help && <div className="form-field__help small">{help}</div>}
+      {help && <div className="field-container__help small">{help}</div>}
     </div>
   )
 }
 
 FormField.propTypes = {
-  accept: PropTypes.string,
-  ariaDescribedBy: PropTypes.string,
   errors: PropTypes.array,
   disabled: PropTypes.bool,
   help: PropTypes.string,
@@ -82,13 +67,12 @@ FormField.propTypes = {
   label: PropTypes.string,
   large: PropTypes.bool,
   name: PropTypes.string.isRequired,
-  onBlur: PropTypes.func,
-  onChange: PropTypes.func,
-  placeholder: PropTypes.string,
-  required: PropTypes.bool,
   status: PropTypes.node,
   type: PropTypes.string,
-  value: PropTypes.string || PropTypes.bool,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool
+  ]),
 }
 
 FormField.defaultProps = {

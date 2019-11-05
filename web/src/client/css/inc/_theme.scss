@@ -12,10 +12,8 @@ $size-large: 2.4rem;
 // Bulma Elements
 @import 'bulma/sass/elements/content.sass';
 @import 'bulma/sass/elements/title.sass';
-@import 'bulma/sass/elements/button.sass';
 @import 'bulma/sass/elements/image.sass';
 @import 'bulma/sass/elements/container.sass';
-// @import 'bulma/sass/elements/form.sass';
 @import 'bulma/sass/elements/other.sass';
 // Bulma components
 @import 'bulma/sass/components/navbar.sass';
@@ -23,6 +21,8 @@ $size-large: 2.4rem;
 @import 'bulma/sass/components/message.sass';
 @import 'bulma/sass/components/card.sass';
 @import 'bulma/sass/layout/hero.sass';
+
+@import 'buttons';
 
 // To help stay sane, look at the structure of the Bulma repo here for
 // the correct import paths. It doesn't match their documentation site perfectly
@@ -111,34 +111,30 @@ a {
   }
 }
 
-// Bulma button override
-.button {
-  background-color: var(--color-blue);
-  text-decoration: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  &:hover, &:focus {
-    background-color: var(--color-cyan);
-  }
-  &:active {
-    background-color: var(--color-blue-dark);
-  }
-  &.is-primary {
-    background-color: var(--color-green);
-    &:hover, &:focus {
-      background-color: var(--color-green);
-    }
-    &:active {
-      background-color: var(--color-green-dark);
-    }
-  }
-}
+// // Bulma button override
+// .button {
+//   background-color: var(--color-blue);
+//   text-decoration: none;
+//   -webkit-tap-highlight-color: rgba(0,0,0,0);
+//   &:hover, &:focus {
+//     background-color: var(--color-cyan);
+//   }
+//   &:active {
+//     background-color: var(--color-blue-dark);
+//   }
+//   &.is-primary {
+//     background-color: var(--color-green);
+//     &:hover, &:focus {
+//       background-color: var(--color-green);
+//     }
+//     &:active {
+//       background-color: var(--color-green-dark);
+//     }
+//   }
+// }
 
 .section {
   .container {
     padding: 0 64px;
   }
-}
-
-.field--with-space {
-  padding-top: 24px;
 }

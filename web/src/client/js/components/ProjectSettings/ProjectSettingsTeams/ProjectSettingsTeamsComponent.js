@@ -16,18 +16,20 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
   const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
 
   return (
-    <form className="project-settings__team" onSubmit={(e) => { e.preventDefault() }}>
+    <form className="project-settings__teams" onSubmit={(e) => { e.preventDefault() }}>
       <section>
         <h2>Manage your team</h2>
-        <div className="form-field form-field--large">
+        <h3>Add a teammate to this project</h3>
+        <p>Once you add a team member, choose their role for the project</p>
+        <div className="field-container field-container--row">
           <div className="field">
-            <h3>Add a teammate to this project</h3>
-            <p>Once you add a team member, choose their role for the project</p>
-            <div className="field__row project-settings__teammate-field">
+            <label htmlFor="team-list">Select a team member</label>
+            <div className="field__control project-settings__teammate-field">
               <Select
                 classNamePrefix="react-select"
                 className="react-select-container"
                 defaultValue={newUserId}
+                inputId="team-list"
                 onInputChange={debounce((input, { action }) => {
                   if (action === 'input-change') {
                     setNewUserId(null)
@@ -38,7 +40,16 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
                 ref={selectRef} />
+            </div>
+          </div>
+          <div className="field">
+            <div className="field__label">Select a role</div>
+            <div className="field__control">
               <ProjectRolesDropdown align="right" defaultValue={newUserRole} onChange={(newRoleId) => { setNewUserRole(newRoleId) }} />
+            </div>
+          </div>
+          <div className="field">
+            <div className="field__control">
               <button
                 type="button"
                 className="btn"
@@ -48,17 +59,13 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
                   selectRef.current.onChange('', 'clear')
                 }}>Add teammate</button>
             </div>
-            <ValidationContainer resource="project" value="userId" />
           </div>
+          <ValidationContainer resource="project" value="userId" />
         </div>
       </section>
       <section>
         <h2>Project team</h2>
-        <div className="form-field form-field--large">
-          <div className="field">
-            <ProjectTeamList projectUsers={projectUsers} removeAssignmentHandler={removeAssignmentHandler} updateAssignmentHandler={updateAssignmentHandler} />
-          </div>
-        </div>
+        <ProjectTeamList projectUsers={projectUsers} removeAssignmentHandler={removeAssignmentHandler} updateAssignmentHandler={updateAssignmentHandler} />
       </section>
     </form>
   )

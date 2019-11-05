@@ -64,6 +64,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
       <section>
         <h2>Update Your Password</h2>
         <FormField
+          aria-required={true}
           errors={errors.password}
           id="currentPassword"
           label="Current Password"
@@ -74,7 +75,9 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           type="password"
         />
         <FormField
-          ariaDescribedBy="pw-popover"
+          aria-describedby="pw-popover"
+          aria-required={true}
+          autoComplete="new-password"
           errors={errors.newPassword}
           id="newPassword"
           label="New Password"
@@ -98,7 +101,9 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
         </PopoverComponent>
         }
         <FormField
-          ariaDescribedBy="co-popover"
+          aria-describedby="co-popover"
+          aria-required={true}
+          autoComplete="new-password"
           disabled={newPassword === null}
           errors={errors.confirmNewPassword}
           id="confirmNewPassword"
