@@ -6,7 +6,7 @@
     <form class="login-form" action="/sign-up/registration/complete" method="POST">
       <section class="section">
         <p>You're almost there! Pick a strong password to finish the last step.</p>
-        <div class="form-field">
+        <div class="field-container">
           <div class="field">
             <label class="label is-small" for="password">Password</label>
             <div class="field__control field__control--with-status">
@@ -22,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="form-field">
+        <div class="field-container">
           <div class="field">
             <label class="label is-small" for="confirm-password">Confirm password</label>
             <div class="field__control field__control--with-status">
@@ -41,14 +41,16 @@
         <% if (flash) { %>
           <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
         <% } %>
-        <div class="field field--with-space">
-          <%
-            if (typeof button === 'undefined') {
-              var button = 'Complete registration'
-            }
-          %>
-          <input type="hidden" id="email" name="token" value="<%= token %>">
-          <input type="submit" id="complete-btn" class="button is-primary" value="<%= button %>">
+        <div class="field-container field-container--with-space">
+          <div class="field">
+            <%
+              if (typeof button === 'undefined') {
+                var button = 'Complete registration'
+              }
+            %>
+            <input type="hidden" id="email" name="token" value="<%= token %>">
+            <input type="submit" id="complete-btn" class="button" value="<%= button %>">
+          </div>
         </div>
       </section>
     </form>

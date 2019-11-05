@@ -8,16 +8,15 @@ import { CheckIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
-  action,
   bigSubmit,
   children,
+  dispatch,
   forms,
   name,
-  method,
-  multipart,
   onSubmit,
   submitEnabled,
   submitLabel,
+  ...props,
 }) => {
   const formRef = useRef()
   const [formChanged, setFormChanged] = useState(submitEnabled)
@@ -55,13 +54,12 @@ const Form = ({
 
   return (
     <form
-      ref={formRef}
-      action={action}
-      method={method}
-      multipart={multipart}
+      className="form"
       name={name}
       onChange={debouncedChangeHandler}
-      onSubmit={submitHandler}>
+      onSubmit={submitHandler}
+      ref={formRef}
+      {...props}>
       {children}
       {failed &&
       <div>
@@ -78,12 +76,10 @@ const Form = ({
 }
 
 Form.propTypes = {
-  action: PropTypes.string,
   bigSubmit: PropTypes.bool,
   children: PropTypes.node,
+  dispatch: PropTypes.func,
   forms: PropTypes.object,
-  method: PropTypes.string,
-  multipart: PropTypes.string,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
@@ -91,7 +87,6 @@ Form.propTypes = {
 }
 
 Form.defaultProps = {
-  multipart: 'false',
   submitLabel: 'Submit',
 }
 
