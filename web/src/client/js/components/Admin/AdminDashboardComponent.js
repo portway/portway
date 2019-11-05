@@ -64,16 +64,16 @@ const AdminDashboardComponent = ({ organization, section }) => {
             </Link>
             }
             <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} isActive={isSubSection}>
-                <TeamsIcon width="22" height="22" /> Users
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} aria-label="Users" isActive={isSubSection}>
+                <TeamsIcon width="22" height="22" /> <span className="label">Users</span>
               </NavLink>
             </OrgPlanPermission>
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`}>
-                <OrganizationIcon width="22" height="22" /> Organization
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`} aria-label="Organization">
+                <OrganizationIcon width="22" height="22" /> <span className="label">Organization</span>
               </NavLink>
-              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`}>
-                <BillingIcon width="22" height="22" /> Billing
+              <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`} aria-label="Billing">
+                <BillingIcon width="22" height="22" /> <span className="label">Billing</span>
               </NavLink>
             </OrgPermission>
           </PanelNavigation>
