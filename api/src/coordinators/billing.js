@@ -4,7 +4,7 @@ import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
-import { PLANS } from '../constants/plans'
+import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
 
 const formatBilling = (customer) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -41,6 +41,7 @@ const formatBilling = (customer) => {
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
     subscription.currentPeriodEnd = billingSubscription.current_period_end
     subscription.trialEnd = billingSubscription.trialEnd
+    subscription.currentSeats = billingSubscription.items.data[0].quantity
 
     if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
       subscription.flatCost = billingSubscription.plan.amount
@@ -58,6 +59,8 @@ const formatBilling = (customer) => {
 }
 
 const subscribeOrgToPlan = async function(planId, orgId) {
+  let seats
+
   const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
 
   const org = await BusinessOrganization.findById(orgId)
@@ -73,10 +76,64 @@ const subscribeOrgToPlan = async function(planId, orgId) {
 
   const currentSubscription = customer.subscriptions.data[0]
   const subscriptionId = currentSubscription && currentSubscription.id
+  const currentPlanId = currentSubscription && currentSubscription.plan.id
 
-  const subscription = await stripeIntegrator.createSubscription({ customerId: customer.id, planId, subscriptionId })
+  if (planId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
+    const message = 'Cannot downgrade from multi user to single user plan'
+    throw ono({ code: 409, publicMessage: message }, message)
+  }
+
+  //nothing is changing, return success and move on without updating stripe
+  if (planId === currentPlanId) {
+    return
+  }
+
+  if (planId === PLANS.MULTI_USER) {
+    seats = 5
+  }
+
+  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, planId, subscriptionId, seats })
 
   await BusinessOrganization.updateById(orgId, { plan: planId, subscriptionStatus: subscription.status })
+}
+
+const updatePlanSeats = async function(seats, orgId) {
+  const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot update plan seats, organization: ${orgId} does not have saved billing information`)
+
+  const org = await BusinessOrganization.findById(orgId)
+  if (!org.stripeId) {
+    throw billingError
+  }
+
+  const customer = await stripeIntegrator.getCustomer(org.stripeId)
+
+  if (!customer) {
+    throw billingError
+  }
+
+  const currentSubscription = customer.subscriptions.data[0]
+
+  if (!currentSubscription) {
+    throw ono({ code: 409, publicMessage: 'No Subscription: Organization must be subscribed to a plan to update seat count' })
+  }
+
+  const subscriptionId = currentSubscription.id
+  const currentSeats = currentSubscription.items.data[0].quantity
+  const currentPlanId = currentSubscription.plan.id
+
+  if (currentPlanId === PLANS.SINGLE_USER) {
+    const message = 'Cannot set seats on a single user plan'
+    throw ono({ code: 409, publicMessage: message }, message)
+  }
+
+  //nothing is changing, return success and move on without updating stripe
+  if (seats === currentSeats) {
+    return
+  }
+
+  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, seats, subscriptionId })
+
+  await BusinessOrganization.updateById(orgId, { subscriptionStatus: subscription.status })
 }
 
 const updateOrgBilling = async function(token, orgId) {
@@ -111,6 +168,7 @@ const getOrgBilling = async function(orgId) {
 
 export default {
   subscribeOrgToPlan,
+  updatePlanSeats,
   updateOrgBilling,
   getOrgBilling
 }

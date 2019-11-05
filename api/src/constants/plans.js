@@ -4,3 +4,5 @@ export const PLANS = {
 }
 
 export const TRIAL_PERIOD_DAYS = 10
+
+export const MULTI_USER_DEFAULT_SEAT_COUNT = 5
