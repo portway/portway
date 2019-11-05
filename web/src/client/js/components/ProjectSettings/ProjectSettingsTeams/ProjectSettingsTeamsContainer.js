@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
@@ -14,18 +14,22 @@ import { uiConfirm } from 'Actions/ui'
 import ProjectSettingsTeamComponent from './ProjectSettingsTeamsComponent'
 
 const ProjectSettingsTeamContainer = ({ location }) => {
-  const { data: project } = useDataService(currentResource('project', location.pathname), [
+  const [userSearch, setUserSearch] = useState()
+
+  const { data: project = {} } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
+
   const projectId = project.id
-  const { data: users } = useDataService(dataMapper.users.list())
+  const { data: projectUsers } = useDataService(dataMapper.projects.projectUsers(projectId))
   const { data: currentUser } = useDataService(dataMapper.users.current())
   const { data: projectAssignments } = useDataService(dataMapper.projects.projectAssignments(projectId))
+  const { data: searchUsers = {} } = useDataService(dataMapper.users.searchByName(userSearch), [userSearch])
 
-  if (!currentUser || !users || !projectAssignments) return null
+  if (!currentUser || !projectUsers || !projectAssignments || !Object.keys(project).length) return null
 
   const assignedUsers = Object.values(projectAssignments).map((assignment) => {
-    const projectUser = { ...users[assignment.userId] }
+    const projectUser = { ...projectUsers[assignment.userId] }
     return {
       ...projectUser,
       assignmentId: assignment.id,
@@ -33,7 +37,7 @@ const ProjectSettingsTeamContainer = ({ location }) => {
     }
   })
 
-  const unassignedUsers = Object.values(users).filter((user) => {
+  const unassignedUsers = Object.values(searchUsers).filter((user) => {
     if (projectAssignments[user.id]) return
     return user
   })
@@ -54,11 +58,17 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   }
 
   function removeAssignmentHandler(userId, assignmentId) {
-    const name = users[userId].name
+    const name = projectUsers[userId].name
     const message = <span>Remove <span className="highlight">{name}</span> from this project?</span>
     const confirmedAction = () => { Store.dispatch(removeProjectAssignee(projectId, userId, assignmentId)) }
     const confirmedLabel = `Yes, remove ${name}`
     Store.dispatch(uiConfirm({ message, confirmedAction, confirmedLabel }))
+  }
+
+  function userSearchHandler(partialNameString) {
+    if (partialNameString) {
+      setUserSearch(partialNameString)
+    }
   }
 
   return (
@@ -71,7 +81,9 @@ const ProjectSettingsTeamContainer = ({ location }) => {
         projectUsers={assignedUsers}
         removeAssignmentHandler={removeAssignmentHandler}
         updateAssignmentHandler={updateAssignmentHandler}
-        users={userOptions} />
+        userSearchHandler={userSearchHandler}
+        users={userOptions}
+        projectId={projectId} />
     </>
   )
 }

@@ -54,3 +54,24 @@ export function validateParams(schema, options = {}) {
     next(apiError)
   }
 }
+
+// validation occurs on req.query
+export function validateQuery(schema, options = {}) {
+  const defaultOptions = {
+    allowUnknown: false
+  }
+
+  const mergedOptions = Object.assign(defaultOptions, options)
+  return (req, res, next) => {
+    const { value, error } = Joi.validate(req.query, schema, mergedOptions)
+
+    if (!error) {
+      req.query = value
+      return next()
+    }
+
+    const apiError = new ono({ code: 400, publicMessage: PUBLIC_MESSAGES.INVALID_QUERY }, error.message)
+
+    next(apiError)
+  }
+}

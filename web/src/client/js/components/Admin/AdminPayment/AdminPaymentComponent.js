@@ -28,8 +28,12 @@ function renderCardLogo(brand) {
 }
 
 function getTotalCost(subscription) {
-  // TODO calculate total cost from flatCost + seatCount*costPerSeat
-  return subscription.flatCost || '000'
+  if (subscription.flatCost) {
+    // @todo calculate total cost from flatCost + seatCount*costPerSeat
+    return subscription.flatCost
+  } else {
+    return '000'
+  }
 }
 
 function toCurrencyString(num) {
@@ -69,7 +73,7 @@ const AdminPaymentComponent = ({
   }
 
   if (orgBilling && orgBilling.source) {
-    const cost = orgBilling.subscription && toCurrencyString(getTotalCost(orgBilling.subscription)) // @todo update with seats
+    const cost = orgBilling.subscription && toCurrencyString(getTotalCost(orgBilling.subscription))
     const expDateCalc = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
     const expDate = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
     const expiringSoon = moment() > expDateCalc.add(1, 'months')

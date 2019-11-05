@@ -25,9 +25,11 @@
         width: 18px;
       }
     }
-    &:hover:not([disabled]) {
-      .icon {
-        background-color: var(--color-cyan);
+    @media (hover: hover) {
+      &:hover:not([disabled]) {
+        .icon {
+          background-color: var(--color-cyan);
+        }
       }
     }
     &[aria-expanded="true"] {
@@ -35,21 +37,23 @@
         background-color: var(--color-gray-15);
         transform: rotate(45deg);
       }
-      &:hover:not([disabled]) {
-        .icon {
-          background-color: var(--color-gray-15);
+      @media (hover: hover) {
+        &:hover:not([disabled]) {
+          .icon {
+            background-color: var(--color-gray-15);
+          }
         }
       }
     }
   }
 
   &__content {
-    background-color: var(--base-background);
+    background-color: var(--theme-surface);
     border: thin solid var(--base-border-color);
     border-radius: var(--border-radius);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     bottom: var(--gutter-width);
-    max-height: 200px;
+    // max-height: 200px;
     overflow: auto;
     position: absolute;
     width: var(--content-menu-width);
@@ -104,8 +108,10 @@
       }
     }
     &.btn--blank {
-      &:hover {
-        background-color: var(--content-menu-btn-hover);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--content-menu-btn-hover);
+        }
       }
     }
   }

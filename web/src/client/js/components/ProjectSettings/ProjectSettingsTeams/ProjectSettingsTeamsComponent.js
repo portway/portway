@@ -1,22 +1,34 @@
 import React, { lazy, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import { debounce } from 'lodash'
+import { Link } from 'react-router-dom'
 const Select = lazy(() => import('react-select'))
 
-import Constants from 'Shared/constants'
+import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { CaretIcon } from 'Components/Icons'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 import './_ProjectSettingsTeams.scss'
 
-const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, projectUsers, updateAssignmentHandler, removeAssignmentHandler }) => {
+const ProjectSettingsTeamsComponent = ({
+  createAssignmentHandler,
+  projectId,
+  projectUsers,
+  removeAssignmentHandler,
+  updateAssignmentHandler,
+  users,
+  userSearchHandler
+}) => {
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
-  const [newUserRole, setNewUserRole] = useState(Constants.PROJECT_ROLE_IDS.READER)
+  const [newUserRole, setNewUserRole] = useState(PROJECT_ROLE_IDS.READER)
 
   return (
     <form className="project-settings__team" onSubmit={(e) => { e.preventDefault() }}>
       <section>
+        <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><CaretIcon /> Back to Project</Link>
         <h2>Manage your team</h2>
         <div className="form-field form-field--large">
           <div className="field">
@@ -26,7 +38,13 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
               <Select
                 classNamePrefix="react-select"
                 className="react-select-container"
-                noOptionsMessage={() => { return 'Your entire team is on the project' }}
+                defaultValue={newUserId}
+                onInputChange={debounce((input, { action }) => {
+                  if (action === 'input-change') {
+                    setNewUserId(null)
+                    userSearchHandler(input)
+                  }
+                }, 400)}
                 options={users}
                 onChange={(option) => { setNewUserId(Number(option.value)) }}
                 placeholder="Add a person..."
@@ -59,10 +77,12 @@ const ProjectSettingsTeamsComponent = ({ users, createAssignmentHandler, project
 
 ProjectSettingsTeamsComponent.propTypes = {
   createAssignmentHandler: PropTypes.func.isRequired,
+  projectId: PropTypes.string.isRequired,
+  projectUsers: PropTypes.array.isRequired,
   removeAssignmentHandler: PropTypes.func.isRequired,
   updateAssignmentHandler: PropTypes.func.isRequired,
   users: PropTypes.array.isRequired,
-  projectUsers: PropTypes.array.isRequired
+  userSearchHandler: PropTypes.func.isRequired,
 }
 
 export default ProjectSettingsTeamsComponent

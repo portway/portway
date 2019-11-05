@@ -54,13 +54,17 @@
       display: flex;
       font-size: 1.3rem;
       padding: 4px 10px;
-      &:hover {
-        background-color: rgba(255, 255, 255, .03);
+      @media (hover: hover) {
+        &:hover {
+          background-color: rgba(255, 255, 255, .03);
+        }
       }
       &--is-focused {
         background-color: var(--color-blue);
-        &:hover {
-          background-color: var(--color-blue-dark);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--color-blue-dark);
+          }
         }
       }
       .icon {

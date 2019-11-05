@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import TextField from 'Components/Form/TextField'
+import FormField from 'Components/Form/FormField'
 
 const ProjectFormComponent = ({ errors, formOptions }) => {
   return (
     <form className="project-form" onSubmit={formOptions.submitHandler}>
-      <TextField
+      <FormField
         id="projectName"
         label="Project Name"
         name="name"
@@ -14,7 +14,7 @@ const ProjectFormComponent = ({ errors, formOptions }) => {
         placeholder="My new project"
         value={formOptions.values.projectName}
         onChange={formOptions.changeHandler} />
-      <TextField
+      <FormField
         id="projectDescription"
         label="Description (optional)"
         large

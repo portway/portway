@@ -128,7 +128,9 @@ describe('BusinessUser', () => {
       let users
 
       beforeAll(async () => {
-        users = await BusinessUser.findAllSanitized(constants.ORG_ID)
+        users = (
+          await BusinessUser.findAllSanitized(constants.ORG_ID, { page: 1, perPage: 1000 })
+        ).users
       })
 
       it('should return all users', () => {

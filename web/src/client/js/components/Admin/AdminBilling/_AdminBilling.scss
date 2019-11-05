@@ -1,10 +1,9 @@
 .admin-billing {
 
   &__notice {
-    background-color: var(--color-gray-80);
+    background-color: var(--theme-overlay-dark);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    color: var(--color-white);
     left: 50%;
     padding: 2rem;
     position: absolute;

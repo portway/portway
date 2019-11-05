@@ -6,11 +6,7 @@ function DragIcon({ className, fill, height, width }) {
   return (
     <div className="icon">
       <svg className={className} xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 36 36">
-        <g fill="none" fillRule="evenodd" stroke={fill} strokeLinecap="round" strokeWidth="3" transform="translate(6 9)">
-          <path d="m0 8.83333333h24"/>
-          <path d="m0 .83333333h24"/>
-          <path d="m0 17 24-.1666667"/>
-        </g>
+        <path d="m3 24c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm11 0c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm-11-12c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm11 0c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm-11-12c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm11 0c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z" fill={fill} fillRule="evenodd" transform="translate(10 3)"/>
       </svg>
     </div>
   )

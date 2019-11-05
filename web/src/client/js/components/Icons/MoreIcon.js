@@ -6,7 +6,7 @@ function MoreIcon({ className, fill, height, width }) {
   return (
     <div className="icon">
       <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width={width} height={height}>
-        <path fill={fill} fillRule="evenodd" d="m18 21c-1.6568542 0-3-1.3431458-3-3s1.3431458-3 3-3 3 1.3431458 3 3-1.3431458 3-3 3zm10 0c-1.6568542 0-3-1.3431458-3-3s1.3431458-3 3-3 3 1.3431458 3 3-1.3431458 3-3 3zm-20 0c-1.65685425 0-3-1.3431458-3-3s1.34314575-3 3-3 3 1.3431458 3 3-1.34314575 3-3 3z" />
+        <path d="m18 15c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm-13 0c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm26 0c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3z" fill={fill} fillRule="evenodd"/>
       </svg>
     </div>
   )
