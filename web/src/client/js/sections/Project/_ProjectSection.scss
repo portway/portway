@@ -43,16 +43,13 @@
       overscroll-behavior: contain;
       position: relative;
       transform: translate3d(0, 0, 0);
-      transition: transform 0.2s ease-in-out;
       width: 100vw;
       z-index: 1;
       -webkit-overflow-scrolling: touch;
-      // &--list-only {
-      //   transform: translate3d(0, 0, 0);
-      // }
-      // &--document-only {
-      //   transform: translate3d(-100vw, 0, 0);
-      // }
+      @media (prefers-reduced-motion: no-preference) {
+        // Turn on animations for users with no preference
+        transition: transform 0.2s ease-in-out;
+      }
       @include media('>medium') {
         transform: translate3d(0, 0, 0);
         width: calc(var(--gutter-width) + 300px);
@@ -69,7 +66,6 @@
       padding-bottom: 65px;
       position: absolute;
       transform: translate3d(0, 20px, 0);
-      transition: transform 0.2s ease-out;
       top: 63px;
       visibility: hidden;
       width: 100vw;
@@ -84,6 +80,10 @@
       }
       &--full-screen {
         height: 100vh;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        // Turn on animations for users with no preference
+        transition: transform 0.2s ease-out;
       }
       @include media('>medium') {
         flex: 1;
