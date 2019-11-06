@@ -18,7 +18,7 @@
       font-size: 1.2rem;
       margin: 0;
     }
-    ul, ol { margin-bottom: 0; }
+    ul, ol { margin: 0; }
 
     &:after, &:before {
       bottom: 100%;
@@ -32,7 +32,7 @@
     }
     &:after {
       border-color: rgba(255, 255, 255, 0);
-      border-bottom-color: #ffffff;
+      border-bottom-color: var(--theme-surface);
       border-width: 16px;
       margin-left: -16px;
     }

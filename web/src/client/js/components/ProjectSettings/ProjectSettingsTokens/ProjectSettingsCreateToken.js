@@ -22,23 +22,27 @@ const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, errors, proj
   }, [])
   return (
     <form className="project-settings__create-token" onSubmit={(e) => { e.preventDefault(); createKeyHandler() }}>
-      <div className="form-field">
+      <div className="field-container">
         <div className="field">
           <label htmlFor="token-name">Key name <span className="note">(required)</span></label>
-          <input ref={nameRef} type="text" name="token-name" placeholder="Key name..." onChange={nameChangeHandler} />
-          <p className="note">The name is not important. Use it as a way to identify your differeny keys.</p>
+          <div className="field__control">
+            <input ref={nameRef} type="text" name="token-name" placeholder="Key name..." onChange={nameChangeHandler} />
+          </div>
           <ValidationContainer resource="project" value="name" />
         </div>
+        <p className="field-container__help">The name is not important. Use it as a way to identify your differeny keys.</p>
       </div>
-      <div className="form-field">
+      <div className="field-container">
         <div className="field">
           <label htmlFor="role-menu">Select a role</label>
           <ProjectRolesDropdown defaultValue={Constants.PROJECT_ROLE_IDS.READER} name="role-menu" onChange={(roleId) => { setProjectRoleId(roleId) }} />
         </div>
       </div>
-      <div className="form-field">
-        <div className="field__row field--with-space">
+      <div className="field-container field-container--row field-container--with-space">
+        <div className="field">
           <button className="btn btn--primary" disabled={creationDisabled}>Create key</button>
+        </div>
+        <div className="field">
           <button type="button" className="btn btn--blank" onClick={cancelHandler}>Cancel</button>
         </div>
       </div>
