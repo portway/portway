@@ -97,7 +97,7 @@ const subscribeOrgToPlan = async function(planId, orgId) {
     seats = MULTI_USER_DEFAULT_SEAT_COUNT
   }
 
-  await createOrUpdateOrgSubscription({ customerId: customer.id, planId, seats, subscriptionId, orgId })
+  await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId, seats, subscriptionId, orgId })
 }
 
 const updatePlanSeats = async function(seats, orgId) {
@@ -135,9 +135,7 @@ const updatePlanSeats = async function(seats, orgId) {
     return
   }
 
-  const subscription = await stripeIntegrator.createOrUpdateSubscription({ customerId: customer.id, seats, subscriptionId })
-
-  await BusinessOrganization.updateById(orgId, { subscriptionStatus: subscription.status })
+  await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
 }
 
 const updateOrgBilling = async function(token, orgId) {
@@ -158,11 +156,11 @@ const updateOrgBilling = async function(token, orgId) {
 
   if (!currentSubscription) {
     // Somehow the user doesn't have a subscription yet, they now have billing info saved, give them a single user one
-    await createOrUpdateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, orgId })
+    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, orgId })
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
     const currentPlan = currentSubscription.plan.id
-    await createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, orgId })
+    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, orgId })
   }
 
   // refetch customer with current billing and subscription information
@@ -189,10 +187,12 @@ const createOrUpdateOrgSubscription = async function({ customerId, planId, trial
   await BusinessOrganization.updateById(orgId, { subscriptionStatus: updatedSubscription.status, plan: updatedSubscription.plan.id })
 }
 
-export default {
+const billingCoordinator = {
   subscribeOrgToPlan,
   updatePlanSeats,
   updateOrgBilling,
   getOrgBilling,
   createOrUpdateOrgSubscription
 }
+
+export default billingCoordinator

@@ -1,7 +1,7 @@
 export default {
   createCustomer: jest.fn(() => getGenericStripeCustomerData()),
   createOrUpdateSubscription: jest.fn(() => {
-    return {}
+    return { plan: { id: 'not-a-real-plan-id' } }
   }),
   getCustomer: jest.fn(() => getGenericStripeCustomerData()),
   updateCustomer: jest.fn(() => getGenericStripeCustomerData())
