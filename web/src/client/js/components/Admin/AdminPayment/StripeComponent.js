@@ -111,13 +111,13 @@ class StripeComponent extends React.Component {
             <label className="field__label" htmlFor="state">
               State
             </label>
-            <div className="field__control field__control">
+            <div className="field__control field__control--state">
               <input
                 id="state"
                 className="input"
                 type="text"
                 name="state"
-                placeholder="Oregon"
+                placeholder="OR"
                 autoComplete="section-billing address-level1" />
             </div>
           </div>
