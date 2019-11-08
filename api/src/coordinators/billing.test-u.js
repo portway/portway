@@ -5,6 +5,7 @@ import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
 
 jest.mock('../integrators/stripe')
 jest.mock('../businesstime/organization')
+billingCoordinator.createOrUpdateOrgSubscription = jest.fn()
 
 describe('billing coordinator', () => {
   const orgId = 999
@@ -14,7 +15,6 @@ describe('billing coordinator', () => {
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
     const planId = PLANS.SINGLE_USER
-    const subscriptionStatus = 'active'
     const mockCurrentSeatCount = 1
     let resolvedValue
     const mockSubscription = {
@@ -36,10 +36,6 @@ describe('billing coordinator', () => {
           ]
         }
       })
-      stripeIntegrator.createOrUpdateSubscription.mockClear()
-      stripeIntegrator.createOrUpdateSubscription.mockImplementationOnce(() => {
-        return { ...mockSubscription, status: subscriptionStatus }
-      })
       resolvedValue = await billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
     })
 
@@ -51,22 +47,6 @@ describe('billing coordinator', () => {
     it('should call stripeIntegrator.getCustomer with the org stripeId', () => {
       expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
-    })
-
-    it('should call stripeIntegrator.createOrUpdateSubscription with customerId, planId, default seat count for multi-user plan, and subscription id', () => {
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual({
-        customerId,
-        planId: PLANS.MULTI_USER,
-        seats: MULTI_USER_DEFAULT_SEAT_COUNT,
-        subscriptionId
-      })
-    })
-
-    it('should call BusinessOrganization.updateById with the org id and plan id', () => {
-      expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
-      expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(orgId)
-      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ plan: PLANS.MULTI_USER, subscriptionStatus })
     })
 
     it('should resolve with undefined', () => {
@@ -107,7 +87,7 @@ describe('billing coordinator', () => {
 
     describe('when plans are not changing', () => {
       it('should return early', async () => {
-        stripeIntegrator.createOrUpdateSubscription.mockClear()
+        billingCoordinator.createOrUpdateOrgSubscription.mockClear()
         BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockReturnValueOnce({
           id: customerId,
@@ -122,7 +102,7 @@ describe('billing coordinator', () => {
           }
         })
         await billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
-        expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(0)
+        expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(0)
       })
     })
   })
@@ -132,7 +112,6 @@ describe('billing coordinator', () => {
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
     const planId = PLANS.MULTI_USER
-    const subscriptionStatus = 'active'
     const mockCurrentSeatCount = 1
     const newSeatCount = 6
     let resolvedValue
@@ -153,10 +132,7 @@ describe('billing coordinator', () => {
           data: [mockSubscription]
         }
       })
-      stripeIntegrator.createOrUpdateSubscription.mockClear()
-      stripeIntegrator.createOrUpdateSubscription.mockImplementationOnce(() => {
-        return { ...mockSubscription, status: subscriptionStatus }
-      })
+      billingCoordinator.createOrUpdateOrgSubscription.mockClear()
       resolvedValue = await billingCoordinator.updatePlanSeats(newSeatCount, orgId)
     })
 
@@ -170,20 +146,13 @@ describe('billing coordinator', () => {
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
     })
 
-    it('should call stripeIntegrator.createOrUpdateSubscription with customerId, new seat count, and subscription id', () => {
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual({
+    it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, and orgId', () => {
+      expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
+      expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual({
+        orgId,
         customerId,
         seats: newSeatCount,
         subscriptionId
-      })
-    })
-
-    it('should call BusinessOrganization.updateById with the org id and subscription status', () => {
-      expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
-      expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(orgId)
-      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({
-        subscriptionStatus
       })
     })
 
@@ -278,6 +247,45 @@ describe('billing coordinator', () => {
         expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
         expect(BusinessOrganization.updateById.mock.calls[0][0]).toBe(orgId)
         expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual(expect.objectContaining({ stripeId }))
+      })
+    })
+
+    describe('when the org does not have a current subscription', () => {
+      const customerId = 'not-a-real-customer-id'
+
+      beforeAll(async () => {
+        billingCoordinator.createOrUpdateOrgSubscription.mockClear()
+        stripeIntegrator.createCustomer.mockReturnValueOnce({ id: customerId, subscriptions: { data: [] } })
+        await billingCoordinator.updateOrgBilling(token, orgId)
+      })
+
+      it('should call billingCoordinator.createOrUpdateOrgSubscription with the customerId, orgId, and SINGLE_USER planId', () => {
+        expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
+        expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({
+          customerId,
+          orgId,
+          planId: PLANS.SINGLE_USER
+        }))
+      })
+    })
+
+    describe('when the org has a subscription, but it is not active', () => {
+      const customerId = 'not-a-real-customer-id'
+      const currentPlanId = 'not-a-real-plan-id'
+
+      beforeAll(async () => {
+        billingCoordinator.createOrUpdateOrgSubscription.mockClear()
+        stripeIntegrator.createCustomer.mockReturnValueOnce({ id: customerId, subscriptions: { data: [{ plan: { id: currentPlanId } }] } })
+        await billingCoordinator.updateOrgBilling(token, orgId)
+      })
+
+      it('should call billingCoordinator.createOrUpdateOrgSubscription with the customerId, orgId, and current plan id', () => {
+        expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
+        expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({
+          customerId,
+          orgId,
+          planId: currentPlanId
+        }))
       })
     })
   })
