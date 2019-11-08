@@ -1,3 +1,4 @@
 export default {
-  subscribeCustomerToPlan: jest.fn()
+  subscribeCustomerToPlan: jest.fn(),
+  createOrUpdateOrgSubscription: jest.fn()
 }

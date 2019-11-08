@@ -89,6 +89,11 @@ export const updateOrganizationPlan = (formId, orgId, body) => {
     dispatch(formSubmitAction(formId))
     dispatch(Organizations.initiatePlanUpdate(orgId))
     const { data, status } = await update(`organizations/${orgId}/plan`, body)
+    if (validationCodes.includes(status)) {
+      dispatch(Validation.create('organization', data, status))
+      dispatch(Organizations.receiveBillingError())
+      return
+    }
     if (globalErrorCodes.includes(status)) {
       dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
