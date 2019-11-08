@@ -4,7 +4,7 @@
  * Converts MarkdownIt Tokens to baller Portway structure which is more baller
  */
 
-export default (markdownItTokens) => {
+module.exports = (markdownItTokens) => {
   return parseTokens(markdownItTokens)
 }
 
