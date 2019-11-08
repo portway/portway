@@ -9,6 +9,10 @@
  *
  * Runner args must be cloneable objects or the main thread cannot
  * pass them to the worker thread
+ *
+ * NOTE: performance-wise, this is a naive implementation that spins up
+ * and shuts down a Worker _per invocation_. So if you invoke it 100 times,
+ * you get 100 workers, which could cause major resource issues
  */
 import path from 'path'
 import { Worker } from 'worker_threads'
