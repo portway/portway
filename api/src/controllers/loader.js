@@ -52,7 +52,8 @@ const AUTHENTICATED_CONTROLLERS = {
 // Define controllers with custom auth (must be implemented in the controller!)
 const UNAUTHENTICATED_CONTROLLERS = {
   '/login': { fileName: 'login' },
-  '/signup': { fileName: 'signup' }
+  '/signup': { fileName: 'signup' },
+  '/stripehooks': { fileName: 'stripeHooks' }
 }
 
 const loadControllers = (router, controllers, middleware, routerOptions) => {
