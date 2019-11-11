@@ -22,10 +22,7 @@
 .notifications {
   --notification-width: 300px;
   --notification-space: calc(var(--brand-width) / 2);
-  --notification-background: var(--color-gray-60);
-  @media (prefers-color-scheme: dark) {
-    --notification-background: var(--color-gray-80);
-  }
+  --notification-background: var(--theme-overlay-dark);
   display: block;
   position: fixed;
   left: 100vw;
@@ -71,6 +68,9 @@
 
   &__remove {
     margin-right: 1rem;
+    .icon {
+      background-color: var(--theme-overlay-light);
+    }
   }
 
 }
