@@ -176,7 +176,10 @@ button,
     padding: 0 10px 0 10px;
     .icon {
       .icon-caret {
-        transition: transform 0.2s ease-in-out;
+        @media (prefers-reduced-motion: no-preference) {
+          // Turn on animations for users with no preference
+          transition: transform 0.2s ease-in-out;
+        }
       }
     }
     .label {

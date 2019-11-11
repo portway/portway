@@ -1,4 +1,4 @@
-import signUpCoordinator from '../coordinators/signUp'
+import signUpCoordinator from './signUp'
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
@@ -7,6 +7,7 @@ import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
+import billingCoordinator from './billing'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/organization')
@@ -14,6 +15,7 @@ jest.mock('../integrators/token')
 jest.mock('../integrators/stripe')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/email')
+jest.mock('./billing')
 
 describe('signUp coordinator', () => {
   const name = 'Nicolas Cage'
@@ -21,6 +23,7 @@ describe('signUp coordinator', () => {
 
   describe('#createUserAndOrganization', () => {
     beforeAll(async () => {
+      BusinessOrganization.updateById.mockClear()
       await signUpCoordinator.createUserAndOrganization(
         name,
         email
@@ -54,23 +57,25 @@ describe('signUp coordinator', () => {
       expect(stripeIntegrator.createCustomer.mock.calls[0][0]).toEqual({ name: mockOrgName, description: expect.stringMatching(email) })
     })
 
-    it('should call stripeIntegrator.createOrUpdateSubscription with the customer id, plan id, and trial period', () => {
+    it('should call billingCoordinator.createOrUpdateSubscription with the customer id, plan id, trial period, and orgId', () => {
       const customerId = stripeIntegrator.createCustomer.mock.results[0].value.id
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual({
+      const mockOrgId = BusinessOrganization.create.mock.results[0].value.id
+      expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
+      expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual({
         customerId,
         planId: PLANS.SINGLE_USER,
-        trialPeriodDays: TRIAL_PERIOD_DAYS
+        trialPeriodDays: TRIAL_PERIOD_DAYS,
+        orgId: mockOrgId
       })
     })
 
-    it('should call BusinessOrganization.updateById with the org id, owner id, stripe id, and plan', () => {
+    it('should call BusinessOrganization.updateById with the org id, owner id, stripe id', () => {
       const stripeId = stripeIntegrator.createCustomer.mock.results[0].value.id
       const mockOrgId = BusinessOrganization.create.mock.results[0].value.id
       const mockOwnerId = BusinessUser.create.mock.results[0].value.id
       expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
       expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(mockOrgId)
-      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ ownerId: mockOwnerId, plan: PLANS.SINGLE_USER, stripeId })
+      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ ownerId: mockOwnerId, stripeId })
     })
 
     // eslint-disable-next-line max-len

@@ -18,11 +18,13 @@
     .icon {
       background-color: var(--color-blue);
       height: 40px;
-      transition: transform 0.1s ease-out;
       width: 40px;
       .icon-add {
         height: 18px;
         width: 18px;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        transition: transform 0.1s ease-out;
       }
     }
     @media (hover: hover) {
@@ -61,14 +63,18 @@
       display: block;
       opacity: 0;
       transform: translateY(50px);
-      transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out, visibility 0s linear 0.2s;
       visibility: hidden;
+      @media (prefers-reduced-motion: no-preference) {
+        transition: transform 0.1s ease-in-out, opacity 0.1s ease-in-out, visibility 0s linear 0.2s;
+      }
     }
     &:not([hidden]) {
       opacity: 1;
       transform: translateY(0);
-      transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
       visibility: visible;
+      @media (prefers-reduced-motion: no-preference) {
+        transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+      }
     }
   }
 
