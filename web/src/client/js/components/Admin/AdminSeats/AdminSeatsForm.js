@@ -35,14 +35,17 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
   }
 
   function getAdditionalSeatsCost() {
-    if (newTotalSeats > 0) {
+    if (newTotalSeats > SEATS_INCLUDED) {
       return Number((newTotalSeats - SEATS_INCLUDED) * PLAN_PRICING.SINGLE_USER)
     }
     return 0
   }
 
   function getAdditionalSeatCount() {
-    return newTotalSeats - SEATS_INCLUDED
+    if (newTotalSeats > SEATS_INCLUDED) {
+      return newTotalSeats - SEATS_INCLUDED
+    }
+    return currentSeats - SEATS_INCLUDED
   }
 
   return (
