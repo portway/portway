@@ -12,7 +12,8 @@ items:
     api.aws-ses-region: "us-west-2"
     api.sender-email-address: "no-reply@portway.app"
     api.client-url: {{ printf "https://%s" .Values.baseUrl }}
-    api.s3-content-bucket: 'portway-content-dev'
+    api.s3-content-bucket: {{ .Values.api.s3ContentBucket }}
+    api.cdn-hostname: {{ .Values.api.hostName }}
   kind: ConfigMap
   metadata:
     name: api-config
