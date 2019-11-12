@@ -16,6 +16,7 @@ const FormField = ({
   large,
   name,
   status,
+  small,
   type,
   value,
   ...props
@@ -29,6 +30,7 @@ const FormField = ({
     'field--error': errors.length > 0,
     'field--file': type === 'file',
     'field--large': large,
+    'field--small': small,
   })
   const controlClasses = cx({
     'field__control': true,
@@ -62,12 +64,13 @@ const FormField = ({
 FormField.propTypes = {
   errors: PropTypes.array,
   disabled: PropTypes.bool,
-  help: PropTypes.string,
+  help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
   large: PropTypes.bool,
   name: PropTypes.string.isRequired,
   status: PropTypes.node,
+  small: PropTypes.bool,
   type: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.string,

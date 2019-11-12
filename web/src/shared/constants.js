@@ -119,6 +119,7 @@ module.exports = {
   PATH_BILLING: '/admin/billing',
   PATH_ADMIN: '/admin',
   PATH_ORGANIZATION: '/admin/organization',
+  PATH_USERS: '/admin/users',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT_NEW_PARAM: 'new',
@@ -141,6 +142,7 @@ module.exports = {
   PLAN_PRICING: PLAN_PRICING,
   PLAN_TYPES: PLAN_TYPES,
   SUBSCRIPTION_STATUS: SUBSCRIPTION_STATUS,
+  SEATS_INCLUDED: 5,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support

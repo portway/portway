@@ -1,0 +1,61 @@
+@import 'CSS/inc/_mixins.scss';
+
+.admin-seats-form {
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  // Adjusting the btn-group to align
+
+  &__title {
+    margin: 0;
+  }
+
+  &__summary-container {
+    flex: 1;
+  }
+
+  &__summary {
+    background-color: var(--theme-base);
+    margin: 0 0 0 2rem;
+    padding: 2rem;
+    @include boxShadow();
+  }
+
+  &__summary-list {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+  }
+
+  &__summary-item {
+    border-bottom: thin solid var(--theme-overlay-dark);
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+
+    &--total {
+      border: none;
+      color: var(--color-blue);
+      // justify-content: flex-end;
+    }
+
+  }
+
+  &__summary-price {
+    font-weight: bold;
+    &:before {
+      content: '$';
+    }
+  }
+
+  &__summary-total {
+    color: var(--color-blue);
+    font-weight: bold;
+    &:before {
+      content: '$';
+    }
+  }
+
+}
