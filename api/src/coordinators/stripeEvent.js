@@ -56,6 +56,6 @@ Supported events:
   NOTES:
 
   - to use, each one must be individually enabled in the stripe dashboard for the stripehooks endpoint
-  - to get the current list using the stripe cli run:
+  - to get the current list of available events using the stripe cli run:
   stripe trigger --help
 */

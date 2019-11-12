@@ -13,9 +13,9 @@ const stripeHooks = function(router) {
 
 const checkEventSignature = function(req, res, next) {
   const signature = req.headers['stripe-signature']
-
   try {
-    req.event = stripeIntegrator.constructWebhookEvent(JSON.stringify(req.body), signature)
+    req.event = stripeIntegrator.constructWebhookEvent(req.body, signature)
+    next()
   } catch (err) {
     throw ono({ status: 401, publicMessage: 'Unauthorized' }, err.message)
   }

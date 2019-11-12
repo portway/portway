@@ -19,9 +19,8 @@ const app = express()
 //logging
 app.use(logger('dev'))
 
-//bodyparser
+//bodyparser, NOTE: json parsing is applied in the controller loader file
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
 
 //cors
 app.use((req, res, next) => {
