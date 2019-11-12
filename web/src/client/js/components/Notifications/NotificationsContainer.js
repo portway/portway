@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 import { dismissNotification } from 'Actions/notifications'
 import NotificationList from './NotificationList'
-import './Notifications.scss'
 
 const NotificationsContainer = ({ dismissNotification, notifications }) => {
   const notificationArray = Object.keys(notifications).map((key) => {
