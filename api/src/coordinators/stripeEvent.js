@@ -53,8 +53,9 @@ Supported events:
   payment_intent.succeeded
   payment_method.attached
 
-  run:
-  stripe trigger --help
+  NOTES:
 
-  to get the current list using the stripe cli
+  - to use, each one must be individually enabled in the stripe dashboard for the stripehooks endpoint
+  - to get the current list using the stripe cli run:
+  stripe trigger --help
 */

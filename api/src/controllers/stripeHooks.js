@@ -1,15 +1,28 @@
 import stripeEventCoordinator from '../coordinators/stripeEvent'
+import stripeIntegrator from '../integrators/stripe'
+import ono from 'ono'
 
 const stripeHooks = function(router) {
   // all routes are nested at stripehooks
   router.post(
     '/',
+    checkEventSignature,
     handleStripeEvent
   )
 }
 
+const checkEventSignature = function(req, res, next) {
+  const signature = req.headers['stripe-signature']
+
+  try {
+    req.event = stripeIntegrator.constructWebhookEvent(JSON.stringify(req.body), signature)
+  } catch (err) {
+    throw ono({ status: 401, publicMessage: 'Unauthorized' }, err.message)
+  }
+}
+
 const handleStripeEvent = async function(req, res, next) {
-  const { body: event } = req
+  const { event } = req
 
   try {
     stripeEventCoordinator.handleEvent(event)
