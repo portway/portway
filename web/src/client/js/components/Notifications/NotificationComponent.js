@@ -6,6 +6,8 @@ import { NOTIFICATION_TYPES } from 'Shared/constants'
 import { RemoveIcon } from 'Components/Icons'
 import { getNotificationTitle, getNotificationMessage } from './NotificationMessages'
 
+import './_Notifications.scss'
+
 const NotificationComponent = ({ dismissHandler, id, notification }) => {
   const notificationClasses = cx({
     'notifications__notification': true,

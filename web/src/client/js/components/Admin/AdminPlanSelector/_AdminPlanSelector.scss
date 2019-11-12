@@ -27,7 +27,7 @@
     }
 
     // Override button
-    button:not([disabled]) {
+    button {
       align-items: flex-start;
       background: transparent;
       border: thin solid var(--base-border-color, gray);
