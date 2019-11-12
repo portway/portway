@@ -1,20 +1,23 @@
 import { sendSingleRecipientEmail } from '../integrators/email'
-import billingCoordinator from './billing'
+import stripeIntegrator from '../integrators/stripe'
 
 async function handleEvent(event) {
+  const eventData = event.data.object
+  const customer = await stripeIntegrator.getCustomer(eventData.customer)
+
   switch (event.type) {
-    case 'charge.failed':
-      const email = event.data.object.billing_details.email
+    case 'charge.failed': {
       const subject = 'Payment failed'
       const message = 'Portway payment failed'
-      // TODO email user
-      // deactivate account
-    case 'charge.succeeded':
-      //TODO email user
-      const email = event.data.object.billing_details.email
+      //not awaiting anything after this point to prevent timeout and possible duplication
+      sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+    }
+    case 'charge.succeeded': {
       const subject = 'Payment successful'
       const message = 'Portway payment was successful'
-      await sendSingleRecipientEmail({ address: email, textBody: message, subject })
+      //not awaiting anything after this point to prevent timeout and possible duplication
+      sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+    }
   }
 }
 

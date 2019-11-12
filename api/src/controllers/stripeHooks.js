@@ -10,7 +10,7 @@ const stripeHooks = function(router) {
 
 const handleStripeEvent = async function(req, res, next) {
   const { body: event } = req
-  console.log(event)
+
   try {
     stripeEventCoordinator.handleEvent(event)
     res.status(204).send()
