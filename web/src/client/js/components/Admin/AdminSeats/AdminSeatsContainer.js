@@ -14,7 +14,7 @@ const AdminSeatsContainer = ({ currentOrgId, errors, orgBilling, updateOrganizat
   const formId = 'admin-seats-form'
 
   function adminSeatAdjustmentHandler(value) {
-    const newSeatNumber = Number(orgBilling.subscription.includedSeats + value)
+    const newSeatNumber = Number(value)
     console.log(newSeatNumber)
     updateOrganizationSeats(formId, currentOrgId, { seats: newSeatNumber })
   }

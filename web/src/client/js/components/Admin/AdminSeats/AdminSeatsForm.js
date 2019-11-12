@@ -5,14 +5,22 @@ import { Link } from 'react-router-dom'
 import { PATH_USERS, PLAN_PRICING, SEATS_INCLUDED } from 'Shared/constants'
 import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
+import PopoverComponent from 'Components/Popover/PopoverComponent'
 
 import './_AdminSeatsForm.scss'
 
 const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrganizationSeats, includedSeats }) => {
-  const [adjustedSeats, setAdjustedSeats] = useState(0)
+  const [newTotalSeats, setNewTotalSeats] = useState(includedSeats)
+  const [validationError, setValidationError] = useState()
 
   function formSubmitHandler() {
-    updateOrganizationSeats(adjustedSeats)
+    // Don't let the user set fewer seats than 5
+    // or the number of users they have
+    if (newTotalSeats < SEATS_INCLUDED) {
+      setValidationError(`You can’t have fewer than ${SEATS_INCLUDED} seats`)
+      return
+    }
+    updateOrganizationSeats(newTotalSeats)
   }
 
   function renderHelpText() {
@@ -27,10 +35,14 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
   }
 
   function getAdditionalSeatsCost() {
-    if (adjustedSeats > 0) {
-      return Number(adjustedSeats * PLAN_PRICING.SINGLE_USER)
+    if (newTotalSeats > 0) {
+      return Number((newTotalSeats - SEATS_INCLUDED) * PLAN_PRICING.SINGLE_USER)
     }
     return 0
+  }
+
+  function getAdditionalSeatCount() {
+    return newTotalSeats - SEATS_INCLUDED
   }
 
   return (
@@ -47,14 +59,19 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
           help={renderHelpText()}
           id="admin-seats-form-number"
           label="Number of seats"
-          min={0}
+          min={SEATS_INCLUDED}
           name="seats"
-          onChange={(e) => { setAdjustedSeats(e.target.value) }}
+          onChange={(e) => { setNewTotalSeats(e.target.value) }}
           defaultValue={currentSeats}
           placeholder={currentSeats}
           small
           type="number"
         />
+        {validationError &&
+        <PopoverComponent name="seat-popover">
+          {validationError}
+        </PopoverComponent>
+        }
       </Form>
       <div className="admin-seats-form__summary-container">
         <div className="admin-seats-form__summary">
@@ -64,7 +81,7 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
               Multi-user plan w/ {SEATS_INCLUDED} users <span className="admin-seats-form__summary-price">{PLAN_PRICING.MULTI_USER}</span>
             </li>
             <li className="admin-seats-form__summary-item">
-              Additional seats: {adjustedSeats} <span className="admin-seats-form__summary-price">{getAdditionalSeatsCost()}</span>
+              Additional seats: {getAdditionalSeatCount()} <span className="admin-seats-form__summary-price">{getAdditionalSeatsCost()}</span>
             </li>
             <li className="admin-seats-form__summary-item admin-seats-form__summary-item--total">
               New total per month <span className="admin-seats-form__summary-total">{getAdditionalSeatsCost() + PLAN_PRICING.MULTI_USER}</span>
