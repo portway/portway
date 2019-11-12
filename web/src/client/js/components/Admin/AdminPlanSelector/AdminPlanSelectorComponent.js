@@ -19,8 +19,10 @@ const AdminPlanSelectorComponent = ({
   // Manually sets the Form's submit button to enabled, since we're not using
   // a normal form field
   function formChangeHandler(val) {
-    setFormChanged(true)
-    setPlan(val)
+    if (val !== plan) {
+      setFormChanged(true)
+      setPlan(val)
+    }
   }
 
   function formSubmitHandler() {
