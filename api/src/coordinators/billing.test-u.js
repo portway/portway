@@ -135,6 +135,7 @@ describe('billing coordinator', () => {
         }
       })
       billingCoordinator.createOrUpdateOrgSubscription.mockClear()
+      billingCoordinator.createOrUpdateOrgSubscription.mockReturnValueOnce({ ...mockSubscription, items: { data: [{ quantity: newSeatCount }] } })
       resolvedValue = await billingCoordinator.updatePlanSeats(newSeatCount, orgId)
     })
 
@@ -158,8 +159,8 @@ describe('billing coordinator', () => {
       })
     })
 
-    it('should resolve with undefined', () => {
-      expect(resolvedValue).toBe(undefined)
+    it('should resolve with the new seat count', () => {
+      expect(resolvedValue).toBe(newSeatCount)
     })
 
     describe('when there is no stripeId on the org', () => {
