@@ -51,7 +51,7 @@ const orgSeatController = function(router) {
   router.put(
     '/',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(bodySchema, { includeDetails: true }),
     conditionalUpdatePerm,
     updateSeats
   )
