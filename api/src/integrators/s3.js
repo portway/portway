@@ -2,16 +2,14 @@ import AWS from 'aws-sdk'
 import ono from 'ono'
 import fs from 'fs'
 import util from 'util'
+import { URL } from 'url'
+import { getHashIdFromOrgId } from '../libs/hashId'
 
 const readFile = util.promisify(fs.readFile)
 const unlink = util.promisify(fs.unlink)
-
-import { getHashIdFromOrgId } from '../libs/hashId'
-
-const { S3_CONTENT_BUCKET, AWS_SES_REGION } = process.env
+const { S3_CONTENT_BUCKET, AWS_SES_REGION, CDN_HOSTNAME } = process.env
 
 AWS.config.update({ region: AWS_SES_REGION })
-
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' })
 
 export const uploadContent = async function(documentId, orgId, file) {
@@ -34,7 +32,7 @@ export const uploadContent = async function(documentId, orgId, file) {
     // async function, but don't await it, just fire and move on
     unlink(file.path)
   }
-  return res.Location
+  return s3ToCDNLink(res.Location)
 }
 
 export const uploadAvatar = async function({ orgId, userId, file }) {
@@ -66,7 +64,7 @@ export const uploadAvatar = async function({ orgId, userId, file }) {
     unlink(file.path)
   }
 
-  return res.Location
+  return s3ToCDNLink(res.Location)
 }
 
 export const deleteContent = async function(key) {
@@ -82,4 +80,13 @@ export const deleteContent = async function(key) {
   }
 
   console.info(`Successfully deleted S3 content with key: ${key}`)
+}
+
+// Get the Cloudfront url for the S3 url
+function s3ToCDNLink(s3Location) {
+  if (!CDN_HOSTNAME) return s3Location
+
+  const parsedUrl = new URL(s3Location)
+  const newUrl = new URL(parsedUrl.pathname, CDN_HOSTNAME)
+  return newUrl.href
 }

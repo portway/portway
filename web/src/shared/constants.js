@@ -10,6 +10,11 @@ const PLAN_TYPES = {
   SINGLE_USER: 'SINGLE_USER',
 }
 
+const PRICING = {
+  [PLAN_TYPES.SINGLE_USER]: '$10/mo',
+  [PLAN_TYPES.MULTI_USER]: '$50/mo',
+}
+
 // https://stripe.com/docs/billing/lifecycle#subscription-states
 const SUBSCRIPTION_STATUS = {
   TRIALING: 'trialing',
@@ -144,7 +149,7 @@ module.exports = {
   PLAN_PRICING: PLAN_PRICING,
   PLAN_TYPES: PLAN_TYPES,
   SUBSCRIPTION_STATUS: SUBSCRIPTION_STATUS,
-  SEATS_INCLUDED: 5,
+  PRICING: PRICING,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support

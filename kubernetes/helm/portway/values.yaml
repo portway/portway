@@ -13,6 +13,10 @@ apiTag: dev4
 webImage: bonkeybong/portway_web
 webTag: dev2
 
+api:
+  cdnHostname: 'https://dev.portwaycontent.com'
+  s3ContentBucket: 'portway-content-dev'
+
 db:
   host: "dev-db-portway-do-user-2269753-0.db.ondigitalocean.com"
   port: "25060"

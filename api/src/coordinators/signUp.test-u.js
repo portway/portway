@@ -54,7 +54,7 @@ describe('signUp coordinator', () => {
     it('should call stripeIntegrator.createCustomer with the org name and a description containing owner email', () => {
       const mockOrgName = BusinessOrganization.create.mock.results[0].value.name
       expect(stripeIntegrator.createCustomer.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createCustomer.mock.calls[0][0]).toEqual({ name: mockOrgName, description: expect.stringMatching(email) })
+      expect(stripeIntegrator.createCustomer.mock.calls[0][0]).toEqual({ name: mockOrgName, description: expect.stringMatching(email), email })
     })
 
     it('should call billingCoordinator.createOrUpdateSubscription with the customer id, plan id, trial period, and orgId', () => {

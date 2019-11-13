@@ -1,7 +1,10 @@
 /* eslint-disable camelcase */
 import Stripe from 'stripe'
 import ono from 'ono'
-const stripe = Stripe(process.env.STRIPE_SECRET)
+
+const { STRIPE_HOOK_SECRET, STRIPE_SECRET } = process.env
+
+const stripe = Stripe(STRIPE_SECRET)
 
 const createCustomer = async function(body) {
   let customer
@@ -98,9 +101,14 @@ const createOrUpdateSubscription = async function({ customerId, planId, seats, t
   return subscription
 }
 
+const constructWebhookEvent = function(body, signature) {
+  return stripe.webhooks.constructEvent(body, signature, STRIPE_HOOK_SECRET)
+}
+
 export default {
   createCustomer,
   getCustomer,
   updateCustomer,
-  createOrUpdateSubscription
+  createOrUpdateSubscription,
+  constructWebhookEvent
 }
