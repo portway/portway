@@ -32,7 +32,8 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
       fieldBody.value = url
       break
     case FIELD_TYPES.TEXT:
-      fieldBody.structuredValue = await processMarkdownWithWorker(body.value)
+      const inputBody = body.value || ''
+      fieldBody.structuredValue = await processMarkdownWithWorker(inputBody)
       break
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.NUMBER:

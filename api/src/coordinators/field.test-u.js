@@ -1,9 +1,11 @@
 import fieldCoordinator from './field'
 import BusinessField from '../businesstime/field'
 import { uploadContent } from '../integrators/s3'
+import { processMarkdownWithWorker } from './markdown'
 
 jest.mock('../businesstime/field')
 jest.mock('../integrators/s3')
+jest.mock('./markdown')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
@@ -39,6 +41,41 @@ describe('fieldCoordinator', () => {
         expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
         expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
         expect(BusinessField.createForDocument.mock.calls[0][1]).toEqual(expect.objectContaining({ ...imageBody, value: url }))
+      })
+    })
+
+    describe('when it is a text field', () => {
+      describe('with an empty body', () => {
+        const inputBody = {
+          name: 'text-area-1',
+          type: 2
+        }
+        beforeAll(async () => {
+          processMarkdownWithWorker.mockReset()
+          await fieldCoordinator.addFieldToDocument(documentId, inputBody)
+        })
+
+        it('should call processMarkdownWithWorker', () => {
+          expect(processMarkdownWithWorker.mock.calls.length).toBe(1)
+          expect(processMarkdownWithWorker.mock.calls[0][0]).toBe('')
+        })
+      })
+
+      describe('with a body', () => {
+        const inputBody = {
+          name: 'text-area-1',
+          type: 2,
+          value: '# Markdown Header \n and pretty colors'
+        }
+        beforeAll(async () => {
+          processMarkdownWithWorker.mockReset()
+          await fieldCoordinator.addFieldToDocument(documentId, inputBody)
+        })
+
+        it('should call processMarkdownWithWorker', () => {
+          expect(processMarkdownWithWorker.mock.calls.length).toBe(1)
+          expect(processMarkdownWithWorker.mock.calls[0][0]).toBe(inputBody.value)
+        })
       })
     })
   })
