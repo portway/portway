@@ -79,6 +79,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.s3-content-bucket
+        - name: CDN_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.cdn-hostname
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
