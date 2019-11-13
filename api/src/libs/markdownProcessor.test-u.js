@@ -4,6 +4,35 @@ import MarkdownIt from 'markdown-it'
 const md = new MarkdownIt()
 
 describe('markdownProcessor', () => {
+  describe('with empty input', () => {
+    let tokens
+    const TEST_MD = ''
+
+    beforeAll(() => {
+      const mdTokens = md.parse(TEST_MD, {})
+      tokens = processTokens(mdTokens)
+    })
+
+    it('should return an empty array', () => {
+      expect(Array.isArray(tokens)).toBe(true)
+      expect(tokens.length).toBe(0)
+    })
+  })
+
+  describe('with invalid input', () => {
+    it('should throw an error with an object', () => {
+      expect(() => {
+        processTokens({ anObject: true })
+      }).toThrow()
+    })
+
+    it('should throw an error with undefined', () => {
+      expect(() => {
+        processTokens()
+      }).toThrow()
+    })
+  })
+
   describe('with plain text', () => {
     let tokens
     const TEST_MD = 'this is just plain text'
