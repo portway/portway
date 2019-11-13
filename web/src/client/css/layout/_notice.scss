@@ -5,17 +5,6 @@
   flex-direction: column;
   text-align: center;
 
-  &--in-a-box {
-    align-items: flex-start;
-    background-color: var(--theme-overlay-dark);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    margin: auto;
-    padding: 2rem;
-    text-align: left;
-    width: 80%;
-  }
-
   &__icon {
     align-items: center;
     background-color: var(--color-cyan);
@@ -33,12 +22,6 @@
 
   &__action {
     margin: 1rem 0 2rem;
-  }
-
-  .btn-group {
-    padding: 2rem 0 0;
-    flex-direction: row-reverse;
-    width: 100%;
   }
 
 }

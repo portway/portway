@@ -83,6 +83,10 @@ form, .form {
     flex-direction: row;
   }
 
+  &--large {
+    width: 100%;
+  }
+
   // Need some top padding to separate your field a little?
   &--with-space {
     padding-top: 2.4rem;

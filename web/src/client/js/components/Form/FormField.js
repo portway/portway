@@ -23,6 +23,7 @@ const FormField = ({
 }) => {
   const formFieldClasses = cx({
     'field-container': true,
+    'field-container--large': large,
   })
   const fieldClasses = cx({
     'field': true,
