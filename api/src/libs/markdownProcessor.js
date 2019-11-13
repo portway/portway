@@ -5,6 +5,10 @@
  */
 
 export default (markdownItTokens) => {
+  if (!Array.isArray(markdownItTokens)) {
+    throw new Error('must pass array of markdown-it tokens')
+  }
+
   return parseTokens(markdownItTokens)
 }
 
