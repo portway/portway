@@ -30,6 +30,8 @@ const LOCKED_ACCOUNT_STATUSES = [
   SUBSCRIPTION_STATUS.UNPAID,
 ]
 
+// This should only be used by marketing side, not in the app
+// as that always comes from stripe
 const PLAN_PRICING = {
   [PLAN_TYPES.SINGLE_USER]: 10,
   [PLAN_TYPES.MULTI_USER]: 50,

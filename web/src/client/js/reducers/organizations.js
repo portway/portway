@@ -93,7 +93,7 @@ export const organizations = (state = initialState, action) => {
       const { id, seats } = action
       const billingById = { ...state.loading.billingById, [id]: false }
       const organizationToUpdate = { ...state.organizationsBillingById[id] }
-      organizationToUpdate.subscription.includedSeats = seats
+      organizationToUpdate.subscription.totalSeats = seats
       const organizationsBillingById = { ...state.organizationsBillingById, [id]: organizationToUpdate }
       return {
         ...state,

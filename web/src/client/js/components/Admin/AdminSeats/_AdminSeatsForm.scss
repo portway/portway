@@ -44,7 +44,9 @@
   }
 
   &__summary-price {
+    flex: 1;
     font-weight: bold;
+    text-align: right;
     &:before {
       content: '$';
     }

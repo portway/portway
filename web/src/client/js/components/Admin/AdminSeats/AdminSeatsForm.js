@@ -2,50 +2,71 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { PATH_USERS, PLAN_PRICING, SEATS_INCLUDED } from 'Shared/constants'
+import { debounce } from 'Shared/utilities'
+import { PATH_USERS } from 'Shared/constants'
 import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
 import PopoverComponent from 'Components/Popover/PopoverComponent'
 
 import './_AdminSeatsForm.scss'
 
-const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrganizationSeats, includedSeats }) => {
-  const [newTotalSeats, setNewTotalSeats] = useState(includedSeats)
+const AdminSeatsForm = ({
+  additionalSeatCost,
+  cancelHandler,
+  errors,
+  flatCost,
+  formId,
+  includedSeats,
+  totalSeats,
+  updateOrganizationSeats,
+  usedSeats,
+}) => {
+  const [newTotalSeats, setNewTotalSeats] = useState(totalSeats)
   const [validationError, setValidationError] = useState()
 
   function formSubmitHandler() {
     // Don't let the user set fewer seats than 5
     // or the number of users they have
-    if (newTotalSeats < SEATS_INCLUDED) {
-      setValidationError(`You can’t have fewer than ${SEATS_INCLUDED} seats`)
-      return
+    if (newTotalSeats < includedSeats) {
+      setValidationError(`You can’t have fewer than ${includedSeats} seats.`)
+      return false
+    }
+    if (newTotalSeats < usedSeats) {
+      setValidationError(`You have ${usedSeats} used seats, please remove some people to decrease your seat count.`)
+      return false
     }
     updateOrganizationSeats(newTotalSeats)
   }
 
   function renderHelpText() {
-    if (currentSeats >= includedSeats) {
+    if (newTotalSeats < usedSeats) {
       return (
         <>
-          You currently have <b>{currentSeats}</b> active people in your organization.<br />
+          You currently have <b>{usedSeats}</b> active people in your organization.<br />
           To remove additional seats from your plan, you’ll need to <Link to={PATH_USERS}>remove some people</Link> first.
         </>
       )
     }
   }
 
+  const setSeatValue = debounce(500, (value) => {
+    setValidationError(null)
+    setNewTotalSeats(value)
+  })
+
   function getAdditionalSeatsCost() {
-    if (newTotalSeats > SEATS_INCLUDED) {
-      return Number((newTotalSeats - SEATS_INCLUDED) * PLAN_PRICING.SINGLE_USER)
+    // If we are changing seats and it's more than includedSeats (5)
+    if (newTotalSeats > includedSeats) {
+      return Number((newTotalSeats - includedSeats) * additionalSeatCost)
     }
-    return 0
+    return (totalSeats - includedSeats) * additionalSeatCost
   }
 
   function getAdditionalSeatCount() {
-    if (newTotalSeats > SEATS_INCLUDED) {
-      return newTotalSeats - SEATS_INCLUDED
+    if (newTotalSeats > includedSeats) {
+      return newTotalSeats - includedSeats
     }
-    return currentSeats - SEATS_INCLUDED
+    return totalSeats - includedSeats
   }
 
   return (
@@ -55,18 +76,18 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
         cancelHandler={cancelHandler}
         name={formId}
         onSubmit={formSubmitHandler}
-        submitLabel="Update billing amount"
+        submitLabel="Update my plan"
       >
         <FormField
           errors={errors.seats}
           help={renderHelpText()}
           id="admin-seats-form-number"
           label="Number of seats"
-          min={SEATS_INCLUDED}
+          min={includedSeats}
           name="seats"
-          onChange={(e) => { setNewTotalSeats(e.target.value) }}
-          defaultValue={currentSeats}
-          placeholder={currentSeats}
+          onChange={e => setSeatValue(e.target.value)}
+          defaultValue={totalSeats}
+          placeholder={totalSeats}
           small
           type="number"
         />
@@ -81,13 +102,13 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
           <h3 className="admin-seats-form__title">Plan change summary</h3>
           <ul className="admin-seats-form__summary-list">
             <li className="admin-seats-form__summary-item">
-              Multi-user plan w/ {SEATS_INCLUDED} users <span className="admin-seats-form__summary-price">{PLAN_PRICING.MULTI_USER}</span>
+              Multi-user plan&nbsp;<b>w/ {includedSeats} users</b> <span className="admin-seats-form__summary-price">{flatCost}</span>
             </li>
             <li className="admin-seats-form__summary-item">
-              Additional seats: {getAdditionalSeatCount()} <span className="admin-seats-form__summary-price">{getAdditionalSeatsCost()}</span>
+              Additional seats:&nbsp;<b>{getAdditionalSeatCount()}</b> <span className="admin-seats-form__summary-price">{getAdditionalSeatsCost()}</span>
             </li>
             <li className="admin-seats-form__summary-item admin-seats-form__summary-item--total">
-              New total per month <span className="admin-seats-form__summary-total">{getAdditionalSeatsCost() + PLAN_PRICING.MULTI_USER}</span>
+              Total per month <span className="admin-seats-form__summary-total">{getAdditionalSeatsCost() + flatCost}</span>
             </li>
           </ul>
         </div>
@@ -97,12 +118,15 @@ const AdminSeatsForm = ({ cancelHandler, currentSeats, errors, formId, updateOrg
 }
 
 AdminSeatsForm.propTypes = {
-  cancelHandler: PropTypes.func,
-  currentSeats: PropTypes.number.isRequired,
+  additionalSeatCost: PropTypes.number.isRequired,
+  cancelHandler: PropTypes.func.isRequired,
   errors: PropTypes.object,
+  flatCost: PropTypes.number.isRequired,
   formId: PropTypes.string.isRequired,
-  updateOrganizationSeats: PropTypes.func.isRequired,
   includedSeats: PropTypes.number.isRequired,
+  totalSeats: PropTypes.number.isRequired,
+  updateOrganizationSeats: PropTypes.func.isRequired,
+  usedSeats: PropTypes.number.isRequired,
 }
 
 export default AdminSeatsForm

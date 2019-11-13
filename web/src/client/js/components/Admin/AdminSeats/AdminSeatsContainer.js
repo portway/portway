@@ -15,18 +15,20 @@ const AdminSeatsContainer = ({ currentOrgId, errors, orgBilling, updateOrganizat
 
   function adminSeatAdjustmentHandler(value) {
     const newSeatNumber = Number(value)
-    console.log(newSeatNumber)
     updateOrganizationSeats(formId, currentOrgId, { seats: newSeatNumber })
   }
 
   return (
     <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
       <AdminSeatsComponent
-        currentSeats={orgBilling ? orgBilling.subscription.currentSeats : 0}
+        additionalSeatCost={orgBilling ? orgBilling.subscription.additionalSeatCost / 100 : 0}
         errors={errors}
+        flatCost={orgBilling ? orgBilling.subscription.flatCost / 100 : 0}
         formId={formId}
-        updateOrganizationSeats={adminSeatAdjustmentHandler}
         includedSeats={orgBilling ? orgBilling.subscription.includedSeats : 0}
+        totalSeats={orgBilling ? orgBilling.subscription.totalSeats : 0}
+        updateOrganizationSeats={adminSeatAdjustmentHandler}
+        usedSeats={orgBilling ? orgBilling.subscription.usedSeats : 0}
       />
     </OrgPermission>
   )

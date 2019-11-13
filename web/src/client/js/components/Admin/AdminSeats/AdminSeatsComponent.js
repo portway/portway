@@ -1,28 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import AdminSeatsForm from './AdminSeatsForm'
 import './_AdminSeatsStyles.scss'
 
-const AdminSeatsComponent = ({ currentSeats, errors, formId, updateOrganizationSeats, includedSeats }) => {
+const AdminSeatsComponent = ({
+  additionalSeatCost,
+  errors,
+  flatCost,
+  formId,
+  includedSeats,
+  totalSeats,
+  updateOrganizationSeats,
+  usedSeats,
+}) => {
   const [manageMode, setManageMode] = useState(false)
+  useEffect(() => {
+    // Get out of managed mode if totalSeats changes
+    setManageMode(false)
+  }, [totalSeats])
   return (
     <div className="admin-seats">
       {!manageMode &&
         <div className="admin-seats__status">
           <span className="admin-seats__status__label">
-            <b>{currentSeats}</b> out of <b>{includedSeats}</b> Seats
+            <b>{usedSeats}</b> out of <b>{totalSeats}</b> Seats
           </span>
           <meter
             className="admin-seats__status__meter"
-            high={includedSeats / 1.05}
-            low={includedSeats * .5}
-            max={includedSeats}
+            high={totalSeats / 1.05}
+            low={totalSeats * .5}
+            max={totalSeats}
             min="1"
-            optimum={includedSeats}
-            value={currentSeats}
+            optimum={totalSeats}
+            value={usedSeats}
           >
-            {currentSeats}/{includedSeats}
+            {usedSeats}/{totalSeats}
           </meter>
           <button className="btn btn--small" onClick={() => { setManageMode(true) }}>
             Change the number of seats
@@ -31,12 +44,15 @@ const AdminSeatsComponent = ({ currentSeats, errors, formId, updateOrganizationS
       }
       {manageMode &&
         <AdminSeatsForm
+          additionalSeatCost={additionalSeatCost}
           cancelHandler={() => { setManageMode(false) }}
-          currentSeats={currentSeats}
           errors={errors}
+          flatCost={flatCost}
           formId={formId}
-          updateOrganizationSeats={updateOrganizationSeats}
           includedSeats={includedSeats}
+          totalSeats={totalSeats}
+          updateOrganizationSeats={updateOrganizationSeats}
+          usedSeats={usedSeats}
         />
       }
     </div>
@@ -44,11 +60,14 @@ const AdminSeatsComponent = ({ currentSeats, errors, formId, updateOrganizationS
 }
 
 AdminSeatsComponent.propTypes = {
-  currentSeats: PropTypes.number,
+  additionalSeatCost: PropTypes.number,
   errors: PropTypes.object,
+  flatCost: PropTypes.number,
   formId: PropTypes.string,
-  updateOrganizationSeats: PropTypes.func,
   includedSeats: PropTypes.number,
+  totalSeats: PropTypes.number,
+  updateOrganizationSeats: PropTypes.func,
+  usedSeats: PropTypes.number,
 }
 
 export default AdminSeatsComponent
