@@ -51,7 +51,7 @@ const orgSeatController = function(router) {
   router.put(
     '/',
     validateParams(paramSchema),
-    validateBody(bodySchema),
+    validateBody(bodySchema, { includeDetails: true }),
     conditionalUpdatePerm,
     updateSeats
   )
@@ -62,8 +62,8 @@ const updateSeats = async function(req, res, next) {
   const { orgId } = req.params
 
   try {
-    await billingCoordinator.updatePlanSeats(seats, orgId)
-    res.status(204).send()
+    const totalSeats = await billingCoordinator.updatePlanSeats(seats, orgId)
+    res.status(200).send({ totalSeats })
   } catch (e) {
     next(e)
   }
