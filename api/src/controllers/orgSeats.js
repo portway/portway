@@ -62,8 +62,8 @@ const updateSeats = async function(req, res, next) {
   const { orgId } = req.params
 
   try {
-    await billingCoordinator.updatePlanSeats(seats, orgId)
-    res.status(204).send()
+    const totalSeats = await billingCoordinator.updatePlanSeats(seats, orgId)
+    res.status(200).send({ totalSeats })
   } catch (e) {
     next(e)
   }

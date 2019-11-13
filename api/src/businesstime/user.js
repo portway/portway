@@ -154,7 +154,8 @@ async function deleteById(id, orgId) {
 
 async function countAll(orgId) {
   const db = getDb()
-  return db.model(MODEL_NAME).findAndCountAll({ where: { orgId } })
+  const { count } = await db.model(MODEL_NAME).findAndCountAll({ where: { orgId } })
+  return count
 }
 
 export default {

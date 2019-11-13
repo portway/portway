@@ -135,10 +135,12 @@ const updatePlanSeats = async function(seats, orgId) {
 
   //nothing is changing, return success and move on without updating stripe
   if (seats === currentSeats) {
-    return
+    return currentSeats
   }
 
-  await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
+  const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
+
+  return subscription.items.data[0].quantity
 }
 
 const updateOrgBilling = async function(token, orgId) {
@@ -187,6 +189,7 @@ const getOrgBilling = async function(orgId) {
 const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId }) {
   const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId })
   await BusinessOrganization.updateById(orgId, { subscriptionStatus: updatedSubscription.status, plan: updatedSubscription.plan.id })
+  return updatedSubscription
 }
 
 const billingCoordinator = {
