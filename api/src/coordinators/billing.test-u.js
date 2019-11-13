@@ -1,10 +1,12 @@
 import billingCoordinator from './billing'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
-import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
+import BusinessUser from '../businesstime/user'
+import { PLANS } from '../constants/plans'
 
 jest.mock('../integrators/stripe')
 jest.mock('../businesstime/organization')
+jest.mock('../businesstime/user')
 billingCoordinator.createOrUpdateOrgSubscription = jest.fn()
 
 describe('billing coordinator', () => {
@@ -202,11 +204,17 @@ describe('billing coordinator', () => {
 
   describe('#updateOrgBilling', () => {
     const token = 'aaa'
+    const getOrgBilling = billingCoordinator.getOrgBilling
 
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
       stripeIntegrator.createCustomer.mockClear()
+      billingCoordinator.getOrgBilling = jest.fn()
       await billingCoordinator.updateOrgBilling(token, orgId)
+    })
+
+    afterAll(() => {
+      billingCoordinator.getOrgBilling = getOrgBilling
     })
 
     it('should call BusinessOrganization.findById with the passed in org id', () => {
@@ -298,6 +306,7 @@ describe('billing coordinator', () => {
       stripeIntegrator.getCustomer.mockClear()
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+      BusinessUser.countAll.mockClear()
       orgBilling = await billingCoordinator.getOrgBilling(orgId)
     })
 
@@ -309,6 +318,11 @@ describe('billing coordinator', () => {
     it('should call stripeIntegrator.getCustomer with the orgs stripeId', () => {
       expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toEqual(stripeId)
+    })
+
+    it('should call BusinessUser.countAll with the orgId', () => {
+      expect(BusinessUser.countAll.mock.calls.length).toBe(1)
+      expect(BusinessUser.countAll.mock.calls[0][0]).toEqual(orgId)
     })
 
     describe('when the organization does not have a stripe id', () => {

@@ -152,6 +152,11 @@ async function deleteById(id, orgId) {
   await user.destroy()
 }
 
+async function countAll(orgId) {
+  const db = getDb()
+  return db.model(MODEL_NAME).findAndCountAll({ where: { orgId } })
+}
+
 export default {
   create,
   findByEmail,
@@ -163,5 +168,6 @@ export default {
   updateById,
   updateOrgRole,
   restoreSoftDeleted,
-  deleteById
+  deleteById,
+  countAll
 }
