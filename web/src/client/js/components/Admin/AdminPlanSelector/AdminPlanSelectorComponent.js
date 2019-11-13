@@ -19,8 +19,10 @@ const AdminPlanSelectorComponent = ({
   // Manually sets the Form's submit button to enabled, since we're not using
   // a normal form field
   function formChangeHandler(val) {
-    setFormChanged(true)
-    setPlan(val)
+    if (val !== plan) {
+      setFormChanged(true)
+      setPlan(val)
+    }
   }
 
   function formSubmitHandler() {
@@ -53,6 +55,7 @@ const AdminPlanSelectorComponent = ({
               aria-checked={plan === PLAN_TYPES.SINGLE_USER && !lockedSubscription}
               aria-label="Select a single-user plan"
               className="btn btn--white"
+              disabled={organizationPlan === PLAN_TYPES.MULTI_USER}
               onClick={() => formChangeHandler(PLAN_TYPES.SINGLE_USER)}
               role="radio"
               type="button"
@@ -103,6 +106,9 @@ const AdminPlanSelectorComponent = ({
             </button>
           </li>
         </ul>
+        {organizationPlan === PLAN_TYPES.MULTI_USER &&
+        <p className="small">At the moment we cannot downgrade multi-user plans. Please contact us if you need assistance.</p>
+        }
       </Form>
     </div>
   )
