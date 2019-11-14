@@ -1,6 +1,7 @@
 import BusinessField from '../businesstime/field'
 import { uploadContent } from '../integrators/s3'
 import { FIELD_TYPES } from '../constants/fieldTypes'
+import { processMarkdownWithWorker } from './markdown'
 import ono from 'ono'
 
 const addFieldToDocument = async function(documentId, body, file) {
@@ -29,9 +30,13 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         url = await uploadContent(documentId, orgId, file)
       }
       fieldBody.value = url
+      break
+    case FIELD_TYPES.TEXT:
+      const inputBody = body.value || ''
+      fieldBody.structuredValue = await processMarkdownWithWorker(inputBody)
+      break
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.NUMBER:
-    case FIELD_TYPES.TEXT:
     // keep body the same
   }
 
