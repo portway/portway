@@ -13,7 +13,7 @@ items:
     api.sender-email-address: "no-reply@portway.app"
     api.client-url: {{ printf "https://%s" .Values.baseUrl }}
     api.s3-content-bucket: {{ .Values.api.s3ContentBucket }}
-    api.cdn-hostname: {{ .Values.api.hostName }}
+    api.cdn-hostname: {{ .Values.api.cdnHostname | quote }}
   kind: ConfigMap
   metadata:
     name: api-config
