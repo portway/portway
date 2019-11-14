@@ -1,10 +1,12 @@
 import billingCoordinator from './billing'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
-import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
+import BusinessUser from '../businesstime/user'
+import { PLANS } from '../constants/plans'
 
 jest.mock('../integrators/stripe')
 jest.mock('../businesstime/organization')
+jest.mock('../businesstime/user')
 billingCoordinator.createOrUpdateOrgSubscription = jest.fn()
 
 describe('billing coordinator', () => {
@@ -133,6 +135,8 @@ describe('billing coordinator', () => {
         }
       })
       billingCoordinator.createOrUpdateOrgSubscription.mockClear()
+      billingCoordinator.createOrUpdateOrgSubscription.mockReturnValueOnce({ ...mockSubscription, items: { data: [{ quantity: newSeatCount }] } })
+      BusinessUser.countAll.mockClear()
       resolvedValue = await billingCoordinator.updatePlanSeats(newSeatCount, orgId)
     })
 
@@ -146,6 +150,11 @@ describe('billing coordinator', () => {
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
     })
 
+    it('should call BusinessUser.countAll with the org id', () => {
+      expect(BusinessUser.countAll.mock.calls.length).toBe(1)
+      expect(BusinessUser.countAll.mock.calls[0][0]).toBe(orgId)
+    })
+
     it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, and orgId', () => {
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual({
@@ -156,8 +165,8 @@ describe('billing coordinator', () => {
       })
     })
 
-    it('should resolve with undefined', () => {
-      expect(resolvedValue).toBe(undefined)
+    it('should resolve with the new seat count', () => {
+      expect(resolvedValue).toBe(newSeatCount)
     })
 
     describe('when there is no stripeId on the org', () => {
@@ -198,15 +207,31 @@ describe('billing coordinator', () => {
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
+
+    describe('when trying to change seat count to a lower value than current user count', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        BusinessUser.countAll.mockReturnValueOnce(7)
+        await expect(billingCoordinator.updatePlanSeats(newSeatCount, orgId)).rejects.toEqual(
+          expect.objectContaining({ code: 409 })
+        )
+      })
+    })
   })
 
   describe('#updateOrgBilling', () => {
     const token = 'aaa'
+    const getOrgBilling = billingCoordinator.getOrgBilling
 
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
       stripeIntegrator.createCustomer.mockClear()
+      billingCoordinator.getOrgBilling = jest.fn()
       await billingCoordinator.updateOrgBilling(token, orgId)
+    })
+
+    afterAll(() => {
+      billingCoordinator.getOrgBilling = getOrgBilling
     })
 
     it('should call BusinessOrganization.findById with the passed in org id', () => {
@@ -298,6 +323,7 @@ describe('billing coordinator', () => {
       stripeIntegrator.getCustomer.mockClear()
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+      BusinessUser.countAll.mockClear()
       orgBilling = await billingCoordinator.getOrgBilling(orgId)
     })
 
@@ -309,6 +335,11 @@ describe('billing coordinator', () => {
     it('should call stripeIntegrator.getCustomer with the orgs stripeId', () => {
       expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toEqual(stripeId)
+    })
+
+    it('should call BusinessUser.countAll with the orgId', () => {
+      expect(BusinessUser.countAll.mock.calls.length).toBe(1)
+      expect(BusinessUser.countAll.mock.calls[0][0]).toEqual(orgId)
     })
 
     describe('when the organization does not have a stripe id', () => {

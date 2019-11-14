@@ -79,6 +79,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.s3-content-bucket
+        - name: CDN_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.cdn-hostname
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -94,6 +99,11 @@ spec:
             secretKeyRef:
               name: stripe-secrets
               key: secret
+        - name: STRIPE_HOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: stripe-secrets
+              key: hook_secret
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:

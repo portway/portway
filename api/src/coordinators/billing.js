@@ -2,11 +2,12 @@ import ono from 'ono'
 
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
+import BusinessUser from '../businesstime/user'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS } from '../constants/plans'
 
-const formatBilling = (customer) => {
+const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
   const billingSource = customer.sources.data[0]
   let source = null
@@ -34,7 +35,8 @@ const formatBilling = (customer) => {
     billingCycleAnchor: null,
     currentPeriodEnd: null,
     trialEnd: null,
-    currentSeats: null,
+    totalSeats: null,
+    usedSeats: null,
     flatCost: null,
     includedSeats: null,
     additionalSeatCost: null
@@ -46,7 +48,8 @@ const formatBilling = (customer) => {
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
     subscription.currentPeriodEnd = billingSubscription.current_period_end
     subscription.trialEnd = billingSubscription.trialEnd
-    subscription.currentSeats = billingSubscription.items.data[0].quantity
+    subscription.totalSeats = billingSubscription.items.data[0].quantity
+    subscription.usedSeats = userCount
 
     if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
       subscription.flatCost = billingSubscription.plan.amount
@@ -132,10 +135,19 @@ const updatePlanSeats = async function(seats, orgId) {
 
   //nothing is changing, return success and move on without updating stripe
   if (seats === currentSeats) {
-    return
+    return currentSeats
   }
 
-  await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
+  const userCount = await BusinessUser.countAll(orgId)
+
+  if (userCount > seats) {
+    const publicMessage = `You currently have ${userCount} users, you cannot have less seats than users`
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+  }
+
+  const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
+
+  return subscription.items.data[0].quantity
 }
 
 const updateOrgBilling = async function(token, orgId) {
@@ -160,13 +172,10 @@ const updateOrgBilling = async function(token, orgId) {
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
     const currentPlan = currentSubscription.plan.id
-    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, orgId })
+    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, subscriptionId: currentSubscription.id, orgId })
   }
 
-  // refetch customer with current billing and subscription information
-  const updatedCustomer = await stripeIntegrator.getCustomer(customer.id)
-
-  return formatBilling(updatedCustomer)
+  return billingCoordinator.getOrgBilling(orgId)
 }
 
 const getOrgBilling = async function(orgId) {
@@ -179,12 +188,15 @@ const getOrgBilling = async function(orgId) {
 
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
 
-  return formatBilling(customer)
+  const userCount = await BusinessUser.countAll(orgId)
+
+  return formatBilling(customer, userCount)
 }
 
 const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId }) {
-  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId })
+  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true })
   await BusinessOrganization.updateById(orgId, { subscriptionStatus: updatedSubscription.status, plan: updatedSubscription.plan.id })
+  return updatedSubscription
 }
 
 const billingCoordinator = {

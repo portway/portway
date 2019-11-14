@@ -1,7 +1,10 @@
 /* eslint-disable camelcase */
 import Stripe from 'stripe'
 import ono from 'ono'
-const stripe = Stripe(process.env.STRIPE_SECRET)
+
+const { STRIPE_HOOK_SECRET, STRIPE_SECRET } = process.env
+
+const stripe = Stripe(STRIPE_SECRET)
 
 const createCustomer = async function(body) {
   let customer
@@ -37,6 +40,10 @@ const getCustomer = async function(customerId) {
     throw ono(err, { code: 502 })
   }
 
+  if (customer.subscriptions && customer.subscriptions.data.length > 1) {
+    console.info(`WARNING: customer with stripeId ${customerId} has multiple subscriptions`)
+  }
+
   return customer
 }
 
@@ -64,7 +71,7 @@ const updateCustomer = async function(customerId, body) {
   return customer
 }
 
-const createOrUpdateSubscription = async function({ customerId, planId, seats, trialPeriodDays, subscriptionId }) {
+const createOrUpdateSubscription = async function({ customerId, planId, seats, trialPeriodDays, subscriptionId, endTrial = false }) {
   let subscription
   try {
     if (subscriptionId) {
@@ -74,10 +81,11 @@ const createOrUpdateSubscription = async function({ customerId, planId, seats, t
           {
             id: currentSubscription.items.data[0].id,
             plan: planId,
-            trial_period_days: trialPeriodDays,
             quantity: seats
           }
-        ]
+        ],
+        trial_period_days: trialPeriodDays,
+        trial_end: endTrial ? 'now' : null
       })
     } else {
       subscription = await stripe.subscriptions.create({
@@ -98,9 +106,14 @@ const createOrUpdateSubscription = async function({ customerId, planId, seats, t
   return subscription
 }
 
+const constructWebhookEvent = function(body, signature) {
+  return stripe.webhooks.constructEvent(body, signature, STRIPE_HOOK_SECRET)
+}
+
 export default {
   createCustomer,
   getCustomer,
   updateCustomer,
-  createOrUpdateSubscription
+  createOrUpdateSubscription,
+  constructWebhookEvent
 }

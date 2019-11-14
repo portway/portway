@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 
-import { ORGANIZATION_ROLE_NAMES, PATH_ADMIN } from 'Shared/constants'
+import { ORGANIZATION_ROLE_NAMES, ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_BILLING } from 'Shared/constants'
 import { TrashIcon } from 'Components/Icons'
+import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
 import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
@@ -25,6 +26,7 @@ const AdminUsersComponent = ({
   sortBy,
   sortMethod,
   sortUsersHandler,
+  subscription,
   users,
   totalPages
 }) => {
@@ -78,19 +80,37 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
+          {subscription && subscription.usedSeats === subscription.totalSeats &&
+          <p className="small --align-right">
+            You have filled all of your <b>{subscription.totalSeats}</b> seats.<br />
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
+              <Link to={PATH_BILLING}>Add some seats</Link> if you’d like to add more users.
+            </OrgPermission>
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.ADMIN]}>
+              Contact your organization owner to add more seats.
+            </OrgPermission>
+          </p>
+          }
+          {subscription && subscription.usedSeats < subscription.totalSeats &&
           <button
             className="btn"
             disabled={isCreating}
             onClick={() => { setCreateMode(true) }}>
               Add User
           </button>
+          }
         </header>
         {isCreating &&
+        <>
+          {subscription && subscription.usedSeats < subscription.totalSeats &&
           <AdminUsersCreateForm
             cancelHandler={() => {setCreateMode(false) }}
+            disabled={subscription.usedSeats === subscription.totalSeats}
             errors={errors}
             submitHandler={addUserHandler}
           />
+          }
+        </>
         }
         {!isCreating &&
           <>
@@ -121,6 +141,7 @@ AdminUsersComponent.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
+  subscription: PropTypes.object,
   users: PropTypes.array.isRequired,
   totalPages: PropTypes.number
 }

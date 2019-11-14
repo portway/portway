@@ -44,9 +44,23 @@ async function findById(orgId) {
   return organization.get({ plain: true })
 }
 
+async function updateByStripeId(stripeId, body) {
+  //TODO we might want to index by stripeId as well if this is getting used enough
+  const db = getDb()
+  const organization = await db.model(MODEL_NAME).findOne({ where: { stripeId } })
+
+  if (!organization) {
+    throw ono({ code: 404 }, `Cannot update, organization not found with stripe id: ${stripeId}`)
+  }
+
+  const updatedOrganization = await organization.update(body)
+  return publicFields(updatedOrganization)
+}
+
 export default {
   create,
   findSanitizedById,
   updateById,
-  findById
+  findById,
+  updateByStripeId
 }

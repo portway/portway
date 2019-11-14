@@ -60,7 +60,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
         </>
       )
     }
-    return <UserIcon width="32" height="32" />
+    return <UserIcon width="64" height="64" />
   }
 
   const classes = cx({

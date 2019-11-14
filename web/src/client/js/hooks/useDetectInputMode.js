@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 // Don't adjust input method if it's a certain type of field
-const inputTypesThatShouldntReturnTrue = ['text', 'password', 'email']
+const inputTypesThatShouldntReturnTrue = ['text', 'password', 'email', 'number']
 
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Safely_detecting_option_support
 // Test via a getter in the options object to see if the passive property is accessed

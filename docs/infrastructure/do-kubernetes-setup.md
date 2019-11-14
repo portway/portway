@@ -71,7 +71,7 @@ helm upgrade dashboard stable/kubernetes-dashboard --set fullnameOverride="dashb
 
 7. Setup the app
 
-- Set all the kubernetes secrets with kubectl
+- Set all the kubernetes secrets with kubectl. See `kube-secrets-setup.md`
 - Build images and push to Docker Hub repo
 
 8. Setup DNS

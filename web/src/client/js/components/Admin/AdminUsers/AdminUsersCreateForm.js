@@ -9,7 +9,7 @@ import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import FormField from 'Components/Form/FormField'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
+const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }) => {
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [orgRole, setOrgRole] = useState(ORGANIZATION_ROLE_IDS.USER)
@@ -25,7 +25,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
   ]
 
   function isNameOrEmailBlank() {
-    return name === undefined || email === undefined
+    return name === undefined || email === undefined || disabled
   }
 
   return (
@@ -83,6 +83,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
 AdminUsersCreateForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   errors: PropTypes.object,
+  disabled: PropTypes.bool,
   submitHandler: PropTypes.func.isRequired
 }
 
