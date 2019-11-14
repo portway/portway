@@ -1,59 +1,14 @@
 <%- include('../partials/head', { title: title, permalink: permalink, robots: 'index, nofollow' }); %>
 <%- include('../partials/navigation'); %>
-<main class="section">
+<main class="section registration">
   <div class="container">
-    <h1 class="title">Complete your registration</h1>
-    <form class="login-form" action="/sign-up/registration/complete" method="POST">
-      <section class="section">
-        <p>You're almost there! Pick a strong password to finish the last step.</p>
-        <div class="field-container">
-          <div class="field">
-            <label class="label is-small" for="password">Password</label>
-            <div class="field__control field__control--with-status">
-              <input class="input" name="password" id="password" type="password" placeholder="" autocomplete="section-signup new-password" aria-describedby="password-tip">
-              <div id="pw-status" class="field__status">
-                <div className="icon">
-                  <svg className="icon-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
-                    <path fill="#000000" fillRule="evenodd" transform="translate(4 8)" d="m26.7704375-.88388348c.4881554-.48815536 1.2796116-.48815536 1.767767 0 .4881553.48815537.4881553 1.27961159 0 1.76776696l-19.89622919 19.89622912-9.52585879-9.5258588c-.48815536-.4881553-.48815536-1.27961154 0-1.76776691.48815537-.48815536 1.27961159-.48815536 1.76776696 0l7.75809183 7.75809181z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div id="pw-messages"></div>
-          </div>
-        </div>
-        <div class="field-container">
-          <div class="field">
-            <label class="label is-small" for="confirm-password">Confirm password</label>
-            <div class="field__control field__control--with-status">
-              <input class="input" name="confirm-password" id="confirm-password" type="password" placeholder="" autocomplete="section-signup new-password" aria-describedby="confirm-tip">
-              <div id="co-status" class="field__status">
-                <div className="icon">
-                  <svg className="icon-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
-                    <path fill="#000000" fillRule="evenodd" transform="translate(4 8)" d="m26.7704375-.88388348c.4881554-.48815536 1.2796116-.48815536 1.767767 0 .4881553.48815537.4881553 1.27961159 0 1.76776696l-19.89622919 19.89622912-9.52585879-9.5258588c-.48815536-.4881553-.48815536-1.27961154 0-1.76776691.48815537-.48815536 1.27961159-.48815536 1.76776696 0l7.75809183 7.75809181z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div id="co-messages"></div>
-          </div>
-        </div>
-        <% if (flash) { %>
-          <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
-        <% } %>
-        <div class="field-container field-container--with-space">
-          <div class="field">
-            <%
-              if (typeof button === 'undefined') {
-                var button = 'Complete registration'
-              }
-            %>
-            <input type="hidden" id="email" name="token" value="<%= token %>">
-            <input type="submit" id="complete-btn" class="button" value="<%= button %>">
-          </div>
-        </div>
-      </section>
-    </form>
+    <h1 className="title">Complete your registration</h1>
+    <% if (flash) { %>
+      <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+    <% } %>
+    <div id="registrationForm" class="registration__form">
+      <!-- React form -->
+    </div>
   </div>
 </main>
 <%- include('../partials/foot'); %>

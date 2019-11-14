@@ -1,85 +1,61 @@
-import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom'
-import zxcvbn from 'zxcvbn'
+import React, { useRef, useState } from 'react'
+import { render } from 'react-dom'
+
+import UserSecurityFields from 'Components/User/UserSecurity/UserSecurityFields'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import 'CSS/registration.scss'
 
-const submitBtn = document.querySelector('#complete-btn')
-const passwordField = document.querySelector('#password')
-const confirmField = document.querySelector('#confirm-password')
-const pwStatus = document.querySelector('#pw-status')
-const coStatus = document.querySelector('#co-status')
+const urlParams = new URLSearchParams(window.location.search)
+const TOKEN = urlParams.get('token')
 
-function isPasswordMatch() {
-  return passwordField.value !== '' && passwordField.value === confirmField.value
-}
+const RegistrationForm = () => {
+  const [fieldsReady, setFieldsReady] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const formRef = useRef()
 
-function isRegReady() {
-  return isPasswordMatch()
-}
-
-const resetPasswordStatus = (e) => {
-  setTimeout(() => {
-    unmountComponentAtNode(document.getElementById('pw-messages'))
-    unmountComponentAtNode(document.getElementById('co-messages'))
-    passwordField.removeEventListener('keydown', resetPasswordStatus, false)
-  }, 1000)
-}
-
-const passwordScoreHandler = (e) => {
-  const pw = e.target.value
-  const result = zxcvbn(pw)
-  // Scores are 0 - 4
-  if (result.score < 3) {
-    passwordField.addEventListener('keydown', resetPasswordStatus, false)
-    pwStatus.style.display = 'none'
-    const Validation = (
-      <div name="password-tip" role="alert">
-        <p>{result.feedback.warning}</p>
-        {result.feedback.suggestions &&
-        <ul>
-          {result.feedback.suggestions.map((suggestion, index) => {
-            return <li key={`s-${index}`}>{suggestion}</li>
-          })}
-        </ul>
-        }
-      </div>
-    )
-    render(Validation, document.getElementById('pw-messages'))
-    return
+  function fieldsReadyHandler(value) {
+    setFieldsReady(value)
   }
-  unmountComponentAtNode(document.getElementById('pw-messages'))
-  pwStatus.style.display = 'block'
-}
 
-const confirmPasswordHandler = (e) => {
-  if (isPasswordMatch()) {
-    unmountComponentAtNode(document.getElementById('co-messages'))
-    coStatus.style.display = 'block'
-    if (isRegReady()) {
-      submitBtn.removeAttribute('disabled')
+  function formSubmitHandler(e) {
+    e.preventDefault()
+    if (fieldsReady) {
+      setSubmitting(true)
+      formRef.current.submit()
+    } else {
+      setSubmitting(false)
     }
-  } else {
-    confirmField.addEventListener('keydown', resetPasswordStatus, false)
-    coStatus.style.display = 'none'
-    submitBtn.setAttribute('disabled', true)
-    const Validation = (
-      <div name="confirm-tip" role="alert">
-        <p>Your password’s do not match.</p>
-      </div>
-    )
-    render(Validation, document.getElementById('co-messages'))
-    return
+    return false
   }
+
+  return (
+    <form
+      action="/sign-up/registration/complete"
+      method="POST"
+      onSubmit={formSubmitHandler}
+      ref={formRef}
+    >
+      <section>
+        <h2>You’re almost there! Pick a strong password to finish the last step.</h2>
+        <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} />
+        <input type="hidden" id="email" value={TOKEN} />
+        <div className="btn-group">
+          <input className="btn" type="submit" disabled={!fieldsReady} value="Complete registration" />
+          {submitting && <SpinnerComponent color="#e5e7e6" />}
+        </div>
+      </section>
+    </form>
+  )
 }
 
-// Disable the submit button unless we know the org name has a value
-submitBtn.setAttribute('disabled', true)
-passwordField.addEventListener('blur', passwordScoreHandler, false)
-confirmField.addEventListener('blur', confirmPasswordHandler, false)
+function renderRegistrationPage() {
+  const registrationDom = document.querySelector('#registrationForm')
+  render(<RegistrationForm />, registrationDom)
+}
 
-// Todo: Investigate why the globals.js doesnt work for this one
+window.addEventListener('load', renderRegistrationPage, false)
+
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept()
 }
-

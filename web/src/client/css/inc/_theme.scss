@@ -23,6 +23,8 @@ $size-large: 2.4rem;
 @import 'bulma/sass/layout/hero.sass';
 
 @import 'buttons';
+@import 'basics';
+@import 'icons';
 
 // To help stay sane, look at the structure of the Bulma repo here for
 // the correct import paths. It doesn't match their documentation site perfectly
