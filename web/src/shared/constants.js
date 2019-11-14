@@ -35,6 +35,8 @@ const LOCKED_ACCOUNT_STATUSES = [
   SUBSCRIPTION_STATUS.UNPAID,
 ]
 
+// This should only be used by marketing side, not in the app
+// as that always comes from stripe
 const PLAN_PRICING = {
   [PLAN_TYPES.SINGLE_USER]: 10,
   [PLAN_TYPES.MULTI_USER]: 50,
@@ -124,6 +126,7 @@ module.exports = {
   PATH_BILLING: '/admin/billing',
   PATH_ADMIN: '/admin',
   PATH_ORGANIZATION: '/admin/organization',
+  PATH_USERS: '/admin/users',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT_NEW_PARAM: 'new',

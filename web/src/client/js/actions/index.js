@@ -105,6 +105,9 @@ export const ActionTypes = {
   RECEIVE_BILLING_ERROR: 'RECEIVE_BILLING_ERROR',
   INITIATE_ORGANIZATION_PLAN_UPDATE: 'INITIATE_ORGANIZATION_PLAN_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION_PLAN: 'RECEIVE_UPDATED_ORGANIZATION_PLAN',
+  INITIATE_ORGANIZATION_SEATS_UPDATE: 'INITIATE_ORGANIZATION_SEATS_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_SEATS: 'RECEIVE_UPDATED_ORGANIZATION_SEATS',
+  RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
@@ -243,7 +246,11 @@ export const Organizations = {
   receiveUpdatedBilling: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING, 'id', 'data'),
   receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR),
   initiatePlanUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_PLAN_UPDATE, 'id'),
-  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'id', 'plan')
+  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'id', 'plan'),
+  // Seats
+  initiateSeatsUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_SEATS_UPDATE, 'id'),
+  receiveUpdatedSeats: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_SEATS, 'id', 'seats'),
+  receiveSeatsError: makeActionCreator(ActionTypes.RECEIVE_SEATS_ERROR),
 }
 
 export const UI = {

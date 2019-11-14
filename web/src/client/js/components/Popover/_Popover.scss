@@ -5,7 +5,7 @@
   z-index: 10;
 
   &__container {
-    background: var(--theme-surface);
+    background: var(--theme-overflow);
     border: thin solid var(--base-border-color);
     left: -24px;
     padding: 2rem;
@@ -32,7 +32,7 @@
     }
     &:after {
       border-color: rgba(255, 255, 255, 0);
-      border-bottom-color: var(--theme-surface);
+      border-bottom-color: var(--theme-overflow);
       border-width: 16px;
       margin-left: -16px;
     }
