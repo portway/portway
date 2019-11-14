@@ -172,7 +172,7 @@ const updateOrgBilling = async function(token, orgId) {
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
     const currentPlan = currentSubscription.plan.id
-    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, orgId })
+    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, subscriptionId: currentSubscription.id, orgId })
   }
 
   return billingCoordinator.getOrgBilling(orgId)
@@ -194,7 +194,7 @@ const getOrgBilling = async function(orgId) {
 }
 
 const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId }) {
-  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId })
+  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true })
   await BusinessOrganization.updateById(orgId, { subscriptionStatus: updatedSubscription.status, plan: updatedSubscription.plan.id })
   return updatedSubscription
 }
