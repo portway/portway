@@ -2,8 +2,6 @@ import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import zxcvbn from 'zxcvbn'
 
-import PopoverComponent from 'Components/Popover/PopoverComponent'
-
 import 'CSS/registration.scss'
 
 const submitBtn = document.querySelector('#complete-btn')
@@ -11,8 +9,6 @@ const passwordField = document.querySelector('#password')
 const confirmField = document.querySelector('#confirm-password')
 const pwStatus = document.querySelector('#pw-status')
 const coStatus = document.querySelector('#co-status')
-
-let passwordFieldSuccess = false
 
 function isPasswordMatch() {
   return passwordField.value !== '' && passwordField.value === confirmField.value
@@ -35,13 +31,10 @@ const passwordScoreHandler = (e) => {
   const result = zxcvbn(pw)
   // Scores are 0 - 4
   if (result.score < 3) {
-    // Focus the input, and clear the popover once we start typing
-    setTimeout(() => { passwordField.focus() }, 100)
-    passwordFieldSuccess = false
     passwordField.addEventListener('keydown', resetPasswordStatus, false)
     pwStatus.style.display = 'none'
-    const Popover = (
-      <PopoverComponent name="password-tip">
+    const Validation = (
+      <div name="password-tip" role="alert">
         <p>{result.feedback.warning}</p>
         {result.feedback.suggestions &&
         <ul>
@@ -50,13 +43,12 @@ const passwordScoreHandler = (e) => {
           })}
         </ul>
         }
-      </PopoverComponent>
+      </div>
     )
-    render(Popover, document.getElementById('pw-messages'))
+    render(Validation, document.getElementById('pw-messages'))
     return
   }
   unmountComponentAtNode(document.getElementById('pw-messages'))
-  passwordFieldSuccess = true
   pwStatus.style.display = 'block'
 }
 
@@ -68,20 +60,16 @@ const confirmPasswordHandler = (e) => {
       submitBtn.removeAttribute('disabled')
     }
   } else {
-    if (passwordFieldSuccess) {
-      // Focus the input, and clear the popover once we start typing
-      setTimeout(() => { confirmField.focus() }, 100)
-      confirmField.addEventListener('keydown', resetPasswordStatus, false)
-      coStatus.style.display = 'none'
-      submitBtn.setAttribute('disabled', true)
-      const Popover = (
-        <PopoverComponent name="confirm-tip">
-          <p>Your password’s do not match.</p>
-        </PopoverComponent>
-      )
-      render(Popover, document.getElementById('co-messages'))
-      return
-    }
+    confirmField.addEventListener('keydown', resetPasswordStatus, false)
+    coStatus.style.display = 'none'
+    submitBtn.setAttribute('disabled', true)
+    const Validation = (
+      <div name="confirm-tip" role="alert">
+        <p>Your password’s do not match.</p>
+      </div>
+    )
+    render(Validation, document.getElementById('co-messages'))
+    return
   }
 }
 

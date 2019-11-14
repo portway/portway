@@ -17,16 +17,21 @@ body.home {
   display: flex;
 }
 
-.popover__placeholder {
-  bottom: -24px;
-  position: absolute;
-
-  ul {
-    list-style: disc;
-    margin: 1rem;
-    padding: 1rem;
+div[role="alert"] {
+  padding: 8px;
+  p {
+    color: var(--color-red);
+    font-size: 1.2rem;
   }
-
+  ul {
+    color: var(--color-gray-60);
+    list-style: disc;
+    margin: .5rem 1rem;
+    padding: 1rem;
+    li {
+      font-size: 1.2rem;
+    }
+  }
 }
 
 .field__status {
