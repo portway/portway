@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Select = lazy(() => import('react-select'))
 
 import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
-import { CaretIcon } from 'Components/Icons'
+import { ArrowIcon } from 'Components/Icons'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
@@ -28,7 +28,7 @@ const ProjectSettingsTeamsComponent = ({
   return (
     <form className="project-settings__teams" onSubmit={(e) => { e.preventDefault() }}>
       <section>
-        <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><CaretIcon /> Back to Project</Link>
+        <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><ArrowIcon direction="left" /> Back to Project</Link>
         <h2>Manage your team</h2>
         <h3>Add a teammate to this project</h3>
         <p>Once you add a team member, choose their role for the project</p>
@@ -84,7 +84,7 @@ const ProjectSettingsTeamsComponent = ({
 
 ProjectSettingsTeamsComponent.propTypes = {
   createAssignmentHandler: PropTypes.func.isRequired,
-  projectId: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
   projectUsers: PropTypes.array.isRequired,
   removeAssignmentHandler: PropTypes.func.isRequired,
   updateAssignmentHandler: PropTypes.func.isRequired,
