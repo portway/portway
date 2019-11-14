@@ -94,7 +94,7 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
       {passwordStatus && passwordStatus.warning &&
       <div name="pw-popover" role="alert">
         <div className="data">
-          <RemoveIcon fill={redColor} /> <span>{passwordStatus.warning}</span>
+          <RemoveIcon width="14" height="14" fill={redColor} /> <span>{passwordStatus.warning}</span>
         </div>
         {passwordStatus.suggestions &&
         <ul>
@@ -121,7 +121,7 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
       {confirmStatus && confirmStatus.warning &&
       <div name="co-popover" role="alert">
         <div className="data">
-          <RemoveIcon fill={redColor} /> {confirmStatus.warning}
+          <RemoveIcon width="14" height="14" fill={redColor} /> {confirmStatus.warning}
         </div>
       </div>
       }

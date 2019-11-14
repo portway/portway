@@ -20,7 +20,7 @@ ProjectIcon.propTypes = {
 }
 
 ProjectIcon.defaultProps = {
-  className: 'icon-project',
+  className: 'icon-remove',
   fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#e5e7e6' : '#3b3d3e',
   height: '18',
   width: '18'
