@@ -72,7 +72,7 @@ const DocumentsListItem = ({ disable, disableDragging, document, fieldCopyHandle
         onClick={(e) => { if (disable) { e.preventDefault() } }}>
         <span className="documents-list__name">{ document.name }</span>
         <time className="documents-list__date" dateTime={document.updatedAt}>
-          <TimeIcon />
+          <TimeIcon width="13" height="13" />
           <span>{moment(document.updatedAt).fromNow()}</span>
         </time>
       </NavLink>
