@@ -138,6 +138,13 @@ const updatePlanSeats = async function(seats, orgId) {
     return currentSeats
   }
 
+  const userCount = await BusinessUser.countAll(orgId)
+
+  if (userCount > seats) {
+    const publicMessage = `You currently have ${userCount} users, you cannot have less seats than users`
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+  }
+
   const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
 
   return subscription.items.data[0].quantity

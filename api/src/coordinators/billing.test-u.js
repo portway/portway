@@ -136,6 +136,7 @@ describe('billing coordinator', () => {
       })
       billingCoordinator.createOrUpdateOrgSubscription.mockClear()
       billingCoordinator.createOrUpdateOrgSubscription.mockReturnValueOnce({ ...mockSubscription, items: { data: [{ quantity: newSeatCount }] } })
+      BusinessUser.countAll.mockClear()
       resolvedValue = await billingCoordinator.updatePlanSeats(newSeatCount, orgId)
     })
 
@@ -147,6 +148,11 @@ describe('billing coordinator', () => {
     it('should call stripeIntegrator.getCustomer with the org stripeId', () => {
       expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
       expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
+    })
+
+    it('should call BusinessUser.countAll with the org id', () => {
+      expect(BusinessUser.countAll.mock.calls.length).toBe(1)
+      expect(BusinessUser.countAll.mock.calls[0][0]).toBe(orgId)
     })
 
     it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, and orgId', () => {
@@ -199,6 +205,16 @@ describe('billing coordinator', () => {
         })
         await expect(billingCoordinator.updatePlanSeats(newSeatCount, orgId))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when trying to change seat count to a lower value than current user count', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        BusinessUser.countAll.mockReturnValueOnce(7)
+        await expect(billingCoordinator.updatePlanSeats(newSeatCount, orgId)).rejects.toEqual(
+          expect.objectContaining({ code: 409 })
+        )
       })
     })
   })
