@@ -1,12 +1,7 @@
-@import 'CSS/inc/_vars.scss';
+@import 'CSS/inc/_include-media.scss';
 
 .project {
-  --project-background: var(--color-white);
-  --project-toolbar-background: var(--color-gray-4);
-  @media (prefers-color-scheme: dark) {
-    --project-background: var(--base-background);
-    --project-toolbar-background: var(--base-border-color);
-  }
+  --project-toolbar-background: var(--theme-overlay-light);
   padding: 0;
 
   .toolbar__start {
@@ -31,28 +26,72 @@
     z-index: 100;
   }
 
+  // Documents list is by itself on small screens, and then a sidebar on medium +
   &__documents {
-    display: flex;
+    overflow: hidden;
+    position: relative;
+    width: 100vw;
+    @include media('>medium') {
+      overflow: unset;
+      display: flex;
+      // width: auto;
+    }
     &-list-container {
       border-right: thin solid var(--base-border-color);
       height: calc(100vh - (var(--ribbon-height) + var(--header-height)));
       overflow-y: auto;
       overscroll-behavior: contain;
       position: relative;
-      width: calc(var(--gutter-width) + 300px);
+      transform: translate3d(0, 0, 0);
+      width: 100vw;
+      z-index: 1;
       -webkit-overflow-scrolling: touch;
+      @media (prefers-reduced-motion: no-preference) {
+        // Turn on animations for users with no preference
+        transition: transform 0.2s ease-in-out;
+      }
+      @include media('>medium') {
+        transform: translate3d(0, 0, 0);
+        width: calc(var(--gutter-width) + 300px);
+      }
     }
     &-document-container {
-      background-color: var(--project-background);
+      background-color: var(--theme-surface);
       display: flex;
-      flex: 1;
       flex-direction: column;
       height: calc(100vh - (var(--ribbon-height) + var(--header-height)) - 40px); // footer height
+      left: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      position: relative;
+      padding-bottom: 65px;
+      position: absolute;
+      transform: translate3d(0, 20px, 0);
+      top: 63px;
+      visibility: hidden;
+      width: 100vw;
+      z-index: 2;
+      &--list-only {
+        transform: translate3d(0, 20px, 0);
+        visibility: hidden;
+      }
+      &--document-only {
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+      }
       &--full-screen {
         height: 100vh;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        // Turn on animations for users with no preference
+        transition: transform 0.2s ease-out;
+      }
+      @include media('>medium') {
+        flex: 1;
+        padding-bottom: 0;
+        position: relative;
+        top: auto;
+        transform: translate3d(0, 0, 0);
+        width: auto;
       }
     }
   }
@@ -66,7 +105,7 @@
 
     &-button-pill {
       align-items: center;
-      background-color: var(--base-background);
+      background-color: var(--theme-surface);
       border-radius: var(--border-radius);
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
       display: flex;
@@ -81,9 +120,11 @@
       height: 30px;
       padding: .25rem 1rem .25rem .5rem;
       text-decoration: none;
-      &:hover {
-        background-color: var(--base-border-color);
-        color: var(--color-gray-10);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--base-border-color);
+          color: var(--color-gray-10);
+        }
       }
     }
 
@@ -98,8 +139,10 @@
       &.active {
         background-color: var(--base-border-color);
       }
-      &:hover {
-        background-color: var(--base-border-color) !important;
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--base-border-color) !important;
+        }
       }
     }
 

@@ -1,9 +1,11 @@
 import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
-import { Link, NavLink, Redirect } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 
-import { PATH_PROJECT } from 'Shared/constants'
+import { PATH_PROJECT, PLAN_TYPES } from 'Shared/constants'
+import { InfoIcon, APIKeyIcon, TeamsIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
 import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
 
@@ -30,10 +32,17 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
   return (
     <Panel>
       <PanelNavigation>
-        <Link to={`${PATH_PROJECT}/${projectId}`} className="link--back">Back to Project</Link>
-        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`}>Info</NavLink>
-        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`}>Teams</NavLink>
-        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`}>API Keys</NavLink>
+        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`} aria-label="Info">
+          <InfoIcon /> <span className="label">Info</span>
+        </NavLink>
+        <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+          <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`} aria-label="Teams">
+            <TeamsIcon /> <span className="label">Teams</span>
+          </NavLink>
+        </OrgPlanPermission>
+        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`} aria-label="API Keys">
+          <APIKeyIcon /> <span className="label">API Keys</span>
+        </NavLink>
       </PanelNavigation>
       <PanelContent contentKey={setting} contentMap={PANEL_PATHS} />
     </Panel>

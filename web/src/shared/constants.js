@@ -6,8 +6,40 @@ const FIELD_TYPES = {
 }
 
 const PLAN_TYPES = {
-  SINGLE: 'single',
-  MULTIPLE: 'multiple'
+  MULTI_USER: 'MULTI_USER',
+  SINGLE_USER: 'SINGLE_USER',
+}
+
+const PRICING = {
+  [PLAN_TYPES.SINGLE_USER]: '$10/mo',
+  [PLAN_TYPES.MULTI_USER]: '$50/mo',
+}
+
+// https://stripe.com/docs/billing/lifecycle#subscription-states
+const SUBSCRIPTION_STATUS = {
+  TRIALING: 'trialing',
+  ACTIVE: 'active',
+  INCOMPLETE: 'incomplete',
+  INCOMPLETE_EXPIRED: 'incomplete_expired',
+  PAST_DUE: 'past_due',
+  CANCELED: 'canceled',
+  UNPAID: 'unpaid',
+}
+
+// We will lock out users in the UI if the subscriptionStatus is any of the following
+const LOCKED_ACCOUNT_STATUSES = [
+  SUBSCRIPTION_STATUS.INCOMPLETE,
+  SUBSCRIPTION_STATUS.INCOMPLETE_EXPIRED,
+  SUBSCRIPTION_STATUS.PAST_DUE,
+  SUBSCRIPTION_STATUS.CANCELED,
+  SUBSCRIPTION_STATUS.UNPAID,
+]
+
+// This should only be used by marketing side, not in the app
+// as that always comes from stripe
+const PLAN_PRICING = {
+  [PLAN_TYPES.SINGLE_USER]: 10,
+  [PLAN_TYPES.MULTI_USER]: 50,
 }
 
 const ORGANIZATION_ROLE_IDS = {
@@ -93,6 +125,8 @@ module.exports = {
   PATH_APP: '/d',
   PATH_BILLING: '/admin/billing',
   PATH_ADMIN: '/admin',
+  PATH_ORGANIZATION: '/admin/organization',
+  PATH_USERS: '/admin/users',
   PATH_DOCUMENT: '/document',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT_NEW_PARAM: 'new',
@@ -111,7 +145,11 @@ module.exports = {
   PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
   // Plans
+  LOCKED_ACCOUNT_STATUSES,
+  PLAN_PRICING: PLAN_PRICING,
   PLAN_TYPES: PLAN_TYPES,
+  SUBSCRIPTION_STATUS: SUBSCRIPTION_STATUS,
+  PRICING: PRICING,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support

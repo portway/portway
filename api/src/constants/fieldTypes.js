@@ -14,5 +14,7 @@ export const FIELD_TYPE_MODELS = {
 }
 
 export const MAX_NUMBER_PRECISION = 15
+// 100 Megabytes
+export const MAX_FILE_SIZE_BYTES = 10e7
 
 export default { FIELD_TYPES, FIELD_TYPE_MODELS }

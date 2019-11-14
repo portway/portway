@@ -86,6 +86,9 @@ export const ActionTypes = {
   RECEIVE_REINVITED_USER: 'RECEIVE_REINVITED_USER',
   REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
+  INITIATE_USER_SEARCH_BY_NAME: 'INITIATE_USER_SEARCH_BY_NAME',
+  RECEIVE_USER_SEARCH_RESULTS_BY_NAME: 'RECEIVE_USER_SEARCH_RESULTS_BY_NAME',
+  SORT_USERS: 'SORT_USERS',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
   RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
@@ -100,6 +103,11 @@ export const ActionTypes = {
   INITIATE_ORGANIZATION_BILLING_UPDATE: 'INITIATE_ORGANIZATION_BILLING_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION_BILLING: 'RECEIVE_UPDATED_ORGANIZATION_BILLING',
   RECEIVE_BILLING_ERROR: 'RECEIVE_BILLING_ERROR',
+  INITIATE_ORGANIZATION_PLAN_UPDATE: 'INITIATE_ORGANIZATION_PLAN_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_PLAN: 'RECEIVE_UPDATED_ORGANIZATION_PLAN',
+  INITIATE_ORGANIZATION_SEATS_UPDATE: 'INITIATE_ORGANIZATION_SEATS_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_SEATS: 'RECEIVE_UPDATED_ORGANIZATION_SEATS',
+  RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
   // UI
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
@@ -200,8 +208,8 @@ export const Notifications = {
 }
 
 export const Users = {
-  request: makeActionCreator(ActionTypes.REQUEST_USERS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data'),
+  request: makeActionCreator(ActionTypes.REQUEST_USERS, 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
   create: makeActionCreator(ActionTypes.INITIATE_USER_CREATE, 'userId'),
@@ -215,7 +223,10 @@ export const Users = {
   removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
   initiateReinvite: makeActionCreator(ActionTypes.INITIATE_USER_REINVITE, 'userId'),
   receiveSuccessfulReinvite: makeActionCreator(ActionTypes.RECEIVE_REINVITED_USER, 'userId'),
-  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
+  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id'),
+  initiateSearchByName: makeActionCreator(ActionTypes.INITIATE_USER_SEARCH_BY_NAME, 'partialNameString'),
+  receiveSearchResultsByName: makeActionCreator(ActionTypes.RECEIVE_USER_SEARCH_RESULTS_BY_NAME, 'data', 'partialNameString'),
+  sort: makeActionCreator(ActionTypes.SORT_USERS, 'sortBy', 'sortMethod')
 }
 
 export const UserProjectAssignments = {
@@ -233,7 +244,13 @@ export const Organizations = {
   receiveBilling: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_BILLING, 'id', 'data'),
   initiateBillingUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE, 'id'),
   receiveUpdatedBilling: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING, 'id', 'data'),
-  receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR)
+  receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR),
+  initiatePlanUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_PLAN_UPDATE, 'id'),
+  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'id', 'plan'),
+  // Seats
+  initiateSeatsUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_SEATS_UPDATE, 'id'),
+  receiveUpdatedSeats: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_SEATS, 'id', 'seats'),
+  receiveSeatsError: makeActionCreator(ActionTypes.RECEIVE_SEATS_ERROR),
 }
 
 export const UI = {

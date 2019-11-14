@@ -11,7 +11,7 @@ const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignme
     if (!user) return null
     const itsMeMario = user.id === currentUserId
     return (
-      <li key={`${user.id}-${index}`} className="field__row project-settings__teammate">
+      <li key={`${user.id}-${index}`} className="project-settings__teammate">
         <span className="project-settings__teammate-name">
           <UserIcon />
           {user.name}

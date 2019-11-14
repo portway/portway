@@ -1,0 +1,190 @@
+
+@import 'CSS/inc/_mixins.scss';
+
+.documents-list {
+  --document-list-active-item: var(--theme-overlay-dark);
+  --document-list-item-hover: var(--theme-overlay-light);
+  --document-list-item-new: var(--theme-base);
+
+  min-height: 100%;
+
+  .toolbar {
+    background-color: var(--theme-surface);
+    border-bottom: thin solid var(--base-border-color);
+    position: sticky;
+    top: 0;
+  }
+
+  &--dragged-over {
+    background-color: var(--document-list-item-hover);
+    .toolbar {
+      display: none;
+    }
+    .documents-list__empty-state {
+      display: none;
+    }
+    .documents-list__drag-notice {
+      display: block;
+      pointer-events: none;
+    }
+    .documents-list__item {
+      filter: blur(4px);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+
+  &__empty-state {
+    border-top: thin solid var(--base-border-color);
+    padding: calc(var(--gutter-width) / 4);
+  }
+  &__empty-state-content {
+    padding: calc(var(--gutter-width) / 4);
+  }
+
+  &__drag-notice {
+    display: none;
+    left: 50%;
+    pointer-events: none;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  &__item {
+    border-top: thin solid var(--base-border-color);
+    @media (prefers-reduced-motion: no-preference) {
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    &:first-child {
+      border-top: none;
+    }
+
+    &--active {
+      .btn {
+        background-color: var(--document-list-active-item);
+      }
+    }
+    // New item is a fake list item
+    &--new {
+      border-bottom: thin solid var(--base-border-color);
+      border-top: none;
+      .documents-list__button {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        &:not([disabled]) {
+          @media (hover: hover) {
+            &:hover {
+              background-color: var(--document-list-item-new);
+            }
+          }
+        }
+        .btn--with-circular-icon {
+          padding: 0;
+          .icon {
+            // background-color: var(--color-gray-4);
+            // height: 30px;
+            margin-right: 0;
+            // width: 30px;
+          }
+        }
+      }
+      .documents-list__name {
+        background-color: transparent;
+        flex: 1;
+        line-height: 1em;
+        outline: none;
+        padding-bottom: 0;
+        padding-top: 8px;
+        resize: none;
+      }
+      &:focus {
+        background-color: var(--document-list-active-item);
+      }
+    } // new
+  }
+  &__button {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: calc(var(--gutter-width) / 4);
+    white-space: normal;
+    width: 100%;
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--document-list-item-hover);
+        }
+      }
+    }
+    &.active {
+      background-color: var(--document-list-active-item);
+      &:not([disabled]) {
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--document-list-active-item);
+          }
+        }
+      }
+      &:focus {
+        background-color: var(--document-list-active-item);
+      }
+    }
+  }
+  &__name {
+    border: 0;
+    color: var(--theme-text-color);
+    font-weight: 400;
+    padding-bottom: calc(var(--gutter-width) / 4);
+    .active & {
+      color: var(--theme-header-color);
+    }
+  }
+  &__date {
+    align-items: center;
+    color: var(--theme-text-color);
+    display: flex;
+    .active & {
+      color: var(--color-gray-30);
+    }
+    .icon {
+      height: 16px;
+      margin-right: var(--icon-margin);
+      width: 16px;
+      g {
+        stroke: var(--color-gray-15);
+      }
+    }
+  }
+
+  // When we're creating a new document, override the active styling
+  // that may exist if we were looking at a document when clicking New
+  &--creating {
+    .documents-list__item {
+      opacity: 0.2;
+      &--new {
+        background-color: var(--document-list-item-new);
+        opacity: 1;
+      }
+    }
+    .documents-list__button {
+      &.active {
+        background-color: transparent;
+        .documents-list__name {
+          color: var(--color-gray-80);
+        }
+      }
+    }
+  }
+
+}

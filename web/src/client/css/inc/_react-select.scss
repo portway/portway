@@ -30,19 +30,19 @@ form {
 
 .react-select-container {
   --react-select-background: var(--color-gray-10);
-  --react-select-border: var(--color-gray-5);
+  --react-select-border: var(--color-gray-20); // this should match _forms
   --react-select-control-background: var(--color-white);
-  --react-select-control-color: var(--color-gray-10);
-  --react-select-placeholder-color: var(--color-gray-5);
+  --react-select-control-color: var(--theme-text-color);
+  --react-select-placeholder-color: var(--color-gray-20); // this should match _forms
   --react-select-option: var(--color-gray-2);
   --react-select-option-focused: var(--color-gray-5);
   --react-select-option-selected: transparent;
   --react-select-notice-background: var(--color-gray-2);
   @media (prefers-color-scheme: dark) {
-    --react-select-background: var(--color-gray-10);
-    --react-select-border: var(--color-gray-9);
+    --react-select-background: var(--color-gray-9);
+    --react-select-border: var(--color-gray-20);
     --react-select-control-background: var(--color-gray-9); // like _forms.scss
-    --react-select-control-color: var(--color-white);
+    --react-select-control-color: var(--theme-text-color);
     --react-select-placeholder-color: var(--color-gray-4);
     --react-select-option: var(--color-gray-10);
     --react-select-option-focused: var(--color-gray-8);
@@ -140,8 +140,10 @@ form {
       &--menu-is-open {
         margin: 0 12px 12px;
         border-radius: var(--border-radius);
-        &:hover {
-          border-color: var(--react-select-border);
+        @media (hover: hover) {
+          &:hover {
+            border-color: var(--react-select-border);
+          }
         }
         @include focus(var(--color-blue));
         + .react-select__menu {

@@ -1,42 +1,63 @@
+@import 'CSS/inc/_include-media.scss';
+
 /**
  * Panel is a navigataion on the left, content on the right layout
  * Project Settings, Admin Settings, etc
  */
 .panel {
-  --menu-background: var(--color-gray-5);
   display: flex;
   flex: 1;
   flex-direction: column;
-  @media (prefers-color-scheme: dark) {
-    --menu-background: var(--color-gray-90);
-  }
   &__container {
     display: flex;
     flex: 1;
     padding-top: calc(var(--brand-width) / 2);
   }
   &__navigation {
-    margin-right: var(--brand-width);
-    width: 20%;
+    margin-right: calc(var(--brand-width) / 2);
+    @include media('>medium') {
+      margin-right: var(--brand-width);
+      width: 20%;
+    }
+
     a {
-      display: block;
-      color: var(--base-color);
+      align-items: center;
+      border-left: 2px solid transparent;
+      display: flex;
+      color: transparent;
+      justify-content: center;
+      overflow: hidden;
       padding: 8px 7px;
       text-decoration: none;
+      width: 48px;
+      .label {
+        display: none;
+      }
       &.link--back {
         display: flex;
-        // margin: 0;
       }
       &.active {
-        background-color: var(--menu-background);
+        background-color: var(--theme-overlay-dark);
         border-left: 2px solid var(--color-green);
+      }
+      @include media('>medium') {
+        color: var(--theme-header-color);
+        justify-content: flex-start;
+        width: auto;
+        .label {
+          display: block;
+        }
+        .icon {
+          margin-right: .75rem;
+        }
       }
     }
   }
   &__content {
     flex: 1;
-    overflow-x: hidden;
+    // overflow-x: hidden; // this causes issues with focused input borders. Can we leave this out?
     section {
+      position: relative;
       &:first-child {
         padding-top: 0;
       }

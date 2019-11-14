@@ -1,0 +1,118 @@
+.admin-plans-selector {
+
+  &--disabled {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  &__title {
+    color: var(--color-green-dark);
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: nowrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    flex: 1 1 100%;
+    margin-right: 2rem;
+    width: 50%;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    // Override button
+    button {
+      align-items: flex-start;
+      background: transparent;
+      border: thin solid var(--base-border-color, gray);
+      border-radius: var(--border-radius, 8px);
+      color: var(--theme-text-color, black);
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin: 0 1rem 0 0;
+      overflow: hidden;
+      padding: 0;
+      text-align: left;
+      transform: scale(.98);
+      user-select: unset;
+      white-space: normal;
+      width: 100%;
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: transform 0.1s ease-in;
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          background: transparent;
+          border: thin solid var(--base-border-color, gray);
+          color: var(--theme-text-color, black);
+        }
+      }
+
+      &[aria-checked="true"] {
+        border: thin solid var(--color-green, green);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+        transform: scale(1);
+      }
+
+    } // button
+  }
+
+  &__submit {
+    margin: 2rem 0 0;
+  }
+
+  // text
+  &__content {
+    flex: 1;
+    padding: 2rem;
+    h3 {
+      color: var(--color-gray-80);
+      font-weight: 700;
+      margin: 0 0 1rem;
+    }
+    p {
+      color: unset;
+    }
+    ul {
+      list-style: none;
+      margin: 1rem 0;
+      padding-left: 0;
+      li {
+        align-items: center;
+        display: flex;
+        .icon {
+          margin-right: .5rem;
+        }
+      }
+    }
+    [aria-checked="true"] & {
+      h3 {
+        color: var(--color-green);
+      }
+    }
+  }
+
+  &__price {
+    background-color: var(--base-border-color);
+    color: var(--color-white);
+    font-weight: 700;
+    margin: 2rem 0 0 0;
+    padding: 1rem 2rem;
+    width: 400%; // Safari bug
+
+    [aria-checked="true"] & {
+      background-color: var(--color-green);
+    }
+  }
+
+}

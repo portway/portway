@@ -1,3 +1,5 @@
+import { PLANS } from '../../constants/plans'
+
 module.exports = (sequelize, DataTypes) => {
   const Organization = sequelize.define(
     'Organization',
@@ -15,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false
       },
       stripeId: DataTypes.STRING,
-      avatar: DataTypes.STRING
+      avatar: DataTypes.STRING,
+      plan: DataTypes.ENUM(Object.keys(PLANS)),
+      subscriptionStatus: DataTypes.STRING
     },
     {
       paranoid: true

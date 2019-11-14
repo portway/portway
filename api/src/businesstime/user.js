@@ -6,6 +6,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import { getPaginationOptions, getSortOptions } from '../libs/queryFilters'
 
 export const MODEL_NAME = 'User'
 
@@ -47,13 +48,44 @@ async function findById(id) {
   return await db.model(MODEL_NAME).findByPk(id, { raw: true })
 }
 
-async function findAllSanitized(orgId) {
+/**
+ * Get sanitized, paginated/searched users
+ * @param {String} orgId
+ * @param {Object} options
+ *    {Integer} page
+ *    {Integer} perPage number of records per page
+ *    {String} sortBy
+ *    {String} sortMethod
+ *    {String} nameSearch search user's names
+ */
+async function findAllSanitized(orgId, options) {
+  const paginationOptions = getPaginationOptions(options.page, options.perPage)
+  const sortOptions = getSortOptions(options.sortBy, options.sortMethod)
   const db = getDb()
-  const users = await db.model(MODEL_NAME).findAll({
-    where: { orgId }
-  })
 
-  return users.map(publicFields)
+  const query = {
+    where: { orgId },
+    ...sortOptions,
+    ...paginationOptions
+  }
+
+  if (options.nameSearch) {
+    query.where = {
+      [db.Op.and]: [
+        {
+          ...query.where
+        }, {
+          name: {
+            [db.Op.iLike]: `%${options.nameSearch}%`
+          }
+        }
+      ]
+    }
+  }
+
+  const result = await db.model(MODEL_NAME).findAndCountAll(query)
+
+  return { users: result.rows.map(publicFields), count: result.count }
 }
 
 async function findSanitizedById(id, orgId) {
@@ -120,6 +152,12 @@ async function deleteById(id, orgId) {
   await user.destroy()
 }
 
+async function countAll(orgId) {
+  const db = getDb()
+  const { count } = await db.model(MODEL_NAME).findAndCountAll({ where: { orgId } })
+  return count
+}
+
 export default {
   create,
   findByEmail,
@@ -131,5 +169,6 @@ export default {
   updateById,
   updateOrgRole,
   restoreSoftDeleted,
-  deleteById
+  deleteById,
+  countAll
 }

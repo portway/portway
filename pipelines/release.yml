@@ -32,8 +32,6 @@ steps:
     working_directory: ./web/
     tag: '${{CF_RELEASE_TAG}}'
     dockerfile: Dockerfile-prod
-    build_arguments:
-      - API_PUBLIC_URL=https://api.dev.portway.app
     when:
       steps:
         - name: main_clone

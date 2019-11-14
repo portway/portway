@@ -83,3 +83,45 @@ export const updateOrganizationBilling = (orgId, body) => {
     dispatch(Organizations.receiveUpdatedBilling(orgId, data))
   }
 }
+
+export const updateOrganizationPlan = (formId, orgId, body) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Organizations.initiatePlanUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/plan`, body)
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('organization', data, status))
+      dispatch(Organizations.receiveBillingError())
+      return
+    }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveUpdatedPlan(orgId, body.plan))
+    dispatch(formSucceededAction(formId))
+  }
+}
+
+export const updateOrganizationSeats = (formId, orgId, body) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Organizations.initiateSeatsUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/seats`, body)
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('organization', data, status))
+      dispatch(Organizations.receiveSeatsError())
+      return
+    }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveUpdatedSeats(orgId, body.seats))
+    dispatch(formSucceededAction(formId))
+  }
+}

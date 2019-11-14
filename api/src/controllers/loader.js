@@ -1,6 +1,8 @@
 import express from 'express'
 import auth from '../libs/auth/auth'
 import reqInfoExtractor from '../libs/middleware/reqInfoExtractorMiddleware'
+import checkActiveOrgStatus from '../libs/middleware/checkActiveOrgStatus'
+import bodyParser from 'body-parser'
 
 // To add a controller, add the base path to mount it as a key
 // and an object with the controller filename as the value,
@@ -37,34 +39,51 @@ const AUTHENTICATED_CONTROLLERS = {
       '/:userId/assignments': { fileName: 'userProjectAssignments' },
       '/:userId/projects': { fileName: 'userProjects' },
       '/:userId/password': { fileName: 'userPassword' }
-    }
+    },
+    allowInactiveOrgAccess: true
   },
   '/organizations': {
     fileName: 'organizations',
     childRoutes: {
-      '/:orgId/billing': { fileName: 'orgBilling' }
-    }
+      '/:orgId/billing': { fileName: 'orgBilling', allowInactiveOrgAccess: true },
+      '/:orgId/plan': { fileName: 'orgPlan' },
+      '/:orgId/seats': { fileName: 'orgSeats' }
+    },
+    allowInactiveOrgAccess: true
   }
 }
 
 // Define controllers with custom auth (must be implemented in the controller!)
 const UNAUTHENTICATED_CONTROLLERS = {
-  '/login': { fileName: 'login' },
-  '/signup': { fileName: 'signup' }
+  '/login': { fileName: 'login', allowInactiveOrgAccess: true },
+  '/signup': { fileName: 'signup', allowInactiveOrgAccess: true },
+  '/stripehooks': { fileName: 'stripeHooks', allowInactiveOrgAccess: true, customBodyParsingMiddleware: bodyParser.raw({ type: 'application/json' }) }
 }
 
-const loadControllers = (router, controllers, middleware, routerOptions) => {
+const loadControllers = (router, controllers, middleware = [], routerOptions) => {
   Object.keys(controllers).forEach((path) => {
     const controllerFileName = controllers[path].fileName
     const childRoutes = controllers[path].childRoutes
     const controller = require(`./${controllerFileName}`).default
     const controllerRouter = express.Router(routerOptions)
     controller(controllerRouter)
-    if (middleware && middleware.length) {
-      router.use(path, ...middleware, controllerRouter)
+
+    let expandedMiddleware
+    // activate body parsing middleware for each route, default to json parsing, unless otherwise specified
+    if (controllers[path].customBodyParsingMiddleware) {
+      expandedMiddleware = [...middleware, controllers[path].customBodyParsingMiddleware]
     } else {
-      router.use(path, controllerRouter)
+      expandedMiddleware = [...middleware, bodyParser.json()]
     }
+    // activate subscription status check middleware for each route, default is to only allow active orgs access
+    // unless allowInactiveOrgAccess is set to true
+
+    if (!controllers[path].allowInactiveOrgAccess) {
+      expandedMiddleware = [...middleware, checkActiveOrgStatus]
+    }
+
+    router.use(path, ...expandedMiddleware, controllerRouter)
+
     if (childRoutes) {
       loadControllers(controllerRouter, childRoutes, middleware, { mergeParams: true })
     }

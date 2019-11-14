@@ -1,5 +1,5 @@
 <form class="login-form" action="/sign-in" method="post">
-  <div class="form-field">
+  <div class="field-container">
     <div class="field">
       <label class="label is-small" for="email">Email</label>
       <div class="field__control">
@@ -8,11 +8,11 @@
     </div>
   </div>
   <% if (typeof emailOnly === 'undefined' || emailOnly !== true) { %>
-  <div class="form-field">
+  <div class="field-container">
     <div class="field">
       <label class="label is-small" for="password">Password</label>
       <div class="field__control">
-        <input class="input" name="password" type="password" placeholder="" autocomplete="section-login current-password">
+        <input class="input" name="password" type="password" placeholder="********" autocomplete="section-login current-password">
       </div>
     </div>
   </div>
@@ -20,13 +20,15 @@
   <% if (flash) { %>
   <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
   <% } %>
-  <div class="field field--with-space">
-    <%
-      if (typeof button === 'undefined') {
-        var button = 'Sign in'
-      }
-    %>
-    <input type="submit" class="button is-primary" value="<%= button %>">
+  <div class="field-container field-container--with-space">
+    <div class="field">
+      <%
+        if (typeof button === 'undefined') {
+          var button = 'Sign in'
+        }
+      %>
+      <input type="submit" class="button" value="<%= button %>">
+    </div>
   </div>
 </form>
 <!-- /login -->

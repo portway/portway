@@ -13,4 +13,11 @@ module.exports = () => {
   if (token.length < 10) {
     throw new Error(`JWT_SECRET: length must be greater than 9, set to ${process.env.JWT_SECRET}`)
   }
+
+  const cdnHostname = process.env.CDN_HOSTNAME
+  if (cdnHostname) {
+    if (typeof cdnHostname !== 'string') {
+      throw new Error(`CDN_HOSTNAME: must be a string, set to ${cdnHostname}`)
+    }
+  }
 }

@@ -1,33 +1,35 @@
 <form class="login-form" action="/sign-up/registration" method="post">
   <h1 class="title">Create your free account</h1>
-  <div class="form-field">
+  <div class="field-container">
     <div class="field">
       <label class="label" for="name">Your name</label>
       <div class="field__control">
-        <input class="input" type="text" name="name" id="name" placeholder="Name" autocomplete="section-signup given-name" required />
+        <input id="name" class="input" type="text" name="name" placeholder="Name" autocomplete="section-signup given-name" required />
       </div>
     </div>
   </div>
   <!-- /name -->
-  <div class="form-field">
+  <div class="field-container">
     <div class="field">
       <label class="label" for="email">Email address</label>
       <div class="field__control">
-        <input class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-signup username" required>
+        <input id="email" class="input" type="email" name="email" placeholder="email@domain.com" autocomplete="section-signup username" required>
         <p class="help">Your email address will be your username</p>
       </div>
     </div>
   </div>
-  <div class="field field--with-space">
-    <%
-      if (typeof button === 'undefined') {
-        var button = 'Create my account'
-      }
-    %>
-    <input type="submit" class="button is-primary" value="<%= button %>">
-  </div>
-  <div class="field">
-    <p class="help">Already have an account? <a href="/sign-in">Sign in</a></p>
+  <div class="field-container field-container--with-space">
+    <div class="field">
+      <%
+        if (typeof button === 'undefined') {
+          var button = 'Create my account'
+        }
+      %>
+      <input type="submit" class="button" value="<%= button %>">
+    </div>
+    <div class="field-container__help">
+      <p class="help">Already have an account? <a href="/sign-in">Sign in</a></p>
+    </div>
   </div>
 </form>
 <!-- /login -->

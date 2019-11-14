@@ -18,18 +18,25 @@ body {
   overscroll-behavior-y: none;
 }
 body {
-  background-color: var(--base-background);
-  color: var(--base-color);
+  background-color: var(--theme-surface);
+  color: var(--theme-text-color);
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 a, .link {
   color: var(--color-blue);
-  &:hover {
-    color: var(--color-cyan);
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-cyan);
+    }
   }
   &:active {
     color: var(--color-blue-dark);
@@ -38,8 +45,10 @@ a, .link {
   &--gray {
     color: var(--link-color-gray);
     text-decoration: none;
-    &:hover {
-      color: var(--color-gray-6);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-gray-6);
+      }
     }
     &:active {
       color: var(--color-gray-8);
@@ -51,16 +60,10 @@ a, .link {
     align-items: center;
     color: var(--link-color-gray);
     display: flex;
-    margin-bottom: 2rem;
+    // margin-bottom: 2rem;
     padding: 8px 7px 8px 0;
     text-decoration: none;
-    &:before {
-      background-image: url('../images/icon/caret.svg');
-      background-repeat: no-repeat;
-      background-size: 12px 12px;
-      background-position: 50% 50%;
-      content: '';
-      display: inline-block;
+    .icon {
       height: 18px;
       margin-right: 6px;
       transform: rotate(90deg);
@@ -71,9 +74,9 @@ a, .link {
 }
 
 input, textarea {
-  background: var(--base-background);
+  background: var(--theme-surface);
   border: thin solid var(--base-border-color);
-  color: var(--base-color);
+  color: var(--theme-text-color);
 }
 
 hr {
@@ -105,10 +108,10 @@ meter {
     background: var(--color-green);
   }
   &::-webkit-meter-suboptimum-value {
-    background: var(--color-brand);
+    background: var(--color-green);
   }
   &::-webkit-meter-even-less-good-value  {
-    background: var(--color-red);
+    background: var(--color-green);
   }
 
   // Firefox
@@ -120,10 +123,10 @@ meter {
     background: var(--color-green);
   }
   &:-moz-meter-sub-optimum::-moz-meter-bar {
-    background: var(--color-brand);
+    background: var(--color-green);
   }
   &:-moz-meter-sub-sub-optimum::-moz-meter-bar {
-    background: var(--color-red);
+    background: var(--color-green);
   }
 }
 

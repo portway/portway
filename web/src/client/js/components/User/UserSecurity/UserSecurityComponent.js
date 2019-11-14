@@ -7,7 +7,7 @@ import { debounce } from 'Shared/utilities'
 import { CheckIcon } from 'Components/Icons'
 import PopoverComponent from 'Components/Popover/PopoverComponent'
 import Form from 'Components/Form/Form'
-import TextField from 'Components/Form/TextField'
+import FormField from 'Components/Form/FormField'
 
 import './_UserSecurity.scss'
 
@@ -63,7 +63,8 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
     <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my password">
       <section>
         <h2>Update Your Password</h2>
-        <TextField
+        <FormField
+          aria-required={true}
           errors={errors.password}
           id="currentPassword"
           label="Current Password"
@@ -73,8 +74,10 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           required
           type="password"
         />
-        <TextField
-          ariaDescribedBy="pw-popover"
+        <FormField
+          aria-describedby="pw-popover"
+          aria-required={true}
+          autoComplete="new-password"
           errors={errors.newPassword}
           id="newPassword"
           label="New Password"
@@ -97,8 +100,10 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           }
         </PopoverComponent>
         }
-        <TextField
-          ariaDescribedBy="co-popover"
+        <FormField
+          aria-describedby="co-popover"
+          aria-required={true}
+          autoComplete="new-password"
           disabled={newPassword === null}
           errors={errors.confirmNewPassword}
           id="confirmNewPassword"
