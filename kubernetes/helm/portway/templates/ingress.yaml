@@ -24,3 +24,10 @@ spec:
       - backend:
           serviceName: {{ .Release.Name }}-web-service
           servicePort: 3000
+---
+apiVersion: v1
+data:
+  proxy-body-size: "100M"
+kind: ConfigMap
+metadata:
+  name: nginx-configuration

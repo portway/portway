@@ -6,11 +6,10 @@ import { validateBody, validateParams } from '../libs/middleware/payloadValidati
 import BusinessField from '../businesstime/field'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
+import { MAX_FILE_SIZE_BYTES } from '../constants/fieldTypes'
 import { requiredFields, partialFields } from './payloadSchemas/helpers'
 import auditLog, { auditActions } from '../integrators/audit'
 import fieldCoordinator from '../coordinators/field'
-
-const MAX_FILE_SIZE = 10e7
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.DOCUMENT,
@@ -33,7 +32,7 @@ const documentFields = function(router) {
     multer({
       dest: 'uploads/',
       limits: {
-        fileSize: MAX_FILE_SIZE
+        fileSize: MAX_FILE_SIZE_BYTES
       }
     }).single('file'),
     validateBody(requiredFields(RESOURCE_TYPES.FIELD, 'name', 'type'), { includeDetails: true }),
@@ -48,7 +47,7 @@ const documentFields = function(router) {
     multer({
       dest: 'uploads/',
       limits: {
-        fileSize: MAX_FILE_SIZE
+        fileSize: MAX_FILE_SIZE_BYTES
       }
     }).single('file'),
     validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), {
