@@ -129,21 +129,21 @@ time {
 }
 
 .pill {
-  background-color: var(--color-gray-5);
+  background-color: var(--color-gray-20);
   border: thin solid transparent;
   border-radius: var(--border-radius);
-  color: var(--color-gray-10);
+  color: var(--color-gray-40);
   display: inline-block;
   font-size: 90%;
   margin: 0 var(--icon-margin);
-  padding: 3px var(--icon-margin);
+  padding: 5px 10px;
   text-decoration: none;
   &--gray {
-    background-color: var(--color-gray-5);
-    color: var(--color-gray-80);
+    background-color: var(--color-gray-20);
+    color: var(--color-gray-40);
     &:hover {
       border: thin solid var(--color-gray-15);
-      color: var(--color-gray-80);
+      color: var(--color-gray-60);
     }
   }
   &--green {

@@ -21,7 +21,7 @@ TableIcon.propTypes = {
 
 TableIcon.defaultProps = {
   className: 'icon-table',
-  fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#e5e7e6' : '#3b3d3e',
+  fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#F2F2F2' : '#3b3d3e',
   height: '18',
   width: '18'
 }

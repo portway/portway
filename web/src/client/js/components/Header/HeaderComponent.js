@@ -28,7 +28,7 @@ const renderBrandLogo = (logo) => {
 const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) => {
   const upgradePillClasses = cx({
     'pill': true,
-    'pill--red': LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
+    'pill--red': !LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
     'pill--gray': subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null,
   })
   if (!isFullScreen) {
@@ -51,7 +51,7 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
               <NavLink to={PATH_BILLING} className={upgradePillClasses}>Upgrade your account</NavLink>
             </OrgPermission>
             }
-            {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
+            {!LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <NavLink to={PATH_BILLING} className={upgradePillClasses}>Your account needs attention</NavLink>
             </OrgPermission>
