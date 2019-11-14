@@ -1,9 +1,11 @@
 import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
+import organization from '../businesstime/organization'
 
 async function handleEvent(event) {
   const eventData = event.data.object
-  const customer = await stripeIntegrator.getCustomer(eventData.customer)
+  const stripeId = eventData.customer
+  const customer = await stripeIntegrator.getCustomer(stripeId)
 
   switch (event.type) {
     case 'charge.failed': {
@@ -11,6 +13,9 @@ async function handleEvent(event) {
       const message = 'Portway payment failed'
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+      //update cached subscription status on org
+      const subscription = customer.subscriptions.data[0]
+      organization.updateByStripeId(stripeId, { subscriptionStatus: subscription.status })
     }
     case 'charge.succeeded': {
       const subject = 'Payment successful'
