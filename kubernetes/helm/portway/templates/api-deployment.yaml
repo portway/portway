@@ -99,6 +99,11 @@ spec:
             secretKeyRef:
               name: stripe-secrets
               key: secret
+        - name: STRIPE_HOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: stripe-secrets
+              key: hook_secret
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
