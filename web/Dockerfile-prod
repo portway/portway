@@ -20,7 +20,4 @@ RUN rm -rf config/
 ENV NODE_ENV production
 RUN npm install --only=production
 
-# Delete any tar or other files npm may have cached during install
-RUN npm cache clean --force
-
 ENTRYPOINT ["/bin/sh", "./run.sh"]
