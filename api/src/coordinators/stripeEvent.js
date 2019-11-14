@@ -22,6 +22,9 @@ async function handleEvent(event) {
       const message = 'Portway payment was successful'
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+      //update cached subscription status on org
+      const subscription = customer.subscriptions.data[0]
+      organization.updateByStripeId(stripeId, { subscriptionStatus: subscription.status })
     }
   }
 }
