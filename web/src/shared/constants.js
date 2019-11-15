@@ -101,7 +101,6 @@ module.exports = {
   PRODUCT_NAME: 'Portway',
   PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
-  PRODUCT_API_URL: 'http://localhost:3001/api',
   // Documentation
   DOCUMENTATION_URL: 'https://docs.portway.app/',
   // Fields
