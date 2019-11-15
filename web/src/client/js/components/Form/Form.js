@@ -11,6 +11,7 @@ const Form = ({
   bigSubmit,
   cancelHandler,
   children,
+  disabled,
   dispatch,
   forms,
   name,
@@ -27,6 +28,12 @@ const Form = ({
   const [succeeded, setSucceeded] = useState(false)
 
   useEffect(() => {
+    if (!disabled) {
+      setFormChanged(true)
+    }
+  }, [disabled])
+
+  useEffect(() => {
     setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)
     setFailed(forms[name] && forms[name].failed)
     setSucceeded(forms[name] && forms[name].succeeded && !forms[name].failed)
@@ -40,10 +47,12 @@ const Form = ({
   }
 
   const debouncedChangeHandler = debounce(200, () => {
-    setFormChanged(true)
+    if (!disabled) {
+      setFormChanged(true)
+    }
   })
 
-  const buttonDisabledWhen = !formChanged || submitting || succeeded
+  const buttonDisabledWhen = disabled || !formChanged || submitting || succeeded
   const submitClasses = cx({
     'btn': true,
     'btn--small': !bigSubmit,
@@ -89,6 +98,7 @@ Form.propTypes = {
   bigSubmit: PropTypes.bool,
   children: PropTypes.node,
   dispatch: PropTypes.func,
+  disabled: PropTypes.bool,
   forms: PropTypes.object,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,

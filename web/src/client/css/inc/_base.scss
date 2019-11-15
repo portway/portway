@@ -1,6 +1,7 @@
 @import 'vars';
 @import 'mixins';
 @import 'include-media';
+@import 'basics';
 @import 'type';
 @import 'code';
 @import 'lists';
@@ -8,6 +9,12 @@
 @import 'buttons';
 @import 'hacks';
 @import 'react-select';
+
+/**
+ * This is a base import for the main application
+ * Use theme.scss for the website
+ *
+ */
 
 * {
   box-sizing: border-box;
@@ -71,63 +78,6 @@ a, .link {
     }
   }
 
-}
-
-input, textarea {
-  background: var(--theme-surface);
-  border: thin solid var(--base-border-color);
-  color: var(--theme-text-color);
-}
-
-hr {
-  border: none;
-  border-top: thin solid var(--base-border-color);
-}
-
-meter {
-  // -webkit-appearance: none; // fixes chrome / opera
-  // -moz-appearance: none;
-  // appearance: none;
-  background: var(--color-gray-5); // Firefox
-  border-radius: var(--border-radius);
-  display: block;
-  margin: .25rem 0 1rem 0;
-  width: 100%;
-
-  // Safari
-  &::-webkit-meter-bar {
-    background: var(--color-gray-5);
-    border-radius: var(--border-radius);
-  }
-  &::-webkit-meter-optimum-value,
-  &::-webkit-meter-suboptimum-value,
-  &::-webkit-meter-even-less-good-value {
-    border-radius: var(--border-radius);
-  }
-  &::-webkit-meter-optimum-value {
-    background: var(--color-green);
-  }
-  &::-webkit-meter-suboptimum-value {
-    background: var(--color-green);
-  }
-  &::-webkit-meter-even-less-good-value  {
-    background: var(--color-green);
-  }
-
-  // Firefox
-  &::-moz-meter-bar {
-    background: var(--color-gray-5);
-    border-radius: var(--border-radius);
-  }
-  &:-moz-meter-optimum::-moz-meter-bar {
-    background: var(--color-green);
-  }
-  &:-moz-meter-sub-optimum::-moz-meter-bar {
-    background: var(--color-green);
-  }
-  &:-moz-meter-sub-sub-optimum::-moz-meter-bar {
-    background: var(--color-green);
-  }
 }
 
 [contenteditable] {
