@@ -39,7 +39,7 @@ const RegistrationForm = () => {
       <section>
         <h2>You’re almost there! Pick a strong password to finish the last step.</h2>
         <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} />
-        <input type="hidden" id="email" value={TOKEN ? TOKEN : ''} />
+        <input type="hidden" id="token" name="token" value={TOKEN ? TOKEN : ''} />
         <div className="btn-group">
           <input className="btn" type="submit" disabled={!fieldsReady} value="Complete registration" />
           {submitting && <SpinnerComponent color="#e5e7e6" />}
