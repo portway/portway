@@ -119,7 +119,7 @@
     } // new
   }
   &__button {
-    align-items: center;
+    align-items: flex-start;
     flex-direction: row;
     padding: calc(var(--gutter-width) / 5) calc(var(--gutter-width) / 4);
     white-space: normal;
