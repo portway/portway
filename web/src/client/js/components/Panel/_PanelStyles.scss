@@ -55,7 +55,7 @@
   }
   &__content {
     flex: 1;
-    overflow-x: hidden;
+    // overflow-x: hidden; // this causes issues with focused input borders. Can we leave this out?
     section {
       position: relative;
       &:first-child {

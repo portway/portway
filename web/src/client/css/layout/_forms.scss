@@ -12,6 +12,10 @@ form, .form {
 
   // Defaults
   // ---------------------------------------------------------------------------
+  fieldset {
+    padding: 0;
+  }
+
   label, .field__label {
     display: block;
     font-weight: 700;
@@ -79,6 +83,10 @@ form, .form {
     flex-direction: row;
   }
 
+  &--large {
+    width: 100%;
+  }
+
   // Need some top padding to separate your field a little?
   &--with-space {
     padding-top: 2.4rem;
@@ -142,6 +150,11 @@ form, .form {
       input[type='password'] {
         width: var(--field-container-width);
       }
+    }
+
+    // Shrink just the control of the small fields
+    .field--small & {
+      width: 100px;
     }
 
     // checkboxes get no width

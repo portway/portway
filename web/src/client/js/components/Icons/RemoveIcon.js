@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function ProjectIcon({ className, fill, height, width }) {
+function RemoveIcon({ className, fill, height, width }) {
   // xmlns="http://www.w3.org/2000/svg"
   return (
     <div className="icon">
@@ -12,20 +12,20 @@ function ProjectIcon({ className, fill, height, width }) {
   )
 }
 
-ProjectIcon.propTypes = {
+RemoveIcon.propTypes = {
   className: PropTypes.string,
   fill: PropTypes.string,
   height: PropTypes.string,
   width: PropTypes.string
 }
 
-ProjectIcon.defaultProps = {
-  className: 'icon-project',
+RemoveIcon.defaultProps = {
+  className: 'icon-remove',
   fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#F2F2F2' : '#3b3d3e',
   height: '18',
   width: '18'
 }
 
-export default ProjectIcon
+export default RemoveIcon
 
 

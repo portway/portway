@@ -29,8 +29,7 @@ function renderCardLogo(brand) {
 
 function getTotalCost(subscription) {
   if (subscription.flatCost) {
-    // @todo calculate total cost from flatCost + seatCount*costPerSeat
-    return subscription.flatCost
+    return subscription.flatCost + (subscription.totalSeats - subscription.includedSeats) * subscription.additionalSeatCost
   } else {
     return '000'
   }

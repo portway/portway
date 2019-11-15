@@ -32,6 +32,7 @@ const AdminUsersContainer = ({
   const params = parseParams(location.search)
   const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.ASCENDING } = params
   const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
+  const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
 
   function addUserHandler(values) {
     createUser(values)
@@ -80,9 +81,9 @@ const AdminUsersContainer = ({
       <AdminUsersComponent
         addUserHandler={addUserHandler}
         currentUserId={currentUserId}
+        errors={errors}
         isCreating={isCreating}
         isInviting={isInviting}
-        errors={errors}
         pageChangeHandler={pageChangeHandler}
         reinviteUserHandler={reinviteUserHandler}
         removeUserHandler={removeUserHandler}
@@ -90,8 +91,9 @@ const AdminUsersContainer = ({
         sortBy={sortBy}
         sortMethod={sortMethod}
         sortUsersHandler={sortUsersHandler}
-        users={users}
+        subscription={orgBilling ? orgBilling.subscription : null}
         totalPages={totalPages}
+        users={users}
       />
     </OrgPlanPermission>
   )
@@ -114,7 +116,7 @@ const mapStateToProps = (state) => {
   return {
     errors: state.validation.user,
     isCreating: state.ui.users.creating,
-    isInviting: state.ui.users.inviting
+    isInviting: state.ui.users.inviting,
   }
 }
 

@@ -9,13 +9,16 @@ import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
   bigSubmit,
+  cancelHandler,
   children,
+  disabled,
   dispatch,
   forms,
   name,
   onSubmit,
   submitEnabled,
   submitLabel,
+  submitOnRight,
   ...props,
 }) => {
   const formRef = useRef()
@@ -23,6 +26,12 @@ const Form = ({
   const [submitting, setSubmitting] = useState(false)
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
+
+  useEffect(() => {
+    if (!disabled) {
+      setFormChanged(true)
+    }
+  }, [disabled])
 
   useEffect(() => {
     setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)
@@ -38,14 +47,20 @@ const Form = ({
   }
 
   const debouncedChangeHandler = debounce(200, () => {
-    setFormChanged(true)
+    if (!disabled) {
+      setFormChanged(true)
+    }
   })
 
-  const buttonDisabledWhen = !formChanged || submitting || succeeded
+  const buttonDisabledWhen = disabled || !formChanged || submitting || succeeded
   const submitClasses = cx({
     'btn': true,
     'btn--small': !bigSubmit,
     'btn--disabled': buttonDisabledWhen,
+  })
+  const buttonGroupClasses = cx({
+    'btn-group': true,
+    'btn-group--right-aligned': submitOnRight
   })
 
   if (succeeded && formRef.current) {
@@ -66,8 +81,11 @@ const Form = ({
         <p className="danger">Please check your form for errors</p>
       </div>
       }
-      <div className="btn-group">
+      <div className={buttonGroupClasses}>
         <input type="submit" className={submitClasses} disabled={buttonDisabledWhen && !submitEnabled} value={submitLabel} />
+        {cancelHandler &&
+          <button className="btn btn--blank btn--small" type="button" onClick={cancelHandler}>Cancel</button>
+        }
         {submitting && <SpinnerComponent color="#e5e7e6" />}
         {succeeded && <CheckIcon fill="#51a37d" />}
       </div>
@@ -76,14 +94,17 @@ const Form = ({
 }
 
 Form.propTypes = {
+  cancelHandler: PropTypes.func,
   bigSubmit: PropTypes.bool,
   children: PropTypes.node,
   dispatch: PropTypes.func,
+  disabled: PropTypes.bool,
   forms: PropTypes.object,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   submitEnabled: PropTypes.bool,
   submitLabel: PropTypes.string,
+  submitOnRight: PropTypes.bool,
 }
 
 Form.defaultProps = {

@@ -8,6 +8,9 @@
   .btn {
     margin-right: 12px;
   }
+  &--right-aligned {
+    flex-direction: row-reverse;
+  }
 }
 
 [role="button"] {
