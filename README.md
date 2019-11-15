@@ -1,3 +1,5 @@
+![Portway Image](docs/portway-github.png)
+
 # Portway 🔥
 
 To get started, you'll need Docker installed, then run the following commands
