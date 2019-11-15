@@ -53,7 +53,8 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
 
     // Set the score and summary, always
     const result = zxcvbn(password)
-    setPasswordScore(result.score)
+    setPasswordScore(result.score === 0 ? 1 : result.score)
+    setPasswordStatus(result.feedback.warning)
     setPasswordSummary(result.feedback.suggestions)
 
     // Did we put in a confirm password and then change the password?
@@ -72,7 +73,7 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
     }
     // Ok we'll allow this password, now match it
     if (password.length >= MIN_PASSWORD_LENGTH) {
-      setPasswordStatus(result.feedback.warning)
+      setPasswordStatus(null)
       setNewPassword(password)
     }
   })
@@ -101,11 +102,13 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
         status={passwordIsValid() && <CheckIcon fill="#51a37d" />}
         type="password"
       />
-      {passwordStatus &&
+      {(passwordStatus || passwordSummary) &&
       <div name="pw-popover" role="alert">
+        {passwordStatus &&
         <div className="data">
           <RemoveIcon width="14" height="14" fill={redColor} /> <span>{passwordStatus}</span>
         </div>
+        }
         {passwordSummary &&
         <ul>
           {passwordSummary.map((suggestion, index) => {
@@ -137,7 +140,7 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
       }
       <div className="user-security-fields__password-score">
         <p>Password strength</p>
-        <meter low="1" optimum="4" min="0" max="4" value={passwordScore} />
+        <meter low="0" optimum="4" min="0" max="4" value={passwordScore} />
       </div>
     </div>
   )
