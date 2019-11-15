@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import zxcvbn from 'zxcvbn'
 
@@ -18,20 +18,27 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
 
   // Password meter
   const [passwordStatus, setPasswordStatus] = useState(null)
+  const [passwordSummary, setPasswordSummary] = useState(null)
   const [passwordScore, setPasswordScore] = useState(null)
   const [confirmStatus, setConfirmStatus] = useState(null)
+
+  const passwordIsValid = useCallback(() => {
+    return newPassword && newPassword.length >= MIN_PASSWORD_LENGTH
+  }, [newPassword])
 
   // monitor fields and trigger fieldsReadyHandler if everything is good
   useEffect(() => {
     function areFieldsReady() {
-      return newPassword && newPassword === confirmNewPassword
+      return passwordIsValid() && newPassword === confirmNewPassword
     }
     fieldsReadyHandler(areFieldsReady(), newPassword, confirmNewPassword)
-  }, [newPassword, confirmNewPassword, fieldsReadyHandler])
+  }, [newPassword, confirmNewPassword, fieldsReadyHandler, passwordIsValid])
 
   function resetPassword() {
     setNewPassword(null)
     setPasswordScore(0)
+    setPasswordStatus(null)
+    setPasswordSummary(null)
   }
 
   const passwordValidationHandler = debounce(500, (password) => {
@@ -40,40 +47,43 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
       resetPassword()
       return
     }
+
+    // Set the password
+    setNewPassword(password)
+
+    // Set the score and summary, always
+    const result = zxcvbn(password)
+    setPasswordScore(result.score)
+    setPasswordSummary(result.feedback.suggestions)
+
+    // Did we put in a confirm password and then change the password?
+    if (confirmNewPassword) {
+      if (password !== confirmNewPassword) {
+        setConfirmStatus('Your passwords do not match.')
+      }
+      // Did we change the password after we updated the confirm password?
+      if (confirmNewPassword === password) {
+        setConfirmStatus(null)
+      }
+    }
     // Do we have enough characters?
     if (password.length < MIN_PASSWORD_LENGTH) {
-      setPasswordStatus({ warning: `Your password must be at least ${MIN_PASSWORD_LENGTH} characters.` })
-      resetPassword()
-      return
+      setPasswordStatus(`Your password must be at least ${MIN_PASSWORD_LENGTH} characters.`)
     }
-    // Did we put in a confirm password and then change the password?
-    if (confirmNewPassword && password !== confirmNewPassword) {
-      setConfirmStatus({ warning: 'Your passwords do not match.' })
-    }
-    // Did we change the password after we updated the confirm password?
-    if (confirmNewPassword === password) {
-      setConfirmStatus(null)
-    }
-    const result = zxcvbn(password)
-    setPasswordStatus(result.feedback)
-    setPasswordScore(result.score)
     // Ok we'll allow this password, now match it
-    if (result.score >= 3) {
+    if (password.length >= MIN_PASSWORD_LENGTH) {
+      setPasswordStatus(result.feedback.warning)
       setNewPassword(password)
-      setPasswordStatus(null)
-    } else {
-      setNewPassword(null)
     }
   })
 
   const passwordMatchHandler = debounce(500, (pw) => {
     if (pw !== newPassword) {
-      setConfirmStatus({ warning: 'Your passwords do not match.' })
-      setConfirmNewPassword(pw)
+      setConfirmStatus('Your passwords do not match.')
     } else {
       setConfirmStatus(null)
-      setConfirmNewPassword(pw)
     }
+    setConfirmNewPassword(pw)
   })
 
   return (
@@ -88,17 +98,17 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
         onChange={e => passwordValidationHandler(e.target.value)}
         placeholder="Enter a new password"
         required
-        status={newPassword && <CheckIcon fill="#51a37d" />}
+        status={passwordIsValid() && <CheckIcon fill="#51a37d" />}
         type="password"
       />
-      {passwordStatus && passwordStatus.warning &&
+      {passwordStatus &&
       <div name="pw-popover" role="alert">
         <div className="data">
-          <RemoveIcon width="14" height="14" fill={redColor} /> <span>{passwordStatus.warning}</span>
+          <RemoveIcon width="14" height="14" fill={redColor} /> <span>{passwordStatus}</span>
         </div>
-        {passwordStatus.suggestions &&
+        {passwordSummary &&
         <ul>
-          {passwordStatus.suggestions.map((suggestion, index) => {
+          {passwordSummary.map((suggestion, index) => {
             return <li key={`s-${index}`}>{suggestion}</li>
           })}
         </ul>
@@ -115,19 +125,19 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
         onChange={e => passwordMatchHandler(e.target.value)}
         placeholder="Enter your new password"
         required
-        status={confirmNewPassword && newPassword === confirmNewPassword && <CheckIcon fill="#51a37d" />}
+        status={passwordIsValid() && newPassword === confirmNewPassword && <CheckIcon fill="#51a37d" />}
         type="password"
       />
-      {confirmStatus && confirmStatus.warning &&
+      {confirmStatus &&
       <div name="co-popover" role="alert">
         <div className="data">
-          <RemoveIcon width="14" height="14" fill={redColor} /> {confirmStatus.warning}
+          <RemoveIcon width="14" height="14" fill={redColor} /> {confirmStatus}
         </div>
       </div>
       }
       <div className="user-security-fields__password-score">
         <p>Password strength</p>
-        <meter low="1" optimum="4" min="1" max="4" value={passwordScore} />
+        <meter low="1" optimum="4" min="0" max="4" value={passwordScore} />
       </div>
     </div>
   )
