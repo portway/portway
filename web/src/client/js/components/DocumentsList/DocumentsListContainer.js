@@ -7,15 +7,17 @@ import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT } from 'Shared
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-import { createDocument } from 'Actions/document'
+import { createDocument, deleteDocument } from 'Actions/document'
 import { copyField, moveField } from 'Actions/field'
-import { uiDocumentCreate } from 'Actions/ui'
+import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
 
 const DocumentsListContainer = ({
   createDocument,
   copyField,
+  deleteDocument,
   documentFields,
+  uiConfirm,
   uiDocumentCreate,
   history,
   ui,
@@ -65,6 +67,15 @@ const DocumentsListContainer = ({
     copyField(match.params.projectId, oldDocumentId, newDocumentId, field)
   }
 
+  function removeDocumentHandler(document) {
+    const message = (
+      <span> Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
+    )
+    const confirmedLabel = `Yes, delete this document`
+    const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
+    uiConfirm({ message, confirmedAction, confirmedLabel })
+  }
+
   const sortedDocuments = []
   if (documents) {
     Object.keys(documents).forEach((doc) => {
@@ -85,14 +96,18 @@ const DocumentsListContainer = ({
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
       loading={loading}
-      projectId={Number(match.params.projectId)}/>
+      projectId={Number(match.params.projectId)}
+      removeDocumentHandler={removeDocumentHandler}
+    />
   )
 }
 
 DocumentsListContainer.propTypes = {
   createDocument: PropTypes.func.isRequired,
   copyField: PropTypes.func.isRequired,
+  deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
+  uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   ui: PropTypes.object.isRequired,
@@ -107,7 +122,14 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { createDocument, copyField, moveField, uiDocumentCreate }
+const mapDispatchToProps = {
+  createDocument,
+  copyField,
+  deleteDocument,
+  moveField,
+  uiConfirm,
+  uiDocumentCreate
+}
 
 
 export default withRouter(

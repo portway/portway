@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { debounce } from 'Shared/utilities'
-import { ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
+import { ExpandIcon, PublishIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
-import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -16,7 +15,6 @@ const DocumentComponent = ({
   isPublishing,
   nameChangeHandler,
   publishDocumentHandler,
-  removeDocumentHandler,
   toggleFullScreenHandler,
 }) => {
   const titleRef = useRef()
@@ -38,10 +36,6 @@ const DocumentComponent = ({
   })
 
   const docKey = document ? document.id : 0
-  const dropdownButton = {
-    className: 'btn btn--blank btn--with-circular-icon',
-    icon: <MoreIcon />
-  }
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
   })
@@ -93,10 +87,6 @@ const DocumentComponent = ({
           {!isPublishing && <PublishIcon fill="#ffffff" />}
           <span className="label">Publish</span>
         </button>
-        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-          <DropdownItem label="Duplicate document" type="button" />
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
-        </DropdownComponent>
       </header>
       <DocumentFieldsContainer />
     </div>
@@ -110,7 +100,6 @@ DocumentComponent.propTypes = {
   isPublishing: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
   publishDocumentHandler: PropTypes.func.isRequired,
-  removeDocumentHandler: PropTypes.func.isRequired,
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 
