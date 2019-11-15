@@ -38,7 +38,7 @@ async function createUserAndOrganization(name, email) {
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
 
-  const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
+  const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
   const htmlBody = `
     <H2>Here's your link to finish signing up for Portway:</h2>
