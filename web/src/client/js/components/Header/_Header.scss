@@ -64,6 +64,17 @@
       }
     }
 
+    .pill {
+      background-color: var(--theme-surface);
+      border: thin solid var(--color-gray-20);
+      color: var(--color-gray-40);
+      font-size: 1.3rem;
+      &--red {
+        border: thin solid var(--color-brand);
+        color: var(--color-brand);
+      }
+    }
+
     &__project-settings-link {
       align-items: center;
       color: var(--theme-text-color);
@@ -78,7 +89,7 @@
       align-items: center;
       border-left: thin solid var(--base-border-color);
       display: flex;
-      height: var(--gutter-width);
+      // height: var(--gutter-width);
       justify-content: center;
       min-width: var(--gutter-width);
       z-index: 11;

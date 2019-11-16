@@ -40,7 +40,7 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
         aria-label={button.label}
         name={button.name}
         style={buttonStyle}
-        onClick={() => { setExpanded(!expanded)}}>
+        onClick={(e) => { e.preventDefault(); setExpanded(!expanded)}}>
         {button.iconPlacement === 'before' || button.iconPlacement === undefined && button.icon}
         {button.label && <div className="label">{button.label}</div>}
         {button.iconPlacement === 'after' && button.icon}

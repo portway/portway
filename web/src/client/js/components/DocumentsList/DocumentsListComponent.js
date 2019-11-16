@@ -15,15 +15,16 @@ const { PROJECT_ROLE_IDS } = Constants
 const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
 const DocumentsListComponent = ({
+  createCallback,
   createChangeHandler,
   creating,
-  createCallback,
   documents,
   draggedDocumentHandler,
   fieldCopyHandler,
   fieldMoveHandler,
   loading,
-  projectId
+  projectId,
+  removeDocumentHandler,
 }) => {
   // Keep track of how many things being dragged
   let dragCount = 0
@@ -99,10 +100,11 @@ const DocumentsListComponent = ({
         <DocumentsListItem
           disable={creating}
           disableDragging={dragActive}
+          document={doc}
           fieldCopyHandler={fieldCopyHandler}
           fieldMoveHandler={fieldMoveHandler}
           key={`d-${doc.id}-${index}`}
-          document={doc}
+          removeDocumentHandler={removeDocumentHandler}
         />
       )
     })
@@ -201,15 +203,16 @@ const DocumentsListComponent = ({
 }
 
 DocumentsListComponent.propTypes = {
+  createCallback: PropTypes.func.isRequired,
   createChangeHandler: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
-  createCallback: PropTypes.func.isRequired,
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   projectId: PropTypes.number.isRequired,
+  removeDocumentHandler: PropTypes.func.isRequired,
 }
 
 DocumentsListComponent.defaultProps = {

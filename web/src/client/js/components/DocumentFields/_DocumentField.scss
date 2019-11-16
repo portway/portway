@@ -79,8 +79,8 @@
       input {
         background-color: var(--color-brand-light);
         &::selection {
-          background-color: var(--color-green);
-          color: #fff;
+          background-color: var(--color-yellow);
+          // color: #fff;
         }
       }
     }

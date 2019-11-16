@@ -10,6 +10,10 @@
       height: 24px;
       width: 24px;
     }
+    .label {
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
     &[aria-expanded="true"] {
       .icon {
         animation-fill-mode: forwards;

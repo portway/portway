@@ -1,7 +1,7 @@
 // New CSS variables to replace the below ones
 :root {
   // Border-radius should be the same everywhere
-  --border-radius: 2px;
+  --border-radius: 4px;
   --box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
   // brandWidth and gutter width are for the side gutters, and side boxes of the header
   // we use this measurement in a bunch of places, usually dividing or multiplying by it

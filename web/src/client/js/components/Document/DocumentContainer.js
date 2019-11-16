@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { uiConfirm, uiToggleFullScreen } from 'Actions/ui'
-import { deleteDocument, publishDocument, updateDocument } from 'Actions/document'
+import { uiToggleFullScreen } from 'Actions/ui'
+import { publishDocument, updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import Constants from 'Shared/constants'
@@ -14,14 +14,11 @@ import { PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument,
   documents,
-  history,
   isFullScreen,
   location,
   match,
   publishDocument,
-  uiConfirm,
   uiToggleFullScreen,
   updateDocument,
 }) => {
@@ -63,14 +60,7 @@ const DocumentContainer = ({
   function publishDocumentHandler() {
     publishDocument(document.id)
   }
-  function removeDocumentHandler() {
-    const message = (
-      <span> Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
-    )
-    const confirmedLabel = `Yes, delete this document`
-    const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
-  }
+
   function toggleFullScreenHandler(e) {
     uiToggleFullScreen(!isFullScreen)
   }
@@ -87,22 +77,18 @@ const DocumentContainer = ({
         isPublishing={documents.isPublishing}
         nameChangeHandler={nameChangeHandler}
         publishDocumentHandler={publishDocumentHandler}
-        removeDocumentHandler={removeDocumentHandler}
         toggleFullScreenHandler={toggleFullScreenHandler} />
     </>
   )
 }
 
 DocumentContainer.propTypes = {
-  deleteDocument: PropTypes.func.isRequired,
   documents: PropTypes.object.isRequired,
   fields: PropTypes.object,
-  history: PropTypes.object.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   publishDocument: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
 }
@@ -116,10 +102,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  deleteDocument,
   publishDocument,
   updateDocument,
-  uiConfirm,
   uiToggleFullScreen
 }
 
