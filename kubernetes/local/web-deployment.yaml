@@ -42,6 +42,11 @@ spec:
             secretKeyRef:
               name: token-secrets
               key: jwt_secret
+        - name: STRIPE_PUBLISHABLE_KEY
+          valueFrom:
+            configMapKeyRef:
+                name: web-config
+                key: web.stripe_publishable_key
         ports:
         - containerPort: 3000
           protocol: TCP

@@ -17,7 +17,7 @@ class StripeContainer extends React.Component {
     this.state = {
       loading: true,
       isTrusted: false,
-      stripeKey: 'pk_test_1pwhBFZzMbjvUlsgn2EjsfWP',
+      stripeKey: STRIPE_PUBLISHABLE_KEY,
       stripe: null
     }
     // Load stripe library dynamically

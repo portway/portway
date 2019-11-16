@@ -6,6 +6,7 @@ certName: letsencrypt-prod
 baseUrl: dev.portway.app
 apiPublicUrl: api.dev.portway.app
 apiPort: "3001"
+stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
 
 apiImage: bonkeybong/portway_api
 apiTag: dev4
