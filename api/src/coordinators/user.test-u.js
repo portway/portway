@@ -11,7 +11,6 @@ import emailCoordinator from '../coordinators/email'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
-
 jest.mock('../libs/passwords')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/token')
@@ -55,6 +54,12 @@ describe('user coordinator', () => {
       expect(BusinessUser.updateById.mock.calls[0][0]).toBe(userId)
       expect(BusinessUser.updateById.mock.calls[0][1]).toEqual(expect.objectContaining({ password: mockHashedPassword }))
       expect(BusinessUser.updateById.mock.calls[0][2]).toEqual(orgId)
+    })
+
+    it('should call emailCoordinator.sendPasswordChangeEmail with the user email address', () => {
+      const mockUser = BusinessUser.findById.mock.results[0].value
+      expect(emailCoordinator.sendPasswordChangeEmail.mock.calls.length).toBe(1)
+      expect(emailCoordinator.sendPasswordChangeEmail.mock.calls[0][0]).toBe(mockUser.email)
     })
 
     describe('When the update password does not match the confirmation password', () => {
