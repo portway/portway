@@ -20,6 +20,7 @@ const paramSchema = Joi.compile({
 const documentsController = function(router) {
   router.get('/:id', validateParams(paramSchema), readPerm, getDocument)
   router.post('/:id/publish', validateParams(paramSchema), updatePerm, publishDocument)
+  router.post('/:id/unpublish', validateParams(paramSchema), updatePerm, unpublishDocument)
 }
 
 const getDocument = async function(req, res, next) {
@@ -53,6 +54,24 @@ const publishDocument = async function(req, res) {
   } catch (e) {
     console.error(e.stack)
     res.status(e.code || 500).json({ error: `error publishing document with id ${id}` })
+  }
+}
+
+const unpublishDocument = async function(req, res) {
+  const { id } = req.params
+  const { orgId } = req.requestorInfo
+
+  try {
+    const document = await BusinessDocument.findById(id, orgId)
+    const unpublishedDoc = await documentVersionCoordinator.unpublishDocument(
+      document.id,
+      document.projectId,
+      orgId
+    )
+    res.json({ data: unpublishedDoc })
+  } catch (e) {
+    console.error(e.stack)
+    res.status(e.code || 500).json({ error: `error unpublishing document with id ${id}` })
   }
 }
 
