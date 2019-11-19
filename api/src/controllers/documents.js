@@ -39,6 +39,8 @@ const getDocument = async function(req, res, next) {
   }
 }
 
+//TODO: should probably move publish and unpublish to projectDocuments controller and save document lookup,
+// assuming the perms line up correctly with the document update perms, and we have the project id available in the UI
 const publishDocument = async function(req, res) {
   const { id } = req.params
   const { orgId } = req.requestorInfo

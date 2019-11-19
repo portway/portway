@@ -29,7 +29,7 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
 const unpublishDocument = async function(documentId, projectId, orgId) {
   const doc = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
   if (!doc) {
-    throw ono({ code: 404 }, `Document ${documentId} not found, cannot publish`)
+    throw ono({ code: 404 }, `Document ${documentId} not found, cannot unpublish`)
   }
 
   return await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
