@@ -110,10 +110,15 @@ const constructWebhookEvent = function(body, signature) {
   return stripe.webhooks.constructEvent(body, signature, STRIPE_HOOK_SECRET)
 }
 
+const cancelSubscriptionAtPeriodEnd = function(subscriptionId) {
+  return stripe.subscriptions.update(subscriptionId, { cancel_at_period_end: true })
+}
+
 export default {
   createCustomer,
   getCustomer,
   updateCustomer,
   createOrUpdateSubscription,
-  constructWebhookEvent
+  constructWebhookEvent,
+  cancelSubscriptionAtPeriodEnd
 }

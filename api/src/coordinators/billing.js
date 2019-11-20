@@ -199,12 +199,38 @@ const createOrUpdateOrgSubscription = async function({ customerId, planId, trial
   return updatedSubscription
 }
 
+const cancelAccount = async function(orgId) {
+  const billingError = ono({ code: 409, errorDetails: [{ key: 'seats', message: 'No billing information for organization' }] }, `Cannot cancel subscription, organization: ${orgId} does not have saved billing information`)
+
+  const org = await BusinessOrganization.findById(orgId)
+  if (!org.stripeId) {
+    throw billingError
+  }
+
+  const customer = await stripeIntegrator.getCustomer(org.stripeId)
+
+  if (!customer) {
+    throw billingError
+  }
+
+  const currentSubscription = customer.subscriptions.data[0]
+
+  if (!currentSubscription) {
+    const publicMessage = 'Organization does not have a subscription to cancel'
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+  }
+
+  const subscription = await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
+  console.log(subscription)
+}
+
 const billingCoordinator = {
   subscribeOrgToPlan,
   updatePlanSeats,
   updateOrgBilling,
   getOrgBilling,
-  createOrUpdateOrgSubscription
+  createOrUpdateOrgSubscription,
+  cancelAccount
 }
 
 export default billingCoordinator
