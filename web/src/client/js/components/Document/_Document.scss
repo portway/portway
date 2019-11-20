@@ -2,6 +2,8 @@
 
 .document {
   flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   position: relative;
 
   &__no-document {
@@ -14,7 +16,7 @@
   &__header {
     background-color: var(--theme-surface);
     align-items: center;
-    border-bottom: thin solid var(--base-border-color);
+    border-bottom: thin solid var(--theme-border-light);
     display: flex;
     height: 63px;
     justify-content: space-between;
@@ -86,10 +88,5 @@
     }
 
   }
-
-  // Validation for document
-  // .validation {
-    // background-color: var(--color-gray-5);
-  // }
 
 }

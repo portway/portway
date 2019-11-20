@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { debounce } from 'Shared/utilities'
-import { ExpandIcon, PublishIcon } from 'Components/Icons'
+import { ExpandIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
-import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './_Document.scss'
@@ -12,9 +11,7 @@ import './_Document.scss'
 const DocumentComponent = ({
   document,
   isFullScreen,
-  isPublishing,
   nameChangeHandler,
-  publishDocumentHandler,
   toggleFullScreenHandler,
 }) => {
   const titleRef = useRef()
@@ -78,15 +75,6 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
-        <button
-          className="btn btn--small btn--with-icon"
-          disabled={isPublishing}
-          onClick={publishDocumentHandler}
-          title="Publish this version">
-          {isPublishing && <SpinnerComponent width="12" height="12" color="#ffffff" />}
-          {!isPublishing && <PublishIcon fill="#ffffff" />}
-          <span className="label">Publish</span>
-        </button>
       </header>
       <DocumentFieldsContainer />
     </div>
@@ -97,9 +85,7 @@ const DocumentComponent = ({
 DocumentComponent.propTypes = {
   document: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
-  isPublishing: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
-  publishDocumentHandler: PropTypes.func.isRequired,
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 

@@ -30,7 +30,7 @@
     button {
       align-items: flex-start;
       background: transparent;
-      border: thin solid var(--base-border-color, gray);
+      border: thin solid var(--theme-border, gray);
       border-radius: var(--border-radius, 8px);
       color: var(--theme-text-color, black);
       display: flex;
@@ -53,7 +53,7 @@
       @media (hover: hover) {
         &:hover {
           background: transparent;
-          border: thin solid var(--base-border-color, gray);
+          border: thin solid var(--theme-border, gray);
           color: var(--theme-text-color, black);
         }
       }
@@ -103,7 +103,7 @@
   }
 
   &__price {
-    background-color: var(--base-border-color);
+    background-color: var(--theme-border);
     color: var(--color-white);
     font-weight: 700;
     margin: 2rem 0 0 0;

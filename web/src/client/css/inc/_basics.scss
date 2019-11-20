@@ -2,13 +2,13 @@
 
 input, textarea {
   background: var(--theme-surface);
-  border: thin solid var(--base-border-color);
+  border: thin solid var(--theme-border);
   color: var(--theme-text-color);
 }
 
 hr {
   border: none;
-  border-top: thin solid var(--base-border-color);
+  border-top: thin solid var(--theme-border);
 }
 
 meter {

@@ -36,7 +36,7 @@
 
   &--number, &--string {
     background-color: var(--theme-overflow);
-    // border: thin solid var(--base-border-color);
+    // border: thin solid var(--theme-border);
     border-bottom: none;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     margin: 0 24px;
@@ -54,7 +54,7 @@
     // }
 
     &:last-child {
-      border-bottom: thin solid var(--base-border-color);
+      border-bottom: thin solid var(--theme-border);
       // border-bottom-left-radius: var(--border-radius);
       // border-bottom-right-radius: var(--border-radius);
       // margin-bottom: var(--gutter-width);
@@ -142,7 +142,7 @@
 
   &__name {
     align-items: flex-start;
-    border-right: thin solid var(--base-border-color);
+    border-right: thin solid var(--theme-border);
     display: flex;
     flex: 0 0 var(--field-name-width);
     flex-direction: column;

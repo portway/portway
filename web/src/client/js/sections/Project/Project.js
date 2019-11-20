@@ -8,8 +8,8 @@ import { PATH_PROJECT, PATH_DOCUMENT } from 'Shared/constants'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
-import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
+import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbarContainer'
 
 const Project = ({ isFullScreen }) => {
   const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
@@ -50,7 +50,7 @@ const Project = ({ isFullScreen }) => {
         }
         <div className={documentsClasses}>
           <DocumentContainer />
-          <ContentMenuContainer />
+          <DocumentToolbarContainer />
         </div>
       </>
     </main>

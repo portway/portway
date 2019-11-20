@@ -1,0 +1,28 @@
+.document-toolbar {
+  align-items: center;
+  background-color: var(--theme-overlay-light);
+  border-top: thin solid var(--theme-border);
+  display: flex;
+  font-size: 1.2rem;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 calc(var(--gutter-width) / 4);
+  z-index: 100;
+
+  &__start {
+    align-items: center;
+    display: flex;
+  }
+
+  &__end {
+    align-items: center;
+    display: flex;
+  }
+
+  &__info {
+    color: var(--color-gray-30);
+    font-size: 1.2rem;
+    margin-right: 1rem;
+  }
+
+}
