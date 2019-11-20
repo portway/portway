@@ -84,7 +84,7 @@ describe('OrganizationBusiness', () => {
       })
 
       it('with an invalid id should throw an error', async () => {
-        const targetOrgId = 'this aint no id'
+        const targetOrgId = 124212421242
 
         await expect(OrganizationBusiness.findById(targetOrgId)).rejects
           .toThrow(/Cannot find organization with id/)
