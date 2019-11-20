@@ -68,17 +68,26 @@ describe('OrganizationBusiness', () => {
     })
 
     describe('#findById', () => {
-      let targetOrganizationId
-      let organization
+      describe('with a valid id', () => {
+        let targetOrganizationId
+        let organization
 
-      beforeAll(async () => {
-        targetOrganizationId = factoryOrganizations[0].get('id')
-        organization = await OrganizationBusiness.findById(targetOrganizationId)
+        beforeAll(async () => {
+          targetOrganizationId = factoryOrganizations[0].get('id')
+          organization = await OrganizationBusiness.findById(targetOrganizationId)
+        })
+
+        it('should return organization as POJO', () => {
+          expect(organization.id).toBe(targetOrganizationId)
+          expect(organization.constructor).toBe(Object)
+        })
       })
 
-      it('should return organization as POJO', () => {
-        expect(organization.id).toBe(targetOrganizationId)
-        expect(organization.constructor).toBe(Object)
+      it('with an invalid id should throw an error', async () => {
+        const targetOrgId = 'this aint no id'
+
+        await expect(OrganizationBusiness.findById(targetOrgId)).rejects
+          .toThrow(/Cannot find organization with id/)
       })
     })
   })
