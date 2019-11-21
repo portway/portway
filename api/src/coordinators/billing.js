@@ -6,6 +6,7 @@ import BusinessUser from '../businesstime/user'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS } from '../constants/plans'
+import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -194,8 +195,12 @@ const getOrgBilling = async function(orgId) {
 }
 
 const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId }) {
-  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true })
-  await BusinessOrganization.updateById(orgId, { subscriptionStatus: updatedSubscription.status, plan: updatedSubscription.plan.id })
+  const endTrial = planId === PLANS.MULTI_USER
+
+  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial })
+
+  await billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(orgId)
+
   return updatedSubscription
 }
 
@@ -220,8 +225,25 @@ const cancelAccount = async function(orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
   }
 
-  const subscription = await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
-  console.log(subscription)
+  if (currentSubscription.status === STRIPE_STATUS.TRIALING && !customer.sources.data[0]) {
+    // still in trial and no billing info, delete the subscription
+    await stripeIntegrator.deleteSubscription(currentSubscription.id)
+  } else if (currentSubscription.status === STRIPE_STATUS.TRIALING) {
+    // still in trial, but has billing info for pending first payment, immediately cancel the subscription
+    await stripeIntegrator.cancelSubscription(currentSubscription.id)
+  } else {
+    // for all other subscription statuses wait until billing period ends to cancel
+    await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
+  }
+
+  await billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(orgId)
+}
+
+const fetchCustomerAndSetSubscriptionStatusOnOrg = async function(orgId) {
+  const org = await BusinessOrganization.findById(orgId)
+  const customer = await stripeIntegrator.getCustomer(org.stripeId)
+  const subscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
+  await BusinessOrganization.updateById(orgId, { subscriptionStatus })
 }
 
 const billingCoordinator = {
@@ -230,7 +252,8 @@ const billingCoordinator = {
   updateOrgBilling,
   getOrgBilling,
   createOrUpdateOrgSubscription,
-  cancelAccount
+  cancelAccount,
+  fetchCustomerAndSetSubscriptionStatusOnOrg
 }
 
 export default billingCoordinator
