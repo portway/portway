@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { uiToggleFullScreen } from 'Actions/ui'
-import { publishDocument, updateDocument } from 'Actions/document'
+import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import Constants from 'Shared/constants'
@@ -14,11 +14,10 @@ import { PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  documents,
+  isCreating,
   isFullScreen,
   location,
   match,
-  publishDocument,
   uiToggleFullScreen,
   updateDocument,
 }) => {
@@ -34,7 +33,7 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (documents.creating || match.params.documentId === Constants.PATH_DOCUMENT_NEW_PARAM) {
+  if (isCreating || match.params.documentId === Constants.PATH_DOCUMENT_NEW_PARAM) {
     return null
   }
 
@@ -57,9 +56,6 @@ const DocumentContainer = ({
       })
     }
   }
-  function publishDocumentHandler() {
-    publishDocument(document.id)
-  }
 
   function toggleFullScreenHandler(e) {
     uiToggleFullScreen(!isFullScreen)
@@ -74,21 +70,18 @@ const DocumentContainer = ({
       <DocumentComponent
         document={document}
         isFullScreen={isFullScreen}
-        isPublishing={documents.isPublishing}
         nameChangeHandler={nameChangeHandler}
-        publishDocumentHandler={publishDocumentHandler}
         toggleFullScreenHandler={toggleFullScreenHandler} />
     </>
   )
 }
 
 DocumentContainer.propTypes = {
-  documents: PropTypes.object.isRequired,
   fields: PropTypes.object,
+  isCreating: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  publishDocument: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
 }
@@ -96,13 +89,12 @@ DocumentContainer.propTypes = {
 const mapStateToProps = (state) => {
   return {
     fields: state.documentFields[state.documents.currentDocumentId],
-    documents: state.ui.documents,
+    isCreating: state.ui.documents.creating,
     isFullScreen: state.ui.document.isFullScreen
   }
 }
 
 const mapDispatchToProps = {
-  publishDocument,
   updateDocument,
   uiToggleFullScreen
 }

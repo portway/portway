@@ -1,151 +1,93 @@
 @import 'CSS/inc/_include-media.scss';
 
+// Documents list is by itself on small screens, and then a sidebar on medium +
 .project {
-  --project-toolbar-background: var(--theme-overlay-light);
   padding: 0;
+  position: relative;
+  width: 100vw;
 
-  .toolbar__start {
-    padding-left: calc(var(--gutter-width) / 4);
-  }
-  .toolbar__end {
-    padding-right: calc(var(--gutter-width) / 6);
-  }
-
-  /**
-   * This is themeing the toolbar just for this section!
-   * Edit anything else in Components/ProjectToolbar/_ProjectToolbar.scss
-   */
-  &-toolbar {
-    background-color: var(--project-toolbar-background);
-    border-top: thin solid var(--base-border-color);
-    bottom: 0;
-    left: 0;
-    font-size: 1.2rem;
-    position: fixed;
-    width: 100vw;
-    z-index: 100;
-  }
-
-  // Documents list is by itself on small screens, and then a sidebar on medium +
-  &__documents {
-    overflow: hidden;
-    position: relative;
-    width: 100vw;
-    @include media('>medium') {
-      overflow: unset;
-      display: flex;
-      // width: auto;
-    }
-    &-list-container {
-      border-right: thin solid var(--base-border-color);
-      height: calc(100vh - (var(--ribbon-height) + var(--header-height)));
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      position: relative;
-      transform: translate3d(0, 0, 0);
-      width: 100vw;
-      z-index: 1;
-      -webkit-overflow-scrolling: touch;
-      @media (prefers-reduced-motion: no-preference) {
-        // Turn on animations for users with no preference
-        transition: transform 0.2s ease-in-out;
-      }
-      @include media('>medium') {
-        transform: translate3d(0, 0, 0);
-        width: calc(var(--gutter-width) + 300px);
-      }
-    }
-    &-document-container {
-      background-color: var(--theme-surface);
-      display: flex;
-      flex-direction: column;
-      height: calc(100vh - (var(--ribbon-height) + var(--header-height)) - 40px); // footer height
-      left: 0;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      padding-bottom: 65px;
-      position: absolute;
-      transform: translate3d(0, 20px, 0);
-      top: 63px;
-      visibility: hidden;
-      width: 100vw;
-      z-index: 2;
-      &--list-only {
-        transform: translate3d(0, 20px, 0);
-        visibility: hidden;
-      }
-      &--document-only {
-        transform: translate3d(0, 0, 0);
-        visibility: visible;
-      }
-      &--full-screen {
-        height: 100vh;
-      }
-      @media (prefers-reduced-motion: no-preference) {
-        // Turn on animations for users with no preference
-        transition: transform 0.2s ease-out;
-      }
-      @include media('>medium') {
-        flex: 1;
-        padding-bottom: 0;
-        position: relative;
-        top: auto;
-        transform: translate3d(0, 0, 0);
-        width: auto;
-      }
-    }
-  }
-
-  &__utilities {
-    bottom: calc(var(--gutter-width) / 2);
+  @include media('>medium') {
     display: flex;
-    justify-content: center;
-    position: absolute;
-    width: 100%;
+    flex-direction: row;
+    overflow: unset;
+  }
+}
 
-    &-button-pill {
-      align-items: center;
-      background-color: var(--theme-surface);
-      border-radius: var(--border-radius);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-      display: flex;
-      padding: 0;
-    }
+// List of documents on the left
+.project__documents-list-container {
+  border-right: thin solid var(--theme-border);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - (var(--ribbon-height) + var(--header-height)));
+  overflow: hidden;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  width: 100vw;
+  z-index: 1;
+  -webkit-overflow-scrolling: touch;
 
-    &-settings-link {
-      align-items: center;
-      color: var(--color-gray-10);
-      display: inline-flex;
-      font-size: 1.2rem;
-      height: 30px;
-      padding: .25rem 1rem .25rem .5rem;
-      text-decoration: none;
-      @media (hover: hover) {
-        &:hover {
-          background-color: var(--base-border-color);
-          color: var(--color-gray-10);
-        }
-      }
-    }
+  @media (prefers-reduced-motion: no-preference) {
+    // Turn on animations for users with no preference
+    transition: transform 0.2s ease-in-out;
+  }
 
-    &-button {
-      border-right: thin solid var(--base-border-color);
-      min-height: auto;
-      font-size: 1.2rem;
-      font-weight: normal;
-      height: 30px;
-      margin: 0;
-      padding: .25rem 1rem;
-      &.active {
-        background-color: var(--base-border-color);
-      }
-      @media (hover: hover) {
-        &:hover {
-          background-color: var(--base-border-color) !important;
-        }
-      }
-    }
+  @include media('>medium') {
+    transform: translate3d(0, 0, 0);
+    width: calc(var(--gutter-width) + 300px);
+  }
 
+  .documents-list {
+    flex: 1 1 100%;
+  }
+
+}
+
+// Document pane on the right
+.project__document-container {
+  background-color: var(--theme-surface);
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  overflow: hidden;
+  padding-bottom: 65px;
+  position: absolute;
+  transform: translate3d(0, 20px, 0);
+  top: 63px;
+  visibility: hidden;
+  width: 100vw;
+  z-index: 2;
+
+  .document {
+    flex: 1 1 100%;
+  }
+
+  &--list-only {
+    transform: translate3d(0, 20px, 0);
+    visibility: hidden;
+  }
+
+  &--document-only {
+    height: calc(100vh - (var(--ribbon-height) + var(--header-height)));
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+  }
+
+  &--full-screen {
+    height: 100vh;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    // Turn on animations for users with no preference
+    transition: transform 0.2s ease-out;
+  }
+
+  @include media('>medium') {
+    flex: 1;
+    padding-bottom: 0;
+    position: relative;
+    top: auto;
+    transform: translate3d(0, 0, 0);
+    width: auto;
   }
 
 }

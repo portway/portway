@@ -6,13 +6,23 @@
   --document-list-item-hover: var(--theme-overlay-light);
   --document-list-item-new: var(--theme-base);
 
-  min-height: 100%;
+  // min-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
   .toolbar {
     background-color: var(--theme-surface);
-    border-bottom: thin solid var(--base-border-color);
+    border-bottom: thin solid var(--theme-border-light);
     position: sticky;
     top: 0;
+    z-index: 100;
+
+    &__start {
+      padding-left: calc(var(--gutter-width) / 4);
+    }
+    &__end {
+      padding-right: calc(var(--gutter-width) / 6);
+    }
   }
 
   &--dragged-over {
@@ -35,7 +45,7 @@
   }
 
   &__empty-state {
-    border-top: thin solid var(--base-border-color);
+    border-top: thin solid var(--theme-border-light);
     padding: calc(var(--gutter-width) / 4);
   }
   &__empty-state-content {
@@ -60,7 +70,7 @@
   }
 
   &__item {
-    border-top: thin solid var(--base-border-color);
+    border-top: thin solid var(--theme-border-light);
     @media (prefers-reduced-motion: no-preference) {
       transition: opacity 0.2s ease-in-out;
     }
@@ -76,7 +86,7 @@
     }
     // New item is a fake list item
     &--new {
-      border-bottom: thin solid var(--base-border-color);
+      border-bottom: thin solid var(--theme-border-light);
       border-top: none;
       .documents-list__button {
         align-items: flex-start;
@@ -133,6 +143,9 @@
     }
     &.active {
       background-color: var(--document-list-active-item);
+      .icon {
+        background-color: var(--color-gray-5);
+      }
       &:not([disabled]) {
         @media (hover: hover) {
           &:hover {

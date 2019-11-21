@@ -64,7 +64,7 @@ form, .form {
   // Form markup
   // ---------------------------------------------------------------------------
   &__section {
-    border: thin solid var(--base-border-color);
+    border: thin solid var(--theme-border);
     border-radius: var(--border-radius);
     padding: 2rem;
   }

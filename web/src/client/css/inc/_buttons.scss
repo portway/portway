@@ -38,7 +38,7 @@ button,
     --button-label-expanded: var(--color-gray-70);
   }
   align-items: center;
-  background-color: var(--color-blue);
+  background-color: var(--color-green);
   border-radius: var(--border-radius);
   border: thin solid transparent;
   color: #fff;
@@ -57,17 +57,17 @@ button,
 
   p { color: var(--color-gray-7); margin: 0; }
 
-  @include focus(var(--color-blue));
+  @include focus(var(--color-green));
 
   &:not([disabled]) {
     @media (hover: hover) {
       &:hover {
-        background-color: var(--color-cyan);
+        background-color: var(--color-green-light);
         color: #fff;
       }
     }
     &:active {
-      background-color: var(--color-blue-dark);
+      background-color: var(--color-green-dark);
       color: #fff;
     }
   }
@@ -75,9 +75,9 @@ button,
   &--small {
     font-size: 1.2rem;
     min-height: 24px;
-    padding: 0 18px;
+    padding: 3px 24px;
     &.btn--with-icon {
-      padding: 0 6px;
+      padding: 3px 18px;
       .icon {
         height: 12px;
         min-height: 12px;
