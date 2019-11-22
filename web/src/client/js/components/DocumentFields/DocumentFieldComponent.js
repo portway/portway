@@ -2,18 +2,17 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import Constants from 'Shared/constants'
+import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
 import { DragIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
+import './_DocumentTools.scss'
 
 const DocumentFieldComponent = ({
   children,
-  dragStartHandler,
-  dragEndHandler,
-  dragEnterHandler,
-  dragLeaveHandler,
+  documentMode,
   dragOverHandler,
+  dragStartHandler,
   dropHandler,
   field,
   index,
@@ -23,6 +22,7 @@ const DocumentFieldComponent = ({
   settingsHandler,
   settingsMode,
 }) => {
+  const listRef = useRef()
   const nameRef = useRef()
   useEffect(() => {
     if (isNewField && nameRef.current) {
@@ -31,22 +31,24 @@ const DocumentFieldComponent = ({
     }
   }, [isNewField])
 
-  const showName = field.type !== Constants.FIELD_TYPES.TEXT && field.type !== Constants.FIELD_TYPES.IMAGE
+  const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE
 
   const fieldClasses = cx({
     'document-field': true,
     'document-field--new': isNewField,
-    'document-field--text': field.type === Constants.FIELD_TYPES.TEXT,
-    'document-field--number': field.type === Constants.FIELD_TYPES.NUMBER,
-    'document-field--string': field.type === Constants.FIELD_TYPES.STRING,
-    'document-field--image': field.type === Constants.FIELD_TYPES.IMAGE,
+    'document-field--edit-mode': documentMode === DOCUMENT_MODE.EDIT,
+    'document-field--data': dataField,
+    'document-field--text': field.type === FIELD_TYPES.TEXT,
+    'document-field--number': field.type === FIELD_TYPES.NUMBER,
+    'document-field--string': field.type === FIELD_TYPES.STRING,
+    'document-field--image': field.type === FIELD_TYPES.IMAGE,
   })
 
   const fieldLabels = {
-    [Constants.FIELD_TYPES.TEXT]: 'Text area',
-    [Constants.FIELD_TYPES.STRING]: 'String',
-    [Constants.FIELD_TYPES.NUMBER]: 'Number',
-    [Constants.FIELD_TYPES.IMAGE]: 'Photo',
+    [FIELD_TYPES.TEXT]: 'Text area',
+    [FIELD_TYPES.STRING]: 'String',
+    [FIELD_TYPES.NUMBER]: 'Number',
+    [FIELD_TYPES.IMAGE]: 'Photo',
   }
 
   // Field name handling
@@ -59,61 +61,68 @@ const DocumentFieldComponent = ({
     }
     return length * fieldLengthFactor > fieldMinimumWidth ? length * fieldLengthFactor : fieldMinimumWidth
   }
+
   return (
     <li
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
-      draggable="true"
       onDragStart={dragStartHandler}
-      onDragEnd={dragEndHandler}
-      onDragEnter={dragEnterHandler}
-      onDragLeave={dragLeaveHandler}
       onDragOver={dragOverHandler}
-      onDrop={dropHandler}>
+      onDrop={dropHandler}
+      ref={listRef}
+    >
       <div className="document-field__component">
-        {showName &&
-        <div className="document-field__name">
-          <span className="document-field__name-label">{fieldLabels[field.type]}</span>
-          <input
-            defaultValue={field.name}
-            maxLength={fieldNameMaxLength}
-            onKeyDown={(e) => {
-              if (e.key.toLowerCase() === 'escape') {
-                e.target.blur()
-                return
-              }
-              e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
-            }}
-            onChange={(e) => { onRename(field.id, e.target.value) }}
-            onFocus={(e) => { e.target.select() }}
-            ref={nameRef}
-            style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
-            type="text" />
-        </div>
-        }
-        <div className="document-field__content">{children}</div>
+
         <div className="document-field__tools">
-          {!settingsMode &&
-          <div className="document-field__tool-options">
-            {onDestroy &&
-            <button aria-label="Remove field" className="btn btn--blank btn--with-circular-icon" onClick={onDestroy}>
-              <TrashIcon />
-            </button>
-            }
-            {field.type === Constants.FIELD_TYPES.IMAGE && field.value &&
+          {documentMode === DOCUMENT_MODE.EDIT &&
+            <div className="document-field__dragger">
+              <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon" onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}>
+                <DragIcon />
+              </button>
+            </div>
+          }
+        </div>
+
+        <div className="document-field__container">
+          {dataField &&
+          <div className="document-field__name">
+            <span className="document-field__name-label">{fieldLabels[field.type]}</span>
+            <input
+              defaultValue={field.name}
+              maxLength={fieldNameMaxLength}
+              onKeyDown={(e) => {
+                if (e.key.toLowerCase() === 'escape') {
+                  e.target.blur()
+                  return
+                }
+                e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
+              }}
+              onChange={(e) => { onRename(field.id, e.target.value) }}
+              onFocus={(e) => { e.target.select() }}
+              ref={nameRef}
+              style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
+              type="text" />
+          </div>
+          }
+          <div className="document-field__content">
+            {field.type === FIELD_TYPES.IMAGE && field.value &&
             <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
               <SettingsIcon />
             </button>
             }
-            <div className="document-field__dragger">
-              <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon">
-                <DragIcon />
-              </button>
-            </div>
+            {children}
           </div>
+        </div>
+
+        <div className="document-field__actions">
+          {documentMode === DOCUMENT_MODE.EDIT &&
+          <button aria-label="Remove field" className="btn btn--blank btn--red btn--with-circular-icon" onClick={onDestroy}>
+            <TrashIcon fill="#ffffff" />
+          </button>
           }
         </div>
+
       </div>
     </li>
   )
@@ -121,11 +130,9 @@ const DocumentFieldComponent = ({
 
 DocumentFieldComponent.propTypes = {
   children: PropTypes.element.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
-  dragEndHandler: PropTypes.func.isRequired,
-  dragEnterHandler: PropTypes.func.isRequired,
-  dragLeaveHandler: PropTypes.func.isRequired,
+  documentMode: PropTypes.string.isRequired,
   dragOverHandler: PropTypes.func.isRequired,
+  dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,

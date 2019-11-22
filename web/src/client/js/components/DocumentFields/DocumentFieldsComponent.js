@@ -12,11 +12,10 @@ import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 const DocumentFieldsComponent = ({
   createdFieldId,
   disabled,
-  dragStartHandler,
-  dragEndHandler,
+  documentMode,
   dragEnterHandler,
-  dragLeaveHandler,
   dragOverHandler,
+  dragStartHandler,
   dropHandler,
   fieldChangeHandler,
   fieldDestroyHandler,
@@ -69,20 +68,20 @@ const DocumentFieldsComponent = ({
       const settingsModeForField = settingsForField === field.id
       return (
         <DocumentFieldComponent
-          key={field.id}
+          documentMode={documentMode}
+          dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
+          dragOverHandler={settingsModeForField ? null : dragOverHandler}
+          dragStartHandler={settingsModeForField ? null : dragStartHandler}
+          dropHandler={settingsModeForField ? null : dropHandler}
+          field={field}
           index={index}
           isNewField={createdFieldId === field.id}
-          field={field}
-          dragStartHandler={settingsModeForField ? null : dragStartHandler}
-          dragEndHandler={settingsModeForField ? null : dragEndHandler}
-          dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
-          dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
-          dragOverHandler={settingsModeForField ? null : dragOverHandler}
-          dropHandler={settingsModeForField ? null : dropHandler}
-          onRename={fieldRenameHandler}
+          key={field.id}
           onDestroy={() => { fieldDestroyHandler(field.id) }}
+          onRename={fieldRenameHandler}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-          settingsMode={settingsModeForField}>
+          settingsMode={settingsModeForField}
+        >
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )
@@ -111,18 +110,17 @@ const DocumentFieldsComponent = ({
 DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
-  dragEndHandler: PropTypes.func.isRequired,
+  documentMode: PropTypes.string.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,
-  dragLeaveHandler: PropTypes.func.isRequired,
   dragOverHandler: PropTypes.func.isRequired,
+  dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
-  fields: PropTypes.array.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
-  fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
-  isPublishing: PropTypes.bool.isRequired,
+  fieldRenameHandler: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
+  isPublishing: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldsComponent

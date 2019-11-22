@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
+import { DOCUMENT_MODE } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ExpandIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
@@ -10,8 +11,10 @@ import './_Document.scss'
 
 const DocumentComponent = ({
   document,
+  documentMode,
   isFullScreen,
   nameChangeHandler,
+  toggleDocumentMode,
   toggleFullScreenHandler,
 }) => {
   const titleRef = useRef()
@@ -42,7 +45,7 @@ const DocumentComponent = ({
       <header className="document__header">
         <button
           aria-label="Expand the editor to full screen"
-          className="btn btn--blank document__button-expand"
+          className="btn btn--blank btn--with-circular-icon document__button-expand"
           onClick={() => {
             // This has to be here because of Safari
             // You have to call fullscreen functions on the actual element onClick
@@ -75,6 +78,16 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
+        <div className="document__toggle-container">
+          <button className="btn btn--blank" onClick={toggleDocumentMode}>
+            {documentMode === DOCUMENT_MODE.NORMAL &&
+            <>Edit</>
+            }
+            {documentMode === DOCUMENT_MODE.EDIT &&
+            <>Save</>
+            }
+          </button>
+        </div>
       </header>
       <DocumentFieldsContainer />
     </div>
@@ -84,8 +97,10 @@ const DocumentComponent = ({
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
+  documentMode: PropTypes.string,
   isFullScreen: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
+  toggleDocumentMode: PropTypes.func.isRequired,
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 

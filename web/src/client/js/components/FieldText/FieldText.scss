@@ -1,6 +1,5 @@
 .document-field__text {
-  --document-field-min-height: 64px;
-  margin: auto;
+  --document-field-min-height: 48px;
   max-width: 1366px;
   width: 100%;
 
@@ -11,10 +10,14 @@
     border-radius: 0;
     height: auto;
     min-height: var(--document-field-min-height);
-    overflow: visible;
+    overflow: visible; // was visible
 
     pre {
       padding: 0;
+    }
+
+    .CodeMirror-vscrollbar {
+      display: none !important;
     }
 
     .CodeMirror-scroll {
@@ -28,37 +31,41 @@
     }
 
     .CodeMirror-code {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 300;
-      letter-spacing: 0.3px;
-      line-height: 2.7rem;
+      letter-spacing: -0.2px;
+      line-height: 2.4rem;
 
       .cm-header-1 {
-        font-size: 3.6rem;
+        font-size: 2.8rem;
         font-weight: 700;
-        letter-spacing: 0.4px;
-        line-height: 4.4rem;
+        letter-spacing: 0.2px;
+        line-height: 3.6rem;
+        margin-bottom: 1.8rem;
       }
 
       .cm-header-2 {
-        font-size: 2.8rem;
+        font-size: 2.4rem;
         font-weight: 700;
-        letter-spacing: 0.3px;
-        line-height: 3.8rem;
+        letter-spacing: 0.2px;
+        line-height: 3.0rem;
+        margin-bottom: 1.8rem;
       }
 
       .cm-header-3 {
-        font-size: 2.4rem;
-        font-weight: 500;
-        letter-spacing: 0.4px;
-        line-height: 3.2rem;
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        line-height: 2.8rem;
+        margin-bottom: 1.8rem;
       }
 
       .cm-header-4 {
-        font-size: 2rem;
+        font-size: 1.7rem;
         font-weight: 500;
-        letter-spacing: 0.4px;
-        line-height: 2.9rem;
+        letter-spacing: 0.2px;
+        line-height: 2.5rem;
+        margin-bottom: 1.8rem;
       }
 
       .cm-comment {

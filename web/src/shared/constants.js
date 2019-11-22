@@ -96,6 +96,11 @@ const QUERY_PARAMS = {
   DESCENDING: 'DESC'
 }
 
+const DOCUMENT_MODE = {
+  NORMAL: 'NORMAL',
+  EDIT: 'EDIT',
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Portway',
@@ -154,4 +159,6 @@ module.exports = {
   // Support
   SUPPORT_EMAIL: 'support@portway.app',
   SUPPORT_LINK: 'https://support.portway.app/',
+  // UI Related
+  DOCUMENT_MODE: DOCUMENT_MODE,
 }

@@ -1,4 +1,5 @@
 import { ActionTypes } from '../actions'
+import { DOCUMENT_MODE } from 'Shared/constants'
 
 const initialState = {
   confirmation: {
@@ -9,6 +10,7 @@ const initialState = {
     confirmedLabel: ''
   },
   document: {
+    documentMode: DOCUMENT_MODE.NORMAL,
     isFullScreen: false,
   },
   documents: {
@@ -115,6 +117,17 @@ export const ui = (state = initialState, action) => {
         fields: {
           ...state.fields,
           disabled: false
+        }
+      }
+    }
+
+    // Document mode
+    case ActionTypes.UI_DOCUMENT_MODE: {
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          documentMode: action.value
         }
       }
     }
