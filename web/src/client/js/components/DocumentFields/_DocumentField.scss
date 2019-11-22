@@ -29,6 +29,19 @@
     }
   }
 
+  &--clone-element {
+    list-style: none;
+    .document-field__component {
+      padding: 0;
+    }
+    .document-field__container {
+      margin: 0;
+    }
+    .document-field__actions {
+      display: none;
+    }
+  }
+
 } // document-field
 
 

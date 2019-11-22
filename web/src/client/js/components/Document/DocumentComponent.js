@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { DOCUMENT_MODE } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { ExpandIcon } from 'Components/Icons'
+import { ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -79,12 +79,12 @@ const DocumentComponent = ({
             ref={titleRef} />
         </div>
         <div className="document__toggle-container">
-          <button className="btn btn--blank" onClick={toggleDocumentMode}>
+          <button className="btn btn--blank" onClick={toggleDocumentMode} title="Re-order or remove fields">
             {documentMode === DOCUMENT_MODE.NORMAL &&
-            <>Edit</>
+            <SettingsIcon />
             }
             {documentMode === DOCUMENT_MODE.EDIT &&
-            <>Save</>
+            <>Done</>
             }
           </button>
         </div>

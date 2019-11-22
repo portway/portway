@@ -11,7 +11,9 @@ import './_DocumentTools.scss'
 const DocumentFieldComponent = ({
   children,
   documentMode,
-  dragOverHandler,
+  dragEndHandler,
+  dragEnterHandler,
+  dragLeaveHandler,
   dragStartHandler,
   dropHandler,
   field,
@@ -67,8 +69,9 @@ const DocumentFieldComponent = ({
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
+      onDragEnd={dragEndHandler}
+      onDragEnter={dragEnterHandler}
       onDragStart={dragStartHandler}
-      onDragOver={dragOverHandler}
       onDrop={dropHandler}
       ref={listRef}
     >
@@ -131,7 +134,9 @@ const DocumentFieldComponent = ({
 DocumentFieldComponent.propTypes = {
   children: PropTypes.element.isRequired,
   documentMode: PropTypes.string.isRequired,
-  dragOverHandler: PropTypes.func.isRequired,
+  dragEndHandler: PropTypes.func.isRequired,
+  dragEnterHandler: PropTypes.func.isRequired,
+  dragLeaveHandler: PropTypes.func.isRequired,
   dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,

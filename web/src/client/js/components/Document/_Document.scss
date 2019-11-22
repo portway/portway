@@ -2,6 +2,7 @@
 
 .document {
   flex: 1;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   position: relative;
@@ -27,7 +28,7 @@
   }
 
   &__button-expand {
-    padding: 0 1.8rem;
+    padding: 0 1.9rem;
     .icon-expand {
       path {
         fill: var(--color-gray-40);

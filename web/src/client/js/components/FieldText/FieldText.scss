@@ -1,3 +1,6 @@
+// To look at individual lines in the editor, search your web inspector for CodeMirror-code and
+// CoreMirror-line
+
 .document-field__text {
   --document-field-min-height: 48px;
   max-width: 1366px;
@@ -30,42 +33,55 @@
       min-height: var(--document-field-min-height) !important;
     }
 
+    // Each line of text is in this container
+    .CodeMirror-line {
+      display: block;
+      span[role="presentation"] {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        position: relative;
+      }
+    }
+
+    // This is the item that is displayed to the left of a line, usually showing
+    // the # or ##
+    // .cm-formatting {
+    // }
+
     .CodeMirror-code {
       font-size: 1.5rem;
       font-weight: 300;
       letter-spacing: -0.2px;
       line-height: 2.4rem;
 
-      .cm-header-1 {
-        font-size: 2.8rem;
+      .cm-header {
+        display: inline-block;
         font-weight: 700;
         letter-spacing: 0.2px;
+        padding-bottom: .9rem;
+        padding-top: .9rem;
+      }
+
+      .cm-header-1 {
+        font-size: 2.8rem;
         line-height: 3.6rem;
-        margin-bottom: 1.8rem;
       }
 
       .cm-header-2 {
         font-size: 2.4rem;
-        font-weight: 700;
-        letter-spacing: 0.2px;
         line-height: 3.0rem;
-        margin-bottom: 1.8rem;
       }
 
       .cm-header-3 {
         font-size: 1.9rem;
-        font-weight: 700;
-        letter-spacing: 0.2px;
         line-height: 2.8rem;
-        margin-bottom: 1.8rem;
       }
 
       .cm-header-4 {
         font-size: 1.7rem;
         font-weight: 500;
-        letter-spacing: 0.2px;
         line-height: 2.5rem;
-        margin-bottom: 1.8rem;
       }
 
       .cm-comment {
@@ -85,12 +101,20 @@
         color: var(--color-gray-30);
       }
 
+      .cm-formatting-header {
+        color: var(--color-gray-20);
+      }
+
       .cm-formatting-list-ul {
         color: var(--color-gray-20);
+        line-height: 2rem;
+        margin-right: .9rem;
       }
 
       .cm-formatting-list-ol {
         color: var(--color-gray-20);
+        line-height: 2rem;
+        margin-right: .9rem;
       }
 
       .cm-formatting-quote {

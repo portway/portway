@@ -13,8 +13,9 @@ const DocumentFieldsComponent = ({
   createdFieldId,
   disabled,
   documentMode,
+  dragEndHandler,
   dragEnterHandler,
-  dragOverHandler,
+  dragLeaveHandler,
   dragStartHandler,
   dropHandler,
   fieldChangeHandler,
@@ -69,8 +70,9 @@ const DocumentFieldsComponent = ({
       return (
         <DocumentFieldComponent
           documentMode={documentMode}
+          dragEndHandler={dragEndHandler}
           dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
-          dragOverHandler={settingsModeForField ? null : dragOverHandler}
+          dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
           dragStartHandler={settingsModeForField ? null : dragStartHandler}
           dropHandler={settingsModeForField ? null : dropHandler}
           field={field}
@@ -111,8 +113,9 @@ DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
   documentMode: PropTypes.string.isRequired,
+  dragEndHandler: PropTypes.func.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,
-  dragOverHandler: PropTypes.func.isRequired,
+  dragLeaveHandler: PropTypes.func.isRequired,
   dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
