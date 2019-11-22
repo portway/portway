@@ -2,10 +2,9 @@ import { STRIPE_STATUS, PLANS } from '../constants/plans'
 
 export const ORG_SUBSCRIPTION_STATUS = {
   ACTIVE: 'ACTIVE',
-  CANCELED: 'CANCELED',
-  INACTIVE: 'INACTIVE', //NO PARALLEL STRIPE API STATUS
-  INCOMPLETE: 'INCOMPLETE',
-  INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED',
+  INACTIVE: 'INACTIVE', //COVERS Stripe status of 'canceled' and also when there's no subscription
+  INCOMPLETE: 'INCOMPLETE', //Part of European SCA requiremenmts https://stripe.com/docs/billing/migration/strong-customer-authentication
+  INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED', //Also SCA
   PAST_DUE: 'PAST_DUE',
   PENDING_CANCEL: 'PENDING_CANCEL', //NO PARALLEL STRIPE API STATUS
   TRIALING: 'TRIALING',
@@ -37,7 +36,7 @@ export const getOrgSubscriptionStatusFromStripeCustomer = function(customer) {
     case STRIPE_STATUS.ACTIVE:
       return ORG_SUBSCRIPTION_STATUS.ACTIVE
     case STRIPE_STATUS.CANCELED:
-      return ORG_SUBSCRIPTION_STATUS.CANCELED
+      return ORG_SUBSCRIPTION_STATUS.INACTIVE
     case STRIPE_STATUS.INCOMPLETE:
       return ORG_SUBSCRIPTION_STATUS.INCOMPLETE
     case STRIPE_STATUS.INCOMPLETE_EXPIRED:

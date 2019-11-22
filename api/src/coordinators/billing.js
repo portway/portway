@@ -225,11 +225,8 @@ const cancelAccount = async function(orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
   }
 
-  if (currentSubscription.status === STRIPE_STATUS.TRIALING && !customer.sources.data[0]) {
-    // still in trial and no billing info, delete the subscription
-    await stripeIntegrator.deleteSubscription(currentSubscription.id)
-  } else if (currentSubscription.status === STRIPE_STATUS.TRIALING) {
-    // still in trial, but has billing info for pending first payment, immediately cancel the subscription
+  if (currentSubscription.status === STRIPE_STATUS.TRIALING) {
+    // still in trial with or without billing info, cancel immediately
     await stripeIntegrator.cancelSubscription(currentSubscription.id)
   } else {
     // for all other subscription statuses wait until billing period ends to cancel

@@ -113,19 +113,14 @@ const constructWebhookEvent = function(body, signature) {
   return stripe.webhooks.constructEvent(body, signature, STRIPE_HOOK_SECRET)
 }
 
+const cancelSubscription = function(subscriptionId) {
+  return stripe.subscriptions.del(subscriptionId)
+}
+
 const cancelSubscriptionAtPeriodEnd = function(subscriptionId) {
   return stripe.subscriptions.update(subscriptionId, { cancel_at_period_end: true })
 }
 
-// customer must have billing information to cancel the subscription
-const cancelSubscription = function(subscriptionId) {
-  return stripe.subscriptions.update(subscriptionId, { cancel_at: Date.now() })
-}
-
-// can't update a subscription if customer has no billing info, delete the subscription
-const deleteSubscription = function(subscriptionId) {
-  return stripe.subscriptions.del(subscriptionId)
-}
 
 export default {
   createCustomer,
@@ -133,7 +128,6 @@ export default {
   updateCustomer,
   createOrUpdateSubscription,
   constructWebhookEvent,
-  cancelSubscriptionAtPeriodEnd,
   cancelSubscription,
-  deleteSubscription
+  cancelSubscriptionAtPeriodEnd
 }
