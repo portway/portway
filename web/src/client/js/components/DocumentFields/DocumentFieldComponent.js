@@ -71,6 +71,7 @@ const DocumentFieldComponent = ({
       data-order={index}
       onDragEnd={dragEndHandler}
       onDragEnter={dragEnterHandler}
+      onDragOver={e => e.preventDefault()}
       onDragStart={dragStartHandler}
       onDrop={dropHandler}
       ref={listRef}

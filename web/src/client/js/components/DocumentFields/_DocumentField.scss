@@ -9,6 +9,7 @@
   &--dragging {
     cursor: grabbing;
     padding: 1.8rem 0 !important;
+    -webkit-user-drag: element; // Safari hack
     .document-field__actions {
       visibility: hidden;
     }
