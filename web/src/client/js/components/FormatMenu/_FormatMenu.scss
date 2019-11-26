@@ -1,0 +1,11 @@
+.format-menu {
+  --document-menu-width: 136px; // override
+
+  &__format {
+    color: var(--color-gray-40);
+    margin-right: 4px;
+    text-align: right;
+    width: 40px;
+  }
+
+}
