@@ -133,8 +133,8 @@ export const documents = (state = initialState, action) => {
       const listDoc = state.projectDocumentsById[action.data.projectId][action.data.id]
       const updatedDoc = {
         ...listDoc,
-        updatedAt: action.data.updatedAt,
-        lastPublishedAt: action.data.lastPublishedAt
+        lastPublishedAt: action.data.lastPublishedAt,
+        publishedVersionId: action.data.publishedVersionId,
       }
       const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
