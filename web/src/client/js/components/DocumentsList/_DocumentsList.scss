@@ -143,9 +143,9 @@
     }
     &.active {
       background-color: var(--document-list-active-item);
-      .icon {
-        background-color: var(--color-gray-5);
-      }
+      // .icon {
+      //   background-color: var(--color-gray-5);
+      // }
       &:not([disabled]) {
         @media (hover: hover) {
           &:hover {

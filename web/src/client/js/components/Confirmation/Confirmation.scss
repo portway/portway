@@ -5,8 +5,8 @@
   --confirmation-bg: var(--color-white, white);
   --confirmation-border: var(--color-gray-20, gray);
   @media (prefers-color-scheme: dark) {
-    --modal-alpha-bg: rgba(#3b3d3e, .8);
-    --confirmation-bg: var(--color-gray-90, black);
+    --modal-alpha-bg: hsla(223, 7%, 19%, .8);
+    --confirmation-bg: var(--theme-overlay-light, black);
     --confirmation-border: var(--color-gray-80, gray);
   }
   align-items: center;
@@ -30,7 +30,7 @@
   }
 
   &__message {
-    color: var(--color-gray-80, gray);
+    color: var(--theme-text-color);
   }
   &__actions {
     display: flex;

@@ -2,12 +2,17 @@
 
 .user-menu {
   --user-menu-banner-bg: var(--theme-overlay-dark);
+  --user-menu-button-color: var(--theme-overlay-light);
+  @media (prefers-color-scheme: dark) {
+    --user-menu-button-color: var(--color-gray-30);
+  }
 
   .btn--blank {
-    background-color: var(--theme-overlay-light);
+    background-color: var(--user-menu-button-color);
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: 40px;
+    border: thin solid var(--color-gray-30);
     border-radius: 50% 50%;
     display: block;
     height: 40px;
@@ -15,10 +20,10 @@
     overflow: hidden;
     text-indent: -9000px;
     width: 40px;
-    @include focus(var(--theme-overlay-light), var(--color-gray-2));
-    border: thin solid var(--color-gray-30);
+    @include focus(var(--user-menu-button-color), var(--color-gray-2));
     @media (hover: hover) {
       &:not([disabled]):hover {
+        background-color: var(--user-menu-button-color);
         border: thin solid var(--color-gray-60);
       }
     }
