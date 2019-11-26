@@ -6,7 +6,7 @@ import BusinessUser from '../businesstime/user'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS } from '../constants/plans'
-import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
+import { getOrgSubscriptionStatusFromStripeCustomer, ORG_SUBSCRIPTION_STATUS } from '../libs/orgSubscription'
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -240,7 +240,16 @@ const fetchCustomerAndSetSubscriptionStatusOnOrg = async function(orgId) {
   const org = await BusinessOrganization.findById(orgId)
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
   const subscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
-  await BusinessOrganization.updateById(orgId, { subscriptionStatus })
+
+  const orgUpdateData = { subscriptionStatus }
+
+  // The org is getting inactive status, but this could potentially happen multiple times depending on how hooks are set up
+  // so only set the canceledAt date on the org if it doesn't already exist
+  if (subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE && !org.canceledAt) {
+    orgUpdateData.canceledAt = Date.now()
+  }
+
+  await BusinessOrganization.updateById(orgId, orgUpdateData)
 }
 
 const billingCoordinator = {

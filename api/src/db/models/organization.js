@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       stripeId: DataTypes.STRING,
       avatar: DataTypes.STRING,
       plan: DataTypes.ENUM(Object.keys(PLANS)),
-      subscriptionStatus: DataTypes.STRING
+      subscriptionStatus: DataTypes.STRING,
+      canceledAt: DataTypes.DATE
     },
     {
       paranoid: true
