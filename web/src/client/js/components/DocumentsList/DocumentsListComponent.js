@@ -25,6 +25,7 @@ const DocumentsListComponent = ({
   loading,
   projectId,
   removeDocumentHandler,
+  unpublishDocumentHandler,
 }) => {
   // Keep track of how many things being dragged
   let dragCount = 0
@@ -105,6 +106,7 @@ const DocumentsListComponent = ({
           fieldMoveHandler={fieldMoveHandler}
           key={`d-${doc.id}-${index}`}
           removeDocumentHandler={removeDocumentHandler}
+          unpublishDocumentHandler={unpublishDocumentHandler}
         />
       )
     })
@@ -213,6 +215,7 @@ DocumentsListComponent.propTypes = {
   loading: PropTypes.bool.isRequired,
   projectId: PropTypes.number.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
+  unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 
 DocumentsListComponent.defaultProps = {

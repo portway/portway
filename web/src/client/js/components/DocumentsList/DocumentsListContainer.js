@@ -7,22 +7,23 @@ import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT } from 'Shared
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-import { createDocument, deleteDocument } from 'Actions/document'
+import { createDocument, deleteDocument, unpublishDocument } from 'Actions/document'
 import { copyField, moveField } from 'Actions/field'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
 
 const DocumentsListContainer = ({
-  createDocument,
   copyField,
+  createDocument,
   deleteDocument,
   documentFields,
+  history,
+  match,
+  moveField,
+  ui,
   uiConfirm,
   uiDocumentCreate,
-  history,
-  ui,
-  match,
-  moveField
+  unpublishDocument,
 }) => {
   const { data: documents, loading } = useDataService(dataMapper.documents.list(match.params.projectId), [
     match.params.projectId
@@ -67,9 +68,21 @@ const DocumentsListContainer = ({
     copyField(match.params.projectId, oldDocumentId, newDocumentId, field)
   }
 
+  function unpublishDocumentHandler(document) {
+    const message = (
+      <>
+        <p>Un-publish the document <span className="highlight">{document.name}</span>?</p>
+        <p>If you are using this document in a live application, it will be removed.</p>
+      </>
+    )
+    const confirmedLabel = `Yes, ub-publish this document`
+    const confirmedAction = () => { unpublishDocument(document.id) }
+    uiConfirm({ message, confirmedAction, confirmedLabel })
+  }
+
   function removeDocumentHandler(document) {
     const message = (
-      <span> Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
+      <span>Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
     )
     const confirmedLabel = `Yes, delete this document`
     const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
@@ -98,21 +111,23 @@ const DocumentsListContainer = ({
       loading={loading}
       projectId={Number(match.params.projectId)}
       removeDocumentHandler={removeDocumentHandler}
+      unpublishDocumentHandler={unpublishDocumentHandler}
     />
   )
 }
 
 DocumentsListContainer.propTypes = {
-  createDocument: PropTypes.func.isRequired,
   copyField: PropTypes.func.isRequired,
+  createDocument: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
-  uiConfirm: PropTypes.func.isRequired,
-  uiDocumentCreate: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  ui: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   moveField: PropTypes.func.isRequired,
+  ui: PropTypes.object.isRequired,
+  uiConfirm: PropTypes.func.isRequired,
+  uiDocumentCreate: PropTypes.func.isRequired,
+  unpublishDocument: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -123,12 +138,13 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  createDocument,
   copyField,
+  createDocument,
   deleteDocument,
   moveField,
   uiConfirm,
-  uiDocumentCreate
+  uiDocumentCreate,
+  unpublishDocument,
 }
 
 

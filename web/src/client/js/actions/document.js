@@ -75,6 +75,18 @@ export const updateDocument = (projectId, documentId, body) => {
   }
 }
 
+export const unpublishDocument = (documentId) => {
+  return async (dispatch) => {
+    dispatch(Documents.unpublish(documentId))
+    const { data, status } = await add(`documents/${documentId}/unpublish`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    dispatch(Documents.receiveUnpublishedVersion(data))
+  }
+}
+
 export const deleteDocument = (projectId, documentId, history) => {
   return async (dispatch) => {
     dispatch(Documents.delete(projectId, documentId))
