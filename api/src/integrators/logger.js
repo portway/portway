@@ -1,19 +1,22 @@
 import Logger from 'r7insight_node'
+import { LOGGER, LOG_TOKEN, LOG_LEVELS, DEFAULT_LOG_LEVEL, LOGGER_TYPES } from '../constants/logging'
 
-const LOG_LEVELS = {
-  INFO: 'info',
-  ERROR: 'error'
-}
 const VALID_LOG_LEVEL_VALUES = Object.values(LOG_LEVELS)
 
-const DEFAULT_LOG_LEVEL = LOG_LEVELS.INFO
+let logger
 
-const logger = new Logger({
-  // TODO: make this env var, kube secret
-  token: 'd984edf9-07a7-4ff6-94ce-00a519bc7fa9',
-  region: 'us',
-  console: true // send output to console too
-})
+switch (LOGGER) {
+  case LOGGER_TYPES.R7_INSIGHT:
+    logger = new Logger({
+      token: LOG_TOKEN,
+      region: 'us',
+      console: true // send output to console too
+    })
+    break
+  default:
+    // eslint-disable-next-line no-console
+    logger = console
+}
 
 export default (level, message) => {
   // First arg is optional level. If only one arg passed, it's the log message so give it the

@@ -1,3 +1,5 @@
+const { LOGGER_TYPES } = require('../constants/logging')
+
 module.exports = () => {
   const port = parseInt(process.env.API_PORT, 10)
   if (isNaN(port) || port < 0) {
@@ -18,6 +20,14 @@ module.exports = () => {
   if (cdnHostname) {
     if (typeof cdnHostname !== 'string') {
       throw new Error(`CDN_HOSTNAME: must be a string, set to ${cdnHostname}`)
+    }
+  }
+
+  const logger = process.env.LOGGER
+  if (logger) {
+    const logTypes = Object.values(LOGGER_TYPES)
+    if (!logTypes.includes(logger)) {
+      throw new Error(`LOGGER must be of type ${logTypes.join(' ')}`)
     }
   }
 }

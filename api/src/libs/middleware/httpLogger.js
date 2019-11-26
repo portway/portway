@@ -1,7 +1,14 @@
+/**
+ * Middleware request logger for Portway
+ */
 import logger from '../../integrators/logger'
 import { processId } from '../../integrators/uniqueId'
+import { LOG_LEVELS } from '../../constants/logging'
 /* eslint-disable camelcase */
 
+// Keys are the key that will be logged, and values are functions that will
+// be passed the express req, res vars at the end of a request. Functions must
+// be synchronous and return a value for the given key
 const endFuncs = {
   url: (req) => {
     return req.originalUrl || req.url
@@ -54,7 +61,7 @@ const httpLogger = (req, res, next) => {
       return log
     }, {})
 
-    logger('info', reqLog)
+    logger(LOG_LEVELS.INFO, reqLog)
   })
 
   next()
