@@ -33,13 +33,3 @@ export default (level, message) => {
 
   logger.log(level, message)
 }
-
-// Writeable "stream" so data can be piped to the logger.
-// Libraries that expose a readable stream should be read from instead, wherever possible
-export const streamableLog = {
-  write: (msg, encoding) => {
-    // Pump logs to kubernetes too for debugging
-    console.info(msg)
-    logger.info(msg)
-  }
-}
