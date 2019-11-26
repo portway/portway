@@ -42,9 +42,11 @@ const UserSecurityFields = ({ fieldsReadyHandler, fieldsShouldReset }) => {
 
   function resetPassword() {
     setNewPassword(null)
-    setPasswordScore(0)
+    setConfirmNewPassword(null)
     setPasswordStatus(null)
     setPasswordSummary(null)
+    setPasswordScore(0)
+    setConfirmStatus(null)
   }
 
   const passwordValidationHandler = debounce(500, (password) => {
