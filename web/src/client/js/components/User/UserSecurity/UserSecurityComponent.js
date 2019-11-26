@@ -5,7 +5,7 @@ import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
 import UserSecurityFields from './UserSecurityFields'
 
-const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
+const UserSecurityComponent = ({ errors, formId, submitHandler, succeeded }) => {
   const [currentPassword, setCurrentPassword] = useState(null)
   const [newPassword, setNewPassword] = useState(null)
   const [confirmNewPassword, setConfirmNewPassword] = useState(null)
@@ -47,7 +47,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           required
           type="password"
         />
-        <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} />
+        <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} fieldsShouldReset={succeeded} />
       </section>
     </Form>
   )
@@ -57,6 +57,7 @@ UserSecurityComponent.propTypes = {
   errors: PropTypes.object,
   formId: PropTypes.string.isRequired,
   submitHandler: PropTypes.func.isRequired,
+  succeeded: PropTypes.bool,
 }
 
 UserSecurityComponent.defaultProps = {
