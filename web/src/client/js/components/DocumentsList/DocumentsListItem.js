@@ -94,7 +94,7 @@ const DocumentsListItem = ({
           </time>
         </div>
         <DropdownComponent align="right" button={dropdownButton} className="documents-list__document-dropdown">
-          <DropdownItem label="Un-publish document..." disabled={document.lastPublishedAt === null} type="button" onClick={(e) => {
+          <DropdownItem label="Unpublish document..." disabled={document.lastPublishedAt === null} type="button" onClick={(e) => {
             e.preventDefault()
             unpublishDocumentHandler(document)
           }} />

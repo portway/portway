@@ -71,11 +71,11 @@ const DocumentsListContainer = ({
   function unpublishDocumentHandler(document) {
     const message = (
       <>
-        <p>Un-publish the document <span className="highlight">{document.name}</span>?</p>
+        <p>Unpublish the document <span className="highlight">{document.name}</span>?</p>
         <p>If you are using this document in a live application, it will be removed.</p>
       </>
     )
-    const confirmedLabel = `Yes, ub-publish this document`
+    const confirmedLabel = `Yes, unpublish this document`
     const confirmedAction = () => { unpublishDocument(document.id) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
