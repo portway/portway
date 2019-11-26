@@ -2,6 +2,7 @@
 
 .document {
   flex: 1;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   position: relative;
@@ -21,17 +22,16 @@
     height: 63px;
     justify-content: space-between;
     margin-bottom: calc(var(--brand-width) / 2);
-    padding: 0 calc(var(--brand-width) / 4) 0 0;
     position: sticky;
     top: 0;
     z-index: 10;
   }
 
   &__button-expand {
-    padding: 0 calc(var(--brand-width) / 8);
+    padding: 0 1.9rem;
     .icon-expand {
       path {
-        fill: var(--color-gray-30);
+        fill: var(--color-gray-40);
       }
     }
   }
@@ -65,9 +65,8 @@
 
   }
 
-  &__publish-date {
-    color: var(--color-gray-7);
-    display: block;
+  &__toggle-container {
+    padding: 0 1.8rem;
   }
 
   &__fields {

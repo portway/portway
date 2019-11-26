@@ -37,7 +37,9 @@ const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
   useEffect(() => {
     if (editor) {
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
+      editor.codemirror.on('dragenter', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
+      editor.codemirror.on('dragleave', (cm, e) => { e.preventDefault() })
       if (field.id === autoFocusElement) {
         editor.codemirror.focus()
         editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)

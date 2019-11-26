@@ -1,6 +1,8 @@
+// To look at individual lines in the editor, search your web inspector for CodeMirror-code and
+// CoreMirror-line
+
 .document-field__text {
-  --document-field-min-height: 64px;
-  margin: auto;
+  --document-field-min-height: 48px;
   max-width: 1366px;
   width: 100%;
 
@@ -11,10 +13,14 @@
     border-radius: 0;
     height: auto;
     min-height: var(--document-field-min-height);
-    overflow: visible;
+    overflow: visible; // was visible
 
     pre {
       padding: 0;
+    }
+
+    .CodeMirror-vscrollbar {
+      display: none !important;
     }
 
     .CodeMirror-scroll {
@@ -27,38 +33,55 @@
       min-height: var(--document-field-min-height) !important;
     }
 
+    // Each line of text is in this container
+    .CodeMirror-line {
+      display: block;
+      span[role="presentation"] {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        position: relative;
+      }
+    }
+
+    // This is the item that is displayed to the left of a line, usually showing
+    // the # or ##
+    // .cm-formatting {
+    // }
+
     .CodeMirror-code {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 300;
-      letter-spacing: 0.3px;
-      line-height: 2.7rem;
+      letter-spacing: -0.2px;
+      line-height: 2.4rem;
+
+      .cm-header {
+        display: inline-block;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        padding-bottom: .9rem;
+        padding-top: .9rem;
+      }
 
       .cm-header-1 {
-        font-size: 3.6rem;
-        font-weight: 700;
-        letter-spacing: 0.4px;
-        line-height: 4.4rem;
+        font-size: 2.8rem;
+        line-height: 3.6rem;
       }
 
       .cm-header-2 {
-        font-size: 2.8rem;
-        font-weight: 700;
-        letter-spacing: 0.3px;
-        line-height: 3.8rem;
+        font-size: 2.4rem;
+        line-height: 3.0rem;
       }
 
       .cm-header-3 {
-        font-size: 2.4rem;
-        font-weight: 500;
-        letter-spacing: 0.4px;
-        line-height: 3.2rem;
+        font-size: 1.9rem;
+        line-height: 2.8rem;
       }
 
       .cm-header-4 {
-        font-size: 2rem;
+        font-size: 1.7rem;
         font-weight: 500;
-        letter-spacing: 0.4px;
-        line-height: 2.9rem;
+        line-height: 2.5rem;
       }
 
       .cm-comment {
@@ -78,12 +101,20 @@
         color: var(--color-gray-30);
       }
 
+      .cm-formatting-header {
+        color: var(--color-gray-20);
+      }
+
       .cm-formatting-list-ul {
         color: var(--color-gray-20);
+        line-height: 2rem;
+        margin-right: .9rem;
       }
 
       .cm-formatting-list-ol {
         color: var(--color-gray-20);
+        line-height: 2rem;
+        margin-right: .9rem;
       }
 
       .cm-formatting-quote {

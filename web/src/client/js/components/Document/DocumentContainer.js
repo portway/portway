@@ -4,20 +4,21 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { uiToggleFullScreen } from 'Actions/ui'
+import { uiToggleDocumentMode, uiToggleFullScreen } from 'Actions/ui'
 import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
-import Constants from 'Shared/constants'
 
-import { PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
+import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
+  documentMode,
   isCreating,
   isFullScreen,
   location,
   match,
+  uiToggleDocumentMode,
   uiToggleFullScreen,
   updateDocument,
 }) => {
@@ -33,7 +34,7 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (isCreating || match.params.documentId === Constants.PATH_DOCUMENT_NEW_PARAM) {
+  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
   }
 
@@ -61,6 +62,11 @@ const DocumentContainer = ({
     uiToggleFullScreen(!isFullScreen)
   }
 
+  function toggleDocumentMode(e) {
+    const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
+    uiToggleDocumentMode(mode)
+  }
+
   return (
     <>
       <Helmet>
@@ -69,25 +75,30 @@ const DocumentContainer = ({
 
       <DocumentComponent
         document={document}
+        documentMode={documentMode}
         isFullScreen={isFullScreen}
         nameChangeHandler={nameChangeHandler}
+        toggleDocumentMode={toggleDocumentMode}
         toggleFullScreenHandler={toggleFullScreenHandler} />
     </>
   )
 }
 
 DocumentContainer.propTypes = {
+  documentMode: PropTypes.string,
   fields: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
+  uiToggleDocumentMode: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
+    documentMode: state.ui.document.documentMode,
     fields: state.documentFields[state.documents.currentDocumentId],
     isCreating: state.ui.documents.creating,
     isFullScreen: state.ui.document.isFullScreen
@@ -96,7 +107,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   updateDocument,
-  uiToggleFullScreen
+  uiToggleDocumentMode,
+  uiToggleFullScreen,
 }
 
 export default withRouter(
