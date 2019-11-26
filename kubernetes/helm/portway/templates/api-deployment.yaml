@@ -114,6 +114,11 @@ spec:
             secretKeyRef:
               name: aws-secrets
               key: secret_access_key
+        - name: LOG_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: log-secrets
+              key: log_token
         ports:
         - containerPort: 3001
           protocol: TCP
