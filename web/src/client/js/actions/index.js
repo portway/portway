@@ -44,6 +44,8 @@ export const ActionTypes = {
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   INITIATE_DOCUMENT_PUBLISH: 'INITIATE_DOCUMENT_PUBLISH',
   RECEIVE_PUBLISHED_DOCUMENT: 'RECEIVE_PUBLISHED_DOCUMENT',
+  INITIATE_DOCUMENT_UNPUBLISH: 'INITIATE_DOCUMENT_UNPUBLISH',
+  RECEIVE_UNPUBLISHED_DOCUMENT: 'RECEIVE_UNPUBLISHED_DOCUMENT',
   // Fields
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
@@ -185,6 +187,8 @@ export const Documents = {
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
   update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
+  unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
+  receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'data'),
 }
 
 export const Fields = {

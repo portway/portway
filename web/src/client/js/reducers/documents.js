@@ -128,6 +128,21 @@ export const documents = (state = initialState, action) => {
         projectDocumentsById
       }
     }
+    // Remove the published value
+    case ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT: {
+      const listDoc = state.projectDocumentsById[action.data.projectId][action.data.id]
+      const updatedDoc = {
+        ...listDoc,
+        lastPublishedAt: action.data.lastPublishedAt,
+        publishedVersionId: action.data.publishedVersionId,
+      }
+      const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
+      return {
+        ...state,
+        projectDocumentsById
+      }
+    }
     case ActionTypes.REMOVE_DOCUMENT: {
       const { documentId, projectId } = action
       const byId = { ...state.loading.byId, [documentId]: false }

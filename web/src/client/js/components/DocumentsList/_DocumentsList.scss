@@ -215,5 +215,11 @@
 .documents-list__document-dropdown {
   display: flex;
   justify-content: flex-end;
+  position: relative;
   width: 48px;
+
+  .menu {
+    top: 3rem;
+  }
+
 }
