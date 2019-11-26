@@ -11,7 +11,8 @@ const DEFAULT_LOG_LEVEL = LOG_LEVELS.INFO
 const logger = new Logger({
   // TODO: make this env var, kube secret
   token: 'd984edf9-07a7-4ff6-94ce-00a519bc7fa9',
-  region: 'us'
+  region: 'us',
+  console: true // send output to console too
 })
 
 export default (level, message) => {
