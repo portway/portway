@@ -12,10 +12,14 @@ switch (LOGGER) {
     logger = new Logger({
       token: LOG_TOKEN,
       region: 'us',
-      console: true // send output to console too
+      console: true, // send output to console too
+      withStack: true // expands error objects with stack in logs
     })
 
-    logger.on('error', console.error)
+    logger.on('error', (err) => {
+      console.error('R7 Insight Logger Error')
+      console.error(err)
+    })
     break
   default:
     // eslint-disable-next-line no-console

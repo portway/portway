@@ -1,9 +1,12 @@
 export const LOG_TOKEN = process.env.LOG_TOKEN
 export const AUDIT_LOG_TOKEN = process.env.AUDIT_LOG_TOKEN
 
+// NOTE: if you change these levels, make sure
+// the r7 insights logger will accept them!
 export const LOG_LEVELS = {
   INFO: 'info',
-  ERROR: 'error'
+  WARNING: 'warning',
+  ERROR: 'err'
 }
 
 export const LOGGER_TYPES = {
