@@ -1,5 +1,6 @@
 import Logger from 'r7insight_node'
 import { LOGGER, LOG_TOKEN, LOG_LEVELS, DEFAULT_LOG_LEVEL, LOGGER_TYPES } from '../constants/logging'
+import { processId } from '../integrators/uniqueId'
 
 const VALID_LOG_LEVEL_VALUES = Object.values(LOG_LEVELS)
 
@@ -36,6 +37,10 @@ export default (level, message) => {
   if (typeof message === 'string') {
     message = { message }
   }
+
+  // Add the machine id to anything logged
+  // eslint-disable-next-line camelcase
+  message.machine_id = processId
 
   logger.log(level, message)
 }
