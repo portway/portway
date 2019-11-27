@@ -199,7 +199,7 @@ const createOrUpdateOrgSubscription = async function({ customerId, planId, trial
 
   const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial })
 
-  await billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(orgId)
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
 
   return updatedSubscription
 }
@@ -233,10 +233,10 @@ const cancelAccount = async function(orgId) {
     await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
   }
 
-  await billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(orgId)
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
 }
 
-const fetchCustomerAndSetSubscriptionStatusOnOrg = async function(orgId) {
+const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
   const org = await BusinessOrganization.findById(orgId)
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
   const subscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
@@ -266,7 +266,7 @@ const billingCoordinator = {
   getOrgBilling,
   createOrUpdateOrgSubscription,
   cancelAccount,
-  fetchCustomerAndSetSubscriptionStatusOnOrg
+  fetchCustomerAndSetSubscriptionDataOnOrg
 }
 
 export default billingCoordinator

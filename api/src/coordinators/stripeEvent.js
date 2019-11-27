@@ -16,7 +16,7 @@ async function handleEvent(event) {
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
       //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(org.id)
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
     }
     case 'charge.succeeded': {
@@ -25,14 +25,14 @@ async function handleEvent(event) {
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
       //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(org.id)
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
     }
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
       //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionStatusOnOrg(org.id)
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
     }
   }
