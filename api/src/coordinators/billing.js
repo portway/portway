@@ -5,8 +5,8 @@ import BusinessOrganization from '../businesstime/organization'
 import BusinessUser from '../businesstime/user'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
-import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS } from '../constants/plans'
-import { getOrgSubscriptionStatusFromStripeCustomer, ORG_SUBSCRIPTION_STATUS } from '../libs/orgSubscription'
+import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
