@@ -3,7 +3,7 @@ import { STRIPE_STATUS, PLANS } from '../constants/plans'
 export const ORG_SUBSCRIPTION_STATUS = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE', //COVERS Stripe status of 'canceled' and also when there's no subscription
-  INCOMPLETE: 'INCOMPLETE', //Part of European SCA requiremenmts https://stripe.com/docs/billing/migration/strong-customer-authentication
+  INCOMPLETE: 'INCOMPLETE', //when first payment fails, or Part of European SCA requirements https://stripe.com/docs/billing/migration/strong-customer-authentication
   INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED', //Also SCA
   PAST_DUE: 'PAST_DUE',
   PENDING_CANCEL: 'PENDING_CANCEL', //NO PARALLEL STRIPE API STATUS

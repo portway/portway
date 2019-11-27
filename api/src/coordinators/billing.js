@@ -249,6 +249,13 @@ const fetchCustomerAndSetSubscriptionStatusOnOrg = async function(orgId) {
     orgUpdateData.canceledAt = Date.now()
   }
 
+  const plan = customer.subscriptions.data[0] && customer.subscriptions.data[0].plan.id
+
+  // if the customer is subscribed to a plan, go ahead and update it to the current value
+  if (plan) {
+    orgUpdateData.plan = plan
+  }
+
   await BusinessOrganization.updateById(orgId, orgUpdateData)
 }
 
