@@ -2,13 +2,13 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import passport from 'passport'
-import logger from 'morgan'
 //libs
 import envVarValidation from './libs/envVarValidation'
 import auth from './libs/auth/auth'
 import controllerLoader from './controllers/loader'
 import apiErrorHandler from './libs/middleware/apiErrorHandler'
 import noRouteHandler from './libs/middleware/noRouteHandler'
+import httpLogger from './libs/middleware/httpLogger'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -16,8 +16,8 @@ envVarValidation()
 //instances
 const app = express()
 
-//logging
-app.use(logger('dev'))
+// request logging
+app.use(httpLogger)
 
 //bodyparser, NOTE: json parsing is applied in the controller loader file
 app.use(bodyParser.urlencoded({ extended: true }))
