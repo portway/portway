@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './FieldString.scss'
-
 const FieldStringComponent = ({ field, onChange }) => {
   return (
     <input
-      className="string h-second-level"
+      className="document-field__string"
       defaultValue={field.value}
       onChange={(e) => { onChange(field.id, e.target.value) }}
       onFocus={(e) => { e.target.select() }}

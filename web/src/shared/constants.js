@@ -78,13 +78,14 @@ const NOTIFICATION_TYPES = {
 }
 
 const NOTIFICATION_RESOURCE = {
-  PROJECTS: 'PROJECTS',
-  PROJECT: 'PROJECT',
-  DOCUMENTS: 'DOCUMENTS',
   DOCUMENT: 'DOCUMENT',
+  DOCUMENTS: 'DOCUMENTS',
   FIELD: 'FIELD',
   ORGANIZATION: 'ORGANIZATION',
-  PROJECT_ASSIGNMENT: 'PROJECT ASSIGNMENT'
+  PROJECT_ASSIGNMENT: 'PROJECT ASSIGNMENT',
+  PROJECT: 'PROJECT',
+  PROJECTS: 'PROJECTS',
+  USER: 'USER',
 }
 
 const ORGANIZATION_SETTINGS = {
@@ -94,6 +95,11 @@ const ORGANIZATION_SETTINGS = {
 const QUERY_PARAMS = {
   ASCENDING: 'ASC',
   DESCENDING: 'DESC'
+}
+
+const DOCUMENT_MODE = {
+  NORMAL: 'NORMAL',
+  EDIT: 'EDIT',
 }
 
 // Note: This is so we can use this webpack as well, don't convert this to ES6
@@ -154,4 +160,6 @@ module.exports = {
   // Support
   SUPPORT_EMAIL: 'support@portway.app',
   SUPPORT_LINK: 'https://support.portway.app/',
+  // UI Related
+  DOCUMENT_MODE: DOCUMENT_MODE,
 }

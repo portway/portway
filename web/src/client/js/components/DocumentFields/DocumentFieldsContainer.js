@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { debounce } from 'Shared/utilities'
+import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
@@ -12,12 +12,23 @@ import { updateField, removeField, updateFieldOrder } from 'Actions/field'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
-  disabled, createdFieldId, fieldsUpdating, isPublishing, match, removeField, updateField, updateFieldOrder, uiConfirm
+  createdFieldId,
+  documentMode,
+  disabled,
+  fieldsUpdating,
+  isPublishing,
+  match,
+  removeField,
+  uiConfirm,
+  updateField,
+  updateFieldOrder,
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
   const { projectId, documentId } = match.params
   const { data: fields = {} } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
+
+  let cloneElement
 
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
@@ -44,46 +55,64 @@ const DocumentFieldsContainer = ({
     updateField(projectId, documentId, fieldId, body)
   }
 
-  // Drag and drop
-  let dragCount = 0
-
   function dragStartHandler(e) {
-    setDraggingElement(e.currentTarget)
-    e.currentTarget.classList.add('document-field--dragging')
+    e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.effectAllowed = 'copyMove'
-    e.dataTransfer.setData('fieldid', e.currentTarget.dataset.id)
+    const listItem = e.currentTarget
+
+    // Create a clone of the item and append it to the document
+    // This is for dragging around a clone of the item we're dragging
+    cloneElement = listItem.cloneNode(true)
+    cloneElement.style.position = 'absolute'
+    cloneElement.style.zIndex = '101'
+    cloneElement.style.width = `${listItem.offsetWidth}px`
+    cloneElement.classList.add('document-field--clone-element')
+    cloneElement.setAttribute('draggable', false)
+    cloneElement.setAttribute('id', 'clone-element')
+    document.body.appendChild(cloneElement)
+    setDraggingElement(listItem)
+
+    // Make the default, blurry image of the dragged item disappear
+    event.dataTransfer.setDragImage(cloneElement, 10, 10)
+
+    // Add the class just after the browser makes the copy for the browser UI
+    window.requestAnimationFrame(() => { listItem.classList.add('document-field--dragging') })
+    e.dataTransfer.setData('fieldid', listItem.dataset.id)
     e.dataTransfer.setData('documentid', documentId)
-    e.dataTransfer.setData('text/html', e.target)
+    e.dataTransfer.setData('text/html', listItem)
   }
+
   function dragEnterHandler(e) {
     e.preventDefault()
-    if (e.dataTransfer.types.includes('Files')) {
-      return false
-    }
-    dragCount++
-    e.currentTarget.classList.add('document-field--dragged-over')
-  }
-  function dragLeaveHandler(e) {
-    e.preventDefault()
-    dragCount--
-    if (dragCount === 0) {
-      e.currentTarget.classList.remove('document-field--dragged-over')
-    }
-  }
-  function dragOverHandler(e) {
-    e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
-    if (e.currentTarget === draggingElement) return
+    // if (e.currentTarget === draggingElement) return
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
-    e.currentTarget.classList.add('document-field--dragged-over')
+
+    // Swap the fields on drag enter
+    const from = Number(draggingElement.dataset.order)
+    const to = Number(e.currentTarget.dataset.order)
+    const fieldData = [...orderedFields]
+    fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
+    setOrderedFields(fieldData)
+    // If the item we're dragging is nowhere in the viewport,
+    // scroll to it
+    window.requestAnimationFrame(() => {
+      if (!isAnyPartOfElementInViewport(draggingElement)) {
+        draggingElement.scrollIntoView(false, {
+          // behavior: 'smooth'
+        })
+      }
+    })
   }
-  function dragEndHandler(e) {
+
+  // This is here for debugging
+  function dragLeaveHandler(e) {
     e.preventDefault()
-    e.currentTarget.classList.remove('document-field--dragged-over')
-    e.currentTarget.classList.remove('document-field--dragging')
+    // dragCounter--
   }
+
   function dropHandler(e) {
     e.preventDefault()
     if (e.stopPropagation) {
@@ -93,18 +122,17 @@ const DocumentFieldsContainer = ({
       return
     }
     const fieldIdToUpdate = draggingElement.dataset.id
-    const from = Number(draggingElement.dataset.order)
-    const to = Number(e.currentTarget.dataset.order)
-    e.currentTarget.classList.remove('document-field--dragging', 'document-field--dragged-over')
-    if (to === from) { return }
-    const fieldData = [...orderedFields]
-    fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
-    setOrderedFields(fieldData)
-    setDraggingElement(null)
+    const to = Number(draggingElement.dataset.order)
+    draggingElement.classList.remove('document-field--dragging')
     // Trigger action with documentId, fieldId
     updateFieldOrder(documentId, fieldIdToUpdate, to)
-    // Reset drag count
-    dragCount = 0
+  }
+
+  function dragEndHandler(e) {
+    e.preventDefault()
+    draggingElement.classList.remove('document-field--dragging')
+    setDraggingElement(null)
+    document.querySelector('#clone-element').remove()
   }
 
   // Prop handler
@@ -118,41 +146,44 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
-      disabled={disabled}
       createdFieldId={createdFieldId}
-      dragStartHandler={dragStartHandler}
+      disabled={disabled}
+      documentMode={documentMode}
       dragEndHandler={dragEndHandler}
       dragEnterHandler={dragEnterHandler}
       dragLeaveHandler={dragLeaveHandler}
-      dragOverHandler={dragOverHandler}
+      dragStartHandler={dragStartHandler}
       dropHandler={dropHandler}
-      fields={orderedFields}
       fieldChangeHandler={debouncedValueChangeHandler}
-      fieldRenameHandler={debouncedNameChangeHandler}
       fieldDestroyHandler={fieldDestroyHandler}
+      fieldRenameHandler={debouncedNameChangeHandler}
+      fields={orderedFields}
+      fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
-      fieldsUpdating={fieldsUpdating} />
+    />
   )
 }
 
 DocumentFieldsContainer.propTypes = {
-  disabled: PropTypes.bool.isRequired,
   createdFieldId: PropTypes.number,
+  disabled: PropTypes.bool.isRequired,
+  documentMode: PropTypes.string,
+  fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
+  uiConfirm: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired,
-  fieldsUpdating: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
-    disabled: state.ui.fields.disabled,
     createdFieldId: state.documentFields.lastCreatedFieldId,
-    isPublishing: state.ui.documents.isPublishing,
+    disabled: state.ui.fields.disabled,
+    documentMode: state.ui.document.documentMode,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
+    isPublishing: state.ui.documents.isPublishing,
   }
 }
 

@@ -44,6 +44,8 @@ export const ActionTypes = {
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
   INITIATE_DOCUMENT_PUBLISH: 'INITIATE_DOCUMENT_PUBLISH',
   RECEIVE_PUBLISHED_DOCUMENT: 'RECEIVE_PUBLISHED_DOCUMENT',
+  INITIATE_DOCUMENT_UNPUBLISH: 'INITIATE_DOCUMENT_UNPUBLISH',
+  RECEIVE_UNPUBLISHED_DOCUMENT: 'RECEIVE_UNPUBLISHED_DOCUMENT',
   // Fields
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
@@ -109,13 +111,14 @@ export const ActionTypes = {
   RECEIVE_UPDATED_ORGANIZATION_SEATS: 'RECEIVE_UPDATED_ORGANIZATION_SEATS',
   RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
   // UI
-  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
-  UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
-  UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
   UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE',
   UI_CREATE_USER_MODE: 'UI_CREATE_USER_MODE',
+  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
+  UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
+  UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
+  UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM'
 }
 
@@ -173,17 +176,19 @@ export const ProjectTokens = {
 
 export const Documents = {
   create: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_CREATE, 'projectId', 'data'),
-  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
-  update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
-  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
   deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
-  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
-  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
-  requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
-  receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data'),
   publish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_PUBLISH, 'documentId'),
+  receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   receivePublishedVersion: makeActionCreator(ActionTypes.RECEIVE_PUBLISHED_DOCUMENT, 'data'),
+  requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
+  update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
+  unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
+  receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'data'),
 }
 
 export const Fields = {
@@ -254,12 +259,13 @@ export const Organizations = {
 }
 
 export const UI = {
-  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
-  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
-  toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
-  toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value')
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
+  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
+  toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
+  toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
+  toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),
 }

@@ -22,6 +22,8 @@ const DocumentToolbarContainer = ({ isCreating, isPublishing, publishDocument })
   const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.projects.projectAssignments(projectId), [projectId])
   const { data: users, loading: userLoading } = useDataService(dataMapper.users.list())
 
+  if (!document) return null
+
   // Create a list of projectUsers if we have any
   let projectUsers = []
   if (currentOrg.plan === PLAN_TYPES.MULTI_USER) {

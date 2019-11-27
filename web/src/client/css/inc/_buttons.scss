@@ -262,3 +262,9 @@ button,
   }
 
 }
+
+.btn--red {
+  .icon {
+    background-color: var(--color-red);
+  }
+}

@@ -1,7 +1,7 @@
 @import 'CSS/inc/_mixins.scss';
 
 .confirmation {
-  --modal-alpha-bg: rgba(#fff, .8);
+  --modal-alpha-bg: rgba(255, 255, 255, .9);
   --confirmation-bg: var(--color-white, white);
   --confirmation-border: var(--color-gray-20, gray);
   @media (prefers-color-scheme: dark) {
@@ -10,7 +10,7 @@
     --confirmation-border: var(--color-gray-80, gray);
   }
   align-items: center;
-  background: var(--modal-alpha-bg, white);
+  background-color: var(--modal-alpha-bg, white);
   display: flex;
   height: 100%;
   justify-content: center;
@@ -31,6 +31,7 @@
 
   &__message {
     color: var(--color-gray-80, gray);
+    padding: 0 0 2rem;
   }
   &__actions {
     display: flex;

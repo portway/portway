@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
-const DropdownItem = ({ children, className, divider, label, onClick, href, type }) => {
+const DropdownItem = ({ children, className, disabled, divider, label, onClick, href, type }) => {
   let elementType
   switch (type) {
     case 'button':
-      elementType = <button className={className} type="button" onClick={onClick}>{label}{children}</button>
+      elementType = <button className={className} disabled={disabled} type="button" onClick={onClick}>{label}{children}</button>
       break
     case 'link':
       elementType = <Link className={className} to={href} onClick={onClick}>{label}{children}</Link>
@@ -33,6 +33,7 @@ const DropdownItem = ({ children, className, divider, label, onClick, href, type
 DropdownItem.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
   divider: PropTypes.bool,
   href: PropTypes.string,
   label: PropTypes.string,
