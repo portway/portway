@@ -119,6 +119,11 @@ spec:
             secretKeyRef:
               name: log-secrets
               key: log_token
+        - name: AUDIT_LOG_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: log-secrets
+              key: audit_log_token
         ports:
         - containerPort: 3001
           protocol: TCP
