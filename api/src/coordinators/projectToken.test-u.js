@@ -48,38 +48,79 @@ describe('projectToken coordinator', () => {
   })
 
   describe('#verifyProjectToken', () => {
-    let verifiedToken
-    const decodedToken = {
-      id: 123,
-      orgId: 456
-    }
-    const tokenString = 'this-token-is-fake'
+    describe('with a valid token', () => {
+      let verifiedToken
+      const decodedToken = {
+        id: 123,
+        orgId: 456
+      }
+      const tokenString = 'this-token-is-valid'
 
-    beforeAll(async () => {
-      jsonwebtoken.decode.mockReturnValue(decodedToken)
-      jsonwebtoken.verify.mockImplementation((token, secret, options, callback) => {
-        callback(null, decodedToken)
+      beforeAll(async () => {
+        jsonwebtoken.decode.mockReturnValue(decodedToken)
+        jsonwebtoken.verify.mockImplementation((token, secret, options, callback) => {
+          callback(null, decodedToken)
+        })
+        verifiedToken = await verifyProjectToken(tokenString)
       })
-      verifiedToken = await verifyProjectToken(tokenString)
+
+      it('should return the token', () => {
+        expect(Object.keys(verifiedToken)).toEqual(expect.arrayContaining(['id', 'token', 'name']))
+      })
+
+      it('should find unsanitized token by id', () => {
+        expect(BusinessProjectToken.findByIdUnsanitized.mock.calls.length).toBe(1)
+        expect(BusinessProjectToken.findByIdUnsanitized.mock.calls[0][0]).toBe(decodedToken.id)
+      })
+
+      it('should decode jwt', () => {
+        expect(jsonwebtoken.decode.mock.calls.length).toBe(1)
+        expect(jsonwebtoken.decode.mock.calls[0][0]).toBe(tokenString)
+      })
+
+      it('should verify jwt', () => {
+        expect(jsonwebtoken.verify.mock.calls.length).toBe(1)
+        expect(jsonwebtoken.verify.mock.calls[0][0]).toBe(tokenString)
+      })
     })
 
-    it('should return the token', () => {
-      expect(Object.keys(verifiedToken)).toEqual(expect.arrayContaining(['id', 'token', 'name']))
-    })
+    describe('with an invalid token', () => {
+      it('with undecodeable data should reject the promise', async () => {
+        jsonwebtoken.decode.mockReturnValue(null)
+        const tokenString = 'this-token-contains-no-data'
 
-    it('should find unsanitized token by id', () => {
-      expect(BusinessProjectToken.findByIdUnsanitized.mock.calls.length).toBe(1)
-      expect(BusinessProjectToken.findByIdUnsanitized.mock.calls[0][0]).toBe(decodedToken.id)
-    })
+        await expect(verifyProjectToken(tokenString)).rejects
+          .toThrow(/token does not contain encoded id/)
+      })
 
-    it('should decode jwt', () => {
-      expect(jsonwebtoken.decode.mock.calls.length).toBe(1)
-      expect(jsonwebtoken.decode.mock.calls[0][0]).toBe(tokenString)
-    })
+      it('that is incorrectly signed should reject the promise', async () => {
+        const decodedToken = {
+          id: 123,
+          orgId: 456
+        }
+        jsonwebtoken.decode.mockReturnValue(decodedToken)
+        const tokenString = 'this-token-has-been-tampered-with'
 
-    it('should verify jwt', () => {
-      expect(jsonwebtoken.verify.mock.calls.length).toBe(1)
-      expect(jsonwebtoken.verify.mock.calls[0][0]).toBe(tokenString)
+        jsonwebtoken.verify.mockImplementation((token, secret, options, callback) => {
+          callback(new Error('Invalid Signature'))
+        })
+
+        await expect(verifyProjectToken(tokenString)).rejects
+          .toThrow(/Invalid Signature/)
+      })
+
+      it('that contains invalid org data', async () => {
+        const tokenString = 'this-token-has-invalid-org-data'
+        const decodedToken = {
+          id: 123,
+          orgId: 456
+        }
+        jsonwebtoken.decode.mockReturnValue(decodedToken)
+        BusinessProjectToken.findByIdUnsanitized.mockReturnValue(null)
+
+        await expect(verifyProjectToken(tokenString)).rejects
+          .toThrow(/No project token found/)
+      })
     })
   })
 })

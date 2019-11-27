@@ -41,6 +41,10 @@ async function findById(orgId) {
   const db = getDb()
   const organization = await db.model(MODEL_NAME).findByPk(orgId)
 
+  if (!organization) {
+    throw ono({ code: 404 }, `Cannot find organization with id: ${orgId}`)
+  }
+
   return organization.get({ plain: true })
 }
 

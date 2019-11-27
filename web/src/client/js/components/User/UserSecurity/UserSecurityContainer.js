@@ -8,7 +8,7 @@ import useDataService from 'Hooks/useDataService'
 import { updatePassword } from 'Actions/user'
 import UserSecurityComponent from './UserSecurityComponent'
 
-const UserSecurityContainer = ({ errors, updatePassword }) => {
+const UserSecurityContainer = ({ errors, forms, updatePassword }) => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
 
   const userPasswordFormId = 'user-password'
@@ -22,12 +22,21 @@ const UserSecurityContainer = ({ errors, updatePassword }) => {
   }
 
   if (!currentUser) return null
-  return <UserSecurityComponent errors={errors} formId={userPasswordFormId} user={currentUser} submitHandler={submitHandler} />
+  return (
+    <UserSecurityComponent
+      errors={errors}
+      formId={userPasswordFormId}
+      submitHandler={submitHandler}
+      succeeded={forms[userPasswordFormId] ? forms[userPasswordFormId].succeeded : null}
+      user={currentUser}
+    />
+  )
 }
 
 const mapStateToProps = (state) => {
   return {
-    errors: state.validation.user
+    errors: state.validation.user,
+    forms: state.forms.byName
   }
 }
 
@@ -35,7 +44,8 @@ const mapDispatchToProps = { updatePassword }
 
 UserSecurityContainer.propTypes = {
   errors: PropTypes.object,
-  updatePassword: PropTypes.func.isRequired
+  forms: PropTypes.object.isRequired,
+  updatePassword: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserSecurityContainer)
