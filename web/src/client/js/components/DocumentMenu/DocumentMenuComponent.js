@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import useBlur from 'Hooks/useBlur'
 import useClickOutside from 'Hooks/useClickOutside'
 
 import './_DocumentMenu.scss'
@@ -14,6 +15,7 @@ const DocumentMenuComponent = ({ button, children, className }) => {
     contentRef.current.scrollTop = 0
     setExpanded(false)
   }, [])
+  useBlur(menuRef, collapseCallback)
   useClickOutside(menuRef, collapseCallback)
 
   const dmClasses = cx({
@@ -32,7 +34,15 @@ const DocumentMenuComponent = ({ button, children, className }) => {
         title={button.label}>
         {button.icon}
       </button>
-      <div className="document-menu__content" hidden={!expanded} ref={contentRef}>
+      <div
+        className="document-menu__content"
+        hidden={!expanded}
+        onClick={() => { setExpanded(false) }}
+        onKeyPress={(e) => { if (e.key === 'ENTER') { setExpanded(false) } }}
+        ref={contentRef}
+        role="menubar"
+        tabIndex={0}
+      >
         {children}
       </div>
     </div>

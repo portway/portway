@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const DocumentMenuGroup = ({ children, title }) => {
-  console.log(children)
   return (
     <div className="document-menu__group">
       {title &&

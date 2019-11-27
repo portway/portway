@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { PublishIcon } from 'Components/Icons'
 import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
-import FormatMenuComponent from 'Components/FormatMenu/FormatMenuComponent'
+import FormatMenuContainer from 'Components/FormatMenu/FormatMenuContainer'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import './_DocumentToolbar.scss'
@@ -23,7 +23,7 @@ const DocumentToolbarComponent = ({
   return (
     <footer className="document-toolbar">
       <div className="document-toolbar__start">
-        <FormatMenuComponent />
+        <FormatMenuContainer />
         <ContentMenuContainer />
       </div>
       <div className="document-toolbar__end">

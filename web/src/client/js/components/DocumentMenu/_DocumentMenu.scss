@@ -1,7 +1,7 @@
 .document-menu {
   --document-menu-width: auto;
   --document-menu-heading: var(--color-gray-5);
-  --document-menu-btn-hover: var(--color-gray-2);
+  --document-menu-btn-hover: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
     --document-menu-heading: var(--color-gray-90);
     --document-menu-btn-hover: var(--color-gray-80);
@@ -74,7 +74,7 @@
 
   &__group {
     border-bottom: thin solid var(--theme-border);
-    padding: .7rem 1.4rem;
+    padding: .7rem 0;
     text-align: left;
     &:last-child {
       border: none;
@@ -83,9 +83,11 @@
 
   &__group-name {
     display: block;
+    font-family: var(--type-sans-serif);
     font-size: 1.3rem;
     font-weight: 500;
-    padding: 9px 12px;
+    margin: 0;
+    padding: 0 1.4rem;
     width: 100%;
   }
 
@@ -95,24 +97,24 @@
     padding: 0;
   }
 
-  &__item-button {
-    font-size: 1.5rem;
-    font-weight: 300;
-    justify-content: flex-start;
-    width: 100%;
-    &.btn--with-icon {
+  &__list-item {
+    .btn {
+      font-size: 1.5rem;
+      font-weight: 300;
+      justify-content: flex-start;
+      padding: 0 1.4rem;
+      width: 100%;
+    }
+    .btn--with-icon {
       .icon {
+        margin-right: 8px;
         svg {
           height: 26px;
           width: 26px;
         }
       }
-      .label {
-        flex: 0;
-        margin-left: 8px;
-      }
     }
-    &.btn--blank {
+    .btn--blank {
       @media (hover: hover) {
         &:hover {
           background-color: var(--document-menu-btn-hover);

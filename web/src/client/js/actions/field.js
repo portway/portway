@@ -56,6 +56,18 @@ export const removeField = (projectId, documentId, fieldId) => {
   }
 }
 
+export const blurField = (fieldId, fieldType, fieldData) => {
+  return async (dispatch) => {
+    dispatch(Fields.blurField(fieldId, fieldType, fieldData))
+  }
+}
+
+export const focusField = (fieldId, fieldType, fieldData) => {
+  return async (dispatch) => {
+    dispatch(Fields.focusField(fieldId, fieldType, fieldData))
+  }
+}
+
 /**
  * Creates a new field in newDocumentId using an existing field's data
  * Then removes that field from the currentDocumentId

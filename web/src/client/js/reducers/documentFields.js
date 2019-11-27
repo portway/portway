@@ -4,6 +4,11 @@ const initialState = {
   // nested at { [documentId]: { [fieldId]: {} } }
   documentFieldsById: {},
   lastCreatedFieldId: null,
+  focused: {
+    id: null,
+    type: null,
+    data: null,
+  },
   loading: {
     byId: {},
     byDocument: {}
@@ -110,6 +115,25 @@ export const documentFields = (state = initialState, action) => {
       const lastCreatedFieldId = initialState.lastCreatedFieldId
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: restDocumentFields }
       return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
+    }
+    // Blur field resets focus data
+    case ActionTypes.BLUR_FIELD: {
+      const focused = { ...state.focused }
+      focused.id = null
+      focused.type = null
+      focused.data = null
+      return { ...state, focused }
+    }
+    // Focus field tracks field ID and certain data per type of field
+    // This is so we can interact with the actual field component or ref from
+    // somewhere else within the app
+    case ActionTypes.FOCUS_FIELD: {
+      const { fieldId, fieldData, fieldType } = action
+      const focused = { ...state.focused }
+      focused.id = fieldId
+      focused.type = fieldType
+      focused.data = fieldData
+      return { ...state, focused }
     }
     default:
       return state

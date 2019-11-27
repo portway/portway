@@ -56,6 +56,8 @@ export const ActionTypes = {
   FIELD_COPIED: 'FIELD_COPIED',
   FIELD_MOVED: 'FIELD_MOVED',
   REMOVE_FIELD: 'REMOVE_FIELD',
+  FOCUS_FIELD: 'FOCUS_FIELD',
+  BLUR_FIELD: 'BLUR_FIELD',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -200,7 +202,10 @@ export const Fields = {
   copiedField: makeActionCreator(ActionTypes.FIELD_COPIED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
   // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
-  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId')
+  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId'),
+  // Blur / Focus
+  blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
 }
 
 export const Notifications = {
