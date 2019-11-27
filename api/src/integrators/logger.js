@@ -7,11 +7,14 @@ let logger
 
 switch (LOGGER) {
   case LOGGER_TYPES.R7_INSIGHT:
+    console.info(LOG_TOKEN)
     logger = new Logger({
       token: LOG_TOKEN,
       region: 'us',
       console: true // send output to console too
     })
+
+    logger.on('error', console.error)
     break
   default:
     // eslint-disable-next-line no-console

@@ -1,4 +1,5 @@
 export const LOG_TOKEN = process.env.LOG_TOKEN
+export const AUDIT_LOG_TOKEN = process.env.AUDIT_LOG_TOKEN
 
 export const LOG_LEVELS = {
   INFO: 'info',
@@ -13,5 +14,7 @@ export const LOGGER_TYPES = {
 export const DEFAULT_LOG_LEVEL = LOG_LEVELS.INFO
 
 export const LOGGER = process.env.LOGGER || LOGGER_TYPES.CONSOLE
+
+console.info(`Logger: ${LOGGER}`)
 
 
