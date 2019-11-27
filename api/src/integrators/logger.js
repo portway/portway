@@ -7,7 +7,6 @@ let logger
 
 switch (LOGGER) {
   case LOGGER_TYPES.R7_INSIGHT:
-    console.info(LOG_TOKEN)
     logger = new Logger({
       token: LOG_TOKEN,
       region: 'us',
