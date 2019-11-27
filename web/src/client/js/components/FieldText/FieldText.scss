@@ -55,6 +55,14 @@
       letter-spacing: -0.2px;
       line-height: 2.4rem;
 
+      .cm-hr {
+        border-top: thin solid var(--theme-border);
+        display: block;
+        height: 1px;
+        overflow: hidden;
+        width: 100%;
+      }
+
       .cm-header {
         display: inline-block;
         font-weight: 700;

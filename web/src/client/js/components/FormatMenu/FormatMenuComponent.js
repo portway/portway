@@ -35,6 +35,21 @@ const FormatMenuComponent = ({ focusedField }) => {
         case 'link':
           editor.drawLink(editor)
           break
+        case 'hr':
+          editor.drawHorizontalRule(editor)
+          break
+        case 'ul':
+          editor.toggleUnorderedList(editor)
+          break
+        case 'ol':
+          editor.toggleOrderedList(editor)
+          break
+        case 'blockquote':
+          editor.toggleBlockquote(editor)
+          break
+        case 'code':
+          editor.toggleCodeBlock(editor)
+          break
         default:
           break
       }
@@ -61,16 +76,33 @@ const FormatMenuComponent = ({ focusedField }) => {
       </DocumentMenuGroup>
       <DocumentMenuGroup>
         <button className="btn btn--blank" role="menuitem" onClick={() => formatSelection('bold') }>
-          <span className="format-menu__format">*</span> <b>Bold</b>&nbsp;*
+          <span className="format-menu__format">*</span> <b>Bold</b><span className="format-menu__closing">*</span>
         </button>
         <button className="btn btn--blank" onClick={() => formatSelection('italic') }>
-          <span className="format-menu__format">/</span> <i>Italic</i>&nbsp;/
+          <span className="format-menu__format">/</span> <i>Italic</i><span className="format-menu__closing">/</span>
         </button>
         <button className="btn btn--blank" onClick={() => formatSelection('strikethrough') }>
-          <span className="format-menu__format">~</span> <span className="strikethrough">Strike-through</span>&nbsp;~
+          <span className="format-menu__format">~</span> <span className="strikethrough">Strike-through</span><span className="format-menu__closing">~</span>
         </button>
         <button className="btn btn--blank" onClick={() => formatSelection('link') }>
-          <span className="format-menu__format">[</span> <span className="format-menu__link">Link</span>&nbsp;]
+          <span className="format-menu__format">[</span> <span className="format-menu__link">Link</span><span className="format-menu__closing">]</span>
+        </button>
+      </DocumentMenuGroup>
+      <DocumentMenuGroup>
+        <button className="btn btn--blank" role="menuitem" onClick={() => formatSelection('hr') }>
+          <span className="format-menu__format">---</span> Horizontal Rule
+        </button>
+        <button className="btn btn--blank" role="menuitem" onClick={() => formatSelection('ul') }>
+          <span className="format-menu__format">*</span> Unordered List
+        </button>
+        <button className="btn btn--blank" role="menuitem" onClick={() => formatSelection('ol') }>
+          <span className="format-menu__format">1.</span> Ordered List
+        </button>
+        <button className="btn btn--blank" role="menuitem" onClick={() => formatSelection('blockquote') }>
+          <span className="format-menu__format">&gt;</span> Blockquote
+        </button>
+        <button className="btn btn--blank" role="menuitem" onClick={() => formatSelection('code') }>
+          <span className="format-menu__format">`</span> Code
         </button>
       </DocumentMenuGroup>
     </DocumentMenuComponent>

@@ -8,6 +8,11 @@
     width: 40px;
   }
 
+  &__closing {
+    color: var(--color-gray-40);
+    margin-left: 4px;
+  }
+
   &__link {
     color: var(--color-blue);
   }

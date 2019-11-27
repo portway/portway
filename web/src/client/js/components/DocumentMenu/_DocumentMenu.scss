@@ -31,7 +31,6 @@
       .icon {
         background-color: var(--color-gray-15);
         border-color: transparent;
-        transform: rotate(45deg);
       }
       @media (hover: hover) {
         &:hover:not([disabled]) {
