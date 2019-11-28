@@ -1,6 +1,7 @@
 // Controller audit log integrator
 // receives an object with namespace info
-// currently logging to the console
+// and logs to configured service
+// (console in dev, or r7 audit log service if AUDIT_LOG_TOKEN is present)
 import Logger from 'r7insight_node'
 import { AUDIT_LOG_TOKEN } from '../constants/logging'
 
