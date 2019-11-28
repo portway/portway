@@ -46,7 +46,7 @@
     background-color: var(--theme-surface);
     border: thin solid var(--theme-border);
     border-radius: var(--border-radius);
-    box-shadow: 0 2px 6px 0 rgba(102,102,102,0.40);
+    box-shadow: var(--box-shadow);
     bottom: var(--gutter-width);
     // max-height: 200px;
     overflow: auto;
