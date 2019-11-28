@@ -1,5 +1,7 @@
 import PUBLIC_MESSAGES from '../../constants/publicMessages'
 import multer from 'multer'
+import logger from '../../integrators/logger'
+import { LOG_LEVELS } from '../../constants/logging'
 
 const getPublicMessage = function(code) {
   switch (code) {
@@ -56,8 +58,11 @@ export default function(error, req, res, next) {
 
   const responseMessage = publicMessage || exposedMessage || getPublicMessage(responseCode)
 
-  //TODO handle conditional logging here for different environments
-  console.error(error.stack)
+  // Match any 5XX error code and log at error level
+  const level = responseCode > 499 ? LOG_LEVELS.ERROR : LOG_LEVELS.WARNING
+
+  logger(level, { error })
+
   res.status(responseCode).json({
     error: responseMessage,
     errorType,
