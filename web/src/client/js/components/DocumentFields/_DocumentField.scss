@@ -67,6 +67,12 @@
   align-items: stretch;
   display: flex;
   padding: 0 2.3rem;
+
+  .document__fields--is-dragging & {
+    overflow: hidden;
+    height: 65px;
+  }
+
 } // document-field__component
 
 
