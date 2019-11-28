@@ -5,7 +5,7 @@ import EasyMDE from 'easymde'
 import './EasyMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
+const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
@@ -20,11 +20,12 @@ const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
       initialValue: field ? field.value : '',
       placeholder: 'Your ideas here...',
       shortcuts: {
+        drawImage: null,
+        toggleFullScreen: null,
         toggleHeadingSmaller: null,
-        toggleUnorderedList: null,
         togglePreview: null,
         toggleSideBySide: null,
-        toggleFullScreen: null
+        toggleUnorderedList: null,
       },
       spellChecker: false,
       status: false,
@@ -36,10 +37,13 @@ const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
   }, [])
   useEffect(() => {
     if (editor) {
+      // editor.codemirror.on('blur', (cm, e) => { onBlur(field.id, field.type, cm) })
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
+      editor.codemirror.on('dragstart', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('dragenter', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('dragleave', (cm, e) => { e.preventDefault() })
+      editor.codemirror.on('focus', (cm, e) => { onFocus(field.id, field.type, editor) })
       if (field.id === autoFocusElement) {
         editor.codemirror.focus()
         editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
@@ -51,7 +55,7 @@ const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
   }, [editor])
   return (
     <div className="document-field__text">
-      <textarea ref={textRef} />
+      <textarea ref={textRef} defaultValue={field.value} />
     </div>
   )
 }
@@ -59,7 +63,9 @@ const FieldTextComponent = ({ field, onChange, autoFocusElement }) => {
 FieldTextComponent.propTypes = {
   autoFocusElement: PropTypes.number,
   field: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  onBlur: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
 }
 
 export default FieldTextComponent

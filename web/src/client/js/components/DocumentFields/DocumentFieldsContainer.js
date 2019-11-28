@@ -7,15 +7,17 @@ import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
-import { updateField, removeField, updateFieldOrder } from 'Actions/field'
+import { blurField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
+  blurField,
   createdFieldId,
   documentMode,
   disabled,
   fieldsUpdating,
+  focusField,
   isPublishing,
   match,
   removeField,
@@ -47,6 +49,14 @@ const DocumentFieldsContainer = ({
     const confirmedLabel = 'Yes, delete it.'
     const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
+  }
+
+  function fieldFocusHandler(fieldId, fieldType, fieldData) {
+    focusField(fieldId, fieldType, fieldData)
+  }
+
+  function fieldBlurHandler(fieldId, fieldType, fieldData) {
+    blurField(fieldId, fieldType, fieldData)
   }
 
   function fieldChangeHandler(fieldId, body) {
@@ -156,6 +166,8 @@ const DocumentFieldsContainer = ({
       dropHandler={dropHandler}
       fieldChangeHandler={debouncedValueChangeHandler}
       fieldDestroyHandler={fieldDestroyHandler}
+      fieldFocusHandler={fieldFocusHandler}
+      fieldBlurHandler={fieldBlurHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
       fields={orderedFields}
       fieldsUpdating={fieldsUpdating}
@@ -165,10 +177,12 @@ const DocumentFieldsContainer = ({
 }
 
 DocumentFieldsContainer.propTypes = {
+  blurField: PropTypes.func.isRequired,
   createdFieldId: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
   fieldsUpdating: PropTypes.object.isRequired,
+  focusField: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
@@ -187,7 +201,14 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { removeField, updateField, updateFieldOrder, uiConfirm }
+const mapDispatchToProps = {
+  blurField,
+  focusField,
+  removeField,
+  updateField,
+  updateFieldOrder,
+  uiConfirm
+}
 
 export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
