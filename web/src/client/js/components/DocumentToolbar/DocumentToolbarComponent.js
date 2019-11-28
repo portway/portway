@@ -12,6 +12,8 @@ import './_DocumentToolbar.scss'
 const DocumentToolbarComponent = ({
   document, isCreating, isPublishing, projectUsers, publishDocumentHandler
 }) => {
+  const publishDisabled = moment(document.updatedAt).isSameOrBefore(document.lastPublishedAt, 'second')
+  const publishString = document.lastPublishedAt === null ? 'document' : 'changes'
   function publishButtonTitle() {
     if (document && document.publishedVersionId && document.lastPublishedAt) {
       return `Published ${moment(document.lastPublishedAt).fromNow()}`
@@ -38,12 +40,12 @@ const DocumentToolbarComponent = ({
         }
         <button
           className="btn btn--small btn--with-icon"
-          disabled={isPublishing}
+          disabled={isPublishing || publishDisabled}
           onClick={publishDocumentHandler}
           title={publishButtonTitle()}>
           {isPublishing && <SpinnerComponent width="12" height="12" color="#ffffff" />}
           {!isPublishing && <PublishIcon fill="#ffffff" />}
-          <span className="label">Publish</span>
+          <span className="label">Publish {publishString}</span>
         </button>
       </div>
     </footer>

@@ -143,9 +143,9 @@
     }
     &.active {
       background-color: var(--document-list-active-item);
-      .icon {
-        background-color: var(--color-gray-5);
-      }
+      // .icon {
+      //   background-color: var(--color-gray-5);
+      // }
       &:not([disabled]) {
         @media (hover: hover) {
           &:hover {
@@ -215,5 +215,11 @@
 .documents-list__document-dropdown {
   display: flex;
   justify-content: flex-end;
+  position: relative;
   width: 48px;
+
+  .menu {
+    top: 3rem;
+  }
+
 }

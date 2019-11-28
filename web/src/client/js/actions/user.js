@@ -118,6 +118,7 @@ export const updatePassword = (formId, userId, body) => {
       dispatch(formFailedAction(formId))
       dispatch(Validation.create('user', data, status))
     } else {
+      dispatch(Notifications.create('Password change successful 👍🏽', NOTIFICATION_TYPES.SUCCESS, NOTIFICATION_RESOURCE.USER, status))
       dispatch(formSucceededAction(formId))
       dispatch(Users.receiveUpdatedPassword(userId, data))
     }

@@ -17,3 +17,7 @@ kubectl create secret generic aws-secrets --from-literal=access_key_id='value' -
 ```
 kubectl create secret generic db-secrets --from-literal=db_user_password='value'
 ```
+
+```
+kubectl create secret generic log-secrets --from-literal=log_token='value'
+```

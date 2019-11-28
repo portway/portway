@@ -30,7 +30,7 @@ const NotificationComponent = ({ dismissHandler, id, notification }) => {
         <RemoveIcon />
       </button>
       <div className="notifications__content">
-        <h2 id={title} className="notifications__title">{notificationTitle}</h2>
+        {notificationTitle && <h2 id={title} className="notifications__title">{notificationTitle}</h2>}
         <p id={desc} className="notifications__message">{notificationMessage}</p>
         {notification.code && notification.type === NOTIFICATION_TYPES.ERROR &&
         <span className="notifications__code note">Error code: {notification.code}</span>

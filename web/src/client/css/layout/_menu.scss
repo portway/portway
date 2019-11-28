@@ -17,6 +17,7 @@
   border: thin solid var(--menu-border);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
+  overflow: hidden;
   padding: 0;
   position: absolute;
   z-index: 10;
@@ -128,10 +129,15 @@
     &.btn--danger {
       color: var(--color-red);
     }
+    &[disabled] {
+      cursor: normal;
+    }
     @media (hover: hover) {
-      &:hover {
-        background-color: var(--menu-hover);
-        color: var(--menu-hover-color);
+      &:not([disabled]) {
+        &:hover {
+          background-color: var(--menu-hover);
+          color: var(--menu-hover-color);
+        }
       }
     }
     &:active,
@@ -140,8 +146,10 @@
     }
     .menu--dark & {
       @media (hover: hover) {
-        &:hover {
-          background-color: var(--menu-highlight);
+        &:not([disabled]) {
+          &:hover {
+            background-color: var(--menu-highlight);
+          }
         }
       }
     }
