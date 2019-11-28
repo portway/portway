@@ -58,7 +58,10 @@ export default function(error, req, res, next) {
 
   const responseMessage = publicMessage || exposedMessage || getPublicMessage(responseCode)
 
-  logger(LOG_LEVELS.WARNING, { error })
+  // Match any 5XX error code and log at error level
+  const level = responseCode > 499 ? LOG_LEVELS.ERROR : LOG_LEVELS.WARNING
+
+  logger(level, { error })
 
   res.status(responseCode).json({
     error: responseMessage,
