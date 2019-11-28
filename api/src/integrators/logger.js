@@ -12,6 +12,8 @@ switch (LOGGER) {
       region: 'us',
       console: true // send output to console too
     })
+
+    logger.on('error', console.error)
     break
   default:
     // eslint-disable-next-line no-console

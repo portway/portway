@@ -1,6 +1,20 @@
 // Controller audit log integrator
 // receives an object with namespace info
-// currently logging to the console
+// and logs to configured service
+// (console in dev, or r7 audit log service if AUDIT_LOG_TOKEN is present)
+import Logger from 'r7insight_node'
+import { AUDIT_LOG_TOKEN } from '../constants/logging'
+
+let logger
+
+if (AUDIT_LOG_TOKEN) {
+  const logger = new Logger({
+    token: AUDIT_LOG_TOKEN,
+    region: 'us'
+  })
+
+  logger.on('error', console.error)
+}
 
 export default function auditLog({
   userId,
@@ -39,7 +53,7 @@ export default function auditLog({
       break
   }
 
-  console.info('AUDIT:', JSON.stringify({
+  const auditInfo = {
     userId,
     timestamp: Date.now(),
     message,
@@ -47,7 +61,13 @@ export default function auditLog({
     primaryId,
     secondaryModel,
     secondaryId
-  }))
+  }
+
+  if (logger) {
+    logger.log('info', auditInfo)
+  } else {
+    console.info('AUDIT:', JSON.stringify(auditInfo))
+  }
 }
 
 export const auditActions = {
