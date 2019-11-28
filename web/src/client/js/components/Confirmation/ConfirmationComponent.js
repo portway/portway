@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import useClickOutside from 'Hooks/useClickOutside'
-import './Confirmation.scss'
+import './_Confirmation.scss'
 
 const ConfirmationComponent = ({ cancelAction, confirmedAction, confirmedLabel, message }) => {
   const confirmationRef = useRef()
@@ -24,7 +24,7 @@ const ConfirmationComponent = ({ cancelAction, confirmedAction, confirmedLabel, 
   return (
     <div className="confirmation" role="alert">
       <div className="confirmation__dialog" ref={confirmationRef}>
-        <p className="confirmation__message">{message}</p>
+        <div className="confirmation__message">{message}</div>
         <div className="confirmation__actions">
           {cancelAction &&
           <button className="btn btn--white confirmation__cancel" onClick={cancelAction}>Cancel</button>

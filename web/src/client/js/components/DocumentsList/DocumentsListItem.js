@@ -15,6 +15,7 @@ const DocumentsListItem = ({
   fieldCopyHandler,
   fieldMoveHandler,
   removeDocumentHandler,
+  unpublishDocumentHandler,
 }) => {
   const [draggedOver, setDraggedOver] = useState(false)
 
@@ -93,7 +94,14 @@ const DocumentsListItem = ({
           </time>
         </div>
         <DropdownComponent align="right" button={dropdownButton} className="documents-list__document-dropdown">
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler(document) }} />
+          <DropdownItem label="Unpublish document..." disabled={document.lastPublishedAt === null} type="button" onClick={(e) => {
+            e.preventDefault()
+            unpublishDocumentHandler(document)
+          }} />
+          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={(e) => {
+            e.preventDefault()
+            removeDocumentHandler(document)
+          }} />
         </DropdownComponent>
       </NavLink>
     </li>
@@ -107,6 +115,7 @@ DocumentsListItem.propTypes = {
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
+  unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 
 DocumentsListItem.defaultProps = {

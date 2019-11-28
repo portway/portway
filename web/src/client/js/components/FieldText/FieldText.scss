@@ -23,6 +23,13 @@
       display: none !important;
     }
 
+    .CodeMirror-cursor {
+      border-left: thin solid var(--color-gray-40);
+      @media (prefers-color-scheme: dark) {
+        border-left: thin solid var(--color-gray-20);
+      }
+    }
+
     .CodeMirror-scroll {
       height: auto !important;
       min-height: var(--document-field-min-height) !important;

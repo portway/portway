@@ -146,7 +146,8 @@ export const ui = (state = initialState, action) => {
 
     // Document publishng
     // -------------------------------------------------------------------------
-    case ActionTypes.INITIATE_DOCUMENT_PUBLISH: {
+    case ActionTypes.INITIATE_DOCUMENT_PUBLISH:
+    case ActionTypes.INITIATE_DOCUMENT_UNPUBLISH: {
       return {
         ...state,
         documents: {
@@ -158,7 +159,8 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
-    case ActionTypes.RECEIVE_PUBLISHED_DOCUMENT: {
+    case ActionTypes.RECEIVE_PUBLISHED_DOCUMENT:
+    case ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT: {
       return {
         ...state,
         documents: {

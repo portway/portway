@@ -3,6 +3,12 @@
 .document-field {
   --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
+  --field-data-background: var(--theme-overflow);
+  --field-data-border: var(--color-gray-10);
+  @media (prefers-color-scheme: dark) {
+    --field-data-background: var(--theme-overlay-dark);
+    --field-data-border: var(--theme-overlay-light);
+  }
   margin-top: 1.8rem;
   outline: 0;
 
@@ -71,8 +77,8 @@
 
   // Data fields get a border and background-color, like a table
   .document-field--data & {
-    background-color: var(--theme-overflow);
-    border: thin solid var(--color-gray-10);
+    background-color: var(--field-data-background);
+    border: thin solid var(--field-data-border);
     display: flex;
     input {
       background-color: transparent;

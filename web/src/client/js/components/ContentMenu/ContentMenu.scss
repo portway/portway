@@ -23,20 +23,20 @@
     @media (hover: hover) {
       &:hover:not([disabled]) {
         .icon {
-          background-color: var(--color-gray-2);
+          // background-color: var(--color-gray-2);
         }
       }
     }
     &[aria-expanded="true"] {
       .icon {
-        background-color: var(--color-gray-15);
+        background-color: var(--theme-overlay-dark);
         border-color: transparent;
         transform: rotate(45deg);
       }
       @media (hover: hover) {
         &:hover:not([disabled]) {
           .icon {
-            background-color: var(--color-gray-15);
+            background-color: var(--theme-overlay-dark);
           }
         }
       }

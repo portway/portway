@@ -1,16 +1,16 @@
 @import 'CSS/inc/_mixins.scss';
 
 .confirmation {
-  --modal-alpha-bg: rgba(#fff, .8);
+  --modal-alpha-bg: rgba(255, 255, 255, .9);
   --confirmation-bg: var(--color-white, white);
   --confirmation-border: var(--color-gray-20, gray);
   @media (prefers-color-scheme: dark) {
-    --modal-alpha-bg: rgba(#3b3d3e, .8);
-    --confirmation-bg: var(--color-gray-90, black);
+    --modal-alpha-bg: hsla(223, 7%, 19%, .8);
+    --confirmation-bg: var(--theme-overlay-light, black);
     --confirmation-border: var(--color-gray-80, gray);
   }
   align-items: center;
-  background: var(--modal-alpha-bg, white);
+  background-color: var(--modal-alpha-bg, white);
   display: flex;
   height: 100%;
   justify-content: center;
@@ -30,8 +30,10 @@
   }
 
   &__message {
-    color: var(--color-gray-80, gray);
+    color: var(--theme-text-color);
+    padding: 0 0 2rem;
   }
+
   &__actions {
     display: flex;
     justify-content: space-between;

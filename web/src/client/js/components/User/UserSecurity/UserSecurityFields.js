@@ -11,7 +11,7 @@ import './_UserSecurityFields.scss'
 
 const redColor = getComputedStyle(document.documentElement).getPropertyValue('--color-red')
 
-const UserSecurityFields = ({ fieldsReadyHandler }) => {
+const UserSecurityFields = ({ fieldsReadyHandler, fieldsShouldReset }) => {
   // Password and Confirm password
   const [newPassword, setNewPassword] = useState(null)
   const [confirmNewPassword, setConfirmNewPassword] = useState(null)
@@ -34,11 +34,19 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
     fieldsReadyHandler(areFieldsReady(), newPassword, confirmNewPassword)
   }, [newPassword, confirmNewPassword, fieldsReadyHandler, passwordIsValid])
 
+  useEffect(() => {
+    if (fieldsShouldReset) {
+      resetPassword()
+    }
+  }, [fieldsShouldReset])
+
   function resetPassword() {
     setNewPassword(null)
-    setPasswordScore(0)
+    setConfirmNewPassword(null)
     setPasswordStatus(null)
     setPasswordSummary(null)
+    setPasswordScore(0)
+    setConfirmStatus(null)
   }
 
   const passwordValidationHandler = debounce(500, (password) => {
@@ -148,6 +156,7 @@ const UserSecurityFields = ({ fieldsReadyHandler }) => {
 
 UserSecurityFields.propTypes = {
   fieldsReadyHandler: PropTypes.func.isRequired,
+  fieldsShouldReset: PropTypes.bool,
 }
 
 export default UserSecurityFields
