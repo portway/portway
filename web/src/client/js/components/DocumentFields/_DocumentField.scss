@@ -5,9 +5,11 @@
   --field-name-width: 150px;
   --field-data-background: var(--theme-overflow);
   --field-data-border: var(--color-gray-10);
+  --field-dragging-background: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
     --field-data-background: var(--theme-overlay-dark);
     --field-data-border: var(--theme-overlay-light);
+    --field-dragging-background: var(--theme-base);
   }
   margin-top: 1.8rem;
   outline: 0;
@@ -20,7 +22,7 @@
       visibility: hidden;
     }
     .document-field__container {
-      background-color: var(--color-gray-5) !important;
+      background-color: var(--field-dragging-background) !important;
       border: none !important;
       border-radius: var(--border-radius);
       * { visibility: hidden; }

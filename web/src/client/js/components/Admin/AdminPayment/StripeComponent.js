@@ -9,6 +9,7 @@ import {
 } from 'react-stripe-elements'
 
 import CountryList from 'Shared/countryList'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const elementStyles = {
   base: {
@@ -160,16 +161,28 @@ class StripeComponent extends React.Component {
         <div className="field-container field-container--row">
           <div className="field">
             <div className="field__control field__control--submit">
-              <input className="btn" type="submit" value="Update payment information" disabled={this.props.isSubmitting} />
+              <input
+                className="btn"
+                disabled={this.props.isSubmitting}
+                type="submit"
+                value="Update payment information"
+              />
             </div>
           </div>
           {this.props.cancelHandler &&
           <div className="field">
             <div className="field__control">
-              <button className="btn btn--blank btn--small" onClick={this.props.cancelHandler}>Cancel</button>
+              <button
+                className="btn btn--blank btn--small"
+                disabled={this.props.isSubmitting}
+                onClick={this.props.cancelHandler}
+              >Cancel</button>
             </div>
           </div>
           }
+          <div className="field">
+            {this.props.isSubmitting && <SpinnerComponent color="#e5e7e6" />}
+          </div>
         </div>
 
       </form>
