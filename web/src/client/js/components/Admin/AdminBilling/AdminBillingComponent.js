@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { LOCKED_ACCOUNT_STATUSES, PLAN_TYPES, SUBSCRIPTION_STATUS } from 'Shared/constants'
+import { LOCKED_ACCOUNT_STATUSES, PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import AdminPlanSelectorContainer from 'Components/Admin/AdminPlanSelector/AdminPlanSelectorContainer'
 import AdminSeatsContainer from 'Components/Admin/AdminSeats/AdminSeatsContainer'
@@ -13,7 +13,7 @@ const AdminBillingComponent = ({ organization }) => {
   return (
     <>
       <section id="plans">
-        {(organization.subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || organization.subscriptionStatus === null) &&
+        {(organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || organization.subscriptionStatus === null) &&
         <div className="admin-billing__notice">
           <h2>Trial Period</h2>
           <p>During your trial, you are limited to a single-user plan.</p>
