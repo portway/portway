@@ -2,7 +2,6 @@
  * Middleware request logger for Portway
  */
 import logger from '../../integrators/logger'
-import { processId } from '../../integrators/uniqueId'
 import { LOG_LEVELS } from '../../constants/logging'
 /* eslint-disable camelcase */
 
@@ -12,6 +11,11 @@ import { LOG_LEVELS } from '../../constants/logging'
 const endFuncs = {
   url: (req) => {
     return req.originalUrl || req.url
+  },
+  endpoint: (req) => {
+    const url = req.originalUrl || req.url
+    const path = url.split('?')[0]
+    return path.replace(/\d+/, ':id')
   },
   method: req => req.method,
   status: (req, res) => res.statusCode,
@@ -42,10 +46,7 @@ const endFuncs = {
 
     return ms.toFixed(2)
   },
-  time: req => req._portway.startTime,
-  machine_id: () => {
-    return processId
-  }
+  time: req => req._portway.startTime
 }
 
 const httpLogger = (req, res, next) => {

@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import passport from 'passport'
 //libs
 import envVarValidation from './libs/envVarValidation'
+import uncaughtErrorHandler from './libs/uncaughtErrorHandler'
 import auth from './libs/auth/auth'
 import controllerLoader from './controllers/loader'
 import apiErrorHandler from './libs/middleware/apiErrorHandler'
@@ -12,6 +13,9 @@ import httpLogger from './libs/middleware/httpLogger'
 
 // Check if required env vars are set the right format
 envVarValidation()
+
+// Setup a listener on uncaught errors to log them
+uncaughtErrorHandler()
 
 //instances
 const app = express()

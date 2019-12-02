@@ -18,8 +18,10 @@ const DocumentFieldsComponent = ({
   dragLeaveHandler,
   dragStartHandler,
   dropHandler,
+  fieldBlurHandler,
   fieldChangeHandler,
   fieldDestroyHandler,
+  fieldFocusHandler,
   fieldRenameHandler,
   fields,
   fieldsUpdating,
@@ -45,23 +47,49 @@ const DocumentFieldsComponent = ({
     let fieldTypeComponent
     switch (field.type) {
       case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocusElement={lastTextFieldId} />
+        fieldTypeComponent = (
+          <FieldTextComponent
+            autoFocusElement={lastTextFieldId}
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+          />
+        )
         break
       case Constants.FIELD_TYPES.NUMBER:
-        fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent = (
+          <FieldNumberComponent
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+          />
+        )
         break
       case Constants.FIELD_TYPES.STRING:
-        fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
+        fieldTypeComponent = (
+          <FieldStringComponent
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+          />
+        )
         break
       case Constants.FIELD_TYPES.IMAGE:
-        fieldTypeComponent =
+        fieldTypeComponent = (
           <FieldImageComponent
             field={field}
+            onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
-            updating={fieldsUpdating[field.id]} />
+            updating={fieldsUpdating[field.id]}
+          />
+        )
         break
       default:
         break
@@ -121,8 +149,10 @@ DocumentFieldsComponent.propTypes = {
   dragLeaveHandler: PropTypes.func.isRequired,
   dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
+  fieldBlurHandler: PropTypes.func.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
+  fieldFocusHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,

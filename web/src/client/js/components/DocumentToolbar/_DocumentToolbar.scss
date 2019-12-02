@@ -12,6 +12,9 @@
   &__start {
     align-items: center;
     display: flex;
+    > div {
+      margin-right: 7px;
+    }
   }
 
   &__end {
