@@ -24,16 +24,17 @@ async function createUserAndOrganization(name, email) {
   })
 
   const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}`, email })
+
+  await BusinessOrganization.updateById(organization.id, {
+    ownerId: createdUser.id,
+    stripeId: customer.id
+  })
+
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
     planId: PLANS.SINGLE_USER,
     trialPeriodDays: TRIAL_PERIOD_DAYS,
     orgId: organization.id
-  })
-
-  await BusinessOrganization.updateById(organization.id, {
-    ownerId: createdUser.id,
-    stripeId: customer.id
   })
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)

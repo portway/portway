@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { LOCKED_ACCOUNT_STATUSES, PLAN_TYPES, SUBSCRIPTION_STATUS } from 'Shared/constants'
+import { LOCKED_ACCOUNT_STATUSES, PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import { CheckIcon } from 'Components/Icons'
 import Form from 'Components/Form/Form'
 
@@ -31,7 +31,7 @@ const AdminPlanSelectorComponent = ({
   }
 
   const lockedSubscription = LOCKED_ACCOUNT_STATUSES.includes(organizationSubscriptionStatus) ||
-                             organizationSubscriptionStatus === SUBSCRIPTION_STATUS.TRIALING ||
+                             organizationSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING ||
                              organizationSubscriptionStatus === null
 
   const adminPlanClasses = cx({

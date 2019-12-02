@@ -1,11 +1,13 @@
 import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
-import organization from '../businesstime/organization'
+import BusinessOrganization from '../businesstime/organization'
+import billingCoordinator from '../coordinators/billing'
 
 async function handleEvent(event) {
   const eventData = event.data.object
   const stripeId = eventData.customer
   const customer = await stripeIntegrator.getCustomer(stripeId)
+  const org = await BusinessOrganization.findByStripeId(stripeId)
 
   switch (event.type) {
     case 'charge.failed': {
@@ -14,8 +16,8 @@ async function handleEvent(event) {
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
       //update cached subscription status on org
-      const subscription = customer.subscriptions.data[0]
-      organization.updateByStripeId(stripeId, { subscriptionStatus: subscription.status })
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
+      break
     }
     case 'charge.succeeded': {
       const subject = 'Payment successful'
@@ -23,8 +25,15 @@ async function handleEvent(event) {
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
       //update cached subscription status on org
-      const subscription = customer.subscriptions.data[0]
-      organization.updateByStripeId(stripeId, { subscriptionStatus: subscription.status })
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
+      break
+    }
+    case 'customer.subscription.created':
+    case 'customer.subscription.updated':
+    case 'customer.subscription.deleted': {
+      //update cached subscription status on org
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
+      break
     }
   }
 }

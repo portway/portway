@@ -2,12 +2,18 @@ import billingCoordinator from './billing'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import BusinessUser from '../businesstime/user'
-import { PLANS } from '../constants/plans'
+import { PLANS, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+import * as orgSubscription from '../libs/orgSubscription'
 
 jest.mock('../integrators/stripe')
 jest.mock('../businesstime/organization')
 jest.mock('../businesstime/user')
+jest.mock('../libs/orgSubscription')
+// separate these internally used functions from the mock object so we can use them for their unit tests
+const createOrUpdateOrgSubscription = billingCoordinator.createOrUpdateOrgSubscription
+const fetchCustomerAndSetSubscriptionDataOnOrg = billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg
 billingCoordinator.createOrUpdateOrgSubscription = jest.fn()
+billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg = jest.fn()
 
 describe('billing coordinator', () => {
   const orgId = 999
@@ -352,6 +358,179 @@ describe('billing coordinator', () => {
       it('should return an empty object', async () => {
         expect(orgBilling).toEqual({})
       })
+    })
+  })
+
+  describe('#cancelAccount', () => {
+    const customerId = 'not-a-real-customer-id'
+    const stripeId = '1234abcd'
+    const subscriptionId = 'not-a-real-subscription-id'
+    const planId = PLANS.SINGLE_USER
+    const mockCurrentSeatCount = 1
+    let resolvedValue
+    const mockSubscription = {
+      id: subscriptionId,
+      plan: { id: planId },
+      items: { data: [{ quantity: mockCurrentSeatCount }] },
+      status: STRIPE_STATUS.ACTIVE
+    }
+
+    beforeAll(async () => {
+      BusinessOrganization.findById.mockClear()
+      BusinessOrganization.updateById.mockClear()
+      BusinessOrganization.findById.mockReturnValue({ stripeId })
+      stripeIntegrator.getCustomer.mockClear()
+      stripeIntegrator.getCustomer.mockReturnValue({
+        id: customerId,
+        subscriptions: {
+          data: [mockSubscription]
+        }
+      })
+      resolvedValue = await billingCoordinator.cancelAccount(orgId)
+    })
+
+    it('should call BusinessOrganization.findById with the passed in org id', () => {
+      expect(BusinessOrganization.findById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.findById.mock.calls[0][0]).toEqual(orgId)
+    })
+
+    it('should call stripeIntegrator.getCustomer with the org stripeId', () => {
+      expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
+    })
+
+    it('should call stripeIntegrator.cancelSubscriptionAtPeriodEnd with the current subscription id', () => {
+      expect(stripeIntegrator.cancelSubscriptionAtPeriodEnd.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.cancelSubscriptionAtPeriodEnd.mock.calls[0][0]).toBe(mockSubscription.id)
+    })
+
+    it('should resolve with undefined', () => {
+      expect(resolvedValue).toBe(undefined)
+    })
+
+    describe('when there is no stripeId on the org', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockClear()
+        BusinessOrganization.findById.mockReturnValueOnce({})
+        await expect(
+          billingCoordinator.cancelAccount(orgId)
+        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when no stripe customer is found', () => {
+      it('should throw an error with status code 409 ', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+        stripeIntegrator.getCustomer.mockReturnValueOnce(null)
+        await expect(
+          billingCoordinator.cancelAccount(orgId)
+        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when the subscription has a status of TRIALING', () => {
+      const mockSubscription = {
+        id: subscriptionId,
+        plan: { id: planId },
+        items: { data: [{ quantity: mockCurrentSeatCount }] },
+        status: STRIPE_STATUS.TRIALING
+      }
+
+      it('should call stripeIntegrator.cancelSubscription with the current subscription id', async () => {
+        stripeIntegrator.getCustomer.mockReturnValueOnce({ subscriptions: { data: [mockSubscription] } })
+        await billingCoordinator.cancelAccount(orgId)
+        expect(stripeIntegrator.cancelSubscription.mock.calls.length).toBe(1)
+        expect(stripeIntegrator.cancelSubscription.mock.calls[0][0]).toBe(mockSubscription.id)
+      })
+    })
+  })
+
+  describe('#createOrUpdateOrgSubscription', () => {
+    const customerId = 'not-a-real-customer-id'
+    const planId = PLANS.MULTI_USER
+    const trialPeriodDays = 10
+    const seats = 7
+    const subscriptionId = 'not-a-real-subscription-id'
+    const orgId = 999
+    let resolvedValue
+
+    beforeAll(async () => {
+      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg.mockClear()
+      resolvedValue = await createOrUpdateOrgSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId })
+    })
+
+    it('should call stripeIntegrator.createOrUpdateSubscription with the passed in data and endTrial: true for the MULTI_USER plan', async () => {
+      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true }))
+    })
+
+    it('should call billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg with the passed in org id', () => {
+      expect(billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg.mock.calls.length).toBe(1)
+      expect(billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should resolve with updated subscription', () => {
+      expect(resolvedValue).toBe(stripeIntegrator.createOrUpdateSubscription.mock.results[0].value)
+    })
+  })
+
+  describe('#fetchCustomerAndSetSubscriptionDataOnOrg', () => {
+    const orgId = 999
+    const stripeId = 'not-a-real-stripe-id'
+    const customerId = 'not-a-real-customerId'
+    const subscriptionId = 'not-a-real-subscription-id'
+    const planId = PLANS.SINGLE_USER
+    const mockCurrentSeatCount = 1
+    const subscriptionStatus = STRIPE_STATUS.ACTIVE
+    let resolvedValue
+    const mockSubscription = {
+      id: subscriptionId,
+      plan: { id: planId },
+      items: { data: [{ quantity: mockCurrentSeatCount }] },
+      status: subscriptionStatus
+    }
+    const mockCustomer = {
+      id: customerId,
+      subscriptions: {
+        data: [mockSubscription]
+      }
+    }
+
+
+    beforeAll(async () => {
+      BusinessOrganization.findById.mockClear()
+      BusinessOrganization.updateById.mockClear()
+      BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
+      BusinessOrganization.updateById.mockClear()
+      stripeIntegrator.getCustomer.mockClear()
+      stripeIntegrator.getCustomer.mockReturnValueOnce(mockCustomer)
+      orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mockReturnValueOnce(ORG_SUBSCRIPTION_STATUS.ACTIVE)
+      resolvedValue = await fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
+    })
+
+    it('should call BusinessOrganization.findById with the passed in org id', async () => {
+      expect(BusinessOrganization.findById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.findById.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call stripeIntegrator.getCustomer with the orgs stripe id', async () => {
+      expect(stripeIntegrator.getCustomer.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.getCustomer.mock.calls[0][0]).toBe(stripeId)
+    })
+
+    it('should call getOrgSubscriptionStatusFromStripeCustomer with the customer', async () => {
+      expect(orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mock.calls.length).toBe(1)
+      expect(orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mock.calls[0][0]).toBe(mockCustomer)
+    })
+
+    it('should call BusinessOrganization.updateById with the org id and correct update object', async () => {
+      expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.updateById.mock.calls[0][0]).toBe(orgId)
+      expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual(expect.objectContaining({ subscriptionStatus: ORG_SUBSCRIPTION_STATUS.ACTIVE, plan: planId }))
+    })
+
+    it('should resolve with undefined', async () => {
+      expect(resolvedValue).toBe(undefined)
     })
   })
 })
