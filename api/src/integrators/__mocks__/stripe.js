@@ -4,7 +4,9 @@ export default {
     return { plan: { id: 'not-a-real-plan-id' } }
   }),
   getCustomer: jest.fn(() => getGenericStripeCustomerData()),
-  updateCustomer: jest.fn(() => getGenericStripeCustomerData())
+  updateCustomer: jest.fn(() => getGenericStripeCustomerData()),
+  cancelSubscription: jest.fn(),
+  cancelSubscriptionAtPeriodEnd: jest.fn()
 }
 
 

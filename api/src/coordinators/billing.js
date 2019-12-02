@@ -5,7 +5,8 @@ import BusinessOrganization from '../businesstime/organization'
 import BusinessUser from '../businesstime/user'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
-import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS } from '../constants/plans'
+import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -194,9 +195,68 @@ const getOrgBilling = async function(orgId) {
 }
 
 const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId }) {
-  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true })
-  await BusinessOrganization.updateById(orgId, { subscriptionStatus: updatedSubscription.status, plan: updatedSubscription.plan.id })
+  const endTrial = planId === PLANS.MULTI_USER
+
+  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial })
+
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
+
   return updatedSubscription
+}
+
+const cancelAccount = async function(orgId) {
+  const billingError = ono({ code: 409, errorDetails: [{ key: 'seats', message: 'No billing information for organization' }] }, `Cannot cancel subscription, organization: ${orgId} does not have saved billing information`)
+
+  const org = await BusinessOrganization.findById(orgId)
+  if (!org.stripeId) {
+    throw billingError
+  }
+
+  const customer = await stripeIntegrator.getCustomer(org.stripeId)
+
+  if (!customer) {
+    throw billingError
+  }
+
+  const currentSubscription = customer.subscriptions.data[0]
+
+  if (!currentSubscription) {
+    const publicMessage = 'Organization does not have a subscription to cancel'
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+  }
+
+  if (currentSubscription.status === STRIPE_STATUS.TRIALING) {
+    // still in trial with or without billing info, cancel immediately
+    await stripeIntegrator.cancelSubscription(currentSubscription.id)
+  } else {
+    // for all other subscription statuses wait until billing period ends to cancel
+    await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
+  }
+
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
+}
+
+const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
+  const org = await BusinessOrganization.findById(orgId)
+  const customer = await stripeIntegrator.getCustomer(org.stripeId)
+  const subscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
+
+  const orgUpdateData = { subscriptionStatus }
+
+  // The org is getting inactive status, but this could potentially happen multiple times depending on how hooks are set up
+  // so only set the canceledAt date on the org if it doesn't already exist
+  if (subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE && !org.canceledAt) {
+    orgUpdateData.canceledAt = Date.now()
+  }
+
+  const plan = customer.subscriptions.data[0] && customer.subscriptions.data[0].plan.id
+
+  // if the customer is subscribed to a plan, go ahead and update it to the current value
+  if (plan) {
+    orgUpdateData.plan = plan
+  }
+
+  await BusinessOrganization.updateById(orgId, orgUpdateData)
 }
 
 const billingCoordinator = {
@@ -204,7 +264,9 @@ const billingCoordinator = {
   updatePlanSeats,
   updateOrgBilling,
   getOrgBilling,
-  createOrUpdateOrgSubscription
+  createOrUpdateOrgSubscription,
+  cancelAccount,
+  fetchCustomerAndSetSubscriptionDataOnOrg
 }
 
 export default billingCoordinator
