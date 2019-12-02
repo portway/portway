@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import Constants from 'Shared/constants'
+import { FIELD_TYPES } from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
@@ -30,7 +30,7 @@ const DocumentFieldsComponent = ({
   const [settingsForField, setSettingsForField] = useState(null)
 
   const textFields = fields.filter((field) => {
-    return field.type === Constants.FIELD_TYPES.TEXT
+    return field.type === FIELD_TYPES.TEXT
   })
   const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
 
@@ -45,7 +45,7 @@ const DocumentFieldsComponent = ({
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
-      case Constants.FIELD_TYPES.TEXT:
+      case FIELD_TYPES.TEXT:
         fieldTypeComponent = (
           <FieldTextComponent
             autoFocusElement={lastTextFieldId}
@@ -56,7 +56,7 @@ const DocumentFieldsComponent = ({
           />
         )
         break
-      case Constants.FIELD_TYPES.NUMBER:
+      case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
             field={field}
@@ -66,7 +66,7 @@ const DocumentFieldsComponent = ({
           />
         )
         break
-      case Constants.FIELD_TYPES.STRING:
+      case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
             field={field}
@@ -76,7 +76,7 @@ const DocumentFieldsComponent = ({
           />
         )
         break
-      case Constants.FIELD_TYPES.IMAGE:
+      case FIELD_TYPES.IMAGE:
         fieldTypeComponent = (
           <FieldImageComponent
             field={field}

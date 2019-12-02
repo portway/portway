@@ -131,6 +131,15 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.ROUTE_CHANGE: {
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          documentMode: initialState.document.documentMode,
+        }
+      }
+    }
 
     // Document full screen
     // -------------------------------------------------------------------------

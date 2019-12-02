@@ -37,7 +37,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [])
   useEffect(() => {
     if (editor) {
-      // editor.codemirror.on('blur', (cm, e) => { onBlur(field.id, field.type, cm) })
+      editor.codemirror.on('blur', (cm, e) => { onBlur(field.id, field.type, editor) })
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
       editor.codemirror.on('dragstart', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('dragenter', (cm, e) => { e.preventDefault() })
