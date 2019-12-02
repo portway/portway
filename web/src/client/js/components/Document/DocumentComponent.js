@@ -63,7 +63,7 @@ const DocumentComponent = ({
           <ExpandIcon />
         </button>
         <div className="document__title-container">
-          <textarea
+          <input
             className="document__title"
             defaultValue={document.name}
             onChange={(e) => {

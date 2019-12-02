@@ -55,7 +55,10 @@
     line-height: 3rem;
     padding: 0;
     outline: none;
+    overflow: hidden;
     resize: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     width: 100%;
     -webkit-appearance: none;
 
