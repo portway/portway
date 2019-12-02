@@ -12,6 +12,7 @@
   margin-top: 1.8rem;
   outline: 0;
 
+  // The whole field, when it is being dragged
   &--dragging {
     cursor: grabbing;
     padding: 1.8rem 0 !important;
@@ -30,12 +31,14 @@
     }
   }
 
+  // When something is dragged over the field, turn off all mouse interactions
   &--dragged-over {
     * {
       pointer-events: none;
     }
   }
 
+  // Clone element is passed to the browser as the "drag image"
   &--clone-element {
     list-style: none;
     .document-field__component {
@@ -119,6 +122,7 @@
   flex: 1;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 
   // A new field should be obvious it is new
   .document-field--new.document-field--data & {
@@ -135,145 +139,3 @@
   }
 
 } // document-field__content
-
-
-// Field settings show up for fields with settings
-.document-field__settings {
-  align-items: center;
-  background: var(--color-gray-70);
-  bottom: 0;
-  color: var(--color-gray-2);
-  display: flex;
-  justify-content: space-between;
-  left: 0;
-  padding: 1rem 2rem;
-  position: absolute;
-  width: 100%;
-  z-index: 3;
-
-  &__label {
-    font-size: 1.2rem;
-    padding-right: 1rem;
-  }
-
-  &__input {
-    background: none;
-    border: none;
-    color: var(--color-gray-5);
-    font-size: 1.2rem;
-    @include focus(transparent, transparent);
-    border-bottom: thin solid var(--color-gray-80);
-  }
-
-  &__button {
-    font-size: 1.2rem;
-  }
-
-} // document-field__settings
-
-
-/**
- * For drag areas (files, etc) overriding FileUploaderComponent styles
- * -------------------------------------------------------------------------- */
-.document-field {
-  .file-uploader {
-    align-items: center;
-    border: thin solid var(--color-gray-5);
-    border-radius: var(--border-radius);
-    display: flex;
-    padding: var(--gutter-width);
-    width: 100%;
-
-    label {
-      text-align: center;
-    }
-
-    &--with-value {
-      background-color: var(--theme-overlay-dark);
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-    }
-
-    &--dragged-over {
-      background-color: var(--color-gray-5);
-    }
-
-    &--uploading {
-      border: thin solid transparent;
-      border-radius: 0;
-      padding: 0;
-    }
-
-    &__status {
-      position: relative;
-      .spinner {
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-    }
-  }
-} // document-field file-uploader override
-
-
-
-
-
-
-
-
-// &--number, &--string {
-//   background-color: var(--theme-overflow);
-//   border-bottom: none;
-//   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-//   margin: 0 24px;
-
-//   input {
-//     background-color: transparent;
-//     // &::selection {
-//       // color: #fff;
-//     // }
-//   }
-
-//   // &:first-child {
-//     // border-top-left-radius: var(--border-radius);
-//     // border-top-right-radius: var(--border-radius);
-//   // }
-
-//   &:last-child {
-//     border-bottom: thin solid var(--theme-border);
-//     // border-bottom-left-radius: var(--border-radius);
-//     // border-bottom-right-radius: var(--border-radius);
-//     // margin-bottom: var(--gutter-width);
-//   }
-
-//   &:focus-within {
-//     background-color: var(--color-gray-5);
-//   }
-
-//   // New data fields
-//   &--new {
-//     background-color: var(--color-brand-light);
-//     border: thin solid transparent;
-
-//     .document-field__name {
-//       border-right: thin solid var(--color-brand-light);
-//     }
-
-//     &:focus-within {
-//       background-color: var(--color-brand-light);
-//     }
-//     input {
-//       background-color: var(--color-brand-light);
-//       &::selection {
-//         background-color: var(--color-yellow);
-//         // color: #fff;
-//       }
-//     }
-//   }
-
-// } // string, number
-

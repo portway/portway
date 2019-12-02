@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import { DropIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import './FileUploader.scss'
@@ -88,10 +89,11 @@ const FileUploaderComponent = ({
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
       {!uploading && !isUpdating &&
-      <form method="post" encType="multipart/form-data">
-        <label>
-          <p>{label}</p>
-          <span className="btn btn--small">Or select a file</span>
+      <form className="file-uploader__form" method="post" encType="multipart/form-data">
+        <DropIcon className="file-uploader__icon" width="46" height="46" />
+        <label className="file-uploader__content">
+          <span className="file-uploader__label">{label}</span>
+          <span className="btn btn--small btn--cyan">Or select a file</span>
           <input
             hidden
             type="file"

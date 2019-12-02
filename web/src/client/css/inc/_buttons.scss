@@ -256,15 +256,36 @@ button,
     }
   }
 
+  // Button colors
+  &--red {
+    .icon {
+      background-color: var(--color-red);
+    }
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          .icon {
+            background-color: var(--color-red-dark);
+          }
+        }
+      }
+    }
+  }
+
+  &--cyan {
+    background-color: var(--color-cyan);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          background-color: var(--color-cyan-dark);
+        }
+      }
+    }
+  }
+
   &[disabled] {
     cursor: not-allowed;
     opacity: 0.2;
   }
 
-}
-
-.btn--red {
-  .icon {
-    background-color: var(--color-red);
-  }
 }
