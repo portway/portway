@@ -24,7 +24,15 @@ const USER_PUBLIC_FIELDS = ['name', 'email', 'orgRoleId', 'pending', 'avatar'].c
 
 const PROJECT_TOKEN_PUBLIC_FIELDS = ['token', 'name', 'projectId', 'roleId'].concat(globalPublicFields)
 
-const ORGANIZATION_PUBLIC_FIELDS = ['name', 'ownerId', 'allowUserProjectCreation', 'avatar', 'plan', 'subscriptionStatus'].concat(globalPublicFields)
+const ORGANIZATION_PUBLIC_FIELDS = [
+  'name',
+  'ownerId',
+  'allowUserProjectCreation',
+  'avatar',
+  'plan',
+  'subscriptionStatus',
+  'canceledAt'
+].concat(globalPublicFields)
 
 export default {
   [resourceTypes.PROJECT_DOCUMENT]: Object.freeze(PROJECT_DOCUMENT_PUBLIC_FIELDS),
