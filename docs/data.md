@@ -18,6 +18,10 @@ make sequelize db:migrate
 make sequelize db:seed:all
 ```
 
+Or for JJ or Jay only: `make sequelize db:migrate:undo:all && make sequelize db:migrate && make sequelize db:seed:all`
+
+NO DIRKS
+
 _Note:_ containers _must_ be running to use `make sequelize` commands!
 
 ## Sequelize
