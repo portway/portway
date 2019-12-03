@@ -9,4 +9,13 @@
       margin-right: .6rem;
     }
   }
+
+  .--with-spinner {
+    align-items: center;
+    display: flex;
+    .spinner {
+      margin-left: .6rem;
+    }
+  }
+
 }

@@ -15,7 +15,7 @@ import './_AdminBilling.scss'
 const AdminBillingComponent = ({ organization }) => {
   const disabledSubscriptionStatuses = [
     ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL,
-    ORG_SUBSCRIPTION_STATUS.INVALID,
+    ORG_SUBSCRIPTION_STATUS.INACTIVE,
   ]
   const sectionClasses = cx({
     'section--disabled': disabledSubscriptionStatuses.includes(organization.subscriptionStatus)
