@@ -39,10 +39,24 @@ async function findAllForProject(projectId, orgId) {
 
 async function findAllPublishedForProject(projectId, orgId) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({
+  const projects = await db.model(MODEL_NAME).findAll({
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
     where: { projectId, orgId, publishedVersionId: { [Op.ne]: null } },
-    raw: true
+    include: [
+      {
+        model: db.model('DocumentVersion'),
+        where: {
+          id: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
+        },
+        required: false
+      }
+    ]
+  })
+
+  return projects.map((project) => {
+    // get the published doc name from the value stored on the currently published DocumentVersion
+    const docVersion = project.DocumentVersions[0]
+    return { ...publicFields(project), name: docVersion.name }
   })
 }
 

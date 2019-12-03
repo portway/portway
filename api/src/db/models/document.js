@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     Document.hasMany(models.Field, {
       foreignKey: 'documentId'
     })
+    Document.hasMany(models.DocumentVersion, {
+      foreignKey: 'documentId'
+    })
   }
 
   Document.prototype.markUpdated = function(valueBody) {
