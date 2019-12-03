@@ -14,6 +14,7 @@ import AdminBillingComponent from './AdminBillingComponent'
 
 const AdminBillingContainer = ({ deleteOrganization, uiConfirm }) => {
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
+  const { data: orgBilling } = useDataService(dataMapper.organizations.billing(), [currentOrg.plan])
 
   function deleteAccountHander() {
     const message = (
@@ -39,7 +40,7 @@ const AdminBillingContainer = ({ deleteOrganization, uiConfirm }) => {
       <Helmet>
         <title>Account Settings: Billing – {PRODUCT_NAME}</title>
       </Helmet>
-      <AdminBillingComponent organization={currentOrg} deleteAccountHander={deleteAccountHander} />
+      <AdminBillingComponent orgBilling={orgBilling} organization={currentOrg} deleteAccountHander={deleteAccountHander} />
     </OrgPermission>
   )
 }

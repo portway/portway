@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import { LOCKED_ACCOUNT_STATUSES, PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
@@ -9,7 +10,7 @@ import AdminPaymentContainer from 'Components/Admin/AdminPayment/AdminPaymentCon
 
 import './_AdminBilling.scss'
 
-const AdminBillingComponent = ({ deleteAccountHander, organization }) => {
+const AdminBillingComponent = ({ deleteAccountHander, orgBilling, organization }) => {
   return (
     <>
       <section id="plans">
@@ -27,10 +28,10 @@ const AdminBillingComponent = ({ deleteAccountHander, organization }) => {
           <p>Please update your payment information below to activate your account.</p>
         </div>
         }
-        {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+        {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL && orgBilling &&
         <div className="admin-billing__notice">
           <h2 className="danger">Account canceled</h2>
-          <p>We are in the process of removing your account.</p>
+          <p>Your current period ends <b>{moment.unix(orgBilling.subscription.cancelAt).format('MMMM Do, YYYY')}</b>. You have access to your projects and documents until then.</p>
         </div>
         }
         <AdminPlanSelectorContainer />
@@ -63,6 +64,7 @@ const AdminBillingComponent = ({ deleteAccountHander, organization }) => {
 
 AdminBillingComponent.propTypes = {
   deleteAccountHander: PropTypes.func.isRequired,
+  orgBilling: PropTypes.object,
   organization: PropTypes.object,
 }
 

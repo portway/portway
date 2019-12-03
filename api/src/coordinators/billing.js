@@ -9,6 +9,7 @@ import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS, ORG_SUBSCRIPTION_S
 import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
 
 const formatBilling = (customer, userCount) => {
+  console.log(customer.subscriptions.data[0])
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
   const billingSource = customer.sources.data[0]
   let source = null
@@ -34,6 +35,7 @@ const formatBilling = (customer, userCount) => {
     status: null,
     planId: null,
     billingCycleAnchor: null,
+    cancelAt: null,
     currentPeriodEnd: null,
     trialEnd: null,
     totalSeats: null,
@@ -47,6 +49,7 @@ const formatBilling = (customer, userCount) => {
     subscription.status = billingSubscription.status
     subscription.planId = billingSubscription.plan.id
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
+    subscription.cancelAt = billingSubscription.cancel_at
     subscription.currentPeriodEnd = billingSubscription.current_period_end
     subscription.trialEnd = billingSubscription.trialEnd
     subscription.totalSeats = billingSubscription.items.data[0].quantity
