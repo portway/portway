@@ -39,7 +39,7 @@ async function findAllForProject(projectId, orgId) {
 
 async function findAllPublishedForProject(projectId, orgId) {
   const db = getDb()
-  const projects = await db.model(MODEL_NAME).findAll({
+  const documents = await db.model(MODEL_NAME).findAll({
     where: { projectId, orgId, publishedVersionId: { [Op.ne]: null } },
     include: [
       {
@@ -52,10 +52,10 @@ async function findAllPublishedForProject(projectId, orgId) {
     ]
   })
 
-  return projects.map((project) => {
+  return documents.map((document) => {
     // get the published doc name from the value stored on the currently published DocumentVersion
-    const docVersion = project.DocumentVersions[0]
-    return { ...publicFields(project), name: docVersion.name }
+    const docVersion = document.DocumentVersions[0]
+    return { ...publicFields(document), name: docVersion.name }
   })
 }
 
@@ -70,7 +70,7 @@ async function findByIdForProject(id, projectId, orgId) {
 
 async function findPublishedByIdForProject(id, projectId, orgId) {
   const db = getDb()
-  const project = await db.model(MODEL_NAME).findOne({
+  const document = await db.model(MODEL_NAME).findOne({
     where: { id, projectId, orgId, publishedVersionId: { [Op.ne]: null } },
     include: [
       {
@@ -83,10 +83,10 @@ async function findPublishedByIdForProject(id, projectId, orgId) {
     ]
   })
 
-  if (!project) return project
+  if (!document) return document
   // get the published doc name from the value stored on the currently published DocumentVersion
-  const docVersion = project.DocumentVersions[0]
-  return { ...publicFields(project), name: docVersion.name }
+  const docVersion = document.DocumentVersions[0]
+  return { ...publicFields(document), name: docVersion.name }
 }
 
 async function updateByIdForProject(id, projectId, orgId, body) {
@@ -141,22 +141,34 @@ async function findByIdWithPublishedFields(id, orgId) {
   const document = await db.model(MODEL_NAME).findOne({
     where: {
       id,
-      orgId
+      orgId,
+      publishedVersionId: { [Op.ne]: null }
     },
-    include: [{
-      model: db.model('Field'),
-      where: {
-        versionId: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
+    include: [
+      {
+        model: db.model('Field'),
+        where: {
+          versionId: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
+        },
+        required: false,
+        include: getFieldValueInclude(db)
       },
-      required: false,
-      include: getFieldValueInclude(db)
-    }],
-    order: [
-      [db.model('Field'), 'order', 'ASC']
-    ]
+      {
+        model: db.model('DocumentVersion'),
+        where: {
+          id: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
+        },
+        required: true
+      }
+    ],
+    order: [[db.model('Field'), 'order', 'ASC']]
   })
 
-  return publicDocumentWithFields(document)
+  if (!document) return document
+
+  const documentVersion = document.DocumentVersions[0]
+  // attach the published doc name
+  return { ...publicDocumentWithFields(document), name: documentVersion.name }
 }
 
 async function findByIdWithFields(id, orgId) {
@@ -177,7 +189,7 @@ async function findByIdWithFields(id, orgId) {
   return publicDocumentWithFields(document)
 }
 
-async function publicDocumentWithFields(document) {
+function publicDocumentWithFields(document) {
   if (!document) return document
 
   const fields = document.Fields.map((field) => {

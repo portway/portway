@@ -113,9 +113,9 @@ describe('documentVersion', () => {
       expect(document.lastPublishedAt).toBe(null)
     })
 
-    it('should no longer return anything when querying for published fields', async () => {
+    it('should no longer return the document when querying published', async () => {
       const populatedDoc = await BusinessDocument.findByIdWithPublishedFields(factoryDocument.id, factoryDocument.orgId)
-      expect(populatedDoc.fields.length).toBe(0)
+      expect(populatedDoc).toBe(null)
     })
   })
 })

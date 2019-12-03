@@ -430,6 +430,7 @@ describe('BusinessDocument', () => {
     let factoryDocument
     let publishedFactoryFields
     const versionId = 5
+    const docVersionName = 'some-other-doc-version-name'
 
     beforeAll(async () => {
       factoryProject = (await ProjectFactory.createMany(1))[0]
@@ -441,7 +442,8 @@ describe('BusinessDocument', () => {
 
       await DocumentVersionFactory.createMany(1, {
         documentId: factoryDocument.id,
-        id: versionId
+        id: versionId,
+        name: docVersionName
       })
 
       await FieldFactory.createMany(3, { type: 3, documentId: factoryDocument.id })
@@ -472,6 +474,10 @@ describe('BusinessDocument', () => {
 
       it('should return public fields', () => {
         expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.DOCUMENT]))
+      })
+
+      it('should return the published document name', () => {
+        expect(document.name).toBe(docVersionName)
       })
     })
 
