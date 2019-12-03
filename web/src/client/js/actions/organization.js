@@ -1,6 +1,6 @@
 import { Organizations, Notifications, Validation } from './index'
 import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
-import { fetch, update, globalErrorCodes, validationCodes } from '../api'
+import { add, fetch, update, globalErrorCodes, validationCodes } from '../api'
 import { NOTIFICATION_TYPES, NOTIFICATION_RESOURCE } from 'Shared/constants'
 
 export const fetchOrganization = (orgId) => {
@@ -123,5 +123,17 @@ export const updateOrganizationSeats = (formId, orgId, body) => {
     }
     dispatch(Organizations.receiveUpdatedSeats(orgId, body.seats))
     dispatch(formSucceededAction(formId))
+  }
+}
+
+export const deleteOrganization = (orgId) => {
+  return async (dispatch) => {
+    dispatch(Organizations.initiateOrgRemoval(orgId))
+    const { data, status } = await add(`organizations/${orgId}/billing/cancel`, orgId)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveOrgRemoval(orgId))
   }
 }

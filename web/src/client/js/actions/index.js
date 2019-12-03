@@ -112,6 +112,8 @@ export const ActionTypes = {
   INITIATE_ORGANIZATION_SEATS_UPDATE: 'INITIATE_ORGANIZATION_SEATS_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION_SEATS: 'RECEIVE_UPDATED_ORGANIZATION_SEATS',
   RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
+  INITIATE_ORGANIZATION_REMOVAL: 'INITIATE_ORGANIZATION_REMOVAL',
+  RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
   // UI
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -261,6 +263,9 @@ export const Organizations = {
   initiateSeatsUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_SEATS_UPDATE, 'id'),
   receiveUpdatedSeats: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_SEATS, 'id', 'seats'),
   receiveSeatsError: makeActionCreator(ActionTypes.RECEIVE_SEATS_ERROR),
+  // Remove account
+  initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
+  receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
 }
 
 export const UI = {
@@ -269,7 +274,7 @@ export const UI = {
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
-  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
+  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel', 'confirmedText'),
   toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),

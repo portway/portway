@@ -67,7 +67,7 @@ FormField.propTypes = {
   disabled: PropTypes.bool,
   help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   id: PropTypes.string.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   large: PropTypes.bool,
   name: PropTypes.string.isRequired,
   status: PropTypes.node,

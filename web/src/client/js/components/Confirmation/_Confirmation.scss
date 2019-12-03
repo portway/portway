@@ -20,6 +20,10 @@
   width: 100%;
   z-index: 15;
 
+  p {
+    margin: 0 0 1.8rem 0;
+  }
+
   &__dialog {
     background-color: var(--confirmation-bg, black);
     border: thin solid var(--confirmation-border, gray);
@@ -38,6 +42,11 @@
     display: flex;
     justify-content: space-between;
     padding-top: 24px;
+  }
+
+  // the typing to confirm bit
+  &__text {
+    margin: 2.8rem 0 0;
   }
 
   &__confirm {

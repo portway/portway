@@ -7,7 +7,8 @@ const initialState = {
     message: '',
     cancelAction: null,
     confirmedAction: null,
-    confirmedLabel: ''
+    confirmedLabel: '',
+    confirmedText: null,
   },
   document: {
     documentMode: DOCUMENT_MODE.NORMAL,
@@ -184,7 +185,8 @@ export const ui = (state = initialState, action) => {
           message: action.message,
           cancelAction: action.cancelAction,
           confirmedAction: action.confirmedAction,
-          confirmedLabel: action.confirmedLabel
+          confirmedLabel: action.confirmedLabel,
+          confirmedText: action.confirmedText,
         }
       }
     }
