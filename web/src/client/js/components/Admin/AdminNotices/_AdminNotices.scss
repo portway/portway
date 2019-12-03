@@ -1,0 +1,12 @@
+.admin-notices {
+  &__notice {
+    // border-bottom: thin solid var(--theme-border);
+  }
+  &__notice-title {
+    align-items: center;
+    display: flex;
+    .icon {
+      margin-right: .6rem;
+    }
+  }
+}

@@ -95,7 +95,7 @@ const AdminPaymentComponent = ({
             <span>Expires: </span>
             <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
           </div>
-          <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
+          <button className="btn btn--white" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
         </>
         }
       </div>

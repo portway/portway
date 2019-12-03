@@ -1,8 +1,18 @@
 .admin-plans-selector {
 
   &--disabled {
-    opacity: 0.2;
     pointer-events: none;
+    .admin-plans-selector__content h3 {
+      color: var(--color-gray-20);
+    }
+    .admin-plans-selector__description {
+      color: var(--color-gray-20);
+    }
+    .icon-check {
+      path {
+        fill: var(--color-gray-20);
+      }
+    }
   }
 
   &__title {

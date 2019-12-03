@@ -18,7 +18,7 @@ const AdminPlanSelectorContainer = ({ updateOrganizationPlan, uiConfirm }) => {
   function planChangeHandler(val) {
     const planTitle = PLAN_TYPES[val] === PLAN_TYPES.SINGLE_USER ? 'Single-user plan' : 'Multi-user plan'
     const message = (
-      <span>Change your plan to a {planTitle}? <b>You will be charged {PRICING[val]}</b></span>
+      <p>Change your plan to a {planTitle}? <b>You will be charged {PRICING[val]}</b></p>
     )
     const confirmedAction = () => {
       updateOrganizationPlan(planSelectorId, currentOrg.id, { plan: val })
