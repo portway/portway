@@ -32,6 +32,7 @@ const AdminPlanSelectorComponent = ({
 
   const lockedSubscription = LOCKED_ACCOUNT_STATUSES.includes(organizationSubscriptionStatus) ||
                              organizationSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING ||
+                             organizationSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL ||
                              organizationSubscriptionStatus === null
 
   const adminPlanClasses = cx({

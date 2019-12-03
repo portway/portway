@@ -27,6 +27,12 @@ const AdminBillingComponent = ({ deleteAccountHander, organization }) => {
           <p>Please update your payment information below to activate your account.</p>
         </div>
         }
+        {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+        <div className="admin-billing__notice">
+          <h2 className="danger">Account canceled</h2>
+          <p>We are in the process of removing your account.</p>
+        </div>
+        }
         <AdminPlanSelectorContainer />
       </section>
       <hr />
@@ -41,12 +47,16 @@ const AdminBillingComponent = ({ deleteAccountHander, organization }) => {
         <h2>Payment information</h2>
         <AdminPaymentContainer />
       </section>
+      {organization.subscriptionStatus !== ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+      <>
       <hr />
       <section id="cancel">
         <h2 className="danger">Cancel account</h2>
         <p>Cancel your Portway account, and remove all data.</p>
         <button className="btn btn--white btn--danger" onClick={deleteAccountHander}>Delete my account</button>
       </section>
+      </>
+      }
     </>
   )
 }

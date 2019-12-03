@@ -81,6 +81,7 @@ export const updateOrganizationBilling = (orgId, body) => {
       return
     }
     dispatch(Organizations.receiveUpdatedBilling(orgId, data))
+    dispatch(fetchOrganization(orgId))
   }
 }
 
@@ -135,5 +136,6 @@ export const deleteOrganization = (orgId) => {
       return
     }
     dispatch(Organizations.receiveOrgRemoval(orgId))
+    dispatch(fetchOrganization(orgId))
   }
 }
