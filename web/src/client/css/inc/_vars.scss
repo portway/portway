@@ -11,6 +11,9 @@
   --ribbon-height: 6px;
   --header-height: 65px;
   // Icon margin is usually used when an icon is next to some type
+  @media (prefers-color-scheme: dark) {
+    --box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .9);
+  }
 }
 
 // For include-media
