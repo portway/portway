@@ -99,9 +99,18 @@
         line-height: 2.5rem;
       }
 
-      .cm-comment {
+      .cm-formatting-code-block.cm-comment, .cm-comment {
         background: rgba(0, 0, 0, 0.05);
-        border-radius: 2px;
+        border-radius: 0;
+        display: block;
+        font-family: monospace;
+        width: 100%;
+      }
+      .cm-formatting-code-block.cm-comment {
+        padding: 6px;
+      }
+      .cm-comment {
+        padding: 2px 10px;
       }
 
       .cm-strong {
