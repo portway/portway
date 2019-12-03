@@ -171,6 +171,7 @@ const DocumentFieldsContainer = ({
       fieldRenameHandler={debouncedNameChangeHandler}
       fields={orderedFields}
       fieldsUpdating={fieldsUpdating}
+      isDragging={draggingElement !== null}
       isPublishing={isPublishing}
     />
   )

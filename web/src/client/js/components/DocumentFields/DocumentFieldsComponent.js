@@ -25,6 +25,7 @@ const DocumentFieldsComponent = ({
   fieldRenameHandler,
   fields,
   fieldsUpdating,
+  isDragging,
   isPublishing,
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
@@ -105,6 +106,7 @@ const DocumentFieldsComponent = ({
           dropHandler={settingsModeForField ? null : dropHandler}
           field={field}
           index={index}
+          isDragging={isDragging}
           isNewField={createdFieldId === field.id}
           key={field.id}
           onDestroy={() => { fieldDestroyHandler(field.id) }}
@@ -126,6 +128,7 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
+    'document__fields--is-dragging': isDragging,
     'document__fields--disabled': isPublishing || disabled
   })
   return (
@@ -153,6 +156,7 @@ DocumentFieldsComponent.propTypes = {
   fieldRenameHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
+  isDragging: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
 }
 
