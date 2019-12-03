@@ -40,7 +40,6 @@ async function findAllForProject(projectId, orgId) {
 async function findAllPublishedForProject(projectId, orgId) {
   const db = getDb()
   const projects = await db.model(MODEL_NAME).findAll({
-    attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
     where: { projectId, orgId, publishedVersionId: { [Op.ne]: null } },
     include: [
       {
@@ -48,7 +47,7 @@ async function findAllPublishedForProject(projectId, orgId) {
         where: {
           id: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
         },
-        required: false
+        required: true
       }
     ]
   })
@@ -67,6 +66,27 @@ async function findByIdForProject(id, projectId, orgId) {
     raw: true,
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS
   })
+}
+
+async function findPublishedByIdForProject(id, projectId, orgId) {
+  const db = getDb()
+  const project = await db.model(MODEL_NAME).findOne({
+    where: { id, projectId, orgId, publishedVersionId: { [Op.ne]: null } },
+    include: [
+      {
+        model: db.model('DocumentVersion'),
+        where: {
+          id: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
+        },
+        required: true
+      }
+    ]
+  })
+
+  if (!project) return project
+  // get the published doc name from the value stored on the currently published DocumentVersion
+  const docVersion = project.DocumentVersions[0]
+  return { ...publicFields(project), name: docVersion.name }
 }
 
 async function updateByIdForProject(id, projectId, orgId, body) {
@@ -171,6 +191,7 @@ export default {
   createForProject,
   updateByIdForProject,
   findByIdForProject,
+  findPublishedByIdForProject,
   findAllForProject,
   findAllPublishedForProject,
   deleteByIdForProject,

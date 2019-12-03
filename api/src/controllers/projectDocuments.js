@@ -59,9 +59,12 @@ const getProjectDocuments = async function(req, res, next) {
 const getProjectDocument = async function(req, res, next) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { draft } = req.query
+
+  const lookup = draft === 'true' ? 'findByIdForProject' : 'findPublishedByIdForProject'
 
   try {
-    const document = await BusinessDocument.findByIdForProject(id, projectId, orgId)
+    const document = await BusinessDocument[lookup](id, projectId, orgId)
     if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
     res.json({ data: document })
   } catch (e) {

@@ -142,6 +142,46 @@ describe('BusinessDocument', () => {
       })
     })
 
+    describe('#findAllPublishedForProject', () => {
+      let documents
+      const publishedDocName = 'published-doc-name'
+
+      beforeAll(async () => {
+        const publishedVersionIdOne = 111
+        const publishedVersionIdTwo = 222
+        await DocumentVersionFactory.createMany(1, { id: publishedVersionIdOne, documentId: factoryDocuments[0].id, name: publishedDocName })
+        await DocumentVersionFactory.createMany(1, { id: publishedVersionIdTwo, documentId: factoryDocuments[1].id, name: publishedDocName })
+        await factoryDocuments[0].update({ publishedVersionId: publishedVersionIdOne })
+        await factoryDocuments[1].update({ publishedVersionId: publishedVersionIdTwo })
+
+        documents = await BusinessDocument.findAllPublishedForProject(
+          factoryProject.id,
+          constants.ORG_ID
+        )
+      })
+
+      it('should return all published documents from passed in project and org', () => {
+        expect(documents.length).toEqual(2)
+      })
+
+      it('should return documents as POJOs', () => {
+        for (const document of documents) {
+          expect(document.password).toBe(undefined)
+          expect(document.constructor).toBe(Object)
+          expect(typeof document.projectId).toBe('number')
+          expect(Object.keys(document)).toEqual(
+            expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT])
+          )
+        }
+      })
+
+      it('should return documents with published names', () => {
+        for (const document of documents) {
+          expect(document.name).toBe(publishedDocName)
+        }
+      })
+    })
+
     describe('#findById', () => {
       let factoryDocument
       let document
@@ -229,6 +269,40 @@ describe('BusinessDocument', () => {
           expect(document).toBe(null)
         })
       })
+    })
+  })
+
+  describe('#findPublishedByIdForProject', () => {
+    let targetDocumentId
+    let factoryProject
+    let document
+    const documentVersionName = 'published-name'
+
+    beforeAll(async () => {
+      const publishedVersionId = 777
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      const factoryDocument = (await DocumentFactory.createMany(3, { projectId: factoryProject.id, name: 'not-a-real-doc-name', publishedVersionId }))[0]
+      await DocumentVersionFactory.createMany(1, { id: publishedVersionId, documentId: factoryDocument.id, name: documentVersionName })
+      targetDocumentId = factoryDocument.id
+      document = await BusinessDocument.findPublishedByIdForProject(
+        factoryDocument.id,
+        factoryProject.id,
+        factoryDocument.orgId
+      )
+    })
+
+    it('should return a document as POJO', () => {
+      expect(document.id).toBe(targetDocumentId)
+      expect(document.constructor).toBe(Object)
+      expect(document.projectId).toBe(factoryProject.id)
+    })
+
+    it('should return public fields', () => {
+      expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
+    })
+
+    it('should return the doc name as the published document version name', () => {
+      expect(document.name).toBe(documentVersionName)
     })
   })
 
