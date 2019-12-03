@@ -44,9 +44,12 @@ const projectDocumentsController = function(router) {
 const getProjectDocuments = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { draft } = req.query
+
+  const lookup = draft === 'true' ? 'findAllForProject' : 'findAllPublishedForProject'
 
   try {
-    const documents = await BusinessDocument.findAllForProject(projectId, orgId)
+    const documents = await BusinessDocument[lookup](projectId, orgId)
     res.json({ data: documents })
   } catch (e) {
     next(e)
