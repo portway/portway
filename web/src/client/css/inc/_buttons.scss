@@ -241,8 +241,10 @@ button,
   &--warning {
     color: var(--color-orange);
     @media (hover: hover) {
-      &:hover {
-        color: var(--color-orange-dark);
+      &:not([disabled]) {
+        &:hover {
+          color: var(--color-orange-dark);
+        }
       }
     }
   }
@@ -250,8 +252,10 @@ button,
   &--danger {
     color: var(--color-red);
     @media (hover: hover) {
-      &:hover {
-        color: var(--color-red-dark);
+      &:not([disabled]) {
+        &:hover {
+          color: var(--color-red-dark);
+        }
       }
     }
   }
