@@ -28,20 +28,39 @@ async function createForProject(projectId, body) {
   return publicFields(createdDocument)
 }
 
-async function findAllForProject(projectId, orgId) {
+async function findAllForProject(projectId, options = {}, orgId) {
   const db = getDb()
+  let where = { projectId, orgId }
+
+  if (options.search) {
+    where = {
+      [db.Op.and]: [
+        {
+          ...where
+        },
+        {
+          name: {
+            [db.Op.iLike]: `%${options.search}%`
+          }
+        }
+      ]
+    }
+  }
+
   return await db.model(MODEL_NAME).findAll({
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
-    where: { projectId, orgId },
+    where: where,
     raw: true
   })
 }
 
-async function findAllPublishedForProject(projectId, orgId) {
+async function findAllPublishedForProject(projectId, options = {}, orgId) {
   const db = getDb()
+  const where = { projectId, orgId, publishedVersionId: { [Op.ne]: null } }
+
   return await db.model(MODEL_NAME).findAll({
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
-    where: { projectId, orgId, publishedVersionId: { [Op.ne]: null } },
+    where,
     raw: true
   })
 }
