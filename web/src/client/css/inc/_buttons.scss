@@ -241,8 +241,10 @@ button,
   &--warning {
     color: var(--color-orange);
     @media (hover: hover) {
-      &:hover {
-        color: var(--color-orange-dark);
+      &:not([disabled]) {
+        &:hover {
+          color: var(--color-orange-dark);
+        }
       }
     }
   }
@@ -250,8 +252,37 @@ button,
   &--danger {
     color: var(--color-red);
     @media (hover: hover) {
-      &:hover {
-        color: var(--color-red-dark);
+      &:not([disabled]) {
+        &:hover {
+          color: var(--color-red-dark);
+        }
+      }
+    }
+  }
+
+  // Button colors
+  &--red {
+    .icon {
+      background-color: var(--color-red);
+    }
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          .icon {
+            background-color: var(--color-red-dark);
+          }
+        }
+      }
+    }
+  }
+
+  &--cyan {
+    background-color: var(--color-cyan);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          background-color: var(--color-cyan-dark);
+        }
       }
     }
   }
@@ -261,10 +292,4 @@ button,
     opacity: 0.2;
   }
 
-}
-
-.btn--red {
-  .icon {
-    background-color: var(--color-red);
-  }
 }

@@ -11,6 +11,12 @@
 }
 
 .document-field__dragger {
+  visibility: hidden; // because Safari was clipping shit
+
+  .document-field__tools--visible & {
+    visibility: visible; // because Safari was clipping shit
+  }
+
   .btn {
     margin: 0;
     .icon {
@@ -51,6 +57,13 @@
 
   .btn {
     margin: 0;
+    visibility: hidden; // because Safari was clipping shit
+  }
+
+  &--visible {
+    .btn {
+      visibility: visible;
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
@@ -19,7 +19,6 @@ const DocumentFieldsContainer = ({
   fieldsUpdating,
   focusField,
   isPublishing,
-  match,
   removeField,
   uiConfirm,
   updateField,
@@ -27,8 +26,9 @@ const DocumentFieldsContainer = ({
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [draggingElement, setDraggingElement] = useState(null)
-  const { projectId, documentId } = match.params
-  const { data: fields = {} } = useDataService(dataMapper.fields.list(match.params.documentId), [match.params.documentId])
+  const params = useParams()
+  const { projectId, documentId } = params
+  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
 
   let cloneElement
 
@@ -185,7 +185,6 @@ DocumentFieldsContainer.propTypes = {
   fieldsUpdating: PropTypes.object.isRequired,
   focusField: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  match: PropTypes.object.isRequired,
   removeField: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
@@ -211,6 +210,4 @@ const mapDispatchToProps = {
   uiConfirm
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

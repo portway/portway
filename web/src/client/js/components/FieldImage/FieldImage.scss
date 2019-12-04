@@ -1,25 +1,28 @@
 @import 'CSS/inc/_mixins.scss';
 
+// Field
+.document-field--image {
+  margin: 1.8rem 0;
+}
+
+// Actual component
 .document-field__image {
+  position: relative;
   width: 100%;
 
   &-container {
     position: relative;
     text-align: center;
+    .document-field--settings-mode & {
+      max-height: 400px;
+      overflow: hidden;
+    }
   }
 
   img {
     height: auto;
     margin: auto;
     max-width: 100%;
-  }
-
-  form {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
   }
 
   .document-field__progress {

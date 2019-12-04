@@ -27,11 +27,11 @@ const Form = ({
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
 
-  useEffect(() => {
-    if (!disabled) {
-      setFormChanged(true)
-    }
-  }, [disabled])
+  // useEffect(() => {
+  //   if (!disabled) {
+  //     setFormChanged(true)
+  //   }
+  // }, [disabled])
 
   useEffect(() => {
     setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)

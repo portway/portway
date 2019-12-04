@@ -7,7 +7,8 @@ const initialState = {
     message: '',
     cancelAction: null,
     confirmedAction: null,
-    confirmedLabel: ''
+    confirmedLabel: '',
+    confirmedText: null,
   },
   document: {
     documentMode: DOCUMENT_MODE.NORMAL,
@@ -131,6 +132,15 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.ROUTE_CHANGE: {
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          documentMode: initialState.document.documentMode,
+        }
+      }
+    }
 
     // Document full screen
     // -------------------------------------------------------------------------
@@ -184,7 +194,8 @@ export const ui = (state = initialState, action) => {
           message: action.message,
           cancelAction: action.cancelAction,
           confirmedAction: action.confirmedAction,
-          confirmedLabel: action.confirmedLabel
+          confirmedLabel: action.confirmedLabel,
+          confirmedText: action.confirmedText,
         }
       }
     }

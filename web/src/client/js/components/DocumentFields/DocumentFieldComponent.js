@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
-import { DragIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
+import { DragIcon, RemoveIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
+import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
 
 const DocumentFieldComponent = ({
@@ -44,6 +45,17 @@ const DocumentFieldComponent = ({
     'document-field--number': field.type === FIELD_TYPES.NUMBER,
     'document-field--string': field.type === FIELD_TYPES.STRING,
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
+    'document-field--settings-mode': settingsMode,
+  })
+
+  const fieldToolClasses = cx({
+    'document-field__tools': true,
+    'document-field__tools--visible': documentMode === DOCUMENT_MODE.EDIT,
+  })
+
+  const fieldActionClasses = cx({
+    'document-field__actions': true,
+    'document-field__actions--visible': documentMode === DOCUMENT_MODE.EDIT,
   })
 
   const fieldLabels = {
@@ -78,14 +90,12 @@ const DocumentFieldComponent = ({
     >
       <div className="document-field__component">
 
-        <div className="document-field__tools">
-          {documentMode === DOCUMENT_MODE.EDIT &&
-            <div className="document-field__dragger">
-              <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon" onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}>
-                <DragIcon />
-              </button>
-            </div>
-          }
+        <div className={fieldToolClasses}>
+          <div className="document-field__dragger">
+            <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon" onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}>
+              <DragIcon />
+            </button>
+          </div>
         </div>
 
         <div className="document-field__container">
@@ -110,21 +120,28 @@ const DocumentFieldComponent = ({
           </div>
           }
           <div className="document-field__content">
-            {field.type === FIELD_TYPES.IMAGE && field.value &&
-            <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
-              <SettingsIcon />
-            </button>
-            }
+            <div className="document-field__settings-button">
+              <>
+              {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode &&
+                <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
+                  <SettingsIcon />
+                </button>
+              }
+              {settingsMode &&
+                <button aria-label="Exit settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
+                  <RemoveIcon width="32" height="32" />
+                </button>
+              }
+              </>
+            </div>
             {children}
           </div>
         </div>
 
-        <div className="document-field__actions">
-          {documentMode === DOCUMENT_MODE.EDIT &&
+        <div className={fieldActionClasses}>
           <button aria-label="Remove field" className="btn btn--blank btn--red btn--with-circular-icon" onClick={onDestroy}>
             <TrashIcon fill="#ffffff" />
           </button>
-          }
         </div>
 
       </div>
@@ -135,11 +152,11 @@ const DocumentFieldComponent = ({
 DocumentFieldComponent.propTypes = {
   children: PropTypes.element.isRequired,
   documentMode: PropTypes.string.isRequired,
-  dragEndHandler: PropTypes.func.isRequired,
-  dragEnterHandler: PropTypes.func.isRequired,
-  dragLeaveHandler: PropTypes.func.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
-  dropHandler: PropTypes.func.isRequired,
+  dragEndHandler: PropTypes.func,
+  dragEnterHandler: PropTypes.func,
+  dragLeaveHandler: PropTypes.func,
+  dragStartHandler: PropTypes.func,
+  dropHandler: PropTypes.func,
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,

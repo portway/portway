@@ -15,7 +15,7 @@ export default function(passport) {
       try {
         user = await UserCoordinator.validateEmailPasswordCombo(email, password)
       } catch (err) {
-        done(ono(err, `Invalid user/pass ${email}`))
+        return done(ono(err, `Invalid user/pass ${email}`))
       }
 
       console.info('logging in ' + email)
