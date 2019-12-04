@@ -59,7 +59,7 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
       <div className="admin-notices__notice">
         <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} />Account canceled</h2>
         <p>
-          Your current period ends <b>{moment.unix(subscription.cancelAt).format('MMMM Do, YYYY')}</b>.
+          Your current period ends <b>{moment.unix(subscription.cancelAt || subscription.currentPeriodEnd).format('MMMM Do, YYYY')}</b>.
           You have access to your projects and documents until then.
         </p>
         <p>
