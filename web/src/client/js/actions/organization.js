@@ -137,5 +137,6 @@ export const deleteOrganization = (orgId) => {
     }
     dispatch(Organizations.receiveOrgRemoval(orgId))
     dispatch(fetchOrganization(orgId))
+    dispatch(fetchOrganizationBilling(orgId))
   }
 }
