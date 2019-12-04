@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { LOCKED_ACCOUNT_STATUSES, PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
+import {
+  LOCKED_ACCOUNT_STATUSES,
+  PLAN_TYPES,
+  ORG_SUBSCRIPTION_STATUS,
+  TRIALING_STATUSES
+} from 'Shared/constants'
 import { CheckIcon } from 'Components/Icons'
 import Form from 'Components/Form/Form'
 
@@ -14,7 +19,8 @@ const AdminPlanSelectorComponent = ({
   const [plan, setPlan] = useState(organizationPlan)
   const [formChanged, setFormChanged] = useState(false)
 
-  const planTitle = organizationPlan === PLAN_TYPES.SINGLE_USER ? 'Single-user plan' : 'Multi-user plan'
+  const singlePlanTypes = [PLAN_TYPES.SINGLE_USER, null]
+  const planTitle = singlePlanTypes.includes(organizationPlan) ? 'Single-user plan' : 'Multi-user plan'
 
   // Manually sets the Form's submit button to enabled, since we're not using
   // a normal form field
@@ -31,8 +37,8 @@ const AdminPlanSelectorComponent = ({
   }
 
   const lockedSubscription = LOCKED_ACCOUNT_STATUSES.includes(organizationSubscriptionStatus) ||
-                             organizationSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING ||
-                             organizationSubscriptionStatus === null
+                             TRIALING_STATUSES.includes(organizationSubscriptionStatus) ||
+                             organizationSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL
 
   const adminPlanClasses = cx({
     'admin-plans-selector': true,

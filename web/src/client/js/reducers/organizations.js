@@ -130,6 +130,19 @@ export const organizations = (state = initialState, action) => {
       }
     }
 
+    // Org removal
+    case ActionTypes.INITIATE_ORGANIZATION_REMOVAL: {
+      return {
+        ...state
+      }
+    }
+
+    case ActionTypes.RECEIVE_REMOVED_ORGANIZATION: {
+      return {
+        ...state
+      }
+    }
+
     default: {
       return state
     }

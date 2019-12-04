@@ -43,9 +43,9 @@ export const uiToggleStripeForm = (value) => {
 /**
  * Confirmation system
  */
-export const uiConfirm = ({ message, cancelAction, confirmedAction, confirmedLabel }) => {
+export const uiConfirm = ({ message, cancelAction, confirmedAction, confirmedLabel, confirmedText }) => {
   return async (dispatch) => {
-    dispatch(UI.initiateConfirm(message, cancelAction, confirmedAction, confirmedLabel))
+    dispatch(UI.initiateConfirm(message, cancelAction, confirmedAction, confirmedLabel, confirmedText))
   }
 }
 export const uiConfirmCancel = () => {
