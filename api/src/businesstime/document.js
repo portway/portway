@@ -37,6 +37,15 @@ async function findAllForProject(projectId, orgId) {
   })
 }
 
+async function findAllPublishedForProject(projectId, orgId) {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findAll({
+    attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
+    where: { projectId, orgId, publishedVersionId: { [Op.ne]: null } },
+    raw: true
+  })
+}
+
 async function findByIdForProject(id, projectId, orgId) {
   const db = getDb()
   return await db.model(MODEL_NAME).findOne({
@@ -149,6 +158,7 @@ export default {
   updateByIdForProject,
   findByIdForProject,
   findAllForProject,
+  findAllPublishedForProject,
   deleteByIdForProject,
   findParentProjectByDocumentId,
   findByIdWithPublishedFields,

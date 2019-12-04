@@ -6,7 +6,7 @@ import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '.
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
-    const { data, status } = await fetch(`projects/${projectId}/documents`)
+    const { data, status } = await fetch(`projects/${projectId}/documents?draft=true`)
     globalErrorCodes.includes(status) ?
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status)) :
       dispatch(Documents.receiveList(projectId, data))
