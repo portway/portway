@@ -6,7 +6,13 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { currentUserId } from 'Libs/currentIds'
-import { PATH_ORGANIZATION, PRODUCT_NAME, PLAN_TYPES, QUERY_PARAMS } from 'Shared/constants'
+import {
+  PATH_ORGANIZATION,
+  PRODUCT_NAME,
+  PLAN_TYPES,
+  QUERY_PARAMS,
+  MULTI_USER_PLAN_TYPES
+} from 'Shared/constants'
 import { parseParams } from 'Utilities/queryParams'
 
 import { createUser, reinviteUser, removeUser, sortUsers } from 'Actions/user'
@@ -74,7 +80,9 @@ const AdminUsersContainer = ({
   }
 
   return (
-    <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]} elseRender={<Redirect to={PATH_ORGANIZATION} />}>
+    <OrgPlanPermission
+      acceptedPlans={MULTI_USER_PLAN_TYPES}
+      elseRender={<Redirect to={PATH_ORGANIZATION} />}>
       <Helmet>
         <title>Admin: Users – {PRODUCT_NAME}</title>
       </Helmet>
