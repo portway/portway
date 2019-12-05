@@ -1,3 +1,4 @@
+@import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document {
@@ -12,6 +13,25 @@
     display: flex;
     height: 100%;
     justify-content: center;
+  }
+
+  &__navigation {
+    padding: 1rem 1.5rem .3rem;
+    a {
+      color: var(--color-gray-30);
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+    .icon {
+      svg {
+        path {
+          fill: var(--color-gray-30);
+        }
+      }
+    }
+    @include media('>medium') {
+      display: none;
+    }
   }
 
   &__header {

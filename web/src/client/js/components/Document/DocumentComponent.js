@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
-import { DOCUMENT_MODE } from 'Shared/constants'
+import { DOCUMENT_MODE, PATH_PROJECT } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { ExpandIcon, SettingsIcon } from 'Components/Icons'
+import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -42,6 +43,11 @@ const DocumentComponent = ({
   return (
     <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
+      <div className="document__navigation">
+        <Link className="btn btn--blank" to={`${PATH_PROJECT}/${document.projectId}`}>
+          <ArrowIcon direction="left" width="12" height="12" /> Back to project
+        </Link>
+      </div>
       <header className="document__header">
         <button
           aria-label="Expand the editor to full screen"
