@@ -15,7 +15,7 @@ const getFieldData = function(override = {}) {
 
 const createMany = async function(numberOfFields, override = {} ) {
   // default to a number field
-  const type = override.type || FIELD_TYPES.NUMBER
+  const type = override.type || FIELD_TYPES.STRING
   const model = FIELD_TYPE_MODELS[type]
   let value = override.value
 
