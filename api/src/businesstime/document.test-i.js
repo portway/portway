@@ -148,13 +148,25 @@ describe('BusinessDocument', () => {
       })
 
       describe('when passed a search option', () => {
-        beforeAll(async () => {
-          documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: 'zz' })
+        describe('when the search string matches doc names', () => {
+          beforeAll(async () => {
+            documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: 'zz' })
+          })
+
+          it('should only return documents partially matching the search string', () => {
+            expect(documents.length).toEqual(2)
+            expect([documents[0].name, documents[1].name].sort()).toEqual([searchDocOne.name, searchDocTwo.name].sort())
+          })
         })
 
-        it('should only return documents partially matching the search string', () => {
-          expect(documents.length).toEqual(2)
-          expect([documents[0].name, documents[1].name].sort()).toEqual([searchDocOne.name, searchDocTwo.name].sort())
+        describe('when the search string does not match doc names or field text', () => {
+          beforeAll(async () => {
+            documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: 'nothing' })
+          })
+
+          it('should not return any documents', () => {
+            expect(documents.length).toEqual(0)
+          })
         })
       })
     })
