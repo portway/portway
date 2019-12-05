@@ -75,7 +75,6 @@ async function validatePasswordResetKey(userId, resetKey) {
     throw ono({ code: 404 }, `No user found with id: ${userId}`)
   }
   if (user.resetKey !== resetKey) {
-    console.info(`User reset key: ${user.resetKey} : input resetKey: ${resetKey}`)
     throw ono({ code: 401 }, `Password reset key does not match user key`)
   }
   return user
