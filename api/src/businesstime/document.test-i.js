@@ -7,6 +7,7 @@ import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import { FIELD_TYPES } from '../constants/fieldTypes'
 
 describe('BusinessDocument', () => {
   let factoryProject
@@ -110,16 +111,20 @@ describe('BusinessDocument', () => {
   describe('document fetching', () => {
     let searchDocOne
     let searchDocTwo
+    let searchTextFieldDoc
     let factoryDocuments
     let factoryProject
+    const searchTextValue = 'abbacadaba'
 
     beforeAll(async () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      const nonSearchDocuments = await DocumentFactory.createMany(3, { projectId: factoryProject.id, name: 'no-search' })
+      const nonSearchDocuments = await DocumentFactory.createMany(2, { projectId: factoryProject.id, name: 'no-search' })
       searchDocOne = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'razzy' }))[0]
       searchDocTwo = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'pizza' }))[0]
-      factoryDocuments = [...nonSearchDocuments, searchDocOne, searchDocTwo]
+      searchTextFieldDoc = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'search-text-field-doc' }))[0]
+      await FieldFactory.createMany(1, { documentId: searchTextFieldDoc.id, type: FIELD_TYPES.TEXT, value: searchTextValue })
+      factoryDocuments = [...nonSearchDocuments, searchDocOne, searchDocTwo, searchTextFieldDoc]
 
       await DocumentFactory.createMany(2, {
         projectId: factoryProject.id,
@@ -166,6 +171,17 @@ describe('BusinessDocument', () => {
 
           it('should not return any documents', () => {
             expect(documents.length).toEqual(0)
+          })
+        })
+
+        describe('when the search string matches a text field value', () => {
+          beforeAll(async () => {
+            documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: searchTextValue })
+          })
+
+          it('should only return documents partially matching the search string', () => {
+            expect(documents.length).toEqual(1)
+            expect(documents[0].name).toEqual(searchTextFieldDoc.name)
           })
         })
       })
@@ -338,7 +354,7 @@ describe('BusinessDocument', () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
       factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      factoryFields = await FieldFactory.createMany(3, { type: 3, documentId: factoryDocument.id })
+      factoryFields = await FieldFactory.createMany(3, { type: FIELD_TYPES.NUMBER, documentId: factoryDocument.id })
     })
 
     describe('when the target document has the passed in orgId', () => {
