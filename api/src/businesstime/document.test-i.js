@@ -116,7 +116,7 @@ describe('BusinessDocument', () => {
     beforeAll(async () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      const nonSearchDocuments = await DocumentFactory.createMany(3, { projectId: factoryProject.id })
+      const nonSearchDocuments = await DocumentFactory.createMany(3, { projectId: factoryProject.id, name: 'no-search' })
       searchDocOne = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'razzy' }))[0]
       searchDocTwo = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'pizza' }))[0]
       factoryDocuments = [...nonSearchDocuments, searchDocOne, searchDocTwo]
@@ -154,8 +154,7 @@ describe('BusinessDocument', () => {
 
         it('should only return documents partially matching the search string', () => {
           expect(documents.length).toEqual(2)
-          expect(documents[0].name).toEqual(searchDocOne.name)
-          expect(documents[1].name).toEqual(searchDocTwo.name)
+          expect([documents[0].name, documents[1].name].sort()).toEqual([searchDocOne.name, searchDocTwo.name].sort())
         })
       })
     })
