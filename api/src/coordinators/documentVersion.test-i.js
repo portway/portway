@@ -19,7 +19,7 @@ describe('documentVersion', () => {
       beforeAll(async () => {
         const factoryProject = (await ProjectFactory.createMany(1))[0]
 
-        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
+        factoryDocument = (await DocumentFactory.createMany(1, { name: 'not-a-real-doc-name', projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
 
         factoryFields = await FieldFactory.createMany(3, {
           documentId: factoryDocument.id,
@@ -59,6 +59,7 @@ describe('documentVersion', () => {
         })
         expect(docVersion.id).toBe(document.publishedVersionId)
         expect(docVersion.documentId).toBe(document.id)
+        expect(docVersion.name).toBe(document.name)
       })
     })
     describe('with an invalid document id', () => {
@@ -112,9 +113,9 @@ describe('documentVersion', () => {
       expect(document.lastPublishedAt).toBe(null)
     })
 
-    it('should no longer return anything when querying for published fields', async () => {
+    it('should no longer return the document when querying published', async () => {
       const populatedDoc = await BusinessDocument.findByIdWithPublishedFields(factoryDocument.id, factoryDocument.orgId)
-      expect(populatedDoc.fields.length).toBe(0)
+      expect(populatedDoc).toBe(null)
     })
   })
 })
