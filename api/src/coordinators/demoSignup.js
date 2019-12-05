@@ -25,16 +25,18 @@ async function createUsersAndOrganization(name, users) {
   const organization = await BusinessOrganization.create({ name })
 
   const orgUsers = await Promise.all(
-    users.map((user) => {
+    users.map(async (user) => {
       const { name, email } = user
       const resetKey = passwordResetKey.generate()
-      return BusinessUser.create({
+      const businessUser = await BusinessUser.create({
         name,
         email,
         orgId: organization.id,
         orgRoleId: user.role,
         resetKey
       })
+      businessUser.resetKey = resetKey
+      return businessUser
     })
   )
 

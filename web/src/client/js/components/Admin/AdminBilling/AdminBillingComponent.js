@@ -35,11 +35,13 @@ const AdminBillingComponent = ({ organization }) => {
         </section>
         <hr />
       </OrgPlanPermission>
-      <section id="payment" className={sectionClasses}>
-        <h2>Payment information</h2>
-        <AdminPaymentContainer />
-      </section>
-      <hr />
+      <OrgPlanPermission acceptedPlans={[PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER]}>
+        <section id="payment" className={sectionClasses}>
+          <h2>Payment information</h2>
+          <AdminPaymentContainer />
+        </section>
+        <hr />
+      </OrgPlanPermission>
       <section id="cancel" className={sectionClasses}>
         <AdminCancelAccountContainer />
       </section>
