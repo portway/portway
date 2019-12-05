@@ -30,4 +30,9 @@ module.exports = () => {
       throw new Error(`LOGGER must be of type ${logTypes.join(' ')}`)
     }
   }
+
+  const adminSecretKey = process.env.ADMIN_SECRET_KEY
+  if (!adminSecretKey || !typeof (adminSecretKey) === 'string' || adminSecretKey.length < 10) {
+    throw new Error('ADMIN_SECRET_KEY: must be a string 10+ characters')
+  }
 }
