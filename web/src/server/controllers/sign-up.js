@@ -66,6 +66,7 @@ const setInitialPassword = async (req, res) => {
   }
 
   let accessToken
+  console.info(`access token ${token}`)
   try {
     ({ data: { token: accessToken } } = await API.send({
       url: 'signup/initialPassword',

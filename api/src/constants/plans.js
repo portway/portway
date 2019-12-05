@@ -1,6 +1,9 @@
+// These plan values _must_ match the Stripe subscription plans
 export const PLANS = {
   SINGLE_USER: 'SINGLE_USER',
-  MULTI_USER: 'MULTI_USER'
+  MULTI_USER: 'MULTI_USER',
+  SINGLE_USER_FREE: 'SINGLE_USER_FREE',
+  MULTI_USER_FREE: 'MULTI_USER_FREE'
 }
 
 export const TRIAL_PERIOD_DAYS = 10

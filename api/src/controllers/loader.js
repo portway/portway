@@ -57,7 +57,8 @@ const AUTHENTICATED_CONTROLLERS = {
 const UNAUTHENTICATED_CONTROLLERS = {
   '/login': { fileName: 'login', allowInactiveOrgAccess: true },
   '/signup': { fileName: 'signup', allowInactiveOrgAccess: true },
-  '/stripehooks': { fileName: 'stripeHooks', allowInactiveOrgAccess: true, customBodyParsingMiddleware: bodyParser.raw({ type: 'application/json' }) }
+  '/stripehooks': { fileName: 'stripeHooks', allowInactiveOrgAccess: true, customBodyParsingMiddleware: bodyParser.raw({ type: 'application/json' }) },
+  '/admin': { fileName: 'admin', allowInactiveOrgAccess: true }
 }
 
 const loadControllers = (router, controllers, middleware = [], routerOptions) => {
