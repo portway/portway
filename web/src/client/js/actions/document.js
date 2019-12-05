@@ -23,7 +23,9 @@ export const fetchDocument = (documentId) => {
   }
 }
 
-export const createDocument = (projectId, history, body, preventRedirect = false, withBody = null) => {
+export const createDocument = (projectId, history, body, options) => {
+  const { createEmptyField, preventRedirect, createFieldWithBody } = options
+
   return async (dispatch) => {
     dispatch(Documents.create(projectId, body))
     const { data, status } = await add(`projects/${projectId}/documents`, body)
@@ -35,11 +37,17 @@ export const createDocument = (projectId, history, body, preventRedirect = false
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    if (withBody) {
+    if (createEmptyField && !createFieldWithBody) {
+      await dispatch(createField(projectId, data.id, FIELD_TYPES.TEXT, {
+        name: 'text-area-1',
+        type: FIELD_TYPES.TEXT
+      }))
+    }
+    if (createFieldWithBody) {
       await dispatch(createField(projectId, data.id, FIELD_TYPES.TEXT, {
         name: 'text-area-1',
         type: FIELD_TYPES.TEXT,
-        value: withBody
+        value: createFieldWithBody
       }))
     }
     dispatch(Documents.receiveOneCreated(data))
