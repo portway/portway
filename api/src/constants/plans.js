@@ -1,4 +1,5 @@
 // These plan values _must_ match the Stripe subscription plans
+// and need to be updated in the client constants plans!
 export const PLANS = {
   SINGLE_USER: 'SINGLE_USER',
   MULTI_USER: 'MULTI_USER',
