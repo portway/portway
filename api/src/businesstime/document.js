@@ -37,6 +37,7 @@ async function findAllForProject(projectId, options = {}, orgId) {
   }
 
   if (options.search) {
+    query.raw = false
     query.where = {
       [db.Op.and]: [
         {
@@ -45,31 +46,28 @@ async function findAllForProject(projectId, options = {}, orgId) {
         {
           [db.Op.or]: [
             { name: { [db.Op.iLike]: `%${options.search}%` } },
-            { value: db.where(db.col('Fields->FieldTypeTextValue.value'), { [db.Op.iLike]: `%${options.search}%` }) }
+            { '$Fields.FieldTypeTextValue.value$': { [db.Op.iLike]: `%${options.search}%` } }
           ]
         }
       ]
     }
     query.include = [{
       model: db.model('Field'),
-      where: {
-        versionId: { [Op.col]: `${MODEL_NAME}.publishedVersionId` }
-      },
       required: false,
       include: getFieldValueInclude(db)
     }]
   }
 
-  return await db.model(MODEL_NAME).findAll(query)
+  const documents = await db.model(MODEL_NAME).findAll(query)
+  return documents.map(publicFields)
 }
 
 async function findAllPublishedForProject(projectId, options = {}, orgId) {
   const db = getDb()
-  const where = { projectId, orgId, publishedVersionId: { [Op.ne]: null } }
 
   return await db.model(MODEL_NAME).findAll({
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
-    where,
+    where: { projectId, orgId, publishedVersionId: { [Op.ne]: null } },
     raw: true
   })
 }
