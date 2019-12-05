@@ -108,13 +108,19 @@ describe('BusinessDocument', () => {
   })
 
   describe('document fetching', () => {
+    let searchDocOne
+    let searchDocTwo
     let factoryDocuments
     let factoryProject
 
     beforeAll(async () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      factoryDocuments = await DocumentFactory.createMany(5, { projectId: factoryProject.id })
+      const nonSearchDocuments = await DocumentFactory.createMany(3, { projectId: factoryProject.id })
+      searchDocOne = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'razzy' }))[0]
+      searchDocTwo = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'pizza' }))[0]
+      factoryDocuments = [...nonSearchDocuments, searchDocOne, searchDocTwo]
+
       await DocumentFactory.createMany(2, {
         projectId: factoryProject.id,
         orgId: constants.ORG_2_ID
@@ -139,6 +145,18 @@ describe('BusinessDocument', () => {
           expect(typeof document.projectId).toBe('number')
           expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
         }
+      })
+
+      describe('when passed a search option', () => {
+        beforeAll(async () => {
+          documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: 'zz' })
+        })
+
+        it('should only return documents partially matching the search string', () => {
+          expect(documents.length).toEqual(2)
+          expect(documents[0].name).toEqual(searchDocOne.name)
+          expect(documents[1].name).toEqual(searchDocTwo.name)
+        })
       })
     })
 

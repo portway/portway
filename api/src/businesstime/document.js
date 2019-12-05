@@ -28,7 +28,7 @@ async function createForProject(projectId, body) {
   return publicFields(createdDocument)
 }
 
-async function findAllForProject(projectId, options = {}, orgId) {
+async function findAllForProject(projectId, orgId, options = {}) {
   const db = getDb()
   const query = {
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
@@ -62,7 +62,7 @@ async function findAllForProject(projectId, options = {}, orgId) {
   return documents.map(publicFields)
 }
 
-async function findAllPublishedForProject(projectId, options = {}, orgId) {
+async function findAllPublishedForProject(projectId, orgId) {
   const db = getDb()
 
   return await db.model(MODEL_NAME).findAll({
@@ -170,7 +170,6 @@ async function findByIdWithFields(id, orgId) {
 }
 
 async function publicDocumentWithFields(document) {
-  console.log(document.Fields)
   if (!document) return document
 
   const fields = document.Fields.map((field) => {

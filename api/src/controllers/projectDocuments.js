@@ -48,10 +48,15 @@ const getProjectDocuments = async function(req, res, next) {
 
   const options = search ? { search } : {}
 
-  const lookup = draft === 'true' ? 'findAllForProject' : 'findAllPublishedForProject'
-
   try {
-    const documents = await BusinessDocument[lookup](projectId, options, orgId)
+    let documents
+    if (draft === 'true') {
+      // only passing search options for draft docs
+      documents = await BusinessDocument.findAllForProject(projectId, orgId, options)
+    } else {
+      documents = await BusinessDocument.findAllPublishedForProject(projectId, orgId)
+    }
+
     res.json({ data: documents })
   } catch (e) {
     next(e)
