@@ -28,13 +28,38 @@ async function createForProject(projectId, body) {
   return publicFields(createdDocument)
 }
 
-async function findAllForProject(projectId, orgId) {
+async function findAllForProject(projectId, orgId, options = {}) {
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({
+  const query = {
     attributes: PROJECT_DOCUMENT_PUBLIC_FIELDS,
-    where: { projectId, orgId },
-    raw: true
-  })
+    raw: true,
+    where: { projectId, orgId }
+  }
+
+  if (options.search) {
+    query.raw = false
+    query.where = {
+      [db.Op.and]: [
+        {
+          ...query.where
+        },
+        {
+          [db.Op.or]: [
+            { name: { [db.Op.iLike]: `%${options.search}%` } },
+            { '$Fields.FieldTypeTextValue.value$': { [db.Op.iLike]: `%${options.search}%` } }
+          ]
+        }
+      ]
+    }
+    query.include = [{
+      model: db.model('Field'),
+      required: false,
+      include: getFieldValueInclude(db)
+    }]
+  }
+
+  const documents = await db.model(MODEL_NAME).findAll(query)
+  return documents.map(publicFields)
 }
 
 async function findAllPublishedForProject(projectId, orgId) {
