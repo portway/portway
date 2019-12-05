@@ -8,7 +8,7 @@ import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
-import { PLANS } from '../constants/plans'
+import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
 import billingCoordinator from './billing'
 
 const { CLIENT_URL } = process.env
@@ -54,7 +54,8 @@ async function createUsersAndOrganization(name, users) {
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
     planId: PLANS.MULTI_USER_FREE,
-    orgId: organization.id
+    orgId: organization.id,
+    seats: MULTI_USER_DEFAULT_SEAT_COUNT
   })
 
   await Promise.all(
