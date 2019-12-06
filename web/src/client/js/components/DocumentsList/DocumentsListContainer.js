@@ -32,7 +32,7 @@ const DocumentsListContainer = ({
   function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
       name: value
-    }, false, ' ')
+    })
   }
 
   function createDocumentHandler(value) {
@@ -52,7 +52,11 @@ const DocumentsListContainer = ({
       // Remove the file extension
       const fileName = file.name.replace(/\.[^/.]+$/, '')
       const markdownBody = reader.result
-      createDocument(match.params.projectId, history, { name: fileName }, true, markdownBody)
+      const documentOptions = {
+        preventRedirect: true,
+        createFieldWithBody: markdownBody
+      }
+      createDocument(match.params.projectId, history, { name: fileName }, documentOptions)
     }
   }
 
