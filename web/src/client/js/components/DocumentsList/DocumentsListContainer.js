@@ -30,12 +30,9 @@ const DocumentsListContainer = ({
   ])
 
   function createDocumentAction(value) {
-    const documentOptions = {
-      createEmptyField: true
-    }
     createDocument(match.params.projectId, history, {
       name: value
-    }, documentOptions)
+    })
   }
 
   function createDocumentHandler(value) {
@@ -57,7 +54,6 @@ const DocumentsListContainer = ({
       const markdownBody = reader.result
       const documentOptions = {
         preventRedirect: true,
-        createEmptyField: false,
         createFieldWithBody: markdownBody
       }
       createDocument(match.params.projectId, history, { name: fileName }, documentOptions)
