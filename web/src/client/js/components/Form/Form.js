@@ -8,7 +8,6 @@ import { CheckIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
-  bigSubmit,
   cancelHandler,
   children,
   disabled,
@@ -26,12 +25,6 @@ const Form = ({
   const [submitting, setSubmitting] = useState(false)
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
-
-  // useEffect(() => {
-  //   if (!disabled) {
-  //     setFormChanged(true)
-  //   }
-  // }, [disabled])
 
   useEffect(() => {
     setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)
@@ -55,7 +48,6 @@ const Form = ({
   const buttonDisabledWhen = disabled || !formChanged || submitting || succeeded
   const submitClasses = cx({
     'btn': true,
-    'btn--small': !bigSubmit,
     'btn--disabled': buttonDisabledWhen,
   })
   const buttonGroupClasses = cx({
@@ -95,7 +87,6 @@ const Form = ({
 
 Form.propTypes = {
   cancelHandler: PropTypes.func,
-  bigSubmit: PropTypes.bool,
   children: PropTypes.node,
   dispatch: PropTypes.func,
   disabled: PropTypes.bool,

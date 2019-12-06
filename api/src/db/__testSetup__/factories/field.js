@@ -1,6 +1,7 @@
 import faker from 'faker'
 import { getDb } from '../../dbConnector'
 import constants from '../constants'
+import { FIELD_TYPES, FIELD_TYPE_MODELS } from '../../../constants/fieldTypes'
 
 const getFieldData = function(override = {}) {
   const defaultProps = {
@@ -12,7 +13,25 @@ const getFieldData = function(override = {}) {
   return { ...defaultProps, ...override }
 }
 
-const createMany = async function(numberOfFields, override) {
+const createMany = async function(numberOfFields, override = {} ) {
+  // default to a number field
+  const type = override.type || FIELD_TYPES.STRING
+  const model = FIELD_TYPE_MODELS[type]
+  let value = override.value
+
+  if (!value) {
+    switch (type) {
+      case FIELD_TYPES.STRING:
+      case FIELD_TYPES.TEXT:
+      case FIELD_TYPES.IMAGE:
+        value = faker.random.word()
+        break
+      case FIELD_TYPES.NUMBER:
+        value = faker.random.number()
+        break
+    }
+  }
+
   const db = getDb()
   const fields = Array(numberOfFields)
     .fill()
@@ -23,9 +42,9 @@ const createMany = async function(numberOfFields, override) {
   )
 
   await Promise.all(
-    createdFields.map(field =>
-      db.model('FieldTypeStringValue').create({ fieldId: field.id, value: faker.random.word() })
-    )
+    createdFields.map((field) => {
+      return db.model(model).create({ fieldId: field.id, value })
+    })
   )
 
   return createdFields

@@ -109,7 +109,7 @@ const DocumentFieldsComponent = ({
           isDragging={isDragging}
           isNewField={createdFieldId === field.id}
           key={field.id}
-          onDestroy={() => { fieldDestroyHandler(field.id) }}
+          onDestroy={() => { fieldDestroyHandler(field.id, field.type) }}
           onRename={fieldRenameHandler}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}

@@ -49,10 +49,10 @@
   flex-direction: column;
   left: 0;
   overflow: hidden;
-  padding-bottom: 65px;
+  // padding-bottom: 65px;
   position: absolute;
   transform: translate3d(0, 20px, 0);
-  top: 63px;
+  top: 0; // 63
   visibility: hidden;
   width: 100vw;
   z-index: 2;

@@ -1,3 +1,4 @@
+@import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .confirmation {
@@ -30,7 +31,10 @@
     border-radius: var(--border-radius, 8px);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
     padding: 24px;
-    width: 50vw;
+    width: 75vw;
+    @include media('>medium') {
+      width: 50vw;
+    }
   }
 
   &__message {
@@ -40,8 +44,12 @@
 
   &__actions {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column-reverse;
     padding-top: 24px;
+    @include media('>medium') {
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 
   // the typing to confirm bit

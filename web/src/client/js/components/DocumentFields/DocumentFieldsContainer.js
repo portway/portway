@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import { FIELD_TYPES } from 'Shared/constants'
 import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -44,8 +45,27 @@ const DocumentFieldsContainer = ({
   }, [fields])
 
   // Actions
-  function fieldDestroyHandler(fieldId) {
-    const message = <span>Are you sure you want to delete <span className="highlight">{fields[fieldId].name}</span>?</span>
+  function fieldDestroyHandler(fieldId, fieldType) {
+    let type = 'field'
+
+    switch (fieldType) {
+      case FIELD_TYPES.IMAGE:
+        type = 'image'
+        break
+      case FIELD_TYPES.STRING:
+        type = 'string'
+        break
+      case FIELD_TYPES.NUMBER:
+        type = 'number'
+        break
+      case FIELD_TYPES.TEXT:
+        type = 'text'
+        break
+      default:
+        break
+    }
+
+    const message = <span>Are you sure you want to delete this {type}?</span>
     const confirmedLabel = 'Yes, delete it.'
     const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
