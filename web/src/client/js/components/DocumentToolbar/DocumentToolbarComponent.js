@@ -57,7 +57,7 @@ const DocumentToolbarComponent = ({
           </>
           }
 
-          {documentMode === DOCUMENT_MODE.EDIT &&
+          {documentMode === DOCUMENT_MODE.EDIT && document.lastPublishedAt !== null &&
           <>
           Last published:&nbsp;
           <span title={moment(document.lastPublishedAt).format('MMMM do, YYYY - h:mma')}>
@@ -70,7 +70,11 @@ const DocumentToolbarComponent = ({
 
         {documentMode === DOCUMENT_MODE.EDIT &&
         <>
-        <button className="btn btn--small btn--white" onClick={unpublishDocumentHandler}>
+        <button
+          className="btn btn--small btn--white"
+          disabled={document.lastPublishedAt === null}
+          onClick={unpublishDocumentHandler}
+        >
           {isPublishing && <SpinnerComponent width="12" height="12" color="#ffffff" />}
           <span className="label">{UNPUBLISH_BUTTON_LABEL}</span>
         </button>
