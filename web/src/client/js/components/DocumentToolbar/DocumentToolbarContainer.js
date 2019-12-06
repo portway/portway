@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import { useLocation, useParams, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { PLAN_TYPES } from 'Shared/constants'
 import * as strings from 'Loc/strings'
+import { PLAN_TYPES } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
+
 import { deleteDocument, publishDocument, unpublishDocument } from 'Actions/document'
 import { uiConfirm } from 'Actions/ui'
 import useDataService from 'Hooks/useDataService'
@@ -16,6 +17,7 @@ import DocumentToolbarComponent from './DocumentToolbarComponent'
 
 const DocumentToolbarContainer = ({
   deleteDocument,
+  documentMode,
   history,
   isCreating,
   isPublishing,
@@ -75,6 +77,7 @@ const DocumentToolbarContainer = ({
   return (
     <DocumentToolbarComponent
       document={document}
+      documentMode={documentMode}
       isCreating={isCreating}
       isPublishing={isPublishing}
       projectUsers={projectUsers}
@@ -87,6 +90,7 @@ const DocumentToolbarContainer = ({
 
 DocumentToolbarContainer.propTypes = {
   deleteDocument: PropTypes.func.isRequired,
+  documentMode: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   isCreating: PropTypes.bool,
   isPublishing: PropTypes.bool,
@@ -97,6 +101,7 @@ DocumentToolbarContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    documentMode: state.ui.document.documentMode,
     isCreating: state.ui.documents.creating,
     isPublishing: state.ui.documents.isPublishing,
   }
