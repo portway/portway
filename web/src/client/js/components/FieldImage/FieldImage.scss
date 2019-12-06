@@ -3,16 +3,19 @@
 // Field
 .document-field--image {
   margin: 1.8rem 0;
+
+  .document-field__content {
+    align-items: unset;
+  }
+
 }
 
 // Actual component
 .document-field__image {
   position: relative;
-  width: 100%;
 
   &-container {
     position: relative;
-    text-align: center;
     .document-field--settings-mode & {
       max-height: 400px;
       overflow: hidden;

@@ -38,6 +38,10 @@
     right: 0;
   }
 
+  &--bottom {
+    bottom: 4rem;
+  }
+
   &:not([hidden]) {
     transform: translateY(5px);
   }

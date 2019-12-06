@@ -29,6 +29,15 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
     }
   }
 
+  let verticalAlign = 'top'
+  const viewportHeightLimit = window.innerHeight / 2
+  const menuPosition = nodeRef.current ? nodeRef.current.getBoundingClientRect() : null
+
+  if (menuPosition && menuPosition.top > viewportHeightLimit) {
+    verticalAlign = 'bottom'
+  }
+
+
   return (
     <div ref={nodeRef} className={`dropdown${className ? ' ' + className : ''}`}>
       <button
@@ -46,7 +55,7 @@ const DropdownComponent = ({ align, autoCollapse = true, button, children, class
         {button.iconPlacement === 'after' && button.icon}
       </button>
       <div
-        className={`menu menu--${align}`}
+        className={`menu menu--${align} menu--${verticalAlign}`}
         hidden={!expanded}
         onKeyDown={() => { if (autoCollapse) { collapseCallback() } }}
         onClick={() => { if (autoCollapse) { collapseCallback() } }}>

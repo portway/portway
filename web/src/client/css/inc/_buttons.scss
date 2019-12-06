@@ -46,8 +46,10 @@ button,
   color: var(--button-color);
   cursor: pointer;
   display: inline-flex;
+  flex-wrap: wrap;
   font-family: var(--type-sans-serif);
   font-weight: 500;
+  justify-content: center;
   margin-bottom: 0;
   margin-top: 0;
   min-height: 38px;
@@ -195,7 +197,7 @@ button,
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      padding: 2px 0 2px 4px;
+      padding: 0 0 0 4px;
     }
     &[aria-expanded="true"] {
       .icon-caret {
