@@ -4,6 +4,7 @@ import { useLocation, useParams, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { PLAN_TYPES } from 'Shared/constants'
+import * as strings from 'Loc/strings'
 import { currentUserId } from 'Libs/currentIds'
 import { deleteDocument, publishDocument, unpublishDocument } from 'Actions/document'
 import { uiConfirm } from 'Actions/ui'
@@ -52,9 +53,9 @@ const DocumentToolbarContainer = ({
 
   function removeDocumentHandler() {
     const message = (
-      <span>Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
+      <span>{strings.DELETE_CONFIRMATION_TITLE_PREFIX} <span className="highlight">{document.name}</span> {strings.DELETE_CONFIRMATION_TITLE_SUFFIX}</span>
     )
-    const confirmedLabel = `Yes, delete this document`
+    const confirmedLabel = strings.DELETE_CONFIRMATION_LABEL
     const confirmedAction = () => { deleteDocument(projectId, document.id, history) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
@@ -62,11 +63,11 @@ const DocumentToolbarContainer = ({
   function unpublishDocumentHandler() {
     const message = (
       <>
-        <p>Unpublish the document <span className="highlight">{document.name}</span>?</p>
-        <p>If you are using this document in a live application, it will be removed.</p>
+        <p>{strings.UNPUBLISH_CONFIRMATION_TITLE} <span className="highlight">{document.name}</span>?</p>
+        <p>{strings.UNPUBLISH_CONFIRMATION_DESCRIPTION}</p>
       </>
     )
-    const confirmedLabel = `Yes, unpublish this document`
+    const confirmedLabel = strings.UNPUBLISH_CONFIRMATION_LABEL
     const confirmedAction = () => { unpublishDocument(document.id) }
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
