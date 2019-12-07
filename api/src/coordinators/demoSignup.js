@@ -52,8 +52,12 @@ async function createUsersAndOrganization(name, users) {
     email: owner.email
   })
 
+  const businessOwner = orgUsers.find((user) => {
+    return user.orgRoleId === ORGANIZATION_ROLE_IDS.OWNER
+  })
+
   await BusinessOrganization.updateById(organization.id, {
-    ownerId: owner.id,
+    ownerId: businessOwner.id,
     stripeId: customer.id
   })
 
