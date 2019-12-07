@@ -72,7 +72,6 @@ const AdminSeatsForm = ({
   return (
     <div className="admin-seats-form">
       <Form
-        bigSubmit
         cancelHandler={cancelHandler}
         name={formId}
         onSubmit={formSubmitHandler}

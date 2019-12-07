@@ -49,7 +49,6 @@ const AdminPlanSelectorComponent = ({
     <div className={adminPlanClasses}>
       <h2 id="rg1-label">Your plan: <span className="admin-plans-selector__title">{planTitle}</span></h2>
       <Form
-        bigSubmit
         name={formId}
         onSubmit={formSubmitHandler}
         submitEnabled={formChanged}
