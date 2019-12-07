@@ -48,6 +48,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         autoCollapse={collapseCallback}
         open={!expanded}
         placement="bottom"
+        width="130"
       >
         <MenuHeader><h2>Content</h2></MenuHeader>
         <Menu>
