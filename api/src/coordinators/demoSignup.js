@@ -14,12 +14,18 @@ import billingCoordinator from './billing'
 const { CLIENT_URL } = process.env
 
 async function createUsersAndOrganization(name, users) {
-  const owner = users.find((user) => {
+  const owners = users.filter((user) => {
     return user.role === ORGANIZATION_ROLE_IDS.OWNER
   })
 
+  if (owners.length > 1) {
+    throw ono({ code: 400, expose: true }, 'Organization can only have 1 owner')
+  }
+
+  const owner = owners[0]
+
   if (!owner) {
-    throw ono({ code: 400 }, 'Must set an owner for the demo account')
+    throw ono({ code: 400, expose: true }, 'Must set an owner for the demo account')
   }
 
   const organization = await BusinessOrganization.create({ name })

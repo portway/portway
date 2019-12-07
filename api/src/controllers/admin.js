@@ -1,4 +1,8 @@
-// Caution: admin controller routes have NO AUTH by default!
+// Caution: admin controller routes have NO AUTH by default! And no middleware outside of
+// catchall mounted middleware.
+//
+// This controller is directly loaded by the app, bypassing the controller loader
+import bodyParser from 'body-parser'
 import adminAuth from '../libs/auth/adminAuth'
 import demoSignupCoordinator from '../coordinators/demoSignup'
 
@@ -20,6 +24,7 @@ import demoSignupCoordinator from '../coordinators/demoSignup'
 
 const adminController = function(router) {
   router.post('/demoAccount',
+    bodyParser.json(),
     adminAuth,
     createAccount
   )
