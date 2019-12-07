@@ -50,14 +50,12 @@
 
   // Overwriting some values from _menu.scss
   .menu {
-    padding: 0;
-    width: var(--navigator-width);
+    background-color: var(--color-gray-80);
+
     &__item {
       align-items: center;
-      border-top: thin solid rgba(255, 255, 255, .03);
       display: flex;
-      font-size: 1.3rem;
-      padding: 4px 10px;
+      padding: .4rem 1.4rem;
       @media (hover: hover) {
         &:hover {
           background-color: rgba(255, 255, 255, .03);
@@ -76,6 +74,14 @@
         margin-right: var(--icon-margin);
       }
     }
+
+    &__footer {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+      padding: .4rem 1.4rem 0;
+    }
+
   }
 
   &__settings {
@@ -145,6 +151,7 @@
       }
       &__option {
         background-color: transparent !important; // I hate React-Select
+        color: var(--color-gray-2);
         cursor: pointer;
         padding: 6px 0;
         &--is-focused {

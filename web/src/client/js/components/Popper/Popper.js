@@ -22,7 +22,7 @@ export const Popper = ({ align, anchorRef, autoCollapse, children, open, placeme
     anchorRef.current.getBoundingClientRect() : 0
 
   const spacing = {
-    'top': 32,
+    'top': 48,
     'right': 12,
     'bottom': 64,
     'left': 12

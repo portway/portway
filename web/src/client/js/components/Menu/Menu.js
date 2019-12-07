@@ -4,13 +4,13 @@ import cx from 'classnames'
 
 import './_Menu.scss'
 
-export const Menu = ({ className, children }) => {
+export const Menu = ({ className, children, ...props }) => {
   const menuClasses = cx({
     'menu': true,
     [className]: className
   })
   return (
-    <ul className={menuClasses} role="menu" tabIndex="-1">
+    <ul className={menuClasses} role="menu" tabIndex="-1" {...props}>
       {children}
     </ul>
   )
