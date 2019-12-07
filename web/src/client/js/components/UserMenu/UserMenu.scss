@@ -7,7 +7,7 @@
     --user-menu-button-color: var(--color-gray-30);
   }
 
-  .btn--blank {
+  &__button {
     background-color: var(--user-menu-button-color);
     background-position: 50% 50%;
     background-repeat: no-repeat;
@@ -38,13 +38,11 @@
     }
   }
 
-  &__dropdown {
-    border-radius: 50% 50%;
-  }
-  &__banner {
+  .menu__header {
     background-color: var(--user-menu-banner-bg);
     padding: 8px 14px;
   }
+
   &__username {
     display: block;
     font-weight: 700;

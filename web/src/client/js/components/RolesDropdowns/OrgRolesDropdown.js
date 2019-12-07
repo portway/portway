@@ -1,28 +1,58 @@
-import React, { useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+
+import useClickOutside from 'Hooks/useClickOutside'
+import useBlur from 'Hooks/useBlur'
 
 import { ORGANIZATION_ROLE_NAMES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import { CaretIcon } from 'Components/Icons'
-import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
+import { Popper, PopperGroup } from 'Components/Popper/Popper'
+import { Menu, MenuItem } from 'Components/Menu/Menu'
 
 const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(ORGANIZATION_ROLE_NAMES[defaultValue])
-  const roleSelectorButton = {
-    label: permissionMenuLabel,
-    className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
-    icon: <CaretIcon />,
-    iconPlacement: 'after',
-    name: name
-  }
+  const [expanded, setExpanded] = useState(false)
+  const anchorRef = useRef()
+  const containerRef = useRef()
+
+  const collapseCallback = useCallback(() => {
+    setExpanded(false)
+  }, [])
+
+  useClickOutside(containerRef, collapseCallback)
+  useBlur(containerRef, collapseCallback)
+
   const adjustRoleHandler = (roleId) => {
     setPermissionMenuLabel(ORGANIZATION_ROLE_NAMES[roleId])
     onChange(roleId)
   }
   return (
-    <DropdownComponent align={align} autoCollapse={true} button={roleSelectorButton} className="org-roles" disabled={disabled}>
-      <DropdownItem label={ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.USER]} onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) } />
-      <DropdownItem label={ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.ADMIN]} onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.ADMIN) } />
-    </DropdownComponent>
+    <PopperGroup anchorRef={containerRef}>
+      <button
+        aria-expanded={expanded}
+        aria-haspopup="true"
+        aria-controls="org-roles-dropdown"
+        className="btn btn--white btn--with-icon"
+        onClick={() => setExpanded(true)}
+      >
+        <span className="label">{permissionMenuLabel}</span>
+        <CaretIcon />
+      </button>
+      <Popper id="org-roles-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
+        <Menu>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) }>
+              {ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.USER]}
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.ADMIN) }>
+              {ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.ADMIN]}
+            </button>
+          </MenuItem>
+        </Menu>
+      </Popper>
+    </PopperGroup>
   )
 }
 

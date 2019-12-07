@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 import cx from 'classnames'
 
+import useClickOutside from 'Hooks/useClickOutside'
+import useBlur from 'Hooks/useBlur'
+
 import Constants from 'Shared/constants'
 import { MoreIcon, TimeIcon } from 'Components/Icons'
-import { DropdownItem, DropdownComponent } from 'Components/Dropdown/Dropdown'
+import { Popper, PopperGroup } from 'Components/Popper/Popper'
+import { Menu, MenuItem } from 'Components/Menu/Menu'
 
 const DocumentsListItem = ({
   disable,
@@ -18,6 +22,16 @@ const DocumentsListItem = ({
   unpublishDocumentHandler,
 }) => {
   const [draggedOver, setDraggedOver] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+  const containerRef = useRef()
+  const anchorRef = useRef()
+
+  const collapseCallback = useCallback(() => {
+    setExpanded(false)
+  }, [])
+
+  useClickOutside(containerRef, collapseCallback)
+  useBlur(containerRef, collapseCallback)
 
   function dropHandler(e) {
     e.preventDefault()
@@ -63,11 +77,6 @@ const DocumentsListItem = ({
     setDraggedOver(true)
   }
 
-  const dropdownButton = {
-    className: 'btn btn--blank btn--with-circular-icon',
-    icon: <MoreIcon />
-  }
-
   const documentClasses = cx({
     'documents-list__item': true,
     'documents-list__item--active': draggedOver
@@ -93,16 +102,55 @@ const DocumentsListItem = ({
             <span>{moment(document.updatedAt).fromNow()}</span>
           </time>
         </div>
-        <DropdownComponent align="right" button={dropdownButton} className="documents-list__document-dropdown">
-          <DropdownItem label="Unpublish document..." disabled={document.lastPublishedAt === null} type="button" onClick={(e) => {
-            e.preventDefault()
-            unpublishDocumentHandler(document)
-          }} />
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={(e) => {
-            e.preventDefault()
-            removeDocumentHandler(document)
-          }} />
-        </DropdownComponent>
+        <PopperGroup anchorRef={containerRef}>
+          <button
+            aria-expanded={expanded}
+            aria-haspopup="true"
+            aria-controls="document-options-menu"
+            aria-label="Document options menu"
+            className="btn btn--blank btn--with-circular-icon"
+            onClick={(e) => {
+              e.preventDefault()
+              setExpanded(true)
+            }}
+            ref={anchorRef}
+          >
+            <MoreIcon />
+          </button>
+          <Popper
+            id="document-options-menu"
+            align="right"
+            anchorRef={anchorRef}
+            autoCollapse={collapseCallback}
+            open={!expanded}
+          >
+            <Menu>
+              <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
+                <button
+                  className="btn btn--blank"
+                  disabled={document.lastPublishedAt === null}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    unpublishDocumentHandler(document)
+                  }}
+                >
+                  Unpublish document...
+                </button>
+              </MenuItem>
+              <MenuItem tabIndex="-1">
+                <button
+                  className="btn btn--blank btn--danger"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    removeDocumentHandler(document)
+                  }}
+                >
+                  Delete document...
+                </button>
+              </MenuItem>
+            </Menu>
+          </Popper>
+        </PopperGroup>
       </NavLink>
     </li>
   )

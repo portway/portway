@@ -141,7 +141,7 @@ class StripeComponent extends React.Component {
           </div>
         </div>
 
-        <div className="field-container" hidden="hidden">
+        <div className="field-container field-container__hidden">
           <div className="field">
             <label className="field__label" htmlFor="plan">
               Plan ID
@@ -149,7 +149,7 @@ class StripeComponent extends React.Component {
             <div className="field__control">
               <input
                 className="input is-static"
-                type="text"
+                type="hidden"
                 name="planId"
                 value="plan_ETYqFpkbcgDast"
                 disabled

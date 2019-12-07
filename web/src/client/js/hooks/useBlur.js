@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 function useBlur(ref, callback) {
   useEffect(() => {
     let timeOutId
+    if (!ref.current) return
     const currentRef = ref.current
 
     function blurHandler() {

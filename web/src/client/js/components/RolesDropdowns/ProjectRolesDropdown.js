@@ -1,35 +1,94 @@
-import React, { useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import Constants from 'Shared/constants'
-import { CaretIcon } from 'Components/Icons'
-import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
+import useClickOutside from 'Hooks/useClickOutside'
+import useBlur from 'Hooks/useBlur'
 
-const ProjectRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, onChange }) => {
-  const [permissionMenuLabel, setPermissionMenuLabel] = useState(Constants.PROJECT_ROLE_NAMES[defaultValue])
-  const roleSelectorButton = {
-    label: permissionMenuLabel,
-    className: `${buttonStyle === 'normal' ? 'btn--white' : 'btn--blank'} btn--with-icon`,
-    icon: <CaretIcon />,
-    iconPlacement: 'after',
-    name: name
-  }
+import { PROJECT_ROLE_IDS, PROJECT_ROLE_NAMES } from 'Shared/constants'
+import { CaretIcon } from 'Components/Icons'
+import { Popper, PopperGroup } from 'Components/Popper/Popper'
+import { Menu, MenuItem } from 'Components/Menu/Menu'
+
+const ProjectRolesDropdown = ({ defaultValue, onChange }) => {
+  const [permissionMenuLabel, setPermissionMenuLabel] = useState(PROJECT_ROLE_NAMES[defaultValue])
+  const [expanded, setExpanded] = useState(false)
+  const anchorRef = useRef()
+  const containerRef = useRef()
+
+  const collapseCallback = useCallback(() => {
+    setExpanded(false)
+  }, [])
+
+  useClickOutside(containerRef, collapseCallback)
+  useBlur(containerRef, collapseCallback)
+
   const adjustRoleHandler = (roleId) => {
-    setPermissionMenuLabel(Constants.PROJECT_ROLE_NAMES[roleId])
+    setPermissionMenuLabel(PROJECT_ROLE_NAMES[roleId])
     onChange(roleId)
   }
+
+  const buttonStyleOverride = {
+    display: 'block',
+    padding: '1rem 1.4rem',
+    whiteSpace: 'normal',
+  }
+
   return (
-    <DropdownComponent align={align} autoCollapse={true} button={roleSelectorButton} className="project-roles" disabled={disabled}>
-      <DropdownItem label={Constants.PROJECT_ROLE_NAMES[Constants.PROJECT_ROLE_IDS.READER]} onClick={() => adjustRoleHandler(Constants.PROJECT_ROLE_IDS.READER) }>
-        <p className="small">Project Readers can view all of the documents in this project, but that is all.</p>
-      </DropdownItem>
-      <DropdownItem label={Constants.PROJECT_ROLE_NAMES[Constants.PROJECT_ROLE_IDS.CONTRIBUTOR]} onClick={() => adjustRoleHandler(Constants.PROJECT_ROLE_IDS.CONTRIBUTOR) }>
-        <p className="small">Project Contributors can create, edit, publish, and delete documents within this project. They can also view API data.</p>
-      </DropdownItem>
-      <DropdownItem label={Constants.PROJECT_ROLE_NAMES[Constants.PROJECT_ROLE_IDS.ADMIN]} onClick={() => adjustRoleHandler(Constants.PROJECT_ROLE_IDS.ADMIN) }>
-        <p className="small">Project Contributors can create, edit, publish, and delete documents within this project. They can also view API data.</p>
-      </DropdownItem>
-    </DropdownComponent>
+    <PopperGroup anchorRef={containerRef}>
+      <button
+        aria-expanded={expanded}
+        aria-haspopup="true"
+        aria-controls="project-role-dropdown"
+        className="btn btn--white btn--with-icon"
+        onClick={() => setExpanded(true)}
+        ref={anchorRef}
+      >
+        <span className="label">{permissionMenuLabel}</span>
+        <CaretIcon />
+      </button>
+      <Popper id="project-role-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
+        <Menu>
+          <MenuItem>
+            <button
+              className="btn btn--blank"
+              onClick={() => adjustRoleHandler(PROJECT_ROLE_IDS.READER) }
+              style={buttonStyleOverride}
+            >
+              {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.READER]}
+              <p className="small">
+                Project Readers can view all of the documents in this project, but that is all.
+              </p>
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button
+              className="btn btn--blank"
+              onClick={() => adjustRoleHandler(PROJECT_ROLE_IDS.CONTRIBUTOR) }
+              style={buttonStyleOverride}
+            >
+              {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.CONTRIBUTOR]}
+              <p className="small">
+                Project Contributors can create, edit, publish, and delete documents within this
+                project. They can also view API data.
+              </p>
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button
+              className="btn btn--blank"
+              onClick={() => adjustRoleHandler(PROJECT_ROLE_IDS.ADMIN) }
+              style={buttonStyleOverride}
+            >
+              {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.ADMIN]}
+              <p className="small">
+                Project Contributors can create, edit, publish, and delete documents within this
+                project. They can also view API data.
+              </p>
+            </button>
+          </MenuItem>
+        </Menu>
+      </Popper>
+    </PopperGroup>
   )
 }
 
@@ -45,7 +104,7 @@ ProjectRolesDropdown.propTypes = {
 ProjectRolesDropdown.defaultProps = {
   align: 'left',
   buttonStyle: 'normal',
-  projectRoleId: Constants.PROJECT_ROLE_IDS.READER
+  projectRoleId: PROJECT_ROLE_IDS.READER
 }
 
 export default ProjectRolesDropdown
