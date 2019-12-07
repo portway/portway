@@ -62,4 +62,9 @@
     }
   }
 
+  // Flip the caret icon in the dropdown
+  .icon-caret {
+    transform: rotate(-180deg);
+  }
+
 }

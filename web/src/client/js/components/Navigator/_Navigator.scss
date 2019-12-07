@@ -87,6 +87,11 @@
   &__settings {
     color: var(--color-white);
     font-size: 1rem;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-white);
+      }
+    }
   }
 
   // The React Select container

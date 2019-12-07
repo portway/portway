@@ -9,7 +9,7 @@ import { CaretIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
 import { Menu, MenuItem } from 'Components/Menu/Menu'
 
-const ProjectRolesDropdown = ({ defaultValue, onChange }) => {
+const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(PROJECT_ROLE_NAMES[defaultValue])
   const [expanded, setExpanded] = useState(false)
   const anchorRef = useRef()
@@ -40,13 +40,14 @@ const ProjectRolesDropdown = ({ defaultValue, onChange }) => {
         aria-haspopup="true"
         aria-controls="project-role-dropdown"
         className="btn btn--white btn--with-icon"
+        disabled={disabled}
         onClick={() => setExpanded(true)}
         ref={anchorRef}
       >
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />
       </button>
-      <Popper id="project-role-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
+      <Popper id="project-role-dropdown" anchorRef={anchorRef} align={align} autoCollapse={collapseCallback} open={!expanded} width="300">
         <Menu>
           <MenuItem>
             <button
@@ -94,10 +95,8 @@ const ProjectRolesDropdown = ({ defaultValue, onChange }) => {
 
 ProjectRolesDropdown.propTypes = {
   align: PropTypes.oneOf(['left', 'right']),
-  buttonStyle: PropTypes.oneOf(['normal', 'blank']),
   defaultValue: PropTypes.number.isRequired,
   disabled: PropTypes.bool,
-  name: PropTypes.string,
   onChange: PropTypes.func.isRequired
 }
 

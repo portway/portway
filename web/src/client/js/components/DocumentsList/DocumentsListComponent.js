@@ -160,6 +160,9 @@ const DocumentsListComponent = ({
     'documents-list--creating': creating,
     'documents-list--dragged-over': dragActive
   })
+
+  const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
+
   return (
     <div
       className={classes}
@@ -179,7 +182,7 @@ const DocumentsListComponent = ({
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
-            <DocumentIcon width="32" height="32" />
+            <DocumentIcon fill={colorSurface} width="32" height="32" />
           </div>
           <h2 className="notice__headline">Get started</h2>
           <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>

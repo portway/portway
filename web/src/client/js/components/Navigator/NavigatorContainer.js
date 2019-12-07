@@ -79,10 +79,11 @@ const NavigatorContainer = ({ history, location }) => {
     // eslint-disable-next-line react/prop-types
     const { data, innerRef, innerProps, isFocused } = props
     const classnames = cx({
+      'menu__item': true,
       'menu__item--is-focused': isFocused
     })
     return (
-      <MenuItem className={classnames} ref={innerRef} {...innerProps}>
+      <div className={classnames} ref={innerRef} {...innerProps}>
         <ProjectIcon fill="#d2e0f2" />
         <components.Option {...props} />
         <ProjectPermission
@@ -98,7 +99,7 @@ const NavigatorContainer = ({ history, location }) => {
             Settings
           </Link>
         </ProjectPermission>
-      </MenuItem>
+      </div>
     )
   }
 
@@ -107,7 +108,7 @@ const NavigatorContainer = ({ history, location }) => {
       <Helmet>
         <title>{project ? project.name : 'My Projects'} –– {PRODUCT_NAME}</title>
       </Helmet>
-      <PopperGroup ref={nodeRef} className="navigator">
+      <PopperGroup anchorRef={nodeRef} className="navigator">
         <button
           aria-haspopup
           aria-expanded={expanded}
