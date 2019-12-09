@@ -6,11 +6,12 @@ import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
-import { PATH_PROJECT } from 'Shared/constants'
+import { PATH_DOCUMENT, PATH_PROJECT } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
 import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
-const SearchFieldComponent = ({ documents, project, projects, searchOptionsHandler }) => {
+const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsHandler, searchTerm }) => {
   const [expanded, setExpanded] = useState(false)
   const inputRef = useRef()
   const formRef = useRef()
@@ -34,17 +35,43 @@ const SearchFieldComponent = ({ documents, project, projects, searchOptionsHandl
           aria-haspopup="true"
           aria-controls="search-field"
           type="search"
-          onChange={searchOptionsHandler}
+          onChange={(e) => { searchOptionsHandler(e.target.value) }}
           onFocus={() => setExpanded(true)}
           placeholder="Search..."
           ref={inputRef}
         />
-        <Popper id="search-field" anchorRef={inputRef} open={!expanded}>
-          {documents === null &&
+        <Popper align="right" id="search-field" anchorRef={inputRef} open={!expanded}>
+          {isSearching &&
+          <MenuHeader>
+            <h2>Searching for “<i>{searchTerm}</i>” <SpinnerComponent /></h2>
+          </MenuHeader>
+          }
+          {searchTerm !== null && documents !== null && !isSearching &&
+          <MenuHeader>
+            <h2>Documents with “<i>{searchTerm}</i>”</h2>
+          </MenuHeader>
+          }
           <Menu>
-            <MenuHeader>
-              <h2>Projects</h2>
-            </MenuHeader>
+            {documents !== null && searchTerm !== null &&
+            Object.values(documents).map((document) => {
+              return (
+                <MenuItem key={document.id}>
+                  <Link
+                    className="btn btn--blank"
+                    key={`sf-${document.id}`}
+                    to={`${PATH_PROJECT}/${document.projectId}/${PATH_DOCUMENT}/${document.id}`}
+                  >
+                    {document.name}
+                  </Link>
+                </MenuItem>
+              )
+            })
+            }
+          </Menu>
+          <MenuHeader>
+            <h2>Projects</h2>
+          </MenuHeader>
+          <Menu>
             {Object.values(projects).map((project) => {
               return (
                 <MenuItem key={project.id}>
@@ -59,7 +86,6 @@ const SearchFieldComponent = ({ documents, project, projects, searchOptionsHandl
               )
             })}
           </Menu>
-          }
         </Popper>
       </PopperGroup>
     </form>
@@ -67,10 +93,11 @@ const SearchFieldComponent = ({ documents, project, projects, searchOptionsHandl
 }
 
 SearchFieldComponent.propTypes = {
-  documents: PropTypes.array,
-  project: PropTypes.object,
+  documents: PropTypes.object,
+  isSearching: PropTypes.bool,
   projects: PropTypes.object,
   searchOptionsHandler: PropTypes.func,
+  searchTerm: PropTypes.string,
 }
 
 export default SearchFieldComponent
