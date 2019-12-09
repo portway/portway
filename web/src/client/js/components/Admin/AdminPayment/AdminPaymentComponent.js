@@ -52,7 +52,7 @@ const AdminPaymentComponent = ({
     return (
       <div className="admin-payment">
         <>
-          <p>We don’t have payment on file</p>
+          <p>We don’t have payment information on file</p>
           <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Add Payment Info</button>
         </>
       </div>

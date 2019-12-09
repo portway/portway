@@ -10,6 +10,7 @@ import controllerLoader from './controllers/loader'
 import apiErrorHandler from './libs/middleware/apiErrorHandler'
 import noRouteHandler from './libs/middleware/noRouteHandler'
 import httpLogger from './libs/middleware/httpLogger'
+import adminController from './controllers/admin'
 
 // Check if required env vars are set the right format
 envVarValidation()
@@ -67,8 +68,13 @@ baseRouter.get('/', (req, res) => {
   res.json({ message: 'API Initialized' })
 })
 
-const router = express.Router()
+// Mount the admin router separately to keep it apart
+// from the API
+const adminRouter = express.Router()
+app.use('/admin', adminRouter)
+adminController(adminRouter)
 
+const router = express.Router()
 // Mount router at /api
 app.use('/api', router)
 
@@ -78,6 +84,7 @@ router.get('/', (req, res) => {
 })
 
 controllerLoader(router)
+
 
 // ERROR HANDLING - This should always be the last set of middleware!
 

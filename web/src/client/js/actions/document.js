@@ -26,6 +26,18 @@ export const fetchDocument = (documentId) => {
   }
 }
 
+export const searchDocuments = (projectId, searchValue) => {
+  return async (dispatch) => {
+    dispatch(Documents.initiateSearch(searchValue))
+    const { data, status } = await fetch(`projects/${projectId}/documents?search=`, searchValue)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
+      return
+    }
+    dispatch(Documents.receiveSearchResults(data))
+  }
+}
+
 export const createDocument = (projectId, history, body, options = {}) => {
   const { preventRedirect, createFieldWithBody } = options
 

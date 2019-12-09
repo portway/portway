@@ -17,4 +17,11 @@
     color: var(--color-blue);
   }
 
+  // Reduce the height of poppers on short screens
+  .popper {
+    @media screen and (max-height: 700px) {
+      max-height: 300px;
+    }
+  }
+
 }
