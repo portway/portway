@@ -9,6 +9,7 @@ import {
   PATH_PROJECTS,
   PRODUCT_NAME,
   PLAN_TYPES,
+  MULTI_USER_PLAN_TYPES
 } from 'Shared/constants'
 import { ArrowIcon, TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
@@ -63,7 +64,7 @@ const AdminDashboardComponent = ({ organization, section }) => {
               <ArrowIcon direction="left" /><span className="label">Back to Users</span>
             </Link>
             }
-            <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+            <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} aria-label="Users" isActive={isSubSection}>
                 <TeamsIcon width="22" height="22" /> <span className="label">Users</span>
               </NavLink>

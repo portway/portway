@@ -30,6 +30,26 @@ Multi User
   - Billing interval: `Monthly`
   - Trial Period: `0` days
 
+Single User Free
+  - Plan Nickname: `Single User Free`
+  - ID: `SINGLE_USER_FREE`
+  - Pricing: `Recurring Quantity`
+  - Currency: `USD`
+  - Does this pricing plan have multiple price tiers based on quantity? `No`
+  - Price per unit: `$0` per `seat`
+  - Billing interval: `Monthly`
+  - Trial Period: `0`
+
+Multi User Free
+  - Plan Nickname: `Multi User Free`
+  - ID: `MULTI_USER_FREE`
+  - Pricing: `Recurring Quantity`
+  - Currency: `USD`
+  - Does this pricing plan have multiple price tiers based on quantity? `No`
+  - Price per unit: `$0` per `seat`
+  - Billing interval: `Monthly`
+  - Trial Period: `0`
+
 ### Set API credentials
 
 In the Developers/API Keys section Stripe provides us with a `publishable key` and a `secret key`
