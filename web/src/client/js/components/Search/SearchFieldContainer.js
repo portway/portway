@@ -8,15 +8,27 @@ import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import { debounce } from 'Shared/utilities'
-import { searchDocuments } from 'Actions/document'
+import { clearSearch, searchDocuments } from 'Actions/search'
 import SearchFieldComponent from './SearchFieldComponent'
 
-const SearchFieldContainer = ({ documents, isSearching, searchDocuments, searchTerm }) => {
+const SearchFieldContainer = ({
+  clearSearch,
+  documents,
+  isSearching,
+  searchDocuments,
+  searchTerm
+}) => {
   const location = useLocation()
   const { data: projects } = useDataService(dataMapper.projects.list())
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
+
+  function clearSearchHandler(inputValue) {
+    if (inputValue.trim() === '') {
+      clearSearch()
+    }
+  }
 
   const searchOptionsHandler = debounce(200, (inputValue) => {
     if (project.id && inputValue !== searchTerm) {
@@ -26,6 +38,7 @@ const SearchFieldContainer = ({ documents, isSearching, searchDocuments, searchT
 
   return (
     <SearchFieldComponent
+      clearSearchHandler={clearSearchHandler}
       documents={documents}
       isSearching={isSearching}
       projects={projects}
@@ -36,6 +49,7 @@ const SearchFieldContainer = ({ documents, isSearching, searchDocuments, searchT
 }
 
 SearchFieldContainer.propTypes = {
+  clearSearch: PropTypes.func,
   documents: PropTypes.object,
   isSearching: PropTypes.bool,
   searchTerm: PropTypes.string,
@@ -50,6 +64,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { searchDocuments }
+const mapDispatchToProps = { clearSearch, searchDocuments }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFieldContainer)

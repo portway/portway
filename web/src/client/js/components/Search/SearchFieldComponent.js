@@ -11,7 +11,14 @@ import { Popper, PopperGroup } from 'Components/Popper/Popper'
 import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
-const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsHandler, searchTerm }) => {
+const SearchFieldComponent = ({
+  clearSearchHandler,
+  documents,
+  isSearching,
+  projects,
+  searchOptionsHandler,
+  searchTerm
+}) => {
   const [expanded, setExpanded] = useState(false)
   const inputRef = useRef()
   const formRef = useRef()
@@ -35,6 +42,7 @@ const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsH
           aria-haspopup="true"
           aria-controls="search-field"
           type="search"
+          onBlur={(e) => { clearSearchHandler(e.target.value) }}
           onChange={(e) => { searchOptionsHandler(e.target.value) }}
           onFocus={() => setExpanded(!expanded)}
           placeholder="Search..."
@@ -51,9 +59,9 @@ const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsH
             <h2>Documents with “<i>{searchTerm}</i>”</h2>
           </MenuHeader>
           }
+          {documents !== null && searchTerm !== null &&
           <Menu>
-            {documents !== null && searchTerm !== null &&
-            Object.values(documents).map((document) => {
+            {Object.values(documents).map((document) => {
               return (
                 <MenuItem key={document.id}>
                   <Link
@@ -65,9 +73,9 @@ const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsH
                   </Link>
                 </MenuItem>
               )
-            })
-            }
+            })}
           </Menu>
+          }
           <MenuHeader>
             <h2>Projects</h2>
           </MenuHeader>
@@ -93,6 +101,7 @@ const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsH
 }
 
 SearchFieldComponent.propTypes = {
+  clearSearchHandler: PropTypes.func,
   documents: PropTypes.object,
   isSearching: PropTypes.bool,
   projects: PropTypes.object,
