@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FixStyleOnlyEntriesPlugin = require('webpack-fix-style-only-entries')
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
@@ -14,6 +13,7 @@ const SharedConfig = {
     Libs: path.resolve(__dirname, '../src/client/js/libs'),
     Sections: path.resolve(__dirname, '../src/client/js/sections'),
     Shared: path.resolve(__dirname, '../src/shared'),
+    Loc: path.resolve(__dirname, '../src/client/js/loc'),
     Utilities: path.resolve(__dirname, '../src/client/js/utilities'),
   },
   plugins: [

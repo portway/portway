@@ -10,6 +10,10 @@
       height: 24px;
       width: 24px;
     }
+    .label {
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
     &[aria-expanded="true"] {
       .icon {
         animation-fill-mode: forwards;
@@ -46,14 +50,12 @@
 
   // Overwriting some values from _menu.scss
   .menu {
-    padding: 0;
-    width: var(--navigator-width);
+    background-color: var(--color-gray-80);
+
     &__item {
       align-items: center;
-      border-top: thin solid rgba(255, 255, 255, .03);
       display: flex;
-      font-size: 1.3rem;
-      padding: 4px 10px;
+      padding: .4rem 1.4rem;
       @media (hover: hover) {
         &:hover {
           background-color: rgba(255, 255, 255, .03);
@@ -72,11 +74,24 @@
         margin-right: var(--icon-margin);
       }
     }
+
+    &__footer {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+      padding: .4rem 1.4rem 0;
+    }
+
   }
 
   &__settings {
     color: var(--color-white);
     font-size: 1rem;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-white);
+      }
+    }
   }
 
   // The React Select container
@@ -141,6 +156,7 @@
       }
       &__option {
         background-color: transparent !important; // I hate React-Select
+        color: var(--color-gray-2);
         cursor: pointer;
         padding: 6px 0;
         &--is-focused {

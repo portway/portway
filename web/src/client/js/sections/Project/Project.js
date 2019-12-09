@@ -8,8 +8,8 @@ import { PATH_PROJECT, PATH_DOCUMENT } from 'Shared/constants'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
-import ContentMenuContainer from 'Components/ContentMenu/ContentMenuContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
+import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbarContainer'
 
 const Project = ({ isFullScreen }) => {
   const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
@@ -20,10 +20,10 @@ const Project = ({ isFullScreen }) => {
     'project__documents-list-container--document-only': isDocumentView && isDocumentView.isExact,
   })
   const documentsClasses = cx({
-    'project__documents-document-container': true,
-    'project__documents-document-container--list-only': isDocumentList && isDocumentList.isExact,
-    'project__documents-document-container--document-only': isDocumentView && isDocumentView.isExact,
-    'project__documents-document-container--full-screen': isFullScreen
+    'project__document-container': true,
+    'project__document-container--list-only': isDocumentList && isDocumentList.isExact,
+    'project__document-container--document-only': isDocumentView && isDocumentView.isExact,
+    'project__document-container--full-screen': isFullScreen
   })
 
   useEffect(() => {
@@ -41,18 +41,18 @@ const Project = ({ isFullScreen }) => {
 
   return (
     <main className="project">
-      <div className="project__documents">
+      <>
         {!isFullScreen &&
         <div className={listClasses}>
           <DocumentsListContainer />
+          <ProjectToolbarContainer />
         </div>
         }
         <div className={documentsClasses}>
           <DocumentContainer />
-          <ContentMenuContainer />
+          <DocumentToolbarContainer />
         </div>
-      </div>
-      <ProjectToolbarContainer />
+      </>
     </main>
   )
 }

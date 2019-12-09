@@ -3,6 +3,7 @@ import { ActionTypes } from '../actions'
 const initialState = {
   currentDocumentId: null,
   projectDocumentsById: {},
+  documentSearchResults: null,
   loading: {
     byProject: {},
     byId: {}
@@ -120,6 +121,21 @@ export const documents = (state = initialState, action) => {
         name: action.data.name,
         updatedAt: action.data.updatedAt,
         lastPublishedAt: action.data.lastPublishedAt
+      }
+      const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
+      return {
+        ...state,
+        projectDocumentsById
+      }
+    }
+    // Remove the published value
+    case ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT: {
+      const listDoc = state.projectDocumentsById[action.data.projectId][action.data.id]
+      const updatedDoc = {
+        ...listDoc,
+        lastPublishedAt: action.data.lastPublishedAt,
+        publishedVersionId: action.data.publishedVersionId,
       }
       const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }

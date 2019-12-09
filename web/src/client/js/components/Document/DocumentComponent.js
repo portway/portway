@@ -1,22 +1,21 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
+import { DOCUMENT_MODE, PATH_PROJECT } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { ExpandIcon, MoreIcon, PublishIcon } from 'Components/Icons'
+import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
-import { DropdownComponent, DropdownItem } from 'Components/Dropdown/Dropdown'
-import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
 import './_Document.scss'
 
 const DocumentComponent = ({
   document,
+  documentMode,
   isFullScreen,
-  isPublishing,
   nameChangeHandler,
-  publishDocumentHandler,
-  removeDocumentHandler,
+  toggleDocumentMode,
   toggleFullScreenHandler,
 }) => {
   const titleRef = useRef()
@@ -38,20 +37,21 @@ const DocumentComponent = ({
   })
 
   const docKey = document ? document.id : 0
-  const dropdownButton = {
-    className: 'btn btn--blank btn--with-circular-icon',
-    icon: <MoreIcon />
-  }
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
   })
   return (
     <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
+      <div className="document__navigation">
+        <Link className="btn btn--blank" to={`${PATH_PROJECT}/${document.projectId}`}>
+          <ArrowIcon direction="left" width="12" height="12" /> Back to project
+        </Link>
+      </div>
       <header className="document__header">
         <button
           aria-label="Expand the editor to full screen"
-          className="btn btn--blank document__button-expand"
+          className="btn btn--blank btn--with-circular-icon document__button-expand"
           onClick={() => {
             // This has to be here because of Safari
             // You have to call fullscreen functions on the actual element onClick
@@ -69,7 +69,7 @@ const DocumentComponent = ({
           <ExpandIcon />
         </button>
         <div className="document__title-container">
-          <textarea
+          <input
             className="document__title"
             defaultValue={document.name}
             onChange={(e) => {
@@ -84,19 +84,16 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
-        <button
-          className="btn btn--small btn--with-icon"
-          disabled={isPublishing}
-          onClick={publishDocumentHandler}
-          title="Publish this version">
-          {isPublishing && <SpinnerComponent width="12" height="12" color="#ffffff" />}
-          {!isPublishing && <PublishIcon fill="#ffffff" />}
-          <span className="label">Publish</span>
-        </button>
-        <DropdownComponent align="right" button={dropdownButton} className="document__document-dropdown">
-          <DropdownItem label="Duplicate document" type="button" />
-          <DropdownItem label="Delete document..." type="button" className="btn--danger" divider onClick={() => { removeDocumentHandler() }} />
-        </DropdownComponent>
+        <div className="document__toggle-container">
+          <button className="btn btn--blank" onClick={toggleDocumentMode} title="Re-order or remove fields">
+            {documentMode === DOCUMENT_MODE.NORMAL &&
+            <SettingsIcon />
+            }
+            {documentMode === DOCUMENT_MODE.EDIT &&
+            <>Done</>
+            }
+          </button>
+        </div>
       </header>
       <DocumentFieldsContainer />
     </div>
@@ -106,11 +103,10 @@ const DocumentComponent = ({
 // @todo fill out this document object and add defaults
 DocumentComponent.propTypes = {
   document: PropTypes.object,
+  documentMode: PropTypes.string,
   isFullScreen: PropTypes.bool.isRequired,
-  isPublishing: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
-  publishDocumentHandler: PropTypes.func.isRequired,
-  removeDocumentHandler: PropTypes.func.isRequired,
+  toggleDocumentMode: PropTypes.func.isRequired,
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 

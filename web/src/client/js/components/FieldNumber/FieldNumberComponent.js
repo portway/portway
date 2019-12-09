@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './FieldNumber.scss'
-
 const FieldNumberComponent = ({ field, onChange }) => {
   return (
     <input
-      className="h-second-level"
+      className="document-field__number"
       defaultValue={field.value}
       onChange={(e) => { onChange(field.id, Number.parseFloat(e.target.value)) }}
       onFocus={(e) => { e.target.select() }}

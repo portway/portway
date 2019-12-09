@@ -2,8 +2,6 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
-import FilterComponent from './FilterComponent'
-import SortComponent from './SortComponent'
 
 import './Toolbar.scss'
 
@@ -26,8 +24,6 @@ const ToolbarComponent = ({ action, filter, sort }) => {
         </button>
       </div>
       <div className="toolbar__end">
-        {filter && <FilterComponent />}
-        {sort && <SortComponent />}
       </div>
     </header>
   )

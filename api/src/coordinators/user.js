@@ -29,6 +29,8 @@ async function updatePassword(userId, currentPassword, newPassword, confirmNewPa
   const hashedPassword = await passwords.generateHash(newPassword)
 
   await BusinessUser.updateById(userId, { password: hashedPassword }, orgId)
+
+  emailCoordinator.sendPasswordChangeEmail(user.email)
 }
 
 async function setInitialPassword(id, password) {

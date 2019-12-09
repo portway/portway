@@ -2,15 +2,19 @@
 :root {
   // Border-radius should be the same everywhere
   --border-radius: 2px;
-  --box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --box-shadow: 0 2px 6px 0 rgba(102, 102, 102, 0.40);
   // brandWidth and gutter width are for the side gutters, and side boxes of the header
   // we use this measurement in a bunch of places, usually dividing or multiplying by it
   --brand-width: 64px;
   --gutter-width: 64px;
+  --popover-spacing: 64px;
   // This is the top ribbon and header height
   --ribbon-height: 6px;
   --header-height: 65px;
   // Icon margin is usually used when an icon is next to some type
+  @media (prefers-color-scheme: dark) {
+    --box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .9);
+  }
 }
 
 // For include-media

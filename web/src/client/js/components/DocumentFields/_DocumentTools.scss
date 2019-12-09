@@ -1,0 +1,72 @@
+/**
+ * Document Field Tools
+ * Tools is the left column of the editor that contains the dragger
+ * -------------------------------------------------------------------------- */
+.document-field__tools {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 2.4rem;
+  z-index: 2;
+}
+
+.document-field__dragger {
+  visibility: hidden; // because Safari was clipping shit
+
+  .document-field__tools--visible & {
+    visibility: visible; // because Safari was clipping shit
+  }
+
+  .btn {
+    margin: 0;
+    .icon {
+      border-radius: 1rem 1rem;
+      cursor: grab;
+      height: 3.2rem;
+      min-width: 1.8rem;
+      width: 1.8rem;
+
+      .document-field--dragging & {
+        cursor: grabbing;
+      }
+
+    }
+    @media (hover: hover) {
+      &:hover {
+        &:not([disabled]) {
+          .icon {
+            background-color: var(--button-icon-background);
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Document Field Actions
+ * Actions is the right column of the editor that contains the delete button
+ * or user faces
+ * -------------------------------------------------------------------------- */
+.document-field__actions {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 2.6rem;
+  z-index: 2;
+
+  .btn {
+    margin: 0;
+    visibility: hidden; // because Safari was clipping shit
+  }
+
+  &--visible {
+    .btn {
+      visibility: visible;
+    }
+  }
+
+}
+
+
+

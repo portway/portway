@@ -25,6 +25,10 @@
     }
   }
 
+  .field-container__hidden {
+    display: none;
+  }
+
   // Specific field__control for this component
   .field__control {
     &--card {

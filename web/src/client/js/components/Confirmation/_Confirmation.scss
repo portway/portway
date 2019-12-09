@@ -1,0 +1,79 @@
+@import 'CSS/inc/_include-media.scss';
+@import 'CSS/inc/_mixins.scss';
+
+.confirmation {
+  --modal-alpha-bg: rgba(255, 255, 255, .9);
+  --confirmation-bg: var(--color-white, white);
+  --confirmation-border: var(--color-gray-20, gray);
+  @media (prefers-color-scheme: dark) {
+    --modal-alpha-bg: hsla(223, 7%, 19%, .8);
+    --confirmation-bg: var(--theme-overlay-light, black);
+    --confirmation-border: var(--color-gray-80, gray);
+  }
+  align-items: center;
+  background-color: var(--modal-alpha-bg, white);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 15;
+
+  p {
+    margin: 0 0 1.8rem 0;
+  }
+
+  &__dialog {
+    background-color: var(--confirmation-bg, black);
+    border: thin solid var(--confirmation-border, gray);
+    border-radius: var(--border-radius, 8px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+    padding: 24px;
+    width: 75vw;
+    @include media('>medium') {
+      width: 50vw;
+    }
+  }
+
+  &__message {
+    color: var(--theme-text-color);
+    padding: 0 0 2rem;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column-reverse;
+    padding-top: 24px;
+    @include media('>medium') {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  // the typing to confirm bit
+  &__text {
+    margin: 2.8rem 0 0;
+  }
+
+  &__confirm {
+    font-weight: 700;
+  }
+
+  &__cancel {
+    color: var(--color-gray-40, gray);
+  }
+
+  .highlight {
+    color: var(--color-blue, gray);
+    font-weight: 700;
+    &.danger {
+      color: var(--color-red, red);
+    }
+    &.warning {
+      color: var(--color-orange, orange);
+    }
+  }
+
+}

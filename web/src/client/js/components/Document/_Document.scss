@@ -1,7 +1,11 @@
+@import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document {
   flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   position: relative;
 
   &__no-document {
@@ -11,32 +15,40 @@
     justify-content: center;
   }
 
+  &__navigation {
+    padding: 1rem 1.5rem .3rem;
+    a {
+      color: var(--color-gray-30);
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+    .icon {
+      svg {
+        path {
+          fill: var(--color-gray-30);
+        }
+      }
+    }
+    @include media('>medium') {
+      display: none;
+    }
+  }
+
   &__header {
     background-color: var(--theme-surface);
     align-items: center;
-    border-bottom: thin solid var(--base-border-color);
+    border-bottom: thin solid var(--theme-border-light);
     display: flex;
     height: 63px;
     justify-content: space-between;
     margin-bottom: calc(var(--brand-width) / 2);
-    padding: 0 calc(var(--brand-width) / 4) 0 0;
     position: sticky;
     top: 0;
     z-index: 10;
-
-    .dropdown {
-      padding-left: 1.2rem;
-    }
-
   }
 
   &__button-expand {
-    padding: 0 calc(var(--brand-width) / 8);
-    .icon-expand {
-      path {
-        fill: var(--color-gray-30);
-      }
-    }
+    padding: 0 1.9rem;
   }
 
   &__title-container {
@@ -51,14 +63,17 @@
     border: none;
     color: var(--color-brand-dark);
     flex: 1;
-    font-family: var(--type-serif);
+    // font-family: var(--type-serif);
     font-size: 1.8rem;
-    font-weight: 700;
+    font-weight: 500;
     height: 3rem;
     line-height: 3rem;
     padding: 0;
     outline: none;
+    overflow: hidden;
     resize: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     width: 100%;
     -webkit-appearance: none;
 
@@ -68,9 +83,8 @@
 
   }
 
-  &__publish-date {
-    color: var(--color-gray-7);
-    display: block;
+  &__toggle-container {
+    padding: 0 1.8rem;
   }
 
   &__fields {
@@ -91,10 +105,5 @@
     }
 
   }
-
-  // Validation for document
-  // .validation {
-    // background-color: var(--color-gray-5);
-  // }
 
 }

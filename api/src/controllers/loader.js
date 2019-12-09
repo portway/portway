@@ -46,7 +46,7 @@ const AUTHENTICATED_CONTROLLERS = {
     fileName: 'organizations',
     childRoutes: {
       '/:orgId/billing': { fileName: 'orgBilling', allowInactiveOrgAccess: true },
-      '/:orgId/plan': { fileName: 'orgPlan' },
+      '/:orgId/plan': { fileName: 'orgPlan', allowInactiveOrgAccess: true },
       '/:orgId/seats': { fileName: 'orgSeats' }
     },
     allowInactiveOrgAccess: true
@@ -68,18 +68,18 @@ const loadControllers = (router, controllers, middleware = [], routerOptions) =>
     const controllerRouter = express.Router(routerOptions)
     controller(controllerRouter)
 
-    let expandedMiddleware
-    // activate body parsing middleware for each route, default to json parsing, unless otherwise specified
+    const expandedMiddleware = [...middleware]
+    // activate body parsing middleware for each route, before other middleware.
+    // Default to json parsing, unless otherwise specified
     if (controllers[path].customBodyParsingMiddleware) {
-      expandedMiddleware = [...middleware, controllers[path].customBodyParsingMiddleware]
+      expandedMiddleware.unshift(controllers[path].customBodyParsingMiddleware)
     } else {
-      expandedMiddleware = [...middleware, bodyParser.json()]
+      expandedMiddleware.unshift(bodyParser.json())
     }
-    // activate subscription status check middleware for each route, default is to only allow active orgs access
-    // unless allowInactiveOrgAccess is set to true
-
+    // activate subscription status check middleware for each route, default is to only allow active
+    // orgs access unless allowInactiveOrgAccess is set to true
     if (!controllers[path].allowInactiveOrgAccess) {
-      expandedMiddleware = [...middleware, checkActiveOrgStatus]
+      expandedMiddleware.push(checkActiveOrgStatus)
     }
 
     router.use(path, ...expandedMiddleware, controllerRouter)

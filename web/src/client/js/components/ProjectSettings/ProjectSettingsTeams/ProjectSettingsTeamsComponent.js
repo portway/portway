@@ -26,13 +26,13 @@ const ProjectSettingsTeamsComponent = ({
   const [newUserRole, setNewUserRole] = useState(PROJECT_ROLE_IDS.READER)
 
   return (
-    <form className="project-settings__teams" onSubmit={(e) => { e.preventDefault() }}>
+    <form className="project-settings__teams form" onSubmit={(e) => { e.preventDefault() }}>
       <section>
         <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><ArrowIcon direction="left" /> Back to Project</Link>
         <h2>Manage your team</h2>
         <h3>Add a teammate to this project</h3>
         <p>Once you add a team member, choose their role for the project</p>
-        <div className="field-container field-container--row">
+        <div className="field-container field-container--row field-container--large">
           <div className="field">
             <label htmlFor="team-list">Select a team member</label>
             <div className="field__control project-settings__teammate-field">

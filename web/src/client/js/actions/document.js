@@ -6,7 +6,7 @@ import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '.
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
-    const { data, status } = await fetch(`projects/${projectId}/documents`)
+    const { data, status } = await fetch(`projects/${projectId}/documents?draft=true`)
     globalErrorCodes.includes(status) ?
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status)) :
       dispatch(Documents.receiveList(projectId, data))
@@ -23,7 +23,21 @@ export const fetchDocument = (documentId) => {
   }
 }
 
-export const createDocument = (projectId, history, body, preventRedirect = false, withBody = null) => {
+export const searchDocuments = (projectId, searchValue) => {
+  return async (dispatch) => {
+    dispatch(Documents.initiateSearch(searchValue))
+    const { data, status } = await fetch(`projects/${projectId}/documents?search=`, searchValue)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
+      return
+    }
+    dispatch(Documents.receiveSearchResults(data))
+  }
+}
+
+export const createDocument = (projectId, history, body, options = {}) => {
+  const { preventRedirect, createFieldWithBody } = options
+
   return async (dispatch) => {
     dispatch(Documents.create(projectId, body))
     const { data, status } = await add(`projects/${projectId}/documents`, body)
@@ -35,13 +49,17 @@ export const createDocument = (projectId, history, body, preventRedirect = false
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    if (withBody) {
-      await dispatch(createField(projectId, data.id, FIELD_TYPES.TEXT, {
-        name: 'text-area-1',
-        type: FIELD_TYPES.TEXT,
-        value: withBody
-      }))
+    const createFieldBody = {
+      name: 'text-area-1',
+      type: FIELD_TYPES.TEXT
     }
+    if (typeof createFieldWithBody === 'string') {
+      createFieldBody.value = createFieldWithBody
+    }
+    await dispatch(
+      createField(projectId, data.id, FIELD_TYPES.TEXT, createFieldBody)
+    )
+
     dispatch(Documents.receiveOneCreated(data))
     if (!preventRedirect) {
       history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
@@ -72,6 +90,18 @@ export const updateDocument = (projectId, documentId, body) => {
     validationCodes.includes(status) ?
       dispatch(Validation.create('document', data, status)) :
       dispatch(Documents.receiveOneUpdated(data))
+  }
+}
+
+export const unpublishDocument = (documentId) => {
+  return async (dispatch) => {
+    dispatch(Documents.unpublish(documentId))
+    const { data, status } = await add(`documents/${documentId}/unpublish`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    dispatch(Documents.receiveUnpublishedVersion(data))
   }
 }
 

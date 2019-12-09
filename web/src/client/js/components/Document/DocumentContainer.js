@@ -4,24 +4,21 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { uiConfirm, uiToggleFullScreen } from 'Actions/ui'
-import { deleteDocument, publishDocument, updateDocument } from 'Actions/document'
+import { uiToggleDocumentMode, uiToggleFullScreen } from 'Actions/ui'
+import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
-import Constants from 'Shared/constants'
 
-import { PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
+import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 
 const DocumentContainer = ({
-  deleteDocument,
-  documents,
-  history,
+  documentMode,
+  isCreating,
   isFullScreen,
   location,
   match,
-  publishDocument,
-  uiConfirm,
+  uiToggleDocumentMode,
   uiToggleFullScreen,
   updateDocument,
 }) => {
@@ -37,7 +34,7 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (documents.creating || match.params.documentId === Constants.PATH_DOCUMENT_NEW_PARAM) {
+  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
   }
 
@@ -60,19 +57,14 @@ const DocumentContainer = ({
       })
     }
   }
-  function publishDocumentHandler() {
-    publishDocument(document.id)
-  }
-  function removeDocumentHandler() {
-    const message = (
-      <span> Delete the document <span className="highlight">{document.name}</span> and all of its fields?</span>
-    )
-    const confirmedLabel = `Yes, delete this document`
-    const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
-  }
+
   function toggleFullScreenHandler(e) {
     uiToggleFullScreen(!isFullScreen)
+  }
+
+  function toggleDocumentMode(e) {
+    const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
+    uiToggleDocumentMode(mode)
   }
 
   return (
@@ -83,44 +75,40 @@ const DocumentContainer = ({
 
       <DocumentComponent
         document={document}
+        documentMode={documentMode}
         isFullScreen={isFullScreen}
-        isPublishing={documents.isPublishing}
         nameChangeHandler={nameChangeHandler}
-        publishDocumentHandler={publishDocumentHandler}
-        removeDocumentHandler={removeDocumentHandler}
+        toggleDocumentMode={toggleDocumentMode}
         toggleFullScreenHandler={toggleFullScreenHandler} />
     </>
   )
 }
 
 DocumentContainer.propTypes = {
-  deleteDocument: PropTypes.func.isRequired,
-  documents: PropTypes.object.isRequired,
+  documentMode: PropTypes.string,
   fields: PropTypes.object,
-  history: PropTypes.object.isRequired,
+  isCreating: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  publishDocument: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired,
+  uiToggleDocumentMode: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
+    documentMode: state.ui.document.documentMode,
     fields: state.documentFields[state.documents.currentDocumentId],
-    documents: state.ui.documents,
+    isCreating: state.ui.documents.creating,
     isFullScreen: state.ui.document.isFullScreen
   }
 }
 
 const mapDispatchToProps = {
-  deleteDocument,
-  publishDocument,
   updateDocument,
-  uiConfirm,
-  uiToggleFullScreen
+  uiToggleDocumentMode,
+  uiToggleFullScreen,
 }
 
 export default withRouter(

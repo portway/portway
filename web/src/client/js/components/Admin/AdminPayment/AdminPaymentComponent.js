@@ -52,7 +52,7 @@ const AdminPaymentComponent = ({
     return (
       <div className="admin-payment">
         <>
-          <p>We don’t have payment on file</p>
+          <p>We don’t have payment information on file</p>
           <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Add Payment Info</button>
         </>
       </div>
@@ -95,7 +95,7 @@ const AdminPaymentComponent = ({
             <span>Expires: </span>
             <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
           </div>
-          <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
+          <button className="btn btn--like-a-link" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
         </>
         }
       </div>

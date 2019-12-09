@@ -6,13 +6,24 @@
   --document-list-item-hover: var(--theme-overlay-light);
   --document-list-item-new: var(--theme-base);
 
-  min-height: 100%;
+  // min-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
   .toolbar {
     background-color: var(--theme-surface);
-    border-bottom: thin solid var(--base-border-color);
+    border-bottom: thin solid var(--theme-border-light);
+    height: 63px;
     position: sticky;
     top: 0;
+    z-index: 100;
+
+    &__start {
+      padding-left: calc(var(--gutter-width) / 4);
+    }
+    &__end {
+      padding-right: calc(var(--gutter-width) / 6);
+    }
   }
 
   &--dragged-over {
@@ -35,7 +46,7 @@
   }
 
   &__empty-state {
-    border-top: thin solid var(--base-border-color);
+    border-top: thin solid var(--theme-border-light);
     padding: calc(var(--gutter-width) / 4);
   }
   &__empty-state-content {
@@ -58,8 +69,9 @@
     margin: 0;
     padding: 0;
   }
+
   &__item {
-    border-top: thin solid var(--base-border-color);
+    border-top: thin solid var(--theme-border-light);
     @media (prefers-reduced-motion: no-preference) {
       transition: opacity 0.2s ease-in-out;
     }
@@ -75,7 +87,7 @@
     }
     // New item is a fake list item
     &--new {
-      border-bottom: thin solid var(--base-border-color);
+      border-bottom: thin solid var(--theme-border-light);
       border-top: none;
       .documents-list__button {
         align-items: flex-start;
@@ -108,6 +120,9 @@
         padding-bottom: 0;
         padding-top: 8px;
         resize: none;
+        &::selection {
+          background-color: var(--color-yellow);
+        }
       }
       &:focus {
         background-color: var(--document-list-active-item);
@@ -116,8 +131,8 @@
   }
   &__button {
     align-items: flex-start;
-    flex-direction: column;
-    padding: calc(var(--gutter-width) / 4);
+    flex-direction: row;
+    padding: calc(var(--gutter-width) / 5) calc(var(--gutter-width) / 4);
     white-space: normal;
     width: 100%;
     &:not([disabled]) {
@@ -129,6 +144,9 @@
     }
     &.active {
       background-color: var(--document-list-active-item);
+      // .icon {
+      //   background-color: var(--color-gray-5);
+      // }
       &:not([disabled]) {
         @media (hover: hover) {
           &:hover {
@@ -144,25 +162,26 @@
   &__name {
     border: 0;
     color: var(--theme-text-color);
+    display: block;
     font-weight: 400;
-    padding-bottom: calc(var(--gutter-width) / 4);
+    padding-bottom: 6px;
     .active & {
       color: var(--theme-header-color);
     }
   }
   &__date {
     align-items: center;
-    color: var(--theme-text-color);
+    color: var(--color-gray-40);
     display: flex;
     .active & {
       color: var(--color-gray-30);
     }
     .icon {
-      height: 16px;
+      min-height: 13px;
       margin-right: var(--icon-margin);
-      width: 16px;
-      g {
-        stroke: var(--color-gray-15);
+      min-width: 13px;
+      path {
+        fill: var(--color-gray-40);
       }
     }
   }
@@ -185,6 +204,23 @@
         }
       }
     }
+  }
+
+}
+
+
+.documents-list__name-container {
+  flex: 1;
+}
+
+.documents-list__document-dropdown {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  width: 48px;
+
+  .menu {
+    top: 3rem;
   }
 
 }

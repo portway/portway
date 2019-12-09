@@ -2,73 +2,86 @@ import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import useClickOutside from 'Hooks/useClickOutside'
-import { AddIcon } from 'Components/Icons'
-import './ContentMenu.scss'
+import useBlur from 'Hooks/useBlur'
+import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
-const ContentMenuComponent = ({ createFieldHandler, fields }) => {
+import { AddIcon, TextIcon, StringIcon, ImageIcon, NumberIcon } from 'Components/Icons'
+import { FIELD_TYPES } from 'Shared/constants'
+import { Popper, PopperGroup } from 'Components/Popper/Popper'
+import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
+
+const ContentMenuComponent = ({ createFieldHandler }) => {
   const [expanded, setExpanded] = useState(false)
-  const menuRef = useRef()
-  const contentRef = useRef()
+  const containerRef = useRef()
+  const anchorRef = useRef()
+
   const collapseCallback = useCallback(() => {
-    contentRef.current.scrollTop = 0
     setExpanded(false)
   }, [])
-  useClickOutside(menuRef, collapseCallback)
 
-  function renderFields(fieldGroup) {
-    return fields[fieldGroup].map((field) => {
-      function clickHandler() {
-        setExpanded(false)
-        contentRef.current.scrollTop = 0
-        createFieldHandler(field.key)
-      }
-      return (
-        <li className="content-menu__list-item" key={`item-${field.label}`}>
-          <button className="btn btn--blank btn--with-icon content-menu__item-button" onClick={() => { clickHandler() }}>
-            {field.icon}
-            <span className="label">{field.label}</span>
-          </button>
-        </li>
-      )
-    })
-  }
+  const toggleCallback = useCallback(() => {
+    anchorRef.current.focus()
+  }, [])
 
-  function renderFieldGroups() {
-    const fieldGroups = []
-    Object.keys(fields).forEach((fieldGroup) => {
-      fieldGroups.push(
-        <div className="content-menu__group" key={`group-${fieldGroup}`}>
-          <span className="content-menu__group-name">{fieldGroup}</span>
-          <ul className="content-menu__list" key={fieldGroup}>
-            {renderFields(fieldGroup)}
-          </ul>
-        </div>
-      )
-    })
-    return fieldGroups
-  }
+  useClickOutside(containerRef, collapseCallback)
+  useBlur(containerRef, collapseCallback)
+  useKeyboardShortcut('+', toggleCallback)
 
   return (
-    <div className="content-menu" ref={menuRef}>
+    <PopperGroup className="document-menu" anchorRef={containerRef}>
       <button
-        className="btn btn--blank btn--with-circular-icon content-menu__button"
-        aria-haspopup
         aria-expanded={expanded}
+        aria-haspopup="true"
+        aria-controls="content-menu"
         aria-label="Add a field"
-        onClick={() => { setExpanded(!expanded) }}
-        title="Add a custom field to your document">
-        <AddIcon fill="#ffffff" width="24" height="24" />
+        className="btn btn--blank btn--with-circular-icon document-menu__button"
+        onClick={() => setExpanded(!expanded)}
+        ref={anchorRef}
+        title="Add a field"
+      >
+        <AddIcon width="24" height="24" />
       </button>
-      <div className="content-menu__content" hidden={!expanded} ref={contentRef}>
-        {renderFieldGroups()}
-      </div>
-    </div>
+      <Popper
+        id="content-menu"
+        anchorRef={anchorRef}
+        autoCollapse={collapseCallback}
+        open={!expanded}
+        placement="bottom"
+        width="130"
+      >
+        <MenuHeader><h2>Content</h2></MenuHeader>
+        <Menu>
+          <MenuItem tabIndex="0">
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }}>
+              <TextIcon width="26" height="26" /> <span className="label">Body</span>
+            </button>
+          </MenuItem>
+          <MenuItem tabIndex="-1">
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.IMAGE) }}>
+              <ImageIcon width="26" height="26" /> <span className="label">Photo</span>
+            </button>
+          </MenuItem>
+        </Menu>
+        <MenuHeader><h2>Data</h2></MenuHeader>
+        <Menu>
+          <MenuItem>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.STRING) }}>
+              <StringIcon width="26" height="26" /> <span className="label">String</span>
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.NUMBER) }}>
+              <NumberIcon width="26" height="26" /> <span className="label">Number</span>
+            </button>
+          </MenuItem>
+        </Menu>
+      </Popper>
+    </PopperGroup>
   )
 }
 
 ContentMenuComponent.propTypes = {
   createFieldHandler: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired
 }
 
 export default ContentMenuComponent

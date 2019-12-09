@@ -24,6 +24,12 @@ async function createUserAndOrganization(name, email) {
   })
 
   const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}`, email })
+
+  await BusinessOrganization.updateById(organization.id, {
+    ownerId: createdUser.id,
+    stripeId: customer.id
+  })
+
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
     planId: PLANS.SINGLE_USER,
@@ -31,14 +37,9 @@ async function createUserAndOrganization(name, email) {
     orgId: organization.id
   })
 
-  await BusinessOrganization.updateById(organization.id, {
-    ownerId: createdUser.id,
-    stripeId: customer.id
-  })
-
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
 
-  const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
+  const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
   const htmlBody = `
     <H2>Here's your link to finish signing up for Portway:</h2>

@@ -37,7 +37,7 @@ const AdminSeatsComponent = ({
           >
             {usedSeats}/{totalSeats}
           </meter>
-          <button className="btn btn--small" onClick={() => { setManageMode(true) }}>
+          <button className="btn btn--like-a-link" onClick={() => { setManageMode(true) }}>
             Change the number of seats
           </button>
         </div>

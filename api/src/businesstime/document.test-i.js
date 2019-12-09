@@ -7,6 +7,7 @@ import initializeTestDb, { clearDb } from '../db/__testSetup__/initializeTestDb'
 import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import { FIELD_TYPES } from '../constants/fieldTypes'
 
 describe('BusinessDocument', () => {
   let factoryProject
@@ -108,13 +109,23 @@ describe('BusinessDocument', () => {
   })
 
   describe('document fetching', () => {
+    let searchDocOne
+    let searchDocTwo
+    let searchTextFieldDoc
     let factoryDocuments
     let factoryProject
+    const searchTextValue = 'abbacadaba'
 
     beforeAll(async () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
-      factoryDocuments = await DocumentFactory.createMany(5, { projectId: factoryProject.id })
+      const nonSearchDocuments = await DocumentFactory.createMany(2, { projectId: factoryProject.id, name: 'no-search' })
+      searchDocOne = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'razzy' }))[0]
+      searchDocTwo = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'pizza' }))[0]
+      searchTextFieldDoc = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, name: 'search-text-field-doc' }))[0]
+      await FieldFactory.createMany(1, { documentId: searchTextFieldDoc.id, type: FIELD_TYPES.TEXT, value: searchTextValue })
+      factoryDocuments = [...nonSearchDocuments, searchDocOne, searchDocTwo, searchTextFieldDoc]
+
       await DocumentFactory.createMany(2, {
         projectId: factoryProject.id,
         orgId: constants.ORG_2_ID
@@ -138,6 +149,80 @@ describe('BusinessDocument', () => {
           expect(document.constructor).toBe(Object)
           expect(typeof document.projectId).toBe('number')
           expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
+        }
+      })
+
+      describe('when passed a search option', () => {
+        describe('when the search string matches doc names', () => {
+          beforeAll(async () => {
+            documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: 'zz' })
+          })
+
+          it('should only return documents partially matching the search string', () => {
+            expect(documents.length).toEqual(2)
+            expect([documents[0].name, documents[1].name].sort()).toEqual([searchDocOne.name, searchDocTwo.name].sort())
+          })
+        })
+
+        describe('when the search string does not match doc names or field text', () => {
+          beforeAll(async () => {
+            documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: 'nothing' })
+          })
+
+          it('should not return any documents', () => {
+            expect(documents.length).toEqual(0)
+          })
+        })
+
+        describe('when the search string matches a text field value', () => {
+          beforeAll(async () => {
+            documents = await BusinessDocument.findAllForProject(factoryProject.id, constants.ORG_ID, { search: searchTextValue })
+          })
+
+          it('should only return documents partially matching the search string', () => {
+            expect(documents.length).toEqual(1)
+            expect(documents[0].name).toEqual(searchTextFieldDoc.name)
+          })
+        })
+      })
+    })
+
+    describe('#findAllPublishedForProject', () => {
+      let documents
+      const publishedDocName = 'published-doc-name'
+
+      beforeAll(async () => {
+        const publishedVersionIdOne = 111
+        const publishedVersionIdTwo = 222
+        await DocumentVersionFactory.createMany(1, { id: publishedVersionIdOne, documentId: factoryDocuments[0].id, name: publishedDocName })
+        await DocumentVersionFactory.createMany(1, { id: publishedVersionIdTwo, documentId: factoryDocuments[1].id, name: publishedDocName })
+        await factoryDocuments[0].update({ publishedVersionId: publishedVersionIdOne })
+        await factoryDocuments[1].update({ publishedVersionId: publishedVersionIdTwo })
+
+        documents = await BusinessDocument.findAllPublishedForProject(
+          factoryProject.id,
+          constants.ORG_ID
+        )
+      })
+
+      it('should return all published documents from passed in project and org', () => {
+        expect(documents.length).toEqual(2)
+      })
+
+      it('should return documents as POJOs', () => {
+        for (const document of documents) {
+          expect(document.password).toBe(undefined)
+          expect(document.constructor).toBe(Object)
+          expect(typeof document.projectId).toBe('number')
+          expect(Object.keys(document)).toEqual(
+            expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT])
+          )
+        }
+      })
+
+      it('should return documents with published names', () => {
+        for (const document of documents) {
+          expect(document.name).toBe(publishedDocName)
         }
       })
     })
@@ -232,6 +317,40 @@ describe('BusinessDocument', () => {
     })
   })
 
+  describe('#findPublishedByIdForProject', () => {
+    let targetDocumentId
+    let factoryProject
+    let document
+    const documentVersionName = 'published-name'
+
+    beforeAll(async () => {
+      const publishedVersionId = 777
+      factoryProject = (await ProjectFactory.createMany(1))[0]
+      const factoryDocument = (await DocumentFactory.createMany(3, { projectId: factoryProject.id, name: 'not-a-real-doc-name', publishedVersionId }))[0]
+      await DocumentVersionFactory.createMany(1, { id: publishedVersionId, documentId: factoryDocument.id, name: documentVersionName })
+      targetDocumentId = factoryDocument.id
+      document = await BusinessDocument.findPublishedByIdForProject(
+        factoryDocument.id,
+        factoryProject.id,
+        factoryDocument.orgId
+      )
+    })
+
+    it('should return a document as POJO', () => {
+      expect(document.id).toBe(targetDocumentId)
+      expect(document.constructor).toBe(Object)
+      expect(document.projectId).toBe(factoryProject.id)
+    })
+
+    it('should return public fields', () => {
+      expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.PROJECT_DOCUMENT]))
+    })
+
+    it('should return the doc name as the published document version name', () => {
+      expect(document.name).toBe(documentVersionName)
+    })
+  })
+
   describe('#deleteByIdForProject', () => {
     let factoryDocument
 
@@ -309,7 +428,7 @@ describe('BusinessDocument', () => {
       await clearDb()
       factoryProject = (await ProjectFactory.createMany(1))[0]
       factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id }))[0]
-      factoryFields = await FieldFactory.createMany(3, { type: 3, documentId: factoryDocument.id })
+      factoryFields = await FieldFactory.createMany(3, { type: FIELD_TYPES.NUMBER, documentId: factoryDocument.id })
     })
 
     describe('when the target document has the passed in orgId', () => {
@@ -356,6 +475,7 @@ describe('BusinessDocument', () => {
     let factoryDocument
     let publishedFactoryFields
     const versionId = 5
+    const docVersionName = 'some-other-doc-version-name'
 
     beforeAll(async () => {
       factoryProject = (await ProjectFactory.createMany(1))[0]
@@ -367,7 +487,8 @@ describe('BusinessDocument', () => {
 
       await DocumentVersionFactory.createMany(1, {
         documentId: factoryDocument.id,
-        id: versionId
+        id: versionId,
+        name: docVersionName
       })
 
       await FieldFactory.createMany(3, { type: 3, documentId: factoryDocument.id })
@@ -398,6 +519,10 @@ describe('BusinessDocument', () => {
 
       it('should return public fields', () => {
         expect(Object.keys(document)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.DOCUMENT]))
+      })
+
+      it('should return the published document name', () => {
+        expect(document.name).toBe(docVersionName)
       })
     })
 

@@ -19,18 +19,20 @@
 
 button,
 .btn, .button {
+  --button-color: var(--color-white);
   --button-white-background: var(--color-white);
   --button-white-border: var(--color-gray-20);
   --button-white-border-hover: var(--color-gray-15);
-  --button-icon-background: var(--color-gray-5);
-  --button-icon-hover: var(--color-gray-2);
+  --button-icon-background: var(--color-gray-6);
+  --button-icon-hover: var(--color-gray-9);
   --button-icon-active: var(--color-gray-10);
   --button-icon-expanded: var(--color-gray-5);
   --button-label-expanded: var(--color-gray-30);
   @media (prefers-color-scheme: dark) {
-    --button-white-background: var(--color-gray-10);
-    --button-white-border: var(--color-gray-90);
-    --button-white-border-hover: var(--color-gray-90);
+    --button-color: var(--color-gray-90);
+    --button-white-background: var(--theme-overlay-light);
+    --button-white-border: var(--theme-overlay-dark);
+    --button-white-border-hover: var(--color-gray-50);
     --button-icon-background: hsl(61, 1%, 41%);
     --button-icon-hover: hsl(61, 0%, 49%);
     --button-icon-active: var(--color-gray-90);
@@ -38,14 +40,16 @@ button,
     --button-label-expanded: var(--color-gray-70);
   }
   align-items: center;
-  background-color: var(--color-blue);
+  background-color: var(--color-green);
   border-radius: var(--border-radius);
   border: thin solid transparent;
-  color: #fff;
+  color: var(--button-color);
   cursor: pointer;
   display: inline-flex;
+  flex-wrap: wrap;
   font-family: var(--type-sans-serif);
   font-weight: 500;
+  justify-content: center;
   margin-bottom: 0;
   margin-top: 0;
   min-height: 38px;
@@ -55,29 +59,29 @@ button,
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 
-  p { color: var(--color-gray-7); margin: 0; }
+  p { margin: 0; }
 
-  @include focus(var(--color-blue));
+  @include focus(var(--color-green));
 
   &:not([disabled]) {
     @media (hover: hover) {
       &:hover {
-        background-color: var(--color-cyan);
-        color: #fff;
+        background-color: var(--color-green-dark);
+        color: var(--button-color);
       }
     }
     &:active {
-      background-color: var(--color-blue-dark);
-      color: #fff;
+      background-color: var(--color-green-darker);
+      color: var(--button-color);
     }
   }
 
   &--small {
     font-size: 1.2rem;
     min-height: 24px;
-    padding: 0 18px;
+    padding: 3px 24px;
     &.btn--with-icon {
-      padding: 0 6px;
+      padding: 3px 18px;
       .icon {
         height: 12px;
         min-height: 12px;
@@ -145,6 +149,11 @@ button,
           box-shadow: none;
           color: inherit;
           outline: 0;
+
+          .icon {
+            opacity: 0.5;
+          }
+
         }
       }
     }
@@ -188,7 +197,7 @@ button,
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      padding: 2px 0 2px 4px;
+      padding: 0 0 0 8px;
     }
     &[aria-expanded="true"] {
       .icon-caret {
@@ -241,17 +250,50 @@ button,
   &--warning {
     color: var(--color-orange);
     @media (hover: hover) {
-      &:hover {
-        color: var(--color-orange-dark);
+      &:not([disabled]) {
+        &:hover {
+          color: var(--color-orange-dark);
+        }
       }
     }
   }
 
   &--danger {
+    border-color: var(--color-red);
     color: var(--color-red);
     @media (hover: hover) {
-      &:hover {
-        color: var(--color-red-dark);
+      &:not([disabled]) {
+        &:hover {
+          border-color: var(--color-red-dark);
+          color: var(--color-red-dark);
+        }
+      }
+    }
+  }
+
+  // Button colors
+  &--red {
+    .icon {
+      background-color: var(--color-red);
+    }
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          .icon {
+            background-color: var(--color-red-dark);
+          }
+        }
+      }
+    }
+  }
+
+  &--cyan {
+    background-color: var(--color-cyan);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          background-color: var(--color-cyan-dark);
+        }
       }
     }
   }

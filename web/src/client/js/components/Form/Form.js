@@ -8,9 +8,9 @@ import { CheckIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
-  bigSubmit,
   cancelHandler,
   children,
+  disabled,
   dispatch,
   forms,
   name,
@@ -40,13 +40,14 @@ const Form = ({
   }
 
   const debouncedChangeHandler = debounce(200, () => {
-    setFormChanged(true)
+    if (!disabled) {
+      setFormChanged(true)
+    }
   })
 
-  const buttonDisabledWhen = !formChanged || submitting || succeeded
+  const buttonDisabledWhen = disabled || !formChanged || submitting || succeeded
   const submitClasses = cx({
     'btn': true,
-    'btn--small': !bigSubmit,
     'btn--disabled': buttonDisabledWhen,
   })
   const buttonGroupClasses = cx({
@@ -86,9 +87,9 @@ const Form = ({
 
 Form.propTypes = {
   cancelHandler: PropTypes.func,
-  bigSubmit: PropTypes.bool,
   children: PropTypes.node,
   dispatch: PropTypes.func,
+  disabled: PropTypes.bool,
   forms: PropTypes.object,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,

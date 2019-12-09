@@ -6,7 +6,7 @@
 
   .navbar {
     align-items: center;
-    border-bottom: thin solid var(--base-border-color);
+    border-bottom: thin solid var(--theme-border);
     display: flex;
 
     // Brand area is top left, with logo
@@ -49,7 +49,7 @@
       align-items: center;
       display: flex;
       font-size: 90%;
-      padding-right: 16px;
+      padding-right: 1.6rem;
     }
 
     &__content-items {
@@ -57,10 +57,21 @@
       display: flex;
       flex: 1;
       height: var(--gutter-width);
-      padding-left: 16px;
+      padding-left: 1.6rem;
       .icon {
         height: 24px;
         width: 24px;
+      }
+    }
+
+    .pill {
+      background-color: var(--theme-surface);
+      border: thin solid var(--color-gray-20);
+      color: var(--color-gray-40);
+      font-size: 1.3rem;
+      &--red {
+        border: thin solid var(--color-brand);
+        color: var(--color-brand);
       }
     }
 
@@ -73,12 +84,19 @@
       text-decoration: none;
     }
 
+    &__search {
+      padding-right: 1.6rem;
+      position: relative;
+      z-index: 10;
+      width: 200px;
+    }
+
     // The right-most area with user related functions
     &__user {
       align-items: center;
-      border-left: thin solid var(--base-border-color);
+      border-left: thin solid var(--theme-border);
       display: flex;
-      height: var(--gutter-width);
+      // height: var(--gutter-width);
       justify-content: center;
       min-width: var(--gutter-width);
       z-index: 11;

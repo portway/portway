@@ -1,5 +1,5 @@
 import RESOURCE_TYPES from '../../constants/resourceTypes'
-import ono from 'ono';
+import ono from 'ono'
 
 // Builds the requestorInfo object on request
 export default async (req, res, next) => {

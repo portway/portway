@@ -6,11 +6,11 @@ import { getDb } from '../db/dbConnector'
 
 const MODEL_NAME = 'DocumentVersion'
 
-async function createVersion(documentId, orgId) {
+async function createVersion(documentId, docName, orgId) {
   const db = getDb()
   const latestVersion = await getLatestDocumentVersion(documentId, orgId)
   const versionNumber = latestVersion ? latestVersion.versionNumber + 1 : 1
-  const version = await db.model(MODEL_NAME).create({ versionNumber, documentId, orgId })
+  const version = await db.model(MODEL_NAME).create({ versionNumber, documentId, orgId, name: docName })
   return version
 }
 

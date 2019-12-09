@@ -2,22 +2,27 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import passport from 'passport'
-import logger from 'morgan'
 //libs
 import envVarValidation from './libs/envVarValidation'
+import uncaughtErrorHandler from './libs/uncaughtErrorHandler'
 import auth from './libs/auth/auth'
 import controllerLoader from './controllers/loader'
 import apiErrorHandler from './libs/middleware/apiErrorHandler'
 import noRouteHandler from './libs/middleware/noRouteHandler'
+import httpLogger from './libs/middleware/httpLogger'
+import adminController from './controllers/admin'
 
 // Check if required env vars are set the right format
 envVarValidation()
 
+// Setup a listener on uncaught errors to log them
+uncaughtErrorHandler()
+
 //instances
 const app = express()
 
-//logging
-app.use(logger('dev'))
+// request logging
+app.use(httpLogger)
 
 //bodyparser, NOTE: json parsing is applied in the controller loader file
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -63,8 +68,13 @@ baseRouter.get('/', (req, res) => {
   res.json({ message: 'API Initialized' })
 })
 
-const router = express.Router()
+// Mount the admin router separately to keep it apart
+// from the API
+const adminRouter = express.Router()
+app.use('/admin', adminRouter)
+adminController(adminRouter)
 
+const router = express.Router()
 // Mount router at /api
 app.use('/api', router)
 
@@ -74,6 +84,7 @@ router.get('/', (req, res) => {
 })
 
 controllerLoader(router)
+
 
 // ERROR HANDLING - This should always be the last set of middleware!
 

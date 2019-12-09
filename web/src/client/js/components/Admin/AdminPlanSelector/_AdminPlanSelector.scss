@@ -1,8 +1,18 @@
 .admin-plans-selector {
 
   &--disabled {
-    opacity: 0.2;
     pointer-events: none;
+    .admin-plans-selector__content h3 {
+      color: var(--color-gray-20);
+    }
+    .admin-plans-selector__description {
+      color: var(--color-gray-20);
+    }
+    .icon-check {
+      path {
+        fill: var(--color-gray-20);
+      }
+    }
   }
 
   &__title {
@@ -30,7 +40,7 @@
     button {
       align-items: flex-start;
       background: transparent;
-      border: thin solid var(--base-border-color, gray);
+      border: thin solid var(--theme-border, gray);
       border-radius: var(--border-radius, 8px);
       color: var(--theme-text-color, black);
       display: flex;
@@ -53,7 +63,7 @@
       @media (hover: hover) {
         &:hover {
           background: transparent;
-          border: thin solid var(--base-border-color, gray);
+          border: thin solid var(--theme-border, gray);
           color: var(--theme-text-color, black);
         }
       }
@@ -103,7 +113,7 @@
   }
 
   &__price {
-    background-color: var(--base-border-color);
+    background-color: var(--theme-border);
     color: var(--color-white);
     font-weight: 700;
     margin: 2rem 0 0 0;

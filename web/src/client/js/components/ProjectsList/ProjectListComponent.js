@@ -41,11 +41,12 @@ function ProjectsListComponent({ deleteHandler, history, loading, projects }) {
   })
 
   if (!loading && projectList.length === 0) {
+    const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
     return (
       <div className="project-list__empty-state">
         <div className="notice">
           <div className="notice__icon">
-            <ProjectIcon width="32" height="32" />
+            <ProjectIcon fill={colorSurface} width="32" height="32" />
           </div>
           <h2 className="notice__header">Create your first project</h2>
           <p>Let’s get you going! Create a project and start adding or importing documents</p>

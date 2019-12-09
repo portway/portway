@@ -10,7 +10,9 @@ export default function(passport) {
       try {
         validatedBusinessToken = await verifyProjectToken(token)
       } catch (e) {
-        done(e)
+        // TODO: do we want to log this? It's not an error, it's a 404
+        console.warn(e)
+        return done(null, false)
       }
 
       const tokenData = pick(validatedBusinessToken, ['id', 'roleId', 'projectId', 'orgId'])

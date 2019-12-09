@@ -18,7 +18,7 @@ export default function(passport) {
       try {
         user = await UserCoordinator.validatePasswordResetKey(payload.id, payload.resetKey)
       } catch (err) {
-        done(ono(err, `Invalid reset key}`))
+        return done(ono(err, `Invalid reset key`))
       }
 
       return done(null, user)

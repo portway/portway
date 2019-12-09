@@ -10,12 +10,13 @@ import {
   PATH_BILLING,
   PATH_PROJECTS,
   PATH_SETTINGS,
-  SUBSCRIPTION_STATUS,
+  ORG_SUBSCRIPTION_STATUS,
 } from 'Shared/constants'
 
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import NavigatorContainer from 'Components/Navigator/NavigatorContainer'
+import SearchFieldContainer from 'Components/Search/SearchFieldContainer'
 
 import './_Header.scss'
 
@@ -25,11 +26,13 @@ const renderBrandLogo = (logo) => {
   }
 }
 
+const grayPillStatuses = [ORG_SUBSCRIPTION_STATUS.TRIALING, ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL, null]
+
 const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) => {
   const upgradePillClasses = cx({
     'pill': true,
     'pill--red': LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
-    'pill--gray': subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null,
+    'pill--gray': grayPillStatuses.includes(subscriptionStatus)
   })
   if (!isFullScreen) {
     return (
@@ -46,9 +49,14 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
             {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
           </div>
           <div className="navbar__misc">
-            {(subscriptionStatus === SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className="pill pill--blue">TRIAL PERIOD</b>}>
+            {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
               <NavLink to={PATH_BILLING} className={upgradePillClasses}>Upgrade your account</NavLink>
+            </OrgPermission>
+            }
+            {subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>ACCOUNT CANCELED</b>}>
+              <NavLink to={PATH_BILLING} className={upgradePillClasses}>ACCOUNT CANCELED</NavLink>
             </OrgPermission>
             }
             {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
@@ -56,6 +64,9 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
               <NavLink to={PATH_BILLING} className={upgradePillClasses}>Your account needs attention</NavLink>
             </OrgPermission>
             }
+          </div>
+          <div className="navbar__search">
+            <SearchFieldContainer />
           </div>
           <div className="navbar__user">
             <UserMenuContainer />

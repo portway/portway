@@ -20,7 +20,8 @@ const ConfirmationContainer = ({ confirmation, uiConfirmCancel, uiConfirmComplet
           confirmation.confirmedAction()
           uiConfirmComplete()
         }}
-        confirmedLabel={confirmation.confirmedLabel} />
+        confirmedLabel={confirmation.confirmedLabel}
+        confirmedText={confirmation.confirmedText} />
     )
   } else {
     return null

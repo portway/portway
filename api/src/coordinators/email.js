@@ -1,12 +1,13 @@
 import { sendSingleRecipientEmail } from '../integrators/email'
 import BusinessOrganization from '../businesstime/organization'
+import { SUPPORT_EMAIL } from '../constants/email'
 
 const { CLIENT_URL } = process.env
 
 async function sendInvitationEmail(email, token, orgId) {
   const organization = await BusinessOrganization.findSanitizedById(orgId)
 
-  const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
+  const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
   const invitedText = `You've been invited to join ${organization.name} on Portway!`
   const linkText = `Use the following link to complete your registration:`
 
@@ -22,6 +23,19 @@ async function sendInvitationEmail(email, token, orgId) {
   await sendSingleRecipientEmail({ address: email, htmlBody, textBody, subject })
 }
 
+async function sendPasswordChangeEmail(address) {
+  const subject = 'Password Changed [Portway]'
+  const bodyText = `Your Portway password has been changed, if you were not the one who made this change, please contact ${SUPPORT_EMAIL}`
+
+  const htmlBody = `
+  <div>${bodyText}</div>
+`
+  const textBody = bodyText
+
+  await sendSingleRecipientEmail({ address, htmlBody, textBody, subject })
+}
+
 export default {
-  sendInvitationEmail
+  sendInvitationEmail,
+  sendPasswordChangeEmail
 }

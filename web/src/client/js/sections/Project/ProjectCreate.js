@@ -15,8 +15,8 @@ const ProjectCreate = () => {
       </Helmet>
       <main>
         <div className="section">
-          <h1>Create a new project</h1>
-          <h2>Projects can have multiple users and documents</h2>
+          <h2>Create a new project</h2>
+          <h3>Projects can have multiple users and documents</h3>
         </div>
         <ProjectCreatorContainer />
       </main>

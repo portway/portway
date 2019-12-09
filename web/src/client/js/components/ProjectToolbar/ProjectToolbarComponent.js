@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, NavLink } from 'react-router-dom'
-import moment from 'moment'
 
 import {
   ORGANIZATION_ROLE_IDS,
@@ -13,14 +12,12 @@ import {
 import { AddIcon, SettingsIcon } from 'Components/Icons'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
-import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer'
 
 import './_ProjectToolbar.scss'
 
-const ProjectToolbarComponent = ({ document, isFullScreen, projectId, projectUsers }) => {
+const ProjectToolbarComponent = ({ projectId }) => {
   return (
     <footer className="project-toolbar">
-      {!isFullScreen &&
       <>
         <OrgPermission
           acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
@@ -42,30 +39,12 @@ const ProjectToolbarComponent = ({ document, isFullScreen, projectId, projectUse
           </NavLink>
         </ProjectPermission>
       </>
-      }
-      {projectUsers && projectUsers.length > 0 &&
-      <div className="project-toolbar__team">
-        <span className="project-toolbar__team-label">Your Team:</span>
-        <ProjectUsersContainer projectId={projectId} collapsed />
-      </div>
-      }
-      {document &&
-      <div className="project-toolbar__document-info">
-        Last update:&nbsp;<span title={moment(document.updatedAt).format('MMMM do, YYYY - h:mma')}>{moment(document.updatedAt).fromNow()}</span>
-        {document.publishedVersionId && document.lastPublishedAt &&
-        <b>&nbsp; Published {moment(document.lastPublishedAt).fromNow()}</b>
-        }
-      </div>
-      }
     </footer>
   )
 }
 
 ProjectToolbarComponent.propTypes = {
-  document: PropTypes.object,
-  isFullScreen: PropTypes.bool.isRequired,
   projectId: PropTypes.string.isRequired,
-  projectUsers: PropTypes.array
 }
 
 export default ProjectToolbarComponent

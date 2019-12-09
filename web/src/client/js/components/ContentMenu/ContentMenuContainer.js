@@ -10,7 +10,6 @@ import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
 import ContentMenuComponent from './ContentMenuComponent'
-import settings from './settings'
 
 const ContentMenuContainer = ({ createField, fields, location }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [
@@ -43,7 +42,7 @@ const ContentMenuContainer = ({ createField, fields, location }) => {
     })
   }
 
-  return <ContentMenuComponent createFieldHandler={fieldCreationHandler} fields={settings.fields} />
+  return <ContentMenuComponent createFieldHandler={fieldCreationHandler} />
 }
 
 ContentMenuContainer.propTypes = {

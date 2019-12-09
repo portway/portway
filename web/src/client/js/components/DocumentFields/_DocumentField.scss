@@ -3,243 +3,149 @@
 .document-field {
   --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
-  cursor: grab;
+  --field-data-background: var(--theme-overflow);
+  --field-data-border: var(--color-gray-10);
+  --field-dragging-background: var(--color-gray-5);
+  @media (prefers-color-scheme: dark) {
+    --field-data-background: var(--theme-overlay-dark);
+    --field-data-border: var(--theme-overlay-light);
+    --field-dragging-background: var(--theme-base);
+  }
+  margin-top: 1.8rem;
+  max-width: 1200px;
   outline: 0;
 
-  &--text {
-    margin: calc(var(--gutter-width) / 2) var(--gutter-width);
-    .document-field__component {
-      flex-direction: column;
-    }
-    .document-field__tool-options {
-      justify-content: center;
-    }
-  }
-
-  &--image {
-    margin: calc(var(--gutter-width) / 2);
-    position: relative;
-    .document-field__component {
-      flex-direction: column;
-      position: relative;
-    }
-    .document-field__tools {
-      bottom: 18px;
-      left: 50%;
-      position: absolute;
-      transform: translateX(-50%);
-    }
-    .document-field__tool-options {
-      justify-content: center;
-    }
-  }
-
-  &--number, &--string {
-    background-color: var(--theme-overflow);
-    // border: thin solid var(--base-border-color);
-    border-bottom: none;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-    margin: 0 24px;
-
-    input {
-      background-color: transparent;
-      // &::selection {
-        // color: #fff;
-      // }
-    }
-
-    // &:first-child {
-      // border-top-left-radius: var(--border-radius);
-      // border-top-right-radius: var(--border-radius);
-    // }
-
-    &:last-child {
-      border-bottom: thin solid var(--base-border-color);
-      // border-bottom-left-radius: var(--border-radius);
-      // border-bottom-right-radius: var(--border-radius);
-      // margin-bottom: var(--gutter-width);
-    }
-
-    &:focus-within {
-      background-color: var(--color-gray-5);
-    }
-
-    // New data fields
-    &--new {
-      background-color: var(--color-brand-light);
-      border: thin solid transparent;
-
-      .document-field__name {
-        border-right: thin solid var(--color-brand-light);
-      }
-
-      &:focus-within {
-        background-color: var(--color-brand-light);
-      }
-      input {
-        background-color: var(--color-brand-light);
-        &::selection {
-          background-color: var(--color-green);
-          color: #fff;
-        }
-      }
-    }
-
-  } // string, number
-
+  // The whole field, when it is being dragged
   &--dragging {
     cursor: grabbing;
-    opacity: 0.7;
+    padding: 1.8rem 0 !important;
+    -webkit-user-drag: element; // Safari hack
+    .document-field__actions {
+      visibility: hidden;
+    }
+    .document-field__container {
+      background-color: var(--field-dragging-background) !important;
+      border: none !important;
+      border-radius: var(--border-radius);
+      * { visibility: hidden; }
+    }
     * {
       pointer-events: none;
     }
   }
 
+  // When something is dragged over the field, turn off all mouse interactions
   &--dragged-over {
-    border: thin dashed var(--color-blue);
-    opacity: 0.5;
     * {
       pointer-events: none;
     }
   }
 
-  &__component {
-    align-items: stretch;
-    display: flex;
-  }
-
-  &__settings {
-    align-items: center;
-    background: var(--color-gray-70);
-    bottom: 0;
-    color: var(--color-gray-2);
-    display: flex;
-    justify-content: space-between;
-    left: 0;
-    padding: 1rem 2rem;
-    position: absolute;
-    width: 100%;
-    z-index: 3;
-  }
-
-  &__settings__label {
-    font-size: 1.2rem;
-    padding-right: 1rem;
-  }
-
-  &__settings__input {
-    background: none;
-    border: none;
-    color: var(--color-gray-5);
-    font-size: 1.2rem;
-    @include focus(transparent, transparent);
-    border-bottom: thin solid var(--color-gray-80);
-  }
-
-  &__settings__button {
-    font-size: 1.2rem;
-  }
-
-  &__name {
-    align-items: flex-start;
-    border-right: thin solid var(--base-border-color);
-    display: flex;
-    flex: 0 0 var(--field-name-width);
-    flex-direction: column;
-    justify-content: center;
-    padding: .6rem;
-    &-label {
-      border-bottom: thin solid var(--color-gray-5);
-      font-size: 1.1rem;
-      margin-bottom: .5rem;
-    }
-    input {
-      border: none;
-      color: var(--theme-text-color);
-      font-family: var(--type-serif) !important;
-      font-size: 1.3rem; // 13px
-      min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
-      outline: none;
-    }
-  }
-
-  &__content {
-    align-items: flex-start;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    padding: .6rem;
-  }
-
-  &__tools {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-  }
-
-  &__tool-options {
-    align-items: center;
-    display: flex;
-    padding: 0 1rem;
-    visibility: hidden;
-  }
-
-  // &__dragger {
-    // padding-left: 1.2rem;
-  // }
-
-  &:hover, &:focus, &:focus-within {
-    .document-field__tool-options {
-      visibility: visible;
-    }
-  }
-
-  /**
-   * For drag areas (files, etc) overriding FileUploaderComponent styles
-   * ------------------------------------------------------------------------ */
-  .file-uploader {
-    align-items: center;
-    border: thin solid var(--color-gray-5);
-    border-radius: var(--border-radius);
-    display: flex;
-    padding: var(--gutter-width);
-    width: 100%;
-
-    label {
-      text-align: center;
-    }
-
-    &--with-value {
-      background-color: var(--theme-overlay-dark);
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-    }
-
-    &--dragged-over {
-      background-color: var(--color-gray-5);
-    }
-
-    &--uploading {
-      border: thin solid transparent;
-      border-radius: 0;
+  // Clone element is passed to the browser as the "drag image"
+  &--clone-element {
+    list-style: none;
+    .document-field__component {
       padding: 0;
     }
-
-    &__status {
-      position: relative;
-      .spinner {
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
+    .document-field__container {
+      margin: 0;
     }
-
+    .document-field__actions {
+      display: none;
+    }
   }
 
+} // document-field
+
+
+// Data fields that are directly next to each other shouldn't
+// get a top border so they look more like a table
+.document-field--data + .document-field--data {
+  margin-top: 0;
+  .document-field__container {
+    border-top: none;
+  }
 }
+
+
+// The component is everything for a field, three columns
+.document-field__component {
+  align-items: stretch;
+  display: flex;
+  padding: 0 2.3rem;
+
+  .document__fields--is-dragging & {
+    overflow: hidden;
+    height: 65px;
+  }
+
+} // document-field__component
+
+
+// Container contains the name and the content
+.document-field__container {
+  flex: 1;
+  margin: 0 1.9rem;
+
+  // Data fields get a border and background-color, like a table
+  .document-field--data & {
+    background-color: var(--field-data-background);
+    border: thin solid var(--field-data-border);
+    display: flex;
+    input {
+      background-color: transparent;
+    }
+  }
+
+} // document-field__container
+
+
+// Field name is only visible for data fields
+.document-field__name {
+  align-items: flex-start;
+  border-right: thin solid var(--theme-border);
+  display: flex;
+  flex: 0 0 var(--field-name-width);
+  flex-direction: column;
+  justify-content: center;
+  padding: .7rem 1.2rem;
+  &-label {
+    font-size: 1.3rem;
+    margin-bottom: .8rem;
+  }
+  input {
+    border: none;
+    color: var(--theme-text-color);
+    font-size: 1.3rem; // 13px
+    font-weight: 600;
+    min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
+    outline: none;
+  }
+} // document-field__name
+
+
+// Field content is the actual field value (textarea, image, etc)
+.document-field__content {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+
+  // A new field should be obvious it is new
+  .document-field--new.document-field--data & {
+    border-color: var(--color-blue);
+  }
+
+  .document-field--data & {
+    padding: 1.4rem 1.05rem;
+    input {
+      border: transparent;
+      font-size: 1.5rem;
+      line-height: 2.4rem;
+      width: 100%;
+    }
+  }
+
+} // document-field__content

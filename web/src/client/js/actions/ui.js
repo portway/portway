@@ -8,6 +8,11 @@ export const uiDocumentCreate = (value) => {
     dispatch(UI.documentCreate(value))
   }
 }
+export const uiToggleDocumentMode = (value) => {
+  return async (dispatch) => {
+    dispatch(UI.toggleDocumentMode(value))
+  }
+}
 export const uiToggleFullScreen = (value) => {
   return async (dispatch) => {
     dispatch(UI.toggleFullScreen(value))
@@ -38,9 +43,9 @@ export const uiToggleStripeForm = (value) => {
 /**
  * Confirmation system
  */
-export const uiConfirm = ({ message, cancelAction, confirmedAction, confirmedLabel }) => {
+export const uiConfirm = ({ message, cancelAction, confirmedAction, confirmedLabel, confirmedText }) => {
   return async (dispatch) => {
-    dispatch(UI.initiateConfirm(message, cancelAction, confirmedAction, confirmedLabel))
+    dispatch(UI.initiateConfirm(message, cancelAction, confirmedAction, confirmedLabel, confirmedText))
   }
 }
 export const uiConfirmCancel = () => {

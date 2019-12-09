@@ -76,7 +76,7 @@ const createOrUpdateSubscription = async function({ customerId, planId, seats, t
   try {
     if (subscriptionId) {
       const currentSubscription = await stripe.subscriptions.retrieve(subscriptionId)
-      subscription = await stripe.subscriptions.update(subscriptionId, {
+      const options = {
         items: [
           {
             id: currentSubscription.items.data[0].id,
@@ -84,9 +84,12 @@ const createOrUpdateSubscription = async function({ customerId, planId, seats, t
             quantity: seats
           }
         ],
-        trial_period_days: trialPeriodDays,
-        trial_end: endTrial ? 'now' : null
-      })
+        trial_period_days: trialPeriodDays
+      }
+      if (endTrial) {
+        options.trial_end = 'now'
+      }
+      subscription = await stripe.subscriptions.update(subscriptionId, options)
     } else {
       subscription = await stripe.subscriptions.create({
         customer: customerId,
@@ -110,10 +113,21 @@ const constructWebhookEvent = function(body, signature) {
   return stripe.webhooks.constructEvent(body, signature, STRIPE_HOOK_SECRET)
 }
 
+const cancelSubscription = function(subscriptionId) {
+  return stripe.subscriptions.del(subscriptionId)
+}
+
+const cancelSubscriptionAtPeriodEnd = function(subscriptionId) {
+  return stripe.subscriptions.update(subscriptionId, { cancel_at_period_end: true })
+}
+
+
 export default {
   createCustomer,
   getCustomer,
   updateCustomer,
   createOrUpdateSubscription,
-  constructWebhookEvent
+  constructWebhookEvent,
+  cancelSubscription,
+  cancelSubscriptionAtPeriodEnd
 }

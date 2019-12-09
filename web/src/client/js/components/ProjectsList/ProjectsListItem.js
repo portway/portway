@@ -43,12 +43,12 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
       </Link>
       <div className="project-list__actions" ref={itemRef}>
         <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
-          <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank btn--with-circular-icon">
+          <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
             <SettingsIcon />
           </Link>
           <button
             aria-label="Delete project"
-            className="btn btn--blank btn--with-circular-icon"
+            className="btn btn--blank"
             onClick={handleDelete}
           >
             <TrashIcon />

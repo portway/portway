@@ -35,6 +35,12 @@
     padding: 0;
   }
 
+  &__content {
+    // align-items: center;
+    flex-direction: column;
+    display: flex;
+  }
+
   &__notification {
     animation: slidein 0.3s ease 0.3s 1 normal forwards;
     background: var(--notification-background);

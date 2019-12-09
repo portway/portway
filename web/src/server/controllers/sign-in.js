@@ -5,7 +5,6 @@ import auth from '../libs/auth'
 
 const SignInController = function(router) {
   router.get('/', (req, res) => {
-    console.info('users controller sign-in')
     res.render('user/sign-in', renderBundles(req, 'Sign in', 'index'))
   })
 
