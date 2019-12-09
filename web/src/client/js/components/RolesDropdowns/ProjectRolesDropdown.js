@@ -41,7 +41,7 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
         aria-controls="project-role-dropdown"
         className="btn btn--white btn--with-icon"
         disabled={disabled}
-        onClick={() => setExpanded(true)}
+        onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
       >
         <span className="label">{permissionMenuLabel}</span>

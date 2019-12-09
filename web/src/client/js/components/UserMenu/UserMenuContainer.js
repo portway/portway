@@ -48,7 +48,7 @@ const UserMenuContainer = () => {
         aria-haspopup="true"
         aria-controls="user-menu"
         className="btn btn--blank user-menu__button"
-        onClick={() => setExpanded(true)}
+        onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
         style={{ backgroundImage: `url(${currentUser.avatar || UserIcon}` }}
       >

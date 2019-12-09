@@ -35,7 +35,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         aria-controls="content-menu"
         aria-label="Add a field"
         className="btn btn--blank btn--with-circular-icon document-menu__button"
-        onClick={() => setExpanded(true)}
+        onClick={() => setExpanded(!expanded)}
         onFocus={() => setExpanded(true)}
         ref={anchorRef}
         title="Add a field"

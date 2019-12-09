@@ -111,7 +111,7 @@ const DocumentsListItem = ({
             className="btn btn--blank btn--with-circular-icon"
             onClick={(e) => {
               e.preventDefault()
-              setExpanded(true)
+              setExpanded(!expanded)
             }}
             ref={anchorRef}
           >

@@ -90,7 +90,7 @@ const FormatMenuComponent = ({ focusedField }) => {
         aria-controls="format-menu"
         aria-label="Add a field"
         className="btn btn--blank btn--with-circular-icon document-menu__button"
-        onClick={() => setExpanded(true)}
+        onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
         title="Add a field"
       >
