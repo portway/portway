@@ -59,7 +59,7 @@ button,
   -webkit-appearance: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 
-  p { color: var(--color-gray-7); margin: 0; }
+  p { margin: 0; }
 
   @include focus(var(--color-green));
 
@@ -197,7 +197,7 @@ button,
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      padding: 0 0 0 4px;
+      padding: 0 0 0 8px;
     }
     &[aria-expanded="true"] {
       .icon-caret {

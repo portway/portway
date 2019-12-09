@@ -22,6 +22,8 @@ import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
 import { CaretIcon, ProjectIcon } from 'Components/Icons'
+import { Popper, PopperGroup } from 'Components/Popper/Popper'
+import { Menu } from 'Components/Menu/Menu'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
@@ -36,15 +38,19 @@ const NavigatorContainer = ({ history, location }) => {
   const [expanded, setExpanded] = useState(false)
   const selectRef = useRef()
   const nodeRef = useRef()
+  const anchorRef = useRef()
+
   const collapseCallback = useCallback(() => {
     setExpanded(false)
   }, [])
+
   const toggleCallback = useCallback(() => {
     setExpanded(!expanded)
     if (!expanded) {
       selectRef.current.focus()
     }
   }, [expanded])
+
   useClickOutside(nodeRef, collapseCallback)
   useBlur(nodeRef, collapseCallback)
   useKeyboardShortcut('t', toggleCallback)
@@ -102,46 +108,50 @@ const NavigatorContainer = ({ history, location }) => {
       <Helmet>
         <title>{project ? project.name : 'My Projects'} –– {PRODUCT_NAME}</title>
       </Helmet>
-      <div ref={nodeRef} className="navigator">
+      <PopperGroup anchorRef={nodeRef} className="navigator">
         <button
           aria-haspopup
           aria-expanded={expanded}
           className="btn btn--blank btn--with-circular-icon"
-          onClick={toggleCallback}>
+          onClick={toggleCallback}
+          ref={anchorRef}
+        >
           <CaretIcon />
           <span className="label">{project ? project.name : 'Projects'}</span>
         </button>
-        <div className="menu menu--dark" hidden={!expanded}>
-          <Select
-            ref={selectRef}
-            className={`navigator__select`}
-            classNamePrefix="react-select"
-            components={{ NoOptionsMessage, Option }}
-            menuIsOpen={true}
-            onChange={(value) => {
-              history.push({
-                pathname: `${PATH_PROJECT}/${value.value}`
-              })
-              collapseCallback()
-            }}
-            options={Object.values(projects).map((project) => {
-              return { label: project.name, value: String(project.id) }
-            })}
-            value={null} />
-          <footer className="menu__footer">
-            <OrgPermission
-              acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-              acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
-              <Link to={PATH_PROJECT_CREATE}
-                className="btn btn--small btn--blank navigator__project-btn"
-                onClick={collapseCallback}
-                title="Create a new project">
-                New Project
-              </Link>
-            </OrgPermission>
-          </footer>
-        </div>
-      </div>
+        <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
+          <Menu>
+            <Select
+              ref={selectRef}
+              className={`navigator__select`}
+              classNamePrefix="react-select"
+              components={{ NoOptionsMessage, Option }}
+              menuIsOpen={true}
+              onChange={(value) => {
+                history.push({
+                  pathname: `${PATH_PROJECT}/${value.value}`
+                })
+                collapseCallback()
+              }}
+              options={Object.values(projects).map((project) => {
+                return { label: project.name, value: String(project.id) }
+              })}
+              value={null} />
+            <footer className="menu__footer">
+              <OrgPermission
+                acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+                acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
+                <Link to={PATH_PROJECT_CREATE}
+                  className="btn btn--small btn--blank navigator__project-btn"
+                  onClick={collapseCallback}
+                  title="Create a new project">
+                  New Project
+                </Link>
+              </OrgPermission>
+            </footer>
+          </Menu>
+        </Popper>
+      </PopperGroup>
     </>
   )
 }

@@ -3,6 +3,7 @@ import { ActionTypes } from '../actions'
 const initialState = {
   currentDocumentId: null,
   projectDocumentsById: {},
+  documentSearchResults: null,
   loading: {
     byProject: {},
     byId: {}

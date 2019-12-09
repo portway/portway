@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import {
+  FREE_PLAN_TYPES,
   LOCKED_ACCOUNT_STATUSES,
-  PLAN_TYPES,
   ORG_SUBSCRIPTION_STATUS,
-  TRIALING_STATUSES,
   PLAN_TITLES,
-  FREE_PLAN_TYPES
+  PLAN_TYPES,
+  SUPPORT_EMAIL,
+  TRIALING_STATUSES,
 } from 'Shared/constants'
 import { CheckIcon } from 'Components/Icons'
 import Form from 'Components/Form/Form'
@@ -54,10 +55,12 @@ const AdminPlanSelectorComponent = ({
         Your plan: <span className="admin-plans-selector__title">{planTitle}</span>
       </h2>
       {hasFreePlan ?
-        <p>You are currently on a free plan. If you would like to upgrade, please contact us.</p>
+        <p>
+          You are currently on a free plan. If you would like to upgrade, please
+          <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a>.
+        </p>
         :
         <Form
-          bigSubmit
           name={formId}
           onSubmit={formSubmitHandler}
           submitEnabled={formChanged}

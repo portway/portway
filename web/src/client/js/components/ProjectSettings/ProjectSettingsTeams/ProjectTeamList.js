@@ -18,7 +18,12 @@ const ProjectTeamList = ({ projectUsers, removeAssignmentHandler, updateAssignme
           {itsMeMario && <span className="project-settings__teammate-is-you pill pill--highlight">You</span>}
         </span>
         <div className="project-settings__teammate-role">
-          <ProjectRolesDropdown buttonStyle='blank' disabled={itsMeMario} defaultValue={user.projectRoleId} onChange={(roleId) => { updateAssignmentHandler(user.assignmentId, roleId) }} />
+          <ProjectRolesDropdown
+            align="right"
+            disabled={itsMeMario}
+            defaultValue={user.projectRoleId}
+            onChange={(roleId) => { updateAssignmentHandler(user.assignmentId, roleId) }}
+          />
         </div>
         <button
           aria-label={`Remove ${user.name} from this project`}
