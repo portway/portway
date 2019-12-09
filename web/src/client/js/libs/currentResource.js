@@ -56,6 +56,11 @@ const currentResource = (resourceName, path) => {
         returnValue = returnNull()
         break
       }
+
+      if (matchResults && isNaN(matchResults.params.documentId)) {
+        returnValue = returnNull()
+        break
+      }
       func = dataMapper.documents.id
       if (matchResults && matchResults.params.documentId) {
         returnValue = func(matchResults.params.projectId, matchResults.params.documentId)
