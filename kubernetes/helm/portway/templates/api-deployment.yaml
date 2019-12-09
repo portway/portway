@@ -59,6 +59,11 @@ spec:
             secretKeyRef:
               name: db-secrets
               key: db_user_password
+        - name: LOGGER
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.logger
         - name: AWS_SES_REGION
           valueFrom:
             configMapKeyRef:
