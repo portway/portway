@@ -62,6 +62,17 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.RECEIVE_DOCUMENT_ERROR: {
+      const { documentId } = action
+      const byId = { ...state.loading.byId, [documentId]: false }
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          byId
+        }
+      }
+    }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
       const byId = { ...state.loading.byId, [action.data.id]: false }
       const byProject = { ...state.loading.byProject, [action.projectId]: false }

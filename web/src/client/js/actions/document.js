@@ -17,9 +17,12 @@ export const fetchDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.requestOne(documentId))
     const { data, status } = await fetch(`documents/${documentId}?draft=true`)
-    globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status)) :
-      dispatch(Documents.receiveOne(data))
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Documents.receiveError(documentId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
+      return
+    }
+    dispatch(Documents.receiveOne(data))
   }
 }
 
