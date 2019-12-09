@@ -33,7 +33,7 @@ const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, on
         aria-haspopup="true"
         aria-controls="org-roles-dropdown"
         className="btn btn--white btn--with-icon"
-        onClick={() => setExpanded(true)}
+        onClick={() => setExpanded(!expanded)}
       >
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />

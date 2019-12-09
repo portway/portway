@@ -57,7 +57,7 @@ const AdminPlanSelectorComponent = ({
       {hasFreePlan ?
         <p>
           You are currently on a free plan. If you would like to upgrade, please
-          <a href={SUPPORT_EMAIL}>contact us</a>.
+          <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a>.
         </p>
         :
         <Form

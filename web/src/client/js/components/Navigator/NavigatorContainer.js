@@ -23,7 +23,7 @@ import currentResource from 'Libs/currentResource'
 
 import { CaretIcon, ProjectIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuItem } from 'Components/Menu/Menu'
+import { Menu } from 'Components/Menu/Menu'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 

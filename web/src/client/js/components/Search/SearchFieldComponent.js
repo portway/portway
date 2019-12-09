@@ -36,7 +36,7 @@ const SearchFieldComponent = ({ documents, isSearching, projects, searchOptionsH
           aria-controls="search-field"
           type="search"
           onChange={(e) => { searchOptionsHandler(e.target.value) }}
-          onFocus={() => setExpanded(true)}
+          onFocus={() => setExpanded(!expanded)}
           placeholder="Search..."
           ref={inputRef}
         />
