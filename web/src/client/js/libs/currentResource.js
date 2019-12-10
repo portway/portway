@@ -33,11 +33,18 @@ const currentResource = (resourceName, path) => {
         returnValue = returnNull()
         break
       }
+
       matchResults = matchPath(projectPath, {
         path: '/project/:projectId',
         exact: true,
         strict: false
       })
+
+      if (matchResults && isNaN(matchResults.params.projectId)) {
+        returnValue = returnNull()
+        break
+      }
+
       func = dataMapper.projects.id
       if (matchResults) {
         returnValue = matchResults.params.projectId ?
@@ -56,8 +63,8 @@ const currentResource = (resourceName, path) => {
         returnValue = returnNull()
         break
       }
-
-      if (matchResults && isNaN(matchResults.params.documentId)) {
+      // if either project or document ids in the url aren't numbers, don't fetch
+      if (matchResults && (isNaN(matchResults.params.documentId) || isNaN(matchResults.params.projectId))) {
         returnValue = returnNull()
         break
       }
