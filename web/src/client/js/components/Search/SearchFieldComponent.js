@@ -67,7 +67,7 @@ const SearchFieldComponent = ({
           anchorRef={inputRef}
           autoCollapse={collapseCallback}
           id="search-field"
-          open={expanded}
+          open={expanded || searchTerm !== null || document.activeElement === inputRef.current}
           width="300"
         >
           <Menu anchorRef={inputRef} isActive={expanded}>
