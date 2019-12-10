@@ -1,0 +1,23 @@
+version: '1.0'
+steps:
+  main_clone:
+    title: Cloning main repository...
+    type: git-clone
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_REVISION}}'
+    git: 'github'
+  extract_ze_version:
+    title: Extract version to deploy
+    image: alpine
+    commands:
+      - cf_export VERSION_TAG="$(cat ./deploys/prod.txt)"
+  deploy_to_dev_cf_step:
+    title: Deploy to Dev Cluster
+    image: codefresh/cfstep-helm:2.14.3
+    environment:
+      - CHART_REF=kubernetes/helm/portway
+      - RELEASE_NAME=portway
+      - KUBE_CONTEXT=prod-kubernetes-portway
+      - VALUESFILE_prod=kubernetes/helm/portway/prodValues.yaml
+      - VALUE_apiTag=$VERSION_TAG
+      - VALUE_webTag=$VERSION_TAG
