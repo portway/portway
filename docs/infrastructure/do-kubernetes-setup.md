@@ -40,7 +40,7 @@ This allows kubernetes to pull your docker images from the Docker Hub registry.
 
 Create Docker Hub registry credential secret:
 ```
-kubectl create secret docker-registry regcred —docker-server=<your-registry-server> —docker-username=<your-name> —docker-password=<your-pword> —docker-email=<your-email>
+kubectl create secret docker-registry regcred --docker-server=DOCKER_SERVER --docker-username=DOCKER_USERNAME --docker-password=DOCKER_PASSWORD --docker-email=DOCKER_EMAIL
 ```
 
 5. Add Helm
@@ -58,6 +58,7 @@ Now install Tiller:
 ```
 helm init --service-account tiller
 ```
+**Note** If using Kubernetes 1.16.x and an older Helm client (as of 12/6/19) follow these instructions to initialize Tiller correctly: [Fix Helm Init](https://github.com/helm/helm/issues/6374#issuecomment-533185074)
 
 6. Add kubernetes dashboard
 
@@ -78,37 +79,25 @@ helm upgrade dashboard stable/kubernetes-dashboard --set fullnameOverride="dashb
  Set the DNS for the domains to point to the load balancer
 `kubectl get svc --namespace=ingress-nginx`
 
-Set the desired domains to have an A record pointing to the external IP returned by the above command.
+Set the desired domains to have an A record pointing to the external IP returned by the above command. There should be two DNS records: one for the web app, and one for the API (example: `dev.portway.app` and `api.dev.portway.app` respectively)
 
-9. Install cert-manager
+9. Deploy the app using the helm chart
 
-Add Custom Resource Definitions:
-```
-	kubectl apply \
-	    -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.8/deploy/manifests/00-crds.yaml
-```
-
-Add web hook magic for validation
-```
-	kubectl label namespace kube-system certmanager.k8s.io/disable-validation="true"
-```
-
-Add jetstack repo
-```
-helm repo add jetstack https://charts.jetstack.io
-```
-
-Install the chart:
-```
-helm install --name cert-manager --namespace kube-system jetstack/cert-manager --version v0.8.0
-```
-
-9. Deploy the app from the kubernetes yaml files
+`helm install --name portway ./kubernetes/helm/portway`
+To use a different yaml file:
+`helm install -f ./kubernetes/helm/portway/prodValues.yaml --name portway ./kubernetes/helm/portway`
 
 Notes:
-- Update the domain names in the config to ensure they are correct
+- Make sure all the values.yaml values are correct!
 - Make sure the ingress yaml is set to use the letsencrypt-staging resource!
 - Pay special attention to making sure the services are actually running! See cert-manager’s docs on ACME setup (link in Resources) for curl commands that _must_ return 200s before LetsEncrypt will issue certificates
+
+10. Install cert-manager for SSL
+
+Follow the latest docs from [cert-manager](https://cert-manager.io/docs/tutorials/acme/ingress/)
+The process is a bit complicated, but the key is to ensure the app services are running in the cluster and responding at the domain root with a 200.
+
+Note the letsencrypt issuers are configured in `kubernetes/letsencrypt`, so those can be applied to the cluster and used in the instructions from cert-manager. The Portway Helm Chart is configured to allow setting the certIssuer to `letsencrypt-staging` and `letsencrypt-prod` to utilize the two issuers.
 
 ## Viewing the Kubernetes Dashboard
 Get the Tiller token secret:
