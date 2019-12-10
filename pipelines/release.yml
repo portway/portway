@@ -11,6 +11,7 @@ steps:
     type: git-clone
     repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
     revision: '${{CF_REVISION}}'
+    git: 'github'
   build_prod_api_image:
     stage: API
     title: Building API Production Image

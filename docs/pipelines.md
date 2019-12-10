@@ -2,10 +2,11 @@
 
 Portway's CI/CD is run on [Codefresh](https://codefresh.io)
 
-The pipelines are found in the `pipelines` directory in the repo. There are 3 different pipelines:
+The pipelines are found in the `pipelines` directory in the repo. There are 4 different pipelines:
 1. Test
 1. Release
-1. Deploy
+1. deployDev
+1. deployProd
 
 ### 1. Test
 
@@ -17,4 +18,4 @@ The release pipeline is triggered whenever a tagged release is created on Github
 
 ### 3. Deploy
 
-The deploy pipeline takes a tagged release version and deploys it to the respective environment. Deployments are configured to occur whenever the `master` branch changes, and a file inside `deploys` has changed. For example: to deploy a release to the dev environment, edit `deploys/dev.txt` to put the release tag you'd like to deploy to the dev environment. To find available releases, look at the Releases in Github. Each release is tied to a git tag. The tag is the release version to put in `deploys/dev.txt`
+The deploy pipelines take a tagged release version and deploys it to the respective environment. Deployments are configured to occur whenever the `./deploys/[env].txt` on the `master` branch changes. For example: to deploy a release to the dev environment, edit `deploys/deployDev.txt` to put the release tag you'd like to deploy to the dev environment. To find available releases, look at the Releases in Github. Each release is tied to a git tag. The tag is the release version to put in `deploys/deployDev.txt`

@@ -18,7 +18,7 @@ webTag: "0.9.1"
 
 api:
   cdnHostname: 'https://portwaycontent.com'
-  s3ContentBucket: 'portway-content-dev'
+  s3ContentBucket: 'portway-content-prod'
   logger: 'r7insight'
 
 db:
