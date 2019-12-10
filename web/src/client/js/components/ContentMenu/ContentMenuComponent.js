@@ -8,7 +8,7 @@ import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 import { AddIcon, TextIcon, StringIcon, ImageIcon, NumberIcon } from 'Components/Icons'
 import { FIELD_TYPES } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuHeader, MenuItem } from 'Components/Menu'
 
 const ContentMenuComponent = ({ createFieldHandler }) => {
   const [expanded, setExpanded] = useState(false)
@@ -46,7 +46,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         id="content-menu"
         anchorRef={anchorRef}
         autoCollapse={collapseCallback}
-        open={!expanded}
+        open={expanded}
         placement="bottom"
         width="130"
       >

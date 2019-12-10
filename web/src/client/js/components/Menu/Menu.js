@@ -1,56 +1,87 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import './_Menu.scss'
 
-export const Menu = ({ className, children, ...props }) => {
+const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
+  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [menuItems, setMenuItems] = useState([])
+
+  const keyNavigationHandler = useCallback((e) => {
+    let counterBecauseUseState = selectedIndex
+
+    switch (e.key) {
+      case 'ArrowDown':
+        // Increase the index
+        setSelectedIndex(counterBecauseUseState++)
+        break
+      case 'ArrowUp':
+        // Decrease the index
+        setSelectedIndex(counterBecauseUseState--)
+        break
+      default:
+        return
+    }
+
+    // If we've gone past zero, focus the original element
+    if (counterBecauseUseState < 0) {
+      anchorRef.current.focus()
+      return
+    }
+
+    // If we're within range, set the correct index and focus that ref
+    if (counterBecauseUseState >= 0 && counterBecauseUseState <= menuItems.length - 1) {
+      menuItems[counterBecauseUseState].ref.current.focus()
+    }
+  }, [anchorRef, menuItems, selectedIndex])
+
+  useEffect(() => {
+    if (isActive) {
+      const menuItemComponents = React.Children.toArray(children).filter((child) => {
+        return child.type.name === 'MenuItem'
+      })
+      const menuItemChildren = menuItemComponents.map((child) => {
+        return child.props.children
+      })
+      setMenuItems(menuItemChildren)
+      document.addEventListener('keydown', keyNavigationHandler, false)
+      return () => {
+        document.removeEventListener('keydown', keyNavigationHandler, false)
+      }
+    } else {
+      // Reset once the menu is closed
+      setSelectedIndex(-1)
+    }
+  }, [children, isActive, keyNavigationHandler])
+
   const menuClasses = cx({
     'menu': true,
     [className]: className
   })
+
   return (
-    <ul className={menuClasses} role="menu" tabIndex="-1" {...props}>
+    <ul
+      className={menuClasses}
+      role="menu"
+      tabIndex="-1" {...props}
+    >
       {children}
     </ul>
   )
 }
 
 Menu.propTypes = {
+  anchorRef: PropTypes.node,
   className: PropTypes.string,
   children: PropTypes.node,
+  isActive: PropTypes.bool,
 }
 
-export const MenuItem = ({ className, children, ...props }) => {
-  const menuItemClasses = cx({
-    'menu__item': true,
-    [className]: className
-  })
-  return (
-    <li className={menuItemClasses} role="menuitem" {...props}>
-      {children}
-    </li>
-  )
+Menu.defaultProps = {
+  isActive: false,
 }
 
-MenuItem.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.node,
-}
+export default Menu
 
-export const MenuHeader = ({ className, children, ...props }) => {
-  const menuTitleClasses = cx({
-    'menu__header': true,
-    [className]: className
-  })
-  return (
-    <header className={menuTitleClasses} {...props}>
-      {children}
-    </header>
-  )
-}
 
-MenuHeader.propTypes = {
-  className: PropTypes.string,
-  children: PropTypes.node,
-}

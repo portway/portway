@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -23,15 +23,34 @@ const SearchFieldContainer = ({
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
+  const [filteredProjects, setFilteredProjects] = useState([])
+
+  useEffect(() => {
+    if (Object.values(projects).length > 0) {
+      setFilteredProjects(Object.values(projects))
+    }
+  }, [projects])
 
   function clearSearchHandler(inputValue) {
     if (inputValue.trim() === '') {
       clearSearch()
+      setFilteredProjects(Object.values(projects))
     }
   }
 
   const searchOptionsHandler = debounce(200, (inputValue) => {
-    if (project.id && inputValue !== searchTerm) {
+    if (inputValue.trim() === '') {
+      clearSearch()
+      setFilteredProjects(Object.values(projects))
+      return
+    }
+    // First, let's filter the project names
+    const fp = Object.values(projects).filter((project) => {
+      return project.name.includes(inputValue)
+    })
+    setFilteredProjects(fp)
+    // if we have a project id, search for documents
+    if (project && project.id && inputValue !== searchTerm) {
       searchDocuments(project.id, inputValue)
     }
   })
@@ -41,7 +60,7 @@ const SearchFieldContainer = ({
       clearSearchHandler={clearSearchHandler}
       documents={documents}
       isSearching={isSearching}
-      projects={projects}
+      projects={filteredProjects}
       searchOptionsHandler={searchOptionsHandler}
       searchTerm={searchTerm}
     />

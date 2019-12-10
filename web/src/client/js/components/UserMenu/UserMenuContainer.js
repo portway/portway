@@ -13,7 +13,7 @@ import { currentUserId } from 'Libs/currentIds'
 import { logoutUser } from 'Actions/user'
 
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuHeader, MenuItem } from 'Components/Menu'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './UserMenu.scss'
@@ -59,7 +59,7 @@ const UserMenuContainer = () => {
         align="right"
         anchorRef={anchorRef}
         autoCollapse={collapseCallback}
-        open={!expanded}
+        open={expanded}
         width="200"
       >
         <MenuHeader>

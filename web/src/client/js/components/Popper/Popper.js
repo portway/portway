@@ -47,10 +47,10 @@ export const Popper = ({ align, anchorRef, autoCollapse, children, open, placeme
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
-      ariarole={role}
       className={popperClasses}
-      hidden={open}
+      hidden={!open}
       onClick={() => { if (autoCollapse) { autoCollapse() } }}
       onKeyDown={(e) => {
         if (e.keyCode === 13) {
@@ -58,7 +58,7 @@ export const Popper = ({ align, anchorRef, autoCollapse, children, open, placeme
         }
       }}
       ref={popperRef}
-      role="listbox"
+      role={role}
       style={style}
       tabIndex="-1"
       {...props}
@@ -83,6 +83,7 @@ Popper.defaultProps = {
   align: 'left',
   open: false,
   placement: 'top',
+  role: 'listbox',
 }
 
 /**

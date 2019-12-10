@@ -23,7 +23,7 @@ import currentResource from 'Libs/currentResource'
 
 import { CaretIcon, ProjectIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu } from 'Components/Menu/Menu'
+import { Menu } from 'Components/Menu'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
@@ -119,7 +119,7 @@ const NavigatorContainer = ({ history, location }) => {
           <CaretIcon />
           <span className="label">{project ? project.name : 'Projects'}</span>
         </button>
-        <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
+        <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
           <Menu>
             <Select
               ref={selectRef}
