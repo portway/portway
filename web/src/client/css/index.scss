@@ -12,6 +12,13 @@ html, body {
   }
 }
 
+.hero.is-fullheight-with-navbar .hero-body {
+  align-items: flex-start;
+  .container {
+    padding: 0;
+  }
+}
+
 .login-form {
   // Overwrite root CSS vars for the homepage
   --focus-border-color: var(--color-brand-darker);
