@@ -30,6 +30,11 @@ const DocumentsListContainer = ({
     match.params.projectId
   ])
 
+  // documents are done loading for project, but they aren't populated, assume 404
+  if (loading === false && !documents) {
+    return null
+  }
+
   function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
       name: value

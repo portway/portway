@@ -38,6 +38,17 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.RECEIVE_DOCUMENTS_ERROR: {
+      const { projectId } = action
+      const loadingList = { ...state.loading.byProject, [action.projectId]: false }
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          byProject: loadingList
+        }
+      }
+    }
     // Single document
     case ActionTypes.REQUEST_DOCUMENT:
       const byId = { ...state.loading.byId, [action.documentId]: true }

@@ -34,6 +34,7 @@ export const ActionTypes = {
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
+  RECEIVE_DOCUMENTS_ERROR: 'RECEIVE_DOCUMENTS_ERROR',
   INITIATE_DOCUMENT_CREATE: 'INITIATE_DOCUMENT_CREATE',
   RECEIVE_CREATED_DOCUMENT: 'RECEIVE_CREATED_DOCUMENT',
   INITIATE_DOCUMENT_UPDATE: 'INITIATE_UPDATE_DOCUMENT',
@@ -187,6 +188,7 @@ export const Documents = {
   deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
   publish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_PUBLISH, 'documentId'),
   receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data'),
+  receiveListError: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS_ERROR, 'projectId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   receiveError: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_ERROR, 'documentId'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),

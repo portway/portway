@@ -7,9 +7,12 @@ export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
     const { data, status } = await fetch(`projects/${projectId}/documents?draft=true`)
-    globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status)) :
-      dispatch(Documents.receiveList(projectId, data))
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Documents.receiveListError(projectId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
+      return
+    }
+    dispatch(Documents.receiveList(projectId, data))
   }
 }
 

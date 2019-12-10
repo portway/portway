@@ -11,6 +11,7 @@ import currentResource from 'Libs/currentResource'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
+import FourZeroFour from '../Pages/FourZeroFour'
 
 const DocumentContainer = ({
   documentMode,
@@ -22,13 +23,23 @@ const DocumentContainer = ({
   uiToggleFullScreen,
   updateDocument,
 }) => {
-  const { data: project } = useDataService(currentResource('project', location.pathname), [
+  const { data: project, loading: projectLoading } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
-  const { data: document } = useDataService(currentResource('document', location.pathname), [
+  const { data: document, loading: documentLoading } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
 
+  //if we're done loading things but the data never arrives, assume 404
+  if (projectLoading === false && !project) {
+    return <FourZeroFour />
+  }
+
+  if (documentLoading === false && !document) {
+    return <FourZeroFour />
+  }
+
+  //things are still loading, return null
   if (!project || !document) return null
 
   /**
