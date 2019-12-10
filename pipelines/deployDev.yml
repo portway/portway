@@ -5,6 +5,7 @@ steps:
     type: git-clone
     repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
     revision: '${{CF_REVISION}}'
+    git: 'github'
   extract_ze_version:
     title: Extract version to deploy
     image: alpine
