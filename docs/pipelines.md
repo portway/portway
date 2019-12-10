@@ -18,4 +18,4 @@ The release pipeline is triggered whenever a tagged release is created on Github
 
 ### 3. Deploy
 
-The deploy pipelines take a tagged release version and deploys it to the respective environment. Deployments are configured to occur whenever the `./deploys/[env].txt` on the `master` branch changes. For example: to deploy a release to the dev environment, edit `deploys/dev.txt` to put the release tag you'd like to deploy to the dev environment. To find available releases, look at the Releases in Github. Each release is tied to a git tag. The tag is the release version to put in `deploys/deployDev.txt`
+The deploy pipelines take a tagged release version and deploys it to the respective environment. Deployments are configured to occur whenever the `./deploys/[env].txt` on the `master` branch changes. For example: to deploy a release to the dev environment, edit `deploys/dev.txt` to put the release tag you'd like to deploy to the dev environment. To find available releases, look at the Releases in Github. Each release is tied to a git tag. The tag is the release version to put in `deploys/dev.txt`
