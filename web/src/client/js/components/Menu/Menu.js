@@ -46,7 +46,10 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
       const menuItemChildren = menuItemComponents.map((child) => {
         return child.props.children
       })
-      setMenuItems(menuItemChildren)
+      const filteredMenuItemChildren = menuItemChildren.filter((child) => {
+        return child.ref !== null
+      })
+      setMenuItems(filteredMenuItemChildren)
       document.addEventListener('keydown', keyNavigationHandler, false)
       return () => {
         document.removeEventListener('keydown', keyNavigationHandler, false)
@@ -74,7 +77,7 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
 }
 
 Menu.propTypes = {
-  anchorRef: PropTypes.node,
+  anchorRef: PropTypes.object.isRequired,
   className: PropTypes.string,
   children: PropTypes.node,
   isActive: PropTypes.bool,
