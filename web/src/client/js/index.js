@@ -13,6 +13,7 @@ import {
   PATH_PROJECTS,
   PATH_PROJECT,
   PATH_SETTINGS,
+  PATH_404,
   PRODUCT_NAME
 } from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
@@ -26,6 +27,7 @@ import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryCompon
 
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
+import FourZeroFour from 'Components/Pages/FourZeroFour'
 
 const LockedViewContainer = lazy(() => import(/* webpackChunkName: 'LockedViewContainer' */ 'Components/LockedView/LockedViewContainer'))
 const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection',  webpackPreload: true */ 'Sections/Projects/ProjectsSection'))
@@ -60,6 +62,7 @@ const Index = () => {
               <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
               <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
               <Route path={PATH_SETTINGS} component={UserSection} />
+              <Route path ={PATH_404} component={FourZeroFour} />
               </>
               }
               <Route path={PATH_ADMIN} component={AdminSection} />

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT } from 'Shared/constants'
+import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT, PATH_404 } from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
@@ -30,9 +30,14 @@ const DocumentsListContainer = ({
     match.params.projectId
   ])
 
-  // documents are done loading for project, but they aren't populated, assume 404
+  // project id isn't a number, redirect to 404 page
+  if (isNaN(match.params.projectId)) {
+    return <Redirect to={PATH_404} />
+  }
+
+  // documents are done loading for project, but they aren't populated, assume 404 and redirect
   if (loading === false && !documents) {
-    return null
+    return <Redirect to={PATH_404} />
   }
 
   function createDocumentAction(value) {
