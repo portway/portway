@@ -26,12 +26,14 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
 
     // If we've gone past zero, focus the original element
     if (counterBecauseUseState < 0) {
+      setSelectedIndex(-1)
       anchorRef.current.focus()
       return
     }
 
     // If we're within range, set the correct index and focus that ref
     if (counterBecauseUseState >= 0 && counterBecauseUseState <= menuItems.length - 1) {
+      setSelectedIndex(counterBecauseUseState)
       menuItems[counterBecauseUseState].ref.current.focus()
     }
   }, [anchorRef, menuItems, selectedIndex])

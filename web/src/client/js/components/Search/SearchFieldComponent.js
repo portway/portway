@@ -53,7 +53,10 @@ const SearchFieldComponent = ({
               type="search"
               onBlur={(e) => { clearSearchHandler(e.target.value) }}
               onChange={(e) => { searchOptionsHandler(e.target.value) }}
-              onFocus={() => setExpanded(true)}
+              onFocus={(e) => {
+                setExpanded(true)
+                e.target.select()
+              }}
               placeholder="Search..."
               ref={inputRef}
             />
