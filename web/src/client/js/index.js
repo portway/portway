@@ -38,6 +38,7 @@ const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' *
 const Index = () => {
   useDetectInputMode()
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
+  const lockedComponent = currentOrg && LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus)
   return (
     <Provider store={store}>
       <Router basename={PATH_APP}>
@@ -51,25 +52,13 @@ const Index = () => {
             <HeaderContainer />
             <Suspense fallback={null}>
               {currentOrg &&
-                <>
-                  {LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
-                  <Switch>
-                    <Route exact path={PATH_PROJECTS} component={LockedViewContainer} />
-                    <Route path={`${PATH_PROJECT}/:projectId`} component={LockedViewContainer} />
-                    <Route exact path={PATH_SETTINGS} component={LockedViewContainer} />
-                    <Route component={FourZeroFour} />
-                  </Switch>
-                  }
-                  {!LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
-                  <Switch>
-                    <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
-                    <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
-                    <Route exact path={PATH_SETTINGS} component={UserSection} />
-                    <Route component={FourZeroFour} />
-                  </Switch>
-                  }           
-                  <Route exact path={PATH_ADMIN} component={AdminSection} />
-                </>
+                <Switch>
+                  <Route exact path={PATH_PROJECTS} component={lockedComponent || ProjectsSection} />
+                  <Route path={`${PATH_PROJECT}/:projectId`} component={lockedComponent || ProjectSection} />
+                  <Route exact path={PATH_SETTINGS} component={lockedComponent || UserSection} />
+                  <Route path={PATH_ADMIN} component={AdminSection} />
+                  <Route component={FourZeroFour} />
+                </Switch>
               }
           </Suspense>
           </ErrorBoundaryComponent>

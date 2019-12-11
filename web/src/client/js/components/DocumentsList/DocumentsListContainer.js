@@ -12,6 +12,7 @@ import { createDocument, deleteDocument, unpublishDocument } from 'Actions/docum
 import { copyField, moveField } from 'Actions/field'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
+import NoProject from './NoProject'
 
 const DocumentsListContainer = ({
   copyField,
@@ -32,12 +33,12 @@ const DocumentsListContainer = ({
 
   // project id isn't a number, redirect to 404 page
   if (match.params.projectId && isNaN(match.params.projectId)) {
-    return <Redirect to={PATH_404} />
+    return <NoProject />
   }
 
   // documents are done loading for project, but they aren't populated, assume 404 and redirect
   if (loading === false && !documents) {
-    return <Redirect to={PATH_404} />
+    return <NoProject />
   }
 
   function createDocumentAction(value) {

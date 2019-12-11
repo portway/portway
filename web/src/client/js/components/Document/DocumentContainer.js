@@ -11,6 +11,7 @@ import currentResource from 'Libs/currentResource'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM, PATH_404 } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
+import NoDocument from './NoDocument'
 
 const DocumentContainer = ({
   documentMode,
@@ -35,18 +36,18 @@ const DocumentContainer = ({
 
   //if the document id isn't a valid number, redirect to 404
   if (isNaN(match.params.documentId)) {
-    return <Redirect to={PATH_404} />
+    return <NoDocument />
   }
-  
+
   //if we're done loading things but the data never arrives, assume 404
   if (documentLoading === false && !document) {
-    return <Redirect to={PATH_404} />
+    return <NoDocument />
   }
-  
+
   if (projectLoading === false && !project) {
-    return <Redirect to={PATH_404} />
+    return <NoDocument />
   }
-  
+
   //things are still loading, return null
   if (!project || !document) return null
   /**
