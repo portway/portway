@@ -172,7 +172,7 @@ module.exports = {
   PATH_SETTINGS: '/settings',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT_NEW_PARAM: 'new',
-  PATH_404: '/404',
+  PATH_404: '/not-found',
   // Roles
   ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS,
   ORGANIZATION_ROLE_NAMES: ORGANIZATION_ROLE_NAMES,

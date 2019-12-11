@@ -62,10 +62,11 @@ const Index = () => {
               <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
               <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
               <Route path={PATH_SETTINGS} component={UserSection} />
-              <Route path ={PATH_404} component={FourZeroFour} />
+              <Route exact path={PATH_404} component={FourZeroFour} />
               </>
               }
               <Route path={PATH_ADMIN} component={AdminSection} />
+              <Route component={FourZeroFour} />
             </Suspense>
           </ErrorBoundaryComponent>
         </AppContainer>
