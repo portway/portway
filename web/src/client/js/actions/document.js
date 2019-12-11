@@ -9,7 +9,7 @@ export const fetchDocuments = (projectId) => {
     const { data, status } = await fetch(`projects/${projectId}/documents?draft=true`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Documents.receiveListError(projectId))
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
+      status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
       return
     }
     dispatch(Documents.receiveList(projectId, data))
@@ -22,7 +22,7 @@ export const fetchDocument = (documentId) => {
     const { data, status } = await fetch(`documents/${documentId}?draft=true`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Documents.receiveError(documentId))
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
+      status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
       return
     }
     dispatch(Documents.receiveOne(data))

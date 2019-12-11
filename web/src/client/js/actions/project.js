@@ -33,7 +33,7 @@ export const fetchProject = (projectId) => {
 
     if (globalErrorCodes.includes(status)) {
       dispatch(Projects.receiveError(projectId))
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
       return
     }
 
