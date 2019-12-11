@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Helmet } from 'react-helmet'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import store from './reducers'
 import {
@@ -50,24 +50,28 @@ const Index = () => {
             <NotificationsContainer />
             <HeaderContainer />
             <Suspense fallback={null}>
-              {currentOrg && LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
-              <>
-              <Route exact path={PATH_PROJECTS} component={LockedViewContainer} />
-              <Route exact path={`${PATH_PROJECT}/:projectId`} component={LockedViewContainer} />
-              <Route exact path={PATH_SETTINGS} component={LockedViewContainer} />
-              </>
+              {currentOrg &&
+                <>
+                  {LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
+                  <Switch>
+                    <Route exact path={PATH_PROJECTS} component={LockedViewContainer} />
+                    <Route path={`${PATH_PROJECT}/:projectId`} component={LockedViewContainer} />
+                    <Route exact path={PATH_SETTINGS} component={LockedViewContainer} />
+                    <Route component={FourZeroFour} />
+                  </Switch>
+                  }
+                  {!LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
+                  <Switch>
+                    <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
+                    <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
+                    <Route exact path={PATH_SETTINGS} component={UserSection} />
+                    <Route component={FourZeroFour} />
+                  </Switch>
+                  }           
+                  <Route exact path={PATH_ADMIN} component={AdminSection} />
+                </>
               }
-              {currentOrg && !LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) &&
-              <>
-              <Route exact path={PATH_PROJECTS} component={ProjectsSection} />
-              <Route path={`${PATH_PROJECT}/:projectId`} component={ProjectSection} />
-              <Route path={PATH_SETTINGS} component={UserSection} />
-              <Route exact path={PATH_404} component={FourZeroFour} />
-              </>
-              }
-              <Route path={PATH_ADMIN} component={AdminSection} />
-              <Route component={FourZeroFour} />
-            </Suspense>
+          </Suspense>
           </ErrorBoundaryComponent>
         </AppContainer>
       </Router>
