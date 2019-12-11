@@ -31,7 +31,7 @@ const DocumentsListContainer = ({
   ])
 
   // project id isn't a number, redirect to 404 page
-  if (isNaN(match.params.projectId)) {
+  if (match.params.projectId && isNaN(match.params.projectId)) {
     return <Redirect to={PATH_404} />
   }
 

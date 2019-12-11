@@ -28,19 +28,27 @@ const DocumentContainer = ({
   const { data: document, loading: documentLoading } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+  // if we don't have a documentId, we shouldn't be loading this component
+  if (match.params.documentId == null) {
+    return null
+  }
 
-  //things are still loading, return null
-  if (!project || !document) return null
-
+  //if the document id isn't a valid number, redirect to 404
+  if (isNaN(match.params.documentId)) {
+    return <Redirect to={PATH_404} />
+  }
+  
   //if we're done loading things but the data never arrives, assume 404
   if (documentLoading === false && !document) {
     return <Redirect to={PATH_404} />
   }
-
+  
   if (projectLoading === false && !project) {
     return <Redirect to={PATH_404} />
   }
-
+  
+  //things are still loading, return null
+  if (!project || !document) return null
   /**
    * If we're creating a document, render nothing
    */
