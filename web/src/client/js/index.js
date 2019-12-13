@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Helmet } from 'react-helmet'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 import store from './reducers'
 import {
@@ -13,7 +13,6 @@ import {
   PATH_PROJECTS,
   PATH_PROJECT,
   PATH_SETTINGS,
-  PATH_404,
   PRODUCT_NAME
 } from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
@@ -38,7 +37,7 @@ const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' *
 const Index = () => {
   useDetectInputMode()
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
-  const lockedComponent = currentOrg && LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus)
+  const lockedComponent = currentOrg && LOCKED_ACCOUNT_STATUSES.includes(currentOrg.subscriptionStatus) && LockedViewContainer
   return (
     <Provider store={store}>
       <Router basename={PATH_APP}>
@@ -53,6 +52,7 @@ const Index = () => {
             <Suspense fallback={null}>
               {currentOrg &&
                 <Switch>
+                  <Route exact path="/"><Redirect to="/projects" /></Route>
                   <Route exact path={PATH_PROJECTS} component={lockedComponent || ProjectsSection} />
                   <Route path={`${PATH_PROJECT}/:projectId`} component={lockedComponent || ProjectSection} />
                   <Route exact path={PATH_SETTINGS} component={lockedComponent || UserSection} />
@@ -60,7 +60,7 @@ const Index = () => {
                   <Route component={FourZeroFour} />
                 </Switch>
               }
-          </Suspense>
+            </Suspense>
           </ErrorBoundaryComponent>
         </AppContainer>
       </Router>
