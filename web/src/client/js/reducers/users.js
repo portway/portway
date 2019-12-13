@@ -52,7 +52,8 @@ export const users = (state = initialState, action) => {
       const id = action.data.id
       const byId = { ...state.loading.byId, [id]: false }
       const usersById = { ...state.usersById, [id]: action.data }
-      return { ...state, usersById, loading: { ...state.loading, byId } }
+      const userIdsByPage = { ...state.userIdsByPage, 1: [id, ...state.userIdsByPage[1]] }
+      return { ...state, usersById, userIdsByPage, loading: { ...state.loading, byId } }
     }
     case ActionTypes.INITIATE_USER_UPDATE: {
       const id = action.userId
