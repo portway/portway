@@ -7,9 +7,12 @@ export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
     const { data, status } = await fetch(`projects/${projectId}/documents?draft=true`)
-    globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status)) :
-      dispatch(Documents.receiveList(projectId, data))
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Documents.receiveListError(projectId))
+      status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
+      return
+    }
+    dispatch(Documents.receiveList(projectId, data))
   }
 }
 
@@ -17,9 +20,12 @@ export const fetchDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.requestOne(documentId))
     const { data, status } = await fetch(`documents/${documentId}?draft=true`)
-    globalErrorCodes.includes(status) ?
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status)) :
-      dispatch(Documents.receiveOne(data))
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Documents.receiveError(documentId))
+      status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
+      return
+    }
+    dispatch(Documents.receiveOne(data))
   }
 }
 

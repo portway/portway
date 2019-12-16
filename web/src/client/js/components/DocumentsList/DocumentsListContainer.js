@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT } from 'Shared/constants'
+import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT, PATH_404 } from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
@@ -12,6 +12,7 @@ import { createDocument, deleteDocument, unpublishDocument } from 'Actions/docum
 import { copyField, moveField } from 'Actions/field'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
+import NoProject from './NoProject'
 
 const DocumentsListContainer = ({
   copyField,
@@ -29,6 +30,16 @@ const DocumentsListContainer = ({
   const { data: documents, loading } = useDataService(dataMapper.documents.list(match.params.projectId), [
     match.params.projectId
   ])
+
+  // project id isn't a number, redirect to 404 page
+  if (match.params.projectId && isNaN(match.params.projectId)) {
+    return <NoProject />
+  }
+
+  // documents are done loading for project, but they aren't populated, assume 404 and redirect
+  if (loading === false && !documents) {
+    return <NoProject />
+  }
 
   function createDocumentAction(value) {
     createDocument(match.params.projectId, history, {
