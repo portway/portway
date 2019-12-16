@@ -4,8 +4,8 @@ import cx from 'classnames'
 
 import Constants from 'Shared/constants'
 import useClickOutside from 'Hooks/useClickOutside'
-import { AddIcon, RemoveIcon, DocumentIcon } from 'Components/Icons'
-import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
+import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
+import { AddIcon, RemoveIcon, SearchIcon, DocumentIcon } from 'Components/Icons'
 import DocumentsListItem from './DocumentsListItem'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 
@@ -15,6 +15,7 @@ const { PROJECT_ROLE_IDS } = Constants
 const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
 const DocumentsListComponent = ({
+  clearSearchHandler,
   createCallback,
   createChangeHandler,
   creating,
@@ -25,14 +26,19 @@ const DocumentsListComponent = ({
   loading,
   projectId,
   removeDocumentHandler,
+  searchDocumentsHandler,
   unpublishDocumentHandler,
 }) => {
   // Keep track of how many things being dragged
   let dragCount = 0
 
+  const [isSearching, setIsSearching] = useState(false)
   const [dragActive, setDragActive] = useState(false)
   const listItemRef = useRef()
   const nameRef = useRef()
+
+  // Ctrl-n creates a new document
+  useKeyboardShortcut('n', () => createCallback(true))
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
@@ -40,15 +46,6 @@ const DocumentsListComponent = ({
       nameRef.current.select()
     }
   })
-
-  // Set up toolbar
-  const toolbarAction = {
-    callback: () => { createCallback(true) },
-    icon: <AddIcon />,
-    label: 'New Document',
-    shortcut: 'n',
-    title: 'Create a new document in this project'
-  }
 
   function createDocument() {
     if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
@@ -170,14 +167,56 @@ const DocumentsListComponent = ({
       onDragOver={dragOverHandler}
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
-      <ProjectPermission
-        projectId={projectId}
-        acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}
-        elseRender={(
-          <ToolbarComponent action={{}} />
-        )}>
-        <ToolbarComponent action={toolbarAction} />
-      </ProjectPermission>
+      <header className="documents-list__header">
+        {!isSearching &&
+        <>
+          <ProjectPermission
+            projectId={projectId}
+            acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+            <button
+              className="btn btn--blank btn--with-circular-icon"
+              onClick={() => { createCallback(true) }}
+              title="Create a new document in this project"
+            >
+              <AddIcon /> <span className="label">New Document</span>
+            </button>
+          </ProjectPermission>
+          <button
+            className="btn btn--blank btn--with-circular-icon"
+            onClick={() => {
+              setIsSearching(true)
+            }}
+          >
+            <SearchIcon />
+          </button>
+        </>
+        }
+        {isSearching &&
+        <>
+          <input
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={true}
+            className="documents-list__search-field"
+            onChange={(e) => { searchDocumentsHandler(e.target.value) }}
+            onKeyDown={(e) => {
+              if (e.key.toLowerCase() === 'escape') {
+                setIsSearching(false)
+                clearSearchHandler()
+              }
+            }}
+            placeholder="Search documents..."
+            type="search"
+          />
+          <button
+            aria-label="Exit document search"
+            className="btn btn--blank btn--with-circular-icon"
+            onClick={() => { setIsSearching(false); clearSearchHandler() }}
+          >
+            <RemoveIcon />
+          </button>
+        </>
+        }
+      </header>
       {documents.length === 0 && !loading && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
@@ -208,6 +247,7 @@ const DocumentsListComponent = ({
 }
 
 DocumentsListComponent.propTypes = {
+  clearSearchHandler: PropTypes.func.isRequired,
   createCallback: PropTypes.func.isRequired,
   createChangeHandler: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
@@ -218,6 +258,7 @@ DocumentsListComponent.propTypes = {
   loading: PropTypes.bool.isRequired,
   projectId: PropTypes.number.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
+  searchDocumentsHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 

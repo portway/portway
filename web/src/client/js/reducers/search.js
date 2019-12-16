@@ -9,7 +9,6 @@ const initialState = {
 // Search results
 export const search = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.ROUTE_CHANGE:
     case ActionTypes.SEARCH_CLEAR: {
       // Reset on route change
       return {

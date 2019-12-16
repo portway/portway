@@ -51,7 +51,7 @@ const SearchFieldComponent = ({
               aria-controls="search-field"
               defaultValue={searchTerm}
               type="search"
-              onBlur={(e) => { clearSearchHandler(e.target.value) }}
+              onBlur={(e) => { clearSearchHandler() }}
               onChange={(e) => { searchOptionsHandler(e.target.value) }}
               onFocus={(e) => {
                 setExpanded(true)

@@ -31,11 +31,9 @@ const SearchFieldContainer = ({
     }
   }, [projects])
 
-  function clearSearchHandler(inputValue) {
-    if (inputValue.trim() === '') {
-      clearSearch()
-      setFilteredProjects(Object.values(projects))
-    }
+  function clearSearchHandler() {
+    clearSearch()
+    setFilteredProjects(Object.values(projects))
   }
 
   const searchOptionsHandler = debounce(200, (inputValue) => {

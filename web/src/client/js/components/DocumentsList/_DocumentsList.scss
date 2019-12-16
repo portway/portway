@@ -10,22 +10,6 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 
-  .toolbar {
-    background-color: var(--theme-surface);
-    border-bottom: thin solid var(--theme-border-light);
-    height: 63px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-
-    &__start {
-      padding-left: calc(var(--gutter-width) / 4);
-    }
-    &__end {
-      padding-right: calc(var(--gutter-width) / 6);
-    }
-  }
-
   &--dragged-over {
     background-color: var(--document-list-item-hover);
     .toolbar {
@@ -62,6 +46,24 @@
     top: 50%;
     transform: translate(-50%, -50%);
     width: 60%;
+  }
+
+  &__header {
+    align-items: center;
+    background-color: var(--theme-surface);
+    border-bottom: thin solid var(--theme-border-light);
+    display: flex;
+    height: 63px;
+    justify-content: space-between;
+    padding-left: calc(var(--gutter-width) / 4);
+    padding-right: calc(var(--gutter-width) / 4);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  &__search-field {
+    border: thin solid transparent;
   }
 
   &__list {
