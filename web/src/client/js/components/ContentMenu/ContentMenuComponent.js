@@ -50,7 +50,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         width="130"
       >
         <MenuHeader><h2>Content</h2></MenuHeader>
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem tabIndex="0">
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }}>
               <TextIcon width="26" height="26" /> <span className="label">Body</span>
@@ -63,7 +63,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
           </MenuItem>
         </Menu>
         <MenuHeader><h2>Data</h2></MenuHeader>
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.STRING) }}>
               <StringIcon width="26" height="26" /> <span className="label">String</span>

@@ -33,6 +33,7 @@ function returnNull() {
 export default {
   documents: {
     list: function(projectId) {
+      if (!projectId || isNaN(projectId)) return returnNull()
       return {
         fetchAction: fetchDocuments(projectId),
         getLoadingStatusFromState: (state) => {
@@ -44,7 +45,7 @@ export default {
       }
     },
     id: function(projectId, documentId) {
-      if (!documentId) return returnNull()
+      if (!documentId || isNaN(documentId) || isNaN(projectId)) return returnNull()
       return {
         fetchAction: fetchDocument(documentId),
         getLoadingStatusFromState: (state) => {
@@ -59,7 +60,7 @@ export default {
   },
   fields: {
     list: function(documentId) {
-      if (!documentId) return returnNull()
+      if (!documentId || isNaN(documentId)) return returnNull()
       return {
         fetchAction: fetchDocument(documentId),
         getLoadingStatusFromState: (state) => {
@@ -96,6 +97,7 @@ export default {
       }
     },
     id: function(projectId) {
+      if (!projectId || isNaN(projectId)) return returnNull()
       return {
         fetchAction: fetchProject(projectId),
         getLoadingStatusFromState: (state) => {
@@ -107,7 +109,7 @@ export default {
       }
     },
     projectUsers: function(projectId) {
-      if (!projectId) return returnNull()
+      if (!projectId || isNaN(projectId)) return returnNull()
       return {
         fetchAction: fetchProjectAssignees(projectId),
         getLoadingStatusFromState: (state) => {
@@ -119,7 +121,7 @@ export default {
       }
     },
     projectAssignments: function(projectId) {
-      if (!projectId) return returnNull()
+      if (!projectId || isNaN(projectId)) return returnNull()
       return {
         fetchAction: fetchProjectAssignees(projectId),
         getLoadingStatusFromState: (state) => {
@@ -131,6 +133,7 @@ export default {
       }
     },
     tokens: function(projectId) {
+      if (!projectId || isNaN(projectId)) return returnNull()
       return {
         fetchAction: fetchProjectTokens(projectId),
         getLoadingStatusFromState: (state) => {

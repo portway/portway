@@ -97,7 +97,7 @@ const FormatMenuComponent = ({ focusedField }) => {
         <FormatIcon width="24" height="24" />
       </button>
       <Popper id="format-menu" anchorRef={anchorRef} open={expanded} placement="bottom" width="200">
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem tabIndex="0">
             <button className="btn btn--blank" onClick={() => formatSelection('h1') }>
               <span className="format-menu__format">#</span> Heading 1

@@ -124,7 +124,7 @@ const DocumentsListItem = ({
             autoCollapse={collapseCallback}
             open={expanded}
           >
-            <Menu>
+            <Menu anchorRef={anchorRef}>
               <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
                 <button
                   className="btn btn--blank"

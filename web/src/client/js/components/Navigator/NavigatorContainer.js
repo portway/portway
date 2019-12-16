@@ -120,7 +120,7 @@ const NavigatorContainer = ({ history, location }) => {
           <span className="label">{project ? project.name : 'Projects'}</span>
         </button>
         <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
-          <Menu>
+          <Menu anchorRef={anchorRef}>
             <Select
               ref={selectRef}
               className={`navigator__select`}

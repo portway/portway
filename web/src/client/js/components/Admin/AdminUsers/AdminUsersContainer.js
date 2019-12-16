@@ -36,7 +36,7 @@ const AdminUsersContainer = ({
   uiCreateUserMode
 }) => {
   const params = parseParams(location.search)
-  const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.ASCENDING } = params
+  const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
   const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
   const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
 

@@ -9,10 +9,10 @@ const OrgPermission = ({ children, elseRender, acceptedRoleIds = [], acceptedSet
   const { data: organization, loading: orgLoading } = useDataService(dataMapper.organizations.current())
 
   // check if either user or org loading hasn't been triggered yet, or is currently loading, if so always return null
-  if (userLoading || userLoading == null) {
+  if (userLoading || userLoading == null || !currentUser) {
     return <>{null}</>
   }
-  if (orgLoading || orgLoading == null) {
+  if (orgLoading || orgLoading == null || !organization) {
     return <>{null}</>
   }
 

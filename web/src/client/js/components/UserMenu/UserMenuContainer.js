@@ -67,7 +67,7 @@ const UserMenuContainer = () => {
           <h3 className="user-menu__organization">{currentOrg.name}</h3>
           <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
         </MenuHeader>
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
             <MenuItem tabIndex="0">
               <Link className="btn btn--blank" to={PATH_ADMIN}>Administration</Link>

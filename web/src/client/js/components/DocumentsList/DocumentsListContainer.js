@@ -15,6 +15,7 @@ import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
+import NoProject from './NoProject'
 
 const DocumentsListContainer = ({
   clearSearch,
@@ -37,6 +38,16 @@ const DocumentsListContainer = ({
   const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [
     projectId
   ])
+
+  // project id isn't a number, redirect to 404 page
+  if (projectId && isNaN(projectId)) {
+    return <NoProject />
+  }
+
+  // documents are done loading for project, but they aren't populated, assume 404 and redirect
+  if (loading === false && !documents) {
+    return <NoProject />
+  }
 
   function createDocumentAction(value) {
     createDocument(projectId, history, {
@@ -160,7 +171,6 @@ DocumentsListContainer.propTypes = {
   createDocument: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
-  history: PropTypes.object.isRequired,
   moveField: PropTypes.func.isRequired,
   searchDocuments: PropTypes.func.isRequired,
   searchResults: PropTypes.object,
