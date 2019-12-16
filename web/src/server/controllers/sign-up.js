@@ -37,6 +37,11 @@ const registerOrganization = async (req, res) => {
     } else {
       console.error({ status: response.status, message: response.data })
     }
+
+    if (response.status === 409) {
+      return res.status(409).send('There is already a user with this email address')
+    }
+
     return res.status(500).send('There was an error registering your organization')
   }
 
