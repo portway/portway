@@ -30,9 +30,6 @@ const DocumentContainer = ({
     location.pathname
   ])
 
-  //things are still loading, return null
-  if (!project || !document) return null
-
   /**
    * If we're creating a document, render nothing
    */
@@ -58,6 +55,9 @@ const DocumentContainer = ({
   if (projectLoading === false && !project) {
     return <NoDocument />
   }
+
+  //things are still loading, return null
+  if (!project || !document) return null
 
   /**
    * If there is no document and we are not creating: true, then we render
