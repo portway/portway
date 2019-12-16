@@ -17,7 +17,7 @@ webImage: bonkeybong/portway_web
 webTag: "0.9.1"
 
 api:
-  cdnHostname: 'https://portwaycontent.com'
+  cdnHostname: 'https://www.portwaycontent.com'
   s3ContentBucket: 'portway-content-prod'
   logger: 'r7insight'
 
