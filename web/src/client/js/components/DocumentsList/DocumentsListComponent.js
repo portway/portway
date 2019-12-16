@@ -39,6 +39,7 @@ const DocumentsListComponent = ({
 
   // Ctrl-n creates a new document
   useKeyboardShortcut('n', () => createCallback(true))
+  useKeyboardShortcut('f', () => setIsSearching(true))
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
