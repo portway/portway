@@ -10,7 +10,7 @@ const USERS_PER_SEARCH = 10
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchUsers = (page = 1, sortBy = 'createdAt', sortMethod = 'ASC') => {
+export const fetchUsers = (page = 1, sortBy = 'createdAt', sortMethod = 'DESC') => {
   return async (dispatch) => {
     dispatch(Users.request(page))
     const { data, totalPages, status } = await fetch(

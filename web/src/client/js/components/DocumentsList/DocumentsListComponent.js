@@ -178,7 +178,7 @@ const DocumentsListComponent = ({
         )}>
         <ToolbarComponent action={toolbarAction} />
       </ProjectPermission>
-      {documents.length === 0 && !loading && !creating &&
+      {documents.length === 0 && loading === false && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
@@ -215,7 +215,7 @@ DocumentsListComponent.propTypes = {
   draggedDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,

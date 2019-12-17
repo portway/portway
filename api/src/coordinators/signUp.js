@@ -7,10 +7,17 @@ import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
+import ono from 'ono'
 
 const { CLIENT_URL } = process.env
 
 async function createUserAndOrganization(name, email) {
+  const existingUser = await BusinessUser.findByEmail(email)
+
+  if (existingUser) {
+    throw ono({ code: 409 }, 'There is already a user with this email address')
+  }
+
   const organizationName = `${name}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
   const resetKey = passwordResetKey.generate()
