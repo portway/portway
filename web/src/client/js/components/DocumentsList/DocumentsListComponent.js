@@ -53,6 +53,12 @@ const DocumentsListComponent = ({
     }
   })
 
+  // Reset search box if the project id changes
+  useEffect(() => {
+    setIsSearching(false)
+    searchFieldRef.current.value = ''
+  }, [projectId])
+
   function createDocument() {
     if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
       createChangeHandler(nameRef.current.value)
