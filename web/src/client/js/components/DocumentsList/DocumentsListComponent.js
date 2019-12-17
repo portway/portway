@@ -34,12 +34,16 @@ const DocumentsListComponent = ({
 
   const [isSearching, setIsSearching] = useState(false)
   const [dragActive, setDragActive] = useState(false)
+  const searchFieldRef = useRef()
   const listItemRef = useRef()
   const nameRef = useRef()
 
   // Ctrl-n creates a new document
   useKeyboardShortcut('n', () => createCallback(true))
-  useKeyboardShortcut('f', () => setIsSearching(true))
+  useKeyboardShortcut('f', () => {
+    searchFieldRef.current.focus()
+    setIsSearching(true)
+  })
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
@@ -55,11 +59,18 @@ const DocumentsListComponent = ({
       createCallback(false)
     }
   }
+
   useClickOutside(
     listItemRef,
     () => { if (creating) { createDocument() } },
     { preventEscapeFunctionality: true }
   )
+
+  function clearOutSearch() {
+    setIsSearching(false)
+    searchFieldRef.current.value = ''
+    clearSearchHandler()
+  }
 
   function renderNewDocument() {
     if (creating) {
@@ -159,6 +170,11 @@ const DocumentsListComponent = ({
     'documents-list--dragged-over': dragActive
   })
 
+  const searchClasses = cx({
+    'documents-list__search': true,
+    'documents-list__search--disabled': creating,
+  })
+
   const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
 
   return (
@@ -169,55 +185,49 @@ const DocumentsListComponent = ({
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
       <header className="documents-list__header">
-        {!isSearching &&
-        <>
-          <ProjectPermission
-            projectId={projectId}
-            acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
-            <button
-              className="btn btn--blank btn--with-circular-icon"
-              onClick={() => { createCallback(true) }}
-              title="Create a new document in this project"
-            >
-              <AddIcon /> <span className="label">New Document</span>
-            </button>
-          </ProjectPermission>
+        <ProjectPermission
+          projectId={projectId}
+          acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <button
             className="btn btn--blank btn--with-circular-icon"
-            onClick={() => {
-              setIsSearching(true)
-            }}
+            onClick={() => { createCallback(true) }}
+            title="Create a new document in this project"
           >
-            <SearchIcon />
+            <AddIcon /> <span className="label">New Document</span>
           </button>
-        </>
-        }
-        {isSearching &&
-        <>
+        </ProjectPermission>
+      </header>
+      <div className={searchClasses}>
+        <div className="documents-list__search-field">
+          <SearchIcon />
           <input
             // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus={true}
-            className="documents-list__search-field"
-            onChange={(e) => { searchDocumentsHandler(e.target.value) }}
+            onChange={(e) => {
+              if (!isSearching) {
+                setIsSearching(true)
+              }
+              searchDocumentsHandler(e.target.value)
+            }}
             onKeyDown={(e) => {
               if (e.key.toLowerCase() === 'escape') {
-                setIsSearching(false)
-                clearSearchHandler()
+                clearOutSearch()
               }
             }}
             placeholder="Search documents..."
+            ref={searchFieldRef}
             type="search"
           />
-          <button
-            aria-label="Exit document search"
-            className="btn btn--blank btn--with-circular-icon"
-            onClick={() => { setIsSearching(false); clearSearchHandler() }}
-          >
-            <RemoveIcon />
-          </button>
-        </>
+        </div>
+        {isSearching &&
+        <button
+          aria-label="Exit document search"
+          className="btn btn--blank btn--with-circular-icon"
+          onClick={() => clearOutSearch()}
+        >
+          <RemoveIcon />
+        </button>
         }
-      </header>
+      </div>
       {documents.length === 0 && loading === false && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
