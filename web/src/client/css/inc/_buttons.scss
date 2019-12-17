@@ -222,7 +222,7 @@ button,
       padding: 2px 8px 2px 8px;
     }
     @media (hover: hover) {
-    &:hover {
+      &:hover {
         &:not([disabled]) {
           .icon {
             background-color: var(--button-icon-hover);

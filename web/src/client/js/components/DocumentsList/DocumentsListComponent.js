@@ -6,6 +6,7 @@ import Constants from 'Shared/constants'
 import useClickOutside from 'Hooks/useClickOutside'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 import { AddIcon, RemoveIcon, SearchIcon, DocumentIcon } from 'Components/Icons'
+import { IconButton } from 'Components/Buttons'
 import DocumentsListItem from './DocumentsListItem'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 
@@ -185,49 +186,49 @@ const DocumentsListComponent = ({
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
       <header className="documents-list__header">
+        <div className={searchClasses}>
+          <div className="documents-list__search-field">
+            <SearchIcon />
+            <input
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              onChange={(e) => {
+                if (!isSearching) {
+                  setIsSearching(true)
+                }
+                searchDocumentsHandler(e.target.value)
+              }}
+              onKeyDown={(e) => {
+                if (e.key.toLowerCase() === 'escape') {
+                  clearOutSearch()
+                }
+              }}
+              placeholder="Search documents..."
+              ref={searchFieldRef}
+              type="search"
+            />
+          </div>
+          {isSearching &&
+          <button
+            aria-label="Exit document search"
+            className="btn btn--blank btn--with-circular-icon"
+            onClick={() => clearOutSearch()}
+          >
+            <RemoveIcon />
+          </button>
+          }
+        </div>
         <ProjectPermission
           projectId={projectId}
           acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
-          <button
-            className="btn btn--blank btn--with-circular-icon"
+          <IconButton
+            aria-label="New document"
             onClick={() => { createCallback(true) }}
             title="Create a new document in this project"
           >
-            <AddIcon /> <span className="label">New Document</span>
-          </button>
+            <DocumentIcon fill={colorSurface} width="14" height="14" />
+          </IconButton>
         </ProjectPermission>
       </header>
-      <div className={searchClasses}>
-        <div className="documents-list__search-field">
-          <SearchIcon />
-          <input
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            onChange={(e) => {
-              if (!isSearching) {
-                setIsSearching(true)
-              }
-              searchDocumentsHandler(e.target.value)
-            }}
-            onKeyDown={(e) => {
-              if (e.key.toLowerCase() === 'escape') {
-                clearOutSearch()
-              }
-            }}
-            placeholder="Search documents..."
-            ref={searchFieldRef}
-            type="search"
-          />
-        </div>
-        {isSearching &&
-        <button
-          aria-label="Exit document search"
-          className="btn btn--blank btn--with-circular-icon"
-          onClick={() => clearOutSearch()}
-        >
-          <RemoveIcon />
-        </button>
-        }
-      </div>
       {documents.length === 0 && loading === false && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
