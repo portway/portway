@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser'
 // Custom libraries
 import { normalizePort } from './libs/express-utilities'
 import controllerLoader from './controllers/loader'
+import portwayMiddleware from './libs/portwayMiddleware'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -31,6 +32,7 @@ app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(portwayMiddleware)
 app.use(passport.initialize())
 
 // Dont cache these items
