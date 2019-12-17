@@ -8,9 +8,9 @@ const MenuHeader = ({ className, children, ...props }) => {
     [className]: className
   })
   return (
-    <li className={menuTitleClasses} {...props}>
+    <header className={menuTitleClasses} {...props}>
       {children}
-    </li>
+    </header>
   )
 }
 
