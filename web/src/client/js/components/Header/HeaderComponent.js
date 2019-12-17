@@ -64,8 +64,6 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
             </OrgPermission>
             }
           </div>
-          <div className="navbar__search">
-          </div>
           <div className="navbar__user">
             <UserMenuContainer />
           </div>
