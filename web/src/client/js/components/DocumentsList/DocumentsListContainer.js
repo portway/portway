@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -38,6 +38,11 @@ const DocumentsListContainer = ({
   const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [
     projectId
   ])
+
+  // trigger clear search action if project id changes
+  useEffect(() => {
+    clearSearch()
+  }, [projectId, clearSearch])
 
   // project id isn't a number, redirect to 404 page
   if (projectId && isNaN(projectId)) {
