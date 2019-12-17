@@ -78,10 +78,11 @@ const DocumentsListComponent = ({
       return (
         <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
           <div className="documents-list__button">
-            <textarea
+            <input
               ref={nameRef}
               className="documents-list__name"
               defaultValue={Constants.LABEL_NEW_DOCUMENT}
+              type="text"
               onKeyDown={(e) => {
                 if (e.keyCode === 27) {
                   e.preventDefault()
@@ -225,7 +226,7 @@ const DocumentsListComponent = ({
             onClick={() => { createCallback(true) }}
             title="Create a new document in this project"
           >
-            <DocumentIcon fill={colorSurface} width="14" height="14" />
+            <AddIcon width="14" height="14" />
           </IconButton>
         </ProjectPermission>
       </header>
