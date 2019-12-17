@@ -1,0 +1,26 @@
+.icon-button {
+  align-items: center;
+  background-color: var(--theme-border-light);
+  border: thin solid transparent;
+  border-radius: 50% 50%;
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  min-height: 26px;
+  padding: 0;
+  width: 26px;
+
+  &:not([disabled]) {
+    &:active {
+      background-color: var(--theme-overlay-light);
+    }
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      &:not([disabled]) {
+        background-color: var(--theme-overlay-dark);
+      }
+    }
+  }
+}
