@@ -30,6 +30,7 @@ const DocumentContainer = ({
     location.pathname
   ])
 
+
   /**
    * If we're creating a document, render nothing
    */
@@ -60,6 +61,9 @@ const DocumentContainer = ({
 
   //things are still loading, return null
   if (!project || !document) return null
+
+  //the current document doesn't match the url params, return null
+  if (document.id !== Number(match.params.documentId)) return null
 
   /**
    * Otherwise we render the document, and update its values onChange

@@ -8,9 +8,9 @@ import dataMapper from './dataMapper'
 
 function returnNull() {
   return {
-    fetchAction: () => {},
-    getLoadingStatusFromState: () => false,
-    getDataFromState: () => {}
+    fetchAction: () => null,
+    getLoadingStatusFromState: () => null,
+    getDataFromState: () => null
   }
 }
 
