@@ -58,7 +58,7 @@ export const updateOrganizationAvatar = (formId, orgId, formData) => {
 export const fetchOrganizationSeats = (orgId) => {
   return async (dispatch) => {
     dispatch(Organizations.requestSeats(orgId))
-    const { data, status } = await fetch(`organizations/${orgId}/seats`)
+    const { data, status } = await fetch(`v1/organizations/${orgId}/seats`)
     if (globalErrorCodes.includes(status)) {
       dispatch(
         Notifications.create(
