@@ -85,6 +85,11 @@
       appearance: none;
       border: thin solid transparent;
       width: 100%;
+      .using-mouse & {
+        &:focus {
+          border: thin solid transparent;
+        }
+      }
     }
   }
 

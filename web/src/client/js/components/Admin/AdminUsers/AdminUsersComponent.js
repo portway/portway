@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
@@ -10,6 +10,7 @@ import AdminUsersCreateForm from './AdminUsersCreateForm'
 import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import Table from 'Components/Table/Table'
+import FormField from 'Components/Form/FormField'
 
 import './_AdminUsers.scss'
 
@@ -19,9 +20,10 @@ const AdminUsersComponent = ({
   errors,
   isCreating,
   isInviting,
-  pageChangeHandler,
+  isSearching,
   reinviteUserHandler,
   removeUserHandler,
+  searchUsersHandler,
   setCreateMode,
   sortBy,
   sortMethod,
@@ -30,6 +32,8 @@ const AdminUsersComponent = ({
   users,
   totalPages
 }) => {
+  const searchFieldRef = useRef()
+
   const userHeadings = {
     name: { label: 'Name', sortable: true },
     role: { label: 'Role' },
@@ -114,6 +118,17 @@ const AdminUsersComponent = ({
         }
         {!isCreating &&
           <>
+          <form className="admin-users__search" onSubmit={e => e.preventDefault()}>
+            <FormField
+              label="Search users"
+              id="search-users-field"
+              name="search-users-field"
+              type="search"
+              onChange={(e) => { searchUsersHandler(e.target.value) }}
+              placeholder="Jane Doe..."
+              ref={searchFieldRef}
+            />
+          </form>
           <Table
             headings={userHeadings}
             rows={userRows}
@@ -134,9 +149,10 @@ AdminUsersComponent.propTypes = {
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
-  pageChangeHandler: PropTypes.func.isRequired,
+  isSearching: PropTypes.string,
   reinviteUserHandler: PropTypes.func,
   removeUserHandler: PropTypes.func,
+  searchUsersHandler: PropTypes.func.isRequired,
   setCreateMode: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,

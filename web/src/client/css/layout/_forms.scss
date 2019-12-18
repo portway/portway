@@ -12,57 +12,6 @@ form, .form {
     --form-placeholder-color: var(--color-gray-60);
   }
 
-  // Defaults
-  // ---------------------------------------------------------------------------
-  fieldset {
-    padding: 0;
-  }
-
-  label, .field__label {
-    display: block;
-    font-weight: 700;
-    padding: 4px 0;
-  }
-
-  input[type="checkbox"], input[type="radio"] {
-    display: inline-block;
-    + label, .field__label {
-      display: inline-block;
-    }
-  }
-
-  input[type='text'],
-  input[type='email'],
-  input[type='number'],
-  input[type='password'],
-  .StripeElement {
-    appearance: none;
-    background: var(--form-background);
-    border: thin solid var(--form-border);
-    border-radius: var(--border-radius);
-    min-height: 38px;
-    padding: 8px;
-    width: 100%;
-    -webkit-appearance: none;
-    &::placeholder {
-      color: var(--form-placeholder-color);
-    }
-    &.focus {
-      // StripeElement
-      border: thin solid var(--color-blue);
-    }
-    @include focus(var(--form-background), var(--color-blue));
-  }
-
-  input[type='file'] {
-    border: none;
-  }
-
-  // Remove step arrows
-  input[type='number'] {
-    appearance: textfield;
-  }
-
   // Form markup
   // ---------------------------------------------------------------------------
   &__section {
@@ -70,7 +19,60 @@ form, .form {
     border-radius: var(--border-radius);
     padding: 2rem;
   }
-} // form
+
+}
+
+// Defaults
+// ---------------------------------------------------------------------------
+fieldset {
+  padding: 0;
+}
+
+label, .field__label {
+  display: block;
+  font-weight: 700;
+  padding: 4px 0;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  display: inline-block;
+  + label, .field__label {
+    display: inline-block;
+  }
+}
+
+input[type='text'],
+input[type='email'],
+input[type='number'],
+input[type='search'],
+input[type='password'],
+.StripeElement {
+  appearance: none;
+  background: var(--form-background);
+  border: thin solid var(--form-border);
+  border-radius: var(--border-radius);
+  min-height: 38px;
+  padding: 8px;
+  width: 100%;
+  -webkit-appearance: none;
+  &::placeholder {
+    color: var(--form-placeholder-color);
+  }
+  &.focus {
+    // StripeElement
+    border: thin solid var(--color-blue);
+  }
+  @include focus(var(--form-background), var(--color-blue));
+}
+
+input[type='file'] {
+  border: none;
+}
+
+// Remove step arrows
+input[type='number'] {
+  appearance: textfield;
+}
 
 // form -> form-container -> field -> field__label, field__control, field__help
 // field-container is a container for one or more fields
