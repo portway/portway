@@ -48,7 +48,7 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
         <CaretIcon />
       </button>
       <Popper id="project-role-dropdown" anchorRef={anchorRef} align={align} autoCollapse={collapseCallback} open={expanded} width="300">
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem>
             <button
               className="btn btn--blank"

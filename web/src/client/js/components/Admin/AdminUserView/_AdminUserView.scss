@@ -1,4 +1,5 @@
 .admin-user {
+  --dt-background-color: var(--theme-base);
 
   &__back-btn {
     color: var(--color-blue);
@@ -8,7 +9,7 @@
   &__definition-list {
     dt {
       align-items: center;
-      background-color: var(--color-gray-2);
+      background-color: var(--dt-background-color);
       display: inline-flex;
       font-weight: 500;
       margin-bottom: 1px;

@@ -19,8 +19,8 @@ const AdminUserViewComponent = ({
   user
 }) => {
   const projectTableHeadings = {
-    project: { label: 'Project Name', sortable: true },
-    projectRole: { label: 'Project Role', sortable: true },
+    project: { label: 'Project Name' },
+    projectRole: { label: 'Project Role' },
     tools: { label: '' }
   }
 

@@ -3,7 +3,13 @@
   --row-height-min: 50px;
   --cell-padding: .5rem;
   --row-alternate-bg-color: var(--color-gray-2);
+  --cell-heading-color: var(--color-gray-70);
+  --cell-heading-sortable-color: var(--color-gray-80);
+  --cell-heading-sorted-color: var(--color-gray-50);
   @media (prefers-color-scheme: dark) {
+    --cell-heading-color: var(--color-gray-40);
+    --cell-heading-sortable-color: var(--color-gray-30);
+    --cell-heading-sorted-color: var(--color-gray-20);
     --row-alternate-bg-color: rgba(0, 0, 0, .1);
   }
   &__list {
@@ -13,17 +19,17 @@
   }
   &__heading-cell {
     align-self: center;
-    color: var(--color-gray-70);
+    color: var(--cell-heading-color);
     font-weight: 500;
     padding: var(--cell-padding);
   }
   &__heading-btn {
     &--sortable {
-      color: var(--color-gray-80);
+      color: var(--cell-heading-sortable-color);
       text-decoration: underline;
     }
     &--sorted {
-      color: var(--color-gray-50);
+      color: var(--cell-heading-sorted-color);
     }
     &--ascending {
       + .icon {
@@ -47,7 +53,7 @@
     }
   }
   &__heading {
-    border-bottom: thin solid var(--color-gray-5);
+    border-bottom: thin solid var(--theme-border);
     grid-auto-rows: auto;
   }
   &__cell {
