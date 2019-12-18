@@ -43,7 +43,8 @@
     // Each line of text is in this container
     .CodeMirror-line {
       display: block;
-      span[role="presentation"] {
+      > span[role="presentation"] {
+        display: block;
         position: relative;
       }
     }
@@ -104,7 +105,7 @@
         width: 100%;
       }
       .cm-formatting-code-block.cm-comment {
-        padding: 6px;
+        padding: 0 6px;
       }
       .cm-comment {
         padding: 2px 10px;
@@ -140,6 +141,7 @@
 
       .cm-formatting-quote {
         border-left: 3px solid var(--color-gray-20);
+        display: inline-block;
         margin-right: 1.9rem;
         text-indent: -4000px;
       }
