@@ -6,7 +6,7 @@ import passport from 'passport'
 import envVarValidation from './libs/envVarValidation'
 import uncaughtErrorHandler from './libs/uncaughtErrorHandler'
 import auth from './libs/auth/auth'
-import controllerLoader from './controllers/loader'
+import { v1Loader } from './controllers/loader'
 import apiErrorHandler from './libs/middleware/apiErrorHandler'
 import noRouteHandler from './libs/middleware/noRouteHandler'
 import httpLogger from './libs/middleware/httpLogger'
@@ -74,17 +74,16 @@ const adminRouter = express.Router()
 app.use('/admin', adminRouter)
 adminController(adminRouter)
 
-const router = express.Router()
+const v1Router = express.Router()
 // Mount router at /api
-app.use('/api', router)
+app.use('/api/v1', v1Router)
 
 //now we can set the route path & initialize the API
-router.get('/', (req, res) => {
-  res.json({ message: 'API Initialized!' })
+v1Router.get('/', (req, res) => {
+  res.json({ message: 'V1 API Initialized!' })
 })
 
-controllerLoader(router)
-
+v1Loader(v1Router)
 
 // ERROR HANDLING - This should always be the last set of middleware!
 

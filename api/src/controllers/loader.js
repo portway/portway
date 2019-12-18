@@ -11,53 +11,54 @@ import bodyParser from 'body-parser'
 // Controllers can be added as unauthorized (custom auth or public controllers),
 /// or a regular authenticated controller
 
-// Controllers that use default auth
-const AUTHENTICATED_CONTROLLERS = {
-  '/projects': {
-    fileName: 'projects',
-    childRoutes: {
-      '/:projectId/assignments': { fileName: 'projectUsers' },
-      '/:projectId/documents': { fileName: 'projectDocuments' },
-      '/:projectId/tokens': { fileName: 'projectTokens' }
-    }
-  },
-  '/documents': {
-    fileName: 'documents',
-    childRoutes: {
-      '/:documentId/fields': {
-        fileName: 'documentFields',
-        childRoutes: {
-          '/:fieldId/order': { fileName: 'documentFieldOrder' }
+const V1_CONTROLLERS = {
+  // Controllers that use default auth
+  AUTHENTICATED: {
+    '/projects': {
+      fileName: 'projects',
+      childRoutes: {
+        '/:projectId/assignments': { fileName: 'projectUsers' },
+        '/:projectId/documents': { fileName: 'projectDocuments' },
+        '/:projectId/tokens': { fileName: 'projectTokens' }
+      }
+    },
+    '/documents': {
+      fileName: 'documents',
+      childRoutes: {
+        '/:documentId/fields': {
+          fileName: 'documentFields',
+          childRoutes: {
+            '/:fieldId/order': { fileName: 'documentFieldOrder' }
+          }
         }
       }
+    },
+    '/users': {
+      fileName: 'users',
+      childRoutes: {
+        '/:userId/orgrole': { fileName: 'userOrgRole' },
+        '/:userId/assignments': { fileName: 'userProjectAssignments' },
+        '/:userId/projects': { fileName: 'userProjects' },
+        '/:userId/password': { fileName: 'userPassword' }
+      },
+      allowInactiveOrgAccess: true
+    },
+    '/organizations': {
+      fileName: 'organizations',
+      childRoutes: {
+        '/:orgId/billing': { fileName: 'orgBilling', allowInactiveOrgAccess: true },
+        '/:orgId/plan': { fileName: 'orgPlan', allowInactiveOrgAccess: true },
+        '/:orgId/seats': { fileName: 'orgSeats' }
+      },
+      allowInactiveOrgAccess: true
     }
   },
-  '/users': {
-    fileName: 'users',
-    childRoutes: {
-      '/:userId/orgrole': { fileName: 'userOrgRole' },
-      '/:userId/assignments': { fileName: 'userProjectAssignments' },
-      '/:userId/projects': { fileName: 'userProjects' },
-      '/:userId/password': { fileName: 'userPassword' }
-    },
-    allowInactiveOrgAccess: true
-  },
-  '/organizations': {
-    fileName: 'organizations',
-    childRoutes: {
-      '/:orgId/billing': { fileName: 'orgBilling', allowInactiveOrgAccess: true },
-      '/:orgId/plan': { fileName: 'orgPlan', allowInactiveOrgAccess: true },
-      '/:orgId/seats': { fileName: 'orgSeats' }
-    },
-    allowInactiveOrgAccess: true
+  // Define controllers with custom auth (must be implemented in the controller!)
+  UNAUTHENTICATED: {
+    '/login': { fileName: 'login', allowInactiveOrgAccess: true },
+    '/signup': { fileName: 'signup', allowInactiveOrgAccess: true },
+    '/stripehooks': { fileName: 'stripeHooks', allowInactiveOrgAccess: true, customBodyParsingMiddleware: bodyParser.raw({ type: 'application/json' }) }
   }
-}
-
-// Define controllers with custom auth (must be implemented in the controller!)
-const UNAUTHENTICATED_CONTROLLERS = {
-  '/login': { fileName: 'login', allowInactiveOrgAccess: true },
-  '/signup': { fileName: 'signup', allowInactiveOrgAccess: true },
-  '/stripehooks': { fileName: 'stripeHooks', allowInactiveOrgAccess: true, customBodyParsingMiddleware: bodyParser.raw({ type: 'application/json' }) }
 }
 
 const loadControllers = (router, controllers, middleware = [], routerOptions) => {
@@ -90,9 +91,7 @@ const loadControllers = (router, controllers, middleware = [], routerOptions) =>
   })
 }
 
-const loader = (router) => {
-  loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware, reqInfoExtractor])
-  loadControllers(router, UNAUTHENTICATED_CONTROLLERS)
+export const v1Loader = (router) => {
+  loadControllers(router, V1_CONTROLLERS.AUTHENTICATED, [auth.jwtMiddleware, reqInfoExtractor])
+  loadControllers(router, V1_CONTROLLERS.UNAUTHENTICATED)
 }
-
-export default loader
