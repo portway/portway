@@ -17,6 +17,9 @@
     </div>
   </div>
   <% } %>
+  <% if (url) { %>
+    <input id="url" type="hidden" value="<%- url %>" name="url" />
+  <% } %>
   <% if (flash) { %>
   <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
   <% } %>

@@ -10,7 +10,6 @@ import cookieParser from 'cookie-parser'
 // Custom libraries
 import { normalizePort } from './libs/express-utilities'
 import controllerLoader from './controllers/loader'
-import aliasMiddleware from './libs/aliases'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -28,7 +27,6 @@ if (devMode) {
 }
 
 // Middlewares
-app.use(aliasMiddleware)
 app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: true }))
