@@ -24,7 +24,7 @@ const registerOrganization = async (req, res) => {
 
   try {
     await API.send({
-      url: 'signup',
+      url: 'v1/signup',
       method: 'POST',
       data: {
         name,

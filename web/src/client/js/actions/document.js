@@ -6,7 +6,7 @@ import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '.
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {
     dispatch(Documents.requestList(projectId))
-    const { data, status } = await fetch(`projects/${projectId}/documents?draft=true`)
+    const { data, status } = await fetch(`v1/projects/${projectId}/documents?draft=true`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Documents.receiveListError(projectId))
       status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENTS, status))
@@ -19,7 +19,7 @@ export const fetchDocuments = (projectId) => {
 export const fetchDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.requestOne(documentId))
-    const { data, status } = await fetch(`documents/${documentId}?draft=true`)
+    const { data, status } = await fetch(`v1/documents/${documentId}?draft=true`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Documents.receiveError(documentId))
       status !== 404 && dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
@@ -34,7 +34,7 @@ export const createDocument = (projectId, history, body, options = {}) => {
 
   return async (dispatch) => {
     dispatch(Documents.create(projectId, body))
-    const { data, status } = await add(`projects/${projectId}/documents`, body)
+    const { data, status } = await add(`v1/projects/${projectId}/documents`, body)
     if (validationCodes.includes(status)) {
       dispatch(Validation.create('document', data, status))
       return
@@ -64,7 +64,7 @@ export const createDocument = (projectId, history, body, options = {}) => {
 export const publishDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.publish(documentId))
-    const { data, status } = await add(`documents/${documentId}/publish`)
+    const { data, status } = await add(`v1/documents/${documentId}/publish`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -76,7 +76,7 @@ export const publishDocument = (documentId) => {
 export const updateDocument = (projectId, documentId, body) => {
   return async (dispatch) => {
     dispatch(Documents.update(projectId, documentId, body))
-    const { data, status } = await update(`projects/${projectId}/documents/${documentId}`, body)
+    const { data, status } = await update(`v1/projects/${projectId}/documents/${documentId}`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -90,7 +90,7 @@ export const updateDocument = (projectId, documentId, body) => {
 export const unpublishDocument = (documentId) => {
   return async (dispatch) => {
     dispatch(Documents.unpublish(documentId))
-    const { data, status } = await add(`documents/${documentId}/unpublish`)
+    const { data, status } = await add(`v1/documents/${documentId}/unpublish`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -102,7 +102,7 @@ export const unpublishDocument = (documentId) => {
 export const deleteDocument = (projectId, documentId, history) => {
   return async (dispatch) => {
     dispatch(Documents.delete(projectId, documentId))
-    const { data, status } = await remove(`projects/${projectId}/documents/${documentId}`, {
+    const { data, status } = await remove(`v1/projects/${projectId}/documents/${documentId}`, {
       projectId: projectId,
       id: documentId
     })
