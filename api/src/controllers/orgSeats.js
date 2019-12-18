@@ -2,7 +2,6 @@ import Joi from 'joi'
 import ono from 'ono'
 
 import billingCoordinator from '../coordinators/billing'
-import BusinessOrganization from '../businesstime/organization'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -15,6 +14,27 @@ const bodySchema = Joi.compile({
 const paramSchema = Joi.compile({
   orgId: Joi.number().required()
 })
+
+const readPerm = (req, res, next) => {
+  const { orgId } = req.params
+
+  // make sure requestor is getting info on own org seats
+  if (orgId !== req.requestorInfo.orgId) {
+    return next(
+      ono(
+        { code: 404 },
+        'Cannot fetch plan seats, requestor does not belong to the target organization '
+      )
+    )
+  }
+
+  return perms((req) => {
+    return {
+      resourceType: RESOURCE_TYPES.SEAT,
+      action: ACTIONS.READ
+    }
+  })(req, res, next)
+}
 
 const conditionalUpdatePerm = async (req, res, next) => {
   const { orgId } = req.params
@@ -29,15 +49,6 @@ const conditionalUpdatePerm = async (req, res, next) => {
     )
   }
 
-  // look up the organization and make sure the ruquestor is the current owner
-  const org = await BusinessOrganization.findSanitizedById(orgId)
-
-  if (org.ownerId !== req.requestorInfo.requestorId) {
-    return next(
-      ono({ code: 404 }, 'Cannot update plan seats, requestor is not the current organization owner')
-    )
-  }
-
   return perms((req) => {
     return {
       resourceType: RESOURCE_TYPES.ORGANIZATION,
@@ -48,6 +59,12 @@ const conditionalUpdatePerm = async (req, res, next) => {
 
 const orgSeatController = function(router) {
   // all routes are nested at organizations/:orgId and receive req.params.orgId
+  router.get('/',
+    validateParams(paramSchema),
+    readPerm,
+    getSeats
+  )
+
   router.put(
     '/',
     validateParams(paramSchema),
@@ -55,6 +72,24 @@ const orgSeatController = function(router) {
     conditionalUpdatePerm,
     updateSeats
   )
+}
+
+const getSeats = async function(req, res, next) {
+  const { orgId } = req.params
+
+  try {
+    const billing = await billingCoordinator.getOrgBilling(orgId)
+    const { totalSeats, usedSeats, includedSeats } = billing.subscription
+    res.status(200).send({
+      data: {
+        usedSeats,
+        totalSeats,
+        includedSeats
+      }
+    })
+  } catch (e) {
+    next(e)
+  }
 }
 
 const updateSeats = async function(req, res, next) {

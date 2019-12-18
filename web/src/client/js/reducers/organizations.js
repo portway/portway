@@ -4,10 +4,12 @@ const initialState = {
   currentOrganizationId: null,
   organizationsById: {},
   organizationsBillingById: {},
+  seatsById: {},
   loading: {
     list: null,
     byId: {},
-    billingById: {}
+    billingById: {},
+    seatsById: {}
   }
 }
 
@@ -127,6 +129,30 @@ export const organizations = (state = initialState, action) => {
       return {
         ...state,
         loading: { ...state.loading, billingById }
+      }
+    }
+
+    case ActionTypes.REQUEST_ORGANIZATION_SEATS: {
+      const id = action.id
+      const seatsById = { ...state.loading.seatsById, [id]: true }
+
+      return {
+        ...state,
+        loading: { ...state.loading, seatsById }
+      }
+    }
+
+    case ActionTypes.RECEIVE_ORGANIZATION_SEATS: {
+      const { id } = action
+      const seatsById = { ...state.seatsById, [id]: action.seats }
+      const loadingById = { ...state.loading.seatsById, [id]: false }
+      return {
+        ...state,
+        seatsById,
+        loading: {
+          ...state.loading,
+          seatsById: loadingById
+        }
       }
     }
 

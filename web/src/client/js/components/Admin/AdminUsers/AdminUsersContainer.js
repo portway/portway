@@ -9,7 +9,6 @@ import { currentUserId } from 'Libs/currentIds'
 import {
   PATH_ORGANIZATION,
   PRODUCT_NAME,
-  PLAN_TYPES,
   QUERY_PARAMS,
   MULTI_USER_PLAN_TYPES
 } from 'Shared/constants'
@@ -38,7 +37,7 @@ const AdminUsersContainer = ({
   const params = parseParams(location.search)
   const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
   const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
-  const { data: orgBilling } = useDataService(dataMapper.organizations.billing())
+  const { data: seats } = useDataService(dataMapper.organizations.seats())
 
   function addUserHandler(values) {
     createUser(values)
@@ -99,7 +98,7 @@ const AdminUsersContainer = ({
         sortBy={sortBy}
         sortMethod={sortMethod}
         sortUsersHandler={sortUsersHandler}
-        subscription={orgBilling ? orgBilling.subscription : null}
+        seats={seats}
         totalPages={totalPages}
         users={users}
       />

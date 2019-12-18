@@ -8,7 +8,6 @@ import {
   PATH_ADMIN,
   PATH_PROJECTS,
   PRODUCT_NAME,
-  PLAN_TYPES,
   MULTI_USER_PLAN_TYPES
 } from 'Shared/constants'
 import { ArrowIcon, TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
@@ -37,9 +36,11 @@ const AdminDashboardComponent = ({ organization, section }) => {
     [ADMIN_PATHS.USERS]: <AdminUsersContainer />,
     [ADMIN_PATHS.BILLING]: <AdminBillingContainer />,
     [ADMIN_PATHS.ORGANIZATION]: <AdminOrganizationContainer />,
-    default: organization.plan === PLAN_TYPES.MULTI_USER ?
-      <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} /> :
+    default: MULTI_USER_PLAN_TYPES.includes(organization.plan) ? (
+      <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} />
+    ) : (
       <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`} />
+    )
   }
 
   function isSubSection(match, location) {

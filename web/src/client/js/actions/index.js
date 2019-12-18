@@ -118,6 +118,8 @@ export const ActionTypes = {
   RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
   INITIATE_ORGANIZATION_REMOVAL: 'INITIATE_ORGANIZATION_REMOVAL',
   RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
+  REQUEST_ORGANIZATION_SEATS: 'REQUEST_ORGANIZATION_SEATS',
+  RECEIVE_ORGANIZATION_SEATS: 'RECEIVE_ORGANIZATION_SEATS',
   // UI
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -271,6 +273,8 @@ export const Organizations = {
   initiateSeatsUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_SEATS_UPDATE, 'id'),
   receiveUpdatedSeats: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_SEATS, 'id', 'seats'),
   receiveSeatsError: makeActionCreator(ActionTypes.RECEIVE_SEATS_ERROR),
+  requestSeats: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION_SEATS, 'id'),
+  receiveSeats: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_SEATS, 'id', 'seats'),
   // Remove account
   initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
   receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
