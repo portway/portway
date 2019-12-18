@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -9,7 +9,7 @@ import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
-import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM, PATH_404 } from 'Shared/constants'
+import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
 
@@ -29,7 +29,16 @@ const DocumentContainer = ({
   const { data: document, loading: documentLoading } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  // if we don't have a documentId, we shouldn't be loading this component
+
+  /**
+   * If we're creating a document, render nothing
+   */
+  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
+    return null
+  }
+
+  // if we don't have a documentId (null or undefined),
+  // we shouldn't be loading this component
   if (match.params.documentId == null) {
     return null
   }
@@ -44,27 +53,13 @@ const DocumentContainer = ({
     return <NoDocument />
   }
 
+  // If the project doesn't exist
   if (projectLoading === false && !project) {
     return <NoDocument />
   }
 
   //things are still loading, return null
   if (!project || !document) return null
-  /**
-   * If we're creating a document, render nothing
-   */
-  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
-    return null
-  }
-
-  /**
-   * If there is no document and we are not creating: true, then we render
-   * a helpful message
-   */
-
-  if (typeof match.params.documentId === 'undefined' || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
-    return <div>No document</div>
-  }
 
   /**
    * Otherwise we render the document, and update its values onChange

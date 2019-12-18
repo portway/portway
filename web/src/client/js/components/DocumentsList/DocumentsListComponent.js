@@ -4,8 +4,9 @@ import cx from 'classnames'
 
 import Constants from 'Shared/constants'
 import useClickOutside from 'Hooks/useClickOutside'
-import { AddIcon, RemoveIcon, DocumentIcon } from 'Components/Icons'
-import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
+import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
+import { AddIcon, RemoveIcon, SearchIcon, DocumentIcon } from 'Components/Icons'
+import { IconButton } from 'Components/Buttons'
 import DocumentsListItem from './DocumentsListItem'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 
@@ -15,6 +16,7 @@ const { PROJECT_ROLE_IDS } = Constants
 const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
 const DocumentsListComponent = ({
+  clearSearchHandler,
   createCallback,
   createChangeHandler,
   creating,
@@ -25,14 +27,24 @@ const DocumentsListComponent = ({
   loading,
   projectId,
   removeDocumentHandler,
+  searchDocumentsHandler,
   unpublishDocumentHandler,
 }) => {
   // Keep track of how many things being dragged
   let dragCount = 0
 
+  const [isSearching, setIsSearching] = useState(false)
   const [dragActive, setDragActive] = useState(false)
+  const searchFieldRef = useRef()
   const listItemRef = useRef()
   const nameRef = useRef()
+
+  // Ctrl-n creates a new document
+  useKeyboardShortcut('n', () => createCallback(true))
+  useKeyboardShortcut('f', () => {
+    searchFieldRef.current.focus()
+    setIsSearching(true)
+  })
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
@@ -41,14 +53,11 @@ const DocumentsListComponent = ({
     }
   })
 
-  // Set up toolbar
-  const toolbarAction = {
-    callback: () => { createCallback(true) },
-    icon: <AddIcon />,
-    label: 'New Document',
-    shortcut: 'n',
-    title: 'Create a new document in this project'
-  }
+  // Reset search box if the project id changes
+  useEffect(() => {
+    setIsSearching(false)
+    searchFieldRef.current.value = ''
+  }, [projectId])
 
   function createDocument() {
     if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
@@ -57,21 +66,29 @@ const DocumentsListComponent = ({
       createCallback(false)
     }
   }
+
   useClickOutside(
     listItemRef,
     () => { if (creating) { createDocument() } },
     { preventEscapeFunctionality: true }
   )
 
+  function clearOutSearch() {
+    setIsSearching(false)
+    searchFieldRef.current.value = ''
+    clearSearchHandler()
+  }
+
   function renderNewDocument() {
     if (creating) {
       return (
         <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
           <div className="documents-list__button">
-            <textarea
+            <input
               ref={nameRef}
               className="documents-list__name"
               defaultValue={Constants.LABEL_NEW_DOCUMENT}
+              type="text"
               onKeyDown={(e) => {
                 if (e.keyCode === 27) {
                   e.preventDefault()
@@ -161,6 +178,11 @@ const DocumentsListComponent = ({
     'documents-list--dragged-over': dragActive
   })
 
+  const searchClasses = cx({
+    'documents-list__search': true,
+    'documents-list__search--disabled': creating,
+  })
+
   const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
 
   return (
@@ -170,14 +192,50 @@ const DocumentsListComponent = ({
       onDragOver={dragOverHandler}
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
-      <ProjectPermission
-        projectId={projectId}
-        acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}
-        elseRender={(
-          <ToolbarComponent action={{}} />
-        )}>
-        <ToolbarComponent action={toolbarAction} />
-      </ProjectPermission>
+      <header className="documents-list__header">
+        <div className={searchClasses}>
+          <div className="documents-list__search-field">
+            <SearchIcon />
+            <input
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              onChange={(e) => {
+                if (!isSearching) {
+                  setIsSearching(true)
+                }
+                searchDocumentsHandler(e.target.value)
+              }}
+              onKeyDown={(e) => {
+                if (e.key.toLowerCase() === 'escape') {
+                  clearOutSearch()
+                }
+              }}
+              placeholder="Search documents..."
+              ref={searchFieldRef}
+              type="search"
+            />
+          </div>
+          {isSearching &&
+          <button
+            aria-label="Exit document search"
+            className="btn btn--blank"
+            onClick={() => clearOutSearch()}
+          >
+            <RemoveIcon width="12" height="12" />
+          </button>
+          }
+        </div>
+        <ProjectPermission
+          projectId={projectId}
+          acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+          <IconButton
+            aria-label="New document"
+            onClick={() => { createCallback(true) }}
+            title="Create a new document in this project"
+          >
+            <AddIcon width="14" height="14" />
+          </IconButton>
+        </ProjectPermission>
+      </header>
       {documents.length === 0 && loading === false && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
@@ -208,6 +266,7 @@ const DocumentsListComponent = ({
 }
 
 DocumentsListComponent.propTypes = {
+  clearSearchHandler: PropTypes.func.isRequired,
   createCallback: PropTypes.func.isRequired,
   createChangeHandler: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
@@ -218,6 +277,7 @@ DocumentsListComponent.propTypes = {
   loading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
+  searchDocumentsHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 

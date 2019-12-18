@@ -7,7 +7,7 @@ import useBlur from 'Hooks/useBlur'
 import { PROJECT_ROLE_IDS, PROJECT_ROLE_NAMES } from 'Shared/constants'
 import { CaretIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuItem } from 'Components/Menu'
 
 const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(PROJECT_ROLE_NAMES[defaultValue])
@@ -47,7 +47,7 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />
       </button>
-      <Popper id="project-role-dropdown" anchorRef={anchorRef} align={align} autoCollapse={collapseCallback} open={!expanded} width="300">
+      <Popper id="project-role-dropdown" anchorRef={anchorRef} align={align} autoCollapse={collapseCallback} open={expanded} width="300">
         <Menu>
           <MenuItem>
             <button
