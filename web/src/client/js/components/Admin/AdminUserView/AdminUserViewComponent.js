@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
-import { RemoveIcon } from 'Components/Icons'
-import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
+import { ArrowIcon, RemoveIcon } from 'Components/Icons'
+import { ORGANIZATION_ROLE_IDS, PATH_ADMIN } from 'Shared/constants'
 import OrgRolesDropdown from 'Components/RolesDropdowns/OrgRolesDropdown'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import Table from 'Components/Table/Table'
@@ -56,6 +57,9 @@ const AdminUserViewComponent = ({
 
   return (
     <div className="admin-user">
+      <Link to={`${PATH_ADMIN}/users`} className="link--back">
+        <ArrowIcon direction="left" /><span className="label">Back to Users</span>
+      </Link>
       <header className="header">
         <h2>{user.name}</h2>
       </header>
