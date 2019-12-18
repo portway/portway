@@ -30,6 +30,16 @@ function returnNull() {
   }
 }
 
+function returnEmptyObjectForState() {
+  return {
+    fetchAction: () => null,
+    getLoadingStatusFromState: () => null,
+    getDataFromState: () => {
+      return {}
+    }
+  }
+}
+
 export default {
   documents: {
     list: function(projectId) {
@@ -206,6 +216,7 @@ export default {
       }
     },
     searchByName: function(partialNameString) {
+      if (!partialNameString) return returnEmptyObjectForState()
       return {
         fetchAction: searchByName(partialNameString),
         getLoadingStatusFromState: (state) => {
@@ -213,8 +224,10 @@ export default {
         },
         getDataFromState: (state) => {
           const ids = state.users.userSearchResultIdsByNameString[partialNameString]
-          const users = ids && ids.map(id => state.users.usersById[id])
-          return users
+          const userSearchResults = ids && ids.map(id => state.users.usersById[id])
+          // @todo JJ make this work! =)
+          const totalSearchPages = 1
+          return { userSearchResults, totalSearchPages }
         }
       }
     }

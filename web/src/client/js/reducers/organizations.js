@@ -117,10 +117,15 @@ export const organizations = (state = initialState, action) => {
     case ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING: {
       const billingById = { ...state.loading.billingById, [action.id]: false }
       const organizationsBillingById = { ...state.organizationsBillingById, [action.id]: action.data }
+      const seatsByIdLoading = { ...state.loading.seatsById, [action.id]: false }
+      const { usedSeats, totalSeats, includedSeats } = action.data.subscription
+      const seats = { usedSeats, totalSeats, includedSeats }
+      const seatsById = { ...state.seatsById, [action.id]: seats }
       return {
         ...state,
         organizationsBillingById,
-        loading: { ...state.loading, billingById }
+        seatsById,
+        loading: { ...state.loading, billingById, seatsById: seatsByIdLoading }
       }
     }
     case ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE: {

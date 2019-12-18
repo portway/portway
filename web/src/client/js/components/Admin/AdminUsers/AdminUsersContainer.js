@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { Redirect } from 'react-router-dom'
@@ -13,6 +13,7 @@ import {
   MULTI_USER_PLAN_TYPES
 } from 'Shared/constants'
 import { parseParams } from 'Utilities/queryParams'
+import { debounce } from 'Shared/utilities'
 
 import { createUser, reinviteUser, removeUser, sortUsers } from 'Actions/user'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
@@ -32,11 +33,14 @@ const AdminUsersContainer = ({
   removeUser,
   sortUsers,
   uiConfirm,
-  uiCreateUserMode
+  uiCreateUserMode,
 }) => {
   const params = parseParams(location.search)
+  const [searchTerm, setSearchTerm] = useState(null)
   const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
   const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
+
+  const { data: { userSearchResults = [], totalSearchPages } } = useDataService(dataMapper.users.searchByName(searchTerm), [searchTerm])
   const { data: seats } = useDataService(dataMapper.organizations.seats())
 
   function addUserHandler(values) {
@@ -57,11 +61,6 @@ const AdminUsersContainer = ({
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
-  function pageChangeHandler(page) {
-    // @todo trigger fetch
-    console.info('Change page', page)
-  }
-
   function sortUsersHandler(selectedSortProperty) {
     let newSortMethod
     if (sortBy === selectedSortProperty && sortMethod === QUERY_PARAMS.ASCENDING) {
@@ -73,6 +72,10 @@ const AdminUsersContainer = ({
     history.push({ search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}` })
     sortUsers(sortBy, sortMethod)
   }
+
+  const searchUsersByName = debounce(500, (value) => {
+    setSearchTerm(value)
+  })
 
   function setCreateMode(value) {
     uiCreateUserMode(value)
@@ -91,16 +94,17 @@ const AdminUsersContainer = ({
         errors={errors}
         isCreating={isCreating}
         isInviting={isInviting}
-        pageChangeHandler={pageChangeHandler}
+        isSearching={searchTerm}
         reinviteUserHandler={reinviteUserHandler}
         removeUserHandler={removeUserHandler}
+        searchUsersHandler={searchUsersByName}
         setCreateMode={setCreateMode}
         sortBy={sortBy}
         sortMethod={sortMethod}
         sortUsersHandler={sortUsersHandler}
         seats={seats}
-        totalPages={totalPages}
-        users={users}
+        totalPages={searchTerm && userSearchResults ? totalSearchPages : totalPages}
+        users={searchTerm && userSearchResults ? userSearchResults : users}
       />
     </OrgPlanPermission>
   )
@@ -116,7 +120,7 @@ AdminUsersContainer.propTypes = {
   removeUser: PropTypes.func.isRequired,
   sortUsers: PropTypes.func.isRequired,
   uiCreateUserMode: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired
+  uiConfirm: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {

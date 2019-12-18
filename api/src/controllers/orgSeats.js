@@ -36,7 +36,7 @@ const readPerm = (req, res, next) => {
   })(req, res, next)
 }
 
-const conditionalUpdatePerm = async (req, res, next) => {
+const conditionalUpdatePerm = (req, res, next) => {
   const { orgId } = req.params
 
   // make sure requestor is updating their own organization
