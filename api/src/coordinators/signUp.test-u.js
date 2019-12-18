@@ -24,10 +24,16 @@ describe('signUp coordinator', () => {
   describe('#createUserAndOrganization', () => {
     beforeAll(async () => {
       BusinessOrganization.updateById.mockClear()
+      BusinessUser.findByEmail.mockReturnValueOnce(undefined)
       await signUpCoordinator.createUserAndOrganization(
         name,
         email
       )
+    })
+
+    it('should call BusinessUser.findByEmail with the passed in email', () => {
+      expect(BusinessUser.findByEmail.mock.calls.length).toBe(1)
+      expect(BusinessUser.findByEmail.mock.calls[0][0]).toBe(email)
     })
 
     it('should call BusinessOrganization.create', () => {

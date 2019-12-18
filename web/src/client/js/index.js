@@ -55,7 +55,7 @@ const Index = () => {
                   <Route exact path="/"><Redirect to="/projects" /></Route>
                   <Route exact path={PATH_PROJECTS} component={lockedComponent || ProjectsSection} />
                   <Route path={`${PATH_PROJECT}/:projectId`} component={lockedComponent || ProjectSection} />
-                  <Route exact path={PATH_SETTINGS} component={lockedComponent || UserSection} />
+                  <Route path={PATH_SETTINGS} component={lockedComponent || UserSection} />
                   <Route path={PATH_ADMIN} component={AdminSection} />
                   <Route component={FourZeroFour} />
                 </Switch>
