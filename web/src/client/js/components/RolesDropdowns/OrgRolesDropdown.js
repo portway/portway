@@ -7,7 +7,7 @@ import useBlur from 'Hooks/useBlur'
 import { ORGANIZATION_ROLE_NAMES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import { CaretIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuItem } from 'Components/Menu'
 
 const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(ORGANIZATION_ROLE_NAMES[defaultValue])
@@ -38,7 +38,7 @@ const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, on
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />
       </button>
-      <Popper id="org-roles-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
+      <Popper id="org-roles-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
         <Menu>
           <MenuItem>
             <button className="btn btn--blank" onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) }>

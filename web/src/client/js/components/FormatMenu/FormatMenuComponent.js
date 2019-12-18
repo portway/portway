@@ -9,7 +9,7 @@ import { FIELD_TYPES } from 'Shared/constants'
 import { FormatIcon } from 'Components/Icons'
 
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuItem } from 'Components/Menu'
 
 import './_FormatMenu.scss'
 
@@ -96,8 +96,8 @@ const FormatMenuComponent = ({ focusedField }) => {
       >
         <FormatIcon width="24" height="24" />
       </button>
-      <Popper id="format-menu" anchorRef={anchorRef} open={!expanded} placement="bottom" width="200">
-        <Menu>
+      <Popper id="format-menu" anchorRef={anchorRef} open={expanded} placement="bottom" width="200">
+        <Menu anchorRef={anchorRef}>
           <MenuItem tabIndex="0">
             <button className="btn btn--blank" onClick={() => formatSelection('h1') }>
               <span className="format-menu__format">#</span> Heading 1

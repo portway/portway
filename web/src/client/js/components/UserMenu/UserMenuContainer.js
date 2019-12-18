@@ -13,7 +13,7 @@ import { currentUserId } from 'Libs/currentIds'
 import { logoutUser } from 'Actions/user'
 
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuHeader, MenuItem } from 'Components/Menu'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 import './UserMenu.scss'
@@ -59,7 +59,7 @@ const UserMenuContainer = () => {
         align="right"
         anchorRef={anchorRef}
         autoCollapse={collapseCallback}
-        open={!expanded}
+        open={expanded}
         width="200"
       >
         <MenuHeader>
@@ -67,7 +67,7 @@ const UserMenuContainer = () => {
           <h3 className="user-menu__organization">{currentOrg.name}</h3>
           <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
         </MenuHeader>
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
             <MenuItem tabIndex="0">
               <Link className="btn btn--blank" to={PATH_ADMIN}>Administration</Link>

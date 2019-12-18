@@ -3,3 +3,4 @@
 // ButtonGroup is the first one, but there will be others
 
 export { default as ButtonGroup } from './ButtonGroup'
+export { default as IconButton } from './IconButton/IconButton'
