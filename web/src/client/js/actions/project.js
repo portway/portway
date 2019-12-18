@@ -10,7 +10,7 @@ import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES 
  */
 export const fetchProjects = async (dispatch) => {
   dispatch(Projects.request())
-  const { data, status } = await fetch(`users/${currentUserId}/projects`)
+  const { data, status } = await fetch(`v1/users/${currentUserId}/projects`)
   globalErrorCodes.includes(status) ?
     dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
     dispatch(Projects.receive(data))
@@ -19,7 +19,7 @@ export const fetchProjects = async (dispatch) => {
 export const fetchProjectsForUser = (userId) => {
   return async (dispatch) => {
     dispatch(Projects.requestForUser(userId))
-    const { data, status } = await fetch(`users/${userId}/projects`)
+    const { data, status } = await fetch(`v1/users/${userId}/projects`)
     globalErrorCodes.includes(status) ?
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
       dispatch(Projects.receiveForUser(userId, data))
@@ -29,7 +29,7 @@ export const fetchProjectsForUser = (userId) => {
 export const fetchProject = (projectId) => {
   return async (dispatch) => {
     dispatch(Projects.requestOne(projectId))
-    const { data, status } = await fetch(`projects/${projectId}`)
+    const { data, status } = await fetch(`v1/projects/${projectId}`)
 
     if (globalErrorCodes.includes(status)) {
       dispatch(Projects.receiveError(projectId))
@@ -44,7 +44,7 @@ export const fetchProject = (projectId) => {
 export const createProject = (body, history) => {
   return async (dispatch) => {
     dispatch(Projects.create())
-    const { data, status } = await add('projects', body)
+    const { data, status } = await add('v1/projects', body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
       return
@@ -62,7 +62,7 @@ export const updateProject = (formId, projectId, body) => {
   return async (dispatch) => {
     dispatch(formSubmitAction(formId))
     dispatch(Projects.initiateUpdate())
-    const { data, status } = await update(`projects/${projectId}`, body)
+    const { data, status } = await update(`v1/projects/${projectId}`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
@@ -81,7 +81,7 @@ export const updateProject = (formId, projectId, body) => {
 export const removeProject = (projectId, history) => {
   return async (dispatch) => {
     dispatch(Projects.initiateRemove())
-    const { data, status } = await remove(`projects/${projectId}`)
+    const { data, status } = await remove(`v1/projects/${projectId}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
       return
@@ -97,7 +97,7 @@ export const removeProject = (projectId, history) => {
 export const fetchProjectAssignees = (projectId) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.request(projectId))
-    const { data, status } = await fetch(`projects/${projectId}/assignments?includeUser=true`)
+    const { data, status } = await fetch(`v1/projects/${projectId}/assignments?includeUser=true`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return
@@ -109,7 +109,7 @@ export const fetchProjectAssignees = (projectId) => {
 export const createProjectAssignee = (projectId, body) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.create(projectId))
-    const { data, status } = await add(`projects/${projectId}/assignments?includeUser=true`, body)
+    const { data, status } = await add(`v1/projects/${projectId}/assignments?includeUser=true`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return
@@ -123,7 +123,7 @@ export const createProjectAssignee = (projectId, body) => {
 export const updateProjectAssignee = (projectId, assignmentId, body) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.initiateUpdate(projectId))
-    const { data, status } = await update(`projects/${projectId}/assignments/${assignmentId}`, body)
+    const { data, status } = await update(`v1/projects/${projectId}/assignments/${assignmentId}`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return
@@ -137,7 +137,7 @@ export const updateProjectAssignee = (projectId, assignmentId, body) => {
 export const removeProjectAssignee = (projectId, userId, assignmentId) => {
   return async (dispatch) => {
     dispatch(ProjectAssignees.initiateRemove(projectId, userId))
-    const { data, status } = await remove(`projects/${projectId}/assignments/${assignmentId}`)
+    const { data, status } = await remove(`v1/projects/${projectId}/assignments/${assignmentId}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT_ASSIGNMENT, status))
       return
@@ -153,7 +153,7 @@ export const fetchProjectTokens = (projectId) => {
   return async (dispatch) => {
     // ... get the keys
     dispatch(ProjectTokens.request(projectId))
-    const { data, status } = await fetch(`projects/${projectId}/tokens`)
+    const { data, status } = await fetch(`v1/projects/${projectId}/tokens`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -165,7 +165,7 @@ export const fetchProjectTokens = (projectId) => {
 export const createProjectToken = (projectId, body) => {
   return async (dispatch) => {
     dispatch(ProjectTokens.create(projectId))
-    const { data, status } = await add(`projects/${projectId}/tokens`, body)
+    const { data, status } = await add(`v1/projects/${projectId}/tokens`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -179,7 +179,7 @@ export const createProjectToken = (projectId, body) => {
 export const removeProjectToken = (projectId, tokenId) => {
   return async (dispatch) => {
     dispatch(ProjectTokens.initiateRemove(projectId, tokenId))
-    const { data, status } = await remove(`projects/${projectId}/tokens/${tokenId}`)
+    const { data, status } = await remove(`v1/projects/${projectId}/tokens/${tokenId}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
       return

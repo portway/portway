@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -9,9 +9,13 @@ import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
-import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM, PATH_404 } from 'Shared/constants'
+import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
+
+const defaultDocument = {
+  name: ''
+}
 
 const DocumentContainer = ({
   documentMode,
@@ -29,7 +33,18 @@ const DocumentContainer = ({
   const { data: document, loading: documentLoading } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  // if we don't have a documentId, we shouldn't be loading this component
+
+  let currentDocument = document
+
+  /**
+   * If we're creating a document, render nothing
+   */
+  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
+    return null
+  }
+
+  // if we don't have a documentId (null or undefined),
+  // we shouldn't be loading this component
   if (match.params.documentId == null) {
     return null
   }
@@ -40,30 +55,29 @@ const DocumentContainer = ({
   }
 
   //if we're done loading things but the data never arrives, assume 404
-  if (documentLoading === false && !document) {
+  if (documentLoading === false && !currentDocument) {
     return <NoDocument />
   }
 
+  // If the project doesn't exist
   if (projectLoading === false && !project) {
     return <NoDocument />
   }
 
   //things are still loading, return null
-  if (!project || !document) return null
-  /**
-   * If we're creating a document, render nothing
-   */
-  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
-    return null
+  if (!project) return null
+
+  // The current document doesn't match the url params, usually because
+  // the user has switched docs and the new doc hasn't loaded from currentResource helper.
+  // In that case, we want to render a blank document
+  if (currentDocument && currentDocument.id !== Number(match.params.documentId)) {
+    currentDocument = defaultDocument
   }
 
-  /**
-   * If there is no document and we are not creating: true, then we render
-   * a helpful message
-   */
-
-  if (typeof match.params.documentId === 'undefined' || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
-    return <div>No document</div>
+  // If there's no current doc, we still want to render the doc
+  // layout so the UI doesn't jump around
+  if (!currentDocument) {
+    currentDocument = defaultDocument
   }
 
   /**
@@ -89,11 +103,11 @@ const DocumentContainer = ({
   return (
     <>
       <Helmet>
-        <title>{project.name}: {document.name} –– {PRODUCT_NAME}</title>
+        <title>{project.name}: {currentDocument.name} –– {PRODUCT_NAME}</title>
       </Helmet>
 
       <DocumentComponent
-        document={document}
+        document={currentDocument}
         documentMode={documentMode}
         isFullScreen={isFullScreen}
         nameChangeHandler={nameChangeHandler}

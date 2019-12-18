@@ -14,7 +14,7 @@ export const fetchUsers = (page = 1, sortBy = 'createdAt', sortMethod = 'DESC') 
   return async (dispatch) => {
     dispatch(Users.request(page))
     const { data, totalPages, status } = await fetch(
-      `users?page=${page}&perPage=${USERS_PER_PAGE}&sortBy=${sortBy}&sortMethod=${sortMethod}`
+      `v1/users?page=${page}&perPage=${USERS_PER_PAGE}&sortBy=${sortBy}&sortMethod=${sortMethod}`
     )
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
@@ -27,7 +27,7 @@ export const fetchUsers = (page = 1, sortBy = 'createdAt', sortMethod = 'DESC') 
 export const fetchUser = (id) => {
   return async (dispatch) => {
     dispatch(Users.requestOne(id))
-    const { data, status } = await fetch(`users/${id}`)
+    const { data, status } = await fetch(`v1/users/${id}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -49,7 +49,7 @@ export const createUser = (values) => {
   }
   return async (dispatch) => {
     dispatch(Users.create())
-    const { data, status } = await add('users', body)
+    const { data, status } = await add('v1/users', body)
     if (validationCodes.includes(status)) {
       dispatch(Validation.create('user', data, status))
       return
@@ -68,7 +68,7 @@ export const updateUser = (formId, userId, body) => {
   return async (dispatch) => {
     dispatch(formSubmitAction(formId))
     dispatch(Users.initiateUpdate(userId))
-    const { data, status } = await update(`users/${userId}`, body)
+    const { data, status } = await update(`v1/users/${userId}`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
@@ -88,7 +88,7 @@ export const updateUserAvatar = (formId, userId, formData) => {
   return async (dispatch) => {
     dispatch(formSubmitAction(formId))
     dispatch(Users.initiateUpdate(userId))
-    const { data, status } = await update(`users/${userId}/avatar`, formData)
+    const { data, status } = await update(`v1/users/${userId}/avatar`, formData)
     if (globalErrorCodes.includes(status)) {
       dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
@@ -108,7 +108,7 @@ export const updatePassword = (formId, userId, body) => {
   return async (dispatch) => {
     dispatch(formSubmitAction(formId))
     dispatch(Users.initiateUpdate(userId))
-    const { data, status } = await update(`users/${userId}/password`, body)
+    const { data, status } = await update(`v1/users/${userId}/password`, body)
     if (globalErrorCodes.includes(status)) {
       dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
@@ -128,7 +128,7 @@ export const updatePassword = (formId, userId, body) => {
 export const removeUser = (userId) => {
   return async (dispatch) => {
     dispatch(Users.initiateRemove(userId))
-    const { data, status } = await remove(`users/${userId}`)
+    const { data, status } = await remove(`v1/users/${userId}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -140,7 +140,7 @@ export const removeUser = (userId) => {
 export const updateUserRole = (userId, orgRoleId) => {
   return async (dispatch) => {
     dispatch(Users.initiateUpdate(userId))
-    const { data, status } = await update(`users/${userId}/orgRole`, { orgRoleId: orgRoleId })
+    const { data, status } = await update(`v1/users/${userId}/orgRole`, { orgRoleId: orgRoleId })
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -154,7 +154,7 @@ export const updateUserRole = (userId, orgRoleId) => {
 export const reinviteUser = (userId) => {
   return async (dispatch) => {
     dispatch(Users.initiateReinvite(userId))
-    const { data, status } = await add(`users/${userId}/resendinvite`)
+    const { data, status } = await add(`v1/users/${userId}/resendinvite`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -174,7 +174,7 @@ export const logoutUser = (id) => {
 export const fetchUserProjectAssignments = (userId) => {
   return async (dispatch) => {
     dispatch(UserProjectAssignments.request(userId))
-    const { data, status } = await fetch(`users/${userId}/assignments`)
+    const { data, status } = await fetch(`v1/users/${userId}/assignments`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -186,7 +186,7 @@ export const fetchUserProjectAssignments = (userId) => {
 export const searchByName = (partialNameString) => {
   return async (dispatch) => {
     dispatch(Users.initiateSearchByName(partialNameString))
-    const { data } = await fetch(`users?nameSearch=${partialNameString}&page=1&perPage=${USERS_PER_SEARCH}`)
+    const { data } = await fetch(`v1/users?nameSearch=${partialNameString}&page=1&perPage=${USERS_PER_SEARCH}`)
     return dispatch(Users.receiveSearchResultsByName(data, partialNameString))
   }
 }

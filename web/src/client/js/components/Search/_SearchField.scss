@@ -1,0 +1,17 @@
+// Search field in top header
+.search-field {
+  border: thin solid var(--theme-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  padding: 4px;
+
+  label {
+    align-items: center;
+    display: flex;
+  }
+
+  input[type="search"] {
+    border: none;
+  }
+
+}

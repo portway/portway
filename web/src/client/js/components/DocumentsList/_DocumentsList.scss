@@ -10,22 +10,6 @@
   overflow-y: auto;
   overscroll-behavior: contain;
 
-  .toolbar {
-    background-color: var(--theme-surface);
-    border-bottom: thin solid var(--theme-border-light);
-    height: 63px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-
-    &__start {
-      padding-left: calc(var(--gutter-width) / 4);
-    }
-    &__end {
-      padding-right: calc(var(--gutter-width) / 6);
-    }
-  }
-
   &--dragged-over {
     background-color: var(--document-list-item-hover);
     .toolbar {
@@ -64,6 +48,46 @@
     width: 60%;
   }
 
+  &__header {
+    align-items: center;
+    background-color: var(--theme-surface);
+    border-bottom: thin solid var(--theme-border-light);
+    display: flex;
+    height: 63px;
+    justify-content: space-between;
+    padding-left: calc(var(--gutter-width) / 4);
+    padding-right: calc(var(--gutter-width) / 4);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  &__search {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+
+    &--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__search-field {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    .icon {
+      margin-right: .6rem;
+    }
+    input[type="search"] {
+      appearance: none;
+      border: thin solid transparent;
+      width: 100%;
+    }
+  }
+
   &__list {
     list-style: none;
     margin: 0;
@@ -90,7 +114,7 @@
       border-bottom: thin solid var(--theme-border-light);
       border-top: none;
       .documents-list__button {
-        align-items: flex-start;
+        align-items: center;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -115,10 +139,8 @@
       .documents-list__name {
         background-color: transparent;
         flex: 1;
-        line-height: 1em;
         outline: none;
-        padding-bottom: 0;
-        padding-top: 8px;
+        padding: 0;
         resize: none;
         &::selection {
           background-color: var(--color-yellow);

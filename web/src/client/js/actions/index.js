@@ -129,7 +129,9 @@ export const ActionTypes = {
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
   UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
-  UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM'
+  UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM',
+  // Search
+  SEARCH_CLEAR: 'SEARCH_CLEAR',
 }
 
 export const Route = {
@@ -202,7 +204,7 @@ export const Documents = {
   unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
   receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'data'),
   initiateSearch: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_SEARCH, 'value'),
-  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data'),
+  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data')
 }
 
 export const Fields = {
@@ -290,4 +292,8 @@ export const UI = {
   toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),
+}
+
+export const Search = {
+  clearSearch: makeActionCreator(ActionTypes.SEARCH_CLEAR),
 }

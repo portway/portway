@@ -34,7 +34,7 @@ const loadControllers = (router, controllers, middleware) => {
 
 const loader = (router) => {
   loadControllers(router, AUTHENTICATED_CONTROLLERS, [auth.jwtMiddleware])
-  loadControllers(router, UNAUTHENTICATED_CONTROLLERS)
+  loadControllers(router, UNAUTHENTICATED_CONTROLLERS, [auth.jwtOptionalUser])
 }
 
 export default loader

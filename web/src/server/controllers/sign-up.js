@@ -24,7 +24,7 @@ const registerOrganization = async (req, res) => {
 
   try {
     await API.send({
-      url: 'signup',
+      url: 'v1/signup',
       method: 'POST',
       data: {
         name,
@@ -73,7 +73,7 @@ const setInitialPassword = async (req, res) => {
   let accessToken
   try {
     ({ data: { token: accessToken } } = await API.send({
-      url: 'signup/initialPassword',
+      url: 'v1/signup/initialPassword',
       method: 'POST',
       headers: {
         Authorization: `bearer ${token}`

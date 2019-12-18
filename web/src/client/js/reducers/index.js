@@ -2,36 +2,38 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import thunk from 'redux-thunk'
 
-import { documents } from './documents'
 import { documentFields } from './documentFields'
+import { documents } from './documents'
 import { forms } from './forms'
-import { validation } from './validation'
 import { notifications } from './notifications'
-import { projects } from './projects'
-import { projectUsers } from './projectUsers'
-import { projectTokens } from './projectTokens'
-import { ui } from './ui'
-import { users } from './users'
-import { userAssignments } from './userAssignments'
 import { organizations } from './organizations'
-import { userProjects } from './userProjects'
 import { projectAssignments } from './projectAssignments'
+import { projects } from './projects'
+import { projectTokens } from './projectTokens'
+import { projectUsers } from './projectUsers'
+import { search } from './search'
+import { ui } from './ui'
+import { userAssignments } from './userAssignments'
+import { userProjects } from './userProjects'
+import { users } from './users'
+import { validation } from './validation'
 
 const rootReducer = combineReducers({
-  documents,
   documentFields,
+  documents,
   forms,
-  validation,
   notifications,
-  projects,
-  projectUsers,
-  projectTokens,
-  ui,
-  users,
-  userAssignments,
   organizations,
+  projectAssignments,
+  projects,
+  projectTokens,
+  projectUsers,
+  search,
+  ui,
+  userAssignments,
   userProjects,
-  projectAssignments
+  users,
+  validation,
 })
 
 const middlewares = [thunk]
