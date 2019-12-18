@@ -10,7 +10,7 @@ import useBlur from 'Hooks/useBlur'
 import Constants from 'Shared/constants'
 import { MoreIcon, TimeIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuItem } from 'Components/Menu'
 
 const DocumentsListItem = ({
   disable,
@@ -122,9 +122,9 @@ const DocumentsListItem = ({
             align="right"
             anchorRef={anchorRef}
             autoCollapse={collapseCallback}
-            open={!expanded}
+            open={expanded}
           >
-            <Menu>
+            <Menu anchorRef={anchorRef}>
               <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
                 <button
                   className="btn btn--blank"

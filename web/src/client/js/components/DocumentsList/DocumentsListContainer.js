@@ -1,38 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter, Redirect } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT, PATH_404 } from 'Shared/constants'
+import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT } from 'Shared/constants'
+import { debounce } from 'Shared/utilities'
+
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
 import { createDocument, deleteDocument, unpublishDocument } from 'Actions/document'
 import { copyField, moveField } from 'Actions/field'
+import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
 import NoProject from './NoProject'
 
 const DocumentsListContainer = ({
+  clearSearch,
   copyField,
   createDocument,
   deleteDocument,
   documentFields,
-  history,
-  match,
   moveField,
+  searchDocuments,
+  searchResults,
+  searchTerm,
   ui,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
 }) => {
-  const { data: documents, loading } = useDataService(dataMapper.documents.list(match.params.projectId), [
-    match.params.projectId
+  const { documentId, projectId } = useParams()
+  const history = useHistory()
+
+  const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [
+    projectId
   ])
 
+  // trigger clear search action if project id changes
+  useEffect(() => {
+    clearSearch()
+  }, [projectId, clearSearch])
+
   // project id isn't a number, redirect to 404 page
-  if (match.params.projectId && isNaN(match.params.projectId)) {
+  if (projectId && isNaN(projectId)) {
     return <NoProject />
   }
 
@@ -42,16 +55,16 @@ const DocumentsListContainer = ({
   }
 
   function createDocumentAction(value) {
-    createDocument(match.params.projectId, history, {
+    createDocument(projectId, history, {
       name: value
     })
   }
 
   function createDocumentHandler(value) {
     if (value === false) {
-      history.push({ pathname: `${PATH_PROJECT}/${match.params.projectId}` })
+      history.push({ pathname: `${PATH_PROJECT}/${projectId}` })
     } else {
-      history.push({ pathname: `${PATH_PROJECT}/${match.params.projectId}${PATH_DOCUMENT_NEW}` })
+      history.push({ pathname: `${PATH_PROJECT}/${projectId}${PATH_DOCUMENT_NEW}` })
     }
     uiDocumentCreate(value)
   }
@@ -68,20 +81,20 @@ const DocumentsListContainer = ({
         preventRedirect: true,
         createFieldWithBody: markdownBody
       }
-      createDocument(match.params.projectId, history, { name: fileName }, documentOptions)
+      createDocument(projectId, history, { name: fileName }, documentOptions)
     }
   }
 
   function fieldMoveHandler(oldDocumentId, newDocumentId, fieldId) {
     if (oldDocumentId === newDocumentId) return
     const field = documentFields[oldDocumentId][fieldId]
-    moveField(match.params.projectId, oldDocumentId, newDocumentId, field)
+    moveField(projectId, oldDocumentId, newDocumentId, field)
   }
 
   function fieldCopyHandler(oldDocumentId, newDocumentId, fieldId) {
     if (oldDocumentId === newDocumentId) return
     const field = documentFields[oldDocumentId][fieldId]
-    copyField(match.params.projectId, oldDocumentId, newDocumentId, field)
+    copyField(projectId, oldDocumentId, newDocumentId, field)
   }
 
   function unpublishDocumentHandler(document) {
@@ -105,6 +118,29 @@ const DocumentsListContainer = ({
     uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
+  function clearSearchHandler() {
+    clearSearch()
+  }
+
+  const searchDocumentsHandler = debounce(200, (inputValue) => {
+    if (inputValue.trim() === '') {
+      clearSearch()
+      return
+    }
+    // if we have a project id, search for documents
+    if (projectId && inputValue !== searchTerm) {
+      searchDocuments(projectId, inputValue)
+    }
+  })
+
+  let sortedSearchResults = []
+  if (searchResults) {
+    sortedSearchResults = Object.values(searchResults)
+    sortedSearchResults.sort((a, b) => {
+      return new Date(b.updatedAt) - new Date(a.updatedAt)
+    })
+  }
+
   const sortedDocuments = []
   if (documents) {
     Object.keys(documents).forEach((doc) => {
@@ -117,29 +153,33 @@ const DocumentsListContainer = ({
 
   return (
     <DocumentsListComponent
+      clearSearchHandler={clearSearchHandler}
       createCallback={createDocumentHandler}
       createChangeHandler={createDocumentAction}
-      creating={ui.documents.creating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM}
-      documents={sortedDocuments}
+      creating={ui.documents.creating || documentId === PATH_DOCUMENT_NEW_PARAM}
+      documents={sortedSearchResults.length > 0 ? sortedSearchResults : sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
       loading={loading}
-      projectId={Number(match.params.projectId)}
+      projectId={Number(projectId)}
       removeDocumentHandler={removeDocumentHandler}
+      searchDocumentsHandler={searchDocumentsHandler}
       unpublishDocumentHandler={unpublishDocumentHandler}
     />
   )
 }
 
 DocumentsListContainer.propTypes = {
+  clearSearch: PropTypes.func,
   copyField: PropTypes.func.isRequired,
   createDocument: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
-  history: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
   moveField: PropTypes.func.isRequired,
+  searchDocuments: PropTypes.func.isRequired,
+  searchResults: PropTypes.object,
+  searchTerm: PropTypes.string,
   ui: PropTypes.object.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
@@ -150,20 +190,22 @@ const mapStateToProps = (state) => {
   return {
     ui: state.ui,
     documentFields: state.documentFields.documentFieldsById,
+    searchResults: state.search.searchResultsByDocumentId,
+    searchTerm: state.search.searchTerm,
   }
 }
 
 const mapDispatchToProps = {
   copyField,
   createDocument,
+  clearSearch,
   deleteDocument,
   moveField,
+  searchDocuments,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
 }
 
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(DocumentsListContainer)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentsListContainer)
