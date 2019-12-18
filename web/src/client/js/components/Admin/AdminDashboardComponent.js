@@ -1,7 +1,7 @@
 import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
-import { Link, NavLink, Redirect } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 
 import {
   ORGANIZATION_ROLE_IDS,
@@ -11,7 +11,7 @@ import {
   PLAN_TYPES,
   MULTI_USER_PLAN_TYPES
 } from 'Shared/constants'
-import { ArrowIcon, TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
+import { TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
@@ -59,11 +59,6 @@ const AdminDashboardComponent = ({ organization, section }) => {
       <main>
         <Panel>
           <PanelNavigation>
-            {section === 'user' &&
-            <Link to={`${PATH_ADMIN}/users`} className="link--back">
-              <ArrowIcon direction="left" /><span className="label">Back to Users</span>
-            </Link>
-            }
             <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} aria-label="Users" isActive={isSubSection}>
                 <TeamsIcon width="22" height="22" /> <span className="label">Users</span>
