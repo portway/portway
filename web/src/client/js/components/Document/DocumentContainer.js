@@ -13,6 +13,10 @@ import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/con
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
 
+const defaultDocument = {
+  name: ''
+}
+
 const DocumentContainer = ({
   documentMode,
   isCreating,
@@ -29,6 +33,8 @@ const DocumentContainer = ({
   const { data: document, loading: documentLoading } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+
+  let currentDocument = document
 
   /**
    * If we're creating a document, render nothing
@@ -49,7 +55,7 @@ const DocumentContainer = ({
   }
 
   //if we're done loading things but the data never arrives, assume 404
-  if (documentLoading === false && !document) {
+  if (documentLoading === false && !currentDocument) {
     return <NoDocument />
   }
 
@@ -59,7 +65,20 @@ const DocumentContainer = ({
   }
 
   //things are still loading, return null
-  if (!project || !document) return null
+  if (!project) return null
+
+  // The current document doesn't match the url params, usually because
+  // the user has switched docs and the new doc hasn't loaded from currentResource helper.
+  // In that case, we want to render a blank document
+  if (currentDocument && currentDocument.id !== Number(match.params.documentId)) {
+    currentDocument = defaultDocument
+  }
+
+  // If there's no current doc, we still want to render the doc
+  // layout so the UI doesn't jump around
+  if (!currentDocument) {
+    currentDocument = defaultDocument
+  }
 
   /**
    * Otherwise we render the document, and update its values onChange
@@ -84,11 +103,11 @@ const DocumentContainer = ({
   return (
     <>
       <Helmet>
-        <title>{project.name}: {document.name} –– {PRODUCT_NAME}</title>
+        <title>{project.name}: {currentDocument.name} –– {PRODUCT_NAME}</title>
       </Helmet>
 
       <DocumentComponent
-        document={document}
+        document={currentDocument}
         documentMode={documentMode}
         isFullScreen={isFullScreen}
         nameChangeHandler={nameChangeHandler}

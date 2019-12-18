@@ -34,12 +34,13 @@ const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, on
         aria-controls="org-roles-dropdown"
         className="btn btn--white btn--with-icon"
         onClick={() => setExpanded(!expanded)}
+        ref={anchorRef}
       >
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />
       </button>
       <Popper id="org-roles-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem>
             <button className="btn btn--blank" onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) }>
               {ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.USER]}

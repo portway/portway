@@ -44,7 +44,7 @@ class DangerApi {
    */
   async authenticate(email, password) {
     const res = await this.send({
-      url: 'login',
+      url: 'v1/login',
       method: 'POST',
       data: {
         email,
