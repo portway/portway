@@ -37,36 +37,29 @@ const DocumentContainer = ({
     return null
   }
 
-  // if we don't have a documentId, we shouldn't be loading this component
-  if (match.params.documentId === null) {
+  // if we don't have a documentId (null or undefined),
+  // we shouldn't be loading this component
+  if (match.params.documentId == null) {
     return null
   }
 
   //if the document id isn't a valid number, redirect to 404
-  if (!isCreating && match.params.documentId && isNaN(match.params.documentId)) {
+  if (isNaN(match.params.documentId)) {
     return <NoDocument />
   }
 
   //if we're done loading things but the data never arrives, assume 404
-  if (!isCreating && documentLoading === false && !document) {
+  if (documentLoading === false && !document) {
     return <NoDocument />
   }
 
+  // If the project doesn't exist
   if (projectLoading === false && !project) {
     return <NoDocument />
   }
 
   //things are still loading, return null
   if (!project || !document) return null
-
-  /**
-   * If there is no document and we are not creating: true, then we render
-   * a helpful message
-   */
-
-  if (!isCreating && typeof match.params.documentId === 'undefined' || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
-    return <div>No document</div>
-  }
 
   /**
    * Otherwise we render the document, and update its values onChange
