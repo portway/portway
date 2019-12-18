@@ -62,6 +62,9 @@ export const ORGANIZATION_ROLES = {
       [actions.READ_MY]: true,
       [actions.UPDATE_MY]: true,
       [actions.UPDATE_MY_PASSWORD]: true
+    },
+    [resourceTypes.SEAT]: {
+      [actions.READ]: true
     }
   },
   [rIds.ADMIN]: {
@@ -88,6 +91,9 @@ export const ORGANIZATION_ROLES = {
       [actions.DELETE]: true,
       [actions.READ]: true,
       [actions.LIST]: true
+    },
+    [resourceTypes.SEAT]: {
+      [actions.READ]: true
     }
   },
   [rIds.USER]: {

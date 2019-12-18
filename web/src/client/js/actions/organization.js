@@ -55,6 +55,25 @@ export const updateOrganizationAvatar = (formId, orgId, formData) => {
   }
 }
 
+export const fetchOrganizationSeats = (orgId) => {
+  return async (dispatch) => {
+    dispatch(Organizations.requestSeats(orgId))
+    const { data, status } = await fetch(`v1/organizations/${orgId}/seats`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(
+        Notifications.create(
+          data.error,
+          NOTIFICATION_TYPES.ERROR,
+          NOTIFICATION_RESOURCE.ORGANIZATION,
+          status
+        )
+      )
+      return
+    }
+    dispatch(Organizations.receiveSeats(orgId, data))
+  }
+}
+
 export const fetchOrganizationBilling = (orgId) => {
   return async (dispatch) => {
     dispatch(Organizations.requestBilling(orgId))

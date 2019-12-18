@@ -28,7 +28,7 @@ const AdminUsersComponent = ({
   sortBy,
   sortMethod,
   sortUsersHandler,
-  subscription,
+  seats,
   users,
   totalPages
 }) => {
@@ -84,9 +84,9 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          {subscription && subscription.usedSeats === subscription.totalSeats &&
+          {seats && seats.usedSeats === seats.totalSeats &&
           <p className="small --align-right">
-            You have filled all of your <b>{subscription.totalSeats}</b> seats.<br />
+            You have filled all of your <b>{seats.totalSeats}</b> seats.<br />
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <Link to={PATH_BILLING}>Add some seats</Link> if you’d like to add more users.
             </OrgPermission>
@@ -95,7 +95,7 @@ const AdminUsersComponent = ({
             </OrgPermission>
           </p>
           }
-          {subscription && subscription.usedSeats < subscription.totalSeats &&
+          {seats && seats.usedSeats < seats.totalSeats &&
           <button
             className="btn"
             disabled={isCreating}
@@ -106,10 +106,10 @@ const AdminUsersComponent = ({
         </header>
         {isCreating &&
         <>
-          {subscription && subscription.usedSeats < subscription.totalSeats &&
+          {seats && seats.usedSeats < seats.totalSeats &&
           <AdminUsersCreateForm
             cancelHandler={() => {setCreateMode(false) }}
-            disabled={subscription.usedSeats === subscription.totalSeats}
+            disabled={seats.usedSeats === seats.totalSeats}
             errors={errors}
             submitHandler={addUserHandler}
           />
@@ -157,7 +157,7 @@ AdminUsersComponent.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
-  subscription: PropTypes.object,
+  seats: PropTypes.object,
   users: PropTypes.array.isRequired,
   totalPages: PropTypes.number
 }
