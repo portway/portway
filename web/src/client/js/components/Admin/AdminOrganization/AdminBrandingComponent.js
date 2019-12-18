@@ -69,7 +69,7 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
 
   return (
     <section>
-      <Form name={formId} onSubmit={formAvatarHandler} submitLabel={`Update ${organization.name}`}>
+      <Form name={formId} onSubmit={formAvatarHandler} submitLabel={`Update ${organization.name}’s logo`}>
         <h2>Branding</h2>
         <div className={classes}>
           {renderOrganizationAvatar()}

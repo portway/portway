@@ -22,7 +22,7 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
 
   return (
     <section>
-      <Form name={formId} onSubmit={formSubmitHandler} submitLabel={`Update ${organization.name}’s avatar`}>
+      <Form name={formId} onSubmit={formSubmitHandler} submitLabel={`Update ${organization.name}`}>
         <h2>General information</h2>
         <FormField
           errors={errors.name}
