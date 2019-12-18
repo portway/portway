@@ -5,7 +5,11 @@ import auth from '../libs/auth'
 
 const SignInController = function(router) {
   router.get('/', (req, res) => {
-    res.render('user/sign-in', { ...renderBundles(req, 'Sign in', 'index'), url: req.query.url })
+    if (req._portway.loggedIn) {
+      res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
+    } else {
+      res.render('user/sign-in', { ...renderBundles(req, 'Sign in', 'index'), url: req.query.url })
+    }
   })
 
   router.post('/', auth.loginMiddleware, (req, res) => {
