@@ -217,10 +217,10 @@ const DocumentsListComponent = ({
           {isSearching &&
           <button
             aria-label="Exit document search"
-            className="btn btn--blank btn--with-circular-icon"
+            className="btn btn--blank"
             onClick={() => clearOutSearch()}
           >
-            <RemoveIcon />
+            <RemoveIcon width="12" height="12" />
           </button>
           }
         </div>
