@@ -32,7 +32,7 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
     <div className="admin-notices">
       {TRIALING_STATUSES.includes(organization.subscriptionStatus) &&
       <div className="admin-notices__notice">
-        <h2 className="admin-notices__notice-title"><InfoIcon width="22" height="22" /> Trial period</h2>
+        <h2 className="admin-notices__notice-title"><InfoIcon width="22" height="22" /> Trial ends: {subscription && moment.unix(subscription.trialEnd).format('MMMM Do')}</h2>
         <p>
           During your trial, you are limited to a single-user plan.
         </p>

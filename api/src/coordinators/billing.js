@@ -50,7 +50,7 @@ const formatBilling = (customer, userCount) => {
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
     subscription.cancelAt = billingSubscription.cancel_at
     subscription.currentPeriodEnd = billingSubscription.current_period_end
-    subscription.trialEnd = billingSubscription.trialEnd
+    subscription.trialEnd = billingSubscription.trial_end
     subscription.totalSeats = billingSubscription.items.data[0].quantity
     subscription.usedSeats = userCount
 
