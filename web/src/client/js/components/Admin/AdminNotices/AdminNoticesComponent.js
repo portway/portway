@@ -27,14 +27,16 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
   const lockedAccountStatusesMinusInactive = LOCKED_ACCOUNT_STATUSES.filter((status) => {
     return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE
   })
-  const trialEnds = subscription && moment.unix(subscription.trialEnd)
-  const trialEndsInDays = moment(trialEnds).diff(moment(), 'days')
+  const trialEnds = subscription.trialEnd
+  const trialEndsInDays = moment.unix(trialEnds).diff(moment(), 'days')
 
   return (
     <div className="admin-notices">
       {TRIALING_STATUSES.includes(organization.subscriptionStatus) &&
       <div className="admin-notices__notice">
-        <h2 className="admin-notices__notice-title"><InfoIcon width="22" height="22" /> Trial ends in {trialEndsInDays} days, {moment(trialEnds).format('MMMM Do')}</h2>
+        <h2 className="admin-notices__notice-title">
+          <InfoIcon width="22" height="22" /> Trial {trialEnds && <>ends in {trialEndsInDays} days, {moment(trialEnds).format('MMMM Do')}</>}
+        </h2>
         <p>
           During your trial, you are limited to a single-user plan.
         </p>
@@ -77,6 +79,10 @@ AdminNoticesComponent.propTypes = {
   logoutAction: PropTypes.func.isRequired,
   organization: PropTypes.object.isRequired,
   subscription: PropTypes.object,
+}
+
+AdminNoticesComponent.defaultProps = {
+  subscription: {}
 }
 
 export default AdminNoticesComponent
