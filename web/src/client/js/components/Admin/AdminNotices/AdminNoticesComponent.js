@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
@@ -13,15 +13,7 @@ import { InfoIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import './_AdminNotices.scss'
 
-const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => {
-  useEffect(() => {
-    if (organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE) {
-      setTimeout(() => {
-        logoutAction()
-      }, 3000)
-    }
-  }, [logoutAction, organization.subscriptionStatus])
-
+const AdminNoticesComponent = ({ organization, subscription }) => {
   const colorGray = getComputedStyle(document.documentElement).getPropertyValue('--theme-border')
   const colorDanger = getComputedStyle(document.documentElement).getPropertyValue('--color-red-dark')
   const lockedAccountStatusesMinusInactive = LOCKED_ACCOUNT_STATUSES.filter((status) => {
@@ -72,7 +64,6 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
 }
 
 AdminNoticesComponent.propTypes = {
-  logoutAction: PropTypes.func.isRequired,
   organization: PropTypes.object.isRequired,
   subscription: PropTypes.object,
 }

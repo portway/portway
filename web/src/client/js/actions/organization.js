@@ -1,7 +1,9 @@
 import { Organizations, Notifications, Validation } from './index'
 import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
 import { add, fetch, update, globalErrorCodes, validationCodes } from '../api'
+import { logoutUser } from 'Actions/user'
 import { NOTIFICATION_TYPES, NOTIFICATION_RESOURCE } from 'Shared/constants'
+import { currentUserId } from 'Libs/currentIds'
 
 export const fetchOrganization = (orgId) => {
   return async (dispatch) => {
@@ -157,5 +159,6 @@ export const deleteOrganization = (orgId) => {
     dispatch(Organizations.receiveOrgRemoval(orgId))
     dispatch(fetchOrganization(orgId))
     dispatch(fetchOrganizationBilling(orgId))
+    dispatch(logoutUser(currentUserId))
   }
 }
