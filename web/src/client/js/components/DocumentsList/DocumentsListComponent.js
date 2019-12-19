@@ -227,7 +227,7 @@ const DocumentsListComponent = ({
           </IconButton>
         </ProjectPermission>
       </header>
-      {documents.length === 0 && loading === false && !creating &&
+      {documents.length === 0 && loading === false && !creating && !isSearching &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
