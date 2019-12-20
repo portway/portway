@@ -122,6 +122,7 @@ export const updateOrganizationPlan = (formId, orgId, body) => {
     }
     dispatch(Organizations.receiveUpdatedPlan(orgId, body.plan))
     dispatch(formSucceededAction(formId))
+    dispatch(fetchOrganizationBilling(orgId))
   }
 }
 
