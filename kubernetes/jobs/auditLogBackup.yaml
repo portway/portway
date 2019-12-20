@@ -1,0 +1,48 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: audit-log-backup
+spec:
+  schedule: "0 9 * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: OnFailure
+          containers:
+          - name: audit_log_backup
+            image: bonkeybong/portway_audit_log_backup
+            env:
+            - name: S3_CONTENT_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: audit-log-backup-config
+                  key: backup.s3_content_bucket
+            - name: AWS_SES_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: audit-log-backup-config
+                  key: backup.aws_ses_region
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: audit-log-backup
+                  key: access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: audit-log-backup
+                  key: secret_access_key
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: audit-log-backup
+                  key: api_key
+            - name: LOG_ID
+              valueFrom:
+                secretKeyRef:
+                  name: audit-log-backup
+                  key: log_id

@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    backup.s3_content_bucket: "portway-logs"
+    backup.aws_ses_region: "us-west-2"
+  kind: ConfigMap
+  metadata:
+    name: audit-log-backup-config
+    namespace: default
+kind: List
