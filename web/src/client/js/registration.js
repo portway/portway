@@ -13,6 +13,7 @@ const RegistrationForm = () => {
   const [fieldsReady, setFieldsReady] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const formRef = useRef()
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
 
   function fieldsReadyHandler(value) {
     setFieldsReady(value)
@@ -42,7 +43,7 @@ const RegistrationForm = () => {
         <input type="hidden" id="token" name="token" value={TOKEN ? TOKEN : ''} />
         <div className="btn-group">
           <input className="btn" type="submit" disabled={!fieldsReady} value="Complete registration" />
-          {submitting && <SpinnerComponent color="#e5e7e6" />}
+          {submitting && <SpinnerComponent color={green} />}
         </div>
       </section>
     </form>

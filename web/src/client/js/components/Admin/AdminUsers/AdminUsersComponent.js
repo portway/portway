@@ -41,10 +41,12 @@ const AdminUsersComponent = ({
     tools: { label: '' }
   }
 
+  const gray20 = getComputedStyle(document.documentElement).getPropertyValue('--color-gray-20')
+
   function renderTools(userId) {
     return (
       <div className="table__tools">
-        <SpinnerContainer color="#d9dbdb" />
+        <SpinnerContainer color={gray20} />
         {userId !== currentUserId &&
         <button
           aria-label="Remove user"

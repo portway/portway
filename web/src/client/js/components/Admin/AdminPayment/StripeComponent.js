@@ -11,25 +11,27 @@ import {
 import CountryList from 'Shared/countryList'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
+const gray10 = getComputedStyle(document.documentElement).getPropertyValue('--color-gray-10')
+
 const elementStyles = {
   base: {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
     fontSize: '15px',
     '::placeholder': {
-      color: '#d9dbdb'
+      color: '#999999'
     }
   },
   focus: {
-    border: 'thin solid #6ba5f2'
+    border: `thin solid #6074D6`
   },
   complete: {},
   invalid: {
-    color: '#f26244',
+    color: '#F55961',
     ':focus': {
-      color: '#FA755A'
+      color: '#FBBCBF'
     },
     '::placeholder': {
-      color: '#FFCCA5'
+      color: '#FBBCBF'
     }
   }
 }
@@ -181,7 +183,7 @@ class StripeComponent extends React.Component {
           </div>
           }
           <div className="field">
-            {this.props.isSubmitting && <SpinnerComponent color="#e5e7e6" />}
+            {this.props.isSubmitting && <SpinnerComponent color={gray10} />}
           </div>
         </div>
 

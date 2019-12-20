@@ -84,7 +84,7 @@ const NavigatorContainer = ({ history, location }) => {
     })
     return (
       <div className={classnames} ref={innerRef} {...innerProps}>
-        <ProjectIcon fill="#d2e0f2" />
+        <ProjectIcon fill="#72D9EE" />
         <components.Option {...props} />
         <ProjectPermission
           projectId={data.value}
