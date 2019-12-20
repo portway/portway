@@ -5,13 +5,13 @@ import dataMapper from 'Libs/dataMapper'
 import AdminNoticesComponent from './AdminNoticesComponent'
 
 const AdminNoticesContainer = () => {
-  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
-  const { data: orgBilling } = useDataService(dataMapper.organizations.billing(), [currentOrg.plan])
+  const { data: currentOrg = {} } = useDataService(dataMapper.organizations.current())
+  const { data: orgBilling = {} } = useDataService(dataMapper.organizations.billing(), [currentOrg.plan])
 
   return (
     <AdminNoticesComponent
       organization={currentOrg}
-      subscription={orgBilling ? orgBilling.subscription : null}
+      subscription={orgBilling.subscription}
     />
   )
 }
