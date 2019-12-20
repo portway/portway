@@ -178,6 +178,9 @@ const updateOrgBilling = async function(token, orgId) {
     await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, subscriptionId: currentSubscription.id, orgId })
   }
 
+  // might be adding valid card info to fix PAST_DUE or INACTIVE status, reset cached data on org
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
+
   return billingCoordinator.getOrgBilling(orgId)
 }
 
