@@ -378,7 +378,7 @@ describe('billing coordinator', () => {
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.updateById.mockClear()
-      BusinessOrganization.findById.mockReturnValue({ stripeId })
+      BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       stripeIntegrator.getCustomer.mockClear()
       stripeIntegrator.getCustomer.mockReturnValue({
         id: customerId,
@@ -428,7 +428,7 @@ describe('billing coordinator', () => {
       })
     })
 
-    describe('when the subscription has a status of TRIALING', () => {
+    describe('when the org has a subscriptionStatus of TRIALING', () => {
       const mockSubscription = {
         id: subscriptionId,
         plan: { id: planId },
@@ -438,6 +438,7 @@ describe('billing coordinator', () => {
 
       it('should call stripeIntegrator.cancelSubscription with the current subscription id', async () => {
         stripeIntegrator.getCustomer.mockReturnValueOnce({ subscriptions: { data: [mockSubscription] } })
+        BusinessOrganization.findById.mockReturnValue({ stripeId, subscriptionStatus: ORG_SUBSCRIPTION_STATUS.TRIALING })
         await billingCoordinator.cancelAccount(orgId)
         expect(stripeIntegrator.cancelSubscription.mock.calls.length).toBe(1)
         expect(stripeIntegrator.cancelSubscription.mock.calls[0][0]).toBe(mockSubscription.id)
@@ -503,6 +504,7 @@ describe('billing coordinator', () => {
       BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       BusinessOrganization.updateById.mockClear()
       stripeIntegrator.getCustomer.mockClear()
+      orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mockClear()
       stripeIntegrator.getCustomer.mockReturnValueOnce(mockCustomer)
       orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mockReturnValueOnce(ORG_SUBSCRIPTION_STATUS.ACTIVE)
       resolvedValue = await fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
