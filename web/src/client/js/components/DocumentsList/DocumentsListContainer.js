@@ -133,8 +133,8 @@ const DocumentsListContainer = ({
     }
   })
 
-  let sortedSearchResults = []
-  if (searchResults) {
+  let sortedSearchResults = null
+  if (searchResults && searchTerm) {
     sortedSearchResults = Object.values(searchResults)
     sortedSearchResults.sort((a, b) => {
       return new Date(b.updatedAt) - new Date(a.updatedAt)
@@ -157,7 +157,7 @@ const DocumentsListContainer = ({
       createCallback={createDocumentHandler}
       createChangeHandler={createDocumentAction}
       creating={ui.documents.creating || documentId === PATH_DOCUMENT_NEW_PARAM}
-      documents={sortedSearchResults.length > 0 ? sortedSearchResults : sortedDocuments}
+      documents={sortedSearchResults ? sortedSearchResults : sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
