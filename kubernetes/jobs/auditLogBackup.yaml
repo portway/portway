@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: audit-log-backup
+  name: audit-log-backup-cronjob
 spec:
   schedule: "0 9 * * *"
   concurrencyPolicy: "Forbid"
@@ -13,7 +13,7 @@ spec:
           - name: regcred
           restartPolicy: OnFailure
           containers:
-          - name: audit_log_backup
+          - name: audit-log-backup
             image: bonkeybong/portway_audit_log_backup
             env:
             - name: S3_CONTENT_BUCKET
