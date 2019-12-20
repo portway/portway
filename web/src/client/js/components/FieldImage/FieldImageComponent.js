@@ -50,7 +50,7 @@ const FieldImageComponent = ({ field, onChange, onRename, settingsHandler, setti
     <div className="document-field__image">
       <div className="document-field__image-container">
         {field.value &&
-        <img src={field.value} alt={field.name} ref={imageNodeRef} />
+        <img src={field.value} alt={field.name} ref={imageNodeRef} lazy />
         }
         {(settingsMode || !field.value || updating) &&
         <FileUploaderComponent
