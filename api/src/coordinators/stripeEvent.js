@@ -2,6 +2,8 @@ import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import billingCoordinator from '../coordinators/billing'
+import logger from '../integrators/logger'
+import { LOG_LEVELS } from '../constants/logging'
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -36,6 +38,7 @@ async function handleEvent(event) {
       break
     }
   }
+  logger(LOG_LEVELS.INFO, { source: 'stripe webhook', eventType: event.type, orgId: org.id, stripeId })
 }
 
 export default {
