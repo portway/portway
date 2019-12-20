@@ -150,6 +150,11 @@
         &::selection {
           background-color: var(--color-yellow);
         }
+        &:focus {
+          .using-mouse & {
+            border: thin solid transparent;
+          }
+        }
       }
       &:focus {
         background-color: var(--document-list-active-item);
