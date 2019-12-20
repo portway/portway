@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
@@ -10,19 +10,9 @@ import {
 } from 'Shared/constants'
 
 import { InfoIcon } from 'Components/Icons'
-import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import './_AdminNotices.scss'
 
-const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => {
-  useEffect(() => {
-    if (organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE) {
-      setTimeout(() => {
-        logoutAction()
-      }, 3000)
-    }
-  }, [logoutAction, organization.subscriptionStatus])
-
-  const colorGray = getComputedStyle(document.documentElement).getPropertyValue('--theme-border')
+const AdminNoticesComponent = ({ organization, subscription }) => {
   const colorDanger = getComputedStyle(document.documentElement).getPropertyValue('--color-red-dark')
   const lockedAccountStatusesMinusInactive = LOCKED_ACCOUNT_STATUSES.filter((status) => {
     return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE
@@ -45,7 +35,6 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
       <div className="admin-notices__notice admin-notices__notice--danger">
         <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} /> Inactive</h2>
         <p>We are in the process of removing your account.</p>
-        <span className="--with-spinner">Logging you out <SpinnerComponent color={colorGray} /></span>
       </div>
       }
       {lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus) &&
@@ -72,7 +61,6 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
 }
 
 AdminNoticesComponent.propTypes = {
-  logoutAction: PropTypes.func.isRequired,
   organization: PropTypes.object.isRequired,
   subscription: PropTypes.object,
 }
