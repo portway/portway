@@ -1,6 +1,7 @@
 import { renderBundles } from '../libs/express-utilities'
 import DangerAPI from '../libs/api'
 import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS } from '../../shared/constants'
+import { SIGNUP_DISABLED } from '../constants'
 
 const API = new DangerAPI(process.env.API_URL)
 
@@ -20,6 +21,10 @@ const SignUpController = function(router) {
 }
 
 const registerOrganization = async (req, res) => {
+  if (SIGNUP_DISABLED) {
+    return res.status(403).send('Signup disabled')
+  }
+
   const { name, email } = req.body
 
   try {
