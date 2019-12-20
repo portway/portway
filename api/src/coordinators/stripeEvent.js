@@ -2,6 +2,7 @@ import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import billingCoordinator from '../coordinators/billing'
+import { ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -15,8 +16,6 @@ async function handleEvent(event) {
       const message = 'Portway payment failed'
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
-      //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
     }
     case 'charge.succeeded': {
@@ -24,18 +23,17 @@ async function handleEvent(event) {
       const message = 'Portway payment was successful'
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
-      //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
+    }
+    case 'customer.subscription.deleted': {
+      //TODO send email letting customer know account is cancelled
+      await BusinessOrganization.updateById(org.id, { canceledAt: Date.now(), subscriptionStatus: ORG_SUBSCRIPTION_STATUS.INACTIVE })
     }
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
-    case 'customer.subscription.deleted': {
-      //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
-      break
-    }
   }
+  //update cached subscription status on org, we want to do this for all current events
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
 }
 
 export default {
