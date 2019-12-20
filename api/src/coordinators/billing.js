@@ -230,9 +230,12 @@ const cancelAccount = async function(orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
   }
 
-  if (currentSubscription.status === STRIPE_STATUS.TRIALING) {
-    // still in trial with or without billing info, cancel immediately
+  const orgSubscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
+
+  if (orgSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
+    // still in trial, but not pending active, cancel immediately
     await stripeIntegrator.cancelSubscription(currentSubscription.id)
+    // TODO immediately trigger deletion of org and data here
   } else {
     // for all other subscription statuses wait until billing period ends to cancel
     await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
