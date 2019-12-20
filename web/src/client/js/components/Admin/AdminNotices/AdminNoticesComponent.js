@@ -10,11 +10,9 @@ import {
 } from 'Shared/constants'
 
 import { InfoIcon } from 'Components/Icons'
-import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import './_AdminNotices.scss'
 
 const AdminNoticesComponent = ({ organization, subscription }) => {
-  const colorGray = getComputedStyle(document.documentElement).getPropertyValue('--theme-border')
   const colorDanger = getComputedStyle(document.documentElement).getPropertyValue('--color-red-dark')
   const lockedAccountStatusesMinusInactive = LOCKED_ACCOUNT_STATUSES.filter((status) => {
     return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE
@@ -37,7 +35,6 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
       <div className="admin-notices__notice admin-notices__notice--danger">
         <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} /> Inactive</h2>
         <p>We are in the process of removing your account.</p>
-        <span className="--with-spinner">Logging you out <SpinnerComponent color={colorGray} /></span>
       </div>
       }
       {lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus) &&
