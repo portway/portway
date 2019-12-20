@@ -28,14 +28,14 @@ const AdminNoticesComponent = ({ logoutAction, organization, subscription }) => 
     return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE
   })
   const trialEnds = moment.unix(subscription.trialEnd)
-  const trialEndsInDays = trialEnds.diff(moment(), 'days')
+  const trialEndsInDays = moment(trialEnds).fromNow()
 
   return (
     <div className="admin-notices">
       {TRIALING_STATUSES.includes(organization.subscriptionStatus) &&
       <div className="admin-notices__notice">
         <h2 className="admin-notices__notice-title">
-          <InfoIcon width="22" height="22" /> Your trial {trialEnds && <>ends in {trialEndsInDays} days, on {moment(trialEnds).format('MMMM Do')}</>}
+          <InfoIcon width="22" height="22" /> Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}
         </h2>
         <p>
           During your trial, you are limited to a single-user plan.
