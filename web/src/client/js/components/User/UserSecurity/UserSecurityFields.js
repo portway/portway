@@ -26,6 +26,8 @@ const UserSecurityFields = ({ fieldsReadyHandler, fieldsShouldReset }) => {
     return newPassword && newPassword.length >= MIN_PASSWORD_LENGTH
   }, [newPassword])
 
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
+
   // monitor fields and trigger fieldsReadyHandler if everything is good
   useEffect(() => {
     function areFieldsReady() {
@@ -106,7 +108,7 @@ const UserSecurityFields = ({ fieldsReadyHandler, fieldsShouldReset }) => {
         onChange={e => passwordValidationHandler(e.target.value)}
         placeholder="Enter a new password"
         required
-        status={passwordIsValid() && <CheckIcon fill="#51a37d" />}
+        status={passwordIsValid() && <CheckIcon fill={green} />}
         type="password"
       />
       {(passwordStatus || passwordSummary && passwordSummary.length > 0) &&
@@ -135,7 +137,7 @@ const UserSecurityFields = ({ fieldsReadyHandler, fieldsShouldReset }) => {
         onChange={e => passwordMatchHandler(e.target.value)}
         placeholder="Enter your new password"
         required
-        status={passwordIsValid() && newPassword === confirmNewPassword && <CheckIcon fill="#51a37d" />}
+        status={passwordIsValid() && newPassword === confirmNewPassword && <CheckIcon fill={green} />}
         type="password"
       />
       {confirmStatus &&

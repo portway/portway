@@ -26,6 +26,9 @@ const Form = ({
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
 
+  const gray10 = getComputedStyle(document.documentElement).getPropertyValue('--color-gray-10')
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
+
   useEffect(() => {
     setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)
     setFailed(forms[name] && forms[name].failed)
@@ -84,8 +87,8 @@ const Form = ({
         {cancelHandler &&
           <button className="btn btn--blank btn--small" type="button" onClick={cancelHandler}>Cancel</button>
         }
-        {submitting && <SpinnerComponent color="#e5e7e6" />}
-        {succeeded && <CheckIcon fill="#51a37d" />}
+        {submitting && <SpinnerComponent color={gray10} />}
+        {succeeded && <CheckIcon fill={green} />}
       </div>
     </form>
   )
