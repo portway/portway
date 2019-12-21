@@ -27,7 +27,6 @@ async function handleEvent(event) {
     }
     case 'customer.subscription.deleted': {
       //TODO send email letting customer know account is cancelled
-      await BusinessOrganization.updateById(org.id, { canceledAt: Date.now(), subscriptionStatus: ORG_SUBSCRIPTION_STATUS.INACTIVE })
     }
     case 'customer.subscription.created':
     case 'customer.subscription.updated':

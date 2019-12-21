@@ -235,7 +235,6 @@ const cancelAccount = async function(orgId) {
   if (orgSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
     // still in trial, but not pending active, cancel immediately
     await stripeIntegrator.cancelSubscription(currentSubscription.id)
-    // TODO immediately trigger deletion of org and data here
   } else {
     // for all other subscription statuses wait until billing period ends to cancel
     await stripeIntegrator.cancelSubscriptionAtPeriodEnd(currentSubscription.id)
