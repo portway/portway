@@ -2,12 +2,8 @@ import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import billingCoordinator from '../coordinators/billing'
-<<<<<<< HEAD
-import { ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
-=======
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
->>>>>>> release
 
 async function handleEvent(event) {
   const eventData = event.data.object
