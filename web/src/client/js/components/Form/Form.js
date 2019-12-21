@@ -32,6 +32,12 @@ const Form = ({
     setSucceeded(forms[name] && forms[name].succeeded && !forms[name].failed)
   })
 
+  useEffect(() => {
+    if (!disabled) {
+      setFormChanged(true)
+    }
+  }, [disabled])
+
   function submitHandler(e) {
     e.preventDefault()
     onSubmit()

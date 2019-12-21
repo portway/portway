@@ -2,7 +2,12 @@ import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import billingCoordinator from '../coordinators/billing'
+<<<<<<< HEAD
 import { ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+=======
+import logger from '../integrators/logger'
+import { LOG_LEVELS } from '../constants/logging'
+>>>>>>> release
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -33,6 +38,7 @@ async function handleEvent(event) {
   }
   //update cached subscription status on org, we want to do this for all current events
   await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
+  logger(LOG_LEVELS.INFO, { source: 'stripe webhook', eventType: event.type, orgId: org.id, stripeId })
 }
 
 export default {
