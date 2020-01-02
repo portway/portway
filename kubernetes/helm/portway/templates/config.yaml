@@ -25,7 +25,7 @@ items:
     web.api_url: {{ printf "http://%s-api-service:%s" .Release.Name .Values.apiPort }}
     web.api_public_url: {{ printf "https://%s" .Values.apiPublicUrl }}
     web.stripe_publishable_key: {{ .Values.stripePublishableKey | quote }}
-    web.flag_disable_signup: {{ .Values.web.flagDisableSignup }}
+    web.flag_disable_signup: {{ .Values.web.flagDisableSignup | quote }}
   kind: ConfigMap
   metadata:
     name: web-config
