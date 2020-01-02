@@ -20,6 +20,13 @@
         </ol> -->
         <div class="navbar-end">
           <div class="navbar-item">
+            <div class="buttons">
+              <% const disabledSignup = typeof disableSignup !== 'undefined' && disableSignup === true %>
+              <% if (!disabledSignup) { %>
+                <a class="button" href="/">Sign up</a>
+              <% } %>
+              <a class="button" href="/sign-in">Sign in</a>
+            </div>
           </div>
         </div>
       </div>

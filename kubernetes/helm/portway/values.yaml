@@ -15,6 +15,9 @@ apiTag: dev4
 webImage: bonkeybong/portway_web
 webTag: dev2
 
+web:
+  flagDisableSignup: "false"
+
 api:
   cdnHostname: 'https://dev.portwaycontent.com'
   s3ContentBucket: 'portway-content-dev'
