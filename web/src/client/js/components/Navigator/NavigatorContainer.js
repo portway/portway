@@ -23,7 +23,7 @@ import currentResource from 'Libs/currentResource'
 
 import { CaretIcon, ProjectIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu } from 'Components/Menu/Menu'
+import { Menu } from 'Components/Menu'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
@@ -84,7 +84,7 @@ const NavigatorContainer = ({ history, location }) => {
     })
     return (
       <div className={classnames} ref={innerRef} {...innerProps}>
-        <ProjectIcon fill="#d2e0f2" />
+        <ProjectIcon fill="#72D9EE" />
         <components.Option {...props} />
         <ProjectPermission
           projectId={data.value}
@@ -119,8 +119,8 @@ const NavigatorContainer = ({ history, location }) => {
           <CaretIcon />
           <span className="label">{project ? project.name : 'Projects'}</span>
         </button>
-        <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={!expanded} width="300">
-          <Menu>
+        <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
+          <Menu anchorRef={anchorRef}>
             <Select
               ref={selectRef}
               className={`navigator__select`}

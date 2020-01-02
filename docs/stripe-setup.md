@@ -64,7 +64,7 @@ In the Developers/Webhooks section
 
 - click `Add Endpoint`
 - Endpoint URL: `https://<portwayAPItargetdomain>/api/stripehooks`
-- Events to send: `charge.succeeded` `charge.failed`
+- Events to send: `charge.succeeded` `charge.failed` `customer.subscription.created` `customer.subscription.updated` `customer.subscription.deleted`
 
 Go to the created webhook and retrieve the signing secret
 

@@ -8,7 +8,7 @@ import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 import { AddIcon, TextIcon, StringIcon, ImageIcon, NumberIcon } from 'Components/Icons'
 import { FIELD_TYPES } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuHeader, MenuItem } from 'Components/Menu/Menu'
+import { Menu, MenuHeader, MenuItem } from 'Components/Menu'
 
 const ContentMenuComponent = ({ createFieldHandler }) => {
   const [expanded, setExpanded] = useState(false)
@@ -45,12 +45,12 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         id="content-menu"
         anchorRef={anchorRef}
         autoCollapse={collapseCallback}
-        open={!expanded}
+        open={expanded}
         placement="bottom"
         width="130"
       >
         <MenuHeader><h2>Content</h2></MenuHeader>
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem tabIndex="0">
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }}>
               <TextIcon width="26" height="26" /> <span className="label">Body</span>
@@ -63,7 +63,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
           </MenuItem>
         </Menu>
         <MenuHeader><h2>Data</h2></MenuHeader>
-        <Menu>
+        <Menu anchorRef={anchorRef}>
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.STRING) }}>
               <StringIcon width="26" height="26" /> <span className="label">String</span>

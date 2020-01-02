@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
@@ -10,6 +10,7 @@ import AdminUsersCreateForm from './AdminUsersCreateForm'
 import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import Table from 'Components/Table/Table'
+import FormField from 'Components/Form/FormField'
 
 import './_AdminUsers.scss'
 
@@ -19,17 +20,20 @@ const AdminUsersComponent = ({
   errors,
   isCreating,
   isInviting,
-  pageChangeHandler,
+  isSearching,
   reinviteUserHandler,
   removeUserHandler,
+  searchUsersHandler,
   setCreateMode,
   sortBy,
   sortMethod,
   sortUsersHandler,
-  subscription,
+  seats,
   users,
   totalPages
 }) => {
+  const searchFieldRef = useRef()
+
   const userHeadings = {
     name: { label: 'Name', sortable: true },
     role: { label: 'Role' },
@@ -37,10 +41,12 @@ const AdminUsersComponent = ({
     tools: { label: '' }
   }
 
+  const gray20 = getComputedStyle(document.documentElement).getPropertyValue('--color-gray-20')
+
   function renderTools(userId) {
     return (
       <div className="table__tools">
-        <SpinnerContainer color="#d9dbdb" />
+        <SpinnerContainer color={gray20} />
         {userId !== currentUserId &&
         <button
           aria-label="Remove user"
@@ -80,9 +86,9 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          {subscription && subscription.usedSeats === subscription.totalSeats &&
+          {seats && seats.usedSeats === seats.totalSeats &&
           <p className="small --align-right">
-            You have filled all of your <b>{subscription.totalSeats}</b> seats.<br />
+            You have filled all of your <b>{seats.totalSeats}</b> seats.<br />
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <Link to={PATH_BILLING}>Add some seats</Link> if you’d like to add more users.
             </OrgPermission>
@@ -91,7 +97,7 @@ const AdminUsersComponent = ({
             </OrgPermission>
           </p>
           }
-          {subscription && subscription.usedSeats < subscription.totalSeats &&
+          {seats && seats.usedSeats < seats.totalSeats &&
           <button
             className="btn"
             disabled={isCreating}
@@ -102,10 +108,10 @@ const AdminUsersComponent = ({
         </header>
         {isCreating &&
         <>
-          {subscription && subscription.usedSeats < subscription.totalSeats &&
+          {seats && seats.usedSeats < seats.totalSeats &&
           <AdminUsersCreateForm
             cancelHandler={() => {setCreateMode(false) }}
-            disabled={subscription.usedSeats === subscription.totalSeats}
+            disabled={seats.usedSeats === seats.totalSeats}
             errors={errors}
             submitHandler={addUserHandler}
           />
@@ -114,6 +120,17 @@ const AdminUsersComponent = ({
         }
         {!isCreating &&
           <>
+          <form className="admin-users__search" onSubmit={e => e.preventDefault()}>
+            <FormField
+              label="Search users"
+              id="search-users-field"
+              name="search-users-field"
+              type="search"
+              onChange={(e) => { searchUsersHandler(e.target.value) }}
+              placeholder="Jane Doe..."
+              ref={searchFieldRef}
+            />
+          </form>
           <Table
             headings={userHeadings}
             rows={userRows}
@@ -134,14 +151,15 @@ AdminUsersComponent.propTypes = {
   errors: PropTypes.object,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
-  pageChangeHandler: PropTypes.func.isRequired,
+  isSearching: PropTypes.string,
   reinviteUserHandler: PropTypes.func,
   removeUserHandler: PropTypes.func,
+  searchUsersHandler: PropTypes.func.isRequired,
   setCreateMode: PropTypes.func.isRequired,
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
-  subscription: PropTypes.object,
+  seats: PropTypes.object,
   users: PropTypes.array.isRequired,
   totalPages: PropTypes.number
 }

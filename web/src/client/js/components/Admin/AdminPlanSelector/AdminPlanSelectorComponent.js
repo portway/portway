@@ -22,6 +22,8 @@ const AdminPlanSelectorComponent = ({
   const [plan, setPlan] = useState(organizationPlan)
   const [formChanged, setFormChanged] = useState(false)
 
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
+
   const planTitle = PLAN_TITLES[organizationPlan] || PLAN_TITLES[PLAN_TYPES.SINGLE_USER]
 
   const hasFreePlan = FREE_PLAN_TYPES.includes(organizationPlan)
@@ -56,7 +58,7 @@ const AdminPlanSelectorComponent = ({
       </h2>
       {hasFreePlan ?
         <p>
-          You are currently on a free plan. If you would like to upgrade, please
+          You are currently on a free plan. If you would like to upgrade, please&nbsp;
           <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a>.
         </p>
         :
@@ -84,13 +86,13 @@ const AdminPlanSelectorComponent = ({
                     </p>
                     <ul>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> Unlimited projects
+                        <CheckIcon fill={green} /> Unlimited projects
                       </li>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> Unlimited documents
+                        <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> 10GB Storage
+                        <CheckIcon fill={green} /> 10GB Storage
                       </li>
                     </ul>
                   </div>
@@ -117,19 +119,19 @@ const AdminPlanSelectorComponent = ({
                     </p>
                     <ul>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> Unlimited projects
+                        <CheckIcon fill={green} /> Unlimited projects
                       </li>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> Unlimited documents
+                        <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> Multiple teams and users (5 users included)
+                        <CheckIcon fill={green} /> Multiple teams and users (5 users included)
                       </li>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> Audit log
+                        <CheckIcon fill={green} /> Audit log
                       </li>
                       <li>
-                        <CheckIcon fill="#6ACA65" /> 10GB Storage
+                        <CheckIcon fill={green} /> 10GB Storage
                       </li>
                     </ul>
                   </div>

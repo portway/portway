@@ -16,7 +16,6 @@ import {
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import NavigatorContainer from 'Components/Navigator/NavigatorContainer'
-import SearchFieldContainer from 'Components/Search/SearchFieldContainer'
 
 import './_Header.scss'
 
@@ -64,9 +63,6 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
               <NavLink to={PATH_BILLING} className={upgradePillClasses}>Your account needs attention</NavLink>
             </OrgPermission>
             }
-          </div>
-          <div className="navbar__search">
-            <SearchFieldContainer />
           </div>
           <div className="navbar__user">
             <UserMenuContainer />

@@ -19,7 +19,7 @@
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments, searchByName } from 'Actions/user'
 import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
-import { fetchOrganization, fetchOrganizationBilling } from 'Actions/organization'
+import { fetchOrganization, fetchOrganizationBilling, fetchOrganizationSeats } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
 
 function returnNull() {
@@ -27,6 +27,16 @@ function returnNull() {
     fetchAction: () => null,
     getLoadingStatusFromState: () => null,
     getDataFromState: () => null
+  }
+}
+
+function returnEmptyObjectForState() {
+  return {
+    fetchAction: () => null,
+    getLoadingStatusFromState: () => null,
+    getDataFromState: () => {
+      return {}
+    }
   }
 }
 
@@ -206,6 +216,7 @@ export default {
       }
     },
     searchByName: function(partialNameString) {
+      if (!partialNameString) return returnEmptyObjectForState()
       return {
         fetchAction: searchByName(partialNameString),
         getLoadingStatusFromState: (state) => {
@@ -213,8 +224,10 @@ export default {
         },
         getDataFromState: (state) => {
           const ids = state.users.userSearchResultIdsByNameString[partialNameString]
-          const users = ids && ids.map(id => state.users.usersById[id])
-          return users
+          const userSearchResults = ids && ids.map(id => state.users.usersById[id])
+          // @todo JJ make this work! =)
+          const totalSearchPages = 1
+          return { userSearchResults, totalSearchPages }
         }
       }
     }
@@ -239,6 +252,17 @@ export default {
         },
         getDataFromState: (state) => {
           return state.organizations.organizationsBillingById[currentOrgId]
+        }
+      }
+    },
+    seats: function() {
+      return {
+        fetchAction: fetchOrganizationSeats(currentOrgId),
+        getLoadingStatusFromState: (state) => {
+          return state.organizations.loading.seatsById[currentOrgId]
+        },
+        getDataFromState: (state) => {
+          return state.organizations.seatsById[currentOrgId]
         }
       }
     }

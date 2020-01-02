@@ -8,7 +8,7 @@ import { AUDIT_LOG_TOKEN } from '../constants/logging'
 let logger
 
 if (AUDIT_LOG_TOKEN) {
-  const logger = new Logger({
+  logger = new Logger({
     token: AUDIT_LOG_TOKEN,
     region: 'us'
   })

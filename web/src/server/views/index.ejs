@@ -3,8 +3,11 @@
 <main class="hero is-info is-fullheight-with-navbar">
   <div class="hero-body">
     <div class="container">
-      <h2>Sign in</h2>
-      <%- include('partials/login'); %>
+      <% if (typeof disableSignup !== 'undefined' && disableSignup === true) { %>
+        <%- include('partials/login'); %>
+      <% } else { %>
+        <%- include('partials/sign-up'); %>
+      <% } %>
     </div>
   </div>
 </main>

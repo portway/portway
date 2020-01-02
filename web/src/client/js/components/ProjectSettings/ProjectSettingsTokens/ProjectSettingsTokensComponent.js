@@ -9,7 +9,7 @@ import {
   PROJECT_ROLE_NAMES,
   PROJECT_ROLE_IDS
 } from 'Shared/constants'
-import { CaretIcon } from 'Components/Icons'
+import { ArrowIcon } from 'Components/Icons'
 import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
 import ProjectSettingsTokenList from './ProjectSettingsTokenList'
 import ProjectSettingsCreateToken from './ProjectSettingsCreateToken'
@@ -38,7 +38,7 @@ const ProjectSettingsTokensComponent = ({
   const putEndpointRef = useRef()
   return (
     <div className="project-settings__tokens">
-      <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><CaretIcon /> Back to Project</Link>
+      <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><ArrowIcon direction="left" /> Back to Project</Link>
       <section>
         <header className="header header--with-button">
           <h2>Project Keys</h2>

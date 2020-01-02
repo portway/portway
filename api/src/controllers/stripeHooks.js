@@ -25,7 +25,7 @@ const handleStripeEvent = async function(req, res, next) {
   const { event } = req
 
   try {
-    stripeEventCoordinator.handleEvent(event)
+    await stripeEventCoordinator.handleEvent(event)
     res.status(204).send()
   } catch (e) {
     next(e)

@@ -7,7 +7,7 @@ import ValidationComponent from 'Components/Validation/ValidationComponent'
 // const TEXT_FIELD_TYPES = ['text', 'email', 'number']
 const CHECKED_FIELD_TYPES = ['checkbox', 'radio']
 
-const FormField = ({
+const FormField = React.forwardRef(({
   disabled,
   errors,
   help,
@@ -19,8 +19,7 @@ const FormField = ({
   small,
   type,
   value,
-  ...props
-}) => {
+  ...props }, ref) => {
   const formFieldClasses = cx({
     'field-container': true,
     'field-container--large': large,
@@ -48,6 +47,7 @@ const FormField = ({
             disabled={disabled}
             id={id}
             name={name}
+            ref={ref}
             type={type}
             {...props}
           />
@@ -60,7 +60,7 @@ const FormField = ({
       {help && <div className="field-container__help small">{help}</div>}
     </div>
   )
-}
+})
 
 FormField.propTypes = {
   errors: PropTypes.array,

@@ -11,8 +11,8 @@ steps:
     image: alpine
     commands:
       - cf_export VERSION_TAG="$(cat ./deploys/prod.txt)"
-  deploy_to_dev_cf_step:
-    title: Deploy to Dev Cluster
+  deploy_to_prod_cf_step:
+    title: Deploy to Prod Cluster
     image: codefresh/cfstep-helm:2.14.3
     environment:
       - CHART_REF=kubernetes/helm/portway

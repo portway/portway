@@ -4,7 +4,7 @@ import { useLocation, useParams, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PLAN_TYPES } from 'Shared/constants'
+import { PATH_DOCUMENT_NEW_PARAM, PLAN_TYPES } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
 import { deleteDocument, publishDocument, unpublishDocument } from 'Actions/document'
@@ -25,7 +25,7 @@ const DocumentToolbarContainer = ({
   uiConfirm,
   unpublishDocument
 }) => {
-  const { projectId } = useParams()
+  const { documentId, projectId } = useParams()
   const location = useLocation()
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const { data: document } = useDataService(currentResource('document', location.pathname), [
@@ -35,6 +35,10 @@ const DocumentToolbarContainer = ({
   const { data: users, loading: userLoading } = useDataService(dataMapper.users.list())
 
   if (!document) return null
+
+  if (isCreating && documentId === PATH_DOCUMENT_NEW_PARAM) {
+    return null
+  }
 
   // Create a list of projectUsers if we have any
   let projectUsers = []

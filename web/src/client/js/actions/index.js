@@ -118,6 +118,8 @@ export const ActionTypes = {
   RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
   INITIATE_ORGANIZATION_REMOVAL: 'INITIATE_ORGANIZATION_REMOVAL',
   RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
+  REQUEST_ORGANIZATION_SEATS: 'REQUEST_ORGANIZATION_SEATS',
+  RECEIVE_ORGANIZATION_SEATS: 'RECEIVE_ORGANIZATION_SEATS',
   // UI
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -127,7 +129,9 @@ export const ActionTypes = {
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
   UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
-  UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM'
+  UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM',
+  // Search
+  SEARCH_CLEAR: 'SEARCH_CLEAR',
 }
 
 export const Route = {
@@ -200,7 +204,7 @@ export const Documents = {
   unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
   receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'data'),
   initiateSearch: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_SEARCH, 'value'),
-  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data'),
+  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data')
 }
 
 export const Fields = {
@@ -271,6 +275,8 @@ export const Organizations = {
   initiateSeatsUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_SEATS_UPDATE, 'id'),
   receiveUpdatedSeats: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_SEATS, 'id', 'seats'),
   receiveSeatsError: makeActionCreator(ActionTypes.RECEIVE_SEATS_ERROR),
+  requestSeats: makeActionCreator(ActionTypes.REQUEST_ORGANIZATION_SEATS, 'id'),
+  receiveSeats: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_SEATS, 'id', 'seats'),
   // Remove account
   initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
   receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
@@ -286,4 +292,8 @@ export const UI = {
   toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),
+}
+
+export const Search = {
+  clearSearch: makeActionCreator(ActionTypes.SEARCH_CLEAR),
 }

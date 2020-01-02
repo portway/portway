@@ -40,7 +40,7 @@ export const documents = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_DOCUMENTS_ERROR: {
       const { projectId } = action
-      const loadingList = { ...state.loading.byProject, [action.projectId]: false }
+      const loadingList = { ...state.loading.byProject, [projectId]: false }
       return {
         ...state,
         loading: {
