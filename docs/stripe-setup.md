@@ -4,9 +4,17 @@
 
 For our stripe integration to function, a few things need to be setup in the stripe dashboard:
 
-### Create the subscription plans
+### Create the product
 
-  - Go to Billing/Products
+- Go to Billing -> Products
+- Click "Add a test product"
+- Name it "Portway"
+- "Unit label" should be "seat"
+- Leave "Statement descriptor" blank
+
+### Create the pricing plans
+
+  - Go to Billing -> Products -> Portway
   - Click Add Pricing Plan for each:
 
 Single User
