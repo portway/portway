@@ -44,9 +44,19 @@ const projectDocumentsController = function(router) {
 const getProjectDocuments = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { draft, search } = req.query
+
+  const options = search ? { search } : {}
 
   try {
-    const documents = await BusinessDocument.findAllForProject(projectId, orgId)
+    let documents
+    if (draft === 'true') {
+      // only passing search options for draft docs
+      documents = await BusinessDocument.findAllForProject(projectId, orgId, options)
+    } else {
+      documents = await BusinessDocument.findAllPublishedForProject(projectId, orgId)
+    }
+
     res.json({ data: documents })
   } catch (e) {
     next(e)
@@ -56,9 +66,12 @@ const getProjectDocuments = async function(req, res, next) {
 const getProjectDocument = async function(req, res, next) {
   const { id, projectId } = req.params
   const { orgId } = req.requestorInfo
+  const { draft } = req.query
+
+  const lookup = draft === 'true' ? 'findByIdForProject' : 'findPublishedByIdForProject'
 
   try {
-    const document = await BusinessDocument.findByIdForProject(id, projectId, orgId)
+    const document = await BusinessDocument[lookup](id, projectId, orgId)
     if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
     res.json({ data: document })
   } catch (e) {

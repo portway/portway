@@ -1,4 +1,5 @@
 import { ActionTypes } from '../actions'
+import { DOCUMENT_MODE } from 'Shared/constants'
 
 const initialState = {
   confirmation: {
@@ -6,9 +7,11 @@ const initialState = {
     message: '',
     cancelAction: null,
     confirmedAction: null,
-    confirmedLabel: ''
+    confirmedLabel: '',
+    confirmedText: null,
   },
   document: {
+    documentMode: DOCUMENT_MODE.NORMAL,
     isFullScreen: false,
   },
   documents: {
@@ -119,6 +122,26 @@ export const ui = (state = initialState, action) => {
       }
     }
 
+    // Document mode
+    case ActionTypes.UI_DOCUMENT_MODE: {
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          documentMode: action.value
+        }
+      }
+    }
+    case ActionTypes.ROUTE_CHANGE: {
+      return {
+        ...state,
+        document: {
+          ...state.document,
+          documentMode: initialState.document.documentMode,
+        }
+      }
+    }
+
     // Document full screen
     // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_FULL_SCREEN: {
@@ -133,7 +156,8 @@ export const ui = (state = initialState, action) => {
 
     // Document publishng
     // -------------------------------------------------------------------------
-    case ActionTypes.INITIATE_DOCUMENT_PUBLISH: {
+    case ActionTypes.INITIATE_DOCUMENT_PUBLISH:
+    case ActionTypes.INITIATE_DOCUMENT_UNPUBLISH: {
       return {
         ...state,
         documents: {
@@ -145,7 +169,8 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
-    case ActionTypes.RECEIVE_PUBLISHED_DOCUMENT: {
+    case ActionTypes.RECEIVE_PUBLISHED_DOCUMENT:
+    case ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT: {
       return {
         ...state,
         documents: {
@@ -169,7 +194,8 @@ export const ui = (state = initialState, action) => {
           message: action.message,
           cancelAction: action.cancelAction,
           confirmedAction: action.confirmedAction,
-          confirmedLabel: action.confirmedLabel
+          confirmedLabel: action.confirmedLabel,
+          confirmedText: action.confirmedText,
         }
       }
     }

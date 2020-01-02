@@ -34,6 +34,7 @@ export const ActionTypes = {
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
+  RECEIVE_DOCUMENTS_ERROR: 'RECEIVE_DOCUMENTS_ERROR',
   INITIATE_DOCUMENT_CREATE: 'INITIATE_DOCUMENT_CREATE',
   RECEIVE_CREATED_DOCUMENT: 'RECEIVE_CREATED_DOCUMENT',
   INITIATE_DOCUMENT_UPDATE: 'INITIATE_UPDATE_DOCUMENT',
@@ -42,8 +43,13 @@ export const ActionTypes = {
   REMOVE_DOCUMENT: 'REMOVE_DOCUMENT',
   REQUEST_DOCUMENT: 'REQUEST_DOCUMENT',
   RECEIVE_DOCUMENT: 'RECEIVE_DOCUMENT',
+  RECEIVE_DOCUMENT_ERROR: 'RECEIVE_DOCUMENT_ERROR',
   INITIATE_DOCUMENT_PUBLISH: 'INITIATE_DOCUMENT_PUBLISH',
   RECEIVE_PUBLISHED_DOCUMENT: 'RECEIVE_PUBLISHED_DOCUMENT',
+  INITIATE_DOCUMENT_UNPUBLISH: 'INITIATE_DOCUMENT_UNPUBLISH',
+  RECEIVE_UNPUBLISHED_DOCUMENT: 'RECEIVE_UNPUBLISHED_DOCUMENT',
+  RECEIVE_DOCUMENT_RESULTS: 'RECEIVE_DOCUMENT_RESULTS',
+  INITIATE_DOCUMENT_SEARCH: 'INITIATE_DOCUMENT_SEARCH',
   // Fields
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
@@ -56,6 +62,8 @@ export const ActionTypes = {
   FIELD_COPIED: 'FIELD_COPIED',
   FIELD_MOVED: 'FIELD_MOVED',
   REMOVE_FIELD: 'REMOVE_FIELD',
+  FOCUS_FIELD: 'FOCUS_FIELD',
+  BLUR_FIELD: 'BLUR_FIELD',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -86,6 +94,9 @@ export const ActionTypes = {
   RECEIVE_REINVITED_USER: 'RECEIVE_REINVITED_USER',
   REMOVE_USER: 'REMOVE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
+  INITIATE_USER_SEARCH_BY_NAME: 'INITIATE_USER_SEARCH_BY_NAME',
+  RECEIVE_USER_SEARCH_RESULTS_BY_NAME: 'RECEIVE_USER_SEARCH_RESULTS_BY_NAME',
+  SORT_USERS: 'SORT_USERS',
   // User Project Assignments
   REQUEST_USER_PROJECT_ASSIGNMENTS: 'REQUEST_USER_PROJECT_ASSIGNMENTS',
   RECEIVE_USER_PROJECT_ASSIGNMENTS: 'RECEIVE_USER_PROJECT_ASSIGNMENTS',
@@ -100,14 +111,22 @@ export const ActionTypes = {
   INITIATE_ORGANIZATION_BILLING_UPDATE: 'INITIATE_ORGANIZATION_BILLING_UPDATE',
   RECEIVE_UPDATED_ORGANIZATION_BILLING: 'RECEIVE_UPDATED_ORGANIZATION_BILLING',
   RECEIVE_BILLING_ERROR: 'RECEIVE_BILLING_ERROR',
+  INITIATE_ORGANIZATION_PLAN_UPDATE: 'INITIATE_ORGANIZATION_PLAN_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_PLAN: 'RECEIVE_UPDATED_ORGANIZATION_PLAN',
+  INITIATE_ORGANIZATION_SEATS_UPDATE: 'INITIATE_ORGANIZATION_SEATS_UPDATE',
+  RECEIVE_UPDATED_ORGANIZATION_SEATS: 'RECEIVE_UPDATED_ORGANIZATION_SEATS',
+  RECEIVE_SEATS_ERROR: 'RECEIVE_SEATS_ERROR',
+  INITIATE_ORGANIZATION_REMOVAL: 'INITIATE_ORGANIZATION_REMOVAL',
+  RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
   // UI
-  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
-  UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
-  UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
   UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE',
   UI_CREATE_USER_MODE: 'UI_CREATE_USER_MODE',
+  UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
+  UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
+  UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
+  UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM'
 }
 
@@ -165,17 +184,23 @@ export const ProjectTokens = {
 
 export const Documents = {
   create: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_CREATE, 'projectId', 'data'),
-  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
-  update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
-  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   delete: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_REMOVE, 'projectId', 'documentId'),
   deleted: makeActionCreator(ActionTypes.REMOVE_DOCUMENT, 'projectId', 'documentId'),
-  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
-  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
-  requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
-  receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data'),
   publish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_PUBLISH, 'documentId'),
+  receiveList: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS, 'projectId', 'data'),
+  receiveListError: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS_ERROR, 'projectId'),
+  receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
+  receiveError: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_ERROR, 'documentId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
   receivePublishedVersion: makeActionCreator(ActionTypes.RECEIVE_PUBLISHED_DOCUMENT, 'data'),
+  requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
+  requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
+  update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
+  unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
+  receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'data'),
+  initiateSearch: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_SEARCH, 'value'),
+  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data'),
 }
 
 export const Fields = {
@@ -191,7 +216,10 @@ export const Fields = {
   copiedField: makeActionCreator(ActionTypes.FIELD_COPIED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
   // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
-  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId')
+  removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId'),
+  // Blur / Focus
+  blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
 }
 
 export const Notifications = {
@@ -200,8 +228,8 @@ export const Notifications = {
 }
 
 export const Users = {
-  request: makeActionCreator(ActionTypes.REQUEST_USERS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data'),
+  request: makeActionCreator(ActionTypes.REQUEST_USERS, 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
   create: makeActionCreator(ActionTypes.INITIATE_USER_CREATE, 'userId'),
@@ -215,7 +243,10 @@ export const Users = {
   removeOne: makeActionCreator(ActionTypes.REMOVE_USER, 'userId'),
   initiateReinvite: makeActionCreator(ActionTypes.INITIATE_USER_REINVITE, 'userId'),
   receiveSuccessfulReinvite: makeActionCreator(ActionTypes.RECEIVE_REINVITED_USER, 'userId'),
-  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id')
+  logout: makeActionCreator(ActionTypes.LOGOUT_USER, 'id'),
+  initiateSearchByName: makeActionCreator(ActionTypes.INITIATE_USER_SEARCH_BY_NAME, 'partialNameString'),
+  receiveSearchResultsByName: makeActionCreator(ActionTypes.RECEIVE_USER_SEARCH_RESULTS_BY_NAME, 'data', 'partialNameString'),
+  sort: makeActionCreator(ActionTypes.SORT_USERS, 'sortBy', 'sortMethod')
 }
 
 export const UserProjectAssignments = {
@@ -233,16 +264,26 @@ export const Organizations = {
   receiveBilling: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_BILLING, 'id', 'data'),
   initiateBillingUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_BILLING_UPDATE, 'id'),
   receiveUpdatedBilling: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_BILLING, 'id', 'data'),
-  receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR)
+  receiveBillingError: makeActionCreator(ActionTypes.RECEIVE_BILLING_ERROR),
+  initiatePlanUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_PLAN_UPDATE, 'id'),
+  receiveUpdatedPlan: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_PLAN, 'id', 'plan'),
+  // Seats
+  initiateSeatsUpdate: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_SEATS_UPDATE, 'id'),
+  receiveUpdatedSeats: makeActionCreator(ActionTypes.RECEIVE_UPDATED_ORGANIZATION_SEATS, 'id', 'seats'),
+  receiveSeatsError: makeActionCreator(ActionTypes.RECEIVE_SEATS_ERROR),
+  // Remove account
+  initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
+  receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
 }
 
 export const UI = {
-  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel'),
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
-  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
-  toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
-  toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value')
+  documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
+  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel', 'confirmedText'),
+  toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
+  toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
+  toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),
 }

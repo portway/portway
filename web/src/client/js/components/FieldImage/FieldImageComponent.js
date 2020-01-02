@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
 import { MAX_FILE_SIZE } from 'Shared/constants'
+import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
+import Form from 'Components/Form/Form'
+import FormField from 'Components/Form/FormField'
 import './FieldImage.scss'
 
 const ALLOWED_TYPES = [
@@ -50,43 +52,43 @@ const FieldImageComponent = ({ field, onChange, onRename, settingsHandler, setti
         {field.value &&
         <img src={field.value} alt={field.name} ref={imageNodeRef} />
         }
+        {(settingsMode || !field.value || updating) &&
+        <FileUploaderComponent
+          accept="image/*"
+          hasValue={field.value !== null}
+          isUpdating={updating}
+          label="Drag and drop an image"
+          fileChangeHandler={uploadImage}
+          fileUploadedHandler={() => { settingsHandler(field.id) }}>
+          {settingsMode &&
+          <button
+            className="btn btn--blank"
+            onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
+            Cancel
+          </button>
+          }
+          {warning &&
+          <p className="small warning">{warning}</p>
+          }
+        </FileUploaderComponent>
+        }
       </div>
-      {(settingsMode || !field.value || updating) &&
-      <FileUploaderComponent
-        accept="image/*"
-        hasValue={field.value !== null}
-        isUpdating={updating}
-        label="Drag and drop an image"
-        fileChangeHandler={uploadImage}
-        fileUploadedHandler={() => { settingsHandler(field.id) }}>
-        {settingsMode &&
-        <button
-          className="btn btn--blank document-field__settings__button"
-          onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
-          Cancel
-        </button>
-        }
-        {warning &&
-        <p className="small warning">{warning}</p>
-        }
-      </FileUploaderComponent>
-      }
       {settingsMode && field.value &&
       <div className="document-field__settings">
-        <label>
-          <span className="document-field__settings__label">Photo name:</span>
-          <input
+        <Form
+          id="field-image-settings"
+          name="field-image-settings"
+          onSubmit={() => { settingsHandler(field.id) }}
+          submitLabel="Save settings"
+        >
+          <FormField
             className="document-field__settings__input"
             defaultValue={field.name}
+            label="Photo name"
+            name="field-name"
             onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
-            type="text"
           />
-        </label>
-        <button
-          className="btn btn--small document-field__settings__button"
-          onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
-          Save settings
-        </button>
+        </Form>
       </div>
       }
     </div>

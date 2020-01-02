@@ -1,5 +1,3 @@
-@import 'CSS/inc/_vars.scss';
-
 .admin-payment {
   &__method {
     align-items: center;
@@ -10,8 +8,8 @@
     display: block;
     margin-right: 2rem;
   }
-  &__card-type {
-  }
+  // &__card-type {
+  // }
   &__card-ending-in {
     padding-left: 2rem;
   }
@@ -23,8 +21,12 @@
     font-weight: 700;
     padding: 0 0 0 .5rem;
     &--soon {
-      color: $danger;
+      color: var(--color-red, red);
     }
+  }
+
+  .field-container__hidden {
+    display: none;
   }
 
   // Specific field__control for this component
@@ -39,7 +41,10 @@
       width: 60px;
     }
     &--postal {
-      width: 60px;
+      width: 75px;
+    }
+    &--state {
+      width: 50px;
     }
     &--country {
       width: 300px;
@@ -47,9 +52,6 @@
     &--submit {
       input {
         margin-right: 1rem;
-      }
-      a {
-        color: $gray-dark;
       }
     }
   }

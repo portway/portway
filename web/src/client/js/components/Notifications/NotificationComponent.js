@@ -6,6 +6,8 @@ import { NOTIFICATION_TYPES } from 'Shared/constants'
 import { RemoveIcon } from 'Components/Icons'
 import { getNotificationTitle, getNotificationMessage } from './NotificationMessages'
 
+import './_Notifications.scss'
+
 const NotificationComponent = ({ dismissHandler, id, notification }) => {
   const notificationClasses = cx({
     'notifications__notification': true,
@@ -24,11 +26,11 @@ const NotificationComponent = ({ dismissHandler, id, notification }) => {
   }
   return (
     <li ref={notificationRef} className={notificationClasses} role="alertdialog" aria-labelledby={title} aria-describedby={desc}>
-      <button className="btn btn--blank btn--with-circular-icon notifications__remove" onClick={dismissNotification}>
+      <button aria-label="Dismiss notification" className="btn btn--blank btn--with-circular-icon notifications__remove" onClick={dismissNotification}>
         <RemoveIcon />
       </button>
       <div className="notifications__content">
-        <h2 id={title} className="notifications__title">{notificationTitle}</h2>
+        {notificationTitle && <h2 id={title} className="notifications__title">{notificationTitle}</h2>}
         <p id={desc} className="notifications__message">{notificationMessage}</p>
         {notification.code && notification.type === NOTIFICATION_TYPES.ERROR &&
         <span className="notifications__code note">Error code: {notification.code}</span>

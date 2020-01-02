@@ -1,8 +1,5 @@
 .user-profile {
   &__image {
-    align-items: flex-start;
-    display: flex;
-
     .icon, img {
       margin-right: 1rem;
     }
@@ -16,7 +13,7 @@
     }
 
     // Override the file field for this one
-    .form-field{
+    .field-container{
       &--file {
         margin: 0;
       }

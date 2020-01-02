@@ -1,6 +1,7 @@
 @import 'vars';
 @import 'mixins';
 @import 'include-media';
+@import 'basics';
 @import 'type';
 @import 'code';
 @import 'lists';
@@ -9,25 +10,11 @@
 @import 'hacks';
 @import 'react-select';
 
-:root {
-  color-scheme: light dark;
-  --base-background: #{$white};
-  --base-color: #{$black-bis};
-  --base-border-color: #{$gray-light};
-  --base-link-color: #{$action};
-  --base-link-hover-color: #{$action-light};
-  --base-link-active-color: #{$action-dark};
-  --link-color-gray: #{$gray-dark};
-  @media (prefers-color-scheme: dark) {
-    --base-background: #{$black-bis};
-    --base-color: #{$white};
-    --base-border-color: #{$black-er};
-    --base-link-color: #{$action};
-    --base-link-hover-color: #{$action-light};
-    --base-link-active-color: #{$action-dark};
-    --link-color-gray: #{$gray};
-  }
-}
+/**
+ * This is a base import for the main application
+ * Use theme.scss for the website
+ *
+ */
 
 * {
   box-sizing: border-box;
@@ -35,34 +22,44 @@
 
 html,
 body {
+  overflow-x: hidden;
   overscroll-behavior-y: none;
 }
 body {
-  background-color: var(--base-background);
-  color: var(--base-color);
+  background-color: var(--theme-surface);
+  color: var(--theme-text-color);
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
   padding: 0;
 }
 
+[role="application"] {
+  overflow: hidden;
+}
+
 a, .link {
-  color: $action;
-  &:hover {
-    color: lighten($action, 20%);
+  color: var(--color-blue);
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-blue-dark);
+    }
   }
   &:active {
-    color: darken($action, 20%);
+    color: var(--color-blue-darker);
   }
 
   &--gray {
     color: var(--link-color-gray);
     text-decoration: none;
-    &:hover {
-      color: lighten($gray-dark, 20%);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-gray-6);
+      }
     }
     &:active {
-      color: darken($gray-dark, 20%);
+      color: var(--color-gray-8);
     }
   }
 
@@ -71,16 +68,10 @@ a, .link {
     align-items: center;
     color: var(--link-color-gray);
     display: flex;
-    margin-bottom: 2rem;
+    // margin-bottom: 2rem;
     padding: 8px 7px 8px 0;
     text-decoration: none;
-    &:before {
-      background-image: url('../images/icon/caret.svg');
-      background-repeat: no-repeat;
-      background-size: 12px 12px;
-      background-position: 50% 50%;
-      content: '';
-      display: inline-block;
+    .icon {
       height: 18px;
       margin-right: 6px;
       transform: rotate(90deg);
@@ -88,17 +79,6 @@ a, .link {
     }
   }
 
-}
-
-input, textarea {
-  background: var(--base-background);
-  border: thin solid var(--base-border-color);
-  color: var(--base-color);
-}
-
-hr {
-  border: none;
-  border-top: thin solid var(--base-border-color);
 }
 
 [contenteditable] {

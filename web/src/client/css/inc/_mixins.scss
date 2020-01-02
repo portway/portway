@@ -1,21 +1,8 @@
-@import 'vars';
-
-:root {
-  --focus-border-color: #{$action};
-  --focus-shadow-one: #{$white-bis};
-  --focus-shadow-two: #{$action-light};
-  @media (prefers-color-scheme: dark) {
-    --focus-border-color: #{$white};
-    --focus-shadow-one: #{$black-bis};
-    --focus-shadow-two: #{$action};
-  }
-}
-
 @mixin focus($bgColor, $borderColor: transparent) {
-  border-color: transparent;
-  border: thin inset transparent;
-  box-shadow: unset;
-  outline: none;
+  // border-color: transparent;
+  // border: thin inset transparent;
+  // box-shadow: unset;
+  // outline: none;
   &:focus {
     background-color: $bgColor;
     border: thin solid var(--focus-border-color);

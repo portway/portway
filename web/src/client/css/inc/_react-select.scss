@@ -1,30 +1,4 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/inc/_mixins.scss';
-
-// react-select css vars are in the root scope because there are a few different
-// types of react-select containers
-:root {
-  --react-select-background: #{$white-bis};
-  --react-select-border: #{$gray-light};
-  --react-select-control-background: #{$white};
-  --react-select-control-color: #{$black-bis};
-  --react-select-placeholder-color: #{$gray};
-  --react-select-option: #{$white-bis};
-  --react-select-option-focused: #{$white-ter};
-  --react-select-option-selected: transparent;
-  --react-select-notice-background: #{$white-bis};
-  @media (prefers-color-scheme: dark) {
-    --react-select-background: #{$black-bis};
-    --react-select-border: #{$black-er};
-    --react-select-control-background: #{$black-er}; // like _forms.scss
-    --react-select-control-color: #{$white};
-    --react-select-placeholder-color: #{$white-ter};
-    --react-select-option: #{$black-bis};
-    --react-select-option-focused: #{$black-ter};
-    --react-select-option-selected: transparent;
-    --react-select-notice-background: #{$black-bis};
-  }
-}
 
 .react-select-button {
   background-color: var(--react-select-background);
@@ -55,22 +29,45 @@ form {
 }
 
 .react-select-container {
+  --react-select-background: var(--color-gray-10);
+  --react-select-border: var(--color-gray-20); // this should match _forms
+  --react-select-control-background: var(--color-white);
+  --react-select-control-color: var(--theme-text-color);
+  --react-select-placeholder-color: var(--color-gray-20); // this should match _forms
+  --react-select-option: var(--color-gray-2);
+  --react-select-option-focused: var(--color-gray-5);
+  --react-select-option-selected: transparent;
+  --react-select-notice-background: var(--color-gray-2);
+  @media (prefers-color-scheme: dark) {
+    --react-select-background: var(--color-gray-9);
+    --react-select-border: var(--color-gray-20);
+    --react-select-control-background: var(--color-gray-9); // like _forms.scss
+    --react-select-control-color: var(--theme-text-color);
+    --react-select-placeholder-color: var(--color-gray-4);
+    --react-select-option: var(--color-gray-10);
+    --react-select-option-focused: var(--color-gray-8);
+    --react-select-option-selected: transparent;
+    --react-select-notice-background: var(--color-gray-10);
+  }
+}
+
+.react-select-container {
   .react-select {
     &__control {
       background-color: var(--react-select-control-background);
       border: thin solid var(--react-select-border);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       cursor: text;
       color: var(--react-select-control-color);
       max-height: 38px;
       min-height: 38px;
       &--menu-is-open {
-        border-radius: $borderRadius;
+        border-radius: var(--border-radius);
       }
       &--is-focused {
-        border: thin solid $action;
+        border: thin solid var(--color-blue);
         box-shadow: none;
-        // box-shadow: inset 0 1px 2px var(--react-select-background), 0 0 0 0.2em $action-light;
+        // box-shadow: inset 0 1px 2px var(--react-select-background), 0 0 0 0.2em var(--color-cyan);
       }
     }
     &__value-container, &__single-value {
@@ -97,7 +94,7 @@ form {
     }
     &__menu {
       background-color: var(--react-select-control-background);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       margin: 2px 0 0;
     }
     &__menu-list {
@@ -136,17 +133,19 @@ form {
       background-color: var(--react-select-control-background);
       // Mimic the inputs from _forms.scss
       border: thin solid var(--react-select-border);
-      border-radius: $borderRadius;
+      border-radius: var(--border-radius);
       cursor: text;
       // When menuIsOpen == true, we format this to look like a list with an
       // autocomplete search at the top
       &--menu-is-open {
         margin: 0 12px 12px;
-        border-radius: $borderRadius;
-        &:hover {
-          border-color: var(--react-select-border);
+        border-radius: var(--border-radius);
+        @media (hover: hover) {
+          &:hover {
+            border-color: var(--react-select-border);
+          }
         }
-        @include focus($action);
+        @include focus(var(--color-blue));
         + .react-select__menu {
           // border-top: none;
           border: none;
@@ -169,7 +168,7 @@ form {
         }
       }
       &--is-focused {
-        @include focus($action);
+        @include focus(var(--color-blue));
       }
     }
     &__placeholder {
@@ -187,7 +186,7 @@ form {
       }
     }
     // Regular React Select menu (not auto-open)
-    &__menu {}
+    // &__menu {}
     // React Select menu list
     &__menu-list {
       padding: 0;
@@ -204,7 +203,7 @@ form {
         background-color: var(--react-select-option-focused);
       }
       &--is-selected {
-        background-color: $gray;
+        background-color: var(--color-gray-6);
       }
     }
   }

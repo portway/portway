@@ -1,0 +1,98 @@
+version: '1.0'
+mode: parallel
+stages:
+  - Setup Repo
+  - Web Build and Test
+  - API Build and test
+steps:
+  main_clone:
+    title: Cloning main repository...
+    stage: Setup Repo
+    type: git-clone
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_REVISION}}'
+    git: 'github'
+  hide_dockerignore:
+    stage: Setup Repo
+    image: alpine
+    title: Hide Docker Ignore File
+    commands:
+      - mv api/.dockerignore ./apidockerignore
+      - mv web/.dockerignore ./webdockerignore
+    when:
+      steps:
+        - name: main_clone
+          on:
+            - success
+  build_api_image:
+    stage: API Build and test
+    title: Building API Docker Image
+    type: build
+    image_name: bonkeybong/portway_api
+    working_directory: ./api/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
+  build_web_image:
+    stage: Web Build and Test
+    title: Building Web Docker Image
+    type: build
+    image_name: bonkeybong/portway_web
+    working_directory: ./web/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
+  run_web_tests:
+    stage: Web Build and Test
+    image: ${{build_web_image}}
+    title: Running Web Tests
+    working_directory: /web/
+    cmd:
+      - test
+    when:
+      steps:
+        - name: build_web_image
+          on:
+            - success
+  run_api_tests:
+    stage: API Build and test
+    title: Running API Tests
+    type: composition
+    composition:
+      version: '2'
+      services:
+        db-test:
+          image: postgres:11.2-alpine
+          ports:
+            - 5432
+          environment:
+            POSTGRES_DB: test
+            POSTGRES_USER: bonkey
+            POSTGRES_PASSWORD: bong
+    composition_candidates:
+      api_service:
+        image: ${{build_api_image}}
+        command: './wait-for.sh db-test:5432 -- ./run.sh test'
+        links:
+          - db-test
+        environment:
+          - API_ENV=test
+          - API_PORT=3001
+          - DB_USER=bonkey
+          - DB_PASSWORD=bong
+          - DB_HOST=db-test
+          - DB_PORT=5432
+          - DB_NAME=test
+    when:
+      steps:
+        - name: build_api_image
+          on:
+            - success

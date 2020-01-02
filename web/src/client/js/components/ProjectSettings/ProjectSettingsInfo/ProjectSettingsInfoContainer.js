@@ -4,39 +4,40 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
-import Store from '../../../reducers'
 import { updateProject } from 'Actions/project'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
 import { PRODUCT_NAME } from 'Shared/constants'
-import { debounce } from 'Shared/utilities'
 import ProjectSettingsInfoComponent from './ProjectSettingsInfoComponent'
 
-const ProjectSettingsInfoContainer = ({ errors, location }) => {
+const ProjectSettingsInfoContainer = ({ errors, location, updateProject }) => {
   const { data: project } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
 
   if (!project) return null
 
-  const debouncedUpdateHandler = debounce(1000, (body) => {
-    Store.dispatch(updateProject(project.id, body))
-  })
+  const formId = 'project-settings'
+
+  const debouncedUpdateHandler = (body) => {
+    updateProject(formId, project.id, body)
+  }
 
   return (
     <>
       <Helmet>
         <title>{project.name}: Information –– {PRODUCT_NAME}</title>
       </Helmet>
-      <ProjectSettingsInfoComponent errors={errors} project={project} updateProjectHandler={debouncedUpdateHandler} />
+      <ProjectSettingsInfoComponent errors={errors} formId={formId} project={project} updateProjectHandler={debouncedUpdateHandler} />
     </>
   )
 }
 
 ProjectSettingsInfoContainer.propTypes = {
   errors: PropTypes.object,
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  updateProject: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -45,6 +46,8 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps = { updateProject }
+
 export default withRouter(
-  connect(mapStateToProps)(ProjectSettingsInfoContainer)
+  connect(mapStateToProps, mapDispatchToProps)(ProjectSettingsInfoContainer)
 )

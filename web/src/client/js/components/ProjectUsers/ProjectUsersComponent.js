@@ -6,14 +6,30 @@ import ProjectUsersCollapsedItem from './ProjectUsersCollapsedItem'
 import './_ProjectUsers.scss'
 
 const ProjectUsersComponent = ({ collapsed, users }) => {
-  const userColors = ['#51a37d', '#3f8a67', '#dcede5', '#6ba5f2', '#6095da', '#d2e0f2']
+  const userColors = [
+    'var(--color-green-light)',
+    'var(--color-green)',
+    'var(--color-green-dark)',
+    'var(--color-cyan)',
+    'var(--color-cyan-dark)',
+    'var(--color-yellow)',
+    'var(--color-yellow-dark)',
+    'var(--color-red)',
+    'var(--color-red-dark)',
+    'var(--color-blue)',
+    'var(--color-blue-dark)',
+    'var(--color-purple)',
+    'var(--color-purple-dark)',
+    'var(--color-orange)',
+    'var(--color-orange-dark)',
+  ]
   const collapsedUsers = users.slice(0, 2)
   const collapsedDiff = users.length - collapsedUsers.length
   const usedColors = []
 
   function getUserColor() {
-    // 7 is userColors
-    const color = userColors[Math.floor(Math.random() * Math.floor(6))]
+    const max = userColors.length - 1
+    const color = userColors[Math.floor(Math.random() * Math.floor(max))]
     usedColors.includes(color) ? getUserColor() : usedColors.push(color)
     return color
   }

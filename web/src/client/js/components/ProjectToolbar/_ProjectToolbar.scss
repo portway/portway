@@ -1,32 +1,10 @@
-@import 'CSS/inc/_vars.scss';
-
 .project-toolbar {
   align-items: center;
-  background-color: $white-bis;
-  border-bottom: thin solid var(--base-border-color);
+  background-color: var(--theme-overlay-light);
+  border-top: thin solid var(--theme-border);
   display: flex;
-  min-height: 40px;
-  padding: 0 $sideGutterWidth / 4;
-
-  &__team {
-    align-items: center;
-    display: flex;
-    font-size: 1.2rem;
-    padding: 0 2rem;
-
-    &-label {
-      color: $gray-dark;
-      padding-right: .5rem;
-    }
-  } // team
-
-  &__document-info {
-    align-items: center;
-    color: $gray-dark;
-    display: flex;
-    flex: 1;
-    font-size: 1.2rem;
-    justify-content: flex-end;
-  }
-
+  font-size: 1.2rem;
+  height: 50px;
+  padding: 0 calc(var(--gutter-width) / 4);
+  z-index: 100;
 }

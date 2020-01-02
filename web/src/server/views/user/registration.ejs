@@ -1,38 +1,14 @@
 <%- include('../partials/head', { title: title, permalink: permalink, robots: 'index, nofollow' }); %>
 <%- include('../partials/navigation'); %>
-<main class="section">
+<main class="section registration">
   <div class="container">
-    <h1 class="title">Complete your registration</h1>
-    <form class="login-form" action="/sign-up/registration/complete" method="POST">
-      <div class="section">
-        <p>You're almost there! Pick a strong password to finish the last step.</p>
-        <div class="field">
-          <label class="label is-small" for="password">Password</label>
-          <div class="control">
-            <input class="input" name="password" id="password" type="password" placeholder="" autocomplete="section-signup new-password">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label is-small" for="confirm-password">Confirm password</label>
-          <div class="control">
-            <input class="input" name="confirm-password" id="confirm-password" type="password" placeholder="" autocomplete="section-signup new-password">
-            <p id="password-help" class="help is-danger" hidden>Your passwords don't match</p>
-          </div>
-        </div>
-        <% if (flash) { %>
-          <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
-        <% } %>
-        <div class="field field--with-space">
-          <%
-            if (typeof button === 'undefined') {
-              var button = 'Complete registration'
-            }
-          %>
-          <input type="hidden" id="email" name="token" value="<%= token %>">
-          <input type="submit" id="complete-btn" class="button is-primary" value="<%= button %>">
-        </div>
-      </div>
-    </form>
+    <h1 className="title">Complete your registration</h1>
+    <% if (flash) { %>
+      <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+    <% } %>
+    <div id="registrationForm" class="registration__form">
+      <!-- React form -->
+    </div>
   </div>
 </main>
 <%- include('../partials/foot'); %>

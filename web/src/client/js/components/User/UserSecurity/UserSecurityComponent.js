@@ -1,25 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Form from 'Components/Form/Form'
-import TextField from 'Components/Form/TextField'
+import FormField from 'Components/Form/FormField'
+import UserSecurityFields from './UserSecurityFields'
 
-const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
+const UserSecurityComponent = ({ errors, formId, submitHandler, succeeded }) => {
   const [currentPassword, setCurrentPassword] = useState(null)
   const [newPassword, setNewPassword] = useState(null)
   const [confirmNewPassword, setConfirmNewPassword] = useState(null)
+  const [fieldsReady, setFieldsReady] = useState(false)
+  const [formDisabled, setFormDisabled] = useState(true)
+
+  useEffect(() => {
+    if (currentPassword && fieldsReady) {
+      setFormDisabled(false)
+    } else {
+      setFormDisabled(true)
+    }
+  }, [currentPassword, fieldsReady])
 
   function formSubmitHandler(e) {
-    if (currentPassword && newPassword && confirmNewPassword) {
+    if (currentPassword && fieldsReady) {
       submitHandler({ currentPassword, newPassword, confirmNewPassword })
     }
   }
 
+  function fieldsReadyHandler(readyValue, readyPassword, readyConfirm) {
+    setFieldsReady(readyValue)
+    setNewPassword(readyPassword)
+    setConfirmNewPassword(readyConfirm)
+  }
+
   return (
-    <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my password">
+    <Form disabled={formDisabled} name={formId} onSubmit={formSubmitHandler} submitLabel="Update my password">
       <section>
         <h2>Update Your Password</h2>
-        <TextField
+        <FormField
+          aria-required={true}
           errors={errors.password}
           id="currentPassword"
           label="Current Password"
@@ -29,26 +47,7 @@ const UserSecurityComponent = ({ errors, formId, submitHandler }) => {
           required
           type="password"
         />
-        <TextField
-          errors={errors.newPassword}
-          id="newPassword"
-          label="New Password"
-          name="password"
-          onChange={(e) => { setNewPassword(e.target.value) }}
-          placeholder="Enter a new password"
-          required
-          type="password"
-        />
-        <TextField
-          errors={errors.confirmNewPassword}
-          id="confirmNewPassword"
-          label="Confirm Password"
-          name="password"
-          onChange={(e) => { setConfirmNewPassword(e.target.value) }}
-          placeholder="Enter your new password"
-          required
-          type="password"
-        />
+        <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} fieldsShouldReset={succeeded} />
       </section>
     </Form>
   )
@@ -58,6 +57,7 @@ UserSecurityComponent.propTypes = {
   errors: PropTypes.object,
   formId: PropTypes.string.isRequired,
   submitHandler: PropTypes.func.isRequired,
+  succeeded: PropTypes.bool,
 }
 
 UserSecurityComponent.defaultProps = {

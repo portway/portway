@@ -6,10 +6,10 @@ const Select = lazy(() => import('react-select'))
 import { debounce } from 'Shared/utilities'
 import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
-import TextField from 'Components/Form/TextField'
+import FormField from 'Components/Form/FormField'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
+const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }) => {
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [orgRole, setOrgRole] = useState(ORGANIZATION_ROLE_IDS.USER)
@@ -25,14 +25,14 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
   ]
 
   function isNameOrEmailBlank() {
-    return name === undefined || email === undefined
+    return name === undefined || email === undefined || disabled
   }
 
   return (
     <form onSubmit={formSubmitHandler}>
       <section>
         <h2>Add a User</h2>
-        <TextField
+        <FormField
           errors={errors.name}
           id="userName"
           label="Full name"
@@ -42,7 +42,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
           placeholder="Enter a full name"
           required
         />
-        <TextField
+        <FormField
           errors={errors.email}
           id="userEmail"
           label="Email address"
@@ -53,7 +53,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
           required
           type="email"
         />
-        <div className="form-field">
+        <div className="field-container">
           <div className="field">
             <label htmlFor="orgRole">Select a Role</label>
             <div className="control">
@@ -83,6 +83,7 @@ const AdminUsersCreateForm = ({ cancelHandler, errors, submitHandler }) => {
 AdminUsersCreateForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   errors: PropTypes.object,
+  disabled: PropTypes.bool,
   submitHandler: PropTypes.func.isRequired
 }
 

@@ -1,122 +1,23 @@
-@import '../inc/vars';
 @import '../inc/mixins';
 
-:root {
-  --form-background: #{$white};
-  --form-placeholder-color: #{$gray};
-  @media (prefers-color-scheme: dark) {
-    --form-background: #{$black-er};
-    --form-placeholder-color: #{$black-bis};
-  }
-}
-
 form, .form {
-  padding: 0 5px;
-
-  &__section {
-    border: thin solid var(--base-border-color);
-    border-radius: $borderRadius;
-    padding: 2rem;
+  --form-background: var(--color-white);
+  --form-border: var(--color-gray-20);
+  --form-placeholder-color: var(--color-gray-20);
+  --field-container-width: 325px;
+  --form-status-width: 50px;
+  @media (prefers-color-scheme: dark) {
+    --form-background: var(--theme-overflow);
+    --form-border: var(--color-gray-60);
+    --form-placeholder-color: var(--color-gray-60);
   }
-
-  .field {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    width: 300px;
-    &__row {
-      display: flex;
-      width: 100%;
-      button, .btn {
-        margin-right: 1.8rem;
-      }
-    }
-    &__control {
-      width: 100%;
-    }
-    &--with-space {
-      padding-top: 2.4rem;
-    }
-  } // field
-
-  .form-field {
-    margin-bottom: 18px;
-
-    &__help {
-      color: $gray-dark;
-      padding: 4px;
-      width: 300px;
-    }
-
-    &--large {
-      .field {
-        width: 100%;
-      }
-    } // form-field--large
-
-    &--horizontal {
-      .field {
-        align-items: flex-end;
-        flex-direction: row;
-        width: 100%;
-        > div {
-          margin-right: 1rem;
-        }
-      }
-    } // form-field--horizontal
-
-    &--with-button {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      .field {
-        input {
-          border-radius: $borderRadius;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-      }
-      button, .btn {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
-
-    &--hidden {
-      display: none;
-    } // form-field--hidden
-
-    &--checkbox {
-      .field {
-        align-items: center;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-        input {
-          margin-right: 6px;
-          width: 30px;
-        }
-      }
-      .form-field__help {
-        padding-left: 40px;
-      }
-    } // form-field--checkbox
-
-    &--error {
-      .field {
-        label, .field__label {
-          color: $danger;
-        }
-        input, textarea {
-          border-left: 6px solid $danger;
-        }
-      }
-    } // form-field--eror
-
-  } // form-field
 
   // Defaults
   // ---------------------------------------------------------------------------
+  fieldset {
+    padding: 0;
+  }
+
   label, .field__label {
     display: block;
     font-weight: 700;
@@ -135,26 +36,146 @@ form, .form {
   input[type='number'],
   input[type='password'],
   .StripeElement {
+    appearance: none;
     background: var(--form-background);
-    border: thin solid var(--base-border-color);
-    border-radius: $borderRadius;
+    border: thin solid var(--form-border);
+    border-radius: var(--border-radius);
     min-height: 38px;
     padding: 8px;
     width: 100%;
+    -webkit-appearance: none;
     &::placeholder {
       color: var(--form-placeholder-color);
     }
     &.focus {
       // StripeElement
-      border: thin solid $action;
+      border: thin solid var(--color-blue);
     }
-    &:focus {
-      @include focus(var(--form-background), $action);
-    }
+    @include focus(var(--form-background), var(--color-blue));
   }
 
   input[type='file'] {
     border: none;
   }
 
-}
+  // Remove step arrows
+  input[type='number'] {
+    appearance: textfield;
+  }
+
+  // Form markup
+  // ---------------------------------------------------------------------------
+  &__section {
+    border: thin solid var(--theme-border);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+  }
+} // form
+
+// form -> form-container -> field -> field__label, field__control, field__help
+// field-container is a container for one or more fields
+.field-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+  width: var(--field-container-width);
+
+  // Aligns _fields_ in a row
+  &--row {
+    flex-direction: row;
+  }
+
+  &--large {
+    width: 100%;
+  }
+
+  // Need some top padding to separate your field a little?
+  &--with-space {
+    padding-top: 2.4rem;
+  }
+
+  // A field-container with a button like the Add Members to Projects row in Project Settings
+  &--with-button {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    .field {
+      input {
+        border-radius: var(--border-radius);
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+    button, .btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  // Help is weird. I want it associated with a field, not a field-container...
+  // but life is hard
+  &__help {
+    flex-basis: 100%;
+    font-size: 1.2rem;
+    font-weight: 300;
+  }
+
+} // field-container
+
+// Field is the container of the actual field label, control, help and other items
+.field {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &--large {
+    width: 100%;
+  }
+
+  &--checkbox {
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  &__control {
+    position: relative;
+    width: 100%;
+    &--with-status {
+      align-items: center;
+      display: flex;
+      width: calc(var(--field-container-width) + var(--form-status-width));
+      input[type='text'],
+      input[type='email'],
+      input[type='number'],
+      input[type='password'] {
+        width: var(--field-container-width);
+      }
+    }
+
+    // Shrink just the control of the small fields
+    .field--small & {
+      width: 100px;
+    }
+
+    // checkboxes get no width
+    .field--checkbox & {
+      margin-right: .8rem;
+      width: auto;
+    }
+
+  }
+
+  &__status {
+    padding-left: 1rem;
+    width: var(--form-status-width);
+  }
+
+  // If the field is in a field-container--row, set its width to auto
+  .field-container--row & {
+    margin-right: 1.6rem;
+    width: auto;
+  }
+
+} // field

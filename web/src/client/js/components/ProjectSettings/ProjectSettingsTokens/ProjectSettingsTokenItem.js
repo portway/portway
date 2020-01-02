@@ -20,7 +20,13 @@ const ProjectSettingsTokenItem = ({ removeHandler, selected, selectHandler, toke
             <input readOnly type="text" value={token.token} ref={tokenRef} id={`token-${token.id}`} />
           </div>
           <ClipboardComponent copyRef={tokenRef} />
-          <button className="btn btn--blank btn--with-circular-icon" onClick={() => { removeHandler(token.id) }}><TrashIcon /></button>
+          <button
+            aria-label="Remove token"
+            className="btn btn--blank btn--with-circular-icon"
+            onClick={() => { removeHandler(token.id) }}
+          >
+            <TrashIcon />
+          </button>
         </div>
       </div>
     </li>

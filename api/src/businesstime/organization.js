@@ -41,6 +41,22 @@ async function findById(orgId) {
   const db = getDb()
   const organization = await db.model(MODEL_NAME).findByPk(orgId)
 
+  if (!organization) {
+    throw ono({ code: 404 }, `Cannot find organization with id: ${orgId}`)
+  }
+
+  return organization.get({ plain: true })
+}
+
+async function findByStripeId(stripeId) {
+  //TODO we might want to index by stripeId as well if this is getting used enough
+  const db = getDb()
+  const organization = await db.model(MODEL_NAME).findOne({ where: { stripeId } })
+
+  if (!organization) {
+    throw ono({ code: 404 }, `No organization found with stripeId: ${stripeId}`)
+  }
+
   return organization.get({ plain: true })
 }
 
@@ -48,5 +64,6 @@ export default {
   create,
   findSanitizedById,
   updateById,
-  findById
+  findById,
+  findByStripeId
 }

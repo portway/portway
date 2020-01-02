@@ -1,40 +1,61 @@
-import { debounce } from 'Shared/utilities'
+import React, { useRef, useState } from 'react'
+import { render } from 'react-dom'
+
+import UserSecurityFields from 'Components/User/UserSecurity/UserSecurityFields'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import 'CSS/registration.scss'
 
-const submitBtn = document.querySelector('#complete-btn')
-const passwordField = document.querySelector('#password')
-const confirmField = document.querySelector('#confirm-password')
-const passwordHelp = document.querySelector('#password-help')
+const urlParams = new URLSearchParams(window.location.search)
+const TOKEN = urlParams.get('token')
 
-function isPasswordMatch() {
-  return passwordField.value !== '' && passwordField.value === confirmField.value
-}
+const RegistrationForm = () => {
+  const [fieldsReady, setFieldsReady] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const formRef = useRef()
 
-function isRegReady() {
-  return isPasswordMatch()
-}
-
-const passwordCheckHandler = debounce(200, (e) => {
-  if (isPasswordMatch()) {
-    confirmField.classList.remove('is-danger')
-    passwordHelp.style.display = 'none'
-    if (isRegReady()) {
-      submitBtn.removeAttribute('disabled')
-    }
-  } else {
-    confirmField.classList.add('is-danger')
-    passwordHelp.style.display = 'block'
-    submitBtn.setAttribute('disabled', true)
+  function fieldsReadyHandler(value) {
+    setFieldsReady(value)
   }
-})
 
-// Disable the submit button unless we know the org name has a value
-submitBtn.setAttribute('disabled', true)
-confirmField.addEventListener('keydown', passwordCheckHandler, false)
+  function formSubmitHandler(e) {
+    e.preventDefault()
+    if (fieldsReady) {
+      setSubmitting(true)
+      formRef.current.submit()
+    } else {
+      setSubmitting(false)
+    }
+    return false
+  }
 
-// Todo: Investigate why the globals.js doesnt work for this one
+  return (
+    <form
+      action="/sign-up/registration/complete"
+      method="POST"
+      onSubmit={formSubmitHandler}
+      ref={formRef}
+    >
+      <section>
+        <h2>You’re almost there! Pick a strong password to finish the last step.</h2>
+        <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} />
+        <input type="hidden" id="token" name="token" value={TOKEN ? TOKEN : ''} />
+        <div className="btn-group">
+          <input className="btn" type="submit" disabled={!fieldsReady} value="Complete registration" />
+          {submitting && <SpinnerComponent color="#e5e7e6" />}
+        </div>
+      </section>
+    </form>
+  )
+}
+
+function renderRegistrationPage() {
+  const registrationDom = document.querySelector('#registrationForm')
+  render(<RegistrationForm />, registrationDom)
+}
+
+window.addEventListener('load', renderRegistrationPage, false)
+
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept()
 }
-

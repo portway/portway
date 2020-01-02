@@ -4,10 +4,20 @@ import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
+import stripeIntegrator from '../integrators/stripe'
+import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
+import billingCoordinator from './billing'
+import ono from 'ono'
 
 const { CLIENT_URL } = process.env
 
 async function createUserAndOrganization(name, email) {
+  const existingUser = await BusinessUser.findByEmail(email)
+
+  if (existingUser) {
+    throw ono({ code: 409 }, 'There is already a user with this email address')
+  }
+
   const organizationName = `${name}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
   const resetKey = passwordResetKey.generate()
@@ -20,11 +30,23 @@ async function createUserAndOrganization(name, email) {
     resetKey
   })
 
-  await BusinessOrganization.updateById(organization.id, { ownerId: createdUser.id })
+  const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}`, email })
+
+  await BusinessOrganization.updateById(organization.id, {
+    ownerId: createdUser.id,
+    stripeId: customer.id
+  })
+
+  await billingCoordinator.createOrUpdateOrgSubscription({
+    customerId: customer.id,
+    planId: PLANS.SINGLE_USER,
+    trialPeriodDays: TRIAL_PERIOD_DAYS,
+    orgId: organization.id
+  })
 
   const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
 
-  const linkUrl = `http://${CLIENT_URL}/sign-up/registration/complete?token=${token}`
+  const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
   const htmlBody = `
     <H2>Here's your link to finish signing up for Portway:</h2>
@@ -33,7 +55,6 @@ async function createUserAndOrganization(name, email) {
   const textBody = `Here is your link to finish signing-up for Portway: ${linkUrl}`
 
   const subject = 'Portway email confirmation'
-
 
   await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody, subject })
 }

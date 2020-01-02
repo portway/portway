@@ -9,21 +9,23 @@ import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DocumentsListItem from './DocumentsListItem'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 
-import './DocumentsList.scss'
+import './_DocumentsList.scss'
 
 const { PROJECT_ROLE_IDS } = Constants
 const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
 const DocumentsListComponent = ({
+  createCallback,
   createChangeHandler,
   creating,
-  createCallback,
   documents,
   draggedDocumentHandler,
   fieldCopyHandler,
   fieldMoveHandler,
   loading,
-  projectId
+  projectId,
+  removeDocumentHandler,
+  unpublishDocumentHandler,
 }) => {
   // Keep track of how many things being dragged
   let dragCount = 0
@@ -81,6 +83,7 @@ const DocumentsListComponent = ({
                 }
               }} />
             <button
+              aria-label="Remove document"
               className="btn btn--blank btn--with-circular-icon"
               onClick={() => { createCallback(false) }}>
               <RemoveIcon />
@@ -98,10 +101,12 @@ const DocumentsListComponent = ({
         <DocumentsListItem
           disable={creating}
           disableDragging={dragActive}
+          document={doc}
           fieldCopyHandler={fieldCopyHandler}
           fieldMoveHandler={fieldMoveHandler}
           key={`d-${doc.id}-${index}`}
-          document={doc}
+          removeDocumentHandler={removeDocumentHandler}
+          unpublishDocumentHandler={unpublishDocumentHandler}
         />
       )
     })
@@ -155,6 +160,9 @@ const DocumentsListComponent = ({
     'documents-list--creating': creating,
     'documents-list--dragged-over': dragActive
   })
+
+  const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
+
   return (
     <div
       className={classes}
@@ -170,11 +178,11 @@ const DocumentsListComponent = ({
         )}>
         <ToolbarComponent action={toolbarAction} />
       </ProjectPermission>
-      {documents.length === 0 && !loading && !creating &&
+      {documents.length === 0 && loading === false && !creating &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
-            <DocumentIcon width="32" height="32" />
+            <DocumentIcon fill={colorSurface} width="32" height="32" />
           </div>
           <h2 className="notice__headline">Get started</h2>
           <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
@@ -200,15 +208,17 @@ const DocumentsListComponent = ({
 }
 
 DocumentsListComponent.propTypes = {
+  createCallback: PropTypes.func.isRequired,
   createChangeHandler: PropTypes.func.isRequired,
   creating: PropTypes.bool.isRequired,
-  createCallback: PropTypes.func.isRequired,
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
+  removeDocumentHandler: PropTypes.func.isRequired,
+  unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 
 DocumentsListComponent.defaultProps = {

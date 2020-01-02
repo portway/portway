@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import Constants from 'Shared/constants'
+import { FIELD_TYPES } from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
@@ -12,23 +12,26 @@ import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 const DocumentFieldsComponent = ({
   createdFieldId,
   disabled,
-  dragStartHandler,
+  documentMode,
   dragEndHandler,
   dragEnterHandler,
   dragLeaveHandler,
-  dragOverHandler,
+  dragStartHandler,
   dropHandler,
+  fieldBlurHandler,
   fieldChangeHandler,
   fieldDestroyHandler,
+  fieldFocusHandler,
   fieldRenameHandler,
   fields,
   fieldsUpdating,
+  isDragging,
   isPublishing,
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
   const textFields = fields.filter((field) => {
-    return field.type === Constants.FIELD_TYPES.TEXT
+    return field.type === FIELD_TYPES.TEXT
   })
   const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
 
@@ -43,24 +46,50 @@ const DocumentFieldsComponent = ({
   function renderFieldType(field, index) {
     let fieldTypeComponent
     switch (field.type) {
-      case Constants.FIELD_TYPES.TEXT:
-        fieldTypeComponent = <FieldTextComponent field={field} onChange={fieldChangeHandler} autoFocusElement={lastTextFieldId} />
+      case FIELD_TYPES.TEXT:
+        fieldTypeComponent = (
+          <FieldTextComponent
+            autoFocusElement={lastTextFieldId}
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+          />
+        )
         break
-      case Constants.FIELD_TYPES.NUMBER:
-        fieldTypeComponent = <FieldNumberComponent field={field} onChange={fieldChangeHandler} />
+      case FIELD_TYPES.NUMBER:
+        fieldTypeComponent = (
+          <FieldNumberComponent
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+          />
+        )
         break
-      case Constants.FIELD_TYPES.STRING:
-        fieldTypeComponent = <FieldStringComponent field={field} onChange={fieldChangeHandler} />
+      case FIELD_TYPES.STRING:
+        fieldTypeComponent = (
+          <FieldStringComponent
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+          />
+        )
         break
-      case Constants.FIELD_TYPES.IMAGE:
-        fieldTypeComponent =
+      case FIELD_TYPES.IMAGE:
+        fieldTypeComponent = (
           <FieldImageComponent
             field={field}
+            onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
-            updating={fieldsUpdating[field.id]} />
+            updating={fieldsUpdating[field.id]}
+          />
+        )
         break
       default:
         break
@@ -69,20 +98,22 @@ const DocumentFieldsComponent = ({
       const settingsModeForField = settingsForField === field.id
       return (
         <DocumentFieldComponent
-          key={field.id}
-          index={index}
-          isNewField={createdFieldId === field.id}
-          field={field}
-          dragStartHandler={settingsModeForField ? null : dragStartHandler}
-          dragEndHandler={settingsModeForField ? null : dragEndHandler}
+          documentMode={documentMode}
+          dragEndHandler={dragEndHandler}
           dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
           dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
-          dragOverHandler={settingsModeForField ? null : dragOverHandler}
+          dragStartHandler={settingsModeForField ? null : dragStartHandler}
           dropHandler={settingsModeForField ? null : dropHandler}
+          field={field}
+          index={index}
+          isDragging={isDragging}
+          isNewField={createdFieldId === field.id}
+          key={field.id}
+          onDestroy={() => { fieldDestroyHandler(field.id, field.type) }}
           onRename={fieldRenameHandler}
-          onDestroy={() => { fieldDestroyHandler(field.id) }}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-          settingsMode={settingsModeForField}>
+          settingsMode={settingsModeForField}
+        >
           {fieldTypeComponent}
         </DocumentFieldComponent>
       )
@@ -97,6 +128,7 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
+    'document__fields--is-dragging': isDragging,
     'document__fields--disabled': isPublishing || disabled
   })
   return (
@@ -111,18 +143,21 @@ const DocumentFieldsComponent = ({
 DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
+  documentMode: PropTypes.string.isRequired,
   dragEndHandler: PropTypes.func.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,
   dragLeaveHandler: PropTypes.func.isRequired,
-  dragOverHandler: PropTypes.func.isRequired,
+  dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
-  fields: PropTypes.array.isRequired,
+  fieldBlurHandler: PropTypes.func.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
-  fieldRenameHandler: PropTypes.func.isRequired,
   fieldDestroyHandler: PropTypes.func.isRequired,
-  isPublishing: PropTypes.bool.isRequired,
+  fieldFocusHandler: PropTypes.func.isRequired,
+  fieldRenameHandler: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  isPublishing: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldsComponent

@@ -9,8 +9,10 @@
       "CSS/*": ["src/client/css/*"],
       "Hooks/*": ["src/client/js/hooks/*"],
       "Libs/*": ["src/client/js/libs/*"],
+      "Loc/*": ["src/client/js/loc/*"],
       "Sections/*": ["src/client/js/sections/*"],
-      "Shared/*": ["src/shared/*"]
+      "Shared/*": ["src/shared/*"],
+      "Utilities/*": ["src/utilities/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

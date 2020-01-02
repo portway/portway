@@ -8,7 +8,7 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
   if (!doc) {
     throw ono({ code: 404 }, `Document ${documentId} not found, cannot publish`)
   }
-  const docVersion = await BusinessDocumentVersion.createVersion(doc.id, orgId)
+  const docVersion = await BusinessDocumentVersion.createVersion(doc.id, doc.name, orgId)
   const fields = await BusinessField.findAllForDocument(doc.id, orgId)
   await Promise.all(fields.map((field) => {
     return BusinessField.createForDocument(doc.id, {
@@ -26,6 +26,19 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
   })
 }
 
+const unpublishDocument = async function(documentId, projectId, orgId) {
+  const doc = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
+  if (!doc) {
+    throw ono({ code: 404 }, `Document ${documentId} not found, cannot unpublish`)
+  }
+
+  return await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
+    publishedVersionId: null,
+    lastPublishedAt: null
+  })
+}
+
 export default {
-  publishDocumentVersion
+  publishDocumentVersion,
+  unpublishDocument
 }

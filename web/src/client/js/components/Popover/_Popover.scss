@@ -1,0 +1,47 @@
+@import 'CSS/inc/_mixins.scss';
+
+.popover {
+  position: absolute;
+  z-index: 10;
+
+  &__container {
+    background: var(--theme-overflow);
+    border: thin solid var(--theme-border);
+    left: -24px;
+    padding: 2rem;
+    position: relative;
+    top: -16px;
+    width: 500px;
+    @include boxShadow();
+
+    p, li {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    ul, ol { margin: 0; }
+
+    &:after, &:before {
+      bottom: 100%;
+      left: 10%;
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+    &:after {
+      border-color: rgba(255, 255, 255, 0);
+      border-bottom-color: var(--theme-overflow);
+      border-width: 16px;
+      margin-left: -16px;
+    }
+    &:before {
+      border-color: rgba(245, 51, 174, 0);
+      border-bottom-color: var(--theme-border);
+      border-width: 17px;
+      margin-left: -17px;
+    }
+  }
+
+}

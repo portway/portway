@@ -3,6 +3,7 @@ import { ActionTypes } from '../actions'
 const initialState = {
   currentDocumentId: null,
   projectDocumentsById: {},
+  documentSearchResults: null,
   loading: {
     byProject: {},
     byId: {}
@@ -37,6 +38,17 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.RECEIVE_DOCUMENTS_ERROR: {
+      const { projectId } = action
+      const loadingList = { ...state.loading.byProject, [action.projectId]: false }
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          byProject: loadingList
+        }
+      }
+    }
     // Single document
     case ActionTypes.REQUEST_DOCUMENT:
       const byId = { ...state.loading.byId, [action.documentId]: true }
@@ -56,6 +68,17 @@ export const documents = (state = initialState, action) => {
         ...state,
         currentDocumentId,
         projectDocumentsById,
+        loading: {
+          ...state.loading,
+          byId
+        }
+      }
+    }
+    case ActionTypes.RECEIVE_DOCUMENT_ERROR: {
+      const { documentId } = action
+      const byId = { ...state.loading.byId, [documentId]: false }
+      return {
+        ...state,
         loading: {
           ...state.loading,
           byId
@@ -120,6 +143,21 @@ export const documents = (state = initialState, action) => {
         name: action.data.name,
         updatedAt: action.data.updatedAt,
         lastPublishedAt: action.data.lastPublishedAt
+      }
+      const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
+      const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
+      return {
+        ...state,
+        projectDocumentsById
+      }
+    }
+    // Remove the published value
+    case ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT: {
+      const listDoc = state.projectDocumentsById[action.data.projectId][action.data.id]
+      const updatedDoc = {
+        ...listDoc,
+        lastPublishedAt: action.data.lastPublishedAt,
+        publishedVersionId: action.data.publishedVersionId,
       }
       const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }

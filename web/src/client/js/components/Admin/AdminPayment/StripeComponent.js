@@ -9,6 +9,7 @@ import {
 } from 'react-stripe-elements'
 
 import CountryList from 'Shared/countryList'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const elementStyles = {
   base: {
@@ -53,81 +54,77 @@ class StripeComponent extends React.Component {
   render() {
     return (
       <form
-        id="payment-form"
         method="put"
+        name="payment-form"
         onSubmit={this.billingSubmitHandler.bind(this)}
         ref={this.formRef}>
 
-        <div className="form-field form-field--horizontal">
+        <div className="field-container field-container--row">
           <div className="field">
-            <div>
-              <label className="field__label" htmlFor="card-number">
-                Credit or debit card
-              </label>
-              <div className="field__control field__control--card">
-                <CardNumberElement
-                  id="card-number"
-                  style={elementStyles}
-                  classes={elementClasses}
-                  onReady={(el) => {
-                    el.focus()
-                  }} />
-              </div>
+            <label className="field__label" htmlFor="card-number">
+              Credit or debit card
+            </label>
+            <div className="field__control field__control--card">
+              <CardNumberElement
+                id="card-number"
+                style={elementStyles}
+                classes={elementClasses}
+                onReady={(el) => {
+                  el.focus()
+                }} />
             </div>
-            <div>
-              <label className="field__label" htmlFor="card-expiry">
-                Expiration
-              </label>
-              <div className="field__control field__control--expiry">
-                <CardExpiryElement
-                  id="card-expiry"
-                  style={elementStyles}
-                  classes={elementClasses} />
-              </div>
+          </div>
+          <div className="field">
+            <label className="field__label" htmlFor="card-expiry">
+              Expiration
+            </label>
+            <div className="field__control field__control--expiry">
+              <CardExpiryElement
+                id="card-expiry"
+                style={elementStyles}
+                classes={elementClasses} />
             </div>
-            <div>
-              <label className="field__label" htmlFor="card-expiry">
-                CVC
-              </label>
-              <div className="field__control field__control--cvc">
-                <CardCVCElement id="card-cvc" style={elementStyles} classes={elementClasses} />
-              </div>
+          </div>
+          <div className="field">
+            <label className="field__label" htmlFor="card-expiry">
+              CVC
+            </label>
+            <div className="field__control field__control--cvc">
+              <CardCVCElement id="card-cvc" style={elementStyles} classes={elementClasses} />
             </div>
           </div>
         </div>
 
-        <div className="form-field form-field--horizontal">
+        <div className="field-container field-container--row">
           <div className="field">
-            <div>
-              <label className="field__label" htmlFor="country">
-                Country
-              </label>
-              <div className="field__control field__control--country">
-                <Select
-                  className="react-select-container"
-                  classNamePrefix="react-select"
-                  name="country"
-                  options={CountryList} />
-              </div>
+            <label className="field__label" htmlFor="country">
+              Country
+            </label>
+            <div className="field__control field__control--country">
+              <Select
+                className="react-select-container"
+                classNamePrefix="react-select"
+                name="country"
+                options={CountryList} />
             </div>
-            <div>
-              <label className="field__label" htmlFor="state">
-                State
-              </label>
-              <div className="field__control field__control">
-                <input
-                  id="state"
-                  className="input"
-                  type="text"
-                  name="state"
-                  placeholder="Oregon"
-                  autoComplete="section-billing address-level1" />
-              </div>
+          </div>
+          <div className="field">
+            <label className="field__label" htmlFor="state">
+              State
+            </label>
+            <div className="field__control field__control--state">
+              <input
+                id="state"
+                className="input"
+                type="text"
+                name="state"
+                placeholder="OR"
+                autoComplete="section-billing address-level1" />
             </div>
           </div>
         </div>
 
-        <div className="form-field">
+        <div className="field-container">
           <div className="field">
             <label className="field__label" htmlFor="postal-code">
                 Postal code
@@ -144,7 +141,7 @@ class StripeComponent extends React.Component {
           </div>
         </div>
 
-        <div className="form-field form-field--hidden">
+        <div className="field-container field-container__hidden">
           <div className="field">
             <label className="field__label" htmlFor="plan">
               Plan ID
@@ -152,7 +149,7 @@ class StripeComponent extends React.Component {
             <div className="field__control">
               <input
                 className="input is-static"
-                type="text"
+                type="hidden"
                 name="planId"
                 value="plan_ETYqFpkbcgDast"
                 disabled
@@ -161,12 +158,30 @@ class StripeComponent extends React.Component {
           </div>
         </div>
 
-        <div className="field field__row field--with-space">
-          <div className="field__control field__control--submit">
-            <input className="btn" type="submit" value="Update payment information" disabled={this.props.isSubmitting} />
-            {this.props.cancelHandler &&
-            <button className="btn btn--blank btn--small" onClick={this.props.cancelHandler}>Cancel</button>
-            }
+        <div className="field-container field-container--row">
+          <div className="field">
+            <div className="field__control field__control--submit">
+              <input
+                className="btn"
+                disabled={this.props.isSubmitting}
+                type="submit"
+                value="Update payment information"
+              />
+            </div>
+          </div>
+          {this.props.cancelHandler &&
+          <div className="field">
+            <div className="field__control">
+              <button
+                className="btn btn--blank btn--small"
+                disabled={this.props.isSubmitting}
+                onClick={this.props.cancelHandler}
+              >Cancel</button>
+            </div>
+          </div>
+          }
+          <div className="field">
+            {this.props.isSubmitting && <SpinnerComponent color="#e5e7e6" />}
           </div>
         </div>
 
@@ -176,12 +191,11 @@ class StripeComponent extends React.Component {
 
   stripeTokenHandler(token) {
     if (!this.props.isSubmitting) {
-      const form = document.getElementById('payment-form')
       const hiddenInput = document.createElement('input')
       hiddenInput.setAttribute('type', 'hidden')
       hiddenInput.setAttribute('name', 'token')
       hiddenInput.setAttribute('value', token.id)
-      form.appendChild(hiddenInput)
+      this.formRef.current.appendChild(hiddenInput)
       this.props.updateBillingHandler(token)
     }
   }

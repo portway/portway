@@ -14,7 +14,7 @@ import { uiConfirm } from 'Actions/ui'
 import AdminUserViewComponent from './AdminUserViewComponent'
 
 const AdminUserViewContainer = ({ match, removeProjectAssignee, updateProjectAssignee, updateUserRole, uiConfirm }) => {
-  const { data: users } = useDataService(dataMapper.users.list())
+  const { data: users } = useDataService(dataMapper.users.list(1))
   const { data: userFromRoute = {} } = useDataService(dataMapper.users.id(match.params.subSection))
   const { data: userProjects } = useDataService(dataMapper.projects.listForUser(userFromRoute.id), [userFromRoute])
   const { data: projectAssignments } = useDataService(dataMapper.users.projectAssignmentsForUser(userFromRoute.id), [userFromRoute])

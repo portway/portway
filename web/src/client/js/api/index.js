@@ -3,15 +3,16 @@ import { getCookieValue } from '../utilities/cookieParser'
 
 const token = getCookieValue('token')
 
-// Webpack's DefinePlugin sets VAR_API_URL during build from
-// process.env.API_PUBLIC_URL
+// Express renders the app html page and sets API_PUBLIC_URL in order to keep
+// this webpack bundle API-location agnostic. To set the API url, the node.js
+// express server needs process.env.API_PUBLIC_URL set
 // eslint-disable-next-line no-undef
-const baseURL = new URL('api/', VAR_API_URL)
-const globalErrorCodes = [403, 404, 408, 500]
+const baseURL = (new URL('api/', API_PUBLIC_URL)).href
+const globalErrorCodes = [403, 404, 408, 500, 503]
 const validationCodes = [400, 402, 409, 413, 415]
 
 const axiosInstance = axios.create({
-  baseURL: baseURL.toString(),
+  baseURL: baseURL,
   timeout: 0,
   headers: {
     Authorization: `Bearer ${token}`
@@ -20,8 +21,8 @@ const axiosInstance = axios.create({
 
 async function fetch(resource) {
   try {
-    const { data: { data }, status } = await axiosInstance.get(resource)
-    return { data, status }
+    const { data: { data, page, perPage, total, totalPages }, status } = await axiosInstance.get(resource)
+    return { data, status, page, perPage, total, totalPages }
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
     return { data, status }
@@ -61,4 +62,4 @@ async function remove(resource) {
   }
 }
 
-export { fetch, add, update, remove, globalErrorCodes, validationCodes }
+export { fetch, add, update, remove, globalErrorCodes, validationCodes, baseURL }

@@ -21,17 +21,22 @@ export const createProjectToken = async ({ name, projectId, roleId }, orgId) => 
   return await BusinessProjectToken.addTokenStringById(projectToken.id, tokenString, orgId)
 }
 
+// Returns a promise that rejects if token is not verifiable
 export const verifyProjectToken = async (token) => {
-  const tokenData = jwt.decode(token)
+  return new Promise(async (resolve, reject) => {
+    const tokenData = jwt.decode(token)
 
-  const businessToken = await BusinessProjectToken.findByIdUnsanitized(tokenData.id, tokenData.orgId)
-  if (!businessToken) return false
+    if (!tokenData || (!tokenData.id || !tokenData.orgId)) {
+      return reject(new Error(`token does not contain encoded id or orgId ${token}`))
+    }
 
-  const options = {
-    issuer: tokenSettings.issuer
-  }
+    const businessToken = await BusinessProjectToken.findByIdUnsanitized(tokenData.id, tokenData.orgId)
+    if (!businessToken) return reject(new Error(`No project token found for ${token}`))
 
-  return new Promise((resolve, reject) => {
+    const options = {
+      issuer: tokenSettings.issuer
+    }
+
     jwt.verify(token, businessToken.secret, options, (err, payload) => {
       if (err) {
         reject(err)

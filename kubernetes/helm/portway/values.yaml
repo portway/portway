@@ -1,0 +1,34 @@
+# Default values for portway.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+certIssuer: letsencrypt-prod
+
+baseUrl: dev.portway.app
+apiPublicUrl: api.dev.portway.app
+apiPort: "3001"
+stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
+
+apiImage: bonkeybong/portway_api
+apiTag: dev4
+
+webImage: bonkeybong/portway_web
+webTag: dev2
+
+api:
+  cdnHostname: 'https://dev.portwaycontent.com'
+  s3ContentBucket: 'portway-content-dev'
+  logger: 'r7insight'
+
+db:
+  host: "dev-db-portway-do-user-2269753-0.db.ondigitalocean.com"
+  port: "25060"
+  user: "doadmin"
+  name: "defaultdb"
+  useSsl: "true"
+
+serviceNames:
+  api: api
+  web: web
+  db: db
+

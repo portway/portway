@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { Link } from 'react-router-dom'
 
 import { RemoveIcon } from 'Components/Icons'
-import { PATH_ADMIN, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
+import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import OrgRolesDropdown from 'Components/RolesDropdowns/OrgRolesDropdown'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import Table from 'Components/Table/Table'
@@ -29,10 +28,11 @@ const AdminUserViewComponent = ({
     return (
       <div className="table__tools">
         <button
-          className="btn btn--blank btn--with-circular-icon btn--danger"
+          aria-label="Remove project"
+          className="btn btn--blank btn--with-circular-icon"
           onClick={() => removeProjectHandler(projectId, assignmentId) }>
           <RemoveIcon />
-          <span className="label">Un-assign</span>
+          <span className="label danger">Un-assign</span>
         </button>
       </div>
     )
@@ -65,7 +65,7 @@ const AdminUserViewComponent = ({
           <dt>Email</dt>
           <dd><a href={`mailto:${user.email}`}>{user.email}</a></dd>
           <dt>Date added</dt>
-          <dd>{moment(user.createdAt).format()}</dd>
+          <dd>{moment(user.createdAt).format('dddd, MMMM Do YYYY, h:mm:ss a')}</dd>
           {user.orgRoleId !== ORGANIZATION_ROLE_IDS.OWNER &&
           <>
           <dt>User role</dt>

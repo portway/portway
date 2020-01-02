@@ -27,12 +27,32 @@ function renderCardLogo(brand) {
   return <img className="admin-payment__card-image" src={cardIcons[brand]} alt={`${brand} card logo`} width="64" height="40" />
 }
 
-const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeHandler, orgBilling }) => {
-  if (!isStripeOpen && Object.keys(orgBilling).length === 0) {
+function getTotalCost(subscription) {
+  if (subscription.flatCost) {
+    return subscription.flatCost + (subscription.totalSeats - subscription.includedSeats) * subscription.additionalSeatCost
+  } else {
+    return '000'
+  }
+}
+
+function toCurrencyString(num) {
+  const numString = num.toString()
+  return `${numString.substr(0, numString.length - 2)}.${numString.substr(-2)}`
+}
+
+const AdminPaymentComponent = ({
+  errors,
+  isStripeOpen,
+  isSubmitting,
+  openStripeHandler,
+  organization,
+  orgBilling
+}) => {
+  if (!isStripeOpen && !orgBilling.source) {
     return (
       <div className="admin-payment">
         <>
-          <p>We don’t have payment on file</p>
+          <p>We don’t have payment information on file</p>
           <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Add Payment Info</button>
         </>
       </div>
@@ -52,18 +72,22 @@ const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeH
   }
 
   if (orgBilling && orgBilling.source) {
-    const expDateCalc = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month}-01`)
-    const expDate = moment(`${orgBilling.source.exp_year}-${orgBilling.source.exp_month}-01`)
+    const cost = orgBilling.subscription && toCurrencyString(getTotalCost(orgBilling.subscription))
+    const expDateCalc = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
+    const expDate = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
     const expiringSoon = moment() > expDateCalc.add(1, 'months')
+    const nextBillingDate = moment.unix(orgBilling.subscription.currentPeriodEnd)
+
     const expiringClass = cx({
       'admin-payment__card-expiration': true,
       'admin-payment__card-expiration--soon': expiringSoon
     })
+
     return (
       <div className="admin-payment">
         {!isStripeOpen && orgBilling && orgBilling.source.brand &&
         <>
-          <p>You will be billed <b>$10</b> on <b>September 19, 2019</b></p>
+          <p>You will be billed <b>${cost}</b> on <b>{nextBillingDate.format('MMMM Do, YYYY')}</b></p>
           <div className="admin-payment__method">
             {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
             <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>
@@ -71,7 +95,7 @@ const AdminPaymentComponent = ({ errors, isStripeOpen, isSubmitting, openStripeH
             <span>Expires: </span>
             <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
           </div>
-          <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
+          <button className="btn btn--like-a-link" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
         </>
         }
       </div>
@@ -84,7 +108,8 @@ AdminPaymentComponent.propTypes = {
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
   openStripeHandler: PropTypes.func.isRequired,
-  orgBilling: PropTypes.object,
+  organization: PropTypes.object,
+  orgBilling: PropTypes.object
 }
 
 AdminPaymentComponent.defaultProps = {

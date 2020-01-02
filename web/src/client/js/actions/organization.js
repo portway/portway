@@ -1,6 +1,6 @@
 import { Organizations, Notifications, Validation } from './index'
 import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
-import { fetch, update, globalErrorCodes, validationCodes } from '../api'
+import { add, fetch, update, globalErrorCodes, validationCodes } from '../api'
 import { NOTIFICATION_TYPES, NOTIFICATION_RESOURCE } from 'Shared/constants'
 
 export const fetchOrganization = (orgId) => {
@@ -81,5 +81,62 @@ export const updateOrganizationBilling = (orgId, body) => {
       return
     }
     dispatch(Organizations.receiveUpdatedBilling(orgId, data))
+    dispatch(fetchOrganization(orgId))
+  }
+}
+
+export const updateOrganizationPlan = (formId, orgId, body) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Organizations.initiatePlanUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/plan`, body)
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('organization', data, status))
+      dispatch(Organizations.receiveBillingError())
+      return
+    }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveUpdatedPlan(orgId, body.plan))
+    dispatch(formSucceededAction(formId))
+  }
+}
+
+export const updateOrganizationSeats = (formId, orgId, body) => {
+  return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
+    dispatch(Organizations.initiateSeatsUpdate(orgId))
+    const { data, status } = await update(`organizations/${orgId}/seats`, body)
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('organization', data, status))
+      dispatch(Organizations.receiveSeatsError())
+      return
+    }
+    if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveUpdatedSeats(orgId, body.seats))
+    dispatch(formSucceededAction(formId))
+  }
+}
+
+export const deleteOrganization = (orgId) => {
+  return async (dispatch) => {
+    dispatch(Organizations.initiateOrgRemoval(orgId))
+    const { data, status } = await add(`organizations/${orgId}/billing/cancel`, orgId)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
+      return
+    }
+    dispatch(Organizations.receiveOrgRemoval(orgId))
+    dispatch(fetchOrganization(orgId))
+    dispatch(fetchOrganizationBilling(orgId))
   }
 }

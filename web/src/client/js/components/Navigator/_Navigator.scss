@@ -1,10 +1,8 @@
-@import 'CSS/inc/_vars.scss';
 @import 'CSS/animations/_rotateAndScale.scss';
 
-$navigatorWidth: 300px;
-$navigatorPlaceholderWidth: 56px;
-
 .navigator {
+  --navigator-width: 300px;
+  --navigator-placeholder-width: 56px;
   position: relative;
 
   .btn {
@@ -12,16 +10,20 @@ $navigatorPlaceholderWidth: 56px;
       height: 24px;
       width: 24px;
     }
+    .label {
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
     &[aria-expanded="true"] {
       .icon {
         animation-fill-mode: forwards;
         animation-duration: 0.2s;
         animation-timing-function: ease;
         animation-name: rotateAndScale;
-        background-color: $black-bis;
+        background-color: var(--color-gray-50);
         svg {
           path {
-            fill: $gray-light;
+            fill: var(--color-gray-5);
           }
         }
       }
@@ -29,7 +31,7 @@ $navigatorPlaceholderWidth: 56px;
   }
 
   &__empty-item {
-    color: $gray;
+    color: var(--color-gray-5);
     padding: 1rem;
     a {
       text-decoration: underline;
@@ -37,43 +39,59 @@ $navigatorPlaceholderWidth: 56px;
   }
 
   &__project-btn {
-    color: $gray;
+    color: var(--color-gray-5);
     &:not([disabled]) {
       &:hover,
       &:active {
-        color: $white-ter;
+        color: var(--color-gray-10);
       }
     }
   }
 
   // Overwriting some values from _menu.scss
   .menu {
-    padding: 0;
-    width: $navigatorWidth;
+    background-color: var(--color-gray-80);
+
     &__item {
       align-items: center;
-      border-top: thin solid rgba(255, 255, 255, .03);
       display: flex;
-      font-size: 1.3rem;
-      padding: 4px 10px;
-      &:hover {
-        background-color: rgba(255, 255, 255, .03);
+      padding: .4rem 1.4rem;
+      @media (hover: hover) {
+        &:hover {
+          background-color: rgba(255, 255, 255, .03);
+        }
       }
       &--is-focused {
-        background-color: lighten($black-er, 10%);
-        &:hover {
-          background-color: lighten($black-er, 10%);
+        background-color: var(--color-blue);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--color-blue-dark);
+          }
         }
       }
       .icon {
         flex: 1;
-        margin-right: $iconMargin;
+        margin-right: var(--icon-margin);
       }
     }
+
+    &__footer {
+      align-items: center;
+      display: flex;
+      justify-content: flex-end;
+      padding: .4rem 1.4rem 0;
+    }
+
   }
 
   &__settings {
+    color: var(--color-white);
     font-size: 1rem;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-white);
+      }
+    }
   }
 
   // The React Select container
@@ -90,7 +108,7 @@ $navigatorPlaceholderWidth: 56px;
         background-color: transparent;
         border-radius: 0;
         border: none;
-        color: $gray-light;
+        color: var(--color-gray-5);
         margin: 0;
         min-height: unset;
         &--is-focused {
@@ -99,15 +117,15 @@ $navigatorPlaceholderWidth: 56px;
         }
       }
       &__input {
-        color: $gray-light;
+        color: var(--color-gray-5);
         display: block !important;
         text-align: center;
-        min-width: $navigatorPlaceholderWidth;
+        min-width: var(--navigator-placeholder-width);
         input {
-          caret-color: $action;
+          caret-color: var(--color-blue);
           position: relative;
           z-index: 2;
-          min-width: $navigatorPlaceholderWidth;
+          min-width: var(--navigator-placeholder-width);
         }
       }
       &__value-container {
@@ -116,7 +134,7 @@ $navigatorPlaceholderWidth: 56px;
         padding: 0;
       }
       &__placeholder {
-        color: $black-ter;
+        color: var(--color-gray-10);
         text-align: center;
         z-index: 1;
       }
@@ -138,13 +156,14 @@ $navigatorPlaceholderWidth: 56px;
       }
       &__option {
         background-color: transparent !important; // I hate React-Select
+        color: var(--color-gray-2);
         cursor: pointer;
         padding: 6px 0;
         &--is-focused {
           background-color: transparent;
         }
         &--is-selected {
-          background-color: $black-bis;
+          background-color: var(--color-gray-10);
         }
       }
     }

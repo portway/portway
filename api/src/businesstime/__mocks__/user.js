@@ -48,5 +48,6 @@ export default {
   setFindByIdReturnValue,
   resetFindByIdReturnValue,
   setFindSoftDeletedReturnToMockValue,
-  resetFindSoftDeletedReturnValue
+  resetFindSoftDeletedReturnValue,
+  countAll: jest.fn()
 }

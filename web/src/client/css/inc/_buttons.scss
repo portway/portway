@@ -1,34 +1,15 @@
-@import 'vars';
 @import 'mixins';
-
-:root {
-  --button-white-background: #{$white};
-  --button-white-border: #{$gray-light};
-  --button-white-border-hover: #{$white-ter};
-  --button-icon-background: #{$white-bis};
-  --button-icon-hover: #{$white-ter};
-  --button-icon-active: #{$gray};
-  --button-icon-expanded: #{$gray-light};
-  --button-label-expanded: #{$gray-dark};
-  @media (prefers-color-scheme: dark) {
-    --button-white-background: #{$black-bis};
-    --button-white-border: #{$black-er};
-    --button-white-border-hover: #{$black-er};
-    --button-icon-background: #{$black-ter};
-    --button-icon-hover: #{$gray-dark};
-    --button-icon-active: #{$black-er};
-    --button-icon-expanded: #{$black-er};
-    --button-label-expanded: #{$gray-dark};
-  }
-}
 
 .btn-group {
   align-items: center;
   display: flex;
   justify-content: flex-start;
-  padding: ($sideGutterWidth / 2) 0;
+  padding: calc(var(--gutter-width) / 2) 0;
   .btn {
     margin-right: 12px;
+  }
+  &--right-aligned {
+    flex-direction: row-reverse;
   }
 }
 
@@ -38,15 +19,37 @@
 
 button,
 .btn, .button {
+  --button-color: var(--color-white);
+  --button-white-background: var(--color-white);
+  --button-white-border: var(--color-gray-20);
+  --button-white-border-hover: var(--color-gray-15);
+  --button-icon-background: var(--color-gray-6);
+  --button-icon-hover: var(--color-gray-9);
+  --button-icon-active: var(--color-gray-10);
+  --button-icon-expanded: var(--color-gray-5);
+  --button-label-expanded: var(--color-gray-30);
+  @media (prefers-color-scheme: dark) {
+    --button-color: var(--color-gray-90);
+    --button-white-background: var(--theme-overlay-light);
+    --button-white-border: var(--theme-overlay-dark);
+    --button-white-border-hover: var(--color-gray-50);
+    --button-icon-background: hsl(61, 1%, 41%);
+    --button-icon-hover: hsl(61, 0%, 49%);
+    --button-icon-active: var(--color-gray-90);
+    --button-icon-expanded: var(--color-gray-90);
+    --button-label-expanded: var(--color-gray-70);
+  }
   align-items: center;
-  background-color: $action;
-  border-radius: $borderRadius;
+  background-color: var(--color-green);
+  border-radius: var(--border-radius);
   border: thin solid transparent;
-  color: #fff;
+  color: var(--button-color);
   cursor: pointer;
   display: inline-flex;
-  font-family: $sansSerif;
+  flex-wrap: wrap;
+  font-family: var(--type-sans-serif);
   font-weight: 500;
+  justify-content: center;
   margin-bottom: 0;
   margin-top: 0;
   min-height: 38px;
@@ -54,28 +57,31 @@ button,
   text-decoration: none;
   white-space: nowrap;
   -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 
-  p { color: $gray-dark; margin: 0; }
+  p { margin: 0; }
 
-  @include focus($action);
+  @include focus(var(--color-green));
 
   &:not([disabled]) {
-    &:hover {
-      background-color: $action-light;
-      color: #fff;
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--color-green-dark);
+        color: var(--button-color);
+      }
     }
     &:active {
-      background-color: $action-dark;
-      color: #fff;
+      background-color: var(--color-green-darker);
+      color: var(--button-color);
     }
   }
 
   &--small {
     font-size: 1.2rem;
     min-height: 24px;
-    padding: 0 18px;
+    padding: 3px 24px;
     &.btn--with-icon {
-      padding: 0 6px;
+      padding: 3px 18px;
       .icon {
         height: 12px;
         min-height: 12px;
@@ -86,21 +92,23 @@ button,
   }
 
   &--primary {
-    @include focus($primary, $primary);
-    background-color: $primary;
-    border: thin solid $primary;
+    @include focus(var(--color-green), var(--color-green));
+    background-color: var(--color-green);
+    border: thin solid var(--color-green);
     &:not([disabled]) {
-      &:hover {
-        background-color: lighten($primary, 10%);
-        color: $white;
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-green-light);
+          color: var(--color-white);
+        }
       }
       &:active {
-        background-color: $primary-dark;
-        color: $white;
+        background-color: var(--color-green-dark);
+        color: var(--color-white);
       }
     }
     &[aria-expanded="true"] {
-      background-color: $primary-dark;
+      background-color: var(--color-green-dark);
     }
   }
 
@@ -110,10 +118,12 @@ button,
     border: thin solid var(--button-white-border);
     color: inherit;
     &:not([disabled]) {
-      &:hover {
-        background-color: var(--button-white-background);
-        border: thin solid var(--button-white-border-hover);
-        color: inherit;
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--button-white-background);
+          border: thin solid var(--button-white-border-hover);
+          color: inherit;
+        }
       }
       &:active {
         background-color: var(--button-white-background);
@@ -131,8 +141,23 @@ button,
     color: inherit;
     padding: 0;
     @include focus(transparent);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          background-color: transparent;
+          border: thin solid transparent;
+          box-shadow: none;
+          color: inherit;
+          outline: 0;
+
+          .icon {
+            opacity: 0.5;
+          }
+
+        }
+      }
+    }
     &:not([disabled]) {
-      &:hover,
       &:active {
         background-color: transparent;
         border: thin solid transparent;
@@ -163,20 +188,23 @@ button,
     padding: 0 10px 0 10px;
     .icon {
       .icon-caret {
-        transition: transform 0.2s ease-in-out;
+        @media (prefers-reduced-motion: no-preference) {
+          // Turn on animations for users with no preference
+          transition: transform 0.2s ease-in-out;
+        }
       }
     }
     .label {
       flex: 1;
       flex-wrap: nowrap;
-      padding: 2px 0 2px 4px;
+      padding: 0 0 0 8px;
     }
     &[aria-expanded="true"] {
       .icon-caret {
         transform: rotate(-180deg);
       }
       .label {
-        color: $gray;
+        color: var(--color-gray-60);
       }
     }
   }
@@ -193,10 +221,12 @@ button,
       flex-wrap: nowrap;
       padding: 2px 8px 2px 8px;
     }
+    @media (hover: hover) {
     &:hover {
-      &:not([disabled]) {
-        .icon {
-          background-color: var(--button-icon-hover);
+        &:not([disabled]) {
+          .icon {
+            background-color: var(--button-icon-hover);
+          }
         }
       }
     }
@@ -218,16 +248,53 @@ button,
   }
 
   &--warning {
-    color: $warning;
-    &:hover {
-      color: darken($warning, 20%);
+    color: var(--color-orange);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          color: var(--color-orange-dark);
+        }
+      }
     }
   }
 
   &--danger {
-    color: $danger;
-    &:hover {
-      color: darken($danger, 20%);
+    border-color: var(--color-red);
+    color: var(--color-red);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          border-color: var(--color-red-dark);
+          color: var(--color-red-dark);
+        }
+      }
+    }
+  }
+
+  // Button colors
+  &--red {
+    .icon {
+      background-color: var(--color-red);
+    }
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          .icon {
+            background-color: var(--color-red-dark);
+          }
+        }
+      }
+    }
+  }
+
+  &--cyan {
+    background-color: var(--color-cyan);
+    @media (hover: hover) {
+      &:not([disabled]) {
+        &:hover {
+          background-color: var(--color-cyan-dark);
+        }
+      }
     }
   }
 

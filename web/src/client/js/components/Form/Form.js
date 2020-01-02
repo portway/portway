@@ -1,23 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import cx from 'classnames'
 
 import { debounce } from 'Shared/utilities'
 import { CheckIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const Form = ({
-  action,
+  cancelHandler,
   children,
+  disabled,
+  dispatch,
   forms,
   name,
-  method,
-  multipart,
   onSubmit,
-  submitLabel
+  submitEnabled,
+  submitLabel,
+  submitOnRight,
+  ...props,
 }) => {
   const formRef = useRef()
-  const [formChanged, setFormChanged] = useState(false)
+  const [formChanged, setFormChanged] = useState(submitEnabled)
   const [submitting, setSubmitting] = useState(false)
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
@@ -36,10 +40,20 @@ const Form = ({
   }
 
   const debouncedChangeHandler = debounce(200, () => {
-    setFormChanged(true)
+    if (!disabled) {
+      setFormChanged(true)
+    }
   })
 
-  const buttonDisabledWhen = !formChanged || submitting || succeeded
+  const buttonDisabledWhen = disabled || !formChanged || submitting || succeeded
+  const submitClasses = cx({
+    'btn': true,
+    'btn--disabled': buttonDisabledWhen,
+  })
+  const buttonGroupClasses = cx({
+    'btn-group': true,
+    'btn-group--right-aligned': submitOnRight
+  })
 
   if (succeeded && formRef.current) {
     formRef.current.reset()
@@ -47,21 +61,23 @@ const Form = ({
 
   return (
     <form
-      ref={formRef}
-      action={action}
-      method={method}
-      multipart={multipart}
+      className="form"
       name={name}
       onChange={debouncedChangeHandler}
-      onSubmit={submitHandler}>
+      onSubmit={submitHandler}
+      ref={formRef}
+      {...props}>
       {children}
       {failed &&
       <div>
         <p className="danger">Please check your form for errors</p>
       </div>
       }
-      <div className="btn-group">
-        <input type="submit" className="btn btn--small" disabled={buttonDisabledWhen} value={submitLabel} />
+      <div className={buttonGroupClasses}>
+        <input type="submit" className={submitClasses} disabled={buttonDisabledWhen && !submitEnabled} value={submitLabel} />
+        {cancelHandler &&
+          <button className="btn btn--blank btn--small" type="button" onClick={cancelHandler}>Cancel</button>
+        }
         {submitting && <SpinnerComponent color="#e5e7e6" />}
         {succeeded && <CheckIcon fill="#51a37d" />}
       </div>
@@ -70,18 +86,19 @@ const Form = ({
 }
 
 Form.propTypes = {
-  action: PropTypes.string,
+  cancelHandler: PropTypes.func,
   children: PropTypes.node,
+  dispatch: PropTypes.func,
+  disabled: PropTypes.bool,
   forms: PropTypes.object,
-  method: PropTypes.string,
-  multipart: PropTypes.string,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
+  submitEnabled: PropTypes.bool,
   submitLabel: PropTypes.string,
+  submitOnRight: PropTypes.bool,
 }
 
 Form.defaultProps = {
-  multipart: 'false',
   submitLabel: 'Submit',
 }
 

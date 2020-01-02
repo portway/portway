@@ -5,6 +5,7 @@ import initializeTestDb from '../db/__testSetup__/initializeTestDb'
 import documentVersionCoordinator from './documentVersion'
 import { uniqueVals } from '../libs/utils'
 import { getDb } from '../db/dbConnector'
+import BusinessDocument from '../businesstime/document'
 
 describe('documentVersion', () => {
   beforeAll(async () => {
@@ -18,7 +19,7 @@ describe('documentVersion', () => {
       beforeAll(async () => {
         const factoryProject = (await ProjectFactory.createMany(1))[0]
 
-        factoryDocument = (await DocumentFactory.createMany(1, { projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
+        factoryDocument = (await DocumentFactory.createMany(1, { name: 'not-a-real-doc-name', projectId: factoryProject.id, orgId: factoryProject.orgId }))[0]
 
         factoryFields = await FieldFactory.createMany(3, {
           documentId: factoryDocument.id,
@@ -58,6 +59,7 @@ describe('documentVersion', () => {
         })
         expect(docVersion.id).toBe(document.publishedVersionId)
         expect(docVersion.documentId).toBe(document.id)
+        expect(docVersion.name).toBe(document.name)
       })
     })
     describe('with an invalid document id', () => {
@@ -71,6 +73,49 @@ describe('documentVersion', () => {
           documentVersionCoordinator.publishDocumentVersion(9999999, project.id, project.orgId)
         ).rejects.toThrow()
       })
+    })
+  })
+
+  describe('unpublishDocument', () => {
+    let factoryDocument
+    let document
+    beforeAll(async () => {
+      const factoryProject = (await ProjectFactory.createMany(1))[0]
+
+      factoryDocument = (await DocumentFactory.createMany(1, {
+        projectId: factoryProject.id,
+        orgId: factoryProject.orgId
+      }))[0]
+
+      const factoryFields = await FieldFactory.createMany(3, {
+        documentId: factoryDocument.id,
+        orgId: factoryDocument.orgId
+      })
+
+      await documentVersionCoordinator.publishDocumentVersion(
+        factoryDocument.id,
+        factoryProject.id,
+        factoryProject.orgId
+      )
+
+      const populatedDoc = await BusinessDocument.findByIdWithPublishedFields(factoryDocument.id, factoryDocument.orgId)
+      expect(populatedDoc.fields.length).toBe(factoryFields.length)
+
+      document = await documentVersionCoordinator.unpublishDocument(
+        factoryDocument.id,
+        factoryProject.id,
+        factoryProject.orgId
+      )
+    })
+
+    it('should set the publishedVersionId and lastPublishedAt document fields to null', () => {
+      expect(document.publishedVersionId).toBe(null)
+      expect(document.lastPublishedAt).toBe(null)
+    })
+
+    it('should no longer return the document when querying published', async () => {
+      const populatedDoc = await BusinessDocument.findByIdWithPublishedFields(factoryDocument.id, factoryDocument.orgId)
+      expect(populatedDoc).toBe(null)
     })
   })
 })

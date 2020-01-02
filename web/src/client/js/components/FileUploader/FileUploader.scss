@@ -1,5 +1,78 @@
 .file-uploader {
-  &__status {
+  align-items: center;
+  border: thin solid var(--theme-border);
+  border-radius: var(--border-radius);
+  display: flex;
+  padding: 3.4rem 0;
+  width: 100%;
+
+  &--dragged-over {
+    background-color: var(--color-gray-5);
+    cursor: copy;
+  }
+
+  &--with-value {
+    background-color: hsla(0, 0%, 0%, .7);
+    border-radius: 0;
+    border: none;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+
+    .btn--blank {
+      color: var(--color-gray-50);
+      font-size: 1.2rem;
+    }
+
+  }
+
+  &--uploading {
+    border: thin solid transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  &__icon {
+    margin-bottom: 1.1rem;
+    .file-uploader--with-value & {
+      path {
+        fill: var(--color-gray-2);
+      }
+    }
+  }
+
+  &__content {
+    text-align: center;
+  }
+
+  &__form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
+  }
+
+  &__label {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin-bottom: 1.8rem;
+    text-align: center;
+    .file-uploader--with-value & {
+      color: var(--color-gray-2);
+    }
+  }
+
+  &__status {
+    position: relative;
+    width: 100%;
+    .spinner {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }

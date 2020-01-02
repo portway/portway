@@ -21,9 +21,16 @@ function HeaderContainer({ isFullScreen, location }) {
   }
   const section = location.pathname.split('/')[1]
   const projectId = section === 'project' ? location.pathname.split('/')[2] : null
+  const subscriptionStatus = currentOrg ? currentOrg.subscriptionStatus : null
 
   return (
-    <HeaderComponent brand={brand} isFullScreen={isFullScreen} projectId={projectId} section={section} />
+    <HeaderComponent
+      brand={brand}
+      isFullScreen={isFullScreen}
+      projectId={projectId}
+      section={section}
+      subscriptionStatus={subscriptionStatus}
+    />
   )
 }
 
