@@ -13,6 +13,7 @@
       <label class="label is-small" for="password">Password</label>
       <div class="field__control">
         <input id="password" class="input" name="password" type="password" placeholder="********" autocomplete="section-login current-password">
+        <p class="small"><a href="/sign-in/password-reset">Forget your password?</a></p>
       </div>
     </div>
   </div>
@@ -24,7 +25,7 @@
   <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
   <% } %>
   <div class="field-container field-container--with-space">
-    <div class="field">
+    <div class="field field--centered">
       <%
         if (typeof button === 'undefined') {
           var button = 'Sign in'

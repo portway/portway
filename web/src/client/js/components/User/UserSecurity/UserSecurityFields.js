@@ -147,9 +147,13 @@ const UserSecurityFields = ({ fieldsReadyHandler, fieldsShouldReset }) => {
         </div>
       </div>
       }
-      <div className="user-security-fields__password-score">
-        <p>Password strength</p>
-        <meter low="0" optimum="4" min="0" max="4" value={passwordScore} />
+      <div className="field-container">
+        <div className="field">
+          <div className="user-security-fields__password-score">
+            <p>Password strength</p>
+            <meter low="0" optimum="4" min="0" max="4" value={passwordScore} />
+          </div>
+        </div>
       </div>
     </div>
   )

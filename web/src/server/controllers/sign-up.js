@@ -6,6 +6,10 @@ import { SIGNUP_DISABLED } from '../constants'
 const API = new DangerAPI(process.env.API_URL)
 
 const SignUpController = function(router) {
+  router.get('/', (req, res) => {
+    res.render('user/sign-up', renderBundles(req, 'Sign up', 'index'))
+  })
+
   router.get('/processing', (req, res) => {
     res.render('user/processing', renderBundles(req, 'Processing', 'index'))
   })
