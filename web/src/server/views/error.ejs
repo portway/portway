@@ -1,5 +1,4 @@
 <%- include('partials/head', { title: title, robots: 'noindex, nofollow' }); %>
-<%- include('partials/navigation'); %>
 <main>
   <div class="container">
     <img src="/images/logo.svg" alt="Portway Logo" width="85" />
@@ -8,7 +7,7 @@
     <pre><%= error.stack %></pre>
   </div>
 </main>
-<%- include('partials/footer'); %>
+<%- include('partials/footer', { supportLink: options.supportLink }); %>
 <%- include('partials/foot'); %>
 
 
