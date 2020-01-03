@@ -17,11 +17,10 @@ const RegistrationForm = () => {
     setFieldsReady(value)
   }
 
-  function formSubmitHandler(e) {
-    e.preventDefault()
+  function formSubmitHandler() {
     if (fieldsReady) {
       setSubmitting(true)
-      formRef.current.submit()
+      return true
     } else {
       setSubmitting(false)
     }
@@ -39,7 +38,14 @@ const RegistrationForm = () => {
       <UserSecurityFields fieldsReadyHandler={fieldsReadyHandler} />
       <input type="hidden" id="token" name="token" value={TOKEN ? TOKEN : ''} />
       <div className="btn-group btn-group--centered">
-        {!submitting && <input className="btn" type="submit" disabled={!fieldsReady} value="Complete registration" />}
+        {!submitting &&
+          <input
+            className="btn"
+            type="submit"
+            disabled={!fieldsReady}
+            value="Complete registration"
+          />
+        }
         {submitting && <SpinnerComponent color={green} />}
       </div>
     </form>
