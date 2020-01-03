@@ -1,11 +1,20 @@
-import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
+import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, FIELD_TYPES } from 'Shared/constants'
 import { Fields, Notifications, Validation } from './index'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
+import { fetchImageBlob } from 'Utilities/imageUtils'
 
 export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateCreate(documentId, fieldType))
-    const { data, status } = await add(`v1/documents/${documentId}/fields`, body)
+    let data
+    let status
+    const url = `v1/documents/${documentId}/fields`
+    // if we're getting FormData here, it's a file upload, pass the FormData as the body
+    if (body.value instanceof FormData) {
+      ({ data, status } = await add(url, body.value))
+    } else {
+      ({ data, status } = await add(url, body))
+    }
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
@@ -75,12 +84,8 @@ export const focusField = (fieldId, fieldType, fieldData) => {
  * modifier key (option/alt) held
  */
 export const moveField = (projectId, currentDocumentId, newDocumentId, field) => {
-  const body = {
-    name: field.name,
-    type: field.type,
-    value: field.value
-  }
   return async (dispatch) => {
+    const body = await _getFieldBody(field)
     dispatch(Fields.initiateMove(projectId, currentDocumentId, newDocumentId, field.id))
     await createField(projectId, newDocumentId, field.type, body)(dispatch)
     await removeField(projectId, currentDocumentId, field.id)(dispatch)
@@ -94,14 +99,29 @@ export const moveField = (projectId, currentDocumentId, newDocumentId, field) =>
  * modifier key (option/alt) held
  */
 export const copyField = (projectId, currentDocumentId, newDocumentId, field) => {
-  const body = {
-    name: field.name,
-    type: field.type,
-    value: field.value
-  }
   return async (dispatch) => {
+    const body = await _getFieldBody(field)
     dispatch(Fields.initiateCopy(projectId, currentDocumentId, newDocumentId, field.id))
     await createField(projectId, newDocumentId, field.type, body)(dispatch)
     dispatch(Fields.copiedField(projectId, currentDocumentId, newDocumentId, field.id))
   }
+}
+
+const _getFieldBody = async function(field) {
+  let body = {
+    name: field.name,
+    type: field.type,
+    value: field.value
+  }
+  if (field.type === FIELD_TYPES.IMAGE) {
+    let imageData
+    if (field.value) {
+      imageData = await fetchImageBlob(field.value)
+    }
+    body = new FormData()
+    body.set('name', field.name)
+    body.set('type', field.type)
+    body.set('file', imageData)
+  }
+  return body
 }
