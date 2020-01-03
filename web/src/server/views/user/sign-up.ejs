@@ -2,14 +2,16 @@
 <main>
   <div class="container">
     <img src="/images/logo.svg" alt="Portway Logo" width="85" />
-    <h2>Complete your registration</h2>
-    <% if (flash) { %>
-      <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
+    <h2>Create your free account</h2>
+    <p>Start your <b>free, 30-day trial</b> now. <b>No credit card required.</b></p>
+    <% if (typeof disableSignup !== 'undefined' && disableSignup === true) { %>
+      <p>Registration is currently disabled</p>
+    <% } else { %>
+      <%- include('../partials/sign-up'); %>
     <% } %>
-    <div id="registrationForm" class="registration__form">
-      <!-- React form -->
-    </div>
   </div>
 </main>
 <%- include('../partials/footer', { supportLink: options.supportLink }); %>
 <%- include('../partials/foot'); %>
+
+

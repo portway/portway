@@ -141,6 +141,11 @@ input[type='number'] {
     justify-content: flex-end;
   }
 
+  &--centered {
+    align-items: center;
+    justify-content: center;
+  }
+
   &__control {
     position: relative;
     width: 100%;

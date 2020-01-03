@@ -1,7 +1,7 @@
 import { makePermalinkWithString } from '../libs/string-utilities'
 import constants from '../../shared/constants'
 
-export const renderBundles = (req, pageTitle, bundleKey) => {
+export const renderBundles = (req, pageTitle, bundleKey, options) => {
   let flash
   if (req.query.message) {
     switch (req.query.message) {
@@ -26,7 +26,8 @@ export const renderBundles = (req, pageTitle, bundleKey) => {
     flash: flash,
     permalink: makePermalinkWithString(pageTitle),
     css: bundleKey ? req.app.locals.bundles[bundleKey].css : undefined,
-    js: bundleKey ? req.app.locals.bundles[bundleKey].js : undefined
+    js: bundleKey ? req.app.locals.bundles[bundleKey].js : undefined,
+    options: options,
   }
 }
 
