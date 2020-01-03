@@ -205,7 +205,7 @@ class StripeComponent extends React.Component {
   billingSubmitHandler(e) {
     e.preventDefault()
     const cardData = {
-      'address_country': this.formRef.current.country.value,
+      'address_country': this.formRef.current.elements.country.value,
       'address_zip': this.formRef.current.elements['postal-code'].value,
       'address_state': this.formRef.current.elements.state.value
     }
