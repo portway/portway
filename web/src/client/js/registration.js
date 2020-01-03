@@ -17,21 +17,19 @@ const RegistrationForm = () => {
     setFieldsReady(value)
   }
 
-  function formSubmitHandler() {
-    if (fieldsReady) {
-      setSubmitting(true)
-      return true
-    } else {
-      setSubmitting(false)
-    }
-    return false
-  }
-
   return (
     <form
       action="/sign-up/registration/complete"
       method="POST"
-      onSubmit={formSubmitHandler}
+      onSubmit={() => {
+        if (fieldsReady) {
+          setSubmitting(true)
+          return true
+        } else {
+          setSubmitting(false)
+          return false
+        }
+      }}
       ref={formRef}
     >
       <p>You’re almost there! Pick a strong password to finish the last step.</p>
