@@ -11,6 +11,7 @@ import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import orgSchema from './payloadSchemas/organization'
 import avatarCoordinator from '../coordinators/avatar'
+import organizationCoordinator from '../coordinators/organization'
 
 const MAX_AVATAR_FILE_SIZE = 1024 * 1000
 
@@ -101,7 +102,7 @@ const updateOrganization = async function(req, res, next) {
   const { body } = req
 
   try {
-    const org = await BusinessOrganization.updateById(id, body)
+    const org = await organizationCoordinator.updateById(id, body)
     res.status(200).json({ data: org })
   } catch (e) {
     next(e)
