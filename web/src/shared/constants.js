@@ -192,7 +192,7 @@ module.exports = {
   QUERY_PARAMS: QUERY_PARAMS,
   // Support
   SUPPORT_EMAIL: 'support@portway.app',
-  SUPPORT_LINK: 'https://support.portway.app/',
+  SUPPORT_LINK: 'https://getportway.com/support',
   // UI Related
   DOCUMENT_MODE: DOCUMENT_MODE,
 }

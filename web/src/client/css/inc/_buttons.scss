@@ -11,6 +11,9 @@
   &--right-aligned {
     flex-direction: row-reverse;
   }
+  &--centered {
+    justify-content: center;
+  }
 }
 
 [role="button"] {

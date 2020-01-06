@@ -7,7 +7,7 @@ export const PLANS = {
   MULTI_USER_FREE: 'MULTI_USER_FREE'
 }
 
-export const TRIAL_PERIOD_DAYS = 10
+export const TRIAL_PERIOD_DAYS = 30
 
 // These come directly from stripe on subscription.status
 // https://stripe.com/docs/billing/lifecycle

@@ -1,6 +1,7 @@
 import { Notifications, Users, UserProjectAssignments, Validation } from './index'
 import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
 import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
+import logout from '../utilities/logout'
 
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 
@@ -166,8 +167,7 @@ export const reinviteUser = (userId) => {
 export const logoutUser = (id) => {
   return (dispatch) => {
     dispatch(Users.logout(id))
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/'
-    location.href = '/'
+    logout()
   }
 }
 

@@ -24,10 +24,6 @@ const SharedConfig = {
         to: 'images'
       },
       {
-        from: path.resolve(__dirname, '../src/client/css/fonts'),
-        to: 'css/fonts/'
-      },
-      {
         from: path.resolve(__dirname, '../src/client/manifest.json'),
         to: 'manifest.json'
       }

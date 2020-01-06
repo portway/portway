@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getCookieValue } from '../utilities/cookieParser'
+import logout from '../utilities/logout'
 
 const token = getCookieValue('token')
 
@@ -25,6 +26,7 @@ async function fetch(resource) {
     return { data, status, page, perPage, total, totalPages }
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }
@@ -35,6 +37,7 @@ async function add(resource, body) {
     return { data, status }
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }
@@ -45,6 +48,7 @@ async function update(resource, body) {
     return { data, status }
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }
@@ -58,6 +62,7 @@ async function remove(resource) {
     return {} // keep this here ^
   } catch (error) {
     const { data, status } = error.response || { status: 408, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }

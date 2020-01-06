@@ -8,9 +8,11 @@ import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 
 // Custom libraries
-import { normalizePort } from './libs/express-utilities'
+import { normalizePort, renderBundles } from './libs/express-utilities'
 import controllerLoader from './controllers/loader'
 import portwayMiddleware from './libs/portwayMiddleware'
+
+import { SUPPORT_LINK } from '../shared/constants'
 
 const app = express()
 const port = normalizePort(process.env.PORT || '3000')
@@ -100,7 +102,8 @@ app.use((err, req, res, next) => {
   console.info(err)
   // render the error page
   res.status(err.status || 500)
-  res.render('error', { title: `Error`, error: err })
+  const bundleTemplateVars = renderBundles(req, 'Error', 'index', { supportLink: SUPPORT_LINK })
+  res.render('error', { ...bundleTemplateVars, error: err })
 })
 
 // catch 404 and forward to error handler
