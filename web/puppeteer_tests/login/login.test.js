@@ -36,9 +36,6 @@ describe('Portway', () => {
   })
 
   it('should fill out the project form', async () => {
-    // await page.waitForNavigation({
-    //   waitUntil: 'networkidle2'
-    // })
     await expect(page).toFillForm('form[name="newProject"]', {
       name: 'BonkeyJustice™',
       description: 'Justice: BonkeyStyle™'
@@ -76,9 +73,6 @@ describe('Portway', () => {
   })
 
   it('should delete BonkeyJustice', async () => {
-    // await page.waitForNavigation({
-    //   waitUntil: 'networkidle2'
-    // })
     await expect(page).toClick('li[name="BonkeyJustice™"] button[name="deleteProject"]')
     await expect(page).toClick('button', { text: 'Yes, delete this project' })
   })
