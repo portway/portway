@@ -41,7 +41,9 @@ const AdminUsersContainer = ({
   const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
 
   const { data: { userSearchResults = [], totalSearchPages } } = useDataService(dataMapper.users.searchByName(searchTerm), [searchTerm])
-  const { data: seats } = useDataService(dataMapper.organizations.seats())
+  // setting `null` as the second arg to useDataService will force seats to reload whenever
+  // another action clears out seat data (eg adding/removing users)
+  const { data: seats } = useDataService(dataMapper.organizations.seats(), null)
 
   function addUserHandler(values) {
     createUser(values)
