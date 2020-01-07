@@ -171,11 +171,26 @@ export const organizations = (state = initialState, action) => {
       const id = state.currentOrganizationId
       const seatsById = { ...state.seatsById }
       const seatsByIdLoading = { ...state.loading.seatsById }
+      const organizationsBillingById = { ...state.organizationsBillingById }
+      const billingById = { ...state.loading.billingById }
+      if (organizationsBillingById[id]) {
+        delete organizationsBillingById[id]
+        delete billingById[id]
+      }
       if (seatsById[id]) {
         delete seatsById[id]
         delete seatsByIdLoading[id]
       }
-      return { ...state, seatsById, loading: { ...state.loading, seatsById: seatsByIdLoading } }
+      return {
+        ...state,
+        seatsById,
+        organizationsBillingById,
+        loading: {
+          ...state.loading,
+          seatsById: seatsByIdLoading,
+          billingById
+        }
+      }
     }
 
     // Org removal
