@@ -36,7 +36,7 @@ const ProjectSettingsInfoContainer = ({ errors, removeProject, uiConfirm, update
       removeProject(project.id, history)
     }
     const confirmedLabel = 'Yes, delete this project'
-    const confirmedText = project.title
+    const confirmedText = project.name
     uiConfirm({ message, confirmedAction, confirmedLabel, confirmedText })
   }
 
