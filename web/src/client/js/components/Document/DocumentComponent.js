@@ -85,7 +85,11 @@ const DocumentComponent = ({
             ref={titleRef} />
         </div>
         <div className="document__toggle-container">
-          <button className="btn btn--blank" onClick={toggleDocumentMode} title="Re-order or remove fields">
+          <button
+            className="btn btn--blank"
+            onClick={toggleDocumentMode}
+            name="documentSettings"
+            title="Re-order or remove fields">
             {documentMode === DOCUMENT_MODE.NORMAL &&
             <SettingsIcon />
             }
