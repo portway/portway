@@ -17,7 +17,8 @@ class ProjectsContainer extends React.PureComponent {
         this.props.history.push({ pathname: PATH_PROJECT_CREATE })
       },
       label: `New Project`,
-      icon: <AddIcon width="12" height="12" />
+      icon: <AddIcon width="12" height="12" />,
+      title: 'New Project'
     }
     return (
       <main>

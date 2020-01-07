@@ -14,6 +14,8 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
   const [email, setEmail] = useState()
   const [orgRole, setOrgRole] = useState(ORGANIZATION_ROLE_IDS.USER)
 
+  const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-border')
+
   function formSubmitHandler(e) {
     e.preventDefault()
     submitHandler({ name, email, orgRole })
@@ -73,8 +75,9 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
       </section>
 
       <div className="btn-group">
-        <button className="btn btn-primary" disabled={isNameOrEmailBlank()}>Add User <SpinnerContainer color="#ffffff" /></button>
+        <button className="btn btn-primary" disabled={isNameOrEmailBlank()}>Add User</button>
         <button type="button" className="btn btn--blank" onClick={cancelHandler}>Cancel</button>
+        <SpinnerContainer color={borderColor} />
       </div>
     </form>
   )
