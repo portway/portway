@@ -6,20 +6,29 @@ import { connect } from 'react-redux'
 import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
+import * as strings from 'Loc/strings'
 import { uiConfirm } from 'Actions/ui'
 import { removeProject } from 'Actions/project'
 import ProjectsListComponent from './ProjectListComponent'
 
 const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
   const { data: projects, loading } = useDataService(dataMapper.projects.list())
+
   const handleDelete = (projectId) => {
     const message = (
-      <span>Delete this project? <span className="highlight danger">WARNING: This will delete <i>everything</i>!</span></span>
+      <>
+        <p className="danger">{strings.DELETE_PROJECT_TITLE}</p>
+        <p>{strings.DELETE_PROJECT_DESCRIPTION}</p>
+      </>
     )
-    const confirmedAction = () => { removeProject(projectId, history) }
-    const confirmedLabel = 'Yes, delete this project'
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const confirmedAction = () => {
+      removeProject(projectId, history)
+    }
+    const confirmedLabel = strings.DELETE_PROJECT_BUTTON_LABEL
+    const confirmedText = projects[projectId].name
+    uiConfirm({ message, confirmedAction, confirmedLabel, confirmedText })
   }
+
   return (
     <div className="project-list-container">
       <ProjectsListComponent history={history} projects={projects} deleteHandler={handleDelete} loading={loading} />

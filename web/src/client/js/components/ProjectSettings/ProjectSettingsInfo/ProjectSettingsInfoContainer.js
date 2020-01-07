@@ -10,6 +10,7 @@ import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 
 import { PRODUCT_NAME } from 'Shared/constants'
+import * as strings from 'Loc/strings'
 import ProjectSettingsInfoComponent from './ProjectSettingsInfoComponent'
 
 const ProjectSettingsInfoContainer = ({ errors, removeProject, uiConfirm, updateProject }) => {
@@ -24,18 +25,17 @@ const ProjectSettingsInfoContainer = ({ errors, removeProject, uiConfirm, update
 
   const formId = 'project-settings'
 
-  const message = (
-    <>
-      <p className="danger">Delete this project?</p>
-      <p>This will remove all of the documents, assets, and other media related to this project.</p>
-    </>
-  )
-
   function deleteProjectHandler() {
+    const message = (
+      <>
+        <p className="danger">{strings.DELETE_PROJECT_TITLE}</p>
+        <p>{strings.DELETE_PROJECT_DESCRIPTION}</p>
+      </>
+    )
     const confirmedAction = () => {
       removeProject(project.id, history)
     }
-    const confirmedLabel = 'Yes, delete this project'
+    const confirmedLabel = strings.DELETE_PROJECT_BUTTON_LABEL
     const confirmedText = project.name
     uiConfirm({ message, confirmedAction, confirmedLabel, confirmedText })
   }
