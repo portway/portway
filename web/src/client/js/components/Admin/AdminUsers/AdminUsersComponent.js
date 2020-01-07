@@ -48,7 +48,7 @@ const AdminUsersComponent = ({
       setReinviteStatus(<CheckIcon fill={colorGreen} />)
       setTimeout(() => {
         setReinviteStatus(null)
-        setReinviting(false)
+        setReinviting(null)
       }, 3000)
     }
   }, [reinviting, isInviting])
@@ -79,18 +79,18 @@ const AdminUsersComponent = ({
     return (
       <div className="admin-users__pending-container">
         <span className="pill pill--highlight">Pending</span>
-        {!reinviting &&
+        {reinviting !== userId &&
         <button
           className="btn btn--like-a-link"
           onClick={() => {
-            setReinviting(true)
+            setReinviting(userId)
             reinviteUserHandler(userId)
           }}
         >
           (Reinvite)
         </button>
         }
-        {reinviting && reinviteStatus}
+        {reinviting === userId && reinviteStatus}
       </div>
     )
   }
