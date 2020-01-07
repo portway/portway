@@ -33,7 +33,7 @@ const resetPassword = async (req, res) => {
 
   try {
     await API.send({
-      url: 'v1/reset-password',
+      url: 'v1/login/resetpassword',
       method: 'POST',
       data: {
         email
@@ -47,7 +47,7 @@ const resetPassword = async (req, res) => {
     }
   }
 
-  res.redirect('/sign-up/password-reset/processing')
+  res.redirect('/sign-in/password-reset/processing')
 }
 
 export default SignInController
