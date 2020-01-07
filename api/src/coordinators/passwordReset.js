@@ -19,7 +19,7 @@ async function initiatePasswordReset(email) {
 
   const token = tokenIntegrator.generatePasswordResetToken(updatedUser.id, resetKey)
 
-  const linkUrl = `${CLIENT_URL}/sign-in/password-reset/complete?token=${token}`
+  const linkUrl = `${CLIENT_URL}/password-reset/complete?token=${token}`
 
   const htmlBody = `
     <h2>Reset your Portway Password</h2>
