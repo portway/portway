@@ -12,7 +12,7 @@
     "test": "jest --config ./config/jest.config.js --env=jsdom",
     "test-watch": "jest --config ./config/jest.config.js --env=jsdom --watch",
     "coverage": "jest --config ./config/jest.config.js --env=jsdom --coverage --colors",
-    "puppeteer": "jest --config ./config/jest-puppeteer.config.js --runInBand --colors"
+    "puppeteer": "JEST_PUPPETEER_CONFIG=config/puppeteer.config.js jest --config ./config/jest-puppeteer.config.js --runInBand --colors"
   },
   "repository": {
     "type": "git",

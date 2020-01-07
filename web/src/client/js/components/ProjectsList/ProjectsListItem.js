@@ -24,6 +24,7 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
       onClick={itemClickHandler}
       onKeyDown={itemClickHandler}
       tabIndex={0}
+      name={project.name}
       role="button">
       <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
         <div className="project-list__title">
@@ -48,6 +49,7 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
           </Link>
           <button
             aria-label="Delete project"
+            name="deleteProject"
             className="btn btn--blank"
             onClick={handleDelete}
           >
