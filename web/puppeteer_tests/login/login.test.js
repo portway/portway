@@ -1,6 +1,5 @@
 
-const url = 'https://dev.portway.app'
-
+const url = process.env.TEST_APP_URL
 const username = process.env.TEST_USER_EMAIL
 const password = process.env.TEST_USER_PASSWORD
 
