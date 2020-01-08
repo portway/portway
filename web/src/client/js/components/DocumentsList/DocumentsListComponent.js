@@ -87,6 +87,7 @@ const DocumentsListComponent = ({
             <input
               ref={nameRef}
               className="documents-list__name"
+              name="newDocument"
               defaultValue={Constants.LABEL_NEW_DOCUMENT}
               type="text"
               onKeyDown={(e) => {
@@ -236,7 +237,7 @@ const DocumentsListComponent = ({
           <h2 className="notice__headline">Get started</h2>
           <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
             <p>Create a new document, or drag a bunch of text documents here to get started.</p>
-            <button className="btn btn--small notice__action" onClick={() => { createCallback(true) }}>Create document</button>
+            <button className="btn btn--small notice__action" name="addDocument" onClick={() => { createCallback(true) }}>Create document</button>
           </ProjectPermission>
         </div>
       </div>
