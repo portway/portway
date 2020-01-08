@@ -1,6 +1,6 @@
 import { renderBundles } from '../libs/express-utilities'
 import DangerAPI from '../libs/api'
-import { SUPPORT_LINK } from '../../shared/constants'
+import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS, SUPPORT_LINK } from '../../shared/constants'
 
 const API = new DangerAPI(process.env.API_URL)
 
@@ -14,11 +14,13 @@ const PasswordResetController = function(router) {
 
   router.get('/complete', (req, res) => {
     const { token } = req.query
-    res.render('user/registration', {
-      ...renderBundles(req, 'Registration', 'registration', { supportLink: SUPPORT_LINK }),
+    res.render('user/complete-password-reset', {
+      ...renderBundles(req, 'Reset Password', 'passwordReset', { supportLink: SUPPORT_LINK }),
       token
     })
   })
+
+  router.post('/complete', setNewPassword)
 
   router.get('/processing', (req, res) => {
     res.send('processing, please check your email')
@@ -47,6 +49,56 @@ const resetPassword = async (req, res) => {
   }
 
   res.redirect('/password-reset/processing')
+}
+
+const setNewPassword = async (req, res) => {
+  const {
+    orgName,
+    password,
+    'confirm-password': confirmPassword,
+    'project-creation': projectCreation,
+    token
+  } = req.body
+
+  if (password !== confirmPassword) {
+    return res.render('user/complete-password-reset', {
+      ...renderBundles(req, 'Reset Password', 'passwordReset', { supportLink: SUPPORT_LINK }),
+      token,
+      flash: {
+        type: 'error',
+        message: 'The passwords you entered do not match'
+      },
+      orgName,
+      projectCreation
+    })
+  }
+
+  let accessToken
+  try {
+    ({ data: { token: accessToken } } = await API.send({
+      url: 'v1/login/newpassword',
+      method: 'POST',
+      headers: {
+        Authorization: `bearer ${token}`
+      },
+      data: {
+        password
+      }
+    }))
+  } catch ({ response }) {
+    return res.render('user/complete-password-reset', {
+      ...renderBundles(req, 'Reset Password', 'passwordReset', { supportLink: SUPPORT_LINK }),
+      token,
+      flash: {
+        type: 'error',
+        message: 'Cannot set password, this link has expired'
+      },
+      orgName,
+      projectCreation
+    })
+  }
+  res.cookie('token', accessToken, { maxAge: MAX_COOKIE_AGE_MS })
+  res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
 }
 
 export default PasswordResetController
