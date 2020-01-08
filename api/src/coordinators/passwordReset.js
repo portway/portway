@@ -35,14 +35,14 @@ async function initiatePasswordReset(email) {
   await sendSingleRecipientEmail({ address: existingUser.email, htmlBody, textBody, subject })
 }
 
-async function setNewPassword(id, password) {
+async function setNewPassword(userId, password) {
   if (!password) {
     throw ono({ code: 400 }, 'A valid password must be provided')
   }
 
-  const user = await BusinessUser.findById(id)
+  const user = await BusinessUser.findById(userId)
   if (!user) {
-    throw ono({ code: 404 }, `No user found with id: ${id}`)
+    throw ono({ code: 404 }, `No user found with id: ${userId}`)
   }
 
   const hashedPassword = await passwords.generateHash(password)

@@ -61,4 +61,45 @@ describe('password reset coordinator', () => {
       )
     })
   })
+
+  describe('#setNewPassword', () => {
+    const newPassword = 'some-new-password'
+    const hash = 'some-new-password-hash'
+    const orgRoleId = 1
+
+    beforeAll(async () => {
+      BusinessUser.findById.mockClear()
+      BusinessUser.updateById.mockClear()
+      BusinessUser.findById.mockReturnValueOnce({ id: userId, orgId, email, orgRoleId })
+      passwords.generateHash.mockReturnValueOnce(hash)
+      await passwordResetCoordinator.setNewPassword(userId, newPassword)
+    })
+
+    it('should call BusinessUser.findById with the passed in user id', () => {
+      expect(BusinessUser.findById.mock.calls.length).toBe(1)
+      expect(BusinessUser.findById.mock.calls[0][0]).toBe(userId)
+    })
+
+    it('should call passwords.generateHash with the passed in password', () => {
+      expect(passwords.generateHash.mock.calls.length).toBe(1)
+      expect(passwords.generateHash.mock.calls[0][0]).toBe(newPassword)
+    })
+
+    it('should call BusinessUser.updateById with the correct body', () => {
+      expect(BusinessUser.updateById.mock.calls.length).toBe(1)
+      expect(BusinessUser.updateById.mock.calls[0][0]).toEqual(userId)
+      expect(BusinessUser.updateById.mock.calls[0][1]).toEqual({
+        password: hash,
+        resetKey: null
+      })
+      expect(BusinessUser.updateById.mock.calls[0][2]).toEqual(orgId)
+    })
+
+    it('should call tokenIntegrator.generateToken with the correct user data', () => {
+      expect(tokenIntegrator.generateToken.mock.calls.length).toBe(1)
+      expect(tokenIntegrator.generateToken.mock.calls[0][0]).toBe(userId)
+      expect(tokenIntegrator.generateToken.mock.calls[0][1]).toBe(orgRoleId)
+      expect(tokenIntegrator.generateToken.mock.calls[0][2]).toBe(orgId)
+    })
+  })
 })
