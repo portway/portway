@@ -3,6 +3,7 @@ import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import ono from 'ono'
+import passwords from '../libs/passwords'
 
 const { CLIENT_URL } = process.env
 
@@ -15,9 +16,9 @@ async function initiatePasswordReset(email) {
 
   const resetKey = passwordResetKey.generate()
 
-  const updatedUser = await BusinessUser.updateById(existingUser.id, { resetKey }, existingUser.orgId)
+  await BusinessUser.updateById(existingUser.id, { resetKey }, existingUser.orgId)
 
-  const token = tokenIntegrator.generatePasswordResetToken(updatedUser.id, resetKey)
+  const token = tokenIntegrator.generatePasswordResetToken(existingUser.id, resetKey)
 
   const linkUrl = `${CLIENT_URL}/password-reset/complete?token=${token}`
 
@@ -31,9 +32,35 @@ async function initiatePasswordReset(email) {
 
   const subject = 'Portway password reset'
 
-  await sendSingleRecipientEmail({ address: updatedUser.email, htmlBody, textBody, subject })
+  await sendSingleRecipientEmail({ address: existingUser.email, htmlBody, textBody, subject })
+}
+
+async function setNewPassword(id, password) {
+  if (!password) {
+    throw ono({ code: 400 }, 'A valid password must be provided')
+  }
+
+  const user = await BusinessUser.findById(id)
+  if (!user) {
+    throw ono({ code: 404 }, `No user found with id: ${id}`)
+  }
+
+  const hashedPassword = await passwords.generateHash(password)
+  await BusinessUser.updateById(
+    user.id,
+    {
+      password: hashedPassword,
+      resetKey: null
+    },
+    user.orgId
+  )
+
+  const token = tokenIntegrator.generateToken(user.id, user.orgRoleId, user.orgId)
+
+  return token
 }
 
 export default {
-  initiatePasswordReset
+  initiatePasswordReset,
+  setNewPassword
 }
