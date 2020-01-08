@@ -6,6 +6,27 @@
     }
     &__meter {
       margin: .25rem 0 2rem 0;
+      // Safari
+      &::-webkit-meter-optimum-value {
+        background: var(--color-green);
+      }
+      &::-webkit-meter-suboptimum-value {
+        background: var(--color-green);
+      }
+      &::-webkit-meter-even-less-good-value  {
+        background: var(--color-green);
+      }
+
+      // Firefox
+      &:-moz-meter-optimum::-moz-meter-bar {
+        background: var(--color-green);
+      }
+      &:-moz-meter-sub-optimum::-moz-meter-bar {
+        background: var(--color-green);
+      }
+      &:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+        background: var(--color-green);
+      }
     }
   }
 }

@@ -20,3 +20,11 @@ steps:
       - KUBE_CONTEXT=dev-kubernetes-portway
       - VALUE_apiTag=$VERSION_TAG
       - VALUE_webTag=$VERSION_TAG
+  run_puppeteer_pipeline:
+    title: Run Puppeteer Pipeline
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: 5e1601447ab3a73f622ee053
+      VARIABLE:
+        - CF_BRANCH=${{CF_BRANCH}}
+        - CF_REVISION=${{CF_REVISION}}

@@ -1,15 +1,19 @@
 import { renderBundles } from '../libs/express-utilities'
 import { SIGNUP_DISABLED } from '../constants'
-import { SUPPORT_LINK  } from '../../shared/constants'
+import { PATH_APP, PATH_PROJECTS, SUPPORT_LINK } from '../../shared/constants'
 
 const HomeController = function(router) {
   /* GET home page. */
   router.get('/', (req, res) => {
-    const options = {
-      ...renderBundles(req, 'Home', 'index', { supportLink: SUPPORT_LINK }),
-      disableSignup: SIGNUP_DISABLED
+    if (req._portway.loggedIn) {
+      res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
+    } else {
+      const options = {
+        ...renderBundles(req, 'Home', 'index', { supportLink: SUPPORT_LINK }),
+        disableSignup: SIGNUP_DISABLED
+      }
+      res.render('index', options)
     }
-    res.render('index', options)
   })
 }
 
