@@ -28,3 +28,5 @@ steps:
       VARIABLE:
         - CF_BRANCH=${{CF_BRANCH}}
         - CF_REVISION=${{CF_REVISION}}
+        - CF_REPO_NAME=${{CF_REPO_NAME}}
+        - CF_REPO_OWNER=${{CF_REPO_OWNER}}
