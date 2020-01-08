@@ -1,0 +1,21 @@
+version: '1.0'
+stages:
+  - Clone Repo
+  - Run Puppeteer Tests
+steps:
+  main_clone:
+    title: Cloning main repository...
+    stage: Clone Repo
+    type: git-clone
+    repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+    revision: '${{CF_REVISION}}'
+    git: 'github'
+  puppeteer_tests:
+    stage: Run Puppeteer Tests
+    title: Run Puppeteer
+    type: freestyle
+    image: node:12
+    working_directory: './web/'
+    commands:
+      - npm install
+      - npm run puppeteer
