@@ -11,5 +11,5 @@ export default async function checkActiveOrgStatus(req, res, next) {
     || org.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL) {
     return next()
   }
-  next(ono({ code: 401 }, 'Organization is not active'))
+  next(ono({ code: 403 }, 'Organization is not active'))
 }

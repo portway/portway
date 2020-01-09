@@ -50,7 +50,7 @@ const formatBilling = (customer, userCount) => {
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
     subscription.cancelAt = billingSubscription.cancel_at
     subscription.currentPeriodEnd = billingSubscription.current_period_end
-    subscription.trialEnd = billingSubscription.trialEnd
+    subscription.trialEnd = billingSubscription.trial_end
     subscription.totalSeats = billingSubscription.items.data[0].quantity
     subscription.usedSeats = userCount
 
@@ -178,6 +178,9 @@ const updateOrgBilling = async function(token, orgId) {
     await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, subscriptionId: currentSubscription.id, orgId })
   }
 
+  // might be adding valid card info to fix PAST_DUE or INACTIVE status, reset cached data on org
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
+
   return billingCoordinator.getOrgBilling(orgId)
 }
 
@@ -227,8 +230,10 @@ const cancelAccount = async function(orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
   }
 
-  if (currentSubscription.status === STRIPE_STATUS.TRIALING) {
-    // still in trial with or without billing info, cancel immediately
+  const orgSubscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
+
+  if (orgSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
+    // still in trial, but not pending active, cancel immediately
     await stripeIntegrator.cancelSubscription(currentSubscription.id)
   } else {
     // for all other subscription statuses wait until billing period ends to cancel

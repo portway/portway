@@ -16,6 +16,9 @@ apiTag: "0.9.1"
 webImage: bonkeybong/portway_web
 webTag: "0.9.1"
 
+web:
+  flagDisableSignup: "true"
+
 api:
   cdnHostname: 'https://www.portwaycontent.com'
   s3ContentBucket: 'portway-content-prod'

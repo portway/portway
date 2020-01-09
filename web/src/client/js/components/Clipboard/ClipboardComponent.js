@@ -5,6 +5,7 @@ import { CheckIcon, ClipboardIcon } from 'Components/Icons'
 
 const ClipboardComponent = ({ copyHandler, copyRef }) => {
   const [copied, setCopied] = useState()
+  const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
   function copyTokenToClipboard() {
     if (copyRef && copyRef.current) {
       copyRef.current.select()
@@ -20,7 +21,7 @@ const ClipboardComponent = ({ copyHandler, copyRef }) => {
   }
   return (
     <button aria-label="Copy this to clipboard" className="btn btn--blank btn--with-circular-icon" onClick={copyTokenToClipboard}>
-      {copied && <CheckIcon fill="#51a37d" />}
+      {copied && <CheckIcon fill={green} />}
       {!copied && <ClipboardIcon />}
     </button>
   )

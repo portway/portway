@@ -49,6 +49,11 @@ spec:
             configMapKeyRef:
               name: web-config
               key: web.stripe_publishable_key
+        - name: FLAG_DISABLE_SIGNUP
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.flag_disable_signup
         ports:
         - containerPort: 3000
           protocol: TCP

@@ -1,15 +1,15 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_NAMES, ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_BILLING } from 'Shared/constants'
-import { TrashIcon } from 'Components/Icons'
+import { CheckIcon, TrashIcon } from 'Components/Icons'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminUsersCreateForm from './AdminUsersCreateForm'
 import PaginatorContainer from 'Components/Paginator/PaginatorContainer'
-import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import Table from 'Components/Table/Table'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 import FormField from 'Components/Form/FormField'
 
 import './_AdminUsers.scss'
@@ -28,11 +28,30 @@ const AdminUsersComponent = ({
   sortBy,
   sortMethod,
   sortUsersHandler,
-  subscription,
+  seats,
   users,
   totalPages
 }) => {
+  const [reinviting, setReinviting] = useState(false)
+  const [reinviteStatus, setReinviteStatus] = useState(null)
   const searchFieldRef = useRef()
+
+  useEffect(() => {
+    const colorGray = getComputedStyle(document.documentElement).getPropertyValue('--color-gray-40')
+    const colorGreen = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
+    if (reinviting && isInviting) {
+      setReinviteStatus(<SpinnerComponent color={colorGray} />)
+    }
+    if (reinviting && !isInviting) {
+      // We've invited, so now show a successful notification
+      // Unsuccessful notifications will be handled via global errors
+      setReinviteStatus(<CheckIcon fill={colorGreen} />)
+      setTimeout(() => {
+        setReinviteStatus(null)
+        setReinviting(null)
+      }, 3000)
+    }
+  }, [reinviting, isInviting])
 
   const userHeadings = {
     name: { label: 'Name', sortable: true },
@@ -44,7 +63,6 @@ const AdminUsersComponent = ({
   function renderTools(userId) {
     return (
       <div className="table__tools">
-        <SpinnerContainer color="#d9dbdb" />
         {userId !== currentUserId &&
         <button
           aria-label="Remove user"
@@ -61,9 +79,18 @@ const AdminUsersComponent = ({
     return (
       <div className="admin-users__pending-container">
         <span className="pill pill--highlight">Pending</span>
-        {!isInviting &&
-        <button className="btn btn--like-a-link" onClick={() => reinviteUserHandler(userId)}>(Reinvite)</button>
+        {reinviting !== userId &&
+        <button
+          className="btn btn--like-a-link"
+          onClick={() => {
+            setReinviting(userId)
+            reinviteUserHandler(userId)
+          }}
+        >
+          (Reinvite)
+        </button>
         }
+        {reinviting === userId && reinviteStatus}
       </div>
     )
   }
@@ -84,9 +111,9 @@ const AdminUsersComponent = ({
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
-          {subscription && subscription.usedSeats === subscription.totalSeats &&
+          {seats && seats.usedSeats === seats.totalSeats &&
           <p className="small --align-right">
-            You have filled all of your <b>{subscription.totalSeats}</b> seats.<br />
+            You have filled all of your <b>{seats.totalSeats}</b> seats.<br />
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <Link to={PATH_BILLING}>Add some seats</Link> if you’d like to add more users.
             </OrgPermission>
@@ -95,7 +122,7 @@ const AdminUsersComponent = ({
             </OrgPermission>
           </p>
           }
-          {subscription && subscription.usedSeats < subscription.totalSeats &&
+          {seats && seats.usedSeats < seats.totalSeats &&
           <button
             className="btn"
             disabled={isCreating}
@@ -106,10 +133,10 @@ const AdminUsersComponent = ({
         </header>
         {isCreating &&
         <>
-          {subscription && subscription.usedSeats < subscription.totalSeats &&
+          {seats && seats.usedSeats < seats.totalSeats &&
           <AdminUsersCreateForm
             cancelHandler={() => {setCreateMode(false) }}
-            disabled={subscription.usedSeats === subscription.totalSeats}
+            disabled={seats.usedSeats === seats.totalSeats}
             errors={errors}
             submitHandler={addUserHandler}
           />
@@ -118,24 +145,24 @@ const AdminUsersComponent = ({
         }
         {!isCreating &&
           <>
-          <form className="admin-users__search" onSubmit={e => e.preventDefault()}>
-            <FormField
-              label="Search users"
-              id="search-users-field"
-              name="search-users-field"
-              type="search"
-              onChange={(e) => { searchUsersHandler(e.target.value) }}
-              placeholder="Jane Doe..."
-              ref={searchFieldRef}
-            />
-          </form>
-          <Table
-            headings={userHeadings}
-            rows={userRows}
-            sortCallback={sortUsersHandler}
-            sortedBy={sortBy}
-            sortMethod={sortMethod} />
-          <PaginatorContainer totalPages={totalPages} />
+            <form className="admin-users__search" onSubmit={e => e.preventDefault()}>
+              <FormField
+                label="Search users"
+                id="search-users-field"
+                name="search-users-field"
+                type="search"
+                onChange={(e) => { searchUsersHandler(e.target.value) }}
+                placeholder="Jane Doe..."
+                ref={searchFieldRef}
+              />
+            </form>
+            <Table
+              headings={userHeadings}
+              rows={userRows}
+              sortCallback={sortUsersHandler}
+              sortedBy={sortBy}
+              sortMethod={sortMethod} />
+            <PaginatorContainer totalPages={totalPages} />
           </>
         }
       </section>
@@ -157,7 +184,7 @@ AdminUsersComponent.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortMethod: PropTypes.string.isRequired,
   sortUsersHandler: PropTypes.func,
-  subscription: PropTypes.object,
+  seats: PropTypes.object,
   users: PropTypes.array.isRequired,
   totalPages: PropTypes.number
 }

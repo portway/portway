@@ -13,9 +13,12 @@ const endFuncs = {
     return req.originalUrl || req.url
   },
   endpoint: (req) => {
+    // Turn the url into a route-like endpoint
+    // eg 'api/v1/users/12' becomes 'api/v1/users/:id'
+    // Makes log aggregation much simpler to dig into endpoint performance
     const url = req.originalUrl || req.url
-    const path = url.split('?')[0]
-    return path.replace(/\d+/, ':id')
+    const path = (url.split('?')[0]).split('/')
+    return path.map(i => i.replace(/^\d+$/, ':id')).join('/')
   },
   method: req => req.method,
   status: (req, res) => res.statusCode,

@@ -5,7 +5,7 @@ import FormField from 'Components/Form/FormField'
 
 const ProjectFormComponent = ({ errors, formOptions }) => {
   return (
-    <form className="project-form" onSubmit={formOptions.submitHandler}>
+    <form className="project-form" onSubmit={formOptions.submitHandler} name="newProject">
       <FormField
         id="projectName"
         label="Project Name"

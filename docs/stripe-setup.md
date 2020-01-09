@@ -4,9 +4,17 @@
 
 For our stripe integration to function, a few things need to be setup in the stripe dashboard:
 
-### Create the subscription plans
+### Create the product
 
-  - Go to Billing/Products
+- Go to Billing -> Products
+- Click "Add a test product"
+- Name it "Portway"
+- "Unit label" should be "seat"
+- Leave "Statement descriptor" blank
+
+### Create the pricing plans
+
+  - Go to Billing -> Products -> Portway
   - Click Add Pricing Plan for each:
 
 Single User
@@ -64,7 +72,7 @@ In the Developers/Webhooks section
 
 - click `Add Endpoint`
 - Endpoint URL: `https://<portwayAPItargetdomain>/api/stripehooks`
-- Events to send: `charge.succeeded` `charge.failed`
+- Events to send: `charge.succeeded` `charge.failed` `customer.subscription.created` `customer.subscription.updated` `customer.subscription.deleted`
 
 Go to the created webhook and retrieve the signing secret
 

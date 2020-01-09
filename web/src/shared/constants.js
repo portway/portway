@@ -61,7 +61,6 @@ const LOCKED_ACCOUNT_STATUSES = [
 
 const TRIALING_STATUSES = [
   ORG_SUBSCRIPTION_STATUS.TRIALING,
-  ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE,
   null
 ]
 
@@ -193,7 +192,7 @@ module.exports = {
   QUERY_PARAMS: QUERY_PARAMS,
   // Support
   SUPPORT_EMAIL: 'support@portway.app',
-  SUPPORT_LINK: 'https://support.portway.app/',
+  SUPPORT_LINK: 'https://getportway.com/support',
   // UI Related
   DOCUMENT_MODE: DOCUMENT_MODE,
 }

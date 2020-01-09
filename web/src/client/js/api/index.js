@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getCookieValue } from '../utilities/cookieParser'
+import logout from '../utilities/logout'
 
 const token = getCookieValue('token')
 
@@ -10,6 +11,10 @@ const token = getCookieValue('token')
 const baseURL = (new URL('api', API_PUBLIC_URL)).href
 const globalErrorCodes = [403, 404, 408, 500, 503]
 const validationCodes = [400, 402, 409, 413, 415]
+
+// Handles various uncatchable errors, like timeouts,
+// CORS errors, etc.
+const UNKNOWN_ERROR_CODE = 404
 
 const axiosInstance = axios.create({
   baseURL: baseURL,
@@ -24,7 +29,8 @@ async function fetch(resource) {
     const { data: { data, page, perPage, total, totalPages }, status } = await axiosInstance.get(resource)
     return { data, status, page, perPage, total, totalPages }
   } catch (error) {
-    const { data, status } = error.response || { status: 408, data: {} }
+    const { data, status } = error.response || { status: UNKNOWN_ERROR_CODE, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }
@@ -34,7 +40,8 @@ async function add(resource, body) {
     const { data: { data }, status } = await axiosInstance.post(resource, body)
     return { data, status }
   } catch (error) {
-    const { data, status } = error.response || { status: 408, data: {} }
+    const { data, status } = error.response || { status: UNKNOWN_ERROR_CODE, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }
@@ -44,7 +51,8 @@ async function update(resource, body) {
     const { data: { data }, status } = await axiosInstance.put(resource, body)
     return { data, status }
   } catch (error) {
-    const { data, status } = error.response || { status: 408, data: {} }
+    const { data, status } = error.response || { status: UNKNOWN_ERROR_CODE, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }
@@ -57,7 +65,8 @@ async function remove(resource) {
     await axiosInstance.delete(resource)
     return {} // keep this here ^
   } catch (error) {
-    const { data, status } = error.response || { status: 408, data: {} }
+    const { data, status } = error.response || { status: UNKNOWN_ERROR_CODE, data: {} }
+    if (status === 401) { logout() }
     return { data, status }
   }
 }

@@ -2,6 +2,8 @@ import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import billingCoordinator from '../coordinators/billing'
+import logger from '../integrators/logger'
+import { LOG_LEVELS } from '../constants/logging'
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -15,8 +17,6 @@ async function handleEvent(event) {
       const message = 'Portway payment failed'
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
-      //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
     }
     case 'charge.succeeded': {
@@ -24,18 +24,30 @@ async function handleEvent(event) {
       const message = 'Portway payment was successful'
       //not awaiting anything after this point to prevent timeout and possible duplication
       sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
-      //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
+      break
+    }
+    case 'customer.subscription.deleted': {
+      //TODO send email letting customer know account is cancelled
+      break
+    }
+    case 'customer.source.created':
+    case 'customer.source.updated': {
+      await stripeIntegrator.updateCustomer(stripeId, {
+        metadata: {
+          country: eventData.address_country,
+          state: eventData.address_state,
+          zip: eventData.address_zip
+        }
+      })
       break
     }
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
-    case 'customer.subscription.deleted': {
-      //update cached subscription status on org
-      billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
       break
-    }
   }
+  //update cached subscription status on org, we want to do this for all current events
+  await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
+  logger(LOG_LEVELS.INFO, { source: 'stripe webhook', eventType: event.type, orgId: org.id, stripeId })
 }
 
 export default {
