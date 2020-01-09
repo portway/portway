@@ -23,7 +23,7 @@ const PasswordResetController = function(router) {
   router.post('/complete', setNewPassword)
 
   router.get('/processing', (req, res) => {
-    res.send('processing, please check your email')
+    res.redirect('/?resetLinkSent=true')
   })
 
   router.post('/', resetPassword)

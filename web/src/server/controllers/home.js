@@ -7,7 +7,11 @@ const HomeController = function(router) {
   router.get('/', (req, res) => {
     const options = {
       ...renderBundles(req, 'Home', 'index', { supportLink: SUPPORT_LINK }),
-      disableSignup: SIGNUP_DISABLED
+      disableSignup: SIGNUP_DISABLED,
+      flash: req.query.resetLinkSent === 'true' ? {
+        type: 'info',
+        message: 'Check your email for a password reset link'
+      } : null
     }
     res.render('index', options)
   })
