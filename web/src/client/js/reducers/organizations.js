@@ -96,10 +96,15 @@ export const organizations = (state = initialState, action) => {
       const billingById = { ...state.loading.billingById, [id]: false }
       const organizationToUpdate = { ...state.organizationsBillingById[id] }
       organizationToUpdate.subscription.totalSeats = seats
+      const seatsById = { ...state.seatsById }
+      if (seatsById[id]) {
+        seatsById[id].totalSeats = seats
+      }
       const organizationsBillingById = { ...state.organizationsBillingById, [id]: organizationToUpdate }
       return {
         ...state,
         organizationsBillingById,
+        seatsById,
         loading: { ...state.loading, billingById }
       }
     }
@@ -157,6 +162,33 @@ export const organizations = (state = initialState, action) => {
         loading: {
           ...state.loading,
           seatsById: loadingById
+        }
+      }
+    }
+
+    case ActionTypes.REMOVE_USER:
+    case ActionTypes.RECEIVE_CREATED_USER: {
+      const id = state.currentOrganizationId
+      const seatsById = { ...state.seatsById }
+      const seatsByIdLoading = { ...state.loading.seatsById }
+      const organizationsBillingById = { ...state.organizationsBillingById }
+      const billingById = { ...state.loading.billingById }
+      if (organizationsBillingById[id]) {
+        delete organizationsBillingById[id]
+        delete billingById[id]
+      }
+      if (seatsById[id]) {
+        delete seatsById[id]
+        delete seatsByIdLoading[id]
+      }
+      return {
+        ...state,
+        seatsById,
+        organizationsBillingById,
+        loading: {
+          ...state.loading,
+          seatsById: seatsByIdLoading,
+          billingById
         }
       }
     }

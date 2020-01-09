@@ -1,5 +1,9 @@
 // Note: This is so we can use this webpack as well, don't convert this to ES6 until Node supports
 module.exports = {
+  // Project --------------------------------------------------------------------------------------
+  DELETE_PROJECT_TITLE: 'Delete this project?',
+  DELETE_PROJECT_DESCRIPTION: 'This will remove all of the documents, assets, and other media related to this project.',
+  DELETE_PROJECT_BUTTON_LABEL: 'Yes, delete this project',
   // Document --------------------------------------------------------------------------------------
   // Document Unpublish
   UNPUBLISH_CONFIRMATION_TITLE: 'Unpublish the document',

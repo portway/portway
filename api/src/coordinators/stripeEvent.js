@@ -28,9 +28,22 @@ async function handleEvent(event) {
     }
     case 'customer.subscription.deleted': {
       //TODO send email letting customer know account is cancelled
+      break
+    }
+    case 'customer.source.created':
+    case 'customer.source.updated': {
+      await stripeIntegrator.updateCustomer(stripeId, {
+        metadata: {
+          country: eventData.address_country,
+          state: eventData.address_state,
+          zip: eventData.address_zip
+        }
+      })
+      break
     }
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
+      break
   }
   //update cached subscription status on org, we want to do this for all current events
   await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
