@@ -1,12 +1,11 @@
-import React, { lazy, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Select = lazy(() => import('react-select'))
-
 import { debounce } from 'Shared/utilities'
-import { ORGANIZATION_ROLE_IDS, ORGANIZATION_ROLE_NAMES } from 'Shared/constants'
+import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
 import FormField from 'Components/Form/FormField'
+import OrgRolesDropdown from 'Components/RolesDropdowns/OrgRolesDropdown'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
 const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }) => {
@@ -21,11 +20,6 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
     submitHandler({ name, email, orgRole })
   }
 
-  const orgSelectObject = [
-    { value: ORGANIZATION_ROLE_IDS.USER, label: ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.USER] },
-    { value: ORGANIZATION_ROLE_IDS.ADMIN, label: ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.ADMIN] }
-  ]
-
   function isNameOrEmailBlank() {
     return name === undefined || email === undefined || disabled
   }
@@ -39,8 +33,16 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
           id="userName"
           label="Full name"
           name="name"
-          onChange={e => debounce(200, setName(e.target.value))}
-          onBlur={(e) => { setName(e.target.value)} }
+          onChange={(e) => {
+            if (e.target.value.length > 1) {
+              debounce(200, setName(e.target.value))
+            }
+          }}
+          onBlur={(e) => {
+            if (e.target.value.length > 1) {
+              setName(e.target.value)
+            }
+          }}
           placeholder="Enter a full name"
           required
         />
@@ -49,8 +51,16 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
           id="userEmail"
           label="Email address"
           name="email"
-          onChange={e => debounce(200, setEmail(e.target.value))}
-          onBlur={(e) => { setEmail(e.target.value)} }
+          onChange={(e) => {
+            if (e.target.value.length > 1) {
+              debounce(200, setEmail(e.target.value))
+            }
+          }}
+          onBlur={(e) => {
+            if (e.target.value.length > 1) {
+              setEmail(e.target.value)
+            }
+          }}
           placeholder="name@domain.com"
           required
           type="email"
@@ -59,14 +69,9 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
           <div className="field">
             <label htmlFor="orgRole">Select a Role</label>
             <div className="control">
-              <Select
-                className="react-select-container react-select-container--with-indicators"
-                classNamePrefix="react-select"
-                name="orgRole"
-                isSearchable={false}
-                onChange={(option) => { setOrgRole(option.value) }}
-                options={orgSelectObject}
-                defaultValue={orgSelectObject[0]}
+              <OrgRolesDropdown
+                defaultValue={orgRole}
+                onChange={(roleId) => { setOrgRole(roleId) }}
               />
               <ValidationComponent errors={errors.orgRole} />
             </div>

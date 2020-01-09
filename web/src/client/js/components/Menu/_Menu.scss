@@ -57,6 +57,9 @@
           border: transparent;
         }
       }
+      &:focus {
+        background-color: var(--menu-item-hover-background);
+      }
     }
   }
 
