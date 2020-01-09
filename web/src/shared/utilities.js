@@ -1,3 +1,5 @@
+import { FIELD_LABELS } from 'Shared/constants'
+
 export const debounce = function(delay, fn) {
   let timerId
   return function(...args) {
@@ -33,6 +35,22 @@ export const groupBy = function(list, property) {
     object[key].push(listItem)
     return object
   }, {})
+}
+
+/**
+ * Returns a name for a new field prepended by the number of fields of that type
+ * This is used in places like the ContentMenu and the BigInvisibleButton™
+ */
+export const getNewNameInSequence = function(fields, fieldType) {
+  let fieldsByType
+  if (fields) {
+    fieldsByType = groupBy(fields, 'type')
+  } else {
+    fieldsByType = {}
+  }
+  const typeFieldsInDocument = fieldsByType[fieldType]
+  const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
+  return FIELD_LABELS[fieldType] + (value + 1)
 }
 
 export const isAnyPartOfElementInViewport = function(el) {

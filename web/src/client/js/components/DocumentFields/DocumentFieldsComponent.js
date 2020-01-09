@@ -11,6 +11,7 @@ import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
+  createFieldHandler,
   disabled,
   documentMode,
   dragEndHandler,
@@ -34,6 +35,16 @@ const DocumentFieldsComponent = ({
     return field.type === FIELD_TYPES.TEXT
   })
   const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+
+  const bigInvisibleButton = (
+    <li className="document-field" key="bib">
+      <button
+        aria-label="Continue the document body"
+        className="btn btn--blank document-field__invisible-button"
+        onClick={createFieldHandler}
+      />
+    </li>
+  )
 
   function toggleSettingsFor(fieldId) {
     if (settingsForField === fieldId) {
@@ -123,6 +134,11 @@ const DocumentFieldsComponent = ({
     const fieldArray = []
     fields.forEach((field, index) => {
       fieldArray.push(renderFieldType(field, index))
+      // If we're at the last field, and that field is NOT a text field
+      if (index === fields.length - 1 && field.type !== FIELD_TYPES.TEXT) {
+        // append a big invisible button so that you can click there to continue the "body"
+        fieldArray.push(bigInvisibleButton)
+      }
     })
     return fieldArray
   }
@@ -142,6 +158,7 @@ const DocumentFieldsComponent = ({
 
 DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
+  createFieldHandler: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   documentMode: PropTypes.string.isRequired,
   dragEndHandler: PropTypes.func.isRequired,

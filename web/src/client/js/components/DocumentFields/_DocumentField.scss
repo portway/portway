@@ -118,8 +118,10 @@
     color: var(--theme-text-color);
     font-size: 1.3rem; // 13px
     font-weight: 600;
+    min-height: unset;
     min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
     outline: none;
+    padding: 0;
   }
 } // document-field__name
 
@@ -149,3 +151,9 @@
   }
 
 } // document-field__content
+
+.document-field__invisible-button {
+  cursor: text;
+  height: 88px;
+  width: 100%;
+}
