@@ -26,9 +26,11 @@
 }
 
 .menu__item {
-  --menu-item-hover-background: var(--color-gray-5);
+  --menu-item-focus-background: var(--color-gray-5);
+  --menu-item-hover-background: var(--color-gray-10);
   @media (prefers-color-scheme: dark) {
-    --menu-item-hover-background: var(--color-gray-80);
+    --menu-item-focus-background: var(--color-gray-80);
+    --menu-item-hover-background: var(--color-gray-90);
   }
   outline: 0;
   padding: 0;
@@ -40,7 +42,7 @@
 
   button, .btn {
     background-color: transparent;
-    border: transparent;
+    border: thin solid transparent;
     font-size: 1.5rem;
     font-weight: 300;
     justify-content: flex-start;
@@ -54,8 +56,11 @@
       @media (hover: hover) {
         &:hover {
           background-color: var(--menu-item-hover-background);
-          border: transparent;
+          border: thin solid transparent;
         }
+      }
+      &:focus {
+        background-color: var(--menu-item-focus-background);
       }
     }
   }

@@ -32,22 +32,33 @@ const OrgRolesDropdown = ({ align, buttonStyle, defaultValue, disabled, name, on
         aria-expanded={expanded}
         aria-haspopup="true"
         aria-controls="org-roles-dropdown"
-        className="btn btn--white btn--with-icon"
+        className="btn btn--form btn--with-icon"
         onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
+        type="button"
       >
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />
       </button>
       <Popper id="org-roles-dropdown" anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
-        <Menu anchorRef={anchorRef}>
+        <Menu anchorRef={anchorRef} isActive={expanded}>
           <MenuItem>
-            <button className="btn btn--blank" onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) }>
+            <button
+              className="btn btn--blank btn--menu-item"
+              onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.USER) }
+              ref={React.createRef()}
+              type="button"
+            >
               {ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.USER]}
             </button>
           </MenuItem>
           <MenuItem>
-            <button className="btn btn--blank" onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.ADMIN) }>
+            <button
+              className="btn btn--blank btn--menu-item"
+              onClick={() => adjustRoleHandler(ORGANIZATION_ROLE_IDS.ADMIN) }
+              ref={React.createRef()}
+              type="button"
+            >
               {ORGANIZATION_ROLE_NAMES[ORGANIZATION_ROLE_IDS.ADMIN]}
             </button>
           </MenuItem>
