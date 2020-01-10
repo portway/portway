@@ -16,5 +16,6 @@ export default {
   findByIdUnsanitized: jest.fn(() => {
     return { ...getGenericMockTokenData(), secret: 'abc123' }
   }),
-  addTokenStringById: jest.fn(() => getGenericMockTokenData())
+  addTokenStringById: jest.fn(() => getGenericMockTokenData()),
+  deleteAllForOrg: jest.fn()
 }

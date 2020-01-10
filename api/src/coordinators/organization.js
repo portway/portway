@@ -38,7 +38,7 @@ const removeAllOrgData = async function(orgId) {
   await BusinessProjectUser.deleteAllForOrg(orgId)
   // remove s3 data
   // remove org
-  // await BusinessOrganization.deleteById(orgId)
+  await BusinessOrganization.deleteById(orgId)
 }
 
 export default {
