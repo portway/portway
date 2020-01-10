@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -26,7 +26,7 @@ const DocumentFieldsContainer = ({
   updateFieldOrder,
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
-  const [draggingElement, setDraggingElement] = useState(null)
+  const draggingElement = useRef(null)
   const params = useParams()
   const { projectId, documentId } = params
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
@@ -86,42 +86,49 @@ const DocumentFieldsContainer = ({
   }
 
   function dragStartHandler(e) {
+    // console.info('drag start')
+    e.stopPropagation()
+    const listItem = e.currentTarget
     e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.effectAllowed = 'copyMove'
-    const listItem = e.currentTarget
+    e.dataTransfer.setData('fieldid', listItem.dataset.id)
+    e.dataTransfer.setData('documentid', documentId)
+    e.dataTransfer.setData('text/html', listItem)
+    draggingElement.current = listItem
 
     // Create a clone of the item and append it to the document
     // This is for dragging around a clone of the item we're dragging
+    // this is in a timeout due to a browser bug with dragEnd immediately firing
+    // when DOM is manipulated in dragStart
+
     cloneElement = listItem.cloneNode(true)
     cloneElement.style.position = 'absolute'
-    cloneElement.style.zIndex = '101'
+    cloneElement.style.zIndex = '-1'
     cloneElement.style.width = `${listItem.offsetWidth}px`
     cloneElement.classList.add('document-field--clone-element')
     cloneElement.setAttribute('draggable', false)
     cloneElement.setAttribute('id', 'clone-element')
     document.body.appendChild(cloneElement)
-    setDraggingElement(listItem)
 
     // Make the default, blurry image of the dragged item disappear
-    event.dataTransfer.setDragImage(cloneElement, 10, 10)
+    e.dataTransfer.setDragImage(cloneElement, 10, 10)
 
-    // Add the class just after the browser makes the copy for the browser UI
-    window.requestAnimationFrame(() => { listItem.classList.add('document-field--dragging') })
-    e.dataTransfer.setData('fieldid', listItem.dataset.id)
-    e.dataTransfer.setData('documentid', documentId)
-    e.dataTransfer.setData('text/html', listItem)
+    setTimeout(() => {
+      listItem.classList.add('document-field--dragging')
+    }, 200)
   }
 
   function dragEnterHandler(e) {
+    // console.info('drag enter', draggingElement)
     e.preventDefault()
+    e.stopPropagation()
     e.dataTransfer.dropEffect = 'move'
-    // if (e.currentTarget === draggingElement) return
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
 
     // Swap the fields on drag enter
-    const from = Number(draggingElement.dataset.order)
+    const from = Number(draggingElement.current.dataset.order)
     const to = Number(e.currentTarget.dataset.order)
     const fieldData = [...orderedFields]
     fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
@@ -129,8 +136,8 @@ const DocumentFieldsContainer = ({
     // If the item we're dragging is nowhere in the viewport,
     // scroll to it
     window.requestAnimationFrame(() => {
-      if (!isAnyPartOfElementInViewport(draggingElement)) {
-        draggingElement.scrollIntoView(false, {
+      if (!isAnyPartOfElementInViewport(draggingElement.current)) {
+        draggingElement.current.scrollIntoView(false, {
           // behavior: 'smooth'
         })
       }
@@ -139,30 +146,32 @@ const DocumentFieldsContainer = ({
 
   // This is here for debugging
   function dragLeaveHandler(e) {
+    // console.info('drag leave', draggingElement)
     e.preventDefault()
-    // dragCounter--
+    e.stopPropagation()
   }
 
   function dropHandler(e) {
+    // console.info('drag drop', draggingElement)
     e.preventDefault()
-    if (e.stopPropagation) {
-      e.stopPropagation()
-    }
+    e.stopPropagation()
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
-    const fieldIdToUpdate = draggingElement.dataset.id
-    const to = Number(draggingElement.dataset.order)
-    draggingElement.classList.remove('document-field--dragging')
+    const fieldIdToUpdate = draggingElement.current.dataset.id
+    const to = Number(draggingElement.current.dataset.order)
+    draggingElement.current.classList.remove('document-field--dragging')
     // Trigger action with documentId, fieldId
     updateFieldOrder(documentId, fieldIdToUpdate, to)
   }
 
   function dragEndHandler(e) {
+    // console.info('drag end', draggingElement)
     e.preventDefault()
-    draggingElement.classList.remove('document-field--dragging')
-    setDraggingElement(null)
+    e.stopPropagation()
+    draggingElement.current.classList.remove('document-field--dragging')
     document.querySelector('#clone-element').remove()
+    draggingElement.current = null
   }
 
   // Prop handler
