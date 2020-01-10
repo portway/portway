@@ -15,7 +15,8 @@ const AUTHENTICATED_CONTROLLERS = {
 const UNAUTHENTICATED_CONTROLLERS = {
   '/sign-in': 'sign-in',
   '/sign-up': 'sign-up',
-  '/': 'home'
+  '/password-reset': 'password-reset',
+  '/': 'home',
 }
 
 const loadControllers = (router, controllers, middleware) => {
