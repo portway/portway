@@ -8,13 +8,25 @@ import { SUPPORT_EMAIL } from '../constants/email'
 
 const { CLIENT_URL } = process.env
 
+// Email template directory relative to this file
 const EMAIL_TEMPLATE_DIRECTORY = '../templates/email/ejs/'
 
+// key/vals must be the same!
 const EMAIL_TEMPLATES = {
-  INVITE: 'INVITE'
+  INVITE: 'INVITE',
+  PASSWORD_CHANGE: 'PASSWORD_CHANGE',
+  FORGOT_PASSWORD: 'FORGOT_PASSWORD',
+  SIGNUP_CONFIRM: 'SIGNUP_CONFIRM',
+  PAYMENT_FAILED: 'PAYMENT_FAILED',
+  PAYMENT_SUCCESS: 'PAYMENT_SUCCESS'
 }
 const EMAIL_TEMPLATE_FILES = {
-  [EMAIL_TEMPLATES.INVITE]: 'invite.html'
+  [EMAIL_TEMPLATES.INVITE]: 'invite.html',
+  [EMAIL_TEMPLATES.FORGOT_PASSWORD]: 'forgot-password.html',
+  [EMAIL_TEMPLATES.PASSWORD_CHANGE]: 'password-change.html',
+  [EMAIL_TEMPLATES.SIGNUP_CONFIRM]: 'signup.html',
+  [EMAIL_TEMPLATES.PAYMENT_FAILED]: 'payment-failed.html',
+  [EMAIL_TEMPLATES.PAYMENT_SUCCESS]: 'payment-success.html'
 }
 const EJS_TEMPLATE_FUNCTIONS = {}
 
@@ -46,9 +58,7 @@ async function sendPasswordChangeEmail(address) {
   const subject = 'Password Changed [Portway]'
   const bodyText = `Your Portway password has been changed, if you were not the one who made this change, please contact ${SUPPORT_EMAIL}`
 
-  const htmlBody = `
-  <div>${bodyText}</div>
-`
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PASSWORD_CHANGE]({ bodyText })
   const textBody = bodyText
 
   await sendSingleRecipientEmail({ address, htmlBody, textBody, subject })
