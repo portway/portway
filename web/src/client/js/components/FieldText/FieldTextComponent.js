@@ -18,7 +18,6 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       },
       element: textRef.current,
       initialValue: field ? field.value : '',
-      placeholder: 'Your ideas here...',
       shortcuts: {
         drawImage: null,
         toggleFullScreen: null,

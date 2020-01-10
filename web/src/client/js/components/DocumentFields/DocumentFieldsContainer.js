@@ -4,16 +4,17 @@ import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
-import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
+import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
-import { blurField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
+import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
   blurField,
+  createField,
   createdFieldId,
   documentMode,
   disabled,
@@ -45,6 +46,17 @@ const DocumentFieldsContainer = ({
   }, [fields])
 
   // Actions
+  function createTextFieldHandler() {
+    // This is triggered by the Big Invisible Button™
+    // It should append a new text field to the end of the document, making it seem as though the
+    // user is clicking to continue the document body
+    const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
+    createField(projectId, documentId, FIELD_TYPES.TEXT, {
+      name: newName,
+      type: FIELD_TYPES.TEXT
+    })
+  }
+
   function fieldDestroyHandler(fieldId, fieldType) {
     let type = 'field'
 
@@ -176,6 +188,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
+      createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
       disabled={disabled}
       documentMode={documentMode}
@@ -199,6 +212,7 @@ const DocumentFieldsContainer = ({
 
 DocumentFieldsContainer.propTypes = {
   blurField: PropTypes.func.isRequired,
+  createField: PropTypes.func.isRequired,
   createdFieldId: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
@@ -223,6 +237,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   blurField,
+  createField,
   focusField,
   removeField,
   updateField,

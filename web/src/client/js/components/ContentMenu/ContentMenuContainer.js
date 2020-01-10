@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_LABELS } from 'Shared/constants'
-import { groupBy } from 'Shared/utilities'
+import { getNewNameInSequence } from 'Shared/utilities'
 import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
@@ -21,21 +20,8 @@ const ContentMenuContainer = ({ createField, fields, location }) => {
 
   if (!project || !document) return null
 
-  /**
-   * If we have fields, break them up by type for field names
-   */
-  let fieldsByType
-
-  if (fields) {
-    fieldsByType = groupBy(fields, 'type')
-  } else {
-    fieldsByType = {}
-  }
-
   function fieldCreationHandler(fieldType) {
-    const typeFieldsInDocument = fieldsByType[fieldType]
-    const value = typeFieldsInDocument ? typeFieldsInDocument.length : 0
-    const newName = FIELD_LABELS[fieldType] + (value + 1)
+    const newName = getNewNameInSequence(fields, fieldType)
     createField(project.id, document.id, fieldType, {
       name: newName,
       type: fieldType
@@ -53,7 +39,7 @@ ContentMenuContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    fields: state.documentFields[state.documents.currentDocumentId]
+    fields: state.documentFields.documentFieldsById[state.documents.currentDocumentId]
   }
 }
 
