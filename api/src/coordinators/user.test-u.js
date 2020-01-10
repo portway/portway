@@ -8,6 +8,7 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import emailCoordinator from '../coordinators/email'
+import billingCoordinator from '../coordinators/billing'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
@@ -15,6 +16,7 @@ jest.mock('../libs/passwords')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/token')
 jest.mock('../coordinators/email')
+jest.mock('../coordinators/billing')
 
 describe('user coordinator', () => {
   const email = 'hughjackman@johntravolta.gov'
@@ -70,7 +72,7 @@ describe('user coordinator', () => {
       it('should throw an error with status code 409', async () => {
         await expect(userCoordinator
           .updatePassword(userId, currentPassword, newPassword, 'someotherpassword', orgId))
-          .rejects.toThrow()
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
   })
@@ -264,6 +266,26 @@ describe('user coordinator', () => {
 
     it('should return the created user with only public fields exposed', () => {
       expect(Object.keys(createdUser)).toEqual(expect.arrayContaining(resourcePublicFields[resourceTypes.USER]))
+    })
+
+    describe('when the org does not have a subscription', () => {
+      it('should throw an error', async () => {
+        billingCoordinator.getOrgBilling.mockReturnValueOnce({})
+        await expect(userCoordinator
+          .createPendingUser(email, name, orgId))
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when the org has used all of its seats', () => {
+      it('should throw an error', async () => {
+        billingCoordinator.getOrgBilling.mockReturnValueOnce({
+          subscription: { totalSeats: 5, usedSeats: 5 }
+        })
+        await expect(userCoordinator.createPendingUser(email, name, orgId)).rejects.toEqual(
+          expect.objectContaining({ code: 409 })
+        )
+      })
     })
 
     describe('when there is a returned soft-deleted user', () => {
