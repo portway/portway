@@ -3,7 +3,7 @@ import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
-import { sendSingleRecipientEmail } from '../integrators/email'
+import emailCoordinator from './email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
@@ -48,15 +48,7 @@ async function createUserAndOrganization(name, email) {
 
   const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
-  const htmlBody = `
-    <H2>Here's your link to finish signing up for Portway:</h2>
-    <div>${linkUrl}</div>
-  `
-  const textBody = `Here is your link to finish signing-up for Portway: ${linkUrl}`
-
-  const subject = 'Portway email confirmation'
-
-  await sendSingleRecipientEmail({ address: createdUser.email, htmlBody, textBody, subject })
+  await emailCoordinator.sendSignupVerification(linkUrl, createdUser.email)
 }
 
 export default {
