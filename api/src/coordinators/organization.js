@@ -36,7 +36,7 @@ const removeAllOrgData = async function(orgId) {
   await BusinessUser.deleteAllForOrg(orgId)
   // remove project users
   await BusinessProjectUser.deleteAllForOrg(orgId)
-  // remove s3 data
+  // TODO remove s3 data
   // remove org
   await BusinessOrganization.deleteById(orgId)
 }

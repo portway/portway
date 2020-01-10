@@ -19,7 +19,7 @@ const paramSchema = Joi.compile({
   id: Joi.number().required()
 })
 
-const { createPerm, readPerm, updatePerm } = crudPerms(
+const { createPerm, readPerm, updatePerm, deletePerm } = crudPerms(
   RESOURCE_TYPES.ORGANIZATION,
   (req) => { return { id: req.params.id } }
 )
@@ -72,7 +72,7 @@ const organizationsController = function(router) {
     conditionalUpdatePerm,
     updateOrganizationAvatar
   )
-  router.delete('/:id', deleteData)
+  router.delete('/:id', deletePerm, deleteData)
 }
 
 const getOrganization = async function(req, res, next) {
@@ -122,6 +122,7 @@ const updateOrganizationAvatar = async function(req, res, next) {
   }
 }
 
+// TODO: remove when job is set up
 const deleteData = async function(req, res, next) {
   try {
     await organizationCoordinator.removeAllOrgData(req.params.id)
