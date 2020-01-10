@@ -91,6 +91,10 @@
       transition: opacity 0.2s ease-in-out;
     }
 
+    &--edit-mode {
+      padding-bottom: 7rem;
+    }
+
     // When publishing a document, disable everything
     &--disabled {
       opacity: 0.4;

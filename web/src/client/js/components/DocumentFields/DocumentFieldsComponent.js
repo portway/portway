@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { FIELD_TYPES } from 'Shared/constants'
+import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
@@ -135,7 +135,11 @@ const DocumentFieldsComponent = ({
     fields.forEach((field, index) => {
       fieldArray.push(renderFieldType(field, index))
       // If we're at the last field, and that field is NOT a text field
-      if (index === fields.length - 1 && field.type !== FIELD_TYPES.TEXT) {
+      if (
+        index === fields.length - 1 &&
+        field.type !== FIELD_TYPES.TEXT &&
+        documentMode !== DOCUMENT_MODE.EDIT
+      ) {
         // append a big invisible button so that you can click there to continue the "body"
         fieldArray.push(bigInvisibleButton)
       }
@@ -144,6 +148,7 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
+    'document__fields--edit-mode': documentMode === DOCUMENT_MODE.EDIT,
     'document__fields--is-dragging': isDragging,
     'document__fields--disabled': isPublishing || disabled
   })
