@@ -12,10 +12,6 @@ const SignInController = function(router) {
     }
   })
 
-  router.get('/password-reset', (req, res) => {
-    res.render('user/password-reset', renderBundles(req, 'Reset password', 'index', { supportLink: SUPPORT_LINK }))
-  })
-
   router.post('/', auth.loginMiddleware, (req, res) => {
     res.cookie('token', req.user.token, { maxAge: MAX_COOKIE_AGE_MS })
     const route = req.body.url ? decodeURIComponent(req.body.url) : PATH_PROJECTS
