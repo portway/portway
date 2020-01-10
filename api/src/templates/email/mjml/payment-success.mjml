@@ -61,7 +61,7 @@
       <mj-hero background-color="#FFA784">
         <mj-image align="center" width="75px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.svg" />
         <mj-text align="center">
-          <h1>Welcome to Portway</h1>
+          <h1>Payment Success</h1>
         </mj-text>
         <mj-image src="https://www.portwaycontent.com/portway-marketing-assets/app-emails/hero-image.png" />
       </mj-hero>
@@ -69,10 +69,7 @@
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p><%= invitedText %></p>
-          <p>Use the following link to complete your registration:</p>
-        </mj-text>
-        <mj-button href="<%= linkUrl %>">Complete registration</mj-button>
+          <p>Thank you for your payment.</p>
         <mj-spacer height="50px" />
       </mj-column>
     </mj-section>

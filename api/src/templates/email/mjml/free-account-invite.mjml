@@ -61,7 +61,7 @@
       <mj-hero background-color="#FFA784">
         <mj-image align="center" width="75px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.svg" />
         <mj-text align="center">
-          <h1>Payment Failed to Process</h1>
+          <h1>Welcome to Portway</h1>
         </mj-text>
         <mj-image src="https://www.portwaycontent.com/portway-marketing-assets/app-emails/hero-image.png" />
       </mj-hero>
@@ -69,7 +69,9 @@
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p>Your payment for Portway has failed to process. [TODO: Insert text about how long the account will remain active, steps to take]</p>
+          <p>We'd like to offer you a free account which you can setup by visiting the following link:</p>
+          <a href="<%= linkUrl %>" >Sign up</a>
+          <p>We hope you enjoy Portway and would value any feedback you'd like to share.</p>
         </mj-text>
         <mj-spacer height="50px" />
       </mj-column>
@@ -96,6 +98,9 @@
     </mj-section>
     <mj-section>
       <mj-column>
+        <mj-text line-height="18px">
+          You are receiving this email because you, or someone you know has created a new user in Portway. 
+        </mj-text>
         <mj-text line-height="18px">
           Need help? <a href="support@portway.app" style="color: #333;">Email support</a>
        </mj-text>
