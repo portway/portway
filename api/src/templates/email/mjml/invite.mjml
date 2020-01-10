@@ -69,10 +69,10 @@
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p>You've been invited to join BonkeyBong on Portway!</p>
+          <p><%= invitedText %></p>
           <p>Use the following link to complete your registration:</p>
         </mj-text>
-        <mj-button href="https://portway.app/">Complete registration</mj-button>
+        <mj-button href="<%= linkUrl %>">Complete registration</mj-button>
         <mj-spacer height="50px" />
       </mj-column>
     </mj-section>
