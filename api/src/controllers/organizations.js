@@ -72,6 +72,7 @@ const organizationsController = function(router) {
     conditionalUpdatePerm,
     updateOrganizationAvatar
   )
+  router.delete('/:id', deleteData)
 }
 
 const getOrganization = async function(req, res, next) {
@@ -116,6 +117,15 @@ const updateOrganizationAvatar = async function(req, res, next) {
   try {
     const avatar = await avatarCoordinator.updateOrganizationAvatar(id, file)
     res.status(200).json({ data: { avatar } })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const deleteData = async function(req, res, next) {
+  try {
+    await organizationCoordinator.removeAllOrgData(req.params.id)
+    res.status(204).send()
   } catch (e) {
     next(e)
   }
