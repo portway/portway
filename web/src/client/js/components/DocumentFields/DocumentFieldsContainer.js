@@ -33,6 +33,8 @@ const DocumentFieldsContainer = ({
 
   let cloneElement
 
+  const [dropped, setDropped] = useState(false)
+
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
     const fieldMap = Object.keys(fields).map((fieldId) => {
@@ -171,7 +173,9 @@ const DocumentFieldsContainer = ({
     e.stopPropagation()
     draggingElement.current.classList.remove('document-field--dragging')
     document.querySelector('#clone-element').remove()
+
     draggingElement.current = null
+    setDropped(!dropped)
   }
 
   // Prop handler
@@ -200,7 +204,7 @@ const DocumentFieldsContainer = ({
       fieldRenameHandler={debouncedNameChangeHandler}
       fields={orderedFields}
       fieldsUpdating={fieldsUpdating}
-      isDragging={draggingElement !== null}
+      isDragging={draggingElement.current != null}
       isPublishing={isPublishing}
     />
   )
