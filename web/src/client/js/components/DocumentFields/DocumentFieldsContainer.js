@@ -47,6 +47,25 @@ const DocumentFieldsContainer = ({
     setOrderedFields(fieldMap)
   }, [fields])
 
+  useEffect(() => {
+    // If we are in a new document, or a document with one blank text field,
+    // clicking anywhere within the document should focus that field
+    const fieldValues = Object.values(fields)
+    function documentClickHandler(e) {
+      // If we're clicking the document, focus the first text field
+      if (e.target.classList.contains('document')) {
+        const cm = document.querySelector('.CodeMirror').CodeMirror
+        cm.focus()
+      }
+    }
+    if (fieldValues.length === 1 && fieldValues[0].type === FIELD_TYPES.TEXT) {
+      document.addEventListener('click', documentClickHandler, false)
+      return function cleanup() {
+        document.removeEventListener('click', documentClickHandler, false)
+      }
+    }
+  }, [fields])
+
   // Actions
   function createTextFieldHandler() {
     // This is triggered by the Big Invisible Button™
