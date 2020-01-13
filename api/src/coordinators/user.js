@@ -107,7 +107,7 @@ async function createPendingUser(email, name, orgId) {
   let user
 
   if (previouslyDeletedUser) {
-    user = await BusinessUser.restoreSoftDeleted(previouslyDeletedUser.id, resetKey)
+    user = await BusinessUser.restoreSoftDeleted(previouslyDeletedUser.id, resetKey, orgId)
   } else {
     user = await BusinessUser.create({
       email,

@@ -127,7 +127,7 @@ async function updateOrgRole(id, orgRoleId, orgId) {
   return updatedUser && publicFields(updatedUser)
 }
 
-async function restoreSoftDeleted(id, resetKey) {
+async function restoreSoftDeleted(id, resetKey, newOrgId) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { id }, paranoid: false })
 
@@ -137,6 +137,7 @@ async function restoreSoftDeleted(id, resetKey) {
   user.setDataValue('password', null)
   user.setDataValue('pending', true)
   user.setDataValue('resetKey', resetKey)
+  user.setDataValue('orgId', newOrgId)
 
   const savedUser = await user.save({ paranoid: false })
 
@@ -148,6 +149,8 @@ async function deleteById(id, orgId) {
   const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
 
   if (!user) throw ono({ code: 404 }, `Cannot delete, user not found with id: ${id}`)
+  //when deleting a user we first set the orgId to null, which will allow us to restore them later and assign to a new org
+  await user.update({ orgId: null })
 
   await user.destroy()
 }
