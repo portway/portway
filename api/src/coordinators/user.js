@@ -82,6 +82,12 @@ async function validatePasswordResetKey(userId, resetKey) {
 }
 
 async function createPendingUser(email, name, orgId) {
+  const existingUser = await BusinessUser.findByEmail(email)
+  if (existingUser) {
+    const publicMessage = 'Cannot create user, this email address is already in use'
+    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+  }
+
   // look up number of org seats and number of current users,
   // make sure org isn't maxed out
   const orgBilling = await billingCoordinator.getOrgBilling(orgId)
