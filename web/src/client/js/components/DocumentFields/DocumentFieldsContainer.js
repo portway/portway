@@ -37,15 +37,19 @@ const DocumentFieldsContainer = ({
   const [dropped, setDropped] = useState(false)
 
   // Convert fields object to a sorted array for rendering
+  const fieldIds = Object.keys(fields)
   useEffect(() => {
-    const fieldMap = Object.keys(fields).map((fieldId) => {
+    const fieldMap = fieldIds.map((fieldId) => {
       return fields[fieldId]
     })
     fieldMap.sort((a, b) => {
       return a.order - b.order
     })
     setOrderedFields(fieldMap)
-  }, [fields])
+  // eslint tries to add 'fields' as a dependency because it doesn't recognize fieldIds is a
+  // derivative of fields
+  // eslint-disable-next-line
+  }, fieldIds)
 
   // Actions
   function createTextFieldHandler() {
