@@ -312,6 +312,14 @@ async function normalizeFieldOrderAndGetCount(documentId, orgId) {
   return docFields.length
 }
 
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
+}
+
 export default {
   createForDocument,
   updateByIdForDocument,
@@ -319,5 +327,6 @@ export default {
   findAllForDocument,
   findAllPublishedForDocument,
   deleteByIdForDocument,
-  updateOrderById
+  updateOrderById,
+  deleteAllForOrg
 }

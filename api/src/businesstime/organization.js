@@ -60,10 +60,16 @@ async function findByStripeId(stripeId) {
   return organization.get({ plain: true })
 }
 
+async function deleteById(id) {
+  const db = getDb()
+  return db.model(MODEL_NAME).destroy({ where: { id } })
+}
+
 export default {
   create,
   findSanitizedById,
   updateById,
   findById,
-  findByStripeId
+  findByStripeId,
+  deleteById
 }

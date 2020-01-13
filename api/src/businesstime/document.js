@@ -224,6 +224,14 @@ function publicDocumentWithFields(document) {
   return pick({ ...document.get({ plain: true }), fields }, resourcePublicFields[resourceTypes.DOCUMENT])
 }
 
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
+}
+
 export default {
   createForProject,
   updateByIdForProject,
@@ -235,5 +243,6 @@ export default {
   findParentProjectByDocumentId,
   findByIdWithPublishedFields,
   findByIdWithFields,
-  findById
+  findById,
+  deleteAllForOrg
 }

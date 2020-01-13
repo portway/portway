@@ -7,5 +7,6 @@ export default {
   setFindByIdReturnValue: (returnValue) => {
     findByIdReturnValue = returnValue
   },
-  resetFindByIdReturnValue: () => { findByIdReturnValue = undefined }
+  resetFindByIdReturnValue: () => { findByIdReturnValue = undefined },
+  deleteAllForOrg: jest.fn()
 }

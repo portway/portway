@@ -82,6 +82,14 @@ async function deleteById(id, orgId) {
   await token.destroy()
 }
 
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
+}
+
 export default {
   create,
   findById,
@@ -89,5 +97,6 @@ export default {
   findAllByProjectId,
   updateNameById,
   addTokenStringById,
-  deleteById
+  deleteById,
+  deleteAllForOrg
 }
