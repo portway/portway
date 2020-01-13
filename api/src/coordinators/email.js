@@ -50,14 +50,14 @@ async function sendInvitationEmail(email, token, orgId) {
   const invitedText = `You've been invited to join ${organization.name} on Portway!`
 
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.INVITE]({ invitedText, linkUrl })
-  const textBody = `${invitedText}\n${linkUrl}`
-  const subject = `Portway Invitation`
+  const textBody = `${invitedText}\n\n${linkUrl}`
+  const subject = `Welcome to Portway!`
 
   await sendSingleRecipientEmail({ address: email, htmlBody, textBody, subject })
 }
 
 async function sendPasswordChangeEmail(address) {
-  const subject = 'Password Changed [Portway]'
+  const subject = '[Portway] Password changed'
   const bodyText = `Your Portway password has been changed, if you were not the one who made this change, please contact ${SUPPORT_EMAIL}`
 
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PASSWORD_CHANGE]({ bodyText })
@@ -68,10 +68,9 @@ async function sendPasswordChangeEmail(address) {
 
 async function sendPasswordResetEmail(resetLink, email) {
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.FORGOT_PASSWORD]({ resetLink })
+  const textBody = `Here is your link to reset your password\n\n${resetLink}`
 
-  const textBody = `Here is your link to reset your password: ${resetLink}`
-
-  const subject = 'Portway password reset'
+  const subject = '[Portway] Password reset'
 
   await sendSingleRecipientEmail({ address: email, htmlBody, textBody, subject })
 }
@@ -81,7 +80,7 @@ async function sendFreeAccountInvite(linkUrl, email) {
 
   const textBody = `Welcome to Portway! We'd like to offer you a free account you can claim here: ${linkUrl}`
 
-  const subject = 'Free Account: Welcome to Portway!'
+  const subject = 'Welcome to Portway!'
 
   return sendSingleRecipientEmail({ address: email, htmlBody, textBody, subject })
 }
@@ -97,10 +96,10 @@ async function sendSignupVerification(linkUrl, email) {
 }
 
 async function sendPaymentFailed(email) {
-  const subject = 'Payment failed'
-  const message = 'Portway payment failed'
+  const subject = '[Portway] Payment failed'
+  const message = 'Your payment for Portway has failed to process. We’ll try a few times over the next week. After that, your account will be deactivated.'
 
-  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PAYMENT_FAILED]({})
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PAYMENT_FAILED]({ message })
 
   await sendSingleRecipientEmail({
     address: email,

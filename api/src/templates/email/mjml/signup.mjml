@@ -47,6 +47,9 @@
       	line-height: 31px;
         margin-bottom: 12px;
       }
+      a {
+      	color: #6074D6;
+      }
       button:hover {
       	background-color: #46B84F;
       }
@@ -69,9 +72,10 @@
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p>Use the following link to verify your email:</p>
+          <p>Thanks for trying out Portway!</p>
+          <p>Activate your new account by <a href="<%= linkUrl %>">verifying your email address</a>.</p>
         </mj-text>
-        <mj-button href="<%= linkUrl %>">Verify email</mj-button>
+        <mj-button href="<%= linkUrl %>">Verify your email</mj-button>
         <mj-spacer height="50px" />
       </mj-column>
     </mj-section>

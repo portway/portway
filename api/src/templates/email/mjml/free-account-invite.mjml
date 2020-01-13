@@ -69,10 +69,9 @@
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p>We'd like to offer you a free account which you can setup by visiting the following link:</p>
-          <a href="<%= linkUrl %>" >Sign up</a>
-          <p>We hope you enjoy Portway and would value any feedback you'd like to share.</p>
+          <p>We’d love for you to check out Portway. Here’s an invite for a free, Teams account with a limit of five team members.</p>
         </mj-text>
+        <mj-button href="<%= linkUrl %>">Set up your free account</mj-button>
         <mj-spacer height="50px" />
       </mj-column>
     </mj-section>
@@ -99,7 +98,7 @@
     <mj-section>
       <mj-column>
         <mj-text line-height="18px">
-          You are receiving this email because you, or someone you know has created a new user in Portway. 
+          You are receiving this email because we think you‘re special, and would like you to check out Portway.
         </mj-text>
         <mj-text line-height="18px">
           Need help? <a href="support@portway.app" style="color: #333;">Email support</a>

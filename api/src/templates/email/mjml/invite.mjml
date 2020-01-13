@@ -70,7 +70,6 @@
       <mj-column>
         <mj-text align="center">
           <p><%= invitedText %></p>
-          <p>Use the following link to complete your registration:</p>
         </mj-text>
         <mj-button href="<%= linkUrl %>">Complete registration</mj-button>
         <mj-spacer height="50px" />
