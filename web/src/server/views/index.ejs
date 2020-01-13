@@ -3,7 +3,7 @@
   <div class="container">
     <img src="/images/logo.svg" alt="Portway Logo" width="85" />
     <h2>Sign in to Portway</h2>
-    <%- include('partials/login', { url: undefined, flash: { type: 'info', message: 'test'} }); %>
+    <%- include('partials/login', { url: undefined }); %>
     <% if (typeof disableSignup !== 'undefined' && disableSignup === false) { %>
       <p>Don’t have an account? <a href="/sign-up">Create one</a>.</p>
     <% } %>
