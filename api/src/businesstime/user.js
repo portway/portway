@@ -127,9 +127,17 @@ async function updateOrgRole(id, orgRoleId, orgId) {
   return updatedUser && publicFields(updatedUser)
 }
 
-async function restoreSoftDeleted(id, resetKey, newOrgId) {
+async function restoreSoftDeleted(id, resetKey, newOrgId, newRoleId) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { id }, paranoid: false })
+
+  if (!newOrgId) {
+    throw ono({ code: 404 }, 'Restored user must be given a new org id')
+  }
+
+  if (!newRoleId) {
+    throw ono({ code: 404 }, 'Restored user must be given a new role id')
+  }
 
   if (!user) throw ono({ code: 404 }, `Cannot restore soft deleted user, user not found with id: ${id}`)
 
@@ -138,6 +146,7 @@ async function restoreSoftDeleted(id, resetKey, newOrgId) {
   user.setDataValue('pending', true)
   user.setDataValue('resetKey', resetKey)
   user.setDataValue('orgId', newOrgId)
+  user.setDataValue('orgRoleId', newRoleId)
 
   const savedUser = await user.save({ paranoid: false })
 
