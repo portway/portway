@@ -156,6 +156,14 @@ async function removeAllProjectAssignmentsForUser(userId, orgId) {
   await db.model(MODEL_NAME).destroy({ where: { userId, orgId } })
 }
 
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
+}
+
 export default {
   create,
   addUserIdToProject,
@@ -166,5 +174,6 @@ export default {
   getProjectUserAssignment,
   updateProjectUserById,
   findAllProjectAssignmentsForUser,
-  removeAllProjectAssignmentsForUser
+  removeAllProjectAssignmentsForUser,
+  deleteAllForOrg
 }

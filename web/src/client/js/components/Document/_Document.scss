@@ -87,8 +87,13 @@
   }
 
   &__fields {
+    padding-bottom: var(--brand-width);
     @media (prefers-reduced-motion: no-preference) {
       transition: opacity 0.2s ease-in-out;
+    }
+
+    &--edit-mode {
+      padding-bottom: 7rem;
     }
 
     // When publishing a document, disable everything
