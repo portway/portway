@@ -158,6 +158,14 @@ async function countAll(orgId) {
   return count
 }
 
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
+}
+
 export default {
   create,
   findByEmail,
@@ -170,5 +178,6 @@ export default {
   updateOrgRole,
   restoreSoftDeleted,
   deleteById,
-  countAll
+  countAll,
+  deleteAllForOrg
 }

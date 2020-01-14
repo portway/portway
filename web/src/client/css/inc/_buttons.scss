@@ -137,6 +137,36 @@ button,
     }
   }
 
+  &--form {
+    background-color: var(--button-white-background);
+    border: thin solid var(--button-white-border);
+    color: inherit;
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--button-white-background);
+          border: thin solid var(--button-white-border-hover);
+          color: inherit;
+        }
+      }
+      &:active {
+        background-color: var(--button-white-background);
+        color: inherit;
+      }
+      &:focus {
+        background-color: var(--button-white-background);
+        border: thin solid var(--color-blue);
+        outline: none;
+      }
+    }
+    &[aria-expanded="true"] {
+      background-color: var(--button-white-border-hover);
+      &:focus {
+        background-color: var(--button-white-border-hover);
+      }
+    }
+  }
+
   &--blank, &--like-a-link {
     background-color: transparent;
     border-radius: 0;

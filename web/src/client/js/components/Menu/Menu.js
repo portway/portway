@@ -7,16 +7,19 @@ import './_Menu.scss'
 const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [menuItems, setMenuItems] = useState([])
+  const [activeFirstTime, setActiveFirstTime] = useState(true)
 
   const keyNavigationHandler = useCallback((e) => {
     let counterBecauseUseState = selectedIndex
 
     switch (e.key) {
       case 'ArrowDown':
+        e.preventDefault()
         // Increase the index
         setSelectedIndex(counterBecauseUseState++)
         break
       case 'ArrowUp':
+        e.preventDefault()
         // Decrease the index
         setSelectedIndex(counterBecauseUseState--)
         break
@@ -40,6 +43,10 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
 
   useEffect(() => {
     if (isActive) {
+      if (activeFirstTime) {
+        anchorRef.current.focus()
+        setActiveFirstTime(false)
+      }
       const menuItemComponents = React.Children.toArray(children).filter((child) => {
         return child.type.name === 'MenuItem'
       })
@@ -57,8 +64,9 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
     } else {
       // Reset once the menu is closed
       setSelectedIndex(-1)
+      setActiveFirstTime(true)
     }
-  }, [children, isActive, keyNavigationHandler])
+  }, [activeFirstTime, anchorRef, children, isActive, keyNavigationHandler])
 
   const menuClasses = cx({
     'menu': true,
