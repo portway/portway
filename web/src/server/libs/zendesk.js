@@ -4,7 +4,7 @@ import axios from 'axios'
 const ZENDESK_API_TOKEN = process.env.ZENDESK_API_TOKEN
 const ZENDESK_REQUEST_ENDPOINT = 'https://portway.zendesk.com/api/v2/requests.json'
 
-export default function addRequest(email, message, company, name, subject, type) {
+export default function addRequest(email, message, company, name, subject) {
   try {
     axios({
       method: 'post',
@@ -13,7 +13,7 @@ export default function addRequest(email, message, company, name, subject, type)
         request: {
           requester: { name, email },
           subject,
-          comment: { body: `Company: ${company}\nType: ${type}\n\n${message}` }
+          comment: { body: `Company: ${company}\n\n${message}` }
         }
       },
       auth: {
