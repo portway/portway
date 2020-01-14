@@ -27,7 +27,10 @@ async function handleEvent(event) {
       break
     }
     case 'customer.subscription.deleted': {
-      //TODO send email letting customer know account is cancelled
+      const subject = 'Portway subscription canceled'
+      const message = 'Your portway subscription has been canceled'
+      //not awaiting anything after this point to prevent timeout and possible duplication
+      sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
       break
     }
     case 'customer.source.created':
