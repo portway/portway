@@ -1,14 +1,14 @@
 <mjml>
 
   <mj-head>
-    
+
     <mj-font name="Domine" href="https://fonts.googleapis.com/css?family=Domine" />
 
     <mj-attributes>
       <mj-text color="#333333" font-family="Domine" />
-      <mj-button background-color="#6ACA65" color="#ffffff" />      
+      <mj-button background-color="#6ACA65" color="#ffffff" />
     </mj-attributes>
-    
+
     <mj-style>
       h1, h2, h3 {
         font-family: Domine;
@@ -68,7 +68,7 @@
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p><%= message %></p>
+          <p><%= textBody %></p>
         </mj-text>
         <mj-spacer height="50px" />
       </mj-column>
