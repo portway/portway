@@ -111,12 +111,24 @@ b, strong {
 }
 
 .flash {
-  font-size: 1.2rem; // 12px
-  line-height: 1.4rem; // 14px
-  padding: .5rem 0; // 5px
+  align-items: center;
+  background-color: var(--theme-overlay-light);
+  border-radius: var(--border-radius);
+  color: var(--theme-header-color);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.8rem;
+  padding: 0 1.2rem;
+
   &--danger, &--error {
     color: var(--color-red);
   }
+
+  p {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
 }
 
 .note {
