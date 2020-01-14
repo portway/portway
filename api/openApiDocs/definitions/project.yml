@@ -1,0 +1,30 @@
+Project:
+  allOf:
+    - $ref: '#/components/schemas/NewProject'
+    - required:
+        - id
+    - properties:
+        id:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+NewProject:
+  required:
+    - name
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+
+UpdateProject:
+  properties:
+    name:
+      type: string
+    description:
+      type: string
