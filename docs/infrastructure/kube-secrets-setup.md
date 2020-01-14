@@ -32,6 +32,11 @@ Admin secrets
 kubectl create secret generic admin-secrets --from-literal=admin_secret_key='value'
 ```
 
+Zendesk secrets
+```
+kubectl create secret generic zendesk-secrets --from-literal=token='value'
+```
+
 Audit Log Backup secrets
 These are only needed if the audit log should get backed up in the environment and the audit log backup job is running
 ```
