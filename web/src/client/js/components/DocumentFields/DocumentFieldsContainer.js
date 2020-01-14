@@ -36,16 +36,22 @@ const DocumentFieldsContainer = ({
 
   const [dropped, setDropped] = useState(false)
 
+  const fieldIds = Object.keys(fields)
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
-    const fieldMap = Object.keys(fields).map((fieldId) => {
+    const fieldMap = fieldIds.map((fieldId) => {
       return fields[fieldId]
     })
     fieldMap.sort((a, b) => {
       return a.order - b.order
     })
     setOrderedFields(fieldMap)
-  }, [fields])
+    // Note: this is not an ideal dependency but if fields aren't loaded and then load
+    // it will appropriately set the order. `fields` cannot be a dependency as it's an object.
+    // When field order is changed, other handlers will correctly set the ordered fields and
+    // we do not want this effect to run in those cases.
+    // eslint-disable-next-line
+  }, [fieldIds.length])
 
   const fieldValues = Object.values(fields)
   const hasOnlyOneTextField = fieldValues.length === 1 && fieldValues[0].type === FIELD_TYPES.TEXT
