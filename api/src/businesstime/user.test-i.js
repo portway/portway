@@ -257,13 +257,13 @@ describe('BusinessUser', () => {
   describe('#restoreSoftDeleted', () => {
     let targetUser
     let user
-    const orgId = 1
     const resetKey = 'test-reset-key'
 
     beforeAll(async () => {
+      
       targetUser = (await UserFactory.createMany(1))[0]
       targetUser.destroy()
-      user = await BusinessUser.restoreSoftDeleted(targetUser.id, resetKey, orgId)
+      user = await BusinessUser.restoreSoftDeleted(targetUser.id, resetKey, constants.ORG_ID, 3)
     })
 
     it('should return a pending POJO user', () => {
