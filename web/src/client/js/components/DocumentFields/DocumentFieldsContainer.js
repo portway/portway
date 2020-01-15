@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -28,30 +28,36 @@ const DocumentFieldsContainer = ({
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const draggingElement = useRef(null)
-  const params = useParams()
-  const { projectId, documentId } = params
-  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { projectId, documentId } = useParams()
+  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+
+  const projectAssignment = userProjectAssignments[Number(projectId)]
+
+  let documentReadOnlyMode
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
 
   let cloneElement
 
   const [dropped, setDropped] = useState(false)
 
-  const fieldIds = Object.keys(fields)
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
-    const fieldMap = fieldIds.map((fieldId) => {
-      return fields[fieldId]
-    })
-    fieldMap.sort((a, b) => {
-      return a.order - b.order
-    })
-    setOrderedFields(fieldMap)
-    // Note: this is not an ideal dependency but if fields aren't loaded and then load
-    // it will appropriately set the order. `fields` cannot be a dependency as it's an object.
-    // When field order is changed, other handlers will correctly set the ordered fields and
-    // we do not want this effect to run in those cases.
-    // eslint-disable-next-line
-  }, [fieldIds.length])
+    if (fieldsLoading === false) {
+      const fieldIds = Object.keys(fields)
+      const fieldMap = fieldIds.map((fieldId) => {
+        return fields[fieldId]
+      })
+      fieldMap.sort((a, b) => {
+        return a.order - b.order
+      })
+      setOrderedFields(fieldMap)
+    }
+  }, [fields, fieldsLoading])
 
   const fieldValues = Object.values(fields)
   const hasOnlyOneTextField = fieldValues.length === 1 && fieldValues[0].type === FIELD_TYPES.TEXT
@@ -76,54 +82,64 @@ const DocumentFieldsContainer = ({
 
   // Actions
   function createTextFieldHandler() {
-    // This is triggered by the Big Invisible Button™
-    // It should append a new text field to the end of the document, making it seem as though the
-    // user is clicking to continue the document body
-    const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
-    createField(projectId, documentId, FIELD_TYPES.TEXT, {
-      name: newName,
-      type: FIELD_TYPES.TEXT
-    })
+    if (!documentReadOnlyMode) {
+      // This is triggered by the Big Invisible Button™
+      // It should append a new text field to the end of the document, making it seem as though the
+      // user is clicking to continue the document body
+      const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
+      createField(projectId, documentId, FIELD_TYPES.TEXT, {
+        name: newName,
+        type: FIELD_TYPES.TEXT
+      })
+    }
   }
 
   function fieldDestroyHandler(fieldId, fieldType) {
-    let type = 'field'
+    if (!documentReadOnlyMode) {
+      let type = 'field'
 
-    switch (fieldType) {
-      case FIELD_TYPES.IMAGE:
-        type = 'image'
-        break
-      case FIELD_TYPES.STRING:
-        type = 'string'
-        break
-      case FIELD_TYPES.NUMBER:
-        type = 'number'
-        break
-      case FIELD_TYPES.TEXT:
-        type = 'text'
-        break
-      default:
-        break
+      switch (fieldType) {
+        case FIELD_TYPES.IMAGE:
+          type = 'image'
+          break
+        case FIELD_TYPES.STRING:
+          type = 'string'
+          break
+        case FIELD_TYPES.NUMBER:
+          type = 'number'
+          break
+        case FIELD_TYPES.TEXT:
+          type = 'text'
+          break
+        default:
+          break
+      }
+
+      const message = <span>Are you sure you want to delete this {type}?</span>
+      const confirmedLabel = 'Yes, delete it.'
+      const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
+      uiConfirm({ message, confirmedAction, confirmedLabel })
     }
-
-    const message = <span>Are you sure you want to delete this {type}?</span>
-    const confirmedLabel = 'Yes, delete it.'
-    const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
-    focusField(fieldId, fieldType, fieldData)
+    if (!documentReadOnlyMode) {
+      focusField(fieldId, fieldType, fieldData)
+    }
   }
 
   function fieldBlurHandler(fieldId, fieldType, fieldData) {
-    blurField(fieldId, fieldType, fieldData)
+    if (!documentReadOnlyMode) {
+      blurField(fieldId, fieldType, fieldData)
+    }
   }
 
   function fieldChangeHandler(fieldId, body) {
-    // leave this console in to make sure we're not hammering the API because of useEffect
-    // console.info(`Field: ${fieldId} trigger changeHandler`)
-    updateField(projectId, documentId, fieldId, body)
+    if (!documentReadOnlyMode) {
+      // leave this console in to make sure we're not hammering the API because of useEffect
+      // console.info(`Field: ${fieldId} trigger changeHandler`)
+      updateField(projectId, documentId, fieldId, body)
+    }
   }
 
   function dragStartHandler(e) {
@@ -246,6 +262,7 @@ const DocumentFieldsContainer = ({
       fieldsUpdating={fieldsUpdating}
       isDragging={draggingElement.current != null}
       isPublishing={isPublishing}
+      readOnly={documentReadOnlyMode}
     />
   )
 }
