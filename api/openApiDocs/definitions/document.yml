@@ -9,6 +9,11 @@ Document:
               type: integer
             projectId:
               type: integer
+            publishedVersionId:
+              type: integer
+            lastPublishedAt:
+              type: string
+              format: date-time
             createdAt:
               type: string
               format: date-time

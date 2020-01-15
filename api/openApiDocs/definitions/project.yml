@@ -21,6 +21,9 @@ NewProject:
       type: string
     description:
       type: string
+    accessLevel:
+      type: string
+      enum: [read, write]
 
 UpdateProject:
   properties:
@@ -28,3 +31,6 @@ UpdateProject:
       type: string
     description:
       type: string
+    accessLevel:
+      type: string
+      enum: [read, write]

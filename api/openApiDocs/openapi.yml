@@ -665,8 +665,8 @@ components:
           type: string
           description: Optional error type
           enum:
-            - undefined
             - ValidationError
+            - undefined
             - FieldValueIncorrectTypeError
         errorDetails:
           type: array
