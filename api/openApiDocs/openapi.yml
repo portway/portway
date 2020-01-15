@@ -26,7 +26,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: './definitions/project.yml#/Project'
+                      $ref: 'definitions/project.yml#/Project'
 
         default:
           description: unexpected error
@@ -81,7 +81,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Project'
+                    $ref: './definitions/project.yml#/Project'
         default:
           description: unexpected error
           content:
@@ -105,7 +105,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProject'
+              $ref: './definitions/project.yml#/UpdateProject'
       responses:
         '200':
           description: project response
@@ -115,7 +115,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Project'
+                    $ref: './definitions/project.yml#/Project'
         default:
           description: unexpected error
           content:
@@ -168,7 +168,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Document'
+                      $ref: './definitions/document.yml#/Document'
         default:
           description: unexpected error
           content:
@@ -192,7 +192,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewDocument'
+              $ref: './definitions/document.yml#/NewDocument'
       responses:
         '201':
           description: document response
@@ -202,7 +202,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Project'
+                    $ref: './definitions/document.yml#/Document'
         default:
           description: unexpected error
           content:
@@ -236,7 +236,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Project'
+                    $ref: './definitions/document.yml#/Document'
         default:
           description: unexpected error
           content:
@@ -244,8 +244,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      description: Update a project based on a single ID - full or partial update
-      operationId: updateProject
+      description: Update a document based on a single ID - full or partial update
+      operationId: updateDocument
       parameters:
         - name: projectId
           in: path
@@ -255,7 +255,7 @@ paths:
             type: integer
         - name: id
           in: path
-          description: ID of project to update
+          description: ID of document to update
           required: true
           schema:
             type: integer
@@ -266,7 +266,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateDocument'
+              $ref: './definitions/document.yml#/UpdateDocument'
       responses:
         '200':
           description: document response
@@ -276,7 +276,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Project'
+                    $ref: './definitions/document.yml#/Document'
         default:
           description: unexpected error
           content:
@@ -334,7 +334,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ProjectUser'
+                      $ref: './definitions/projectUser.yml#/ProjectUser'
         default:
           description: unexpected error
           content:
@@ -343,7 +343,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       description: Creates a new project user assignment
-      operationId: addDocument
+      operationId: addProjectUser
       parameters:
         - name: projectId
           in: path
@@ -358,7 +358,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewProjectUser'
+              $ref: './definitions/projectUser.yml#/NewProjectUser'
       responses:
         '201':
           description: project user assignment response
@@ -368,7 +368,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/ProjectUser'
+                    $ref: './definitions/projectUser.yml#/ProjectUser'
         default:
           description: unexpected error
           content:
@@ -403,7 +403,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/ProjectUser'
+                    $ref: './definitions/projectUser.yml#/ProjectUser'
         default:
           description: unexpected error
           content:
@@ -433,7 +433,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProjectUser'
+              $ref: './definitions/projectUser.yml#/UpdateProjectUser'
       responses:
         '200':
           description: project user assignment response
@@ -443,7 +443,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/ProjectUser'
+                    $ref: './definitions/projectUser.yml#/ProjectUser'
         default:
           description: unexpected error
           content:
@@ -482,7 +482,7 @@ paths:
     get:
       description: |
         Returns all fields that the user has access to for the given project/document ids
-      operationId: findDocuments
+      operationId: findFields
       parameters:
         - name: documentId
           in: path
@@ -502,7 +502,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Field'
+                      $ref: './definitions/field.yml#/Field'
         default:
           description: unexpected error
           content:
@@ -526,7 +526,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewField'
+              $ref: './definitions/field.yml#/NewField'
             example:
               name: field name
               value: 808
@@ -540,7 +540,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Field'
+                    $ref: './definitions/field.yml#/Field'
         default:
           description: unexpected error
           content:
@@ -574,7 +574,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Field'
+                    $ref: './definitions/field.yml#/Field'
         default:
           description: unexpected error
           content:
@@ -604,7 +604,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateField'
+              $ref: './definitions/field.yml#/UpdateField'
             example:
               name: 'new name'
               value: 'new value'
@@ -617,7 +617,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Field'
+                    $ref: './definitions/field.yml#/Field'
         default:
           description: unexpected error
           content:
@@ -654,155 +654,6 @@ paths:
 
 components:
   schemas:
-    Document:
-      allOf:
-        - $ref: '#/components/schemas/NewDocument'
-        - required:
-            - id
-            - projectId
-        - properties:
-            id:
-              type: integer
-            projectId:
-              type: integer
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
-
-    NewDocument:
-      required:
-        - name
-      properties:
-        name:
-          type: string
-
-    UpdateDocument:
-      properties:
-        name:
-          type: string
-
-    Field:
-      allOf:
-        - $ref: '#/components/schemas/NewField'
-        - required:
-            - id
-            - name
-            - documentId
-            - type
-        - properties:
-            id:
-              type: integer
-            name:
-              type: string
-            documentId:
-              type: integer
-            type:
-              type: integer
-            value:
-              type: string
-            structuredValue:
-              type: string
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
-
-    NewField:
-      oneOf:
-        - $ref: '#/components/schemas/StringField'
-        - $ref: '#/components/schemas/TextField'
-        - $ref: '#/components/schemas/NumberField'
-
-    UpdateField:
-      properties:
-        name:
-          type: string
-        value:
-          oneOf:
-            - type: string
-            - type: number
-
-    StringField:
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: integer
-          enum: [1]
-        value:
-          type: string
-
-    TextField:
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: integer
-          enum: [2]
-        value:
-          type: string
-        structuredValue:
-          type: string
-
-    NumberField:
-      required:
-        - name
-        - type
-      properties:
-        name:
-          type: string
-        type:
-          type: integer
-          enum: [3]
-        value:
-          type: double
-          description: Number value with maximum of 15 significant digits (including decimal digits).
-            For longer numbers we recommend storing as a string and parsing the value in your code.
-          example: 1234567890.12345
-
-    ProjectUser:
-      allOf:
-        - $ref: '#/components/schemas/NewProjectUser'
-        - required:
-            - id
-        - properties:
-            id:
-              type: integer
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
-
-    NewProjectUser:
-      required:
-        - roleId
-        - userId
-      properties:
-        roleId:
-          type: number
-        userId:
-          type: number
-
-    UpdateProjectUser:
-      required:
-        - roleId
-      properties:
-        roleId:
-          type: number
-
     Error:
       required:
         - code

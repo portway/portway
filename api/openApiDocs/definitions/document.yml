@@ -1,0 +1,29 @@
+Document:
+      allOf:
+        - $ref: '#/NewDocument'
+        - required:
+            - id
+            - projectId
+        - properties:
+            id:
+              type: integer
+            projectId:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+NewDocument:
+  required:
+    - name
+  properties:
+    name:
+      type: string
+
+UpdateDocument:
+  properties:
+    name:
+      type: string

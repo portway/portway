@@ -1,6 +1,6 @@
 Project:
   allOf:
-    - $ref: '#/components/schemas/NewProject'
+    - $ref: '#/NewProject'
     - required:
         - id
     - properties:
