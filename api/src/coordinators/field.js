@@ -1,7 +1,7 @@
 import BusinessField from '../businesstime/field'
-import { uploadContent } from '../integrators/s3'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { processMarkdownWithWorker } from './markdown'
+import assetCoordinator from './assets'
 import ono from 'ono'
 
 const addFieldToDocument = async function(documentId, body, file) {
@@ -27,7 +27,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
     case FIELD_TYPES.IMAGE:
       let url
       if (file) {
-        url = await uploadContent(documentId, orgId, file)
+        url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
       }
       fieldBody.value = url
       break
