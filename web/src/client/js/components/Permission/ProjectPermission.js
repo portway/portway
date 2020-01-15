@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useParams } from 'react-router-dom'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { PROJECT_ROLE_IDS, PROJECT_ACCESS_LEVELS } from 'Shared/constants'
 
-const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId }) => {
+const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectIdOverride }) => {
   const rejectRender = (
     <>
       {elseRender || null}
@@ -16,6 +17,8 @@ const ProjectPermission = ({ children, elseRender, acceptedRoleIds, projectId })
       {children}
     </>
   )
+  let { projectId } = useParams()
+  projectId = projectIdOverride ? projectIdOverride : projectId
 
   const { data: project = {}, loading: projectLoading } = useDataService(dataMapper.projects.id(projectId))
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
@@ -51,10 +54,7 @@ ProjectPermission.propTypes = {
   children: PropTypes.node.isRequired,
   elseRender: PropTypes.node,
   acceptedRoleIds: PropTypes.array.isRequired,
-  projectId: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.number.isRequired
-  ])
+  projectId: PropTypes.number,
 }
 
 export default ProjectPermission

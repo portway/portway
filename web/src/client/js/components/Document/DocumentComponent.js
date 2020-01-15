@@ -2,9 +2,10 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { DOCUMENT_MODE, PATH_PROJECT } from 'Shared/constants'
+import { DOCUMENT_MODE, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -84,20 +85,22 @@ const DocumentComponent = ({
             }}
             ref={titleRef} />
         </div>
-        <div className="document__toggle-container">
-          <button
-            className="btn btn--blank"
-            onClick={toggleDocumentMode}
-            name="documentSettings"
-            title="Re-order or remove fields">
-            {documentMode === DOCUMENT_MODE.NORMAL &&
-            <SettingsIcon />
-            }
-            {documentMode === DOCUMENT_MODE.EDIT &&
-            <>Done</>
-            }
-          </button>
-        </div>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+          <div className="document__toggle-container">
+            <button
+              className="btn btn--blank"
+              onClick={toggleDocumentMode}
+              name="documentSettings"
+              title="Re-order or remove fields">
+              {documentMode === DOCUMENT_MODE.NORMAL &&
+              <SettingsIcon />
+              }
+              {documentMode === DOCUMENT_MODE.EDIT &&
+              <>Done</>
+              }
+            </button>
+          </div>
+        </ProjectPermission>
       </header>
       <DocumentFieldsContainer />
     </div>

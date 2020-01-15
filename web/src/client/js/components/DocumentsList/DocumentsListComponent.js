@@ -216,9 +216,7 @@ const DocumentsListComponent = ({
             />
           </div>
         </div>
-        <ProjectPermission
-          projectId={projectId}
-          acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <IconButton
             aria-label="New document"
             onClick={() => { createCallback(true) }}
@@ -235,7 +233,7 @@ const DocumentsListComponent = ({
             <DocumentIcon fill={colorSurface} width="32" height="32" />
           </div>
           <h2 className="notice__headline">Get started</h2>
-          <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+          <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
             <p>Create a new document, or drag a bunch of text documents here to get started.</p>
             <button className="btn btn--small notice__action" name="addDocument" onClick={() => { createCallback(true) }}>Create document</button>
           </ProjectPermission>

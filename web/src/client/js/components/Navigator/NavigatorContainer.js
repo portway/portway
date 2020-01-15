@@ -87,7 +87,7 @@ const NavigatorContainer = ({ history, location }) => {
         <ProjectIcon fill="#72D9EE" />
         <components.Option {...props} />
         <ProjectPermission
-          projectId={data.value}
+          projectIdOverride={data.value}
           acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} >
           <Link
             className="navigator__settings"
