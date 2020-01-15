@@ -28,6 +28,7 @@ const DocumentFieldsComponent = ({
   fieldsUpdating,
   isDragging,
   isPublishing,
+  readOnly,
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
@@ -65,6 +66,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
+            readOnly={readOnly}
           />
         )
         break
@@ -75,6 +77,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
+            readOnly={readOnly}
           />
         )
         break
@@ -85,6 +88,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
+            readOnly={readOnly}
           />
         )
         break
@@ -96,6 +100,7 @@ const DocumentFieldsComponent = ({
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
+            readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]}
@@ -122,6 +127,7 @@ const DocumentFieldsComponent = ({
           key={field.id}
           onDestroy={() => { fieldDestroyHandler(field.id, field.type) }}
           onRename={fieldRenameHandler}
+          readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
         >
@@ -138,7 +144,8 @@ const DocumentFieldsComponent = ({
       if (
         index === fields.length - 1 &&
         field.type !== FIELD_TYPES.TEXT &&
-        documentMode !== DOCUMENT_MODE.EDIT
+        documentMode !== DOCUMENT_MODE.EDIT &&
+        !readOnly
       ) {
         // append a big invisible button so that you can click there to continue the "body"
         fieldArray.push(bigInvisibleButton)
@@ -180,6 +187,7 @@ DocumentFieldsComponent.propTypes = {
   fieldsUpdating: PropTypes.object.isRequired,
   isDragging: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 }
 
 export default DocumentFieldsComponent

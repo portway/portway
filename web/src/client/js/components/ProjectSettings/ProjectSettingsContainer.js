@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Redirect, useParams } from 'react-router-dom'
 
 import { PATH_PROJECTS, PROJECT_ROLE_IDS } from 'Shared/constants'
@@ -19,7 +18,6 @@ const ProjectSettingsContainer = () => {
 }
 
 ProjectSettingsContainer.propTypes = {
-  match: PropTypes.object.isRequired
 }
 
 export default ProjectSettingsContainer
