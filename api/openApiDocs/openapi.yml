@@ -477,7 +477,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-
   /documents/{documentId}/fields:
     get:
       description: |
@@ -547,6 +546,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
   /documents/{documentId}/fields/{id}:
     get:
       description: Returns a field based on a single ID
@@ -645,6 +645,50 @@ paths:
       responses:
         '204':
           description: field deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /documents/{documentId}/fields/{id}/order:
+    put:
+      description: Update field order based on a field ID
+      operationId: updateFieldOrder
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: ID of field to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Body with order property, order must be within range of total document fields. Order starts at 0.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/field.yml#/UpdateFieldOrder'
+            example:
+              order: '1'
+      responses:
+        '200':
+          description: field response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/field.yml#/Field'
         default:
           description: unexpected error
           content:

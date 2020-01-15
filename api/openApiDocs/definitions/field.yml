@@ -84,3 +84,10 @@ NumberField:
       description: Number value with maximum of 15 significant digits (including decimal digits).
         For longer numbers we recommend storing as a string and parsing the value in your code.
       example: 1234567890.12345
+
+UpdateFieldOrder:
+  properties:
+    required:
+      - order
+    order:
+      type: integer
