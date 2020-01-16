@@ -31,24 +31,27 @@ const DocumentFieldsContainer = ({
   const draggingElement = useRef(null)
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
-  const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // Convert fields object to a sorted array for rendering
+  const fieldIds = Object.keys(fields)
   useEffect(() => {
-    if (fieldsLoading === false) {
-      const fieldMap = Object.keys(fields).map((fieldId) => {
-        return fields[fieldId]
-      })
-      fieldMap.sort((a, b) => {
-        return a.order - b.order
-      })
-      setOrderedFields(fieldMap)
-    }
-  }, [fields, fieldsLoading])
+    const fieldMap = fieldIds.map((fieldId) => {
+      return fields[fieldId]
+    })
+    fieldMap.sort((a, b) => {
+      return a.order - b.order
+    })
+    setOrderedFields(fieldMap)
+    // Note: this is not an ideal dependency but if fields aren't loaded and then load
+    // it will appropriately set the order. `fields` cannot be a dependency as it's an object.
+    // When field order is changed, other handlers will correctly set the ordered fields and
+    // we do not want this effect to run in those cases.
+    // eslint-disable-next-line
+  }, [fieldIds.length])
 
-  const fieldValues = Object.values(fields)
-  const hasOnlyOneTextField = fieldValues.length === 1 && fieldValues[0].type === FIELD_TYPES.TEXT
+  const hasOnlyOneTextField = fieldIds.length === 1 && fields[fieldIds[0]].type === FIELD_TYPES.TEXT
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
