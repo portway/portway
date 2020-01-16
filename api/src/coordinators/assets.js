@@ -4,7 +4,7 @@ import BusinessOrganization from '../businesstime/organization'
 import { PLAN_ASSET_STORAGE_BYTES } from '../constants/plans'
 
 async function addAssetForDocument(documentId, orgId, file) {
-  await recordOrgAsset(orgId, file)
+  await assetsCoordinator.recordOrgAsset(orgId, file)
   return await uploadContent(documentId, orgId, file)
 }
 
@@ -14,7 +14,9 @@ async function recordOrgAsset(orgId, file) {
   await BusinessResourceUsage.addUsageByType(orgId, RESOURCE_TYPES.ASSET, file.size, maxBytes)
 }
 
-export default {
+const assetsCoordinator = {
   addAssetForDocument,
   recordOrgAsset
 }
+
+export default assetsCoordinator
