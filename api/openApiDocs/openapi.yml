@@ -60,12 +60,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /projects/{id}:
+  /projects/{projectId}:
     get:
       description: Returns a project based on a single ID
       operationId: findProjectById
       parameters:
-        - name: id
+        - name: projectId
           in: path
           description: ID of project to fetch
           required: true
@@ -92,7 +92,7 @@ paths:
       description: Update a project based on a single ID - full or partial update
       operationId: updateProject
       parameters:
-        - name: id
+        - name: projectId
           in: path
           description: ID of project to update
           required: true
@@ -127,7 +127,7 @@ paths:
       description: deletes a single project based on the ID supplied
       operationId: deleteProject
       parameters:
-        - name: id
+        - name: projectId
           in: path
           description: ID of project to delete
           required: true
@@ -146,8 +146,7 @@ paths:
 
   /projects/{projectId}/documents:
     get:
-      description: |
-        Returns all documents that the user has access to for the given project id
+      description: Returns all documents that the user has access to for the given project id
       operationId: findDocuments
       parameters:
         - name: projectId
@@ -156,7 +155,6 @@ paths:
           required: true
           schema:
             type: integer
-
       responses:
         '200':
           description: documents response
@@ -209,7 +207,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /projects/{projectId}/documents/{id}:
+
+  /projects/{projectId}/documents/{documentId}:
     get:
       description: Returns a document based on a single ID
       operationId: findDocumentById
@@ -220,7 +219,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: documentId
           in: path
           description: ID of document to fetch
           required: true
@@ -253,7 +252,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: documentId
           in: path
           description: ID of document to update
           required: true
@@ -293,7 +292,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: documentId
           in: path
           description: ID of project to delete
           required: true
@@ -376,7 +375,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /projects/{projectId}/assignments/{id}:
+  /projects/{projectId}/assignments/{assignmentId}:
     get:
       description: Returns a project user assignment based on a single ID
       operationId: findProjectUserById
@@ -387,7 +386,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: assignmentId
           in: path
           description: ID of project user assignment to fetch
           required: true
@@ -420,7 +419,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: assignmentId
           in: path
           description: ID of project to update
           required: true
@@ -460,7 +459,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: assignmentId
           in: path
           description: ID of project user assignment to delete
           required: true
@@ -476,6 +475,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /documents/{documentId}:
+    get:
+      description: Returns a document based on a single ID
+      operationId: findPopulatedDocumentById
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of document to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: document response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/document.yml#/PopulatedDocument'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
 
   /documents/{documentId}/fields:
     get:
@@ -547,7 +576,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /documents/{documentId}/fields/{id}:
+  /documents/{documentId}/fields/{fieldId}:
     get:
       description: Returns a field based on a single ID
       operationId: findFieldById
@@ -558,7 +587,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: fieldId
           in: path
           description: ID of field to fetch
           required: true
@@ -591,7 +620,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: fieldId
           in: path
           description: ID of field to update
           required: true
@@ -635,7 +664,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: fieldId
           in: path
           description: ID of field to delete
           required: true
@@ -652,7 +681,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /documents/{documentId}/fields/{id}/order:
+  /documents/{documentId}/fields/{fieldId}/order:
     put:
       description: Update field order based on a field ID
       operationId: updateFieldOrder
@@ -663,7 +692,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: id
+        - name: fieldId
           in: path
           description: ID of field to update
           required: true
@@ -671,24 +700,15 @@ paths:
             type: integer
 
       requestBody:
-        description: Body with order property, order must be within range of total document fields. Order starts at 0.
+        description: Field body to update - allows partial field update
         required: true
         content:
           application/json:
             schema:
-              $ref: './definitions/field.yml#/UpdateFieldOrder'
-            example:
-              order: '1'
+              $ref: './definitions/field.yml#/FieldOrder'
       responses:
-        '200':
-          description: field response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: './definitions/field.yml#/Field'
+        '204':
+          description: field order updated
         default:
           description: unexpected error
           content:

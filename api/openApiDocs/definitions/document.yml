@@ -1,25 +1,25 @@
 Document:
-      allOf:
-        - $ref: '#/NewDocument'
-        - required:
-            - id
-            - projectId
-        - properties:
-            id:
-              type: integer
-            projectId:
-              type: integer
-            publishedVersionId:
-              type: integer
-            lastPublishedAt:
-              type: string
-              format: date-time
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
+  allOf:
+    - $ref: '#/NewDocument'
+    - required:
+        - id
+        - projectId
+    - properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        publishedVersionId:
+          type: integer
+        lastPublishedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
 NewDocument:
   required:
@@ -32,3 +32,12 @@ UpdateDocument:
   properties:
     name:
       type: string
+
+PopulatedDocument:
+  allOf:
+    - $ref: '#/Document'
+    - properties:
+        fields:
+          type: array
+          items:
+            $ref: './field.yml#/Field'

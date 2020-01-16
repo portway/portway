@@ -1,30 +1,30 @@
 Field:
-      allOf:
-        - $ref: '#/NewField'
-        - required:
-            - id
-            - name
-            - documentId
-            - type
-        - properties:
-            id:
-              type: integer
-            name:
-              type: string
-            documentId:
-              type: integer
-            type:
-              type: integer
-            value:
-              type: string
-            structuredValue:
-              type: string
-            createdAt:
-              type: string
-              format: date-time
-            updatedAt:
-              type: string
-              format: date-time
+  allOf:
+    - $ref: '#/NewField'
+    - required:
+        - id
+        - name
+        - documentId
+        - type
+    - properties:
+        id:
+          type: integer
+        name:
+          type: string
+        documentId:
+          type: integer
+        type:
+          type: integer
+        value:
+          type: string
+        structuredValue:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
 NewField:
   oneOf:
@@ -85,9 +85,7 @@ NumberField:
         For longer numbers we recommend storing as a string and parsing the value in your code.
       example: 1234567890.12345
 
-UpdateFieldOrder:
+FieldOrder:
   properties:
-    required:
-      - order
     order:
       type: integer
