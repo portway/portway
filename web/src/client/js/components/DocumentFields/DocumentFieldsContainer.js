@@ -27,29 +27,17 @@ const DocumentFieldsContainer = ({
   updateFieldOrder,
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
+  const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  const projectAssignment = userProjectAssignments[Number(projectId)]
-
-  let documentReadOnlyMode
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
-  }
-
-  let cloneElement
-
-  const [dropped, setDropped] = useState(false)
-
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
     if (fieldsLoading === false) {
-      const fieldIds = Object.keys(fields)
-      const fieldMap = fieldIds.map((fieldId) => {
+      const fieldMap = Object.keys(fields).map((fieldId) => {
         return fields[fieldId]
       })
       fieldMap.sort((a, b) => {
@@ -61,7 +49,6 @@ const DocumentFieldsContainer = ({
 
   const fieldValues = Object.values(fields)
   const hasOnlyOneTextField = fieldValues.length === 1 && fieldValues[0].type === FIELD_TYPES.TEXT
-
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
@@ -79,6 +66,13 @@ const DocumentFieldsContainer = ({
       }
     }
   }, [hasOnlyOneTextField])
+
+  const projectAssignment = userProjectAssignments[Number(projectId)]
+  let documentReadOnlyMode
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
 
   // Actions
   function createTextFieldHandler() {
@@ -142,6 +136,7 @@ const DocumentFieldsContainer = ({
     }
   }
 
+  let cloneElement
   function dragStartHandler(e) {
     // console.info('drag start')
     e.stopPropagation()
