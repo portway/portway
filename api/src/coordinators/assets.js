@@ -1,5 +1,5 @@
 import { uploadContent } from '../integrators/s3'
-import BusinessResourceUsage, { RESOURCE_TYPES } from '../businesstime/resourceUsage'
+import BusinessResourceUsage, { RESOURCE_TYPES } from '../businesstime/resourceusage'
 import BusinessOrganization from '../businesstime/organization'
 import { PLAN_ASSET_STORAGE_BYTES } from '../constants/plans'
 
