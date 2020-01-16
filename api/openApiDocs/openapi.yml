@@ -504,6 +504,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /documents/{documentId}/publish:
+    post:
+      description: Publishes a document based on ID
+      operationId: publishDocument
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of document to publish
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: document published
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /documents/{documentId}/unpublish:
+    post:
+      description: Unpublishes a document based on ID
+      operationId: unpublishDocument
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of document to unpublish
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: document unpublished
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     
   # TODO draft=true query param
   /documents/{documentId}/fields:
@@ -729,8 +773,8 @@ components:
           type: string
           description: Optional error type
           enum:
-            - ValidationError
             - undefined
+            - ValidationError
             - FieldValueIncorrectTypeError
         errorDetails:
           type: array
