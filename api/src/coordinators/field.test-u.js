@@ -1,10 +1,10 @@
 import fieldCoordinator from './field'
+import assetCoordinator from './assets'
 import BusinessField from '../businesstime/field'
-import { uploadContent } from '../integrators/s3'
 import { processMarkdownWithWorker } from './markdown'
 
 jest.mock('../businesstime/field')
-jest.mock('../integrators/s3')
+jest.mock('./assets')
 jest.mock('./markdown')
 
 describe('fieldCoordinator', () => {
@@ -31,16 +31,14 @@ describe('fieldCoordinator', () => {
         await fieldCoordinator.addFieldToDocument(documentId, imageBody, file )
       })
 
-      it('should call uploadContent from the s3 integrator with the passed in file', () => {
-        expect(uploadContent.mock.calls.length).toBe(1)
-        expect(uploadContent.mock.calls[0][2]).toEqual(file)
+      it('should call assetCoordinator.addAssetForDocument', () => {
+        expect(assetCoordinator.addAssetForDocument.mock.calls.length).toBe(1)
+        expect(assetCoordinator.addAssetForDocument.mock.calls[0][0]).toEqual(documentId)
       })
 
       it('should call BusinessField.createForDocument with the passed in documentId and body with uploaded file url added', () => {
-        const url = uploadContent.mock.results[0].value
         expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
         expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
-        expect(BusinessField.createForDocument.mock.calls[0][1]).toEqual(expect.objectContaining({ ...imageBody, value: url }))
       })
     })
 
@@ -113,26 +111,23 @@ describe('fieldCoordinator', () => {
       const file = { buffer: new Buffer('not-a-real-buffer') }
 
       beforeAll(async () => {
-        uploadContent.mockReset()
         BusinessField.setFindByIdReturnValue({ type: 4 })
         BusinessField.updateByIdForDocument.mockReset()
+        assetCoordinator.addAssetForDocument.mockReset()
         await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, imageBody, file)
       })
 
-      it('should call uploadContent from the s3 integrator with the passed in file', () => {
-        expect(uploadContent.mock.calls.length).toBe(1)
-        expect(uploadContent.mock.calls[0][2]).toEqual(file)
+      it('should call assetCoordinator addAssetForDocument', () => {
+        expect(assetCoordinator.addAssetForDocument.mock.calls.length).toBe(1)
+        expect(assetCoordinator.addAssetForDocument.mock.calls[0][0]).toEqual(documentId)
+        expect(assetCoordinator.addAssetForDocument.mock.calls[0][1]).toEqual(orgId)
       })
 
       it('should call BusinessField.updateByIdForDocument with the passed in documentId and body with uploaded file url added', () => {
-        const url = uploadContent.mock.results[0].value
         expect(BusinessField.updateByIdForDocument.mock.calls.length).toBe(1)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][0]).toEqual(fieldId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(documentId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
-        expect(BusinessField.updateByIdForDocument.mock.calls[0][3]).toEqual(
-          expect.objectContaining({ ...imageBody, value: url })
-        )
       })
     })
   })
