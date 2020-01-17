@@ -106,3 +106,24 @@ UpdateOrganizationPlan:
     plan:
       type: string
       enum: [SINGLE_USER, MULTI_USER]
+
+UpdateOrganizationSeats:
+  properties:
+    seats:
+      type: integer
+      minimum: 5
+      exclusiveMinimum: true
+
+UpdateOrganizationSeatsResponse:
+  properties:
+    totalSeats:
+      type: integer
+
+OrganizationSeats:
+  properties:
+    usedSeats:
+      type: integer
+    totalSeats:
+      type: integer
+    includedSeats:
+      type: integer

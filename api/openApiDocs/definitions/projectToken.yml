@@ -1,6 +1,6 @@
-Project:
+ProjectToken:
   allOf:
-    - $ref: '#/NewProject'
+    - $ref: '#/NewProjectToken'
     - required:
         - id
     - properties:
@@ -12,25 +12,23 @@ Project:
         updatedAt:
           type: string
           format: date-time
+        projectId:
+          type: integer
+        token:
+          type: string
 
-NewProject:
+NewProjectToken:
   required:
+    - roleId
     - name
   properties:
+    roleId:
+      type: number
     name:
       type: string
-    description:
-      type: string
-    accessLevel:
-      type: string
-      enum: [read, write]
 
-UpdateProject:
+UpdateProjectToken:
+  required:
   properties:
     name:
       type: string
-    description:
-      type: string
-    accessLevel:
-      type: string
-      enum: [read, write]
