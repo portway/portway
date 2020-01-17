@@ -1,0 +1,40 @@
+Organization:
+  properties:
+    id:
+      type: integer
+    name:
+      type: string
+    allowUserProjectCreation:
+      type: boolean
+    avatar:
+      type: string
+    plan:
+      type: string
+    subscriptionStatus:
+      type: string
+    canceledAt:
+      type: integer
+    createdAt:
+      type: string
+      format: date-time
+    updatedAt:
+      type: string
+      format: date-time
+
+UpdateOrganization:
+  properties:
+    name:
+      type: string
+    allowUserProjectCreation:
+      type: boolean
+
+OrganizationAvatar:
+  properties:
+    avatar:
+      type: string
+
+UpdateOrganizationAvatar:
+  properties:
+    file:
+      type: string
+      format: binary

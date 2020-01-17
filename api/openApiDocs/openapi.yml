@@ -760,6 +760,103 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /organizations/{organizationId}:
+    get:
+      description: Returns an organization based on a single ID
+      operationId: findOrganizationById
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: organization response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/Organization'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update an organization based on a single ID
+      operationId: updateOrganization
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization body to update - allows partial update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganization'
+      responses:
+        '200':
+          description: organization response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/Organization'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /organizations/{organizationId}/avatar:  
+    put:
+      description: Update an organization avatar based on a single ID
+      operationId: updateOrganizationAvatar
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization avatar binary
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganizationAvatar'
+      responses:
+        '200':
+          description: organization avatar response with avatar url
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/OrganizationAvatar'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     Error:
