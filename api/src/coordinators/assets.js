@@ -17,7 +17,8 @@ async function recordOrgAsset(orgId, size) {
 
 async function deleteAsset(assetUrlString, orgId) {
   const assetUrl = new URL(assetUrlString)
-  const s3AssetKey = assetUrl.pathname
+  // remove beginning "/" from pathname
+  const s3AssetKey = decodeURIComponent(assetUrl.pathname.slice(1))
   const fileSize = (await getContentMetadata(s3AssetKey)).size
   await deleteContent(s3AssetKey)
   await assetsCoordinator.recordOrgAsset(orgId, fileSize * -1)
