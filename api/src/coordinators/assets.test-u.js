@@ -1,5 +1,5 @@
 import assetCoordinator from './assets'
-import { uploadContent } from '../integrators/s3'
+import { uploadContent, getContentMetadata, deleteContent } from '../integrators/s3'
 import BusinessResourceUsage from '../businesstime/resourceusage'
 import BusinessOrganization from '../businesstime/organization'
 
@@ -57,6 +57,35 @@ describe('assetCoordinator', () => {
       expect(BusinessResourceUsage.updateUsageByType.mock.calls.length).toBe(1)
       expect(BusinessResourceUsage.updateUsageByType.mock.calls[0][0]).toEqual(orgId)
       expect(BusinessResourceUsage.updateUsageByType.mock.calls[0][2]).toEqual(file.size)
+    })
+  })
+
+  describe('#deleteAsset', () => {
+    const orgId = 23
+    const assetUrl = 'https://cdn.portway.com/a/bcd/thing.jpg'
+    beforeAll(async () => {
+      jest.spyOn(assetCoordinator, 'recordOrgAsset')
+      await assetCoordinator.deleteAsset(assetUrl, orgId)
+    })
+
+    it('should call getContentMetadata', () => {
+      expect(getContentMetadata.mock.calls.length).toBe(1)
+      expect(assetUrl).toMatch(getContentMetadata.mock.calls[0][0])
+    })
+
+    it('should call deleteContent', () => {
+      expect(deleteContent.mock.calls.length).toBe(1)
+      expect(assetUrl).toMatch(deleteContent.mock.calls[0][0])
+    })
+
+    it('should call recordOrgAsset', () => {
+      expect(assetCoordinator.recordOrgAsset.mock.calls.length).toBe(1)
+      expect(assetCoordinator.recordOrgAsset.mock.calls[0][0]).toEqual(orgId)
+      expect(assetCoordinator.recordOrgAsset.mock.calls[0][1]).toBeLessThan(0)
+    })
+
+    afterAll(() => {
+      assetCoordinator.recordOrgAsset.mockRestore()
     })
   })
 })

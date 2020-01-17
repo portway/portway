@@ -20,7 +20,7 @@ async function deleteAsset(assetUrlString, orgId) {
   const s3AssetKey = assetUrl.pathname
   const fileSize = (await getContentMetadata(s3AssetKey)).size
   await deleteContent(s3AssetKey)
-  await recordOrgAsset(orgId, fileSize * -1)
+  await assetsCoordinator.recordOrgAsset(orgId, fileSize * -1)
 }
 
 const assetsCoordinator = {
