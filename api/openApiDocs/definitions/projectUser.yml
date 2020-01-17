@@ -4,6 +4,8 @@ ProjectUser:
         - required:
             - id
         - properties:
+            projectId:
+              type: integer
             id:
               type: integer
             createdAt:

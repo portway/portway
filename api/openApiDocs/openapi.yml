@@ -807,7 +807,7 @@ paths:
 
       responses:
         '200':
-          description: project response
+          description: field response
           content:
             application/json:
               schema:
@@ -1190,7 +1190,229 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      
+
+  /users:
+    get:
+      description: Returns all users that the user has access to
+      operationId: findUsers
+      responses:
+        '200':
+          description: users response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: 'definitions/user.yml#/User'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new user
+      operationId: addUser
+      requestBody:
+        description: User to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/user.yml#/NewUser'
+      responses:
+        '201':
+          description: user response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/user.yml#/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}:
+    get:
+      description: Returns a user based on a single ID
+      operationId: findUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/user.yml#/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a user based on a single ID - full or partial update
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: User body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/user.yml#/UpdateUser'
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/user.yml#/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      description: deletes a single user based on the ID supplied
+      operationId: deleteUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: user deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}/orgrole:
+    put:
+      description: Update a user's organization role based on a single ID
+      operationId: updateUserOrgRole
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: User organization role body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/user.yml#/UpdateUserOrgRole'
+      responses:
+        '204':
+          description: user org role response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}/assignments:
+    get:
+      description: Returns user assignments based on user id
+      operationId: findUserAssignmentsById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: user assignments response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/projectUser.yml#/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}/projects:
+    get:
+      description: Returns projects based on user id
+      operationId: findUserProjectsById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: user projects response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/project.yml#/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+     
 components:
   schemas:
     Error:

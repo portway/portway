@@ -28,7 +28,6 @@ NewProjectToken:
       type: string
 
 UpdateProjectToken:
-  required:
   properties:
     name:
       type: string
