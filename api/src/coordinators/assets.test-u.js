@@ -1,17 +1,17 @@
 import assetCoordinator from './assets'
 import { uploadContent } from '../integrators/s3'
-import BusinessResourceUsage, { RESOURCE_TYPES } from '../businesstime/resourceUsage'
+import BusinessResourceUsage from '../businesstime/resourceusage'
 import BusinessOrganization from '../businesstime/organization'
 
 jest.mock('../integrators/s3')
-jest.mock('../businesstime/resourceUsage')
+jest.mock('../businesstime/resourceusage')
 jest.mock('../businesstime/organization')
 
 describe('assetCoordinator', () => {
   describe('#addAssetForDocument', () => {
-    const documentId = 0
     const orgId = 1
-    const file = new Buffer('fake-file-buffer')
+    const documentId = 0
+    const file = { size: 723 }
 
     beforeAll(async () => {
       jest.spyOn(assetCoordinator, 'recordOrgAsset')
@@ -42,7 +42,7 @@ describe('assetCoordinator', () => {
       size: 1234
     }
 
-    beforeAll(async() => {
+    beforeAll(async () => {
       BusinessOrganization.findSanitizedById.mockClear()
       BusinessResourceUsage.addUsageByType.mockClear()
       await assetCoordinator.recordOrgAsset(orgId, file)
