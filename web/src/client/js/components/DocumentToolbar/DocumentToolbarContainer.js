@@ -4,7 +4,7 @@ import { useLocation, useParams, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PATH_DOCUMENT_NEW_PARAM, PLAN_TYPES } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
 import { deleteDocument, publishDocument, unpublishDocument } from 'Actions/document'
@@ -42,7 +42,7 @@ const DocumentToolbarContainer = ({
 
   // Create a list of projectUsers if we have any
   let projectUsers = []
-  if (currentOrg.plan === PLAN_TYPES.MULTI_USER) {
+  if (MULTI_USER_PLAN_TYPES.includes(currentOrg.plan)) {
     const myUserId = String(currentUserId)
     if (!userLoading && !assignmentsLoading && projectAssignments) {
       projectUsers = Object.keys(projectAssignments).filter((userId) => {
