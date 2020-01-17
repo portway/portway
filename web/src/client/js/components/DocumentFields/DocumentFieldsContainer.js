@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -27,17 +27,15 @@ const DocumentFieldsContainer = ({
   updateFieldOrder,
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
-  const draggingElement = useRef(null)
-  const params = useParams()
-  const { projectId, documentId } = params
-  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
-
-  let cloneElement
-
   const [dropped, setDropped] = useState(false)
+  const draggingElement = useRef(null)
+  const { projectId, documentId } = useParams()
+  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  const fieldIds = Object.keys(fields)
   // Convert fields object to a sorted array for rendering
+  const fieldIds = Object.keys(fields)
   useEffect(() => {
     const fieldMap = fieldIds.map((fieldId) => {
       return fields[fieldId]
@@ -53,9 +51,7 @@ const DocumentFieldsContainer = ({
     // eslint-disable-next-line
   }, [fieldIds.length])
 
-  const fieldValues = Object.values(fields)
-  const hasOnlyOneTextField = fieldValues.length === 1 && fieldValues[0].type === FIELD_TYPES.TEXT
-
+  const hasOnlyOneTextField = fieldIds.length === 1 && fields[fieldIds[0]].type === FIELD_TYPES.TEXT
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
@@ -74,58 +70,76 @@ const DocumentFieldsContainer = ({
     }
   }, [hasOnlyOneTextField])
 
+  const projectAssignment = userProjectAssignments[Number(projectId)]
+  let documentReadOnlyMode
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
+
   // Actions
   function createTextFieldHandler() {
-    // This is triggered by the Big Invisible Button™
-    // It should append a new text field to the end of the document, making it seem as though the
-    // user is clicking to continue the document body
-    const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
-    createField(projectId, documentId, FIELD_TYPES.TEXT, {
-      name: newName,
-      type: FIELD_TYPES.TEXT
-    })
+    if (!documentReadOnlyMode) {
+      // This is triggered by the Big Invisible Button™
+      // It should append a new text field to the end of the document, making it seem as though the
+      // user is clicking to continue the document body
+      const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
+      createField(projectId, documentId, FIELD_TYPES.TEXT, {
+        name: newName,
+        type: FIELD_TYPES.TEXT
+      })
+    }
   }
 
   function fieldDestroyHandler(fieldId, fieldType) {
-    let type = 'field'
+    if (!documentReadOnlyMode) {
+      let type = 'field'
 
-    switch (fieldType) {
-      case FIELD_TYPES.IMAGE:
-        type = 'image'
-        break
-      case FIELD_TYPES.STRING:
-        type = 'string'
-        break
-      case FIELD_TYPES.NUMBER:
-        type = 'number'
-        break
-      case FIELD_TYPES.TEXT:
-        type = 'text'
-        break
-      default:
-        break
+      switch (fieldType) {
+        case FIELD_TYPES.IMAGE:
+          type = 'image'
+          break
+        case FIELD_TYPES.STRING:
+          type = 'string'
+          break
+        case FIELD_TYPES.NUMBER:
+          type = 'number'
+          break
+        case FIELD_TYPES.TEXT:
+          type = 'text'
+          break
+        default:
+          break
+      }
+
+      const message = <span>Are you sure you want to delete this {type}?</span>
+      const confirmedLabel = 'Yes, delete it.'
+      const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
+      uiConfirm({ message, confirmedAction, confirmedLabel })
     }
-
-    const message = <span>Are you sure you want to delete this {type}?</span>
-    const confirmedLabel = 'Yes, delete it.'
-    const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
-    focusField(fieldId, fieldType, fieldData)
+    if (!documentReadOnlyMode) {
+      focusField(fieldId, fieldType, fieldData)
+    }
   }
 
   function fieldBlurHandler(fieldId, fieldType, fieldData) {
-    blurField(fieldId, fieldType, fieldData)
+    if (!documentReadOnlyMode) {
+      blurField(fieldId, fieldType, fieldData)
+    }
   }
 
   function fieldChangeHandler(fieldId, body) {
-    // leave this console in to make sure we're not hammering the API because of useEffect
-    // console.info(`Field: ${fieldId} trigger changeHandler`)
-    updateField(projectId, documentId, fieldId, body)
+    if (!documentReadOnlyMode) {
+      // leave this console in to make sure we're not hammering the API because of useEffect
+      // console.info(`Field: ${fieldId} trigger changeHandler`)
+      updateField(projectId, documentId, fieldId, body)
+    }
   }
 
+  let cloneElement
   function dragStartHandler(e) {
     // console.info('drag start')
     e.stopPropagation()
@@ -246,6 +260,7 @@ const DocumentFieldsContainer = ({
       fieldsUpdating={fieldsUpdating}
       isDragging={draggingElement.current != null}
       isPublishing={isPublishing}
+      readOnly={documentReadOnlyMode}
     />
   )
 }

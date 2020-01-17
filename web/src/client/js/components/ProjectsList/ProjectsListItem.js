@@ -43,7 +43,7 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
         </OrgPlanPermission>
       </Link>
       <div className="project-list__actions" ref={itemRef}>
-        <ProjectPermission projectId={projectId} acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectIdOverride={projectId}>
           <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
             <SettingsIcon />
           </Link>
