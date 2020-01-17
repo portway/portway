@@ -38,3 +38,65 @@ UpdateOrganizationAvatar:
     file:
       type: string
       format: binary
+
+OrganizationBilling:
+  properties:
+    currency:
+      type: string
+    name:
+      type: string
+    balance:
+      type: integer
+    source:
+      type: object
+      properties:
+        addressCity:
+          type: string
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        addressState:
+          type: string
+        addressZip:
+          type: string
+        brand:
+          type: string
+        expMonth:
+          type: integer
+        expYear:
+          type: integer
+        last4:
+          type: string
+        name:
+          type: string
+    subscription:
+      type: object
+      properties:
+        status:
+          type: string
+        planId:
+          type: string
+        billingCycleAnchor:
+          type: integer
+        cancelAt:
+          type: integer
+        currentPeriodEnd:
+          type: integer
+        trialEnd:
+          type: integer
+        totalSeats:
+          type: integer
+        usedSeats:
+          type: integer
+        flatCost:
+          type: integer
+        includedSeats:
+          type: integer
+        additionalSeatCost:
+          type: integer
+
+UpdateOrganizationBilling:
+  properties:
+    token:
+      type: string
