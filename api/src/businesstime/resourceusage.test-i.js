@@ -7,15 +7,15 @@ describe('resourceUsage', () => {
     await initializeTestDb()
   })
 
-  describe('addUsageByType', () => {
+  describe('updateUsageByType', () => {
     describe('with allowable space', () => {
       it('should add usage', async () => {
-        await expect(BusinessResourceUsage.addUsageByType(constants.ORG_ID, RESOURCE_TYPES.ASSET, 12, 124)).resolves
+        await expect(BusinessResourceUsage.updateUsageByType(constants.ORG_ID, RESOURCE_TYPES.ASSET, 12, 124)).resolves
       })
 
       it('should add more usage', async () => {
         await expect(
-          BusinessResourceUsage.addUsageByType(
+          BusinessResourceUsage.updateUsageByType(
             constants.ORG_ID,
             RESOURCE_TYPES.ASSET,
             89,
@@ -27,7 +27,7 @@ describe('resourceUsage', () => {
 
     describe('without allowable space', () => {
       it('should throw an error', async () => {
-        await expect(BusinessResourceUsage.addUsageByType(
+        await expect(BusinessResourceUsage.updateUsageByType(
           constants.ORG_ID,
           RESOURCE_TYPES.ASSET,
           2000,
@@ -39,7 +39,7 @@ describe('resourceUsage', () => {
     describe('with invalid parameters', () => {
       it('should throw an error with string value', async () => {
         await expect(
-          BusinessResourceUsage.addUsageByType(
+          BusinessResourceUsage.updateUsageByType(
             constants.ORG_ID,
             RESOURCE_TYPES.ASSET,
             'string',
@@ -49,7 +49,7 @@ describe('resourceUsage', () => {
       })
       it('should throw an error with string maxValue', async () => {
         await expect(
-          BusinessResourceUsage.addUsageByType(
+          BusinessResourceUsage.updateUsageByType(
             constants.ORG_ID,
             RESOURCE_TYPES.ASSET,
             123,
@@ -82,7 +82,8 @@ describe('resourceUsage', () => {
       const usageValue = 12
       let usage
       beforeAll(async () => {
-        await BusinessResourceUsage.addUsageByType(
+        await clearDb()
+        await BusinessResourceUsage.updateUsageByType(
           constants.ORG_ID,
           RESOURCE_TYPES.ASSET,
           usageValue,

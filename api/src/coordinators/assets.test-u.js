@@ -44,8 +44,8 @@ describe('assetCoordinator', () => {
 
     beforeAll(async () => {
       BusinessOrganization.findSanitizedById.mockClear()
-      BusinessResourceUsage.addUsageByType.mockClear()
-      await assetCoordinator.recordOrgAsset(orgId, file)
+      BusinessResourceUsage.updateUsageByType.mockClear()
+      await assetCoordinator.recordOrgAsset(orgId, file.size)
     })
 
     it('should call BusinessOrganization.findSanitizedById', () => {
@@ -53,10 +53,10 @@ describe('assetCoordinator', () => {
       expect(BusinessOrganization.findSanitizedById.mock.calls[0][0]).toEqual(orgId)
     })
 
-    it('should call BusinessResourceUsage.addUsageByType', () => {
-      expect(BusinessResourceUsage.addUsageByType.mock.calls.length).toBe(1)
-      expect(BusinessResourceUsage.addUsageByType.mock.calls[0][0]).toEqual(orgId)
-      expect(BusinessResourceUsage.addUsageByType.mock.calls[0][2]).toEqual(file.size)
+    it('should call BusinessResourceUsage.updateUsageByType', () => {
+      expect(BusinessResourceUsage.updateUsageByType.mock.calls.length).toBe(1)
+      expect(BusinessResourceUsage.updateUsageByType.mock.calls[0][0]).toEqual(orgId)
+      expect(BusinessResourceUsage.updateUsageByType.mock.calls[0][2]).toEqual(file.size)
     })
   })
 })

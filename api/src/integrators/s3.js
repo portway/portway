@@ -82,6 +82,25 @@ export const deleteContent = async function(key) {
   console.info(`Successfully deleted S3 content with key: ${key}`)
 }
 
+export const getContentMetadata = async function(key) {
+  let res
+
+  try {
+    res = await s3
+      .headObject({
+        Bucket: S3_CONTENT_BUCKET,
+        Key: key
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, `AWS s3 failed to head object with key: ${key}`)
+  }
+
+  return {
+    size: res.ContentLength
+  }
+}
+
 // Get the Cloudfront url for the S3 url
 function s3ToCDNLink(s3Location) {
   if (!CDN_HOSTNAME) return s3Location

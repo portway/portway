@@ -306,12 +306,8 @@ describe('BusinessField', () => {
       })
 
       describe('when the target field does not have the passed in orgId', () => {
-        beforeAll(async () => {
-          field = await BusinessField.findByIdForDocument(targetFieldId, constants.ORG_ID_2)
-        })
-
-        it('should return null', () => {
-          expect(field).toBe(null)
+        it('should throw an error', async () => {
+          await expect(BusinessField.findByIdForDocument(targetFieldId, constants.ORG_ID_2)).rejects.toThrow()
         })
       })
     })
