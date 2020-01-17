@@ -100,3 +100,9 @@ UpdateOrganizationBilling:
   properties:
     token:
       type: string
+
+UpdateOrganizationPlan:
+  properties:
+    plan:
+      type: string
+      enum: [SINGLE_USER, MULTI_USER]
