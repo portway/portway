@@ -70,12 +70,10 @@ describe('assetCoordinator', () => {
 
     it('should call getContentMetadata', () => {
       expect(getContentMetadata.mock.calls.length).toBe(1)
-      expect(assetUrl).toMatch(getContentMetadata.mock.calls[0][0])
     })
 
     it('should call deleteContent', () => {
       expect(deleteContent.mock.calls.length).toBe(1)
-      expect(assetUrl).toMatch(deleteContent.mock.calls[0][0])
     })
 
     it('should call recordOrgAsset', () => {

@@ -88,9 +88,8 @@ export const copyContent = async function(key) {
   keyParts[lastIndex] = `${Date.now()}-${keyParts[lastIndex]}`
   const newKey = keyParts.join('/')
 
-  let res
   try {
-    res = await s3
+    await s3
       .copyObject({
         Bucket: S3_CONTENT_BUCKET,
         CopySource: `${S3_CONTENT_BUCKET}/${key}`,
