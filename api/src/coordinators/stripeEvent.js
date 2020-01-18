@@ -23,10 +23,8 @@ async function handleEvent(event) {
       break
     }
     case 'customer.subscription.deleted': {
-      const subject = 'Portway subscription canceled'
-      const message = 'Your portway subscription has been canceled'
-      //not awaiting anything after this point to prevent timeout and possible duplication
-      sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+      // No need to await webhook
+      emailCoordinator.sendSubscriptionCanceled(customer.email)
       break
     }
     case 'customer.source.created':
