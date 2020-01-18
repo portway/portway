@@ -7,13 +7,5 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.changeColumn('Users', 'orgId', {
-      allowNull: false,
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'Organizations',
-        key: 'id'
-      }
-    })
   }
 }
