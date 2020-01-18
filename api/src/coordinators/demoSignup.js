@@ -6,7 +6,7 @@ import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
-import { sendSingleRecipientEmail } from '../integrators/email'
+import emailCoordinator from './email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
 import billingCoordinator from './billing'
@@ -71,19 +71,10 @@ async function createUsersAndOrganization(name, users) {
   await Promise.all(
     orgUsers.map((user) => {
       const token = tokenIntegrator.generatePasswordResetToken(user.id, user.resetKey)
+
       const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
-      const htmlBody = `
-      <h2>Welcome to Portway!</h2>
-      <p>We'd like to offer you a free account which you can claim by visiting the following link:</p>
-      <p>${linkUrl}</p>
-      <p>We hope you enjoy Portway and would value any feedback you'd like to share.</p>
-    `
-      const textBody = `Welcome to Portway! We'd like to offer you a free account you can claim here: ${linkUrl}`
-
-      const subject = 'Free Account: Welcome to Portway!'
-
-      return sendSingleRecipientEmail({ address: user.email, htmlBody, textBody, subject })
+      return emailCoordinator.sendFreeAccountInvite(linkUrl, user.email)
     })
   )
 }

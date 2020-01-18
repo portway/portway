@@ -22,6 +22,7 @@ const DocumentFieldComponent = ({
   isNewField,
   onDestroy,
   onRename,
+  readOnly,
   settingsHandler,
   settingsMode,
 }) => {
@@ -81,21 +82,23 @@ const DocumentFieldComponent = ({
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
-      onDragEnd={dragEndHandler}
-      onDragEnter={dragEnterHandler}
+      onDragEnd={readOnly ? null : dragEndHandler}
+      onDragEnter={readOnly ? null : dragEnterHandler}
       onDragOver={e => e.preventDefault()}
-      onDragStart={dragStartHandler}
-      onDrop={dropHandler}
+      onDragStart={readOnly ? null : dragStartHandler}
+      onDrop={readOnly ? null : dropHandler}
       ref={listRef}
     >
       <div className="document-field__component">
 
         <div className={fieldToolClasses}>
+          {!readOnly &&
           <div className="document-field__dragger">
             <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon" onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}>
               <DragIcon />
             </button>
           </div>
+          }
         </div>
 
         <div className="document-field__container">
@@ -113,7 +116,12 @@ const DocumentFieldComponent = ({
                 e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
               }}
               onChange={(e) => { onRename(field.id, e.target.value) }}
-              onFocus={(e) => { e.target.select() }}
+              onFocus={(e) => {
+                if (!readOnly) {
+                  e.target.select()
+                }
+              }}
+              readOnly={readOnly}
               ref={nameRef}
               style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
               type="text" />
@@ -122,12 +130,12 @@ const DocumentFieldComponent = ({
           <div className="document-field__content">
             <div className="document-field__settings-button">
               <>
-              {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode &&
+              {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode && !readOnly &&
                 <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
                   <SettingsIcon />
                 </button>
               }
-              {settingsMode &&
+              {settingsMode && !readOnly &&
                 <button aria-label="Exit settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
                   <RemoveIcon width="32" height="32" />
                 </button>
@@ -139,9 +147,11 @@ const DocumentFieldComponent = ({
         </div>
 
         <div className={fieldActionClasses}>
+          {!readOnly &&
           <button aria-label="Remove field" className="btn btn--blank btn--red btn--with-circular-icon" onClick={onDestroy}>
             <TrashIcon fill="#ffffff" />
           </button>
+          }
         </div>
 
       </div>
@@ -162,6 +172,7 @@ DocumentFieldComponent.propTypes = {
   isNewField: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
 }

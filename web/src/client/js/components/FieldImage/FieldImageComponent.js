@@ -18,7 +18,15 @@ const ALLOWED_TYPES = [
   'image/x-icon'
 ]
 
-const FieldImageComponent = ({ field, onChange, onRename, settingsHandler, settingsMode, updating }) => {
+const FieldImageComponent = ({
+  field,
+  onChange,
+  onRename,
+  readOnly,
+  settingsHandler,
+  settingsMode,
+  updating
+}) => {
   const [warning, setWarning] = useState(null)
   const imageNodeRef = useRef()
 
@@ -99,6 +107,7 @@ FieldImageComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,

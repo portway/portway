@@ -76,7 +76,7 @@
 
   .document__fields--is-dragging & {
     overflow: hidden;
-    height: 100px;
+    max-height: 100px;
   }
 
 } // document-field__component
@@ -135,6 +135,16 @@
   justify-content: center;
   position: relative;
 
+  input {
+    border: thin solid transparent;
+    .using-mouse & {
+      &:focus {
+        border: thin solid transparent;
+        box-shadow: none;
+      }
+    }
+  }
+
   // A new field should be obvious it is new
   .document-field--new.document-field--data & {
     border-color: var(--color-blue);
@@ -143,7 +153,6 @@
   .document-field--data & {
     padding: 1.4rem 1.05rem;
     input {
-      border: transparent;
       font-size: 1.5rem;
       line-height: 2.4rem;
       width: 100%;

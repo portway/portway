@@ -17,6 +17,8 @@ const UNAUTHENTICATED_CONTROLLERS = {
   '/sign-up': 'sign-up',
   '/password-reset': 'password-reset',
   '/': 'home',
+  // needs to be in sync with marketing site form submission url
+  '/squishymuffins': 'support'
 }
 
 const loadControllers = (router, controllers, middleware) => {
