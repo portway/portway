@@ -223,6 +223,7 @@ describe('user coordinator', () => {
     let createdUser
 
     beforeAll(async () => {
+      BusinessUser.findByEmail.mockReturnValueOnce(null)
       createdUser = await userCoordinator.createPendingUser(email, name, orgId)
     })
 
@@ -270,6 +271,7 @@ describe('user coordinator', () => {
 
     describe('when the org does not have a subscription', () => {
       it('should throw an error', async () => {
+        BusinessUser.findByEmail.mockReturnValueOnce(null)
         billingCoordinator.getOrgBilling.mockReturnValueOnce({})
         await expect(userCoordinator
           .createPendingUser(email, name, orgId))
@@ -279,6 +281,7 @@ describe('user coordinator', () => {
 
     describe('when the org has used all of its seats', () => {
       it('should throw an error', async () => {
+        BusinessUser.findByEmail.mockReturnValueOnce(null)
         billingCoordinator.getOrgBilling.mockReturnValueOnce({
           subscription: { totalSeats: 5, usedSeats: 5 }
         })
@@ -290,6 +293,7 @@ describe('user coordinator', () => {
 
     describe('when there is a returned soft-deleted user', () => {
       beforeAll(async () => {
+        BusinessUser.findByEmail.mockReturnValueOnce(null)
         BusinessUser.setFindSoftDeletedReturnToMockValue()
         await userCoordinator.createPendingUser(email, name, orgId)
       })
