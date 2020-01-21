@@ -2,6 +2,7 @@ import express from 'express'
 import auth from '../libs/auth/auth'
 import reqInfoExtractor from '../libs/middleware/reqInfoExtractorMiddleware'
 import checkActiveOrgStatus from '../libs/middleware/checkActiveOrgStatus'
+import orgRateLimiter from '../libs/middleware/orgRateLimiter'
 import bodyParser from 'body-parser'
 
 // To add a controller, add the base path to mount it as a key
@@ -92,6 +93,6 @@ const loadControllers = (router, controllers, middleware = [], routerOptions) =>
 }
 
 export const v1Loader = (router) => {
-  loadControllers(router, V1_CONTROLLERS.AUTHENTICATED, [auth.jwtMiddleware, reqInfoExtractor])
+  loadControllers(router, V1_CONTROLLERS.AUTHENTICATED, [auth.jwtMiddleware, reqInfoExtractor, orgRateLimiter])
   loadControllers(router, V1_CONTROLLERS.UNAUTHENTICATED)
 }
