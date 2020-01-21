@@ -20,7 +20,7 @@ export default async function orgRateLimiter(req, res, next) {
     return next()
   } else {
     const rateLimitError = new ono(
-      { code: 409, publicMessage: PUBLIC_MESSAGES.RATE_LIMIT_EXCEEDED },
+      { code: 429, publicMessage: PUBLIC_MESSAGES.RATE_LIMIT_EXCEEDED },
       `Rate Limit Exceeded for org ${req.requestorInfo.orgId}`
     )
     return next(rateLimitError)

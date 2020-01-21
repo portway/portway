@@ -23,7 +23,8 @@ async function handleEvent(event) {
       break
     }
     case 'customer.subscription.deleted': {
-      //TODO send email letting customer know account is cancelled
+      // No need to await webhook
+      emailCoordinator.sendSubscriptionCanceled(customer.email)
       break
     }
     case 'customer.source.created':
