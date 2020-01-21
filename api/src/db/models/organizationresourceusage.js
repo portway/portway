@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       orgId: DataTypes.INTEGER,
       resourceType: DataTypes.INTEGER,
-      value: DataTypes.TEXT
+      value: DataTypes.INTEGER
     },
     {
       paranoid: true
