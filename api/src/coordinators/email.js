@@ -19,7 +19,8 @@ const EMAIL_TEMPLATES = {
   FORGOT_PASSWORD: 'FORGOT_PASSWORD',
   SIGNUP_CONFIRM: 'SIGNUP_CONFIRM',
   PAYMENT_FAILED: 'PAYMENT_FAILED',
-  PAYMENT_SUCCESS: 'PAYMENT_SUCCESS'
+  PAYMENT_SUCCESS: 'PAYMENT_SUCCESS',
+  SUBSCRIPTION_CANCELED: 'SUBSCRIPTION_CANCELED'
 }
 const EMAIL_TEMPLATE_FILES = {
   [EMAIL_TEMPLATES.INVITE]: 'invite.html',
@@ -28,7 +29,8 @@ const EMAIL_TEMPLATE_FILES = {
   [EMAIL_TEMPLATES.PASSWORD_CHANGE]: 'password-change.html',
   [EMAIL_TEMPLATES.SIGNUP_CONFIRM]: 'signup.html',
   [EMAIL_TEMPLATES.PAYMENT_FAILED]: 'payment-failed.html',
-  [EMAIL_TEMPLATES.PAYMENT_SUCCESS]: 'payment-success.html'
+  [EMAIL_TEMPLATES.PAYMENT_SUCCESS]: 'payment-success.html',
+  [EMAIL_TEMPLATES.SUBSCRIPTION_CANCELED]: 'subscription-canceled.html'
 }
 const EJS_TEMPLATE_FUNCTIONS = {}
 
@@ -114,6 +116,20 @@ async function sendPaymentSuccess(email) {
   })
 }
 
+async function sendSubscriptionCanceled(email) {
+  const subject = 'Portway subscription canceled'
+  const message = 'Your portway subscription has been canceled'
+
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.SUBSCRIPTION_CANCELED]({})
+
+  sendSingleRecipientEmail({
+    address: email,
+    textBody: message,
+    htmlBody,
+    subject
+  })
+}
+
 export default {
   sendInvitationEmail,
   sendPasswordChangeEmail,
@@ -121,5 +137,6 @@ export default {
   sendFreeAccountInvite,
   sendSignupVerification,
   sendPaymentFailed,
-  sendPaymentSuccess
+  sendPaymentSuccess,
+  sendSubscriptionCanceled
 }

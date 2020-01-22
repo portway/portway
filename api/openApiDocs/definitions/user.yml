@@ -1,0 +1,54 @@
+User:
+  allOf:
+    - $ref: '#/NewUser'
+    - required:
+        - id
+    - properties:
+        avatar:
+          type: string
+        pending:
+          type: boolean
+        orgRoleId:
+          type: integer
+        id:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+NewUser:
+  required:
+    - name
+    - email
+  properties:
+    name:
+      type: string
+    email:
+      type: string
+
+UpdateUser:
+  properties:
+    name:
+      type: string
+    email:
+      type: string
+    
+
+UserAvatar:
+  properties:
+    avatar:
+      type: string
+
+UpdateUserAvatar:
+  properties:
+    file:
+      type: string
+      format: binary
+
+UpdateUserOrgRole:
+  properties:
+    orgRoleId:
+      type: integer

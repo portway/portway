@@ -1,0 +1,33 @@
+ProjectUser:
+      allOf:
+        - $ref: '#/NewProjectUser'
+        - required:
+            - id
+        - properties:
+            projectId:
+              type: integer
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+NewProjectUser:
+  required:
+    - roleId
+    - userId
+  properties:
+    roleId:
+      type: number
+    userId:
+      type: number
+
+UpdateProjectUser:
+  required:
+    - roleId
+  properties:
+    roleId:
+      type: number

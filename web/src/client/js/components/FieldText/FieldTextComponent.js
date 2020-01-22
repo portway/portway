@@ -5,7 +5,7 @@ import EasyMDE from 'easymde'
 import './EasyMDE.scss'
 import './FieldText.scss'
 
-const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus }) => {
+const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly }) => {
   const textRef = useRef()
   const [editor, setEditor] = useState(null)
   // Mount the SimpleMDE Editor
@@ -36,6 +36,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [])
   useEffect(() => {
     if (editor) {
+      editor.codemirror.options.readOnly = readOnly ? 'nocursor' : false
       editor.codemirror.on('blur', (cm, e) => { onBlur(field.id, field.type, editor) })
       editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
       editor.codemirror.on('dragstart', (cm, e) => { e.preventDefault() })
@@ -54,7 +55,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [editor])
   return (
     <div className="document-field__text">
-      <textarea ref={textRef} defaultValue={field.value} />
+      <textarea ref={textRef} defaultValue={field.value} readOnly={readOnly} />
     </div>
   )
 }
@@ -65,6 +66,7 @@ FieldTextComponent.propTypes = {
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 }
 
 export default FieldTextComponent
