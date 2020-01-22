@@ -11,10 +11,17 @@ import cookieParser from 'cookie-parser'
 import { normalizePort, renderBundles } from './libs/express-utilities'
 import controllerLoader from './controllers/loader'
 import portwayMiddleware from './libs/portwayMiddleware'
+import httpLogger from './libs/httpLogger'
+import uncaughtErrorHandler from './libs/uncaughtErrorHandler'
 
 import { SUPPORT_LINK } from '../shared/constants'
 
+// Setup a listener on uncaught errors to log them
+uncaughtErrorHandler()
+
 const app = express()
+app.use(httpLogger)
+
 const port = normalizePort(process.env.PORT || '3000')
 const devMode = process.env.NODE_ENV !== 'production'
 

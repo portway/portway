@@ -45,7 +45,6 @@ Make sure people know they need to update their local .env with the new value!
 **STRIPE_HOOK_SECRET**: The Stripe webhook secret  
 **S3_CONTENT_BUCKET**: The name of the S3 bucket where assets are stored  
 **CDN_HOSTNAME**: The FQDN of the Cloudfront CDN. No trailing slash  
-**LOGGER**: The logger the app should use. Valid values defined in `constants/logging.js`  
 **LOG_TOKEN**: When using the `r7insight` logger, the associated log token   
 **AUDIT_LOG_TOKEN**: When set, the `r7insight` logger is turned on for the audit log  
 **ADMIN_SECRET_KEY**: A secret key used for authorizing admin actions  
@@ -54,7 +53,10 @@ Make sure people know they need to update their local .env with the new value!
 **STRIPE_PUBLISHABLE_KEY**: The publishable key from Stripe. Used to manage subscriptions and collect payment info.  
 **API_URL**: The locally resolveable url to the API. In a kubernetes cluster, this may be `http://api-service:3001` for example.
 **API_PUBLIC_URL**: The publicly accessible FQDN for the API. Used to make API calls from the client javascript app.  
+**FLAG_DISABLE_SIGNUP**: Turns off the sign up form and endpoint when set to the string `true`  
+**LOG_TOKEN_WEB**: An r7insight token for web logging
 
 # Shared Environment Variables
 **JWT_SECRET**: A secret string used to sign and verify JSON Web Tokens used for app authentication  
-**FLAG_DISABLE_SIGNUP**: Turns off the sign up form and endpoint when set to the string `true`
+**LOGGER**: The logger the app should use. Valid values defined in `constants/logging.js`  
+
