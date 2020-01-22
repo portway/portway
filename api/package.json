@@ -11,7 +11,8 @@
     "test-i": "jest 'src/.*\\.test-(i)\\.js$' -i",
     "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
-    "migrate": "sequelize db:migrate"
+    "migrate": "sequelize db:migrate",
+    "compile-email": "mjml ./src/templates/email/mjml/*.mjml -o ./src/templates/email/ejs/"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,7 @@
     "husky": "^1.3.1",
     "jest": "^24.1.0",
     "lint-staged": "^8.1.3",
+    "mjml": "^4.5.1",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.4",
     "pretty-quick": "^1.10.0"
@@ -55,6 +57,7 @@
     "bignumber.js": "^8.1.1",
     "cuid": "^2.1.6",
     "debug": "^4.1.1",
+    "ejs": "^3.0.1",
     "express": "^4.16.4",
     "hashids": "^1.2.2",
     "joi": "^14.3.1",
@@ -70,6 +73,7 @@
     "r7insight_node": "^1.8.3",
     "sequelize": "^4.44.3",
     "sequelize-cli": "^5.5.0",
+    "sliding-window-rate-limiter": "^4.1.1",
     "stripe": "^6.23.1",
     "uuid": "^3.3.2"
   },

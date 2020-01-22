@@ -1,0 +1,107 @@
+Field:
+  allOf:
+    - $ref: '#/NewField'
+    - required:
+        - id
+        - name
+        - documentId
+        - type
+    - properties:
+        id:
+          type: integer
+        name:
+          type: string
+        documentId:
+          type: integer
+        type:
+          type: integer
+        value:
+          type: string
+        structuredValue:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+NewField:
+  oneOf:
+    - $ref: '#/StringField'
+    - $ref: '#/TextField'
+    - $ref: '#/NumberField'
+    - $ref: '#/ImageField'
+
+UpdateField:
+  properties:
+    name:
+      type: string
+    value:
+      oneOf:
+        - type: string
+        - type: number
+
+StringField:
+  required:
+    - name
+    - type
+  properties:
+    name:
+      type: string
+    type:
+      type: integer
+      enum: [1]
+    value:
+      type: string
+
+TextField:
+  required:
+    - name
+    - type
+  properties:
+    name:
+      type: string
+    type:
+      type: integer
+      enum: [2]
+    value:
+      type: string
+    structuredValue:
+      type: string
+
+NumberField:
+  required:
+    - name
+    - type
+  properties:
+    name:
+      type: string
+    type:
+      type: integer
+      enum: [3]
+    value:
+      type: double
+      description: Number value with maximum of 15 significant digits (including decimal digits).
+        For longer numbers we recommend storing as a string and parsing the value in your code.
+      example: 1234567890.12345
+
+ImageField:
+  required:
+    - name
+    - type
+  properties:
+    name:
+      type: string
+    type:
+      type: integer
+      enum: [4]
+    value:
+      type: string
+      description: Url of uploaded image
+      example: 'https://www.google.com/test-image'
+
+FieldOrder:
+  properties:
+    order:
+      type: integer

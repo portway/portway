@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
-import { DOCUMENT_MODE, PATH_PROJECT } from 'Shared/constants'
+import useDataService from 'Hooks/useDataService'
+import dataMapper from 'Libs/dataMapper'
+
+import { DOCUMENT_MODE, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 
@@ -18,6 +22,17 @@ const DocumentComponent = ({
   toggleDocumentMode,
   toggleFullScreenHandler,
 }) => {
+  const { projectId } = useParams()
+  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+  const projectAssignment = userProjectAssignments[Number(projectId)]
+
+  let documentReadOnlyMode
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
+
   const titleRef = useRef()
 
   // If we've exited fullscreen, but the UI is still in fullscreen
@@ -82,22 +97,25 @@ const DocumentComponent = ({
                 titleRef.current.blur()
               }
             }}
+            readOnly={documentReadOnlyMode}
             ref={titleRef} />
         </div>
-        <div className="document__toggle-container">
-          <button
-            className="btn btn--blank"
-            onClick={toggleDocumentMode}
-            name="documentSettings"
-            title="Re-order or remove fields">
-            {documentMode === DOCUMENT_MODE.NORMAL &&
-            <SettingsIcon />
-            }
-            {documentMode === DOCUMENT_MODE.EDIT &&
-            <>Done</>
-            }
-          </button>
-        </div>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+          <div className="document__toggle-container">
+            <button
+              className="btn btn--blank"
+              onClick={toggleDocumentMode}
+              name="documentSettings"
+              title="Re-order or remove fields">
+              {documentMode === DOCUMENT_MODE.NORMAL &&
+              <SettingsIcon />
+              }
+              {documentMode === DOCUMENT_MODE.EDIT &&
+              <>Done</>
+              }
+            </button>
+          </div>
+        </ProjectPermission>
       </header>
       <DocumentFieldsContainer />
     </div>

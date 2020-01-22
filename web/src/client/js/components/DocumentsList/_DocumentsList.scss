@@ -84,6 +84,7 @@
     input[type="search"] {
       appearance: none;
       border: thin solid transparent;
+      padding: 0;
       width: 100%;
       .using-mouse & {
         &:focus {

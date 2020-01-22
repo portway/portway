@@ -75,11 +75,20 @@ async function findAllForUser(userId, orgId) {
   return projects.map(publicFields)
 }
 
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
+}
+
 export default {
   create,
   findById,
   findAll,
   updateById,
   deleteById,
-  findAllForUser
+  findAllForUser,
+  deleteAllForOrg
 }

@@ -1,8 +1,22 @@
 import BusinessOrganization from '../businesstime/organization'
+import BusinessField from '../businesstime/field'
+import BusinessDocumentVersion from '../businesstime/documentversion'
+import BusinessDocument from '../businesstime/document'
+import BusinessProject from '../businesstime/project'
+import BusinessProjectToken from '../businesstime/projecttoken'
+import BusinessUser from '../businesstime/user'
+import BusinessProjectUser from '../businesstime/projectuser'
 import stripeIntegrator from '../integrators/stripe'
 import organizationCoordinator from '../coordinators/organization'
 
 jest.mock('../businesstime/organization')
+jest.mock('../businesstime/field')
+jest.mock('../businesstime/documentversion')
+jest.mock('../businesstime/document')
+jest.mock('../businesstime/project')
+jest.mock('../businesstime/projecttoken')
+jest.mock('../businesstime/user')
+jest.mock('../businesstime/projectuser')
 jest.mock('../integrators/stripe')
 
 describe('organization coordinator', () => {
@@ -52,6 +66,52 @@ describe('organization coordinator', () => {
       it('should not call stripeIntegrator.updateCustomer', async () => {
         expect(stripeIntegrator.updateCustomer.mock.calls.length).toBe(0)
       })
+    })
+  })
+
+  describe('#removeAllOrgData', () => {
+    beforeAll(async () => {
+      organizationCoordinator.removeAllOrgData(orgId)
+    })
+
+    it('should call BusinessField.deleteAllForOrg', () => {
+      expect(BusinessField.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessField.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessDocumentVersion.deleteAllForOrg', () => {
+      expect(BusinessDocumentVersion.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessDocumentVersion.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessDocument.deleteAllForOrg', () => {
+      expect(BusinessDocument.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessDocument.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessProject.deleteAllForOrg', () => {
+      expect(BusinessProject.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessProject.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessProjectToken.deleteAllForOrg', () => {
+      expect(BusinessProjectToken.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessProjectToken.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessUser.deleteAllForOrg', () => {
+      expect(BusinessUser.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessUser.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessProjectUser.deleteAllForOrg', () => {
+      expect(BusinessProjectUser.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessProjectUser.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessOrganization.deleteById', () => {
+      expect(BusinessOrganization.deleteById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.deleteById.mock.calls[0][0]).toBe(orgId)
     })
   })
 })

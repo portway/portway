@@ -39,21 +39,24 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
         aria-expanded={expanded}
         aria-haspopup="true"
         aria-controls="project-role-dropdown"
-        className="btn btn--white btn--with-icon"
+        className="btn btn--form btn--with-icon"
         disabled={disabled}
         onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
+        type="button"
       >
         <span className="label">{permissionMenuLabel}</span>
         <CaretIcon />
       </button>
       <Popper id="project-role-dropdown" anchorRef={anchorRef} align={align} autoCollapse={collapseCallback} open={expanded} width="300">
-        <Menu anchorRef={anchorRef}>
+        <Menu anchorRef={anchorRef} isActive={expanded}>
           <MenuItem>
             <button
-              className="btn btn--blank"
+              className="btn btn--blank btn--menu-item"
               onClick={() => adjustRoleHandler(PROJECT_ROLE_IDS.READER) }
               style={buttonStyleOverride}
+              ref={React.createRef()}
+              type="button"
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.READER]}
               <p className="small">
@@ -63,9 +66,11 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
           </MenuItem>
           <MenuItem>
             <button
-              className="btn btn--blank"
+              className="btn btn--blank btn--menu-item"
               onClick={() => adjustRoleHandler(PROJECT_ROLE_IDS.CONTRIBUTOR) }
               style={buttonStyleOverride}
+              ref={React.createRef()}
+              type="button"
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.CONTRIBUTOR]}
               <p className="small">
@@ -76,9 +81,11 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
           </MenuItem>
           <MenuItem>
             <button
-              className="btn btn--blank"
+              className="btn btn--blank btn--menu-item"
               onClick={() => adjustRoleHandler(PROJECT_ROLE_IDS.ADMIN) }
               style={buttonStyleOverride}
+              ref={React.createRef()}
+              type="button"
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.ADMIN]}
               <p className="small">

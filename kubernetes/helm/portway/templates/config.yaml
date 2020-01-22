@@ -15,6 +15,7 @@ items:
     api.s3-content-bucket: {{ .Values.api.s3ContentBucket }}
     api.cdn-hostname: {{ .Values.api.cdnHostname | quote }}
     api.logger: {{ .Values.api.logger | quote }}
+    api.redis-url: {{ printf "http://%s-redis-service:%s" .Release.Name .Values.redisPort }}
   kind: ConfigMap
   metadata:
     name: api-config

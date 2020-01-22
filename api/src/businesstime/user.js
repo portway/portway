@@ -127,9 +127,17 @@ async function updateOrgRole(id, orgRoleId, orgId) {
   return updatedUser && publicFields(updatedUser)
 }
 
-async function restoreSoftDeleted(id, resetKey) {
+async function restoreSoftDeleted(id, resetKey, newOrgId, newRoleId) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { id }, paranoid: false })
+
+  if (!newOrgId) {
+    throw ono({ code: 404 }, 'Restored user must be given a new org id')
+  }
+
+  if (!newRoleId) {
+    throw ono({ code: 404 }, 'Restored user must be given a new role id')
+  }
 
   if (!user) throw ono({ code: 404 }, `Cannot restore soft deleted user, user not found with id: ${id}`)
 
@@ -137,6 +145,8 @@ async function restoreSoftDeleted(id, resetKey) {
   user.setDataValue('password', null)
   user.setDataValue('pending', true)
   user.setDataValue('resetKey', resetKey)
+  user.setDataValue('orgId', newOrgId)
+  user.setDataValue('orgRoleId', newRoleId)
 
   const savedUser = await user.save({ paranoid: false })
 
@@ -148,6 +158,8 @@ async function deleteById(id, orgId) {
   const user = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
 
   if (!user) throw ono({ code: 404 }, `Cannot delete, user not found with id: ${id}`)
+  //when deleting a user we first set the orgId to null, which will allow us to restore them later and assign to a new org
+  await user.update({ orgId: null })
 
   await user.destroy()
 }
@@ -156,6 +168,14 @@ async function countAll(orgId) {
   const db = getDb()
   const { count } = await db.model(MODEL_NAME).findAndCountAll({ where: { orgId } })
   return count
+}
+
+async function deleteAllForOrg(orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId }
+  })
 }
 
 export default {
@@ -170,5 +190,6 @@ export default {
   updateOrgRole,
   restoreSoftDeleted,
   deleteById,
-  countAll
+  countAll,
+  deleteAllForOrg
 }

@@ -89,6 +89,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.cdn-hostname
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.redis-url
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:

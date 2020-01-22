@@ -37,10 +37,13 @@ const ProjectSettingsTeamContainer = ({ location }) => {
     }
   })
 
-  const unassignedUsers = Object.values(searchUsers).filter((user) => {
-    if (projectAssignments[user.id]) return
-    return user
-  })
+  let unassignedUsers = []
+  if (searchUsers && searchUsers.userSearchResults) {
+    unassignedUsers = Object.values(searchUsers.userSearchResults).filter((user) => {
+      if (projectAssignments[user.id]) return
+      return user
+    })
+  }
 
   const userOptions = unassignedUsers.map((user) => {
     return {
