@@ -1,4 +1,9 @@
 <form name="login" class="login-form" action="/sign-in" method="post">
+  <% if (flash) { %>
+  <div class="flash flash--<%= flash.type %>">
+    <p><%= flash.message %></p>
+  </div>
+  <% } %>
   <div class="field-container">
     <div class="field">
       <label class="label is-small" for="email">Email</label>
@@ -7,22 +12,17 @@
       </div>
     </div>
   </div>
-  <% if (typeof emailOnly === 'undefined' || emailOnly !== true) { %>
   <div class="field-container">
     <div class="field">
       <label class="label is-small" for="password">Password</label>
       <div class="field__control">
         <input id="password" class="input" name="password" type="password" placeholder="********" autocomplete="section-login current-password">
-        <p class="small"><a href="/sign-in/password-reset">Forget your password?</a></p>
+        <p class="small"><a href="/password-reset">Forget your password?</a></p>
       </div>
     </div>
   </div>
-  <% } %>
   <% if (typeof url === 'string') { %>
     <input id="url" type="hidden" value="<%- url %>" name="url" />
-  <% } %>
-  <% if (flash) { %>
-  <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
   <% } %>
   <div class="field-container field-container--with-space">
     <div class="field field--centered">

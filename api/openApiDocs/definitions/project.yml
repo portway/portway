@@ -1,0 +1,36 @@
+Project:
+  allOf:
+    - $ref: '#/NewProject'
+    - required:
+        - id
+    - properties:
+        id:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+NewProject:
+  required:
+    - name
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+    accessLevel:
+      type: string
+      enum: [read, write]
+
+UpdateProject:
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+    accessLevel:
+      type: string
+      enum: [read, write]

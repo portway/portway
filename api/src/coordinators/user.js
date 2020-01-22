@@ -10,6 +10,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import emailCoordinator from '../coordinators/email'
+import billingCoordinator from './billing'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
@@ -81,6 +82,29 @@ async function validatePasswordResetKey(userId, resetKey) {
 }
 
 async function createPendingUser(email, name, orgId) {
+  const existingUser = await BusinessUser.findByEmail(email)
+  if (existingUser) {
+    const publicMessage = 'Cannot create user, this email address is already in use'
+    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+  }
+
+  // look up number of org seats and number of current users,
+  // make sure org isn't maxed out
+  const orgBilling = await billingCoordinator.getOrgBilling(orgId)
+
+  if (!orgBilling.subscription) {
+    const publicMessage = 'No Subscription: Organization must be subscribed to a plan before adding users'
+    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+  }
+
+  const { totalSeats, usedSeats } = orgBilling.subscription
+
+  // if subscription doesn't have seats set up, or user count is equal to total seats, throw an error
+  if (totalSeats == null || usedSeats >= totalSeats) {
+    const publicMessage = 'Cannot create user, all available seats have been used'
+    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+  }
+
   const resetKey = passwordResetKey.generate()
 
   //look for existing soft-deleted user
@@ -89,7 +113,7 @@ async function createPendingUser(email, name, orgId) {
   let user
 
   if (previouslyDeletedUser) {
-    user = await BusinessUser.restoreSoftDeleted(previouslyDeletedUser.id, resetKey)
+    user = await BusinessUser.restoreSoftDeleted(previouslyDeletedUser.id, resetKey, orgId, ORGANIZATION_ROLE_IDS.USER)
   } else {
     user = await BusinessUser.create({
       email,

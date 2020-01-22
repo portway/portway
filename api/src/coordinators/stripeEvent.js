@@ -1,7 +1,7 @@
-import { sendSingleRecipientEmail } from '../integrators/email'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import billingCoordinator from '../coordinators/billing'
+import emailCoordinator from '../coordinators/email'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 
@@ -13,21 +13,18 @@ async function handleEvent(event) {
 
   switch (event.type) {
     case 'charge.failed': {
-      const subject = 'Payment failed'
-      const message = 'Portway payment failed'
-      //not awaiting anything after this point to prevent timeout and possible duplication
-      sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+      // No need to await webhook
+      emailCoordinator.sendPaymentFailed(customer.email)
       break
     }
     case 'charge.succeeded': {
-      const subject = 'Payment successful'
-      const message = 'Portway payment was successful'
-      //not awaiting anything after this point to prevent timeout and possible duplication
-      sendSingleRecipientEmail({ address: customer.email, textBody: message, htmlBody: message, subject })
+      // No need to await webhook
+      emailCoordinator.sendPaymentSuccess(customer.email)
       break
     }
     case 'customer.subscription.deleted': {
-      //TODO send email letting customer know account is cancelled
+      // No need to await webhook
+      emailCoordinator.sendSubscriptionCanceled(customer.email)
       break
     }
     case 'customer.source.created':

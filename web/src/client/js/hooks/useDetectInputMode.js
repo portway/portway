@@ -24,6 +24,8 @@ function useDetectInputMode() {
     }
     function keyDownHandler(e) {
       if (inputTypesThatShouldntReturnTrue.includes(e.target.type)) return
+      if (e.target.classList.contains('btn--form')) return
+      if (e.target.classList.contains('btn--menu-item')) return
       if (e.key && e.key.toLowerCase() !== 'meta') {
         document.body.classList.remove('using-mouse')
       }
