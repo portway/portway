@@ -4,21 +4,21 @@ kind: Deployment
 metadata:
   name: redis-deployment
   labels:
-    app: {{ .Values.serviceNames.web }}
+    app: {{ .Values.serviceNames.redis }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.serviceNames.web }}
+      app: {{ .Values.serviceNames.redis }}
   template:
     metadata:
       labels:
         run: redis
-        app: {{ .Values.serviceNames.web }}
+        app: {{ .Values.serviceNames.redis }}
     spec:
       containers:
       - image: redis:5.0-alpine
-        app: {{ .Values.serviceNames.web }}
+        name: {{ .Values.serviceNames.redis }}
         ports:
         - containerPort: {{ .Values.redisPort }}
           protocol: TCP
