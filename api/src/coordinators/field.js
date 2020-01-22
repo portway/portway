@@ -20,6 +20,22 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   return BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 }
 
+const removeDocumentField = async function(fieldId, documentId, orgId) {
+  const field = await BusinessField.findByIdForDocument(fieldId, documentId, orgId)
+  await BusinessField.deleteByIdForDocument(fieldId, documentId, orgId)
+  // async, but don't wait for it
+  cleanupFieldByType(field, orgId)
+}
+
+// Handles cleanup based on the field type
+const cleanupFieldByType = async function(field, orgId) {
+  switch (field.type) {
+    case FIELD_TYPES.IMAGE: {
+      await assetCoordinator.deleteAsset(field.value, orgId)
+    }
+  }
+}
+
 const getFieldBodyByType = async function(body, documentId, orgId, file) {
   const fieldBody = { ...body }
 
@@ -45,5 +61,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
 
 export default {
   addFieldToDocument,
-  updateDocumentField
+  updateDocumentField,
+  removeDocumentField
 }

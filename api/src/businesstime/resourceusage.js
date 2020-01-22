@@ -7,7 +7,7 @@ export const RESOURCE_TYPES = {
   ASSET: 1
 }
 
-async function addUsageByType(orgId, type, value, maxValue) {
+async function updateUsageByType(orgId, type, value, maxValue) {
   if (!Number.isInteger(value)) {
     throw ono({ code: 400 }, `value must be an integer, received ${value}`)
   }
@@ -36,6 +36,6 @@ async function findOrCreateUsageByType(orgId, resourceType) {
 }
 
 export default {
-  addUsageByType,
+  updateUsageByType,
   findOrCreateUsageByType
 }

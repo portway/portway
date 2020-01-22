@@ -101,7 +101,8 @@ async function findByIdForDocument(id, documentId, orgId) {
   const include = getFieldValueInclude(db)
 
   const field = await db.model(MODEL_NAME).findOne({ where: { id, documentId, orgId }, include })
-  if (!field) return field
+
+  if (!field) throw ono({ code: 404 }, `No field with id ${id}`)
 
   return publicFields(field)
 }
