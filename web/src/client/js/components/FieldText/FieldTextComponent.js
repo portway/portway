@@ -17,6 +17,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
         enabled: false
       },
       element: textRef.current,
+      indentWithTabs: false,
       initialValue: field ? field.value : '',
       shortcuts: {
         drawImage: null,
