@@ -8,6 +8,7 @@
 
   // Override the SimpleMDE styling
   .CodeMirror {
+    background-color: transparent;
     border: none;
     padding: 0;
     border-radius: 0;
@@ -16,7 +17,16 @@
     overflow: visible; // was visible
 
     pre {
+      font-family: var(--type-sans-serif);
       padding: 0;
+    }
+
+    .cm--code-block {
+      background: var(--theme-base);
+      padding: .5rem;
+      pre {
+        font-family: monospace;
+      }
     }
 
     .CodeMirror-vscrollbar {
@@ -77,38 +87,70 @@
       }
 
       .cm-header-1 {
+        color: var(--theme-header-color);
         font-size: 2.8rem;
         line-height: 3.6rem;
       }
 
       .cm-header-2 {
+        color: var(--theme-header-color);
         font-size: 2.4rem;
         line-height: 3.0rem;
       }
 
       .cm-header-3 {
+        color: var(--theme-header-color);
         font-size: 1.9rem;
         line-height: 2.8rem;
       }
 
       .cm-header-4 {
+        color: var(--theme-header-color);
         font-size: 1.7rem;
         font-weight: 500;
         line-height: 2.5rem;
       }
 
-      .cm-formatting-code-block.cm-comment, .cm-comment {
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 0;
-        display: block;
-        font-family: monospace;
-        width: 100%;
-      }
-      .cm-formatting-code-block.cm-comment {
-        padding: 0 6px;
-      }
       .cm-comment {
-        padding: 2px 10px;
+        color: var(--color-gray-50);
+      }
+
+      // Code theming
+      .cm-m-css, .cm-m-xml {
+        font-family: 'Courier New', Courier, monospace;
+      }
+      .cm-m-javascript {
+        color: var(--color-blue);
+        font-family: 'Courier New', Courier, monospace;
+      }
+      // html tags
+      .cm-qualifier {
+        color: var(--color-orange);
+      }
+      .cm-property {
+        color: var(--color-red);
+      }
+      .cm-keyword {
+        color: var(--color-blue);
+      }
+      .cm-def {
+        color: var(--color-blue-darker);
+      }
+      .cm-tag {
+        color: var(--color-purple);
+      }
+      .cm-string {
+        color: var(--color-red);
+      }
+      .cm-operator {
+        color: var(--color-gray-40);
+      }
+      .cm-variable-2 {
+        color: var(--theme-text-color);
+      }
+
+      .cm-quote {
+        color: var(--theme-header-color);
       }
 
       .cm-strong {
@@ -121,6 +163,10 @@
 
       .cm-url {
         color: var(--color-gray-30);
+      }
+
+      .cm-formatting-code-block {
+        color: var(--color-gray-40);
       }
 
       .cm-formatting-header {
