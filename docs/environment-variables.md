@@ -49,6 +49,7 @@ Make sure people know they need to update their local .env with the new value!
 **LOG_TOKEN**: When using the `r7insight` logger, the associated log token   
 **AUDIT_LOG_TOKEN**: When set, the `r7insight` logger is turned on for the audit log  
 **ADMIN_SECRET_KEY**: A secret key used for authorizing admin actions  
+**REDIS_URL**: The url to the redis instance. Optionally used for rate-limiting. Uses in-memory store if not set  
 
 # Web Environment Variables
 **STRIPE_PUBLISHABLE_KEY**: The publishable key from Stripe. Used to manage subscriptions and collect payment info.  

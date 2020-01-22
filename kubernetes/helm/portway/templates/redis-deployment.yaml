@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  labels:
+    app: {{ .Values.serviceNames.web }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceNames.web }}
+  template:
+    metadata:
+      labels:
+        run: redis
+        app: {{ .Values.serviceNames.web }}
+    spec:
+      containers:
+      - image: redis:5.0-alpine
+        app: {{ .Values.serviceNames.web }}
+        ports:
+        - containerPort: {{ .Values.redisPort }}
+          protocol: TCP

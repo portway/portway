@@ -6,5 +6,6 @@ export default {
   INVALID_PARAM: 'Invalid Request Url Parameter',
   SERVER_ERROR: 'Server Error',
   INVALID_PAYMENT: 'Invalid Payment',
-  UNAUTHORIZED: 'Unauthorized'
+  UNAUTHORIZED: 'Unauthorized',
+  RATE_LIMIT_EXCEEDED: 'Rate Limit Exceeded'
 }
