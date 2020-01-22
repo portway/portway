@@ -82,6 +82,55 @@ export const deleteContent = async function(key) {
   console.info(`Successfully deleted S3 content with key: ${key}`)
 }
 
+export const copyContent = async function(key) {
+  const keyParts = key.split('/')
+  const lastIndex = keyParts.length - 1
+  keyParts[lastIndex] = `${Date.now()}-${keyParts[lastIndex]}`
+  const newKey = keyParts.join('/')
+
+  try {
+    await s3
+      .copyObject({
+        Bucket: S3_CONTENT_BUCKET,
+        CopySource: `${S3_CONTENT_BUCKET}/${key}`,
+        Key: newKey,
+        ACL: 'public-read'
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, `AWS s3 failed to copy object with key: ${key}`)
+  }
+  // For whatever reason the only S3 function that returns a url is upload() :shrug:
+  const s3Url = `https://${S3_CONTENT_BUCKET}.s3.amazonaws.com/${newKey}`
+
+  return s3ToCDNLink(s3Url)
+}
+
+export const getContentMetadata = async function(key) {
+  let res
+
+  try {
+    res = await s3
+      .headObject({
+        Bucket: S3_CONTENT_BUCKET,
+        Key: key
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, `AWS s3 failed to head object with key: ${key}`)
+  }
+
+  return {
+    size: res.ContentLength
+  }
+}
+
+export const convertCDNUrlToS3Key = function(url) {
+  const assetUrl = new URL(url)
+  // remove beginning "/" from pathname
+  return decodeURIComponent(assetUrl.pathname.slice(1))
+}
+
 // Get the Cloudfront url for the S3 url
 function s3ToCDNLink(s3Location) {
   if (!CDN_HOSTNAME) return s3Location

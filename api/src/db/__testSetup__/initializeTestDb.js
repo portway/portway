@@ -11,7 +11,7 @@ afterAll(async () => {
 export const clearDb = async function() {
   const db = getDb()
 
-  //delet
+  //delete
 
   await Promise.all(Object.values(db.models).map((model) => {
     return model.destroy({ truncate: true, cascade: true, force: true })

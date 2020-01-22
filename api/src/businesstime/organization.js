@@ -15,8 +15,8 @@ const publicFields = (instance) => {
 
 async function create(body) {
   const db = getDb()
-  const createdProject = await db.model(MODEL_NAME).create(body)
-  return publicFields(createdProject)
+  const createdOrg = await db.model(MODEL_NAME).create(body)
+  return publicFields(createdOrg)
 }
 
 async function findSanitizedById(id) {
