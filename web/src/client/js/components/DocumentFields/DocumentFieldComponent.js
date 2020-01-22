@@ -77,18 +77,16 @@ const DocumentFieldComponent = ({
     return length * fieldLengthFactor > fieldMinimumWidth ? length * fieldLengthFactor : fieldMinimumWidth
   }
 
-  const dragEnabled = !readOnly && documentMode === DOCUMENT_MODE.EDIT
-
   return (
     <li
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
-      onDragEnd={dragEnabled ? null : dragEndHandler}
-      onDragEnter={dragEnabled ? null : dragEnterHandler}
+      onDragEnd={dragEndHandler}
+      onDragEnter={dragEnterHandler}
       onDragOver={e => e.preventDefault()}
-      onDragStart={dragEnabled ? null : dragStartHandler}
-      onDrop={dragEnabled ? null : dropHandler}
+      onDragStart={dragStartHandler}
+      onDrop={dropHandler}
       ref={listRef}
     >
       <div className="document-field__component">

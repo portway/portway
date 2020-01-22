@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -74,7 +74,9 @@ const DocumentFieldsContainer = ({
   let documentReadOnlyMode
   // False because null / true == loading
   if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+    documentReadOnlyMode = projectAssignment === undefined ||
+                           readOnlyRoleIds.includes(projectAssignment.roleId) ||
+                           documentMode === DOCUMENT_MODE.NORMAL
   }
 
   // Actions
@@ -143,6 +145,7 @@ const DocumentFieldsContainer = ({
   function dragStartHandler(e) {
     // console.info('drag start')
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     const listItem = e.currentTarget
     e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.effectAllowed = 'copyMove'
@@ -177,6 +180,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag enter', draggingElement)
     e.preventDefault()
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     e.dataTransfer.dropEffect = 'move'
     if (e.dataTransfer.types.includes('Files')) {
       return
@@ -210,6 +214,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag drop', draggingElement)
     e.preventDefault()
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
@@ -224,6 +229,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag end', draggingElement)
     e.preventDefault()
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     draggingElement.current.classList.remove('document-field--dragging')
     document.querySelector('#clone-element').remove()
 
