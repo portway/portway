@@ -1,0 +1,1442 @@
+openapi: '3.0.2'
+info:
+  version: 1.0.0
+  title: Portway API
+  description: Public API spec for Portway
+  contact:
+    name: Portway Team
+    email: info@bonkeybong.com
+    url: http://www.bonkeybong.com
+servers:
+  - url: http://localhost:3001
+paths:
+  /projects:
+    get:
+      description: |
+        Returns all projects that the user has access to
+      operationId: findProjects
+      responses:
+        '200':
+          description: projects response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: 'definitions/project.yml#/Project'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new project
+      operationId: addProject
+      requestBody:
+        description: Project to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/project.yml#/NewProject'
+      responses:
+        '201':
+          description: project response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/project.yml#/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /projects/{projectId}:
+    get:
+      description: Returns a project based on a single ID
+      operationId: findProjectById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/project.yml#/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a project based on a single ID - full or partial update
+      operationId: updateProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Project body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/project.yml#/UpdateProject'
+      responses:
+        '200':
+          description: project response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/project.yml#/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      description: deletes a single project based on the ID supplied
+      operationId: deleteProject
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: project deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  # TODO draft=true query param
+  /projects/{projectId}/documents:
+    get:
+      description: Returns all documents that the user has access to for the given project id
+      operationId: findDocuments
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: documents response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/document.yml#/Document'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new document
+      operationId: addDocument
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: document to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/document.yml#/NewDocument'
+      responses:
+        '201':
+          description: document response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/document.yml#/Document'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  # TODO draft=true query param
+  /projects/{projectId}/documents/{documentId}:
+    get:
+      description: Returns a document based on a single ID
+      operationId: findDocumentById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: documentId
+          in: path
+          description: ID of document to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: document response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/document.yml#/Document'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a document based on a single ID - full or partial update
+      operationId: updateDocument
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: documentId
+          in: path
+          description: ID of document to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Document body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/document.yml#/UpdateDocument'
+      responses:
+        '200':
+          description: document response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/document.yml#/Document'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: deletes a single document based on the ID supplied
+      operationId: deleteDocument
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: documentId
+          in: path
+          description: ID of project to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: document deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{projectId}/assignments:
+    get:
+      description: |
+        Returns all project user assignments
+      operationId: findProjectUsers
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project user assignments response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/projectUser.yml#/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new project user assignment
+      operationId: addProjectUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: project user to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/projectUser.yml#/NewProjectUser'
+      responses:
+        '201':
+          description: project user assignment response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/projectUser.yml#/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{projectId}/assignments/{assignmentId}:
+    get:
+      description: Returns a project user assignment based on a single ID
+      operationId: findProjectUserById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: assignmentId
+          in: path
+          description: ID of project user assignment to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project user assignment response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/projectUser.yml#/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a project user assignment based on a single ID
+      operationId: updateProjectUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: assignmentId
+          in: path
+          description: ID of assignment to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Project User assignment body to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/projectUser.yml#/UpdateProjectUser'
+      responses:
+        '200':
+          description: project user assignment response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/projectUser.yml#/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: deletes a single project user assignment based on the ID supplied
+      operationId: deleteProjectUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: assignmentId
+          in: path
+          description: ID of project user assignment to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: project user assignment deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /projects/{projectId}/tokens:
+    get:
+      description: |
+        Returns all project tokens
+      operationId: findProjectTokens
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project tokens response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/projectToken.yml#/ProjectToken'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new project token
+      operationId: addProjectToken
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: project token to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/projectToken.yml#/NewProjectToken'
+      responses:
+        '201':
+          description: project token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/projectToken.yml#/ProjectToken'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /projects/{projectId}/tokens/{tokenId}}:
+    get:
+      description: Returns a project token based on a single ID
+      operationId: findProjectTokenById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: tokenId
+          in: path
+          description: ID of project token to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: project token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/projectToken.yml#/ProjectToken'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a project token based on a single ID
+      operationId: updateProjectToken
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: tokenId
+          in: path
+          description: ID of token to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Project token body to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/projectToken.yml#/UpdateProjectToken'
+      responses:
+        '200':
+          description: project token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/projectToken.yml#/ProjectToken'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: deletes a single project token based on the ID supplied
+      operationId: deleteProjectToken
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of parent project
+          required: true
+          schema:
+            type: integer
+        - name: tokenId
+          in: path
+          description: ID of project token to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: project token deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  # TODO draft=true query param
+  /documents/{documentId}:
+    get:
+      description: Returns a document based on a single ID
+      operationId: findPopulatedDocumentById
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of document to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: document response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/document.yml#/PopulatedDocument'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /documents/{documentId}/publish:
+    post:
+      description: Publishes a document based on ID
+      operationId: publishDocument
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of document to publish
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: document published
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /documents/{documentId}/unpublish:
+    post:
+      description: Unpublishes a document based on ID
+      operationId: unpublishDocument
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of document to unpublish
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: document unpublished
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+  # TODO draft=true query param
+  /documents/{documentId}/fields:
+    get:
+      description: |
+        Returns all fields that the user has access to for the given project/document ids
+      operationId: findFields
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: fields response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/field.yml#/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new field
+      operationId: addField
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: field to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/field.yml#/NewField'
+            example:
+              name: field name
+              value: 808
+              type: 3
+      responses:
+        '201':
+          description: field response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/field.yml#/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /documents/{documentId}/fields/{fieldId}:
+    get:
+      description: Returns a field based on a single ID
+      operationId: findFieldById
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+        - name: fieldId
+          in: path
+          description: ID of field to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: field response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/field.yml#/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a field based on a single ID - full or partial update
+      operationId: updateField
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+        - name: fieldId
+          in: path
+          description: ID of field to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Field body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/field.yml#/UpdateField'
+            example:
+              name: 'new name'
+              value: 'new value'
+      responses:
+        '200':
+          description: field response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/field.yml#/Field'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      description: deletes a single field based on the ID supplied
+      operationId: deleteField
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+        - name: fieldId
+          in: path
+          description: ID of field to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: field deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /documents/{documentId}/fields/{fieldId}/order:
+    put:
+      description: Update field order based on a field ID
+      operationId: updateFieldOrder
+      parameters:
+        - name: documentId
+          in: path
+          description: ID of parent document
+          required: true
+          schema:
+            type: integer
+        - name: fieldId
+          in: path
+          description: ID of field to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: Field body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/field.yml#/FieldOrder'
+      responses:
+        '204':
+          description: field order updated
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /organizations/{organizationId}:
+    get:
+      description: Returns an organization based on a single ID
+      operationId: findOrganizationById
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: organization response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/Organization'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update an organization based on a single ID
+      operationId: updateOrganization
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization body to update - allows partial update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganization'
+      responses:
+        '200':
+          description: organization response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/Organization'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /organizations/{organizationId}/avatar:  
+    put:
+      description: Update an organizations avatar based on a single ID
+      operationId: updateOrganizationAvatar
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization avatar binary
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganizationAvatar'
+      responses:
+        '200':
+          description: organization avatar response with avatar url
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/OrganizationAvatar'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /organizations/{organizationId}/billing:  
+    get:
+      description: Get an organizations billing based on a single ID
+      operationId: getOrganizationBilling
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: organization billing response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/OrganizationBilling'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+    put:
+      description: Update an organizations billing based on a single ID
+      operationId: updateOrganizationBilling
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization billing token
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganizationBilling'
+      responses:
+        '200':
+          description: organization billing response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/organization.yml#/OrganizationBilling'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /organizations/{organizationId}/billing/cancel:
+    post:
+      description: initiates subscription cancellation for organization
+      operationId: cancelOrganizationSubscription
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: subscription cancellation initiated
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /organizations/{organizationId}/plan:
+     put:
+      description: Update an organizations subscription plan based on a single ID
+      operationId: updateOrganizationPlan
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization plan identifier
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganizationPlan'
+      responses:
+        '204':
+          description: organization plan update response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /organizations/{organizationId}/seats:
+    get:
+      description: Get organization seat data
+      operationId: getOrganizationSeats
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: organization seat data
+          content:
+            application/json:
+              schema:
+                $ref: './definitions/organization.yml#/OrganizationSeats'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update the total seats on an organization, only applies to organizations subscribed to a multi user plan
+      operationId: updateOrganizationSeats
+      parameters:
+        - name: organizationId
+          in: path
+          description: ID of organization to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Organization seat count
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/organization.yml#/UpdateOrganizationSeats'
+      responses:
+        '200':
+          description: organization seat update response
+          content:
+            application/json:
+              schema:
+                $ref: './definitions/organization.yml#/UpdateOrganizationSeatsResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users:
+    get:
+      description: Returns all users that the user has access to
+      operationId: findUsers
+      responses:
+        '200':
+          description: users response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: 'definitions/user.yml#/User'
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Creates a new user
+      operationId: addUser
+      requestBody:
+        description: User to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/user.yml#/NewUser'
+      responses:
+        '201':
+          description: user response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/user.yml#/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}:
+    get:
+      description: Returns a user based on a single ID
+      operationId: findUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to fetch
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/user.yml#/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a user based on a single ID - full or partial update
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: User body to update - allows partial field update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/user.yml#/UpdateUser'
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: './definitions/user.yml#/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      description: deletes a single user based on the ID supplied
+      operationId: deleteUser
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: user deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{userId}/orgrole:
+    put:
+      description: Update a user's organization role based on a single ID
+      operationId: updateUserOrgRole
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        description: User organization role body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './definitions/user.yml#/UpdateUserOrgRole'
+      responses:
+        '204':
+          description: user org role response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}/assignments:
+    get:
+      description: Returns user assignments based on user id
+      operationId: findUserAssignmentsById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: user assignments response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/projectUser.yml#/ProjectUser'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{userId}/projects:
+    get:
+      description: Returns projects based on user id
+      operationId: findUserProjectsById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: user projects response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: './definitions/project.yml#/Project'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+     
+components:
+  schemas:
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        error:
+          type: string
+        errorType:
+          type: string
+          description: Optional error type
+          enum:
+            - undefined
+            - ValidationError
+            - FieldValueIncorrectTypeError
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+
+    ErrorDetail:
+      properties:
+        message:
+          type: string
+        key:
+          type: string

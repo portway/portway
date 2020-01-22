@@ -7,7 +7,8 @@ import cx from 'classnames'
 import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 
-import Constants from 'Shared/constants'
+import { PATH_PROJECT, PATH_DOCUMENT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
 import { MoreIcon, TimeIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
 import { Menu, MenuItem } from 'Components/Menu'
@@ -91,7 +92,7 @@ const DocumentsListItem = ({
       onDragLeave={(e) => { disableDragging ? null : dragLeaveHandler(e) }}
       onDragOver={(e) => { disableDragging ? null : dragOverHandler(e) }}>
       <NavLink
-        to={`${Constants.PATH_PROJECT}/${document.projectId}${Constants.PATH_DOCUMENT}/${document.id}`}
+        to={`${PATH_PROJECT}/${document.projectId}${PATH_DOCUMENT}/${document.id}`}
         className="btn btn--blank documents-list__button"
         onClick={(e) => { if (disable) { e.preventDefault() } }}
       >
@@ -102,55 +103,57 @@ const DocumentsListItem = ({
             <span>{moment(document.updatedAt).fromNow()}</span>
           </time>
         </div>
-        <PopperGroup anchorRef={containerRef}>
-          <button
-            aria-expanded={expanded}
-            aria-haspopup="true"
-            aria-controls="document-options-menu"
-            aria-label="Document options menu"
-            className="btn btn--blank btn--with-circular-icon"
-            onClick={(e) => {
-              e.preventDefault()
-              setExpanded(!expanded)
-            }}
-            ref={anchorRef}
-          >
-            <MoreIcon />
-          </button>
-          <Popper
-            id="document-options-menu"
-            align="right"
-            anchorRef={anchorRef}
-            autoCollapse={collapseCallback}
-            open={expanded}
-          >
-            <Menu anchorRef={anchorRef}>
-              <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
-                <button
-                  className="btn btn--blank"
-                  disabled={document.lastPublishedAt === null}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    unpublishDocumentHandler(document)
-                  }}
-                >
-                  Unpublish document...
-                </button>
-              </MenuItem>
-              <MenuItem tabIndex="-1">
-                <button
-                  className="btn btn--blank btn--danger"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    removeDocumentHandler(document)
-                  }}
-                >
-                  Delete document...
-                </button>
-              </MenuItem>
-            </Menu>
-          </Popper>
-        </PopperGroup>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+          <PopperGroup anchorRef={containerRef}>
+            <button
+              aria-expanded={expanded}
+              aria-haspopup="true"
+              aria-controls="document-options-menu"
+              aria-label="Document options menu"
+              className="btn btn--blank btn--with-circular-icon"
+              onClick={(e) => {
+                e.preventDefault()
+                setExpanded(!expanded)
+              }}
+              ref={anchorRef}
+            >
+              <MoreIcon />
+            </button>
+            <Popper
+              id="document-options-menu"
+              align="right"
+              anchorRef={anchorRef}
+              autoCollapse={collapseCallback}
+              open={expanded}
+            >
+              <Menu anchorRef={anchorRef}>
+                <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
+                  <button
+                    className="btn btn--blank"
+                    disabled={document.lastPublishedAt === null}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      unpublishDocumentHandler(document)
+                    }}
+                  >
+                    Unpublish document...
+                  </button>
+                </MenuItem>
+                <MenuItem tabIndex="-1">
+                  <button
+                    className="btn btn--blank btn--danger"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      removeDocumentHandler(document)
+                    }}
+                  >
+                    Delete document...
+                  </button>
+                </MenuItem>
+              </Menu>
+            </Popper>
+          </PopperGroup>
+        </ProjectPermission>
       </NavLink>
     </li>
   )
@@ -172,7 +175,6 @@ DocumentsListItem.defaultProps = {
     name: '',
     publishedVersionId: null,
     orgId: null,
-    projectId: null,
     createdAt: '',
     updatedAt: ''
   }
