@@ -3,9 +3,9 @@
 .masthead {
   border-top: var(--ribbon-height) solid var(--color-brand);
   height: calc(var(--header-height) + var(--ribbon-height));
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  // position: sticky;
+  // top: 0;
+  z-index: 3;
 
   .navbar {
     align-items: center;

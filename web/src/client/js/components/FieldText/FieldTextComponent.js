@@ -44,10 +44,10 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('dragleave', (cm, e) => { e.preventDefault() })
       editor.codemirror.on('focus', (cm, e) => { onFocus(field.id, field.type, editor) })
-      if (field.id === autoFocusElement) {
-        editor.codemirror.focus()
-        editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
-      }
+      // if (field.id === autoFocusElement) {
+      //   editor.codemirror.focus()
+      // editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
+      // }
     }
   // We're disabling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits

@@ -22,19 +22,20 @@
 
 html,
 body {
-  overflow-x: hidden;
+  overflow: hidden;
   overscroll-behavior-y: none;
 }
 body {
   background-color: var(--theme-surface);
   color: var(--theme-text-color);
   margin: 0;
-  min-height: 100vh;
-  overflow-x: hidden;
   padding: 0;
 }
 
 [role="application"] {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   overflow: hidden;
 }
 

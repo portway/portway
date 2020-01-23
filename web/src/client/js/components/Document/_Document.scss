@@ -2,7 +2,9 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document {
+  display: flex;
   flex: 1;
+  flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -41,9 +43,7 @@
     display: flex;
     height: 63px;
     justify-content: space-between;
-    margin-bottom: calc(var(--brand-width) / 2);
-    position: sticky;
-    top: 0;
+    width: 100%;
     z-index: 10;
   }
 
@@ -87,7 +87,11 @@
   }
 
   &__fields {
-    padding-bottom: var(--brand-width);
+    flex: 1;
+    overflow-y: auto;
+    padding-top: calc(var(--brand-width) / 2);
+    position: relative;
+
     @media (prefers-reduced-motion: no-preference) {
       transition: opacity 0.2s ease-in-out;
     }

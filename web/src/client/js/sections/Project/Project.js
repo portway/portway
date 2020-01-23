@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 
-import { PATH_PROJECT, PATH_DOCUMENT } from 'Shared/constants'
+import { MOBILE_MATCH_SIZE, PATH_PROJECT, PATH_DOCUMENT } from 'Shared/constants'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
@@ -14,6 +14,9 @@ import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbar
 const Project = ({ isFullScreen }) => {
   const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
   const isDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/:documentId`)
+  const isMobileDocumentView = isDocumentView && window.matchMedia(MOBILE_MATCH_SIZE).matches
+  const isMobileListView = isDocumentList.isExact && window.matchMedia(MOBILE_MATCH_SIZE).matches
+
   const listClasses = cx({
     'project__documents-list-container': true,
     'project__documents-list-container--list-only': isDocumentList && isDocumentList.isExact,
@@ -40,20 +43,28 @@ const Project = ({ isFullScreen }) => {
   })
 
   return (
-    <main className="project">
-      <>
-        {!isFullScreen &&
-        <div className={listClasses}>
-          <DocumentsListContainer />
-          <ProjectToolbarContainer />
-        </div>
+    <>
+      <main className="project">
+        <>
+          {!isFullScreen &&
+          <div className={listClasses}>
+            <DocumentsListContainer />
+          </div>
+          }
+          <div className={documentsClasses}>
+            <DocumentContainer />
+          </div>
+        </>
+      </main>
+      <footer className="project__footer">
+        {!isFullScreen && !isMobileDocumentView &&
+        <ProjectToolbarContainer />
         }
-        <div className={documentsClasses}>
-          <DocumentContainer />
-          <DocumentToolbarContainer />
-        </div>
-      </>
-    </main>
+        {!isMobileListView &&
+        <DocumentToolbarContainer />
+        }
+      </footer>
+    </>
   )
 }
 
