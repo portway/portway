@@ -108,7 +108,10 @@ export const ORGANIZATION_ROLES = {
       [actions.READ_MY]: true,
       [actions.UPDATE_MY]: true,
       [actions.UPDATE_MY_PASSWORD]: true
-    }
+    },
+    [resourceTypes.PROJECT_USER]: {
+      [actions.LIST]: true
+    },
   }
 }
 
