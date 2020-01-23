@@ -2,9 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
 
-// import 'codemirror/addon/mode/overlay'
-// import 'codemirror/mode/xml/xml'
-// import 'codemirror/mode/markdown/markdown'
 import 'codemirror/addon/edit/continuelist'
 import 'codemirror/mode/gfm/gfm'
 import 'codemirror/mode/javascript/javascript'
@@ -34,6 +31,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       lineWrapping: true,
       mode: {
         name: 'gfm',
+        gitHubSpice: false,
         highlightFormatting: true,
       },
       scrollbarStyle: null,

@@ -12,7 +12,7 @@ import { Menu, MenuItem } from 'Components/Menu'
 
 import './_FormatMenu.scss'
 
-const FormatMenuComponent = ({ formatSelection, focusedField }) => {
+const FormatMenuComponent = ({ formatSelection }) => {
   const [expanded, setExpanded] = useState(false)
   const containerRef = useRef()
   const anchorRef = useRef()
@@ -28,11 +28,6 @@ const FormatMenuComponent = ({ formatSelection, focusedField }) => {
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
   useKeyboardShortcut('n', toggleCallback)
-
-  const button = {
-    icon: <FormatIcon width="24" height="24" />,
-    label: 'Format tools'
-  }
 
   return (
     <PopperGroup className="document-menu format-menu" anchorRef={containerRef}>

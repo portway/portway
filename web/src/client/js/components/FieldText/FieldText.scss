@@ -51,13 +51,13 @@
     }
 
     // Each line of text is in this container
-    .CodeMirror-line {
-      display: block;
-      > span[role="presentation"] {
-        display: block;
-        position: relative;
-      }
-    }
+    // .CodeMirror-line {
+    //   display: block;
+    //   > span[role="presentation"] {
+    //     display: block;
+    //     position: relative;
+    //   }
+    // }
 
     // This is the item that is displayed to the left of a line, usually showing
     // the # or ##
@@ -80,7 +80,7 @@
 
       .cm-header {
         color: var(--theme-header-color);
-        display: inline-block;
+        // display: inline-block;
         font-weight: 700;
         letter-spacing: 0.2px;
         padding-bottom: .9rem;

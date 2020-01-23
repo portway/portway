@@ -16,6 +16,11 @@ export const blockStyles = {
   'italic': '*',
 }
 
+const insertTexts = {
+  link: ['[', '](#url#)'],
+  horizontalRule: ['', '\n\n---\n\n'],
+}
+
 /**
  * Returns the state of CodeMirror at a given position
  *
@@ -158,6 +163,7 @@ export function toggleBlock(editor, type, startChars, endChars) {
   } else {
     text = cm.getSelection()
     if (type === 'bold') {
+      if (text === '') text = 'Bold'
       text = text.split('**').join('')
       text = text.split('__').join('')
     } else if (type === 'italic') {
@@ -177,8 +183,6 @@ export function toggleBlock(editor, type, startChars, endChars) {
 }
 
 export function toggleLine(cm, name) {
-  if (/editor-preview-active/.test(cm.getWrapperElement().lastChild.className)) {return}
-
   const listRegexp = /^(\s*)(\*|-|\+|\d*\.)(\s+)/
   const whitespacesRegexp = /^\s*/
 
@@ -197,7 +201,6 @@ export function toggleLine(cm, name) {
       'unordered-list': '*',
       'ordered-list': '%%i.',
     }
-
     return map[name].replace('%%i', i)
   }
 
@@ -208,7 +211,6 @@ export function toggleLine(cm, name) {
       'ordered-list': '\\d+.',
     }
     const rt = new RegExp(map[name])
-
     return char && rt.test(char)
   }
 
@@ -306,25 +308,17 @@ export function toggleHeading(cm, size) {
  * Action for drawing a link.
  */
 export function drawLink(editor) {
-  const cm = editor.codemirror
+  const cm = editor
   const stat = getState(cm)
-  const options = editor.options
-  let url = 'https://'
-  if (options.promptURLs) {
-    url = prompt(options.promptTexts.link, 'https://')
-    if (!url) {
-      return false
-    }
-  }
-  replaceSelection(cm, stat.link, options.insertTexts.link, url)
+  const url = 'https://'
+  replaceSelection(cm, stat.link, insertTexts.link, url)
 }
 
 /**
  * Action for drawing a horizontal rule.
  */
 export function drawHorizontalRule(editor) {
-  const cm = editor.codemirror
+  const cm = editor
   const stat = getState(cm)
-  const options = editor.options
-  replaceSelection(cm, stat.image, options.insertTexts.horizontalRule)
+  replaceSelection(cm, stat.image, insertTexts.horizontalRule)
 }

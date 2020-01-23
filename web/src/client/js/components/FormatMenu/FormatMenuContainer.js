@@ -43,10 +43,10 @@ const FormatMenuContainer = ({ focusedField }) => {
           drawHorizontalRule(editor)
           break
         case 'ul':
-          toggleLine(editor, 'ordered-list')
+          toggleLine(editor, 'unordered-list')
           break
         case 'ol':
-          toggleLine(editor, 'unordered-list')
+          toggleLine(editor, 'ordered-list')
           break
         case 'blockquote':
           toggleLine(editor, 'quote')
@@ -57,7 +57,7 @@ const FormatMenuContainer = ({ focusedField }) => {
     }
   }
 
-  return <FormatMenuComponent formatSelection={formatSelection} focusedField={focusedField} />
+  return <FormatMenuComponent formatSelection={formatSelection} />
 }
 
 FormatMenuContainer.propTypes = {
