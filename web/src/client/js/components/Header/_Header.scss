@@ -3,6 +3,9 @@
 .masthead {
   border-top: var(--ribbon-height) solid var(--color-brand);
   height: calc(var(--header-height) + var(--ribbon-height));
+  position: sticky;
+  top: 0;
+  z-index: 1;
 
   .navbar {
     align-items: center;
@@ -102,4 +105,17 @@
       z-index: 11;
     }
   } // navbar
+}
+
+.subhead {
+  background-color: var(--color-brand-dark);
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: .4rem 0;
+
+  a {
+    color: #fff;
+  }
+
 }

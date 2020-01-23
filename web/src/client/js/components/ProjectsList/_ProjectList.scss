@@ -1,3 +1,4 @@
+@import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .project-list-container {
@@ -16,10 +17,14 @@
   .project-list {
     display: grid;
     grid-gap: 2rem;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-template-columns: 1fr;
     list-style: none;
     margin: 0;
     padding: 2rem 0;
+
+    @include media('>medium') {
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    }
 
     &__empty-state {
       align-items: center;

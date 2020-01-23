@@ -1,3 +1,4 @@
+@import 'inc/include-media';
 @import 'inc/vars';
 @import 'inc/color';
 @import 'inc/type';
@@ -34,6 +35,10 @@ a, .link {
   margin: auto;
   max-width: 1200px;
   padding: 6rem 0 2rem;
+  width: 75%;
+  @include media('>medium') {
+    width: 100%;
+  }
 }
 
 form {
@@ -41,7 +46,13 @@ form {
   border: thin solid var(--theme-border);
   border-radius: var(--border-radius);
   margin-bottom: 4rem;
-  padding: 4rem;
+  padding: 2rem;
+  width: calc(var(--field-container-width) + 4rem);
+
+  @include media('>medium') {
+    padding: 4rem;
+    width: auto;
+  }
 
   .user-security-fields {
     margin: auto;

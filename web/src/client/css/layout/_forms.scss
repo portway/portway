@@ -1,11 +1,17 @@
+@import '../inc/include-media';
 @import '../inc/mixins';
 
 form, .form {
   --form-background: var(--color-white);
   --form-border: var(--color-gray-20);
   --form-placeholder-color: var(--color-gray-20);
-  --field-container-width: 325px;
+  --field-container-width: 275px;
   --form-status-width: 50px;
+
+  @include media('>medium') {
+    --field-container-width: 325px;
+  }
+
   @media (prefers-color-scheme: dark) {
     --form-background: var(--theme-overflow);
     --form-border: var(--color-gray-60);
@@ -51,6 +57,7 @@ input[type='password'],
   background: var(--form-background);
   border: thin solid var(--form-border);
   border-radius: var(--border-radius);
+  color: var(--theme-text-color);
   min-height: 38px;
   padding: 8px;
   width: 100%;

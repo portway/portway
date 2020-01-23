@@ -1,3 +1,5 @@
+@import 'CSS/inc/_include-media.scss';
+
 .document-toolbar {
   align-items: center;
   background-color: var(--theme-overlay-light);
@@ -24,8 +26,12 @@
 
   &__info {
     color: var(--color-gray-30);
+    display: none;
     font-size: 1.2rem;
     margin-right: 1rem;
+    @include media('>medium') {
+      display: block;
+    }
   }
 
   .popper-group {
