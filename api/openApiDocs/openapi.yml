@@ -143,7 +143,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  # TODO draft=true query param
+
   /projects/{projectId}/documents:
     get:
       description: Returns all documents that the user has access to for the given project id
@@ -155,6 +155,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: draft
+          in: query
+          description: option to include draft documents
+          schema:
+            type: boolean
       responses:
         '200':
           description: documents response
@@ -207,7 +212,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  # TODO draft=true query param
+
   /projects/{projectId}/documents/{documentId}:
     get:
       description: Returns a document based on a single ID
@@ -225,6 +230,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: draft
+          in: query
+          description: option to include draft documents
+          schema:
+            type: boolean
 
       responses:
         '200':
@@ -642,7 +652,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  # TODO draft=true query param
+
   /documents/{documentId}:
     get:
       description: Returns a document based on a single ID
@@ -654,6 +664,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: draft
+          in: query
+          description: option to include draft documents
+          schema:
+            type: boolean
 
       responses:
         '200':
@@ -716,7 +731,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     
-  # TODO draft=true query param
   /documents/{documentId}/fields:
     get:
       description: |
@@ -729,6 +743,11 @@ paths:
           required: true
           schema:
             type: integer
+        - name: draft
+          in: query
+          description: option to include draft documents
+          schema:
+            type: boolean
 
       responses:
         '200':
@@ -1195,6 +1214,18 @@ paths:
     get:
       description: Returns all users that the user has access to
       operationId: findUsers
+      parameters:
+        - name: page
+          in: query
+          description: the page of results to return
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          description: number of users to return per page
+          schema:
+            type: integer
+
       responses:
         '200':
           description: users response
@@ -1207,6 +1238,18 @@ paths:
                     type: array
                     items:
                       $ref: 'definitions/user.yml#/User'
+                  page:
+                    type: integer
+                    example: 1
+                  perPage:
+                    type: integer
+                    example: 1
+                  total:
+                    type: integer
+                    example: 1
+                  totalPages:
+                    type: integer
+                    example: 1
 
         default:
           description: unexpected error

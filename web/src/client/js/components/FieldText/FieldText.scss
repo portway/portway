@@ -161,6 +161,10 @@
       .cm-quote {
         color: var(--theme-header-color);
       }
+      .cm-tab + .cm-comment {
+        background-color: transparent;
+        display: inline-block;
+      }
 
       .cm-strong {
         font-weight: 800;
