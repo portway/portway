@@ -99,6 +99,9 @@ const AdminPlanSelectorComponent = ({
                         <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
+                        <CheckIcon fill={green} /> Full API access with multiple access levels
+                      </li>
+                      <li>
                         <CheckIcon fill={green} /> {PLAN_LIMITS[PLAN_TYPES.SINGLE_USER].storage}GB Storage
                       </li>
                     </ul>
@@ -132,13 +135,13 @@ const AdminPlanSelectorComponent = ({
                         <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
+                        <CheckIcon fill={green} /> Full API access with multiple access levels
+                      </li>
+                      <li>
                         <CheckIcon fill={green} /> Multiple teams and users (5 users included)
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> Read-only, edit or admin roles
-                      </li>
-                      <li>
-                        <CheckIcon fill={green} /> Projects for everyone or select teams
+                        <CheckIcon fill={green} /> Project access control. Select who can view, contribute, or administer projects
                       </li>
                       <li>
                         <CheckIcon fill={green} /> {PLAN_LIMITS[PLAN_TYPES.MULTI_USER].storage}GB Storage
