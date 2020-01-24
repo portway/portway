@@ -60,7 +60,11 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
         </>
       )
     }
-    return <UserIcon width="64" height="64" />
+    if (user.avatar) {
+      return <img className="user-profile__avatar" src={user.avatar} width="64" height="64" alt={`${user.name}’s avatar`} />
+    } else {
+      return <UserIcon width="64" height="64" />
+    }
   }
 
   const classes = cx({
