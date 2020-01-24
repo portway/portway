@@ -1,16 +1,20 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
-import React, { useRef } from 'react'
+import React, { lazy, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
-import { ProjectIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
+import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ACCESS_LEVELS, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { ProjectIcon, SettingsIcon, TrashIcon, UnlockIcon } from 'Components/Icons'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
-import ProjectUsersContainer from 'Components/ProjectUsers/ProjectUsersContainer'
+
+// Lazy loading because not all users have access to this
+const ProjectUsersContainer = lazy(() => import(/* webpackChunkName: 'ProjectUsersContainer' */ 'Components/ProjectUsers/ProjectUsersContainer'))
 
 const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
   const itemRef = useRef()
+  const assignedProject = project.accessLevel == null
+  const publiclyReadable = project.accessLevel === PROJECT_ACCESS_LEVELS.READ
 
   function itemClickHandler(e) {
     if (e.target === itemRef.current) {
@@ -37,24 +41,34 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
           </div>
         </div>
         <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+          {assignedProject &&
           <div className="project-list__team">
             <ProjectUsersContainer collapsed={true} projectId={projectId} />
           </div>
+          }
         </OrgPlanPermission>
       </Link>
       <div className="project-list__actions" ref={itemRef}>
+        {publiclyReadable &&
+        <div className="project-list__public-token">
+          <UnlockIcon width="18" height="18" />
+          <span className="label">Everyone</span>
+        </div>
+        }
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectIdOverride={projectId}>
-          <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
-            <SettingsIcon />
-          </Link>
-          <button
-            aria-label="Delete project"
-            name="deleteProject"
-            className="btn btn--blank"
-            onClick={handleDelete}
-          >
-            <TrashIcon />
-          </button>
+          <div className="project-list__action-buttons">
+            <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
+              <SettingsIcon />
+            </Link>
+            <button
+              aria-label="Delete project"
+              name="deleteProject"
+              className="btn btn--blank"
+              onClick={handleDelete}
+            >
+              <TrashIcon />
+            </button>
+          </div>
         </ProjectPermission>
       </div>
     </li>

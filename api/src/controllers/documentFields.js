@@ -80,7 +80,6 @@ const getDocumentField = async function(req, res, next) {
 
   try {
     const field = await BusinessField.findByIdForDocument(id, documentId, orgId)
-    if (!field) throw ono({ code: 404 }, `No field with id ${id}`)
     res.json({ data: field })
   } catch (e) {
     next(e)
@@ -122,7 +121,7 @@ const deleteDocumentField = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessField.deleteByIdForDocument(id, documentId, orgId)
+    await fieldCoordinator.removeDocumentField(id, documentId, orgId)
     res.status(204).send()
     auditLogDocumentUpdate(req.requestorInfo.requestorId, documentId)
   } catch (e) {

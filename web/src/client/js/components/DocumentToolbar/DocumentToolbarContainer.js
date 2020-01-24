@@ -4,14 +4,12 @@ import { useLocation, useParams, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { MULTI_USER_PLAN_TYPES, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
-import { currentUserId } from 'Libs/currentIds'
+import { PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 
 import { deleteDocument, publishDocument, unpublishDocument } from 'Actions/document'
 import { uiConfirm } from 'Actions/ui'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
-import dataMapper from 'Libs/dataMapper'
 
 import DocumentToolbarComponent from './DocumentToolbarComponent'
 
@@ -27,30 +25,14 @@ const DocumentToolbarContainer = ({
 }) => {
   const { documentId, projectId } = useParams()
   const location = useLocation()
-  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.projects.projectAssignments(projectId), [projectId])
-  const { data: users, loading: userLoading } = useDataService(dataMapper.users.list())
 
   if (!document) return null
 
   if (isCreating && documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
-  }
-
-  // Create a list of projectUsers if we have any
-  let projectUsers = []
-  if (MULTI_USER_PLAN_TYPES.includes(currentOrg.plan)) {
-    const myUserId = String(currentUserId)
-    if (!userLoading && !assignmentsLoading && projectAssignments) {
-      projectUsers = Object.keys(projectAssignments).filter((userId) => {
-        if (userId !== myUserId) {
-          return users[userId]
-        }
-      })
-    }
   }
 
   function publishDocumentHandler() {
@@ -84,7 +66,6 @@ const DocumentToolbarContainer = ({
       documentMode={documentMode}
       isCreating={isCreating}
       isPublishing={isPublishing}
-      projectUsers={projectUsers}
       publishDocumentHandler={publishDocumentHandler}
       removeDocumentHandler={removeDocumentHandler}
       unpublishDocumentHandler={unpublishDocumentHandler}

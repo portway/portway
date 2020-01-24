@@ -28,9 +28,21 @@ const documents = [
       {
         type: FIELD_TYPES.TEXT,
         name: 'Bonkey Field Text',
-        value: `# Wee Bonkey\n\n
-a strapping young lass with **a heart of gold**, _ah yes, wee bonkey_\n\n
-Dirk is that wee [Bonkey!](https://bonkeybong.com/)`,
+        value: `# Wee Bonkey\n
+A strapping young lass with **a heart of gold**, _ah yes, wee bonkey_ Dirk is that wee [Bonkey!](https://bonkeybong.com/)\n
+1. I am a numbered list
+1. With a second list item\n
+\`\`\`
+// This is some code
+(() => {
+  console.log('Blah')
+})
+\`\`\`\n
+I am also going to put a bulleted list right here\n
+* I am a bullet
+* I am a bullet\n
+> And I am a multi-line quote that will hopefully wrap to a second line and format correctly
+`,
         structuredValue: '{ "h1": "Wee Bonkey", "p": "a strapping young lass"}'
       }
     ]

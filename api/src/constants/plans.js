@@ -9,6 +9,15 @@ export const PLANS = {
 
 export const TRIAL_PERIOD_DAYS = 30
 
+// S3 asset storage allowed per plan
+// 1e10 = 10gb
+export const PLAN_ASSET_STORAGE_BYTES = {
+  [PLANS.SINGLE_USER]: 1e10,
+  [PLANS.SINGLE_USER_FREE]: 1e10,
+  [PLANS.MULTI_USER]: 1e10,
+  [PLANS.MULTI_USER_FREE]: 1e10
+}
+
 // These come directly from stripe on subscription.status
 // https://stripe.com/docs/billing/lifecycle
 export const STRIPE_STATUS = {

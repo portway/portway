@@ -26,6 +26,7 @@ const DocumentsListComponent = ({
   fieldMoveHandler,
   loading,
   projectId,
+  readOnly,
   removeDocumentHandler,
   searchDocumentsHandler,
   unpublishDocumentHandler,
@@ -232,8 +233,14 @@ const DocumentsListComponent = ({
           <div className="notice__icon">
             <DocumentIcon fill={colorSurface} width="32" height="32" />
           </div>
-          <h2 className="notice__headline">Get started</h2>
+          {readOnly &&
+          <>
+            <h2 className="notice__headline">An empty project!?</h2>
+            <p>Check back later to see your team’s hard work.</p>
+          </>
+          }
           <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+            <h2 className="notice__headline">Get started</h2>
             <p>Create a new document, or drag a bunch of text documents here to get started.</p>
             <button className="btn btn--small notice__action" name="addDocument" onClick={() => { createCallback(true) }}>Create document</button>
           </ProjectPermission>
@@ -266,6 +273,7 @@ DocumentsListComponent.propTypes = {
   fieldMoveHandler: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
+  readOnly: PropTypes.bool.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
   searchDocumentsHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,

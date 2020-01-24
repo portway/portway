@@ -1,7 +1,7 @@
 import BusinessField from '../businesstime/field'
-import { uploadContent } from '../integrators/s3'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { processMarkdownWithWorker } from './markdown'
+import assetCoordinator from './assets'
 import ono from 'ono'
 
 const addFieldToDocument = async function(documentId, body, file) {
@@ -20,6 +20,22 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   return BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 }
 
+const removeDocumentField = async function(fieldId, documentId, orgId) {
+  const field = await BusinessField.findByIdForDocument(fieldId, documentId, orgId)
+  await BusinessField.deleteByIdForDocument(fieldId, documentId, orgId)
+  // async, but don't wait for it
+  cleanupFieldByType(field, orgId)
+}
+
+// Handles cleanup based on the field type
+const cleanupFieldByType = async function(field, orgId) {
+  switch (field.type) {
+    case FIELD_TYPES.IMAGE: {
+      await assetCoordinator.deleteAsset(field.value, orgId)
+    }
+  }
+}
+
 const getFieldBodyByType = async function(body, documentId, orgId, file) {
   const fieldBody = { ...body }
 
@@ -27,7 +43,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
     case FIELD_TYPES.IMAGE:
       let url
       if (file) {
-        url = await uploadContent(documentId, orgId, file)
+        url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
       }
       fieldBody.value = url
       break
@@ -45,5 +61,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
 
 export default {
   addFieldToDocument,
-  updateDocumentField
+  updateDocumentField,
+  removeDocumentField
 }
