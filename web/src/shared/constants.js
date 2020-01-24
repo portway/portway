@@ -12,6 +12,22 @@ const PLAN_TYPES = {
   SINGLE_USER_FREE: 'SINGLE_USER_FREE'
 }
 
+// Numbers are in gigabytes
+const PLAN_LIMITS = {
+  [PLAN_TYPES.SINGLE_USER]: {
+    storage: 10
+  },
+  [PLAN_TYPES.SINGLE_USER_FREE]: {
+    storage: 10
+  },
+  [PLAN_TYPES.MULTI_USER]: {
+    storage: 10
+  },
+  [PLAN_TYPES.MULTI_USER_FREE]: {
+    storage: 10
+  },
+}
+
 const FREE_PLAN_TYPES = [
   PLAN_TYPES.SINGLE_USER_FREE,
   PLAN_TYPES.MULTI_USER_FREE
@@ -23,10 +39,10 @@ const MULTI_USER_PLAN_TYPES = [
 ]
 
 const PLAN_TITLES = {
-  [PLAN_TYPES.SINGLE_USER]: 'Single-user plan',
-  [PLAN_TYPES.MULTI_USER]: 'Multi-user plan',
-  [PLAN_TYPES.MULTI_USER_FREE]: 'Free Multi-user plan',
-  [PLAN_TYPES.SINGLE_USER_FREE]: 'Free Single-user plan'
+  [PLAN_TYPES.SINGLE_USER]: 'Solo plan',
+  [PLAN_TYPES.MULTI_USER]: 'Team plan',
+  [PLAN_TYPES.MULTI_USER_FREE]: 'Team plan for friends',
+  [PLAN_TYPES.SINGLE_USER_FREE]: 'Solo plan for friends'
 }
 
 const PRICING = {
@@ -184,6 +200,7 @@ module.exports = {
   PLAN_PRICING: PLAN_PRICING,
   PLAN_TYPES: PLAN_TYPES,
   PLAN_TITLES: PLAN_TITLES,
+  PLAN_LIMITS: PLAN_LIMITS,
   FREE_PLAN_TYPES: FREE_PLAN_TYPES,
   MULTI_USER_PLAN_TYPES: MULTI_USER_PLAN_TYPES,
   PRICING: PRICING,
