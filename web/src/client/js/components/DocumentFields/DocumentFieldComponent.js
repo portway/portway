@@ -82,11 +82,11 @@ const DocumentFieldComponent = ({
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
-      onDragEnd={readOnly ? null : dragEndHandler}
-      onDragEnter={readOnly ? null : dragEnterHandler}
+      onDragEnd={dragEndHandler}
+      onDragEnter={dragEnterHandler}
       onDragOver={e => e.preventDefault()}
-      onDragStart={readOnly ? null : dragStartHandler}
-      onDrop={readOnly ? null : dropHandler}
+      onDragStart={dragStartHandler}
+      onDrop={dropHandler}
       ref={listRef}
     >
       <div className="document-field__component">

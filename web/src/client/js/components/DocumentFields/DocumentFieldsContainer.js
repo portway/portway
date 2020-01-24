@@ -144,6 +144,7 @@ const DocumentFieldsContainer = ({
   function dragStartHandler(e) {
     // console.info('drag start')
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     const listItem = e.currentTarget
     e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.effectAllowed = 'copyMove'
@@ -178,6 +179,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag enter', draggingElement)
     e.preventDefault()
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     e.dataTransfer.dropEffect = 'move'
     if (e.dataTransfer.types.includes('Files')) {
       return
@@ -211,6 +213,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag drop', draggingElement)
     e.preventDefault()
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
@@ -225,6 +228,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag end', draggingElement)
     e.preventDefault()
     e.stopPropagation()
+    if (documentReadOnlyMode) return
     draggingElement.current.classList.remove('document-field--dragging')
     document.querySelector('#clone-element').remove()
 

@@ -5,7 +5,6 @@ import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
-import { FIELD_TYPES } from 'Shared/constants'
 import { FormatIcon } from 'Components/Icons'
 
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
@@ -13,7 +12,7 @@ import { Menu, MenuItem } from 'Components/Menu'
 
 import './_FormatMenu.scss'
 
-const FormatMenuComponent = ({ focusedField }) => {
+const FormatMenuComponent = ({ formatSelection }) => {
   const [expanded, setExpanded] = useState(false)
   const containerRef = useRef()
   const anchorRef = useRef()
@@ -29,58 +28,6 @@ const FormatMenuComponent = ({ focusedField }) => {
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
   useKeyboardShortcut('n', toggleCallback)
-
-  function formatSelection(format) {
-    if (focusedField.type === FIELD_TYPES.TEXT) {
-      const editor = focusedField.data
-      // https://github.com/Ionaru/easy-markdown-editor/blob/master/src/js/easymde.js#L2450
-      switch (format) {
-        case 'h1':
-          editor.toggleHeading1(editor)
-          break
-        case 'h2':
-          editor.toggleHeading2(editor)
-          break
-        case 'h3':
-          editor.toggleHeading3(editor)
-          break
-        case 'bold':
-          editor.toggleBold(editor)
-          break
-        case 'italic':
-          editor.toggleItalic(editor)
-          break
-        case 'strikethrough':
-          editor.toggleStrikethrough(editor)
-          break
-        case 'link':
-          editor.drawLink(editor)
-          break
-        case 'hr':
-          editor.drawHorizontalRule(editor)
-          break
-        case 'ul':
-          editor.toggleUnorderedList(editor)
-          break
-        case 'ol':
-          editor.toggleOrderedList(editor)
-          break
-        case 'blockquote':
-          editor.toggleBlockquote(editor)
-          break
-        case 'code':
-          editor.toggleCodeBlock(editor)
-          break
-        default:
-          break
-      }
-    }
-  }
-
-  const button = {
-    icon: <FormatIcon width="24" height="24" />,
-    label: 'Format tools'
-  }
 
   return (
     <PopperGroup className="document-menu format-menu" anchorRef={containerRef}>
@@ -155,11 +102,6 @@ const FormatMenuComponent = ({ focusedField }) => {
               <span className="format-menu__format">&gt;</span> Blockquote
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('code') }>
-              <span className="format-menu__format">`</span> Code
-            </button>
-          </MenuItem>
         </Menu>
       </Popper>
     </PopperGroup>
@@ -167,6 +109,7 @@ const FormatMenuComponent = ({ focusedField }) => {
 }
 
 FormatMenuComponent.propTypes = {
+  formatSelection: PropTypes.func.isRequired,
   focusedField: PropTypes.shape({
     id: PropTypes.number,
     type: PropTypes.number,
