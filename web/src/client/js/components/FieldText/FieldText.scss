@@ -18,7 +18,12 @@
 
     pre {
       font-family: var(--type-sans-serif);
+      font-size: 1.5rem;
       padding: 0;
+    }
+
+    span[role="presentation"] {
+      font-size: 1.5rem; // Chrome was setting its own
     }
 
     .cm--code-block {

@@ -1,23 +1,57 @@
 @import 'CSS/inc/_include-media.scss';
 
+.body--with-panel {
+  main {
+    overflow-y: auto;
+  }
+}
+
 /**
  * Panel is a navigataion on the left, content on the right layout
  * Project Settings, Admin Settings, etc
  */
 .panel {
-  display: flex;
   flex: 1;
-  flex-direction: column;
+
   &__container {
     display: flex;
+    flex-direction: column-reverse;
     flex: 1;
-    padding-top: calc(var(--brand-width) / 2);
-  }
-  &__navigation {
-    margin-right: calc(var(--brand-width) / 2);
+    padding-top: calc(var(--brand-width) / 4);
+    position: relative;
     @include media('>medium') {
-      margin-right: var(--brand-width);
+      align-items: flex-start;
+      display: flex;
+      flex-direction: row;
+      padding-top: calc(var(--brand-width) / 2);
+    }
+  }
+
+  &__navigation {
+    background-color: var(--theme-overflow);
+    border-top: thin solid var(--theme-border);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+
+    @include media('>medium') {
+      background-color: transparent;
+      border: none;
+      margin-right: calc(var(--brand-width) / 2);
+      position: sticky;
+      top: 0;
       width: 20%;
+    }
+
+    ul {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      @include media('>medium') {
+        display: block;
+      }
     }
 
     a {
@@ -25,6 +59,7 @@
       border-left: 2px solid transparent;
       display: flex;
       color: transparent;
+      height: 48px;
       justify-content: center;
       overflow: hidden;
       padding: 8px 7px;
@@ -38,10 +73,14 @@
       }
       &.active {
         background-color: var(--theme-overlay-dark);
-        border-left: 2px solid var(--color-green);
+        @include media('>medium') {
+          background-color: var(--theme-overlay-dark);
+          border-left: 2px solid var(--color-green);
+        }
       }
       @include media('>medium') {
         color: var(--theme-header-color);
+        height: auto;
         justify-content: flex-start;
         width: auto;
         .label {
@@ -53,9 +92,10 @@
       }
     }
   }
+
   &__content {
     flex: 1;
-    // overflow-x: hidden; // this causes issues with focused input borders. Can we leave this out?
+
     section {
       position: relative;
       &:first-child {

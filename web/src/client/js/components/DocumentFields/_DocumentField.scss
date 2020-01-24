@@ -1,3 +1,4 @@
+@import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document-field {
@@ -72,7 +73,11 @@
 .document-field__component {
   align-items: stretch;
   display: flex;
-  padding: 0 2.3rem;
+  padding: 0 1.3rem;
+
+  @include media ('>medium') {
+    padding: 0 2.3rem;
+  }
 
   .document__fields--is-dragging & {
     overflow: hidden;

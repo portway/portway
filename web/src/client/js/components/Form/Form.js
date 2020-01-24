@@ -15,13 +15,12 @@ const Form = ({
   forms,
   name,
   onSubmit,
-  submitEnabled,
   submitLabel,
   submitOnRight,
   ...props,
 }) => {
   const formRef = useRef()
-  const [formChanged, setFormChanged] = useState(submitEnabled)
+  const [formChanged, setFormChanged] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [failed, setFailed] = useState(false)
   const [succeeded, setSucceeded] = useState(false)
@@ -30,10 +29,13 @@ const Form = ({
   const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
 
   useEffect(() => {
-    setSubmitting(forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded)
-    setFailed(forms[name] && forms[name].failed)
-    setSucceeded(forms[name] && forms[name].succeeded && !forms[name].failed)
-  })
+    const isSubmitting = forms[name] && forms[name].submitted && !forms[name].failed && !forms[name].succeeded
+    const hasFailed = forms[name] && forms[name].failed
+    const hasSucceeded = forms[name] && forms[name].succeeded && !forms[name].failed
+    setSubmitting(isSubmitting || false)
+    setFailed(hasFailed || false)
+    setSucceeded(hasSucceeded || false)
+  }, [forms, name])
 
   useEffect(() => {
     if (!disabled) {
@@ -49,12 +51,11 @@ const Form = ({
   }
 
   const debouncedChangeHandler = debounce(200, () => {
-    if (!disabled) {
-      setFormChanged(true)
-    }
+    setFormChanged(true)
   })
 
-  const buttonDisabledWhen = disabled || !formChanged || submitting || succeeded
+  const buttonDisabledWhen = !formChanged || submitting || succeeded
+
   const submitClasses = cx({
     'btn': true,
     'btn--disabled': buttonDisabledWhen,
@@ -83,7 +84,7 @@ const Form = ({
       </div>
       }
       <div className={buttonGroupClasses}>
-        <input type="submit" className={submitClasses} disabled={buttonDisabledWhen && !submitEnabled} value={submitLabel} />
+        <input type="submit" className={submitClasses} disabled={buttonDisabledWhen} value={submitLabel} />
         {cancelHandler &&
           <button className="btn btn--blank btn--small" type="button" onClick={cancelHandler}>Cancel</button>
         }
@@ -102,12 +103,12 @@ Form.propTypes = {
   forms: PropTypes.object,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
-  submitEnabled: PropTypes.bool,
   submitLabel: PropTypes.string,
   submitOnRight: PropTypes.bool,
 }
 
 Form.defaultProps = {
+  disabled: true,
   submitLabel: 'Submit',
 }
 

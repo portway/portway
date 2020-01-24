@@ -58,7 +58,11 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
         </>
       )
     }
-    return <UserIcon width="64" height="64" />
+    if (organization.avatar) {
+      return <img className="admin-organization__avatar" src={organization.avatar} width="64" height="64" alt={`${organization.name}’s logo`} />
+    } else {
+      return <UserIcon width="64" height="64" />
+    }
   }
 
   const avatarHelpText = `Upload a square image - Formatted as PNG or JPG`

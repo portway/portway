@@ -69,6 +69,8 @@ const AdminDashboardComponent = ({ organization, section }) => {
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`} aria-label="Organization">
                 <OrganizationIcon width="22" height="22" /> <span className="label">Organization</span>
               </NavLink>
+            </OrgPermission>
+            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.BILLING}`} aria-label="Billing">
                 <BillingIcon width="22" height="22" /> <span className="label">Billing</span>
               </NavLink>

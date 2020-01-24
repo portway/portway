@@ -1,3 +1,5 @@
+@import 'CSS/inc/_include-media.scss';
+
 .admin-plans-selector {
 
   &--disabled {
@@ -21,16 +23,24 @@
 
   &__list {
     display: flex;
+    flex-direction: column;
     flex-wrap: nowrap;
     list-style: none;
     margin: 0;
     padding: 0;
+
+    @include media('>medium') {
+      flex-direction: row;
+    }
+
   }
 
   &__item {
-    flex: 1 1 100%;
-    margin-right: 2rem;
-    width: 50%;
+    @include media('>medium') {
+      flex: 1 1 100%;
+      margin-right: 2rem;
+      width: 50%;
+    }
 
     &:last-child {
       margin: 0;

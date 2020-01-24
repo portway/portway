@@ -6,6 +6,7 @@ import {
   FREE_PLAN_TYPES,
   LOCKED_ACCOUNT_STATUSES,
   ORG_SUBSCRIPTION_STATUS,
+  PLAN_LIMITS,
   PLAN_TITLES,
   PLAN_TYPES,
   SUPPORT_EMAIL,
@@ -25,7 +26,6 @@ const AdminPlanSelectorComponent = ({
   const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
 
   const planTitle = PLAN_TITLES[organizationPlan] || PLAN_TITLES[PLAN_TYPES.SINGLE_USER]
-
   const hasFreePlan = FREE_PLAN_TYPES.includes(organizationPlan)
 
   // Manually sets the Form's submit button to enabled, since we're not using
@@ -56,16 +56,23 @@ const AdminPlanSelectorComponent = ({
       <h2 id="rg1-label">
         Your plan: <span className="admin-plans-selector__title">{planTitle}</span>
       </h2>
-      {hasFreePlan ?
-        <p>
-          You are currently on a free plan. If you would like to upgrade, please&nbsp;
+      {organizationPlan === PLAN_TYPES.MULTI_USER && (
+        <p className="small">
+        At the moment we cannot downgrade <span className="lowercase">{PLAN_TITLES[PLAN_TYPES.MULTI_USER]}s</span>.
+        Please <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a> if you need assistance.
+        </p>
+      )}
+      {hasFreePlan &&
+        <p className="small">
+          You are currently on a {planTitle} ❤️. If you would like to upgrade, please&nbsp;
           <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a>.
         </p>
-        :
+      }
+      {organizationPlan === PLAN_TYPES.SINGLE_USER &&
         <Form
           name={formId}
           onSubmit={formSubmitHandler}
-          submitEnabled={formChanged}
+          disabled={!formChanged}
           submitLabel="Update Plan">
           <ul className="admin-plans-selector__list" role="radiogroup" aria-labelledby="rg1-label">
             <li className="admin-plans-selector__item">
@@ -78,7 +85,7 @@ const AdminPlanSelectorComponent = ({
                 role="radio"
                 type="button">
                 <div className="admin-plans-selector__content">
-                  <h3>Single-user</h3>
+                  <h3>{PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}</h3>
                   <div className="admin-plans-selector__description">
                     <p>
                     Enjoy unlimited projects and documents all to yourself. This plan is perfect
@@ -92,7 +99,10 @@ const AdminPlanSelectorComponent = ({
                         <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> 10GB Storage
+                        <CheckIcon fill={green} /> Full API access with multiple access levels
+                      </li>
+                      <li>
+                        <CheckIcon fill={green} /> {PLAN_LIMITS[PLAN_TYPES.SINGLE_USER].storage}GB Storage
                       </li>
                     </ul>
                   </div>
@@ -105,13 +115,13 @@ const AdminPlanSelectorComponent = ({
             <li className="admin-plans-selector__item">
               <button
                 aria-checked={plan === PLAN_TYPES.MULTI_USER && !lockedSubscription}
-                aria-label="Select a multi-user plan"
+                aria-label="Select a team plan"
                 className="btn btn--white"
                 onClick={() => formChangeHandler(PLAN_TYPES.MULTI_USER)}
                 role="radio"
                 type="button">
                 <div className="admin-plans-selector__content">
-                  <h3>Multi-user</h3>
+                  <h3>{PLAN_TITLES[PLAN_TYPES.MULTI_USER]}</h3>
                   <div className="admin-plans-selector__description">
                     <p>
                     Create project teams, assign different roles, and manage organization wide
@@ -125,13 +135,16 @@ const AdminPlanSelectorComponent = ({
                         <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
+                        <CheckIcon fill={green} /> Full API access with multiple access levels
+                      </li>
+                      <li>
                         <CheckIcon fill={green} /> Multiple teams and users (5 users included)
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> Audit log
+                        <CheckIcon fill={green} /> Project access control. Select who can view, contribute, or administer projects
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> 10GB Storage
+                        <CheckIcon fill={green} /> {PLAN_LIMITS[PLAN_TYPES.MULTI_USER].storage}GB Storage
                       </li>
                     </ul>
                   </div>
@@ -142,12 +155,6 @@ const AdminPlanSelectorComponent = ({
               </button>
             </li>
           </ul>
-          {organizationPlan === PLAN_TYPES.MULTI_USER && (
-            <p className="small">
-            At the moment we cannot downgrade multi-user plans. Please contact us if you need
-            assistance.
-            </p>
-          )}
         </Form>
       }
     </div>
