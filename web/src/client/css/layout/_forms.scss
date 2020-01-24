@@ -88,7 +88,10 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   margin-bottom: 18px;
-  width: var(--field-container-width);
+
+  @include media('>medium') {
+    width: var(--field-container-width);
+  }
 
   // Aligns _fields_ in a row
   &--row {

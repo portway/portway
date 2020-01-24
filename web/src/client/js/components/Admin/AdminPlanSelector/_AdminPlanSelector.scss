@@ -36,10 +36,9 @@
   }
 
   &__item {
-    flex: 1 1 100%;
-    margin-right: 2rem;
-
     @include media('>medium') {
+      flex: 1 1 100%;
+      margin-right: 2rem;
       width: 50%;
     }
 

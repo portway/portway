@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import { QUERY_PARAMS } from 'Shared/constants'
 import TableHeading from './TableHeading'
@@ -7,7 +8,7 @@ import TableRow from './TableRow'
 
 import './_TableStyles.scss'
 
-const Table = ({ headings, rows, sortedBy, sortMethod, sortCallback }) => {
+const Table = ({ className, headings, rows, sortedBy, sortMethod, sortCallback }) => {
   function renderHeadings() {
     return Object.keys(headings).map((hId) => {
       return (
@@ -30,8 +31,13 @@ const Table = ({ headings, rows, sortedBy, sortMethod, sortCallback }) => {
     })
   }
 
+  const tableClasses = cx({
+    'table': true,
+    [`${className}`]: className
+  })
+
   return (
-    <section className="table">
+    <section className={tableClasses}>
       <ol className="table__list">
         <li className="table__row table__heading">
           {renderHeadings()}
@@ -44,6 +50,7 @@ const Table = ({ headings, rows, sortedBy, sortMethod, sortCallback }) => {
 
 // @todo Shape this up
 Table.propTypes = {
+  className: PropTypes.string,
   headings: PropTypes.object.isRequired,
   rows: PropTypes.object.isRequired,
   sortedBy: PropTypes.string,

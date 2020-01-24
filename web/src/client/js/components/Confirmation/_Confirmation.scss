@@ -44,7 +44,7 @@
 
   &__actions {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     padding-top: 24px;
     @include media('>medium') {
       flex-direction: row;
@@ -63,6 +63,7 @@
 
   &__cancel {
     color: var(--color-gray-40, gray);
+    margin-bottom: .6rem;
   }
 
   .highlight {

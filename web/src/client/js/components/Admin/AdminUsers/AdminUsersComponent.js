@@ -157,6 +157,7 @@ const AdminUsersComponent = ({
               />
             </form>
             <Table
+              className="admin-users__table"
               headings={userHeadings}
               rows={userRows}
               sortCallback={sortUsersHandler}

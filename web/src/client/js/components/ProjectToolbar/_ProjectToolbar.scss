@@ -15,4 +15,9 @@
     width: calc(var(--gutter-width) + 300px);
   }
 
+  @media all and (display-mode: standalone) {
+    height: 75px;
+    padding: 0 calc(var(--gutter-width) / 4) 2rem;
+  }
+
 }

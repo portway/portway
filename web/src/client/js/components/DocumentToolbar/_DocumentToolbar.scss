@@ -12,6 +12,11 @@
   padding: 0 calc(var(--gutter-width) / 4);
   z-index: 100;
 
+  @media all and (display-mode: standalone) {
+    height: 75px;
+    padding: 0 calc(var(--gutter-width) / 4) 2rem;
+  }
+
   &__start {
     align-items: center;
     display: flex;
@@ -23,6 +28,9 @@
   &__end {
     align-items: center;
     display: flex;
+    .btn + .btn {
+      margin-left: .6rem;
+    }
   }
 
   &__info {
