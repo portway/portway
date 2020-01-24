@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -74,9 +74,7 @@ const DocumentFieldsContainer = ({
   let documentReadOnlyMode
   // False because null / true == loading
   if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment === undefined ||
-                           readOnlyRoleIds.includes(projectAssignment.roleId) ||
-                           documentMode === DOCUMENT_MODE.NORMAL
+    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
   }
 
   // Actions
