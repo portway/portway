@@ -5,6 +5,8 @@ import moment from 'moment'
 import {
   LOCKED_ACCOUNT_STATUSES,
   ORG_SUBSCRIPTION_STATUS,
+  PLAN_TITLES,
+  PLAN_TYPES,
   SUPPORT_EMAIL,
   TRIALING_STATUSES
 } from 'Shared/constants'
@@ -28,10 +30,10 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
           <InfoIcon width="22" height="22" /> Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}
         </h2>
         <p>
-          During your trial, you are limited to a single-user plan.
+          During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}.
         </p>
         <p>
-          Add your payment information below to activate your account or to upgrade to a multi-user plan.
+          Add your payment information below to activate your account or to upgrade to a {PLAN_TITLES[PLAN_TYPES.MULTI_USER]}.
         </p>
       </div>
       }
