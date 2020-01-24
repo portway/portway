@@ -25,7 +25,6 @@ const AdminPlanSelectorComponent = ({
   const green = getComputedStyle(document.documentElement).getPropertyValue('--color-green')
 
   const planTitle = PLAN_TITLES[organizationPlan] || PLAN_TITLES[PLAN_TYPES.SINGLE_USER]
-
   const hasFreePlan = FREE_PLAN_TYPES.includes(organizationPlan)
 
   // Manually sets the Form's submit button to enabled, since we're not using
@@ -65,7 +64,7 @@ const AdminPlanSelectorComponent = ({
         <Form
           name={formId}
           onSubmit={formSubmitHandler}
-          submitEnabled={formChanged}
+          disabled={!formChanged}
           submitLabel="Update Plan">
           <ul className="admin-plans-selector__list" role="radiogroup" aria-labelledby="rg1-label">
             <li className="admin-plans-selector__item">
@@ -78,7 +77,7 @@ const AdminPlanSelectorComponent = ({
                 role="radio"
                 type="button">
                 <div className="admin-plans-selector__content">
-                  <h3>Single-user</h3>
+                  <h3>{PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}</h3>
                   <div className="admin-plans-selector__description">
                     <p>
                     Enjoy unlimited projects and documents all to yourself. This plan is perfect
@@ -105,13 +104,13 @@ const AdminPlanSelectorComponent = ({
             <li className="admin-plans-selector__item">
               <button
                 aria-checked={plan === PLAN_TYPES.MULTI_USER && !lockedSubscription}
-                aria-label="Select a multi-user plan"
+                aria-label="Select a team plan"
                 className="btn btn--white"
                 onClick={() => formChangeHandler(PLAN_TYPES.MULTI_USER)}
                 role="radio"
                 type="button">
                 <div className="admin-plans-selector__content">
-                  <h3>Multi-user</h3>
+                  <h3>{PLAN_TITLES[PLAN_TYPES.MULTI_USER]}</h3>
                   <div className="admin-plans-selector__description">
                     <p>
                     Create project teams, assign different roles, and manage organization wide
@@ -144,8 +143,8 @@ const AdminPlanSelectorComponent = ({
           </ul>
           {organizationPlan === PLAN_TYPES.MULTI_USER && (
             <p className="small">
-            At the moment we cannot downgrade multi-user plans. Please contact us if you need
-            assistance.
+            At the moment we cannot downgrade <span className="lowercase">{PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}s</span>.
+            Please contact us if you need assistance.
             </p>
           )}
         </Form>

@@ -23,10 +23,10 @@ const MULTI_USER_PLAN_TYPES = [
 ]
 
 const PLAN_TITLES = {
-  [PLAN_TYPES.SINGLE_USER]: 'Single-user plan',
-  [PLAN_TYPES.MULTI_USER]: 'Multi-user plan',
-  [PLAN_TYPES.MULTI_USER_FREE]: 'Free Multi-user plan',
-  [PLAN_TYPES.SINGLE_USER_FREE]: 'Free Single-user plan'
+  [PLAN_TYPES.SINGLE_USER]: 'Solo plan',
+  [PLAN_TYPES.MULTI_USER]: 'Team plan',
+  [PLAN_TYPES.MULTI_USER_FREE]: 'Team plan for friends',
+  [PLAN_TYPES.SINGLE_USER_FREE]: 'Solo plan for friends'
 }
 
 const PRICING = {
