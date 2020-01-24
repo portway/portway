@@ -10,6 +10,7 @@ import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
 
+import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
@@ -31,7 +32,7 @@ const DocumentFieldsContainer = ({
   const draggingElement = useRef(null)
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
-  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // Convert fields object to a sorted array for rendering
@@ -75,6 +76,16 @@ const DocumentFieldsContainer = ({
   // False because null / true == loading
   if (assignmentLoading === false) {
     documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
+
+  if (fieldsLoading || assignmentLoading) {
+    const overlayDark = getComputedStyle(document.documentElement).getPropertyValue('--theme-overlay-dark')
+    return (
+      <div className="document__loading">
+        <DocumentIcon width="84" height="84" fill={overlayDark} />
+        <p>Loading</p>
+      </div>
+    )
   }
 
   // Actions

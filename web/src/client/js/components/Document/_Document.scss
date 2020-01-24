@@ -1,5 +1,6 @@
 @import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
+@import 'CSS/animations/_pulse.scss';
 
 .document {
   flex: 1;
@@ -84,6 +85,21 @@
 
   &__toggle-container {
     padding: 0 1.8rem;
+  }
+
+  &__loading {
+    align-items: center;
+    color: var(--theme-overlay-dark);
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 95px);
+    justify-content: center;
+    position: relative;
+    .icon {
+      animation-name: pulse;
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+    }
   }
 
   &__fields {

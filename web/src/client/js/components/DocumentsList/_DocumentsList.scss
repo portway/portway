@@ -30,11 +30,16 @@
   }
 
   &__empty-state {
-    border-top: thin solid var(--theme-border-light);
     padding: calc(var(--gutter-width) / 4);
   }
   &__empty-state-content {
     padding: calc(var(--gutter-width) / 4);
+  }
+  &__loading-state {
+    align-items: center;
+    display: flex;
+    min-height: 300px;
+    justify-content: center;
   }
 
   &__drag-notice {

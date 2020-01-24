@@ -27,7 +27,7 @@ const renderBrandLogo = (logo) => {
 
 const grayPillStatuses = [ORG_SUBSCRIPTION_STATUS.TRIALING, ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL, null]
 
-const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) => {
+const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionStatus }) => {
   const upgradePillClasses = cx({
     'pill': true,
     'pill--red': LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
@@ -45,7 +45,7 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
           <div className="navbar__content">
             {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
             {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
-            {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
+            {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && !loading && <NavigatorContainer />}
           </div>
           <div className="navbar__misc">
             {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
@@ -78,6 +78,7 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
 HeaderComponent.propTypes = {
   brand: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   section: PropTypes.string.isRequired,
   subscriptionStatus: PropTypes.string || null,
 }
