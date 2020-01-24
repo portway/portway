@@ -1,7 +1,7 @@
 {
   "background_color": "#F2F2F2",
   "description": "A content repository",
-  "display": "minimal-ui",
+  "display": "standalone",
   "icons": [
     {
       "src": "/images/social/pwa-icon_192.png",
@@ -16,6 +16,6 @@
   ],
   "name": "Portway",
   "short_name": "Portway",
-  "start_url": "/d/projects",
+  "start_url": "/",
   "theme_color": "#F2F2F2"
 }

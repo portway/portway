@@ -20,6 +20,7 @@
   &__heading-cell {
     align-self: center;
     color: var(--cell-heading-color);
+    display: flex;
     font-weight: 500;
     padding: var(--cell-padding);
   }

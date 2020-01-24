@@ -4,6 +4,7 @@ import { NavLink, Link } from 'react-router-dom'
 import cx from 'classnames'
 
 import {
+  MOBILE_MATCH_SIZE,
   LOCKED_ACCOUNT_STATUSES,
   ORGANIZATION_ROLE_IDS,
   PATH_ADMIN,
@@ -35,40 +36,63 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
   })
   if (!isFullScreen) {
     return (
-      <header className="masthead" role="banner">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar__brand">
-            <Link to={PATH_PROJECTS} aria-label="Your projects" name="projects">
-              <span className="navbar__logo" style={renderBrandLogo(brand.logo)} />
-            </Link>
-          </div>
-          <div className="navbar__content">
-            {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
-            {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
-            {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
-          </div>
-          <div className="navbar__misc">
-            {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
-              <NavLink to={PATH_BILLING} className={upgradePillClasses}>Upgrade your account</NavLink>
-            </OrgPermission>
+      <>
+        <header className="masthead" role="banner">
+          <nav className="navbar" role="navigation" aria-label="main navigation">
+            <div className="navbar__brand">
+              <Link to={PATH_PROJECTS} aria-label="Your projects" name="projects">
+                <span className="navbar__logo" style={renderBrandLogo(brand.logo)} />
+              </Link>
+            </div>
+            <div className="navbar__content">
+              {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
+              {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
+              {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && <NavigatorContainer />}
+            </div>
+            {!window.matchMedia(MOBILE_MATCH_SIZE).matches &&
+            <div className="navbar__misc">
+              {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
+              <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
+                <NavLink to={PATH_BILLING} className={upgradePillClasses}>Upgrade your account</NavLink>
+              </OrgPermission>
+              }
+              {subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+              <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>ACCOUNT CANCELED</b>}>
+                <NavLink to={PATH_BILLING} className={upgradePillClasses}>ACCOUNT CANCELED</NavLink>
+              </OrgPermission>
+              }
+              {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
+              <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
+                <NavLink to={PATH_BILLING} className={upgradePillClasses}>Your account needs attention</NavLink>
+              </OrgPermission>
+              }
+            </div>
             }
-            {subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>ACCOUNT CANCELED</b>}>
-              <NavLink to={PATH_BILLING} className={upgradePillClasses}>ACCOUNT CANCELED</NavLink>
-            </OrgPermission>
-            }
-            {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={PATH_BILLING} className={upgradePillClasses}>Your account needs attention</NavLink>
-            </OrgPermission>
-            }
-          </div>
-          <div className="navbar__user">
-            <UserMenuContainer />
-          </div>
-        </nav>
-      </header>
+            <div className="navbar__user">
+              <UserMenuContainer />
+            </div>
+          </nav>
+        </header>
+        {window.matchMedia(MOBILE_MATCH_SIZE).matches &&
+        <div className="subhead">
+          {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
+            <NavLink to={PATH_BILLING}>Upgrade your account</NavLink>
+          </OrgPermission>
+          }
+          {subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b>ACCOUNT CANCELED</b>}>
+            <NavLink to={PATH_BILLING}>ACCOUNT CANCELED</NavLink>
+          </OrgPermission>
+          }
+          {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
+            <NavLink to={PATH_BILLING}>Your account needs attention</NavLink>
+          </OrgPermission>
+          }
+        </div>
+        }
+      </>
     )
   } else {
     return null

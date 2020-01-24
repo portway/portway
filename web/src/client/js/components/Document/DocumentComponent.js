@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-import { DOCUMENT_MODE, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { DOCUMENT_MODE, MOBILE_MATCH_SIZE, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
@@ -23,17 +23,8 @@ const DocumentComponent = ({
   toggleFullScreenHandler,
 }) => {
   const { projectId } = useParams()
-  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
-  const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
-  const projectAssignment = userProjectAssignments[Number(projectId)]
-
-  let documentReadOnlyMode
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
-  }
-
   const titleRef = useRef()
+  const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // If we've exited fullscreen, but the UI is still in fullscreen
   // This happens when hitting the escape key when in fullscreen
@@ -52,18 +43,30 @@ const DocumentComponent = ({
   })
 
   const docKey = document ? document.id : 0
+  const projectAssignment = userProjectAssignments[Number(projectId)]
+  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
+
+  let documentReadOnlyMode
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
+
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
   })
+
   return (
     <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
-      <div className="document__navigation">
-        <Link className="btn btn--blank" to={`${PATH_PROJECT}/${document.projectId}`}>
-          <ArrowIcon direction="left" width="12" height="12" /> Back to project
-        </Link>
-      </div>
       <header className="document__header">
+        {mobileView &&
+        <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">
+          <ArrowIcon direction="left" width="12" height="12" />
+        </Link>
+        }
+        {!mobileView &&
         <button
           aria-label="Expand the editor to full screen"
           className="btn btn--blank btn--with-circular-icon document__button-expand"
@@ -83,6 +86,7 @@ const DocumentComponent = ({
           title="Expand to full screen">
           <ExpandIcon />
         </button>
+        }
         <div className="document__title-container">
           <input
             className="document__title"
