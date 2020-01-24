@@ -6,6 +6,7 @@ import {
   FREE_PLAN_TYPES,
   LOCKED_ACCOUNT_STATUSES,
   ORG_SUBSCRIPTION_STATUS,
+  PLAN_LIMITS,
   PLAN_TITLES,
   PLAN_TYPES,
   SUPPORT_EMAIL,
@@ -55,12 +56,19 @@ const AdminPlanSelectorComponent = ({
       <h2 id="rg1-label">
         Your plan: <span className="admin-plans-selector__title">{planTitle}</span>
       </h2>
-      {hasFreePlan ?
-        <p>
-          You are currently on a free plan. If you would like to upgrade, please&nbsp;
+      {organizationPlan === PLAN_TYPES.MULTI_USER && (
+        <p className="small">
+        At the moment we cannot downgrade <span className="lowercase">{PLAN_TITLES[PLAN_TYPES.MULTI_USER]}s</span>.
+        Please <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a> if you need assistance.
+        </p>
+      )}
+      {hasFreePlan &&
+        <p className="small">
+          You are currently on a {planTitle} ❤️. If you would like to upgrade, please&nbsp;
           <a href={`mailto:${SUPPORT_EMAIL}`}>contact us</a>.
         </p>
-        :
+      }
+      {organizationPlan === PLAN_TYPES.SINGLE_USER &&
         <Form
           name={formId}
           onSubmit={formSubmitHandler}
@@ -91,7 +99,7 @@ const AdminPlanSelectorComponent = ({
                         <CheckIcon fill={green} /> Unlimited documents
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> 10GB Storage
+                        <CheckIcon fill={green} /> {PLAN_LIMITS[PLAN_TYPES.SINGLE_USER].storage}GB Storage
                       </li>
                     </ul>
                   </div>
@@ -127,10 +135,13 @@ const AdminPlanSelectorComponent = ({
                         <CheckIcon fill={green} /> Multiple teams and users (5 users included)
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> Audit log
+                        <CheckIcon fill={green} /> Read-only, edit or admin roles
                       </li>
                       <li>
-                        <CheckIcon fill={green} /> 10GB Storage
+                        <CheckIcon fill={green} /> Projects for everyone or select teams
+                      </li>
+                      <li>
+                        <CheckIcon fill={green} /> {PLAN_LIMITS[PLAN_TYPES.MULTI_USER].storage}GB Storage
                       </li>
                     </ul>
                   </div>
@@ -141,12 +152,6 @@ const AdminPlanSelectorComponent = ({
               </button>
             </li>
           </ul>
-          {organizationPlan === PLAN_TYPES.MULTI_USER && (
-            <p className="small">
-            At the moment we cannot downgrade <span className="lowercase">{PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}s</span>.
-            Please contact us if you need assistance.
-            </p>
-          )}
         </Form>
       }
     </div>
