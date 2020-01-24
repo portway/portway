@@ -14,18 +14,19 @@ import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbar
 const Project = ({ isFullScreen }) => {
   const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
   const isDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/:documentId`)
-  const isMobileDocumentView = isDocumentView && window.matchMedia(MOBILE_MATCH_SIZE).matches
-  const isMobileListView = isDocumentList.isExact && window.matchMedia(MOBILE_MATCH_SIZE).matches
+
+  const isMobileListView = isDocumentList && isDocumentList.isExact && window.matchMedia(MOBILE_MATCH_SIZE).matches
+  const isMobileDocumentView = isDocumentView && isDocumentView.isExact && window.matchMedia(MOBILE_MATCH_SIZE).matches
 
   const listClasses = cx({
     'project__documents-list-container': true,
-    'project__documents-list-container--list-only': isDocumentList && isDocumentList.isExact,
-    'project__documents-list-container--document-only': isDocumentView && isDocumentView.isExact,
+    'project__documents-list-container--list-only': isMobileListView,
+    'project__documents-list-container--document-only': isMobileDocumentView,
   })
   const documentsClasses = cx({
     'project__document-container': true,
-    'project__document-container--list-only': isDocumentList && isDocumentList.isExact,
-    'project__document-container--document-only': isDocumentView && isDocumentView.isExact,
+    'project__document-container--list-only': isMobileListView,
+    'project__document-container--document-only': isMobileDocumentView,
     'project__document-container--full-screen': isFullScreen
   })
 

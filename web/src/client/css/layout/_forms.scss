@@ -74,6 +74,7 @@ input[type='password'],
 
 input[type='file'] {
   border: none;
+  width: var(--field-container-width);
 }
 
 // Remove step arrows

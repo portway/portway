@@ -1,5 +1,11 @@
 @import 'CSS/inc/_include-media.scss';
 
+.body--with-panel {
+  main {
+    overflow-y: auto;
+  }
+}
+
 /**
  * Panel is a navigataion on the left, content on the right layout
  * Project Settings, Admin Settings, etc
@@ -8,18 +14,23 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+
   &__container {
+    align-items: flex-start;
     display: flex;
     flex: 1;
     padding-top: calc(var(--brand-width) / 4);
+    position: relative;
     @include media('>medium') {
       padding-top: calc(var(--brand-width) / 2);
     }
   }
+
   &__navigation {
     margin-right: calc(var(--brand-width) / 2);
+    position: sticky;
+    top: 0;
     @include media('>medium') {
-      margin-right: var(--brand-width);
       width: 20%;
     }
 
@@ -56,11 +67,10 @@
       }
     }
   }
+
   &__content {
     flex: 1;
     // overflow-x: hidden; // this causes issues with focused input borders. Can we leave this out?
-    overflow-y: auto;
-    overflow-x: hidden;
     section {
       position: relative;
       &:first-child {

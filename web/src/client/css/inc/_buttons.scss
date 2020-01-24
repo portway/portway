@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.btn + .btn {
+  margin-left: 1rem;
+}
+
 button,
 .btn, .button {
   --button-color: var(--color-white);

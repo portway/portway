@@ -56,8 +56,9 @@ const DocumentFieldsContainer = ({
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
     function documentClickHandler(e) {
+      const target = e.target.classList
       // If we're clicking the document, focus the first text field
-      if (e.target.classList.contains('document')) {
+      if (target.contains('document') || target.contains('document__fields')) {
         const cm = document.querySelector('.CodeMirror').CodeMirror
         cm.focus()
       }

@@ -75,23 +75,21 @@ const HeaderComponent = ({ brand, isFullScreen, section, subscriptionStatus }) =
         </header>
         {window.matchMedia(MOBILE_MATCH_SIZE).matches &&
         <div className="subhead">
-          <div className="navbar__misc">
-            {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
-              <NavLink to={PATH_BILLING}>Upgrade your account</NavLink>
-            </OrgPermission>
-            }
-            {subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b>ACCOUNT CANCELED</b>}>
-              <NavLink to={PATH_BILLING}>ACCOUNT CANCELED</NavLink>
-            </OrgPermission>
-            }
-            {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
-            <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
-              <NavLink to={PATH_BILLING}>Your account needs attention</NavLink>
-            </OrgPermission>
-            }
-          </div>
+          {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
+            <NavLink to={PATH_BILLING}>Upgrade your account</NavLink>
+          </OrgPermission>
+          }
+          {subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL &&
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b>ACCOUNT CANCELED</b>}>
+            <NavLink to={PATH_BILLING}>ACCOUNT CANCELED</NavLink>
+          </OrgPermission>
+          }
+          {LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus) &&
+          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
+            <NavLink to={PATH_BILLING}>Your account needs attention</NavLink>
+          </OrgPermission>
+          }
         </div>
         }
       </>
