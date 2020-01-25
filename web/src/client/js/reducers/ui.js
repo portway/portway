@@ -15,7 +15,8 @@ const initialState = {
     isFullScreen: false,
   },
   documents: {
-    creating: false,
+    creating: false, // we are in create mode
+    isCreating: false, // we are actually creating the document, progress
     isPublishing: false,
   },
   fields: {
@@ -77,6 +78,9 @@ export const ui = (state = initialState, action) => {
     case ActionTypes.UI_DOCUMENT_CREATE: {
       return { ...state, documents: { ...state.documents, creating: action.value } }
     }
+    case ActionTypes.INITIATE_DOCUMENT_CREATE: {
+      return { ...state, documents: { ...state.documents, isCreating: true } }
+    }
     case ActionTypes.INITIATE_FIELD_CREATE: {
       // Tell everyone we're creating a field, and what type
       return { ...state, fields: { ...state.fields, disabled: true, type: action.fieldType } }
@@ -86,7 +90,7 @@ export const ui = (state = initialState, action) => {
       return { ...state, fields: initialState.fields }
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
-      return { ...state, documents: { ...state.documents, creating: false } }
+      return { ...state, documents: { ...state.documents, creating: false, isCreating: false } }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [action.fieldId]: true }

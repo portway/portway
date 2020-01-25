@@ -9,6 +9,7 @@ import { AddIcon, RemoveIcon, SearchIcon, DocumentIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import DocumentsListItem from './DocumentsListItem'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import './_DocumentsList.scss'
 
@@ -24,6 +25,7 @@ const DocumentsListComponent = ({
   draggedDocumentHandler,
   fieldCopyHandler,
   fieldMoveHandler,
+  isCreating,
   loading,
   projectId,
   readOnly,
@@ -47,6 +49,12 @@ const DocumentsListComponent = ({
     setIsSearching(true)
   })
 
+  useClickOutside(
+    listItemRef,
+    () => { if (creating) { createDocument() } },
+    { preventEscapeFunctionality: true }
+  )
+
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
     if (creating && nameRef.current) {
@@ -57,7 +65,9 @@ const DocumentsListComponent = ({
   // Reset search box if the project id changes
   useEffect(() => {
     setIsSearching(false)
-    searchFieldRef.current.value = ''
+    if (searchFieldRef.current) {
+      searchFieldRef.current.value = ''
+    }
   }, [projectId])
 
   function createDocument() {
@@ -67,12 +77,6 @@ const DocumentsListComponent = ({
       createCallback(false)
     }
   }
-
-  useClickOutside(
-    listItemRef,
-    () => { if (creating) { createDocument() } },
-    { preventEscapeFunctionality: true }
-  )
 
   function clearOutSearch() {
     setIsSearching(false)
@@ -86,11 +90,10 @@ const DocumentsListComponent = ({
         <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
           <div className="documents-list__button">
             <input
-              ref={nameRef}
               className="documents-list__name"
-              name="newDocument"
               defaultValue={Constants.LABEL_NEW_DOCUMENT}
-              type="text"
+              disabled={isCreating}
+              name="newDocument"
               onKeyDown={(e) => {
                 if (e.keyCode === 27) {
                   e.preventDefault()
@@ -100,11 +103,17 @@ const DocumentsListComponent = ({
                   e.preventDefault()
                   createChangeHandler(e.target.value)
                 }
-              }} />
+              }}
+              ref={nameRef}
+              type="text"
+            />
+            {isCreating && <SpinnerComponent color={colorOverlayDark} />}
             <button
-              aria-label="Remove document"
+              aria-label="Cancel creating document"
               className="btn btn--blank btn--with-circular-icon"
-              onClick={() => { createCallback(false) }}>
+              disabled={isCreating}
+              onClick={() => { createCallback(false) }}
+            >
               <RemoveIcon />
             </button>
           </div>
@@ -186,6 +195,7 @@ const DocumentsListComponent = ({
   })
 
   const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
+  const colorOverlayDark = getComputedStyle(document.documentElement).getPropertyValue('--theme-overlay-dark')
 
   return (
     <div
@@ -227,6 +237,11 @@ const DocumentsListComponent = ({
           </IconButton>
         </ProjectPermission>
       </header>
+      {loading &&
+      <div className="documents-list__loading-state">
+        <SpinnerComponent color={colorOverlayDark} />
+      </div>
+      }
       {documents.length === 0 && loading === false && !creating && !isSearching &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
@@ -271,6 +286,7 @@ DocumentsListComponent.propTypes = {
   draggedDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
+  isCreating: PropTypes.bool.isRequired,
   loading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
   readOnly: PropTypes.bool.isRequired,

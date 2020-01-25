@@ -23,6 +23,7 @@ import useDataService from 'Hooks/useDataService'
 import AppContainer from 'Components/App/AppContainer'
 import HeaderContainer from 'Components/Header/HeaderContainer'
 import ErrorBoundaryComponent from 'Components/ErrorBoundary/ErrorBoundaryComponent'
+import LoadingComponent from 'Components/Loading/LoadingComponent'
 
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
@@ -49,7 +50,7 @@ const Index = () => {
             <ConfirmationContainer />
             <NotificationsContainer />
             <HeaderContainer />
-            <Suspense fallback={null}>
+            <Suspense fallback={<LoadingComponent />}>
               {currentOrg &&
                 <Switch>
                   <Route exact path="/"><Redirect to="/projects" /></Route>

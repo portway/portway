@@ -32,7 +32,7 @@ SpinnerComponent.propTypes = {
 }
 
 SpinnerComponent.defaultProps = {
-  color: '#51a37d',
+  color: 'hsl(0, 0%, 70%)',
   height: '24',
   message: 'Please wait...',
   width: '24'

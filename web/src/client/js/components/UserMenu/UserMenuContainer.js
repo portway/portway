@@ -38,8 +38,16 @@ const UserMenuContainer = () => {
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
 
-  // fuck outta here
-  if (!currentUser || !currentOrg) return null
+  if (!currentUser || !currentOrg) {
+    return (
+      <div className="user-menu">
+        <div
+          className="user-menu__button"
+          style={{ backgroundImage: `url(${UserIcon})` }}
+        />
+      </div>
+    )
+  }
 
   return (
     <PopperGroup anchorRef={containerRef} className="user-menu">
