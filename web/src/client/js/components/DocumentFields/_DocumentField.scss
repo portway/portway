@@ -16,6 +16,10 @@
   max-width: 1200px;
   outline: 0;
 
+  &--edit-mode {
+    -webkit-user-drag: element;
+  }
+
   // The whole field, when it is being dragged
   &--dragging {
     cursor: grabbing;

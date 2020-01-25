@@ -19,12 +19,16 @@ const DocumentFieldComponent = ({
   dropHandler,
   field,
   index,
+  isDragging,
   isNewField,
   onDestroy,
   onRename,
   readOnly,
   settingsHandler,
   settingsMode,
+  touchEndHandler,
+  touchMoveHandler,
+  touchStartHandler,
 }) => {
   const listRef = useRef()
   const nameRef = useRef()
@@ -47,6 +51,7 @@ const DocumentFieldComponent = ({
     'document-field--string': field.type === FIELD_TYPES.STRING,
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--settings-mode': settingsMode,
+    'document-field--dragged-over': isDragging,
   })
 
   const fieldToolClasses = cx({
@@ -84,7 +89,7 @@ const DocumentFieldComponent = ({
       data-order={index}
       onDragEnd={dragEndHandler}
       onDragEnter={dragEnterHandler}
-      onDragOver={e => e.preventDefault()}
+      onDragOver={(e => e.preventDefault())}
       onDragStart={dragStartHandler}
       onDrop={dropHandler}
       ref={listRef}
@@ -98,6 +103,19 @@ const DocumentFieldComponent = ({
               aria-label="Reorder field by dragging"
               className="btn btn--blank btn--with-circular-icon"
               onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}
+              onTouchStart={(e) => {
+                touchStartHandler(listRef.current)
+              }}
+              onTouchMove={(e) => {
+                e.stopPropagation()
+                touchMoveHandler(e)
+              }}
+              onTouchEnd={(e) => {
+                touchEndHandler(e)
+              }}
+              onTouchCancel={(e) => {
+                touchEndHandler(e)
+              }}
             >
               <DragIcon />
             </button>
@@ -173,12 +191,16 @@ DocumentFieldComponent.propTypes = {
   dropHandler: PropTypes.func,
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  isDragging: PropTypes.bool.isRequired,
   isNewField: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
+  touchEndHandler: PropTypes.func.isRequired,
+  touchMoveHandler: PropTypes.func.isRequired,
+  touchStartHandler: PropTypes.func.isRequired,
 }
 
 export default DocumentFieldComponent

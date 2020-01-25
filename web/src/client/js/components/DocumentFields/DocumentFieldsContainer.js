@@ -27,10 +27,17 @@ const DocumentFieldsContainer = ({
   updateField,
   updateFieldOrder,
 }) => {
+  const [currentlyDragging, setCurrentlyDragging] = useState(false) // touch only for now
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
+
   const draggingElement = useRef(null)
+  const cloneElement = useRef(null)
+  const documentFieldsRef = useRef()
+  const draggedOverElement = useRef(null) // touch only for now
+
   const { projectId, documentId } = useParams()
+
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
@@ -151,7 +158,93 @@ const DocumentFieldsContainer = ({
     }
   }
 
-  let cloneElement
+  /**
+   * Touch Drag Events
+   */
+  function createCloneElementFrom(el) {
+    // Create a clone of the item and append it to the document
+    // This is for dragging around a clone of the item we're dragging
+    // this is in a timeout due to a browser bug with dragEnd immediately firing
+    // when DOM is manipulated in dragStart
+    cloneElement.current = el.cloneNode(true)
+    cloneElement.current.style.position = 'absolute'
+    cloneElement.current.style.zIndex = '100'
+    cloneElement.current.style.width = `${el.offsetWidth}px`
+    cloneElement.current.classList.add('document-field--clone-element')
+    cloneElement.current.setAttribute('draggable', false)
+    cloneElement.current.setAttribute('id', 'clone-element')
+    document.body.appendChild(cloneElement.current)
+    return cloneElement
+  }
+
+  function killCloneElement() {
+    cloneElement.current.remove()
+    cloneElement.current = null
+  }
+
+  function fakeTouchEnter(e) {
+    // e.preventDefault()
+    const touch = e.touches[0]
+    const elementFromPoint = document.elementFromPoint(touch.pageX - window.pageXOffset, touch.pageY - window.pageYOffset)
+    console.log(elementFromPoint)
+    // If we are hovering over an LI tag, which should have pointer-events: none
+    // because we are currentlyDragging
+    // Check if the element we are over has changed
+    if (elementFromPoint.dataset && elementFromPoint !== draggedOverElement.current) {
+      draggedOverElement.current = elementFromPoint
+      // If so, then we can swap the order and re-render
+      if (elementFromPoint && elementFromPoint.dataset) {
+        const from = Number(draggingElement.current.dataset.order)
+        const to = Number(elementFromPoint.dataset.order)
+        const fieldData = [...orderedFields]
+        fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
+        // Render it
+        setOrderedFields(fieldData)
+      }
+    }
+  }
+
+  function touchStartHandler(listItem) {
+    setCurrentlyDragging(true)
+    draggingElement.current = listItem
+    createCloneElementFrom(listItem)
+    // Create a document listener to detect "drag enters" for touch movement
+    document.addEventListener('touchmove', fakeTouchEnter, false)
+    // Adding the class after the clone duh
+    setTimeout(() => {
+      draggingElement.current.classList.add('document-field--dragging')
+    }, 200)
+  }
+
+  function touchMoveHandler(e) {
+    // e.preventDefault()
+    e.stopPropagation()
+    const touch = event.targetTouches[0]
+    cloneElement.current.style.left = `${touch.pageX}px`
+    cloneElement.current.style.top = `${touch.pageY}px`
+  }
+
+  function touchEndHandler(e) {
+    e.preventDefault()
+    if (documentReadOnlyMode) return
+
+    // Save it
+    const fieldIdToUpdate = draggingElement.current.dataset.id
+    const to = Number(draggingElement.current.dataset.order)
+    updateFieldOrder(documentId, fieldIdToUpdate, to)
+
+    // Cleanup
+    setCurrentlyDragging(false)
+    draggingElement.current.classList.remove('document-field--dragging')
+    draggingElement.current = null
+    draggedOverElement.current
+    document.removeEventListener('touchmove', fakeTouchEnter, false)
+    killCloneElement()
+  }
+
+  /**
+   * Mouse Drag Events
+  */
   function dragStartHandler(e) {
     // console.info('drag start')
     e.stopPropagation()
@@ -164,22 +257,10 @@ const DocumentFieldsContainer = ({
     e.dataTransfer.setData('text/html', listItem)
     draggingElement.current = listItem
 
-    // Create a clone of the item and append it to the document
-    // This is for dragging around a clone of the item we're dragging
-    // this is in a timeout due to a browser bug with dragEnd immediately firing
-    // when DOM is manipulated in dragStart
-
-    cloneElement = listItem.cloneNode(true)
-    cloneElement.style.position = 'absolute'
-    cloneElement.style.zIndex = '-1'
-    cloneElement.style.width = `${listItem.offsetWidth}px`
-    cloneElement.classList.add('document-field--clone-element')
-    cloneElement.setAttribute('draggable', false)
-    cloneElement.setAttribute('id', 'clone-element')
-    document.body.appendChild(cloneElement)
+    createCloneElementFrom(listItem)
 
     // Make the default, blurry image of the dragged item disappear
-    e.dataTransfer.setDragImage(cloneElement, 10, 10)
+    e.dataTransfer.setDragImage(cloneElement.current, 10, 10)
 
     setTimeout(() => {
       listItem.classList.add('document-field--dragging')
@@ -187,7 +268,7 @@ const DocumentFieldsContainer = ({
   }
 
   function dragEnterHandler(e) {
-    // console.info('drag enter', draggingElement)
+    console.info('drag enter', draggingElement)
     e.preventDefault()
     e.stopPropagation()
     if (documentReadOnlyMode) return
@@ -241,8 +322,7 @@ const DocumentFieldsContainer = ({
     e.stopPropagation()
     if (documentReadOnlyMode) return
     draggingElement.current.classList.remove('document-field--dragging')
-    document.querySelector('#clone-element').remove()
-
+    killCloneElement()
     draggingElement.current = null
     setDropped(!dropped)
   }
@@ -261,6 +341,7 @@ const DocumentFieldsContainer = ({
       createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
       disabled={disabled}
+      documentFieldsRef={documentFieldsRef}
       documentMode={documentMode}
       dragEndHandler={dragEndHandler}
       dragEnterHandler={dragEnterHandler}
@@ -274,9 +355,12 @@ const DocumentFieldsContainer = ({
       fieldRenameHandler={debouncedNameChangeHandler}
       fields={orderedFields}
       fieldsUpdating={fieldsUpdating}
-      isDragging={draggingElement.current != null}
+      isDragging={currentlyDragging}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}
+      touchEndHandler={touchEndHandler}
+      touchMoveHandler={touchMoveHandler}
+      touchStartHandler={touchStartHandler}
     />
   )
 }

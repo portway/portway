@@ -14,6 +14,7 @@ const DocumentFieldsComponent = ({
   createFieldHandler,
   disabled,
   documentMode,
+  documentFieldsRef,
   dragEndHandler,
   dragEnterHandler,
   dragLeaveHandler,
@@ -29,6 +30,9 @@ const DocumentFieldsComponent = ({
   isDragging,
   isPublishing,
   readOnly,
+  touchEndHandler,
+  touchMoveHandler,
+  touchStartHandler,
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
@@ -130,6 +134,9 @@ const DocumentFieldsComponent = ({
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
+          touchEndHandler={touchEndHandler}
+          touchMoveHandler={touchMoveHandler}
+          touchStartHandler={touchStartHandler}
         >
           {fieldTypeComponent}
         </DocumentFieldComponent>
@@ -160,7 +167,14 @@ const DocumentFieldsComponent = ({
     'document__fields--disabled': isPublishing || disabled
   })
   return (
-    <div className={fieldsClasses}>
+    <div
+      className={fieldsClasses}
+      // onTouchMove={(e) => {
+      //   if (isDragging) e.preventDefault()
+      //   console.log('hello', isDragging)
+      // }}
+      ref={documentFieldsRef}
+    >
       <ol>
         {renderFields()}
       </ol>
@@ -173,6 +187,7 @@ DocumentFieldsComponent.propTypes = {
   createFieldHandler: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   documentMode: PropTypes.string.isRequired,
+  documentFieldsRef: PropTypes.object.isRequired,
   dragEndHandler: PropTypes.func.isRequired,
   dragEnterHandler: PropTypes.func.isRequired,
   dragLeaveHandler: PropTypes.func.isRequired,
@@ -188,6 +203,9 @@ DocumentFieldsComponent.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  touchEndHandler: PropTypes.func.isRequired,
+  touchMoveHandler: PropTypes.func.isRequired,
+  touchStartHandler: PropTypes.func.isRequired,
 }
 
 export default DocumentFieldsComponent
