@@ -98,6 +98,7 @@ const DocumentFieldComponent = ({
               aria-label="Reorder field by dragging"
               className="btn btn--blank btn--with-circular-icon"
               onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}
+              onTouchStart={() => { listRef.current.setAttribute('draggable', true) }}
             >
               <DragIcon />
             </button>
