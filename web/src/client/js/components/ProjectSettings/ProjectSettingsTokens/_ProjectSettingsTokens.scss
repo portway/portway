@@ -1,10 +1,5 @@
 // Tokens
 .project-settings {
-  --endpoint-name-background: var(--color-gray-40);
-  @media (prefers-color-scheme: dark) {
-    --endpoint-name-background: var(--color-gray-70);
-  }
-
   // Token list
   &__token-list {
     list-style: none;
@@ -61,7 +56,9 @@
 
   // Endpoints
   &__endpoint-name {
-    background-color: var(--endpoint-name-background);
+    background-color: var(--theme-overflow);
+    border: thin solid var(--theme-border);
+    border-bottom: none;
     align-items: center;
     display: flex;
     justify-content: space-between;
