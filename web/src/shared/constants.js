@@ -153,7 +153,10 @@ module.exports = {
   PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
   // Documentation
-  DOCUMENTATION_URL: 'https://docs.portway.app/',
+  URL_WEBSITE: 'https://getportway.com/',
+  URL_DOCUMENTATION: 'https://docs.portway.app/',
+  URL_API: 'https://docs.portway.app/api',
+  URL_GUIDES: 'https://docs.portway.app/guides',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
@@ -172,19 +175,20 @@ module.exports = {
   NOTIFICATION_TYPES: NOTIFICATION_TYPES,
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
   // Paths
+  PATH_ADMIN: '/admin',
   PATH_APP: '/d',
   PATH_BILLING: '/admin/billing',
-  PATH_ADMIN: '/admin',
-  PATH_ORGANIZATION: '/admin/organization',
-  PATH_USERS: '/admin/users',
+  PATH_DOCUMENT_NEW_PARAM: 'new',
+  PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT: '/document',
+  PATH_HELP: '/help',
   PATH_LOGOUT: '/logout',
+  PATH_ORGANIZATION: '/admin/organization',
+  PATH_PROJECT_CREATE: '/project/create',
   PATH_PROJECT: '/project',
   PATH_PROJECTS: '/projects',
-  PATH_PROJECT_CREATE: '/project/create',
   PATH_SETTINGS: '/settings',
-  PATH_DOCUMENT_NEW: '/document/new',
-  PATH_DOCUMENT_NEW_PARAM: 'new',
+  PATH_USERS: '/admin/users',
   // Roles
   ORGANIZATION_ROLE_IDS: ORGANIZATION_ROLE_IDS,
   ORGANIZATION_ROLE_NAMES: ORGANIZATION_ROLE_NAMES,

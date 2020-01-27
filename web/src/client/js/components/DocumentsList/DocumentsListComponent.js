@@ -289,7 +289,7 @@ DocumentsListComponent.propTypes = {
   isCreating: PropTypes.bool.isRequired,
   loading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool,
   removeDocumentHandler: PropTypes.func.isRequired,
   searchDocumentsHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,

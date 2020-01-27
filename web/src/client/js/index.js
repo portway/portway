@@ -8,12 +8,13 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import store from './reducers'
 import {
   LOCKED_ACCOUNT_STATUSES,
-  PATH_APP,
   PATH_ADMIN,
-  PATH_PROJECTS,
+  PATH_APP,
+  PATH_HELP,
   PATH_PROJECT,
+  PATH_PROJECTS,
   PATH_SETTINGS,
-  PRODUCT_NAME
+  PRODUCT_NAME,
 } from 'Shared/constants'
 import useDetectInputMode from 'Hooks/useDetectInputMode'
 import registerServiceWorker from './utilities/registerServiceWorker'
@@ -34,6 +35,7 @@ const ProjectsSection = lazy(() => import(/* webpackChunkName: 'ProjectsSection'
 const AdminSection = lazy(() => import(/* webpackChunkName: 'AdminSection' */ 'Sections/Admin/AdminSection'))
 const UserSection = lazy(() => import(/* webpackChunkName: 'UserSection' */ 'Sections/User/UserSection'))
 const ProjectSection = lazy(() => import(/* webpackChunkName: 'ProjectSection' */ 'Sections/Project/ProjectSection'))
+const HelpSection = lazy(() => import(/* webpackChunkName: 'HelpSection' */ 'Sections/Help/HelpSection'))
 
 const Index = () => {
   useDetectInputMode()
@@ -58,6 +60,7 @@ const Index = () => {
                   <Route path={`${PATH_PROJECT}/:projectId`} component={lockedComponent || ProjectSection} />
                   <Route path={PATH_SETTINGS} component={lockedComponent || UserSection} />
                   <Route path={PATH_ADMIN} component={AdminSection} />
+                  <Route path={PATH_HELP} component={HelpSection} />
                   <Route component={FourZeroFour} />
                 </Switch>
               }
