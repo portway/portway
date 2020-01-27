@@ -82,6 +82,7 @@ const DocumentFieldComponent = ({
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
+      draggable={false}
       onDragEnd={dragEndHandler}
       onDragEnter={dragEnterHandler}
       onDragOver={e => e.preventDefault()}
