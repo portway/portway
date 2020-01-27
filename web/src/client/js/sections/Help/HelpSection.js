@@ -28,6 +28,12 @@ const HelpSection = () => {
             <li><a href={URL_API}>Portway API</a></li>
             <li><a href={`${URL_WEBSITE}/dirk.html`} target="_blank" rel="noopener noreferrer">Preview of the Portway website</a></li>
           </ul>
+          <h2>Known issues</h2>
+          <ul>
+            <li>Right now multiple people can edit the same document, but you won’t know who is doing what. We’re working on that.</li>
+            <li>We’re adding a few more field types to documents before launch. Likely video, links, and tables</li>
+            <li>We’re also working out how we want to approach tags.</li>
+          </ul>
         </article>
       </main>
     </>
