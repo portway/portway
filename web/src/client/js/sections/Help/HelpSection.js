@@ -19,9 +19,6 @@ const HelpSection = () => {
             we launch it publicly. If you find anything wrong, or have an opinion you’d like to share,
             please <a href="mailto:support@portway.app">contact us</a>.
           </p>
-          <p>
-            <b>Thanks again!</b><br />Your friends at BonkeyBong ❤️
-          </p>
           <h2>Helpful links</h2>
           <ul>
             <li><a href={URL_DOCUMENTATION}>Documentation</a></li>
@@ -35,6 +32,9 @@ const HelpSection = () => {
             <li>We’re also working out how we want to approach tags.</li>
           </ul>
         </article>
+        <p className="section">
+          <b>Thanks again!</b><br />Your friends at BonkeyBong ❤️
+        </p>
       </main>
     </>
   )
