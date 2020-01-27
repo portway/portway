@@ -35,7 +35,10 @@ const Form = ({
     setSubmitting(isSubmitting || false)
     setFailed(hasFailed || false)
     setSucceeded(hasSucceeded || false)
-  }, [forms, name])
+    if (succeeded && formRef.current) {
+      formRef.current.reset()
+    }
+  }, [forms, name, succeeded])
 
   useEffect(() => {
     if (!disabled) {
@@ -64,10 +67,6 @@ const Form = ({
     'btn-group': true,
     'btn-group--right-aligned': submitOnRight
   })
-
-  if (succeeded && formRef.current) {
-    formRef.current.reset()
-  }
 
   return (
     <form
