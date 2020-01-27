@@ -70,16 +70,13 @@
   &__endpoint {
     display: block;
     pre {
+      overflow-x: auto;
       width: 100%;
-    }
-    code {
-      display: block;
-      max-width: 800px;
-      overflow-x: scroll;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
     &-token {
       color: var(--color-gray-10);
-      word-break: break-all;
     }
     &-url {
       color: var(--color-green);
