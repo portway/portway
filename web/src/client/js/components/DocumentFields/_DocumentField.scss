@@ -97,9 +97,16 @@
     background-color: var(--field-data-background);
     border: thin solid var(--field-data-border);
     display: flex;
+    flex-direction: column;
+
+    @include media('>medium') {
+      flex-direction: row;
+    }
+
     input {
       background-color: transparent;
     }
+
   }
 
 } // document-field__container
@@ -107,17 +114,28 @@
 
 // Field name is only visible for data fields
 .document-field__name {
-  align-items: flex-start;
-  border-right: thin solid var(--theme-border);
   display: flex;
-  flex: 0 0 var(--field-name-width);
   flex-direction: column;
-  justify-content: center;
-  padding: .7rem 1.2rem;
-  &-label {
-    font-size: 1.3rem;
-    margin-bottom: .8rem;
+  padding: .8rem .8rem;
+
+  @include media('>medium') {
+    align-items: flex-start;
+    border-right: thin solid var(--theme-border);
+    display: flex;
+    flex: 0 0 var(--field-name-width);
+    flex-direction: column;
+    justify-content: center;
+    padding: .7rem 1.2rem;
   }
+
+  &-label {
+    color: hsla(0, 0%, 26%, .5);
+    font-size: 1.3rem;
+    @include media('>medium') {
+      margin-bottom: .6rem;
+    }
+  }
+
   input {
     border: thin solid transparent;
     color: var(--theme-text-color);
@@ -162,7 +180,11 @@
   }
 
   .document-field--data & {
-    padding: 1.4rem 1.05rem;
+
+    @include media('>medium') {
+      padding: 1.4rem 1.05rem;
+    }
+
     input {
       font-size: 1.5rem;
       line-height: 2.4rem;
