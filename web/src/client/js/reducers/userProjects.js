@@ -30,6 +30,15 @@ export const userProjects = (state = initialState, action) => {
         loading: { ...state.loading, byUserId: { ...state.loading.byUserId, ...loadingByUserId } }
       }
     }
+    case ActionTypes.RECEIVE_CREATED_PROJECT: {
+      return {
+        ...state,
+        projectsByUserId: {},
+        loading: {
+          byUserId: {}
+        }
+      }
+    }
     default:
       return state
   }

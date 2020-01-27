@@ -52,6 +52,7 @@
   // Overwriting some values from _menu.scss
   .menu {
     background-color: var(--color-gray-80);
+    z-index: 11;
 
     &__item {
       align-items: center;

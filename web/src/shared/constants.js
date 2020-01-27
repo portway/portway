@@ -178,8 +178,6 @@ module.exports = {
   PATH_ORGANIZATION: '/admin/organization',
   PATH_USERS: '/admin/users',
   PATH_DOCUMENT: '/document',
-  PATH_DOCUMENT_NEW: '/document/new',
-  PATH_DOCUMENT_NEW_PARAM: 'new',
   PATH_LOGOUT: '/logout',
   PATH_PROJECT: '/project',
   PATH_PROJECTS: '/projects',
