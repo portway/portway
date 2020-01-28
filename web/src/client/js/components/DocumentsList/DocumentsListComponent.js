@@ -116,14 +116,14 @@ const DocumentsListComponent = ({
             >
               <RemoveIcon width="12" height="12" />
             </button>
-            <button
+            <IconButton
               aria-label="Create the document"
-              className="btn btn--blank btn--with-circular-icon documents-list__create-btn"
+              color="green"
               disabled={isCreating}
               onClick={() => { createChangeHandler(nameRef.current.value) } }
             >
               <AddIcon fill="#ffffff" />
-            </button>
+            </IconButton>
           </div>
         </li>
       )
