@@ -59,7 +59,7 @@
       background-color="#FFA784"
       full-width="full-width">
       <mj-hero background-color="#FFA784">
-        <mj-image align="center" width="75px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.svg" />
+        <mj-image align="center" width="75px" height="68px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.png" />
         <mj-text align="center">
           <h1>Payment Success</h1>
         </mj-text>
@@ -67,7 +67,7 @@
     </mj-wrapper>
     <mj-section>
       <mj-column>
-        <mj-image align="center" width="64px" src="https://www.portwaycontent.com/portway-marketing-assets/app-emails/CHECK.svg" />
+        <mj-image align="center" width="64px" height="45px" src="https://www.portwaycontent.com/portway-marketing-assets/app-emails/CHECK.png" />
         <mj-text align="center">
           <p>Thank you for supporting independent software</p>
           <p>– The Portway Team</p>
