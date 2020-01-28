@@ -57,7 +57,7 @@ const DocumentsListComponent = ({
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
-    if (creating && nameRef.current) {
+    if (creating && nameRef.current && !isCreating) {
       nameRef.current.select()
     }
   })
@@ -120,7 +120,9 @@ const DocumentsListComponent = ({
               aria-label="Create the document"
               color="green"
               disabled={isCreating}
-              onClick={() => { createChangeHandler(nameRef.current.value) } }
+              onClick={() => {
+                createChangeHandler(nameRef.current.value)
+              }}
             >
               <AddIcon fill="#ffffff" />
             </IconButton>
