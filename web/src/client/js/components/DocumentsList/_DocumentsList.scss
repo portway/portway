@@ -99,6 +99,13 @@
     }
   }
 
+  &__create-btn {
+    margin-left: .6rem;
+    .icon {
+      background-color: var(--color-green);
+    }
+  }
+
   &__list {
     list-style: none;
     margin: 0;
