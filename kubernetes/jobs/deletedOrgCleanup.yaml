@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: deleted-org-cleanup-cronjob
+spec:
+  schedule: "0 7 * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: OnFailure
+          containers:
+          - name: deleted-org-cleanup
+            image: bonkeybong/portway_deleted_org_cleanup
+            env:
+            - name: ADMIN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: deleted-org-cleanup
+                  key: admin_api_key
+            - name: LOG_ID
+              valueFrom:
+                secretKeyRef:
+                  name: deleted-org-cleanup
+                  key: log_id
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: deleted-org-cleanup-config
+                  key: delete.api_url
