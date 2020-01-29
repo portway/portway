@@ -12,7 +12,7 @@ import HeaderComponent from './HeaderComponent'
 import Logo from '../../../images/logo.svg'
 
 function HeaderContainer({ isFullScreen, location }) {
-  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
+  const { data: currentOrg, loading } = useDataService(dataMapper.organizations.current())
 
   const brand = {
     logo: currentOrg && currentOrg.avatar ? currentOrg.avatar : Logo,
@@ -27,6 +27,7 @@ function HeaderContainer({ isFullScreen, location }) {
     <HeaderComponent
       brand={brand}
       isFullScreen={isFullScreen}
+      loading={loading}
       projectId={projectId}
       section={section}
       subscriptionStatus={subscriptionStatus}

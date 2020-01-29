@@ -5,7 +5,7 @@ import useBlur from 'Hooks/useBlur'
 import useClickOutside from 'Hooks/useClickOutside'
 import useDataService from 'Hooks/useDataService'
 
-import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_SETTINGS } from 'Shared/constants'
+import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_HELP, PATH_SETTINGS } from 'Shared/constants'
 
 import Store from '../../reducers'
 import dataMapper from 'Libs/dataMapper'
@@ -38,8 +38,16 @@ const UserMenuContainer = () => {
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
 
-  // fuck outta here
-  if (!currentUser || !currentOrg) return null
+  if (!currentUser || !currentOrg) {
+    return (
+      <div className="user-menu">
+        <div
+          className="user-menu__button"
+          style={{ backgroundImage: `url(${UserIcon})` }}
+        />
+      </div>
+    )
+  }
 
   return (
     <PopperGroup anchorRef={containerRef} className="user-menu">
@@ -67,14 +75,23 @@ const UserMenuContainer = () => {
           <h3 className="user-menu__organization">{currentOrg.name}</h3>
           <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
         </MenuHeader>
-        <Menu anchorRef={anchorRef}>
+        <Menu anchorRef={anchorRef} isActive={expanded}>
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
-            <MenuItem tabIndex="0">
-              <Link className="btn btn--blank" to={PATH_ADMIN}>Administration</Link>
+            <MenuItem>
+              <Link className="btn btn--blank" to={PATH_ADMIN} ref={React.createRef()}>
+                Administration
+              </Link>
             </MenuItem>
           </OrgPermission>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => { logoutAction() }}>Sign out</button>
+          <MenuItem>
+            <Link className="btn btn--blank" to={PATH_HELP} ref={React.createRef()}>
+              Help
+            </Link>
+          </MenuItem>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => { logoutAction() }} ref={React.createRef()}>
+              Sign out
+            </button>
           </MenuItem>
         </Menu>
       </Popper>

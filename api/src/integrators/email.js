@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk'
 import ono from 'ono'
+import { BOUNCE_NOTIFICATION_EMAIL } from '../constants/email'
 
 const { AWS_SES_REGION, SENDER_EMAIL_ADDRESS } = process.env
 
@@ -11,7 +12,7 @@ const SES = new AWS.SES({ apiVersion: '2010-12-01' })
 const getSESParams = ({ toAddresses, textBody, htmlBody, subject }) => {
   return {
     Destination: {
-    /* required */
+      /* required */
       CcAddresses: [],
       ToAddresses: toAddresses
     },
@@ -22,7 +23,7 @@ const getSESParams = ({ toAddresses, textBody, htmlBody, subject }) => {
         Html: {
           Charset: 'UTF-8',
           Data: htmlBody
-        },
+        }
       },
       Subject: {
         Charset: 'UTF-8',
@@ -32,7 +33,9 @@ const getSESParams = ({ toAddresses, textBody, htmlBody, subject }) => {
     Source: SENDER_EMAIL_ADDRESS /* required */,
     ReplyToAddresses: [
       /* more items */
-    ]
+    ],
+    // SES will use this address to alert us of bounce/complaint emails
+    ReturnPath: BOUNCE_NOTIFICATION_EMAIL
   }
 }
 

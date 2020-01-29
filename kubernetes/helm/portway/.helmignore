@@ -20,3 +20,5 @@
 .idea/
 *.tmproj
 .vscode/
+# TODO: remove when ready for redis
+redis-deployment.fixme

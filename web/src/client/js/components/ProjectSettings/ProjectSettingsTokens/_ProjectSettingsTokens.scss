@@ -1,10 +1,5 @@
 // Tokens
 .project-settings {
-  --endpoint-name-background: var(--color-gray-40);
-  @media (prefers-color-scheme: dark) {
-    --endpoint-name-background: var(--color-gray-70);
-  }
-
   // Token list
   &__token-list {
     list-style: none;
@@ -15,13 +10,11 @@
     align-items: center;
     display: flex;
     input[type="radio"] {
-      margin-right: 1.8rem;
+      margin-right: .6rem;
     }
     &__info {
-      border: thin solid var(--theme-border);
       flex: 1;
       margin-bottom: 2rem;
-      padding: 1rem;
     }
     &__details {
       align-items: flex-start;
@@ -34,15 +27,12 @@
     }
     &__field {
       align-items: center;
-      border: thin solid var(--theme-border);
-      border-radius: var(--border-radius);
       display: flex;
       width: 100%;
       .pill {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         font-size: 1.2rem;
-        margin: 0;
         padding: 2px 6px;
       }
       input {
@@ -55,7 +45,7 @@
     &__token {
       align-items: center;
       display: flex;
-      input {
+      input[type="text"] {
         flex: 1;
       }
       .btn {
@@ -66,7 +56,9 @@
 
   // Endpoints
   &__endpoint-name {
-    background-color: var(--endpoint-name-background);
+    background-color: var(--theme-overflow);
+    border: thin solid var(--theme-border);
+    border-bottom: none;
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -76,9 +68,12 @@
     flex: 1;
   }
   &__endpoint {
-    display: flex;
+    display: block;
     pre {
+      overflow-x: auto;
       width: 100%;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
     &-token {
       color: var(--color-gray-10);

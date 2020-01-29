@@ -5,9 +5,18 @@ import 'CSS/app.scss'
 
 const App = ({ children, history, routeChange }) => {
   useEffect(() => {
+    const appElement = document.getElementById('application')
+    function resizeHander() {
+      appElement.style.height = window.innerHeight + 'px'
+    }
+    resizeHander()
+    window.addEventListener('resize', resizeHander, false)
     history.listen((location, action) => {
       routeChange()
     })
+    return function cleanup() {
+      window.removeEventListener('resize', resizeHander, false)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

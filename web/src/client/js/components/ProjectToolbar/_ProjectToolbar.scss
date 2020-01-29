@@ -1,10 +1,24 @@
+@import 'CSS/inc/_include-media.scss';
+
 .project-toolbar {
   align-items: center;
   background-color: var(--theme-overlay-light);
   border-top: thin solid var(--theme-border);
+  border-right: thin solid var(--theme-border);
   display: flex;
   font-size: 1.2rem;
   height: 50px;
   padding: 0 calc(var(--gutter-width) / 4);
+  width: 100%;
   z-index: 100;
+
+  @include media('>medium') {
+    width: calc(var(--gutter-width) + 300px);
+  }
+
+  @media all and (display-mode: standalone) {
+    height: 75px;
+    padding: 0 calc(var(--gutter-width) / 4) 2rem;
+  }
+
 }

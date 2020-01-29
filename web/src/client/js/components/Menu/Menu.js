@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -6,8 +6,8 @@ import './_Menu.scss'
 
 const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
-  const [menuItems, setMenuItems] = useState([])
-  const [activeFirstTime, setActiveFirstTime] = useState(true)
+  const menuItems = useRef([])
+  const activeFirstTime = useRef(true)
 
   const keyNavigationHandler = useCallback((e) => {
     let counterBecauseUseState = selectedIndex
@@ -35,17 +35,17 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
     }
 
     // If we're within range, set the correct index and focus that ref
-    if (counterBecauseUseState >= 0 && counterBecauseUseState <= menuItems.length - 1) {
+    if (counterBecauseUseState >= 0 && counterBecauseUseState <= menuItems.current.length - 1) {
       setSelectedIndex(counterBecauseUseState)
-      menuItems[counterBecauseUseState].ref.current.focus()
+      menuItems.current[counterBecauseUseState].ref.current.focus()
     }
   }, [anchorRef, menuItems, selectedIndex])
 
   useEffect(() => {
     if (isActive) {
-      if (activeFirstTime) {
+      if (activeFirstTime.current) {
         anchorRef.current.focus()
-        setActiveFirstTime(false)
+        activeFirstTime.current = false
       }
       const menuItemComponents = React.Children.toArray(children).filter((child) => {
         return child.type.name === 'MenuItem'
@@ -56,7 +56,7 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
       const filteredMenuItemChildren = menuItemChildren.filter((child) => {
         return child.ref !== null
       })
-      setMenuItems(filteredMenuItemChildren)
+      menuItems.current = filteredMenuItemChildren
       document.addEventListener('keydown', keyNavigationHandler, false)
       return () => {
         document.removeEventListener('keydown', keyNavigationHandler, false)
@@ -64,7 +64,7 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
     } else {
       // Reset once the menu is closed
       setSelectedIndex(-1)
-      setActiveFirstTime(true)
+      activeFirstTime.current = true
     }
   }, [activeFirstTime, anchorRef, children, isActive, keyNavigationHandler])
 

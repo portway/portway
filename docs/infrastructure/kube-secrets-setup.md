@@ -24,7 +24,7 @@ kubectl create secret generic db-secrets --from-literal=db_user_password='value'
 
 Log secrets
 ```
-kubectl create secret generic log-secrets --from-literal=log_token='value' --from-literal=audit_log_token='value'
+kubectl create secret generic log-secrets --from-literal=log_token='value' --from-literal=audit_log_token='value' --from-literal=log_token_web='value'
 ```
 
 Admin secrets

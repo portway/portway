@@ -4,7 +4,12 @@ import { useHistory, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PATH_DOCUMENT_NEW, PATH_DOCUMENT_NEW_PARAM, PATH_PROJECT } from 'Shared/constants'
+import {
+  PATH_DOCUMENT_NEW,
+  PATH_DOCUMENT_NEW_PARAM,
+  PATH_PROJECT,
+  PROJECT_ROLE_IDS,
+} from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 
 import useDataService from 'Hooks/useDataService'
@@ -35,9 +40,13 @@ const DocumentsListContainer = ({
   const { documentId, projectId } = useParams()
   const history = useHistory()
 
-  const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [
-    projectId
-  ])
+  const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [projectId])
+  const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+
+  let readOnly = null
+  if (assignmentsLoading === false) {
+    readOnly = projectAssignments[projectId] === undefined || projectAssignments[projectId].role === PROJECT_ROLE_IDS.READER
+  }
 
   // trigger clear search action if project id changes
   useEffect(() => {
@@ -161,8 +170,10 @@ const DocumentsListContainer = ({
       draggedDocumentHandler={draggedDocumentHandler}
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
-      loading={loading}
+      isCreating={ui.documents.isCreating}
+      loading={loading || assignmentsLoading}
       projectId={Number(projectId)}
+      readOnly={readOnly}
       removeDocumentHandler={removeDocumentHandler}
       searchDocumentsHandler={searchDocumentsHandler}
       unpublishDocumentHandler={unpublishDocumentHandler}

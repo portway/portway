@@ -39,6 +39,11 @@ spec:
             configMapKeyRef:
               name: web-config
               key: web.api_public_url
+        - name: LOGGER
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.logger
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -59,6 +64,11 @@ spec:
             secretKeyRef:
               name: zendesk-secrets
               key: token
+        - name: LOG_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: log-secrets
+              key: log_token_web
         ports:
         - containerPort: 3000
           protocol: TCP

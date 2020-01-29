@@ -1,58 +1,68 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import EasyMDE from 'easymde'
+import CodeMirror from 'codemirror/lib/codemirror'
 
-import './EasyMDE.scss'
+import 'codemirror/addon/edit/continuelist'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/css/css'
+import 'codemirror/mode/htmlmixed/htmlmixed'
+import 'codemirror/mode/clike/clike'
+
+import './codemirror.css'
 import './FieldText.scss'
+
+window.CodeMirror = CodeMirror
 
 const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly }) => {
   const textRef = useRef()
-  const [editor, setEditor] = useState(null)
+  const editorRef = useRef()
   // Mount the SimpleMDE Editor
   useEffect(() => {
-    setEditor(new EasyMDE({
-      autoDownloadFontAwesome: false,
-      autofocus: false,
-      autosave: {
-        enabled: false
+    editorRef.current = CodeMirror.fromTextArea(textRef.current, {
+      addModeClass: true,
+      dragDrop: false,
+      extraKeys: {
+        'Enter': 'newlineAndIndentContinueMarkdownList',
+        'Tab': 'tabAndIndentMarkdownList',
+        'Shift-Tab': 'shiftTabAndUnindentMarkdownList'
       },
-      element: textRef.current,
-      initialValue: field ? field.value : '',
-      shortcuts: {
-        drawImage: null,
-        toggleFullScreen: null,
-        toggleHeadingSmaller: null,
-        togglePreview: null,
-        toggleSideBySide: null,
-        toggleUnorderedList: null,
+      lineNumbers: false,
+      lineWrapping: true,
+      mode: {
+        name: 'gfm',
+        gitHubSpice: false,
+        highlightFormatting: true,
       },
-      spellChecker: false,
-      status: false,
-      toolbar: false
-    }))
+      scrollbarStyle: null,
+      tabSize: 2,
+      tokenTypeOverrides: {
+        list1: 'formatting-list-ul'
+      }
+    })
   // We're disabling the dependency warning here because anything other than []
   // causes problems. We only want setEditor to run once
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
-    if (editor) {
-      editor.codemirror.options.readOnly = readOnly ? 'nocursor' : false
-      editor.codemirror.on('blur', (cm, e) => { onBlur(field.id, field.type, editor) })
-      editor.codemirror.on('change', () => { onChange(field.id, editor.value()) })
-      editor.codemirror.on('dragstart', (cm, e) => { e.preventDefault() })
-      editor.codemirror.on('dragenter', (cm, e) => { e.preventDefault() })
-      editor.codemirror.on('dragover', (cm, e) => { e.preventDefault() })
-      editor.codemirror.on('dragleave', (cm, e) => { e.preventDefault() })
-      editor.codemirror.on('focus', (cm, e) => { onFocus(field.id, field.type, editor) })
-      if (field.id === autoFocusElement) {
-        editor.codemirror.focus()
-        editor.codemirror.setCursor(editor.codemirror.lineCount(), 0)
-      }
+    if (editorRef.current) {
+      editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
+      editorRef.current.on('blur', (cm, e) => { onBlur(field.id, field.type, editorRef.current) })
+      editorRef.current.on('change', () => { onChange(field.id, editorRef.current.getValue()) })
+      editorRef.current.on('dragstart', (cm, e) => { e.preventDefault() })
+      editorRef.current.on('dragenter', (cm, e) => { e.preventDefault() })
+      editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
+      editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
+      editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current) })
+      // if (field.id === autoFocusElement) {
+      //   editorRef.current.focus()
+      //   editorRef.current.setCursor(editorRef.current.lineCount(), 0)
+      // }
     }
   // We're disabling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor])
+  }, [editorRef])
   return (
     <div className="document-field__text">
       <textarea ref={textRef} defaultValue={field.value} readOnly={readOnly} />
