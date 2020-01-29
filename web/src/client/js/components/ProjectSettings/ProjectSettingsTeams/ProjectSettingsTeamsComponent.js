@@ -41,6 +41,7 @@ const ProjectSettingsTeamsComponent = ({
                 className="react-select-container"
                 defaultValue={newUserId}
                 inputId="team-list"
+                isClearable={true}
                 onInputChange={debounce((input, { action }) => {
                   if (action === 'input-change') {
                     setNewUserId(null)
@@ -48,7 +49,9 @@ const ProjectSettingsTeamsComponent = ({
                   }
                 }, 400)}
                 options={users}
-                onChange={(option) => { setNewUserId(Number(option.value)) }}
+                onChange={(option) => {
+                  option && option.value ? setNewUserId(Number(option.value)) : setNewUserId(null)
+                }}
                 placeholder="Add a person..."
                 ref={selectRef} />
             </div>
