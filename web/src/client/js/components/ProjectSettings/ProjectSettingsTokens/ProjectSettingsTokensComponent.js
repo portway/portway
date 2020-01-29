@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import {
-  DOCUMENTATION_URL,
+  URL_DOCUMENTATION,
   PATH_PROJECT,
   PROJECT_ROLE_NAMES,
   PROJECT_ROLE_IDS
@@ -75,13 +75,8 @@ const ProjectSettingsTokensComponent = ({
           see results for different types of keys. For example, you can test creating a document
           with a <u>{PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.READER]}</u> key to receive an error.
         </p>
-        <p>
-          Looking for the full API? Check out our{' '}
-          <a href={DOCUMENTATION_URL} target="_blank" rel="noopener noreferrer">
-            documentation
-          </a>
-          .
-        </p>
+
+        <p>Looking for the full API? Check out our <a href={URL_DOCUMENTATION} target="_blank" rel="noopener noreferrer">documentation</a>.</p>
         <dl className="project-settings__endpoints">
           <dt className="project-settings__endpoint-name">
             <span className="project-settings__endpoint-method pill pill--green">GET</span>
