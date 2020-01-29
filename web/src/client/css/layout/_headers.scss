@@ -1,9 +1,10 @@
 @import '../inc/include-media';
 
 .header {
+  align-items: center;
+  display: flex;
   &--with-button {
     align-items: flex-start;
-    display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin-bottom: 2rem;
