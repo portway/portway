@@ -155,7 +155,7 @@ module.exports = {
   // Documentation
   URL_WEBSITE: 'https://getportway.com/',
   URL_DOCUMENTATION: 'https://docs.portway.app/',
-  URL_API: 'https://docs.portway.app/api',
+  URL_API_DOCS: 'https://docs.portway.app/api',
   URL_GUIDES: 'https://docs.portway.app/guides',
   // Fields
   FIELD_LABELS: {
@@ -211,6 +211,7 @@ module.exports = {
   QUERY_PARAMS: QUERY_PARAMS,
   // Support
   SUPPORT_EMAIL: 'support@portway.app',
+  FEEDBACK_EMAIL: 'feedback@bonkeybong.com',
   SUPPORT_LINK: 'https://getportway.com/support',
   // UI Related
   DOCUMENT_MODE: DOCUMENT_MODE,
