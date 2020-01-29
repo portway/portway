@@ -64,7 +64,7 @@ spec:
             secretKeyRef:
               name: zendesk-secrets
               key: token
-        - name: LOG_TOKEN
+        - name: LOG_TOKEN_WEB
           valueFrom:
             secretKeyRef:
               name: log-secrets
