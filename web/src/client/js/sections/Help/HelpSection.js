@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 
-import { URL_DOCUMENTATION, URL_API, URL_WEBSITE, PRODUCT_NAME } from 'Shared/constants'
+import { URL_API_DOCS, PRODUCT_NAME, FEEDBACK_EMAIL } from 'Shared/constants'
 
 import './_Help.scss'
 
@@ -12,6 +12,9 @@ const HelpSection = () => {
       document.querySelector('body').classList.remove('body--with-scrolling')
     }
   }, [])
+
+  const feedbackEmail = `mailto:${FEEDBACK_EMAIL}`
+
   return (
     <>
       <Helmet>
@@ -26,32 +29,53 @@ const HelpSection = () => {
           <div className="help-section__grid">
             <div className="help-section__content">
               <p>
-                Thanks for trying out Portway. We hope you enjoy kicking the tires on our new app before
-                we launch it publicly. If you have anything you’d like to share, please <a href="mailto:support@portway.app">contact us</a>.
-                We’d love to hear about your experience.
+                Thanks for trying out Portway. We hope you enjoy kicking the tires on our new app.
+                If you have anything you’d like to share, please{' '}
+                <a target="_blank" rel="noopener noreferrer" href={feedbackEmail}>
+                  contact us
+                </a>{' '}
+                . We’d love to hear your thoughts.
               </p>
-              <h2>What is this thing?</h2>
+              <h2>What is Portway?</h2>
               <p>
-                Portway is a notes app, with a focus on <a href="https://en.wikipedia.org/wiki/Markdown" target="_blank">Markdown</a>.
-                We built this for the notes app nerd who wants to automate things with Shortcuts.
-                We built this for the teams who want a central content repository for their projects.
-                Mainly, we built it for us. We’re always building apps for clients and really, really
-                dislike content management systems.<br />Think Github for content.
+                Note apps. They’re simple, quick, and for the more organized amongst us,
+                satisfying to categorize. But what do notes look like if you stick an API behind
+                them? What about a sprinkling of content management? (We promise, just a
+                sprinkling!)
               </p>
               <p>
-                We’ve given you a free Team plan. Invite whoever you’d like, create some projects,
-                make some documents, and see what you can do with them with the Portway API. We’ve got
-                more work to do, but figured it was time to get some friends in here to play.
+                We think it looks like Portway. The beauty and simplicity of notes with the power
+                of the connected web.
               </p>
+
+              <h2>Your free Team plan</h2>
+              <p>
+                We’ve given you a free Team plan. Invite your friends and coworkers, create some
+                projects, and unleash them wherever you choose via the Portway API. Or use it as a
+                private space to organize your team’s thoughts and documents. Or do both!
+                We’ll leave that up to you.
+              </p>
+
+              <p>
+                We’ll continue to push regular updates, so be on the lookout for new features. In
+                the meantime,{' '}
+                <a rel="noopener noreferrer" target="_blank" href={feedbackEmail}>
+                  let us know what you think!
+                </a>
+              </p>
+
               <p className="section">
-                <b>Thanks again!</b><br />Your friends at BonkeyBong ❤️
+                <b>Thanks again!</b>
+                <br />
+                Your friends at BonkeyBong ❤️
               </p>
             </div>
             <aside className="help-section__aside">
               <h2>Helpful links</h2>
               <ul className="list list--blank">
-                <li><a href={URL_DOCUMENTATION}>Documentation</a></li>
-                <li><a href={URL_API}>Portway API</a></li>
+                <li>
+                  <a href={URL_API_DOCS}>Portway API Docs</a>
+                </li>
               </ul>
             </aside>
           </div>
