@@ -4,7 +4,7 @@ import { getDb } from '../db/dbConnector'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import resourceTypes from '../constants/resourceTypes'
 import { pick } from '../libs/utils'
-
+import { Op } from 'sequelize'
 
 const MODEL_NAME = 'Organization'
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.ORGANIZATION]
@@ -65,11 +65,23 @@ async function deleteById(id) {
   return db.model(MODEL_NAME).destroy({ where: { id } })
 }
 
+async function findAllCanceled() {
+  const db = getDb()
+  return db.model(MODEL_NAME).find({
+    where: {
+      canceledAt: {
+        [Op.ne]: null
+      }
+    }
+  })
+}
+
 export default {
   create,
   findSanitizedById,
   updateById,
   findById,
   findByStripeId,
-  deleteById
+  deleteById,
+  findAllCanceled
 }
