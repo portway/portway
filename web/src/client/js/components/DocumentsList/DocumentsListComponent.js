@@ -57,7 +57,7 @@ const DocumentsListComponent = ({
 
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
-    if (creating && nameRef.current) {
+    if (creating && nameRef.current && !isCreating) {
       nameRef.current.select()
     }
   })
@@ -110,12 +110,22 @@ const DocumentsListComponent = ({
             {isCreating && <SpinnerComponent color={colorOverlayDark} />}
             <button
               aria-label="Cancel creating document"
-              className="btn btn--blank btn--with-circular-icon"
+              className="btn btn--blank"
               disabled={isCreating}
               onClick={() => { createCallback(false) }}
             >
-              <RemoveIcon />
+              <RemoveIcon width="12" height="12" />
             </button>
+            <IconButton
+              aria-label="Create the document"
+              color="green"
+              disabled={isCreating}
+              onClick={() => {
+                createChangeHandler(nameRef.current.value)
+              }}
+            >
+              <AddIcon fill="#ffffff" />
+            </IconButton>
           </div>
         </li>
       )
@@ -228,6 +238,7 @@ const DocumentsListComponent = ({
           </div>
         </div>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+          {!creating &&
           <IconButton
             aria-label="New document"
             onClick={() => { createCallback(true) }}
@@ -235,6 +246,7 @@ const DocumentsListComponent = ({
           >
             <AddIcon width="14" height="14" />
           </IconButton>
+          }
         </ProjectPermission>
       </header>
       {loading &&

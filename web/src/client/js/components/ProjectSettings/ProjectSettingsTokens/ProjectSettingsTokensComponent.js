@@ -75,11 +75,9 @@ const ProjectSettingsTokensComponent = ({
           </dt>
           <dd className="project-settings__endpoint">
             <pre>
-              <code className="code">
-                <span className="code__block-comment"># Get the project documents using the selected token</span>
-                <span className="code__command">curl</span> -H &quot;Authorization: Bearer <span className="project-settings__endpoint-token">{selectedToken.token}</span>&quot; \<br />
-                <span className="project-settings__endpoint-url">{PRODUCT_API_URL}projects/{projectId}/documents</span>
-              </code>
+              <span className="code__block-comment"># Get the project documents using the selected token</span>
+              <span className="code__command">curl</span> -H &quot;Authorization: Bearer <span className="project-settings__endpoint-token">{selectedToken.token}</span>&quot; \<br />
+              <span className="project-settings__endpoint-url">{PRODUCT_API_URL}projects/{projectId}/documents</span>
             </pre>
             <textarea
               ref={getEndpointRef}

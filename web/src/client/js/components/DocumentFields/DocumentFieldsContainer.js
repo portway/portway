@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -73,6 +73,7 @@ const DocumentFieldsContainer = ({
   }, [hasOnlyOneTextField])
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
+  const notReadOnlyModeButDontDoDragEvents = documentMode === DOCUMENT_MODE.NORMAL
   let documentReadOnlyMode
   // False because null / true == loading
   if (assignmentLoading === false) {
@@ -155,7 +156,7 @@ const DocumentFieldsContainer = ({
   function dragStartHandler(e) {
     // console.info('drag start')
     e.stopPropagation()
-    if (documentReadOnlyMode) return
+    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
     const listItem = e.currentTarget
     e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.effectAllowed = 'copyMove'
@@ -190,7 +191,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag enter', draggingElement)
     e.preventDefault()
     e.stopPropagation()
-    if (documentReadOnlyMode) return
+    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
     e.dataTransfer.dropEffect = 'move'
     if (e.dataTransfer.types.includes('Files')) {
       return
@@ -224,13 +225,14 @@ const DocumentFieldsContainer = ({
     // console.info('drag drop', draggingElement)
     e.preventDefault()
     e.stopPropagation()
-    if (documentReadOnlyMode) return
+    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
     const fieldIdToUpdate = draggingElement.current.dataset.id
     const to = Number(draggingElement.current.dataset.order)
     draggingElement.current.classList.remove('document-field--dragging')
+    draggingElement.current.setAttribute('draggable', 'false')
     // Trigger action with documentId, fieldId
     updateFieldOrder(documentId, fieldIdToUpdate, to)
   }
@@ -239,7 +241,7 @@ const DocumentFieldsContainer = ({
     // console.info('drag end', draggingElement)
     e.preventDefault()
     e.stopPropagation()
-    if (documentReadOnlyMode) return
+    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
     draggingElement.current.classList.remove('document-field--dragging')
     document.querySelector('#clone-element').remove()
 

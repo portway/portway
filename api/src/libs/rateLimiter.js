@@ -1,5 +1,5 @@
 import SlidingWindowRateLimiter from 'sliding-window-rate-limiter'
-import IORedis from 'ioredis'
+// import IORedis from 'ioredis'
 /*
 ## check(key, limit)
 const result = await limiter.check(key, limit)
@@ -20,10 +20,11 @@ const options = {
 }
 
 if (process.env.REDIS_URL) {
+  // TODO: fix redis kubernetes issues
   // sliding-window-rate-limiter is supposed to take a url to redis, but
   // it doesn't seem to work. Much safer to just pass an ioredis instance
-  const redis = new IORedis(process.env.REDIS_URL)
-  options.redis = redis
+  // const redis = new IORedis(process.env.REDIS_URL)
+  // options.redis = redis
 }
 
 const limiter = SlidingWindowRateLimiter.createLimiter(options)
