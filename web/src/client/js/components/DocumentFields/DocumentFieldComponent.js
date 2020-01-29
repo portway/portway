@@ -82,11 +82,12 @@ const DocumentFieldComponent = ({
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
-      onDragEnd={readOnly ? null : dragEndHandler}
-      onDragEnter={readOnly ? null : dragEnterHandler}
+      draggable={false}
+      onDragEnd={dragEndHandler}
+      onDragEnter={dragEnterHandler}
       onDragOver={e => e.preventDefault()}
-      onDragStart={readOnly ? null : dragStartHandler}
-      onDrop={readOnly ? null : dropHandler}
+      onDragStart={dragStartHandler}
+      onDrop={dropHandler}
       ref={listRef}
     >
       <div className="document-field__component">
@@ -94,7 +95,11 @@ const DocumentFieldComponent = ({
         <div className={fieldToolClasses}>
           {!readOnly &&
           <div className="document-field__dragger">
-            <button aria-label="Reorder field by dragging" className="btn btn--blank btn--with-circular-icon" onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}>
+            <button
+              aria-label="Reorder field by dragging"
+              className="btn btn--blank btn--with-circular-icon"
+              onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}
+            >
               <DragIcon />
             </button>
           </div>

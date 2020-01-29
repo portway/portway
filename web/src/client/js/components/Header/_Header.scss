@@ -1,8 +1,12 @@
 @import 'CSS/inc/_mixins.scss';
+@import 'CSS/inc/_include-media.scss';
 
 .masthead {
   border-top: var(--ribbon-height) solid var(--color-brand);
   height: calc(var(--header-height) + var(--ribbon-height));
+  // position: sticky;
+  // top: 0;
+  z-index: 3;
 
   .navbar {
     align-items: center;
@@ -102,4 +106,22 @@
       z-index: 11;
     }
   } // navbar
+}
+
+.subhead {
+  background-color: var(--color-green);
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  a {
+    color: #fff;
+    display: block;
+    padding: .4rem 0;
+  }
+
+  @include media('>medium') {
+    display: none;
+  }
+
 }

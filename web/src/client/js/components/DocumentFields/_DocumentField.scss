@@ -1,17 +1,20 @@
+@import 'CSS/inc/_include-media.scss';
 @import 'CSS/inc/_mixins.scss';
 
 .document-field {
   --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
+  --field-data-name-color: hsla(0, 0%, 26%, .5);
   --field-data-background: var(--theme-overflow);
   --field-data-border: var(--color-gray-10);
   --field-dragging-background: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
+    --field-data-name-color: hsla(0, 0%, 100%, .2);
     --field-data-background: var(--theme-overlay-dark);
     --field-data-border: var(--theme-overlay-light);
     --field-dragging-background: var(--theme-base);
   }
-  margin-top: 1.8rem;
+  margin-top: 2.4rem;
   max-width: 1200px;
   outline: 0;
 
@@ -72,7 +75,11 @@
 .document-field__component {
   align-items: stretch;
   display: flex;
-  padding: 0 2.3rem;
+  padding: 0 1.3rem;
+
+  @include media ('>medium') {
+    padding: 0 2.3rem;
+  }
 
   .document__fields--is-dragging & {
     overflow: hidden;
@@ -92,9 +99,16 @@
     background-color: var(--field-data-background);
     border: thin solid var(--field-data-border);
     display: flex;
+    flex-direction: column;
+
+    @include media('>medium') {
+      flex-direction: row;
+    }
+
     input {
       background-color: transparent;
     }
+
   }
 
 } // document-field__container
@@ -102,19 +116,30 @@
 
 // Field name is only visible for data fields
 .document-field__name {
-  align-items: flex-start;
-  border-right: thin solid var(--theme-border);
   display: flex;
-  flex: 0 0 var(--field-name-width);
   flex-direction: column;
-  justify-content: center;
-  padding: .7rem 1.2rem;
-  &-label {
-    font-size: 1.3rem;
-    margin-bottom: .8rem;
+  padding: .8rem .8rem;
+
+  @include media('>medium') {
+    align-items: flex-start;
+    border-right: thin solid var(--theme-border);
+    display: flex;
+    flex: 0 0 var(--field-name-width);
+    flex-direction: column;
+    justify-content: center;
+    padding: .7rem 1.2rem;
   }
+
+  &-label {
+    color: var(--field-data-name-color);
+    font-size: 1.3rem;
+    @include media('>medium') {
+      margin-bottom: .6rem;
+    }
+  }
+
   input {
-    border: none;
+    border: thin solid transparent;
     color: var(--theme-text-color);
     font-size: 1.3rem; // 13px
     font-weight: 600;
@@ -122,6 +147,12 @@
     min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
     outline: none;
     padding: 0;
+    .using-mouse & {
+      &:focus {
+        border: thin solid transparent;
+        box-shadow: none;
+      }
+    }
   }
 } // document-field__name
 
@@ -151,7 +182,11 @@
   }
 
   .document-field--data & {
-    padding: 1.4rem 1.05rem;
+
+    @include media('>medium') {
+      padding: 1.4rem 1.05rem;
+    }
+
     input {
       font-size: 1.5rem;
       line-height: 2.4rem;

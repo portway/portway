@@ -1,30 +1,8 @@
 :root {
   --type-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  // --type-serif: 'Domine', Georgia, serif;
   // Icon margin is usually used when an icon is next to some type
   --icon-margin: 0.6rem;
 }
-
-// Save for website
-// /* domine-regular - latin */
-// @font-face {
-//   font-family: 'Domine';
-//   font-style: normal;
-//   font-weight: 400;
-//   src: local('Domine'), local('Domine-Regular'),
-//        url('/css/fonts/domine-v7-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//        url('/css/fonts/domine-v7-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
-
-// /* domine-700 - latin */
-// @font-face {
-//   font-family: 'Domine';
-//   font-style: normal;
-//   font-weight: 700;
-//   src: local('Domine Bold'), local('Domine-Bold'),
-//        url('/css/fonts/domine-v7-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-//        url('/css/fonts/domine-v7-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-// }
 
 html, body {
   font-family: var(--type-sans-serif);
@@ -95,6 +73,10 @@ p {
   text-align: right;
 }
 
+.lowercase {
+  text-transform: lowercase;
+}
+
 .small {
   font-size: 1.2rem; // 12px
   font-weight: 300;
@@ -159,7 +141,8 @@ time {
   border-radius: var(--border-radius);
   color: var(--color-gray-40);
   display: inline-block;
-  font-size: 90%;
+  font-size: 1.1rem;
+  line-height: 1.1rem;
   margin: 0 var(--icon-margin);
   padding: 5px 10px;
   text-decoration: none;

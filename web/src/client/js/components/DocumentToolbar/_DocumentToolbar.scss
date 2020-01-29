@@ -1,13 +1,21 @@
+@import 'CSS/inc/_include-media.scss';
+
 .document-toolbar {
   align-items: center;
   background-color: var(--theme-overlay-light);
   border-top: thin solid var(--theme-border);
   display: flex;
+  flex: 1;
   font-size: 1.2rem;
   justify-content: space-between;
   height: 50px;
   padding: 0 calc(var(--gutter-width) / 4);
   z-index: 100;
+
+  @media all and (display-mode: standalone) {
+    height: 75px;
+    padding: 0 calc(var(--gutter-width) / 4) 2rem;
+  }
 
   &__start {
     align-items: center;
@@ -20,12 +28,19 @@
   &__end {
     align-items: center;
     display: flex;
+    .btn + .btn {
+      margin-left: .6rem;
+    }
   }
 
   &__info {
     color: var(--color-gray-30);
+    display: none;
     font-size: 1.2rem;
     margin-right: 1rem;
+    @include media('>medium') {
+      display: block;
+    }
   }
 
   .popper-group {

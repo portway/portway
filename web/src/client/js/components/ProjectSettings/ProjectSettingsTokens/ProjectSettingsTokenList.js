@@ -27,6 +27,7 @@ const ProjectSettingsTokenList = ({ selectedToken, tokens, tokenRemoveHandler, t
 ProjectSettingsTokenList.propTypes = {
   selectedToken: PropTypes.number,
   tokens: PropTypes.array.isRequired,
+  tokenRemoveHandler: PropTypes.func.isRequired,
   tokenSelectHandler: PropTypes.func.isRequired
 }
 

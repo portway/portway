@@ -47,6 +47,7 @@ export const userAssignments = (state = initialState, action) => {
     // to force a refetch
     case ActionTypes.RECEIVE_CREATED_PROJECT: {
       return {
+        ...state,
         assignmentsByUserId: {},
         loading: {
           byUserId: {}

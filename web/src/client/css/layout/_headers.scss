@@ -1,8 +1,16 @@
+@import '../inc/include-media';
+
 .header {
+  align-items: center;
+  display: flex;
   &--with-button {
-    align-items: center;
-    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 2rem;
+    @include media('>medium') {
+      align-items: center;
+      flex-direction: row;
+    }
   }
 }

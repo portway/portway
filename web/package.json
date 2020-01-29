@@ -53,12 +53,12 @@
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.4",
     "classnames": "^2.2.6",
+    "codemirror": "^5.51.0",
     "compression-webpack-plugin": "^3.1.0",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^1.0.0",
     "dotenv": "^6.2.0",
     "dotenv-webpack": "^1.5.7",
-    "easymde": "^2.8.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "eslint": "^5.13.0",
@@ -113,6 +113,7 @@
     "body-parser": "^1.18.3",
     "connect-gzip-static": "^2.1.1",
     "cookie-parser": "^1.4.4",
+    "cuid": "^2.1.8",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "express": "^4.16.4",
@@ -122,6 +123,7 @@
     "passport": "^0.4.0",
     "passport-custom": "^1.0.5",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "r7insight_node": "^2.0.0"
   }
 }
