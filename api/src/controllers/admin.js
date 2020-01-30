@@ -32,10 +32,12 @@ const adminController = function(router) {
   )
 
   router.delete('/organizations/:id',
+    adminAuth,
     deleteCanceledOrg
   )
 
   router.get('/organizations/canceled',
+    adminAuth,
     getCanceledOrgs
   )
 }
