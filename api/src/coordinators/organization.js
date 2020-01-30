@@ -9,7 +9,7 @@ import BusinessProjectUser from '../businesstime/projectuser'
 import stripeIntegrator from '../integrators/stripe'
 import ono from 'ono'
 
-const DAYS_AGO_FOR_DELETION = 0
+const DAYS_AGO_FOR_DELETION = 30
 
 const updateById = async function(id, body) {
   const currentOrg = await BusinessOrganization.findById(id)
@@ -60,11 +60,13 @@ const deleteCanceledOrg = async function(orgId) {
     throw ono({ code: 409 }, `Org ${orgId} cannot be deleted, was canceled less than ${DAYS_AGO_FOR_DELETION} days ago`)
   }
 
-  await removeAllOrgData(orgId)
+  await organizationCoordinator.removeAllOrgData(orgId)
 }
 
-export default {
+const organizationCoordinator = {
   updateById,
   removeAllOrgData,
   deleteCanceledOrg
 }
+
+export default organizationCoordinator
