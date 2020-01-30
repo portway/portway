@@ -48,16 +48,19 @@ const deleteCanceledOrg = async function(orgId) {
   const thirtyDays = 1000 * 60 * 60 * 24 * DAYS_AGO_FOR_DELETION
   const thirtyDaysAgo = Date.now() - thirtyDays
   const org = await BusinessOrganization.findById(orgId)
-  console.log(org.canceledAt)
-  console.log(thirtyDaysAgo)
+
   // double check that the org canceledAt exists and happened at least 30 days ago
   if (!org.canceledAt) {
     throw ono({ code: 409 }, `Org ${orgId} cannot be deleted, must be canceled first`)
   }
 
-  if (org.canceledAt > thirtyDaysAgo) {
+  const canceledAtTimestamp = Date.parse(org.canceledAt)
+
+  if (canceledAtTimestamp > thirtyDaysAgo) {
     throw ono({ code: 409 }, `Org ${orgId} cannot be deleted, was canceled less than ${DAYS_AGO_FOR_DELETION} days ago`)
   }
+
+  await removeAllOrgData(orgId)
 }
 
 export default {

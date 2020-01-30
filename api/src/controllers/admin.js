@@ -65,6 +65,7 @@ const deleteCanceledOrg = async function(req, res, next) {
 
   try {
     await organizationCoordinator.deleteCanceledOrg(id)
+    res.status(204).send()
   } catch (e) {
     next(e)
   }
