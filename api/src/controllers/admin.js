@@ -32,12 +32,10 @@ const adminController = function(router) {
   )
 
   router.delete('/organizations/:id',
-    adminAuth,
     deleteCanceledOrg
   )
 
   router.get('/organizations/canceled',
-    adminAuth,
     getCanceledOrgs
   )
 }
@@ -55,15 +53,15 @@ const createAccount = async function(req, res, next) {
 
 const getCanceledOrgs = async function(req, res, next) {
   try {
-    const canceledOrgs = await BusinessOrganization.getCanceledOrgs()
-    res.json(canceledOrgs)
+    const canceledOrgs = await BusinessOrganization.findAllCanceled()
+    res.json({ data: canceledOrgs })
   } catch (e) {
     next(e)
   }
 }
 
 const deleteCanceledOrg = async function(req, res, next) {
-  const { id } = req
+  const { id } = req.params
 
   try {
     await organizationCoordinator.deleteCanceledOrg(id)

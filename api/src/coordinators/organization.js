@@ -7,6 +7,9 @@ import BusinessProjectToken from '../businesstime/projecttoken'
 import BusinessUser from '../businesstime/user'
 import BusinessProjectUser from '../businesstime/projectuser'
 import stripeIntegrator from '../integrators/stripe'
+import ono from 'ono'
+
+const DAYS_AGO_FOR_DELETION = 0
 
 const updateById = async function(id, body) {
   const currentOrg = await BusinessOrganization.findById(id)
@@ -41,7 +44,24 @@ const removeAllOrgData = async function(orgId) {
   await BusinessOrganization.deleteById(orgId)
 }
 
+const deleteCanceledOrg = async function(orgId) {
+  const thirtyDays = 1000 * 60 * 60 * 24 * DAYS_AGO_FOR_DELETION
+  const thirtyDaysAgo = Date.now() - thirtyDays
+  const org = await BusinessOrganization.findById(orgId)
+  console.log(org.canceledAt)
+  console.log(thirtyDaysAgo)
+  // double check that the org canceledAt exists and happened at least 30 days ago
+  if (!org.canceledAt) {
+    throw ono({ code: 409 }, `Org ${orgId} cannot be deleted, must be canceled first`)
+  }
+
+  if (org.canceledAt > thirtyDaysAgo) {
+    throw ono({ code: 409 }, `Org ${orgId} cannot be deleted, was canceled less than ${DAYS_AGO_FOR_DELETION} days ago`)
+  }
+}
+
 export default {
   updateById,
-  removeAllOrgData
+  removeAllOrgData,
+  deleteCanceledOrg
 }

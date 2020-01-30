@@ -67,13 +67,15 @@ async function deleteById(id) {
 
 async function findAllCanceled() {
   const db = getDb()
-  return db.model(MODEL_NAME).find({
+  const orgs = await db.model(MODEL_NAME).findAll({
+    attributes: PUBLIC_FIELDS,
     where: {
-      canceledAt: {
-        [Op.ne]: null
-      }
-    }
+      canceledAt: { [Op.ne]: null }
+    },
+    raw: true
   })
+
+  return orgs
 }
 
 export default {
