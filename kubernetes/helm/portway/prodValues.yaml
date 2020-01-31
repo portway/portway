@@ -7,6 +7,7 @@ certIssuer: letsencrypt-prod
 
 baseUrl: portway.app
 apiPublicUrl: api.portway.app
+docsUrl: docs.portway.app
 apiPort: "3001"
 redisPort: "6379"
 
@@ -33,9 +34,15 @@ db:
   name: "defaultdb"
   useSsl: "true"
 
+docs:
+  image: 'bonkeybong/portway_docs'
+  tag: 'latest'
+  port: "3003"
+
 serviceNames:
   api: api
   web: web
   db: db
   redis: redis
+  docs: docs
 
