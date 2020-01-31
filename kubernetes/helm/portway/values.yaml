@@ -2,7 +2,8 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-certIssuer: letsencrypt-staging
+# Lets Encrypt cert issuer
+certIssuer: letsencrypt-prod
 
 baseUrl: dev.portway.app
 apiPublicUrl: api.dev.portway.app
@@ -13,10 +14,10 @@ redisPort: "6379"
 stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
 
 apiImage: bonkeybong/portway_api
-apiTag: "0.11.0"
+apiTag: "0.12.1"
 
 webImage: bonkeybong/portway_web
-webTag: "0.11.0"
+webTag: "0.12.1"
 
 web:
   port: "3000"
@@ -27,17 +28,17 @@ api:
   s3ContentBucket: 'portway-content-dev'
   logger: 'r7insight'
 
-docs:
-  image: 'bonkeybong/portway_docs'
-  tag: 'latest'
-  port: "3003"
-
 db:
   host: "dev-db-portway-do-user-2269753-0.db.ondigitalocean.com"
   port: "25060"
   user: "doadmin"
   name: "defaultdb"
   useSsl: "true"
+
+docs:
+  image: 'bonkeybong/portway_docs'
+  tag: 'latest'
+  port: "3003"
 
 serviceNames:
   api: api
