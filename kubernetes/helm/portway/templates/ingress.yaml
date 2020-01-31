@@ -11,6 +11,7 @@ spec:
   - hosts:
     - {{ .Values.baseUrl }}
     - {{ .Values.apiPublicUrl }}
+    - {{ .Values.docsUrl }}
     secretName: {{ .Values.certIssuer }}-cert
   rules:
   - host: {{ .Values.apiPublicUrl }}
@@ -18,13 +19,19 @@ spec:
       paths:
       - backend:
           serviceName: {{ .Release.Name }}-api-service
-          servicePort: 3001
+          servicePort: {{ .Values.apiPort }}
   - host: {{ .Values.baseUrl }}
     http:
       paths:
       - backend:
           serviceName: {{ .Release.Name }}-web-service
-          servicePort: 3000
+          servicePort: {{ .Values.web.port }}
+  - host: {{ .Values.docsUrl }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Release.Name }}-docs-service
+          servicePort: {{ .Values.docs.port }}
 ---
 apiVersion: v1
 data:
