@@ -2,6 +2,9 @@
 
 .project-settings__teams {
   // Override field to align-bottom
+  .field-container--row {
+    flex-wrap: wrap;
+  }
   .field {
     justify-content: flex-end;
     &:first-child {
@@ -18,7 +21,7 @@
 
 .project-settings__team-submit {
   margin-top: 2.4rem; // like --with-space on field-containers
-  @include media('>medium') {
+  @include media('>large') {
     margin-top: 0;
   }
 }

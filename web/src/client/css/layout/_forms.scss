@@ -87,7 +87,6 @@ input[type='number'] {
 .field-container {
   display: flex;
   flex-direction: column;
-
   margin-bottom: 18px;
 
   @include media('>medium') {
@@ -98,7 +97,6 @@ input[type='number'] {
   &--row {
     @include media('>medium') {
       flex-direction: row;
-      flex-wrap: wrap;
     }
   }
 
