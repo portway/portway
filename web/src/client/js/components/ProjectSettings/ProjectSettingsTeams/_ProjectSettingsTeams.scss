@@ -1,3 +1,5 @@
+@import 'CSS/inc/_include-media.scss';
+
 .project-settings__teams {
   // Override field to align-bottom
   .field {
@@ -14,19 +16,49 @@
   width: 100%;
 }
 
+.project-settings__team-submit {
+  margin-top: 2.4rem; // like --with-space on field-containers
+  @include media('>medium') {
+    margin-top: 0;
+  }
+}
+
 .project-settings__teammate {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
-  margin-bottom: 6px;
+  margin-bottom: 1.6rem;
+
+  @include media('>medium') {
+    align-items: center;
+    margin-bottom: var(--icon-margin);
+  }
+
+  &-content {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 0 0 0 var(--icon-margin);
+    @include media('>medium') {
+      align-items: center;
+      flex-direction: row;
+      padding: 0;
+    }
+  }
   &-name {
     align-items: center;
     display: flex;
-    flex: 1;
     .icon {
       margin-right: var(--icon-margin);
     }
   }
   &-role {
-    width: 200px;
+    flex: 1;
+    padding: var(--icon-margin) 0 0 0;
+
+    @include media('>medium') {
+      padding: 0 1.6rem 0 0;
+      text-align: right;
+    }
   }
 }

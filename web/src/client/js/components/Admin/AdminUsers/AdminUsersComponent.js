@@ -106,13 +106,15 @@ const AdminUsersComponent = ({
     ]
   })
 
+  console.log(seats)
+
   return (
     <div>
       <section>
         <header className="header header--with-button">
           <h2>User Management</h2>
           {seats && seats.usedSeats === seats.totalSeats &&
-          <p className="small --align-right">
+          <p className="admin-users__seats-warning">
             You have filled all of your <b>{seats.totalSeats}</b> seats.<br />
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <Link to={PATH_BILLING}>Add some seats</Link> if you’d like to add more users.

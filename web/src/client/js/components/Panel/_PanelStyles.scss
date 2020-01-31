@@ -17,7 +17,6 @@
     display: flex;
     flex-direction: column-reverse;
     flex: 1;
-    padding-top: calc(var(--brand-width) / 4);
     position: relative;
     @include media('>medium') {
       align-items: flex-start;
@@ -36,6 +35,11 @@
     width: 100%;
     z-index: 2;
 
+    @media all and (display-mode: standalone) {
+      height: 84px;
+      padding: 0 calc(var(--gutter-width) / 4) 2rem;
+    }
+
     @include media('>medium') {
       background-color: transparent;
       border: none;
@@ -48,7 +52,7 @@
     ul {
       align-items: center;
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
       @include media('>medium') {
         display: block;
       }
@@ -64,15 +68,32 @@
       overflow: hidden;
       padding: 8px 7px;
       text-decoration: none;
-      width: 48px;
+      width: 64px;
       .label {
         display: none;
       }
       &.link--back {
         display: flex;
       }
+      .icon {
+        svg {
+          height: 28px;
+          width: 28px;
+        }
+        @include media('<medium') {
+          path {
+            fill: var(--color-gray-30);
+          }
+        }
+      }
       &.active {
-        background-color: var(--theme-overlay-dark);
+        @include media('<medium') {
+          .icon {
+            path {
+              fill: var(--color-cyan-darker);
+            }
+          }
+        }
         @include media('>medium') {
           background-color: var(--theme-overlay-dark);
           border-left: 2px solid var(--color-green);

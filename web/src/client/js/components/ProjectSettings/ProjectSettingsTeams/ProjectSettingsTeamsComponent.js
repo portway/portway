@@ -63,7 +63,7 @@ const ProjectSettingsTeamsComponent = ({
             <div className="field__control">
               <button
                 type="button"
-                className="btn"
+                className="btn project-settings__team-submit"
                 disabled={newUserId === null}
                 onClick={() => {
                   createAssignmentHandler(newUserId, newUserRole)
@@ -71,8 +71,8 @@ const ProjectSettingsTeamsComponent = ({
                 }}>Add teammate</button>
             </div>
           </div>
-          <ValidationContainer resource="project" value="userId" />
         </div>
+        <ValidationContainer resource="project" value="userId" />
       </section>
       <section>
         <h2>Project team</h2>

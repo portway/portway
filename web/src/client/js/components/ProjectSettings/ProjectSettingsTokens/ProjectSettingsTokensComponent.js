@@ -41,10 +41,10 @@ const ProjectSettingsTokensComponent = ({
   const putEndpointRef = useRef()
   return (
     <div className="project-settings__tokens">
-      <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back">
-        <ArrowIcon direction="left" /> Back to Project
-      </Link>
       <section>
+        <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back">
+          <ArrowIcon direction="left" /> Back to Project
+        </Link>
         <header className="header header--with-button">
           <h2>Project Keys</h2>
           <button className="btn" disabled={createMode} onClick={createModeHandler}>

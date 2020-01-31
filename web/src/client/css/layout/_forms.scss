@@ -87,6 +87,7 @@ input[type='number'] {
 .field-container {
   display: flex;
   flex-direction: column;
+
   margin-bottom: 18px;
 
   @include media('>medium') {
@@ -95,7 +96,10 @@ input[type='number'] {
 
   // Aligns _fields_ in a row
   &--row {
-    flex-direction: row;
+    @include media('>medium') {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   }
 
   &--large {
@@ -141,6 +145,11 @@ input[type='number'] {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: .6rem 0;
+
+  @include media('>medium') {
+    padding: 0;
+  }
 
   &--large {
     width: 100%;
