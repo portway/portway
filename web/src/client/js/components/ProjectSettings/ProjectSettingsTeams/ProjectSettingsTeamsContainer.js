@@ -39,8 +39,9 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   })
 
   let unassignedUsers = []
+
   const searchResults = searchUsers && searchUsers.userSearchResults
-  const resultsOrLoadedUsers = searchResults ? searchResults : loadedUsers.users
+  const resultsOrLoadedUsers = userSearch ? searchResults : loadedUsers.users
   if (resultsOrLoadedUsers) {
     unassignedUsers = Object.values(resultsOrLoadedUsers).filter((user) => {
       if (projectAssignments[user.id]) return
@@ -72,9 +73,7 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   }
 
   function userSearchHandler(partialNameString) {
-    if (partialNameString) {
-      setUserSearch(partialNameString)
-    }
+    setUserSearch(partialNameString)
   }
 
   return (
