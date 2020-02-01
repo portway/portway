@@ -47,7 +47,7 @@ const ProjectSettingsTeamsComponent = ({
                     setNewUserId(null)
                     userSearchHandler(input)
                   }
-                  if (action === 'memnu-close') {
+                  if (action === 'menu-close') {
                     userSearchHandler('')
                   }
                 }, 400)}
