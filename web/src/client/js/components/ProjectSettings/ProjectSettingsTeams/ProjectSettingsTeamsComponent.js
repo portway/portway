@@ -43,9 +43,9 @@ const ProjectSettingsTeamsComponent = ({
                 inputId="team-list"
                 isClearable={true}
                 onInputChange={debounce((input, { action }) => {
-                  if (action === 'input-change') {
+                  if (action === 'input-change' || action === 'menu-close') {
                     setNewUserId(null)
-                    userSearchHandler(input)
+                    userSearchHandler(input || '')
                   }
                 }, 400)}
                 options={users}
