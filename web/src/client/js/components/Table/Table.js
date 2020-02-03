@@ -39,7 +39,7 @@ const Table = ({ className, headings, rows, sortedBy, sortMethod, sortCallback }
   return (
     <section className={tableClasses}>
       <ol className="table__list">
-        <li className="table__row table__heading">
+        <li className="table__heading">
           {renderHeadings()}
         </li>
         {renderRows()}

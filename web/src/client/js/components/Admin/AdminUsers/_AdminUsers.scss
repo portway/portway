@@ -1,4 +1,13 @@
+@import 'CSS/inc/_include-media.scss';
+
 .admin-users {
+  &__seats-warning {
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+    @include media('>medium') {
+      text-align: right;
+    }
+  }
   &__pending-container {
     align-items: center;
     display: flex;
