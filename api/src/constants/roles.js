@@ -156,6 +156,9 @@ export const PROJECT_ROLES = {
       [actions.CREATE]: true,
       [actions.DELETE]: true,
       [actions.UPDATE]: true
+    },
+    [resourceTypes.PROJECT_USER]: {
+      [actions.LIST]: true
     }
   },
   [PROJECT_ROLE_IDS.READER]: {
@@ -165,6 +168,9 @@ export const PROJECT_ROLES = {
     },
     [resourceTypes.DOCUMENT]: {
       [actions.READ]: true,
+      [actions.LIST]: true
+    },
+    [resourceTypes.PROJECT_USER]: {
       [actions.LIST]: true
     }
   }

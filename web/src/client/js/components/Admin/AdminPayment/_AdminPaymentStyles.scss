@@ -1,8 +1,21 @@
+@import 'CSS/inc/_include-media.scss';
+
 .admin-payment {
+  &__date {
+    font-size: 1.3rem;
+  }
   &__method {
+    display: block;
+    margin-bottom: 2rem;
+    @include media('>medium') {
+      align-items: center;
+      display: flex;
+    }
+  }
+  &__card {
     align-items: center;
     display: flex;
-    margin-bottom: 2rem;
+    padding: .6rem;
   }
   &__card-image {
     display: block;
@@ -16,6 +29,11 @@
   &__card-ending {
     font-weight: 700;
     padding: 0 2rem 0 .5rem;
+  }
+  &__exp {
+    align-items: center;
+    display: flex;
+    padding: .6rem;
   }
   &__card-expiration {
     font-weight: 700;

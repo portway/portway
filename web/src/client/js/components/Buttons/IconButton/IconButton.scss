@@ -11,16 +11,29 @@
   width: 26px;
 
   &:not([disabled]) {
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--theme-overlay-dark);
+      }
+    }
     &:active {
       background-color: var(--theme-overlay-light);
     }
   }
 
-  @media (hover: hover) {
-    &:hover {
-      &:not([disabled]) {
-        background-color: var(--theme-overlay-dark);
+  // Colors
+  &--green {
+    background-color: var(--color-green);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-green-dark);
+        }
+      }
+      &:active {
+        background-color: var(--color-green-light);
       }
     }
   }
+
 }

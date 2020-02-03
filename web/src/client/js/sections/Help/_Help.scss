@@ -1,0 +1,44 @@
+@import 'CSS/inc/_include-media.scss';
+
+.help-section {
+
+  .header {
+    h1 {
+      margin: 0;
+    }
+    .pill {
+      margin: 0 calc(var(--icon-margin) * 2);
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 2rem;
+
+    @include media('>medium') {
+      grid-template-columns: 2fr 1fr;
+    }
+
+  }
+
+  &__content {
+    p:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__aside {
+
+    @include media('>medium') {
+      border-left: thin solid var(--theme-border);
+      padding: 0 2rem;
+    }
+
+    h2:first-child {
+      line-height: 2.7rem;
+      margin-top: 0;
+    }
+  }
+
+}

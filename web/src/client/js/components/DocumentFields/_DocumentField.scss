@@ -4,10 +4,12 @@
 .document-field {
   --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
+  --field-data-name-color: hsla(0, 0%, 26%, .5);
   --field-data-background: var(--theme-overflow);
   --field-data-border: var(--color-gray-10);
   --field-dragging-background: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
+    --field-data-name-color: hsla(0, 0%, 100%, .2);
     --field-data-background: var(--theme-overlay-dark);
     --field-data-border: var(--theme-overlay-light);
     --field-dragging-background: var(--theme-base);
@@ -129,7 +131,7 @@
   }
 
   &-label {
-    color: hsla(0, 0%, 26%, .5);
+    color: var(--field-data-name-color);
     font-size: 1.3rem;
     @include media('>medium') {
       margin-bottom: .6rem;

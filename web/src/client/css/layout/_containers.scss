@@ -1,3 +1,9 @@
+.body--with-scrolling {
+  main {
+    overflow-y: auto;
+  }
+}
+
 // Main content container for each section component
 // Based on a 640/768 ratio in Sketch file
 main {

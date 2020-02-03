@@ -87,13 +87,17 @@ const AdminPaymentComponent = ({
       <div className="admin-payment">
         {!isStripeOpen && orgBilling && orgBilling.source.brand &&
         <>
-          <p>You will be billed <b>${cost}</b> on <b>{nextBillingDate.format('MMMM Do, YYYY')}</b></p>
+          <p className="admin-payment__date">You will be billed <b>${cost}</b> on <b>{nextBillingDate.format('MMMM Do, YYYY')}</b></p>
           <div className="admin-payment__method">
             {orgBilling.source.brand !== 'Unknown' && renderCardLogo(orgBilling.source.brand)}
-            <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} ending in</span>
-            <span className="admin-payment__card-ending"> {orgBilling.source.last4}</span>
-            <span>Expires: </span>
-            <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
+            <div className="admin-payment__card">
+              <span className="admin-payment__card-type">{orgBilling.source.brand === 'Unknown' && <>Credit Card </>} Ending in</span>
+              <span className="admin-payment__card-ending"> {orgBilling.source.last4}</span>
+            </div>
+            <div className="admin-payment__exp">
+              <span>Expires: </span>
+              <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
+            </div>
           </div>
           <button className="btn btn--like-a-link" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
         </>
