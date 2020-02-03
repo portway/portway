@@ -30,6 +30,12 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/ngin
 ```
 
 Creates the load balancer:
+**Note:** download the newest version of this file and for Digital Ocean change the below line before applying.
+This fixes a DO networking issue where a pod can't find a local service if that service isn't running on the same node
+```
+externalTrafficPolicy: "Cluster"
+```
+
 ```
  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.24.1/deploy/provider/cloud-generic.yaml
 ```
