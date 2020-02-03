@@ -24,6 +24,7 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   const { data: projectUsers } = useDataService(dataMapper.projects.projectUsers(projectId))
   const { data: currentUser } = useDataService(dataMapper.users.current())
   const { data: projectAssignments } = useDataService(dataMapper.projects.projectAssignments(projectId))
+  const { data: loadedUsers } = useDataService(dataMapper.users.list(1))
   const { data: searchUsers = {} } = useDataService(dataMapper.users.searchByName(userSearch), [userSearch])
 
   if (!currentUser || !projectUsers || !projectAssignments || !Object.keys(project).length) return null
@@ -38,8 +39,11 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   })
 
   let unassignedUsers = []
-  if (searchUsers && searchUsers.userSearchResults) {
-    unassignedUsers = Object.values(searchUsers.userSearchResults).filter((user) => {
+
+  const searchResults = searchUsers && searchUsers.userSearchResults
+  const resultsOrLoadedUsers = userSearch ? searchResults : loadedUsers.users
+  if (resultsOrLoadedUsers) {
+    unassignedUsers = Object.values(resultsOrLoadedUsers).filter((user) => {
       if (projectAssignments[user.id]) return
       return user
     })
@@ -69,9 +73,7 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   }
 
   function userSearchHandler(partialNameString) {
-    if (partialNameString) {
-      setUserSearch(partialNameString)
-    }
+    setUserSearch(partialNameString)
   }
 
   return (
