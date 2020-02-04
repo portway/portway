@@ -9,11 +9,4 @@ items:
   metadata:
     name: audit-log-backup-config
     namespace: default
-- apiVersion: v1
-  data:
-    delete.api_url: 'https://api.portway.app'
-  kind: ConfigMap
-  metadata:
-    name: deleted-org-cleanup-config
-    namespace: default
 kind: List
