@@ -94,6 +94,11 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.redis-url
+        - name: SLACK_WEBHOOK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.slack-webhook-url
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
