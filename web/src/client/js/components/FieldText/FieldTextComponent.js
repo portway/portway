@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
 
+import 'codemirror/addon/display/autorefresh'
 import 'codemirror/addon/edit/continuelist'
 import 'codemirror/mode/gfm/gfm'
 import 'codemirror/mode/javascript/javascript'
@@ -21,6 +22,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
       addModeClass: true,
+      autoRefresh: true,
       dragDrop: false,
       extraKeys: {
         'Enter': 'newlineAndIndentContinueMarkdownList',
