@@ -9,7 +9,7 @@
   --field-data-border: var(--color-gray-10);
   --field-dragging-background: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
-    --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
+    --field-edit-mode-background: hsla(0, 0%, 5%, 90%);
     --field-data-name-color: hsla(0, 0%, 100%, .2);
     --field-data-background: var(--theme-overlay-dark);
     --field-data-border: var(--theme-overlay-light);
@@ -223,7 +223,10 @@
   width: 100%;
 
   &:focus-within {
-    border: thin solid var(--color-blue);
+    border: thin solid var(--color-gray-20);
+    @media (prefers-color-scheme: dark) {
+      border: thin solid var(--color-gray-70);
+    }
   }
 
   &-icon {
