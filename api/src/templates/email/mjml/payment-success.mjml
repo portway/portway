@@ -1,14 +1,14 @@
 <mjml>
 
   <mj-head>
-    
+
     <mj-font name="Domine" href="https://fonts.googleapis.com/css?family=Domine" />
 
     <mj-attributes>
       <mj-text color="#333333" font-family="Domine" />
-      <mj-button background-color="#6ACA65" color="#ffffff" />      
+      <mj-button background-color="#6ACA65" color="#ffffff" />
     </mj-attributes>
-    
+
     <mj-style>
       h1, h2, h3 {
         font-family: Domine;
@@ -78,7 +78,7 @@
     <mj-section>
       <mj-column>
         <mj-text align="center" line-height="18px">
-          Need help? <a href="support@portway.app" style="color: #333;">Email support</a>
+          Need help? <a href="mailto:support@portway.app" style="color: #333;">Email support</a>
        </mj-text>
       </mj-column>
     </mj-section>

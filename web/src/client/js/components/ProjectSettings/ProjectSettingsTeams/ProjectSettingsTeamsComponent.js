@@ -41,14 +41,20 @@ const ProjectSettingsTeamsComponent = ({
                 className="react-select-container"
                 defaultValue={newUserId}
                 inputId="team-list"
+                isClearable={true}
                 onInputChange={debounce((input, { action }) => {
                   if (action === 'input-change') {
                     setNewUserId(null)
                     userSearchHandler(input)
                   }
+                  if (action === 'menu-close') {
+                    userSearchHandler('')
+                  }
                 }, 400)}
                 options={users}
-                onChange={(option) => { setNewUserId(Number(option.value)) }}
+                onChange={(option) => {
+                  option && option.value ? setNewUserId(Number(option.value)) : setNewUserId(null)
+                }}
                 placeholder="Add a person..."
                 ref={selectRef} />
             </div>
@@ -63,7 +69,7 @@ const ProjectSettingsTeamsComponent = ({
             <div className="field__control">
               <button
                 type="button"
-                className="btn"
+                className="btn project-settings__team-submit"
                 disabled={newUserId === null}
                 onClick={() => {
                   createAssignmentHandler(newUserId, newUserRole)
@@ -71,8 +77,8 @@ const ProjectSettingsTeamsComponent = ({
                 }}>Add teammate</button>
             </div>
           </div>
-          <ValidationContainer resource="project" value="userId" />
         </div>
+        <ValidationContainer resource="project" value="userId" />
       </section>
       <section>
         <h2>Project team</h2>

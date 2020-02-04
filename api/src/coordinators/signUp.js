@@ -8,6 +8,7 @@ import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
 import ono from 'ono'
+import slackIntegrator from '../integrators/slack'
 
 const { CLIENT_URL } = process.env
 
@@ -49,6 +50,9 @@ async function createUserAndOrganization(name, email) {
   const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 
   await emailCoordinator.sendSignupVerification(linkUrl, createdUser.email)
+
+  // not awaiting this, sends a notification to slack channel
+  slackIntegrator.sendNotification(`${email} has signed up for Portway`)
 }
 
 export default {

@@ -1,4 +1,4 @@
-# Remove this comment and rename to .yaml
+# Remove this comment and rename to .yaml to re-enable
 ---
 apiVersion: apps/v1
 kind: Deployment

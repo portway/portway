@@ -37,7 +37,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
         </NavLink>
         <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
           <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`} aria-label="Teams">
-            <TeamsIcon /> <span className="label">Teams</span>
+            <TeamsIcon /> <span className="label">Team</span>
           </NavLink>
         </OrgPlanPermission>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`} aria-label="API Keys">

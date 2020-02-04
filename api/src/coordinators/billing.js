@@ -7,6 +7,7 @@ import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
 import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
+import slackIntegrator from '../integrators/slack'
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -254,6 +255,9 @@ const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
   // so only set the canceledAt date on the org if it doesn't already exist
   if (subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE && !org.canceledAt) {
     orgUpdateData.canceledAt = Date.now()
+
+    // not awaiting this, sends a notification to slack channel
+    slackIntegrator.sendNotification(`Organization: ${org.name} has canceled their Portway account`)
   }
 
   const plan = customer.subscriptions.data[0] && customer.subscriptions.data[0].plan.id

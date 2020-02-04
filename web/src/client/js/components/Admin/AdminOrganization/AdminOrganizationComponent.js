@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
+import { MULTI_USER_PLAN_TYPES } from 'Shared/constants'
 import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 
 import './AdminOrganization.scss'
 
@@ -36,19 +38,21 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
           required
           value={organization.name}
         />
-        <FormField
-          errors={errors.privacy}
-          help={helpText}
-          id="orgProjectCreation"
-          label={`Everyone in ${organization.name} can create projects`}
-          large={true}
-          name="organization[allowUserProjectCreation]"
-          onChange={(e) => {
-            setAllowUserProjectCreation(e.target.checked)
-          }}
-          type="checkbox"
-          value={organization.allowUserProjectCreation}
-        />
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+          <FormField
+            errors={errors.privacy}
+            help={helpText}
+            id="orgProjectCreation"
+            label={`Everyone in ${organization.name} can create projects`}
+            large={true}
+            name="organization[allowUserProjectCreation]"
+            onChange={(e) => {
+              setAllowUserProjectCreation(e.target.checked)
+            }}
+            type="checkbox"
+            value={organization.allowUserProjectCreation}
+          />
+        </OrgPlanPermission>
       </Form>
     </section>
   )

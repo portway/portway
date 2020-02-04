@@ -3,6 +3,11 @@ import PropTypes from 'prop-types'
 
 import 'CSS/app.scss'
 
+// https://github.com/Bernardo-Castilho/dragdroptouch
+if ('ontouchstart' in document.documentElement) {
+  import('Utilities/DragDropTouch')
+}
+
 const App = ({ children, history, routeChange }) => {
   useEffect(() => {
     const appElement = document.getElementById('application')
