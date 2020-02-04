@@ -11,6 +11,7 @@ import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import emailCoordinator from '../coordinators/email'
 import billingCoordinator from './billing'
+import slackIntegrator from '../integrators/slack'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
@@ -56,6 +57,9 @@ async function setInitialPassword(id, password) {
     user.orgId)
 
   const token = tokenIntegrator.generateToken(user.id, user.orgRoleId, user.orgId)
+
+  // not awaiting this, sends a notification to slack channel
+  slackIntegrator.sendNotification(`${user.email} has verified their account`)
 
   return token
 }
