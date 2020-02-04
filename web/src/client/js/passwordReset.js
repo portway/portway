@@ -49,12 +49,7 @@ const PasswordResetForm = () => {
   )
 }
 
-function renderPasswordResetPage() {
-  const passwordResetDom = document.querySelector('#passwordResetForm')
-  render(<PasswordResetForm />, passwordResetDom)
-}
-
-window.addEventListener('load', renderPasswordResetPage, false)
+render(<PasswordResetForm />, document.querySelector('#passwordResetForm'))
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept()

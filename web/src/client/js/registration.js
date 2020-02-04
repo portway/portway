@@ -50,12 +50,7 @@ const RegistrationForm = () => {
   )
 }
 
-function renderRegistrationPage() {
-  const registrationDom = document.querySelector('#registrationForm')
-  render(<RegistrationForm />, registrationDom)
-}
-
-window.addEventListener('load', renderRegistrationPage, false)
+render(<RegistrationForm />, document.querySelector('#registrationForm'))
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
   module.hot.accept()
