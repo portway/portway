@@ -36,6 +36,7 @@ const DocumentFieldsComponent = ({
     return field.type === FIELD_TYPES.TEXT
   })
   const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+  const documentEditMode = documentMode === DOCUMENT_MODE.EDIT
 
   const bigInvisibleButton = (
     <li className="document-field" key="bib">
@@ -66,6 +67,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
+            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -77,6 +79,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
+            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -88,6 +91,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
+            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -100,6 +104,7 @@ const DocumentFieldsComponent = ({
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
+            editMode={documentEditMode}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
@@ -124,6 +129,7 @@ const DocumentFieldsComponent = ({
           index={index}
           isDragging={isDragging}
           isNewField={createdFieldId === field.id}
+          isUpdating={fieldsUpdating[field.id]}
           key={field.id}
           onDestroy={() => { fieldDestroyHandler(field.id, field.type) }}
           onRename={fieldRenameHandler}
@@ -155,7 +161,7 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
-    'document__fields--edit-mode': documentMode === DOCUMENT_MODE.EDIT,
+    'document__fields--edit-mode': documentEditMode,
     'document__fields--is-dragging': isDragging,
     'document__fields--disabled': isPublishing || disabled
   })
