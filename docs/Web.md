@@ -24,7 +24,11 @@ Alternatively, you can run `npm run analyze`, however note step #2.
 
 ## Production, local
 
-1. First, you'll want to run the API in its Docker container, using docker-compose.
+1. First, you'll want to rebuild the API with no cache, so it doesn't complain about missing modules
+    ```bash
+    docker-compose build --no-cache api
+    ```
+1. Second, you'll want to run the API in its Docker container, using docker-compose.
     ```bash
     docker-compose run --service-ports api ./wait-for.sh db:5432 -- ./run.sh devstart
     ```
