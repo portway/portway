@@ -29,15 +29,15 @@ class EntryPointPlugin {
           const siblingCssFiles = []
           if (bundle.siblings.length > 0) {
             const siblings = bundle.siblings
-
             siblings.forEach((sibling) => {
               const siblingFullFile = webpackStats.find(b => b.id === sibling)
-              const siblingFile = siblingFullFile.files[0]
-              if (CSS_REGEX_FUNC(siblingFile)) {
-                siblingCssFiles.push(siblingFile)
-              } else if (JS_REGEX_FUNC(siblingFile)) {
-                siblingJsFiles.push(siblingFile)
-              }
+              siblingFullFile.files.forEach((siblingFile) => {
+                if (CSS_REGEX_FUNC(siblingFile)) {
+                  siblingCssFiles.push(siblingFile)
+                } else if (JS_REGEX_FUNC(siblingFile)) {
+                  siblingJsFiles.push(siblingFile)
+                }
+              })
             })
           }
           const name = bundle.names[0]
