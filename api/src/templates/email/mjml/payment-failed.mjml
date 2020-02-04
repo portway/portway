@@ -76,7 +76,7 @@
     <mj-section>
       <mj-column>
         <mj-text align="center" line-height="18px">
-          Need help? <a href="support@portway.app" style="color: #333;">Email support</a>
+          Need help? <a href="mailto:support@portway.app" style="color: #333;">Email support</a>
        </mj-text>
       </mj-column>
     </mj-section>
