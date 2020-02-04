@@ -18,16 +18,11 @@ spec:
             env:
             - name: ADMIN_API_KEY
               valueFrom:
-                secretKeyRef:
-                  name: deleted-org-cleanup
-                  key: admin_api_key
-            - name: LOG_ID
-              valueFrom:
-                secretKeyRef:
-                  name: deleted-org-cleanup
-                  key: log_id
+              secretKeyRef:
+                name: admin-secrets
+                key: admin_secret_key
             - name: API_URL
               valueFrom:
-                configMapKeyRef:
-                  name: deleted-org-cleanup-config
-                  key: delete.api_url
+              configMapKeyRef:
+                name: web-config
+                key: web.api_url
