@@ -1,5 +1,10 @@
 @import 'CSS/inc/_include-media.scss';
 
+// Hack for AdminNotices taking up space it shouldn't
+.section--plans {
+  padding-top: 0;
+}
+
 .admin-plans-selector {
 
   &--disabled {

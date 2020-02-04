@@ -7,18 +7,20 @@ certIssuer: letsencrypt-prod
 
 baseUrl: portway.app
 apiPublicUrl: api.portway.app
+docsUrl: docs.portway.app
 apiPort: "3001"
 redisPort: "6379"
 
 stripePublishableKey: "pk_live_aZuMG4Z30RhPg54H8JFQOEKJ"
 
 apiImage: bonkeybong/portway_api
-apiTag: "0.9.1"
+apiTag: "0.12.1"
 
 webImage: bonkeybong/portway_web
-webTag: "0.9.1"
+webTag: "0.12.1"
 
 web:
+  port: "3000"
   flagDisableSignup: "true"
 
 api:
@@ -33,9 +35,15 @@ db:
   name: "defaultdb"
   useSsl: "true"
 
+docs:
+  image: 'bonkeybong/portway_docs'
+  tag: 'latest'
+  port: "3003"
+
 serviceNames:
   api: api
   web: web
   db: db
   redis: redis
+  docs: docs
 

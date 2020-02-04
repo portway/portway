@@ -52,6 +52,7 @@
     "pretty-quick": "^1.10.0"
   },
   "dependencies": {
+    "@slack/webhook": "^5.0.2",
     "aws-sdk": "^2.463.0",
     "bcrypt": "^3.0.6",
     "bignumber.js": "^8.1.1",

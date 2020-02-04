@@ -4,6 +4,7 @@ import billingCoordinator from '../coordinators/billing'
 import emailCoordinator from '../coordinators/email'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
+import slackIntegrator from '../integrators/slack'
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -20,6 +21,8 @@ async function handleEvent(event) {
     case 'charge.succeeded': {
       // No need to await webhook
       emailCoordinator.sendPaymentSuccess(customer.email)
+      // not awaiting this, sends a notification to slack channel
+      slackIntegrator.sendNotification(`:moneybag: ${customer.email} was successfully charged :moneybag:`)
       break
     }
     case 'customer.subscription.deleted': {

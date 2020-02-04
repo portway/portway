@@ -82,9 +82,6 @@ form {
         outline: none;
       }
     }
-    &__indicators {
-      display: none;
-    }
     &__placeholder {
       color: var(--react-select-placeholder-color);
       + div {

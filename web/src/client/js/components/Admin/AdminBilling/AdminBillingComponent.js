@@ -18,13 +18,13 @@ const AdminBillingComponent = ({ organization }) => {
     ORG_SUBSCRIPTION_STATUS.INACTIVE,
   ]
   const sectionClasses = cx({
-    'section--disabled': disabledSubscriptionStatuses.includes(organization.subscriptionStatus)
+    ' section--disabled': disabledSubscriptionStatuses.includes(organization.subscriptionStatus)
   })
 
   return (
     <>
       <AdminNoticesContainer />
-      <section id="plans" className={sectionClasses}>
+      <section id="plans" className={`section--plans${sectionClasses}`}>
         <AdminPlanSelectorContainer />
       </section>
       <hr />
