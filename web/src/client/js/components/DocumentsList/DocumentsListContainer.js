@@ -61,6 +61,8 @@ const DocumentsListContainer = ({
     return null
   }
 
+  if (loading == null) { return null}
+
   function createDocumentAction(value) {
     createDocument(projectId, history, {
       name: value

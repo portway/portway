@@ -95,8 +95,6 @@ const DocumentsListComponent = ({
     'documents-list--dragged-over': dragActive
   })
 
-  console.log(loading, documents)
-
   return (
     <div
       className={classes}
