@@ -9,6 +9,7 @@
   --field-data-border: var(--color-gray-10);
   --field-dragging-background: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
+    --field-edit-mode-background: hsla(0, 0%, 5%, 90%);
     --field-data-name-color: hsla(0, 0%, 100%, .2);
     --field-data-background: var(--theme-overlay-dark);
     --field-data-border: var(--theme-overlay-light);
@@ -58,6 +59,11 @@
     }
   }
 
+  // Edit mode is when the document is in edit mode, we are changing
+  // every field to an outline UI
+  // &--edit-mode {
+  // }
+
 } // document-field
 
 
@@ -65,6 +71,9 @@
 // get a top border so they look more like a table
 .document-field--data + .document-field--data {
   margin-top: 0;
+  &.document-field--edit-mode {
+    margin-top: 2.4rem;
+  }
   .document-field__container {
     border-top: none;
   }
@@ -100,15 +109,24 @@
     border: thin solid var(--field-data-border);
     display: flex;
     flex-direction: column;
-
     @include media('>medium') {
       flex-direction: row;
     }
-
     input {
       background-color: transparent;
     }
+  }
 
+  // Edit mode is when the document is in edit mode, we are changing
+  // every field to an outline UI
+  .document-field--edit-mode & {
+    background-color: var(--field-edit-mode-background);
+    border-radius: var(--border-radius);
+    border: none;
+    height: 4.4rem;
+    .document-field__content {
+      display: none;
+    }
   }
 
 } // document-field__container
@@ -196,6 +214,42 @@
 
 } // document-field__content
 
+
+.document-field__outline {
+  align-items: center;
+  border: thin solid transparent;
+  display: flex;
+  padding: 0 .6rem;
+  width: 100%;
+
+  &:focus-within {
+    border: thin solid var(--color-gray-20);
+    @media (prefers-color-scheme: dark) {
+      border: thin solid var(--color-gray-70);
+    }
+  }
+
+  &-icon {
+    margin: 0 var(--icon-margin);
+  }
+
+  &-name {
+    flex: 1;
+  }
+
+  input {
+    min-width: 50%;
+    .using-mouse & {
+      &:focus {
+        border: none;
+      }
+    }
+  }
+}
+
+// This is the invisible big button at the bottom of the document that only
+// appears if the last field is NOT a text field
+// This is for tricky "pretend" document body behavior
 .document-field__invisible-button {
   cursor: text;
   height: 88px;
