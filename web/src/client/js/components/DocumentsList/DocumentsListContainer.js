@@ -20,7 +20,7 @@ import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
-import NoProject from './NoProject'
+import NoProject from '../Pages/NoProject'
 
 const DocumentsListContainer = ({
   clearSearch,
@@ -43,24 +43,21 @@ const DocumentsListContainer = ({
   const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [projectId])
   const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  let readOnly = null
-  if (assignmentsLoading === false) {
-    readOnly = projectAssignments[projectId] === undefined || projectAssignments[projectId].role === PROJECT_ROLE_IDS.READER
-  }
-
   // trigger clear search action if project id changes
   useEffect(() => {
     clearSearch()
   }, [projectId, clearSearch])
 
-  // project id isn't a number, redirect to 404 page
-  if (projectId && isNaN(projectId)) {
-    return <NoProject />
+  // readOnly means the user has READ only access, or it is a public project with no direct assignment
+  // readOnly does NOT mean edit mode / outline mode
+  let readOnly = false
+  if (assignmentsLoading === false) {
+    readOnly = projectAssignments[projectId] === undefined || projectAssignments[projectId].role === PROJECT_ROLE_IDS.READER
   }
 
   // documents are done loading for project, but they aren't populated, assume 404 and redirect
   if (loading === false && !documents) {
-    return <NoProject />
+    return null
   }
 
   function createDocumentAction(value) {

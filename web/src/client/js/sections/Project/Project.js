@@ -10,9 +10,10 @@ import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarCon
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
 import DocumentContainer from 'Components/Document/DocumentContainer'
 import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbarContainer'
+import NoProject from 'Components/Pages/NoProject'
 
 const Project = ({ isFullScreen }) => {
-  const { documentId } = useParams()
+  const { documentId, projectId } = useParams()
   const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
   const isCreateDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/${PATH_DOCUMENT_NEW_PARAM}`)
   const isDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/:documentId`)
@@ -52,6 +53,11 @@ const Project = ({ isFullScreen }) => {
       window.removeEventListener('ondrop', bodyDragHandler, false)
     }
   })
+
+  // project id isn't a number, redirect to 404 page
+  if (projectId && isNaN(projectId)) {
+    return <NoProject />
+  }
 
   return (
     <>
