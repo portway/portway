@@ -18,8 +18,8 @@ const defaultDocument = {
 }
 
 const DocumentContainer = ({
+  createMode,
   documentMode,
-  isCreating,
   isFullScreen,
   location,
   match,
@@ -39,7 +39,7 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (isCreating || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
+  if (createMode || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
   }
 
@@ -118,9 +118,9 @@ const DocumentContainer = ({
 }
 
 DocumentContainer.propTypes = {
+  createMode: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
   fields: PropTypes.object,
-  isCreating: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
@@ -131,9 +131,9 @@ DocumentContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    createMode: state.ui.documents.createMode,
     documentMode: state.ui.document.documentMode,
     fields: state.documentFields[state.documents.currentDocumentId],
-    isCreating: state.ui.documents.creating,
     isFullScreen: state.ui.document.isFullScreen
   }
 }

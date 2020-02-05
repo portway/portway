@@ -15,9 +15,10 @@ const initialState = {
     isFullScreen: false,
   },
   documents: {
-    creating: false, // we are in create mode
+    createMode: false, // we are in create mode
     isCreating: false, // we are actually creating the document, progress
     isPublishing: false,
+    isSearching: false,
   },
   fields: {
     disabled: false,
@@ -100,6 +101,26 @@ export const ui = (state = initialState, action) => {
       const { id } = action.data
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [id]: false }
       return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+
+    // Document search list
+    case ActionTypes.INITIATE_DOCUMENT_SEARCH: {
+      return {
+        ...state,
+        documents: {
+          ...state.documents,
+          isSearching: true
+        }
+      }
+    }
+    case ActionTypes.SEARCH_CLEAR: {
+      return {
+        ...state,
+        documents: {
+          ...state.documents,
+          isSearching: false
+        }
+      }
     }
 
     // Disable document fields
