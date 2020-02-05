@@ -25,13 +25,15 @@ const DocumentsListContainer = ({
   clearSearch,
   copyField,
   createDocument,
+  createMode,
   deleteDocument,
   documentFields,
+  isCreating,
+  isSearching,
   moveField,
   searchDocuments,
   searchResults,
   searchTerm,
-  ui,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
@@ -65,7 +67,7 @@ const DocumentsListContainer = ({
     })
   }
 
-  function createDocumentHandler(value) {
+  function toggleCreateMode(value) {
     if (value === false) {
       history.push({ pathname: `${PATH_PROJECT}/${projectId}` })
     } else {
@@ -159,16 +161,16 @@ const DocumentsListContainer = ({
   return (
     <DocumentsListComponent
       clearSearchHandler={clearSearchHandler}
-      createCallback={createDocumentHandler}
-      createChangeHandler={createDocumentAction}
-      creating={ui.documents.creating || documentId === PATH_DOCUMENT_NEW_PARAM}
+      toggleCreateMode={toggleCreateMode}
+      createDocumentHandler={createDocumentAction}
+      createMode={createMode || documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedSearchResults ? sortedSearchResults : sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
-      isCreating={ui.documents.isCreating}
+      isCreating={isCreating}
+      isSearching={isSearching}
       loading={loading || assignmentsLoading}
-      projectId={Number(projectId)}
       readOnly={readOnly}
       removeDocumentHandler={removeDocumentHandler}
       searchDocumentsHandler={searchDocumentsHandler}
@@ -181,13 +183,15 @@ DocumentsListContainer.propTypes = {
   clearSearch: PropTypes.func,
   copyField: PropTypes.func.isRequired,
   createDocument: PropTypes.func.isRequired,
+  createMode: PropTypes.bool.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
+  isCreating: PropTypes.bool.isRequired,
+  isSearching: PropTypes.bool.isRequired,
   moveField: PropTypes.func.isRequired,
   searchDocuments: PropTypes.func.isRequired,
   searchResults: PropTypes.object,
   searchTerm: PropTypes.string,
-  ui: PropTypes.object.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
   unpublishDocument: PropTypes.func.isRequired,
@@ -195,8 +199,10 @@ DocumentsListContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    ui: state.ui,
+    createMode: state.ui.documents.createMode,
     documentFields: state.documentFields.documentFieldsById,
+    isCreating: state.ui.documents.isCreating,
+    isSearching: state.ui.documents.isSearching,
     searchResults: state.search.searchResultsByDocumentId,
     searchTerm: state.search.searchTerm,
   }
