@@ -36,6 +36,8 @@ const DocumentsListComponent = ({
   searchDocumentsHandler,
   unpublishDocumentHandler,
 }) => {
+  const isLoading = loading && documents.length === 0
+
   // Keep track of how many things being dragged
   let dragCount = 0
 
@@ -93,6 +95,8 @@ const DocumentsListComponent = ({
     'documents-list--dragged-over': dragActive
   })
 
+  console.log(loading, documents)
+
   return (
     <div
       className={classes}
@@ -119,7 +123,7 @@ const DocumentsListComponent = ({
           }
         </ProjectPermission>
       </header>
-      {loading &&
+      {isLoading &&
       <div className="documents-list__loading-state">
         <SpinnerComponent color="var(--theme-overlay-dark)" />
       </div>
