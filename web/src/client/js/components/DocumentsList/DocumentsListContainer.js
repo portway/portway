@@ -20,19 +20,20 @@ import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
-import NoProject from './NoProject'
 
 const DocumentsListContainer = ({
   clearSearch,
   copyField,
   createDocument,
+  createMode,
   deleteDocument,
   documentFields,
+  isCreating,
+  isSearching,
   moveField,
   searchDocuments,
   searchResults,
   searchTerm,
-  ui,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
@@ -43,25 +44,24 @@ const DocumentsListContainer = ({
   const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [projectId])
   const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  let readOnly = null
-  if (assignmentsLoading === false) {
-    readOnly = projectAssignments[projectId] === undefined || projectAssignments[projectId].role === PROJECT_ROLE_IDS.READER
-  }
-
   // trigger clear search action if project id changes
   useEffect(() => {
     clearSearch()
   }, [projectId, clearSearch])
 
-  // project id isn't a number, redirect to 404 page
-  if (projectId && isNaN(projectId)) {
-    return <NoProject />
+  // readOnly means the user has READ only access, or it is a public project with no direct assignment
+  // readOnly does NOT mean edit mode / outline mode
+  let readOnly = false
+  if (assignmentsLoading === false) {
+    readOnly = projectAssignments[projectId] === undefined || projectAssignments[projectId].role === PROJECT_ROLE_IDS.READER
   }
 
   // documents are done loading for project, but they aren't populated, assume 404 and redirect
   if (loading === false && !documents) {
-    return <NoProject />
+    return null
   }
+
+  if (loading == null) { return null}
 
   function createDocumentAction(value) {
     createDocument(projectId, history, {
@@ -69,7 +69,7 @@ const DocumentsListContainer = ({
     })
   }
 
-  function createDocumentHandler(value) {
+  function toggleCreateMode(value) {
     if (value === false) {
       history.push({ pathname: `${PATH_PROJECT}/${projectId}` })
     } else {
@@ -163,16 +163,16 @@ const DocumentsListContainer = ({
   return (
     <DocumentsListComponent
       clearSearchHandler={clearSearchHandler}
-      createCallback={createDocumentHandler}
-      createChangeHandler={createDocumentAction}
-      creating={ui.documents.creating || documentId === PATH_DOCUMENT_NEW_PARAM}
+      toggleCreateMode={toggleCreateMode}
+      createDocumentHandler={createDocumentAction}
+      createMode={createMode || documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedSearchResults ? sortedSearchResults : sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
-      isCreating={ui.documents.isCreating}
+      isCreating={isCreating}
+      isSearching={isSearching}
       loading={loading || assignmentsLoading}
-      projectId={Number(projectId)}
       readOnly={readOnly}
       removeDocumentHandler={removeDocumentHandler}
       searchDocumentsHandler={searchDocumentsHandler}
@@ -185,13 +185,15 @@ DocumentsListContainer.propTypes = {
   clearSearch: PropTypes.func,
   copyField: PropTypes.func.isRequired,
   createDocument: PropTypes.func.isRequired,
+  createMode: PropTypes.bool.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
+  isCreating: PropTypes.bool.isRequired,
+  isSearching: PropTypes.bool.isRequired,
   moveField: PropTypes.func.isRequired,
   searchDocuments: PropTypes.func.isRequired,
   searchResults: PropTypes.object,
   searchTerm: PropTypes.string,
-  ui: PropTypes.object.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
   unpublishDocument: PropTypes.func.isRequired,
@@ -199,8 +201,10 @@ DocumentsListContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    ui: state.ui,
+    createMode: state.ui.documents.createMode,
     documentFields: state.documentFields.documentFieldsById,
+    isCreating: state.ui.documents.isCreating,
+    isSearching: state.ui.documents.isSearching,
     searchResults: state.search.searchResultsByDocumentId,
     searchTerm: state.search.searchTerm,
   }
