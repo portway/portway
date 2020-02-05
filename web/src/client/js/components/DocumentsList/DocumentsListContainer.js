@@ -20,7 +20,6 @@ import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
 import DocumentsListComponent from './DocumentsListComponent'
-import NoProject from '../Pages/NoProject'
 
 const DocumentsListContainer = ({
   clearSearch,
