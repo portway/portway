@@ -3,7 +3,17 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
-import { DragIcon, RemoveIcon, SettingsIcon, TrashIcon } from 'Components/Icons'
+import {
+  DragIcon,
+  ImageIcon,
+  NumberIcon,
+  RemoveIcon,
+  SettingsIcon,
+  StringIcon,
+  TextIcon,
+  TrashIcon
+} from 'Components/Icons'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -20,6 +30,7 @@ const DocumentFieldComponent = ({
   field,
   index,
   isNewField,
+  isUpdating,
   onDestroy,
   onRename,
   readOnly,
@@ -36,27 +47,33 @@ const DocumentFieldComponent = ({
   }, [isNewField])
 
   const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE
+  const documentEditMode = documentMode === DOCUMENT_MODE.EDIT
 
   const fieldClasses = cx({
     'document-field': true,
     'document-field--new': isNewField,
-    'document-field--edit-mode': documentMode === DOCUMENT_MODE.EDIT,
     'document-field--data': dataField,
     'document-field--text': field.type === FIELD_TYPES.TEXT,
     'document-field--number': field.type === FIELD_TYPES.NUMBER,
     'document-field--string': field.type === FIELD_TYPES.STRING,
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--settings-mode': settingsMode,
+    'document-field--edit-mode': documentEditMode,
   })
 
   const fieldToolClasses = cx({
     'document-field__tools': true,
-    'document-field__tools--visible': documentMode === DOCUMENT_MODE.EDIT,
+    'document-field__tools--visible': documentEditMode,
   })
 
   const fieldActionClasses = cx({
     'document-field__actions': true,
-    'document-field__actions--visible': documentMode === DOCUMENT_MODE.EDIT,
+    'document-field__actions--visible': documentEditMode,
+  })
+
+  const fieldContainerClasses = cx({
+    'document-field__container': true,
+    'document-field__container--edit-mode': documentEditMode,
   })
 
   const fieldLabels = {
@@ -64,6 +81,13 @@ const DocumentFieldComponent = ({
     [FIELD_TYPES.STRING]: 'String',
     [FIELD_TYPES.NUMBER]: 'Number',
     [FIELD_TYPES.IMAGE]: 'Photo',
+  }
+
+  const fieldIcons = {
+    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--color-gray-40)" />,
+    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" fill="var(--color-gray-40)" />,
+    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" fill="var(--color-gray-40)" />,
+    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" fill="var(--color-gray-40)" />,
   }
 
   // Field name handling
@@ -93,7 +117,7 @@ const DocumentFieldComponent = ({
       <div className="document-field__component">
 
         <div className={fieldToolClasses}>
-          {!readOnly &&
+          {documentEditMode &&
           <div className="document-field__dragger">
             <button
               aria-label="Reorder field by dragging"
@@ -107,8 +131,32 @@ const DocumentFieldComponent = ({
           }
         </div>
 
-        <div className="document-field__container">
-          {dataField &&
+        <div className={fieldContainerClasses}>
+          {documentEditMode &&
+          <div className="document-field__outline">
+            <div className="document-field__outline-icon">{fieldIcons[field.type]}</div>
+            <div className="document-field__outline-name">
+              <input
+                defaultValue={field.name}
+                maxLength={fieldNameMaxLength}
+                onKeyDown={(e) => {
+                  if (e.key.toLowerCase() === 'escape') {
+                    e.target.blur()
+                    return
+                  }
+                }}
+                onChange={(e) => { onRename(field.id, e.target.value) }}
+                type="text" />
+            </div>
+            <div className="document-field__outline-status">
+              {isUpdating &&
+              <SpinnerComponent />
+              }
+            </div>
+          </div>
+          }
+
+          {dataField && !documentEditMode &&
           <div className="document-field__name">
             <span className="document-field__name-label">{fieldLabels[field.type]}</span>
             <input
@@ -153,7 +201,7 @@ const DocumentFieldComponent = ({
         </div>
 
         <div className={fieldActionClasses}>
-          {!readOnly &&
+          {documentEditMode &&
           <button aria-label="Remove field" className="btn btn--blank btn--red btn--with-circular-icon" onClick={onDestroy}>
             <TrashIcon fill="#ffffff" />
           </button>
@@ -176,6 +224,7 @@ DocumentFieldComponent.propTypes = {
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,
+  isUpdating: PropTypes.bool,
   onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,

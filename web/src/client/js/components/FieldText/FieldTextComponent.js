@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
 
+import 'codemirror/addon/display/autorefresh'
 import 'codemirror/addon/edit/continuelist'
 import 'codemirror/mode/gfm/gfm'
 import 'codemirror/mode/javascript/javascript'
@@ -21,6 +22,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
       addModeClass: true,
+      autoRefresh: true,
       dragDrop: false,
       extraKeys: {
         'Enter': 'newlineAndIndentContinueMarkdownList',
@@ -54,10 +56,12 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
       editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current) })
-      // if (field.id === autoFocusElement) {
-      //   editorRef.current.focus()
-      //   editorRef.current.setCursor(editorRef.current.lineCount(), 0)
-      // }
+      if (field.id === autoFocusElement) {
+        window.requestAnimationFrame(() => {
+          editorRef.current.focus()
+        })
+        // editorRef.current.setCursor(editorRef.current.lineCount(), 0)
+      }
     }
   // We're disabling the dependency here because adding field.id or onChange here
   // will cause a bunch of API hits

@@ -16,9 +16,11 @@ function useClickOutside(ref, callback, options = {}) {
         callback()
       }
     }
-    document.addEventListener('mousedown', mouseDownHandler, false)
-    if (!options.preventEscapeFunctionality) {
-      document.addEventListener('keydown', keyDownHandler, false)
+    if (ref && ref.current) {
+      document.addEventListener('mousedown', mouseDownHandler, false)
+      if (!options.preventEscapeFunctionality) {
+        document.addEventListener('keydown', keyDownHandler, false)
+      }
     }
     return () => {
       document.removeEventListener('mousedown', mouseDownHandler, false)

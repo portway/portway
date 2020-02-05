@@ -14,10 +14,10 @@ redisPort: "6379"
 stripePublishableKey: "pk_live_aZuMG4Z30RhPg54H8JFQOEKJ"
 
 apiImage: bonkeybong/portway_api
-apiTag: "0.12.1"
+apiTag: "0.12.5"
 
 webImage: bonkeybong/portway_web
-webTag: "0.12.1"
+webTag: "0.12.5"
 
 web:
   port: "3000"
@@ -37,7 +37,7 @@ db:
 
 docs:
   image: 'bonkeybong/portway_docs'
-  tag: 'latest'
+  tag: '1.0.1'
   port: "3003"
 
 serviceNames:

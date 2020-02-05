@@ -1,15 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import Constants from 'Shared/constants'
-import useClickOutside from 'Hooks/useClickOutside'
-import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
-import { AddIcon, RemoveIcon, SearchIcon, DocumentIcon } from 'Components/Icons'
+import { AddIcon, DocumentIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
-import DocumentsListItem from './DocumentsListItem'
+
+import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
+
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
+import DocumentsListItem from './DocumentsListItem'
+import DocumentsListCreateItem from './DocumentsListCreateItem'
+import DocumentsListSearchField from './DocumentsListSearchField'
 
 import './_DocumentsList.scss'
 
@@ -18,137 +21,30 @@ const ALLOWED_FILES = ['text/markdown', 'text/plain']
 
 const DocumentsListComponent = ({
   clearSearchHandler,
-  createCallback,
-  createChangeHandler,
-  creating,
+  toggleCreateMode,
+  createDocumentHandler,
+  createMode,
   documents,
   draggedDocumentHandler,
   fieldCopyHandler,
   fieldMoveHandler,
   isCreating,
+  isSearching,
   loading,
-  projectId,
   readOnly,
   removeDocumentHandler,
   searchDocumentsHandler,
   unpublishDocumentHandler,
 }) => {
+  const isLoading = loading && documents.length === 0
+
   // Keep track of how many things being dragged
   let dragCount = 0
 
-  const [isSearching, setIsSearching] = useState(false)
   const [dragActive, setDragActive] = useState(false)
-  const searchFieldRef = useRef()
-  const listItemRef = useRef()
-  const nameRef = useRef()
 
   // Ctrl-n creates a new document
-  useKeyboardShortcut('n', () => createCallback(true))
-  useKeyboardShortcut('f', () => {
-    searchFieldRef.current.focus()
-    setIsSearching(true)
-  })
-
-  useClickOutside(
-    listItemRef,
-    () => { if (creating) { createDocument() } },
-    { preventEscapeFunctionality: true }
-  )
-
-  // Select the contents of the contentEditable div (new document name)
-  useEffect(() => {
-    if (creating && nameRef.current && !isCreating) {
-      nameRef.current.select()
-    }
-  })
-
-  // Reset search box if the project id changes
-  useEffect(() => {
-    setIsSearching(false)
-    if (searchFieldRef.current) {
-      searchFieldRef.current.value = ''
-    }
-  }, [projectId])
-
-  function createDocument() {
-    if (nameRef.current.value !== Constants.LABEL_NEW_DOCUMENT) {
-      createChangeHandler(nameRef.current.value)
-    } else {
-      createCallback(false)
-    }
-  }
-
-  function clearOutSearch() {
-    setIsSearching(false)
-    searchFieldRef.current.value = ''
-    clearSearchHandler()
-  }
-
-  function renderNewDocument() {
-    if (creating) {
-      return (
-        <li className="documents-list__item documents-list__item--new" ref={listItemRef}>
-          <div className="documents-list__button">
-            <input
-              className="documents-list__name"
-              defaultValue={Constants.LABEL_NEW_DOCUMENT}
-              disabled={isCreating}
-              name="newDocument"
-              onKeyDown={(e) => {
-                if (e.keyCode === 27) {
-                  e.preventDefault()
-                  createCallback(false)
-                }
-                if (e.key.toLowerCase() === 'enter') {
-                  e.preventDefault()
-                  createChangeHandler(e.target.value)
-                }
-              }}
-              ref={nameRef}
-              type="text"
-            />
-            {isCreating && <SpinnerComponent color={colorOverlayDark} />}
-            <button
-              aria-label="Cancel creating document"
-              className="btn btn--blank"
-              disabled={isCreating}
-              onClick={() => { createCallback(false) }}
-            >
-              <RemoveIcon width="12" height="12" />
-            </button>
-            <IconButton
-              aria-label="Create the document"
-              color="green"
-              disabled={isCreating}
-              onClick={() => {
-                createChangeHandler(nameRef.current.value)
-              }}
-            >
-              <AddIcon fill="#ffffff" />
-            </IconButton>
-          </div>
-        </li>
-      )
-    }
-  }
-
-  function renderDocumentsList() {
-    if (documents.length === 0) return null
-    return documents.map((doc, index) => {
-      return (
-        <DocumentsListItem
-          disable={creating}
-          disableDragging={dragActive}
-          document={doc}
-          fieldCopyHandler={fieldCopyHandler}
-          fieldMoveHandler={fieldMoveHandler}
-          key={`d-${doc.id}-${index}`}
-          removeDocumentHandler={removeDocumentHandler}
-          unpublishDocumentHandler={unpublishDocumentHandler}
-        />
-      )
-    })
-  }
+  useKeyboardShortcut('n', () => toggleCreateMode(true))
 
   function dragEnterHandler(e) {
     e.preventDefault()
@@ -195,17 +91,9 @@ const DocumentsListComponent = ({
 
   const classes = cx({
     'documents-list': true,
-    'documents-list--creating': creating,
+    'documents-list--creating': createMode,
     'documents-list--dragged-over': dragActive
   })
-
-  const searchClasses = cx({
-    'documents-list__search': true,
-    'documents-list__search--disabled': creating,
-  })
-
-  const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
-  const colorOverlayDark = getComputedStyle(document.documentElement).getPropertyValue('--theme-overlay-dark')
 
   return (
     <div
@@ -215,33 +103,17 @@ const DocumentsListComponent = ({
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
       <header className="documents-list__header">
-        <div className={searchClasses}>
-          <div className="documents-list__search-field">
-            <SearchIcon />
-            <input
-              // eslint-disable-next-line jsx-a11y/no-autofocus
-              onChange={(e) => {
-                if (!isSearching) {
-                  setIsSearching(true)
-                }
-                searchDocumentsHandler(e.target.value)
-              }}
-              onKeyDown={(e) => {
-                if (e.key.toLowerCase() === 'escape') {
-                  clearOutSearch()
-                }
-              }}
-              placeholder="Search documents..."
-              ref={searchFieldRef}
-              type="search"
-            />
-          </div>
-        </div>
+        <DocumentsListSearchField
+          clearSearchHandler={clearSearchHandler}
+          disabled={createMode}
+          searchDocumentsHandler={searchDocumentsHandler}
+        />
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
-          {!creating &&
+          {!createMode &&
           <IconButton
             aria-label="New document"
-            onClick={() => { createCallback(true) }}
+            disabled={isSearching}
+            onClick={() => { toggleCreateMode(true) }}
             title="Create a new document in this project"
           >
             <AddIcon width="14" height="14" />
@@ -249,16 +121,16 @@ const DocumentsListComponent = ({
           }
         </ProjectPermission>
       </header>
-      {loading &&
+      {isLoading &&
       <div className="documents-list__loading-state">
-        <SpinnerComponent color={colorOverlayDark} />
+        <SpinnerComponent color="var(--theme-overlay-dark)" />
       </div>
       }
-      {documents.length === 0 && loading === false && !creating && !isSearching &&
+      {documents.length === 0 && loading === false && !createMode && !isSearching &&
       <div className="documents-list__empty-state">
         <div className="documents-list__empty-state-content notice">
           <div className="notice__icon">
-            <DocumentIcon fill={colorSurface} width="32" height="32" />
+            <DocumentIcon fill="var(--theme-surface)" width="32" height="32" />
           </div>
           {readOnly &&
           <>
@@ -269,16 +141,34 @@ const DocumentsListComponent = ({
           <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
             <h2 className="notice__headline">Get started</h2>
             <p>Create a new document, or drag a bunch of text documents here to get started.</p>
-            <button className="btn btn--small notice__action" name="addDocument" onClick={() => { createCallback(true) }}>Create document</button>
+            <button className="btn btn--small notice__action" name="addDocument" onClick={() => { toggleCreateMode(true) }}>Create document</button>
           </ProjectPermission>
         </div>
       </div>
       }
-      {(documents.length > 0 || creating) &&
+      {(documents.length > 0 || createMode) &&
       <nav>
         <ol className="documents-list__list">
-          {renderNewDocument()}
-          {renderDocumentsList()}
+          <DocumentsListCreateItem
+            active={createMode}
+            createDocumentHandler={createDocumentHandler}
+            isCreating={isCreating}
+            toggleCreateMode={toggleCreateMode}
+          />
+          {documents.map((doc, index) => {
+            return (
+              <DocumentsListItem
+                disable={createMode}
+                disableDragging={dragActive}
+                document={doc}
+                fieldCopyHandler={fieldCopyHandler}
+                fieldMoveHandler={fieldMoveHandler}
+                key={`d-${doc.id}-${index}`}
+                removeDocumentHandler={removeDocumentHandler}
+                unpublishDocumentHandler={unpublishDocumentHandler}
+              />
+            )
+          })}
         </ol>
       </nav>
       }
@@ -291,16 +181,16 @@ const DocumentsListComponent = ({
 
 DocumentsListComponent.propTypes = {
   clearSearchHandler: PropTypes.func.isRequired,
-  createCallback: PropTypes.func.isRequired,
-  createChangeHandler: PropTypes.func.isRequired,
-  creating: PropTypes.bool.isRequired,
+  toggleCreateMode: PropTypes.func.isRequired,
+  createDocumentHandler: PropTypes.func.isRequired,
+  createMode: PropTypes.bool.isRequired,
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   isCreating: PropTypes.bool.isRequired,
+  isSearching: PropTypes.bool.isRequired,
   loading: PropTypes.bool,
-  projectId: PropTypes.number.isRequired,
   readOnly: PropTypes.bool,
   removeDocumentHandler: PropTypes.func.isRequired,
   searchDocumentsHandler: PropTypes.func.isRequired,
