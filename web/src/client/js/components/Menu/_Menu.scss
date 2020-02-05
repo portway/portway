@@ -3,6 +3,9 @@
   margin: 0;
   min-width: 200px;
   padding: .7rem 0;
+  &:focus {
+    outline: none;
+  }
 }
 
 .menu__header {
