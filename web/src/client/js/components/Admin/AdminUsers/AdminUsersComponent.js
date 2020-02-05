@@ -106,8 +106,6 @@ const AdminUsersComponent = ({
     ]
   })
 
-  console.log(seats)
-
   return (
     <div>
       <section>
