@@ -14,14 +14,16 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
   const fields = await BusinessField.findAllForDocument(doc.id, orgId)
   await Promise.all(fields.map(async (field) => {
     const value = await createVersionedFieldValue(field)
-    return BusinessField.createForDocument(doc.id, {
-      name: field.name,
-      value,
-      type: field.type,
-      versionId: docVersion.id,
-      orgId,
-      order: field.order
-    })
+    const newField = processNewFieldVersionByType(field,
+      {
+        name: field.name,
+        value,
+        type: field.type,
+        versionId: docVersion.id,
+        orgId,
+        order: field.order
+      })
+    return BusinessField.createForDocument(doc.id, newField)
   }))
   return await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
     publishedVersionId: docVersion.id,
@@ -49,6 +51,15 @@ const createVersionedFieldValue = async function(field) {
     default:
       return field.value
   }
+}
+
+const processNewFieldVersionByType = function(field, newField) {
+  switch (field.type) {
+    case FIELD_TYPES.TEXT: {
+      newField.structuredValue = field.structuredValue
+    }
+  }
+  return newField
 }
 
 export default {
