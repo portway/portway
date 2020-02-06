@@ -1,6 +1,8 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 import UserCoordinator from '../../coordinators/user'
 import ono from 'ono'
+import logger from '../../integrators/logger'
+import { LOG_LEVELS } from '../../constants/logging'
 
 const options = {
   session: false,
@@ -15,10 +17,11 @@ export default function(passport) {
       try {
         user = await UserCoordinator.validateEmailPasswordCombo(email, password)
       } catch (err) {
-        return done(ono(err, `Invalid user/pass ${email}`))
+        return done(ono({ code: 401, logLevel: LOG_LEVELS.INFO }, `Invalid user/pass ${email}`))
       }
 
-      console.info('logging in ' + email)
+      logger(LOG_LEVELS.INFO, 'logging in ' + email)
+
       return done(null, user)
     })
   )
