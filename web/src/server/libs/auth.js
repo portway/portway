@@ -1,4 +1,3 @@
-
 import passport from 'passport'
 import localAuth from './passport-local'
 import JWTAuth from './passport-jwt'
