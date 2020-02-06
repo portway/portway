@@ -22,6 +22,19 @@
   }
 
   // Colors
+  &--transparent {
+    background-color: transparent;
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: transparent;
+        }
+      }
+      &:active {
+        background-color: transparent;
+      }
+    }
+  }
   &--green {
     background-color: var(--color-green);
     &:not([disabled]) {
