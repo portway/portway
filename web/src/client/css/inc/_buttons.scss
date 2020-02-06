@@ -203,6 +203,7 @@ button,
   &--like-a-link {
     color: var(--base-link-color);
     font-weight: 400;
+    min-height: auto;
     text-decoration: underline;
     &:not([disabled]) {
       &:hover, &:focus {
@@ -217,6 +218,7 @@ button,
   &--with-icon {
     align-items: center;
     display: inline-flex;
+    flex-wrap: nowrap;
     padding: 0 10px 0 10px;
     .icon {
       .icon-caret {

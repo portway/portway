@@ -144,14 +144,8 @@
             }
           }
         }
-        .btn--with-circular-icon {
-          padding: 0;
-          .icon {
-            // background-color: var(--color-gray-4);
-            // height: 30px;
-            margin-right: 0;
-            // width: 30px;
-          }
+        .icon-button {
+          margin-left: var(--icon-margin);
         }
       }
       .documents-list__name {
@@ -256,6 +250,7 @@
 
 .documents-list__name-container {
   flex: 1;
+  padding-right: var(--icon-margin);
 }
 
 .documents-list__document-dropdown {

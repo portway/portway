@@ -53,14 +53,14 @@ const DocumentsListCreateItem = ({ active, createDocumentHandler, isCreating, to
             type="text"
           />
           {isCreating && <SpinnerComponent color="var(--theme-overlay-dark)" />}
-          <button
+          <IconButton
             aria-label="Cancel creating document"
-            className="btn btn--blank"
+            color="transparent"
             disabled={isCreating}
             onClick={() => { toggleCreateMode(false) }}
           >
             <RemoveIcon width="12" height="12" />
-          </button>
+          </IconButton>
           <IconButton
             aria-label="Create the document"
             color="green"

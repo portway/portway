@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom'
 const Select = lazy(() => import('react-select'))
 
 import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
-import { ArrowIcon } from 'Components/Icons'
+import { AddIcon, ArrowIcon } from 'Components/Icons'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 import './_ProjectSettingsTeams.scss'
+import { IconButton } from 'Components/Buttons/index'
 
 const ProjectSettingsTeamsComponent = ({
   createAssignmentHandler,
@@ -31,10 +32,9 @@ const ProjectSettingsTeamsComponent = ({
         <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><ArrowIcon direction="left" /> Back to Project</Link>
         <h2>Manage your team</h2>
         <h3>Add a teammate to this project</h3>
-        <p>Once you add a team member, choose their role for the project</p>
-        <div className="field-container field-container--row field-container--large">
+        <div className="grid grid--teams-list">
           <div className="field">
-            <label htmlFor="team-list">Select a team member</label>
+            <label htmlFor="team-list">Team member</label>
             <div className="field__control project-settings__teammate-field">
               <Select
                 classNamePrefix="react-select"
@@ -60,21 +60,40 @@ const ProjectSettingsTeamsComponent = ({
             </div>
           </div>
           <div className="field">
-            <div className="field__label">Select a role</div>
+            <div className="field__label">Role</div>
             <div className="field__control">
-              <ProjectRolesDropdown align="right" defaultValue={newUserRole} onChange={(newRoleId) => { setNewUserRole(newRoleId) }} />
+              <ProjectRolesDropdown
+                align="right"
+                className="project-settings__team-role-selector"
+                defaultValue={newUserRole}
+                onChange={(newRoleId) => { setNewUserRole(newRoleId) }}
+              />
             </div>
           </div>
           <div className="field">
             <div className="field__control">
               <button
                 type="button"
-                className="btn project-settings__team-submit"
+                className="btn project-settings__teams-btn project-settings__team-submit"
                 disabled={newUserId === null}
                 onClick={() => {
                   createAssignmentHandler(newUserId, newUserRole)
                   selectRef.current.onChange('', 'clear')
-                }}>Add teammate</button>
+                }}
+              >
+                Add teammate
+              </button>
+              <IconButton
+                className="project-settings__team-submit"
+                disabled={newUserId === null}
+                color="green"
+                onClick={() => {
+                  createAssignmentHandler(newUserId, newUserRole)
+                  selectRef.current.onChange('', 'clear')
+                }}
+              >
+                <AddIcon />
+              </IconButton>
             </div>
           </div>
         </div>
