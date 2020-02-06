@@ -35,6 +35,7 @@ export default function(error, req, res, next) {
     expose,
     errorType,
     errorDetails = [],
+    logLevel,
     message } = error
 
   let { code, publicMessage } = error
@@ -58,8 +59,8 @@ export default function(error, req, res, next) {
 
   const responseMessage = publicMessage || exposedMessage || getPublicMessage(responseCode)
 
-  // Match any 5XX error code and log at error level
-  const level = responseCode > 499 ? LOG_LEVELS.ERROR : LOG_LEVELS.WARNING
+  // Match any 5XX error code and log at error level, default to passed in log level if it exists
+  const level = logLevel || (responseCode > 499 ? LOG_LEVELS.ERROR : LOG_LEVELS.WARNING)
 
   logger(level, { error })
 
