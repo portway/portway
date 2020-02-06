@@ -99,7 +99,7 @@ const ProjectRolesDropdown = ({ align, className, defaultValue, disabled, onChan
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.ADMIN]}
               <p className="small" style={roleDescriptionStyle}>
-                Admins can manage the project team, delete the project all together, and
+                Admins can manage the project team, delete the project altogether, and
                 do everything else a contributor can.
               </p>
             </button>
