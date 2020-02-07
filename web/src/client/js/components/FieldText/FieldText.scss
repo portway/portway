@@ -166,6 +166,9 @@
 
       .cm-quote {
         color: var(--theme-header-color);
+        // display: block;
+        opacity: 0.8;
+        padding-left: 2rem;
       }
       .cm-tab + .cm-comment {
         background-color: transparent;
@@ -205,10 +208,7 @@
       }
 
       .cm-formatting-quote {
-        border-left: 3px solid var(--color-gray-20);
-        display: inline-block;
-        margin-right: 1.9rem;
-        text-indent: -4000px;
+        display: none;
       }
 
       .cm-strikethrough {
