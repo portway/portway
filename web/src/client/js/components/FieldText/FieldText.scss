@@ -3,7 +3,7 @@
 
 .document-field__text {
   --document-field-min-height: 48px;
-  max-width: 1366px;
+  max-width: 800px;
   width: 100%;
 
   // Override the SimpleMDE styling
@@ -164,12 +164,6 @@
         color: var(--theme-text-color);
       }
 
-      .cm-quote {
-        color: var(--theme-header-color);
-        // display: block;
-        opacity: 0.8;
-        padding-left: 2rem;
-      }
       .cm-tab + .cm-comment {
         background-color: transparent;
         display: inline-block;
@@ -195,20 +189,32 @@
         color: var(--color-gray-20);
       }
 
+      .cm-formatting-list + .cm-variable-3,
+      .cm-formatting-list + .cm-keyword {
+        color: var(--theme-text-color);
+      }
+
       .cm-formatting-list-ul {
         color: var(--color-gray-20);
         line-height: 2rem;
-        margin-right: .9rem;
       }
 
       .cm-formatting-list-ol {
         color: var(--color-gray-20);
         line-height: 2rem;
-        margin-right: .9rem;
+      }
+
+      .cm-formatting-task.cm-property {
+        color: var(--theme-text-color);
       }
 
       .cm-formatting-quote {
-        display: none;
+        color: var(--color-gray-20);
+      }
+
+      .cm-quote {
+        color: var(--theme-header-color);
+        opacity: 0.6;
       }
 
       .cm-strikethrough {
