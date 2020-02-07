@@ -83,13 +83,11 @@
     align-items: center;
     display: flex;
     flex: 1;
-    .icon {
-      margin-right: .6rem;
-    }
     input[type="search"] {
       appearance: none;
       border: thin solid transparent;
-      padding: 0;
+      margin-left: var(--icon-margin);
+      padding: 0 0 2px 0;
       width: 100%;
       .using-mouse & {
         &:focus {
@@ -100,7 +98,7 @@
   }
 
   &__create-btn {
-    margin-left: .6rem;
+    margin-left: var(--icon-margin);
     .icon {
       background-color: var(--color-green);
     }
