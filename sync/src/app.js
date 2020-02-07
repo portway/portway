@@ -2,6 +2,7 @@ import express, { json, urlencoded } from 'express'
 import passport from 'passport'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
+import controllerLoader from './socketControllers'
 
 const app = express()
 
