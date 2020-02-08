@@ -48,6 +48,8 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [])
   useEffect(() => {
     if (editorRef.current) {
+      const charWidth = editorRef.current.defaultCharWidth()
+      const basePadding = 1.5
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
       editorRef.current.on('blur', (cm, e) => { onBlur(field.id, field.type, editorRef.current) })
       editorRef.current.on('change', () => { onChange(field.id, editorRef.current.getValue()) })
@@ -55,7 +57,19 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragenter', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
+      editorRef.current.on('renderLine', (cm, line, el) => {
+        const leadingSpaceListBulletsQuotes = /^\s*([*+-]\s+|\d+\.\s+|>\s*)*/
+        const leading = (leadingSpaceListBulletsQuotes.exec(line.text) || [''])[0]
+        const off = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize'))
+        console.log(off)
+        if (leading.length > 0) {
+          const indentValue = (off * (charWidth / 2))
+          el.style.textIndent = `-${indentValue}px`
+          el.style.paddingLeft = `${indentValue}px`
+        }
+      })
       editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current) })
+      editorRef.current.refresh()
       if (field.id === autoFocusElement) {
         window.requestAnimationFrame(() => {
           editorRef.current.focus()
