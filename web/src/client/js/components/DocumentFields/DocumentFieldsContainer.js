@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
+import io from 'socket.io-client'
 
 import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
@@ -27,6 +28,9 @@ const DocumentFieldsContainer = ({
   updateField,
   updateFieldOrder,
 }) => {
+  const socket = io('http://localhost:3002/documents')
+  socket.emit('room', 1234567, 'userIIDIDIDI')
+
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
