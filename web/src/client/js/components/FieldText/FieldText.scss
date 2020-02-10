@@ -20,7 +20,7 @@
     pre {
       font-family: var(--type-sans-serif);
       font-size: 1.5rem;
-      padding: 0;
+      padding: 0; // commented out for wrapping
     }
 
     span[role="presentation"] {
@@ -73,7 +73,7 @@
     .CodeMirror-code {
       font-size: 1.5rem;
       font-weight: 300;
-      letter-spacing: -0.2px;
+      // letter-spacing: -0.2px; // commented out for wrapping
       line-height: 2.4rem;
 
       .cm-hr {
