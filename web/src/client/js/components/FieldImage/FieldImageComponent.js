@@ -92,7 +92,7 @@ const FieldImageComponent = ({
           <FormField
             className="document-field__settings__input"
             defaultValue={field.name}
-            label="Photo name"
+            label="Image name"
             name="field-name"
             onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
           />
