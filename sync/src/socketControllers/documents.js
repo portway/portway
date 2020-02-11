@@ -1,14 +1,16 @@
+let localRoomState = {}
+
 export default (io) => {
   const documentsIO = io.of('/documents')
 
   documentsIO.on('connection', (socket) => {
-    console.log('someone connected to the document namespace')
-    socket.on('room', (fieldId, userId) => {
-      const room = fieldId
-      console.log(`${userId} connected to the ${room} room`)
+    socket.on('room', (documentId, userId) => {
+      const room = documentId
       socket.join(room)
-      socket.to(room).emit('activeUser', userId)
+      const currentRoomUsers = localRoomState[room] ? { ...localRoomState[room] } : {}
+      localRoomState = { ...localRoomState, [room]: { ...currentRoomUsers, [userId]: true } }
+      const roomUsers = Object.keys(localRoomState[room])
+      socket.to(room).emit('userChange', roomUsers)
     })
-    socket.to()
   })
 }

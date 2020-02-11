@@ -13,6 +13,7 @@ import { blurField, createField, focusField, updateField, removeField, updateFie
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
+import { currentUserId } from 'Libs/currentIds'
 
 const DocumentFieldsContainer = ({
   blurField,
@@ -28,9 +29,7 @@ const DocumentFieldsContainer = ({
   updateField,
   updateFieldOrder,
 }) => {
-  const socket = io('http://localhost:3002/documents')
-  socket.emit('room', 1234567, 'userIIDIDIDI')
-
+  const socketConnectedRef = useRef()
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
@@ -38,6 +37,17 @@ const DocumentFieldsContainer = ({
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+
+  let activeUsers = []
+  // fields are done loading so we know it's a valid document id, connect socket
+  if (fieldsLoading === false && socketConnectedRef.current !== true) {
+    const socket = io('http://localhost:3002/documents')
+    socket.emit('room', documentId, currentUserId)
+    socket.on('userChange', (userIds) => {
+      activeUsers = userIds
+    })
+    socketConnectedRef.current = true
+  }
 
   // Convert fields object to a sorted array for rendering
   const fieldIds = Object.keys(fields)
@@ -264,6 +274,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
+      activeUsers ={activeUsers}
       createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
       disabled={disabled}
