@@ -18,6 +18,9 @@ jest.mock('../businesstime/projecttoken')
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
 jest.mock('../integrators/stripe')
+// separate these internally used functions from the mock object so we can use them for their unit tests
+const removeAllOrgData = organizationCoordinator.removeAllOrgData
+organizationCoordinator.removeAllOrgData = jest.fn()
 
 describe('organization coordinator', () => {
   const orgId = 9876
@@ -71,7 +74,7 @@ describe('organization coordinator', () => {
 
   describe('#removeAllOrgData', () => {
     beforeAll(async () => {
-      organizationCoordinator.removeAllOrgData(orgId)
+      removeAllOrgData(orgId)
     })
 
     it('should call BusinessField.deleteAllForOrg', () => {
@@ -112,6 +115,39 @@ describe('organization coordinator', () => {
     it('should call BusinessOrganization.deleteById', () => {
       expect(BusinessOrganization.deleteById.mock.calls.length).toBe(1)
       expect(BusinessOrganization.deleteById.mock.calls[0][0]).toBe(orgId)
+    })
+  })
+
+  describe('#deleteCanceledOrg', () => {
+    function isoDateDaysAgo(days) {
+      const ms = 1000 * 60 * 60 * 24 * days
+      const twentyDaysAgo = Date.now() - ms
+      return new Date(twentyDaysAgo).toISOString()
+    }
+
+    beforeAll(async () => {
+      BusinessOrganization.findById.mockReturnValueOnce({ id: orgId, canceledAt: isoDateDaysAgo(30) })
+      await organizationCoordinator.deleteCanceledOrg(orgId)
+    })
+
+    it('should call organizationCoordinator.removeAllOrgData with the passed in org id', () => {
+      expect(organizationCoordinator.removeAllOrgData.mock.calls.length).toBe(1)
+      expect(organizationCoordinator.removeAllOrgData.mock.calls[0][0]).toBe(orgId)
+    })
+
+    describe('when the org has no canceledAt value', () => {
+      it('should throw an error', async () => {
+        await expect(organizationCoordinator.deleteCanceledOrg()).rejects
+          .toThrow(expect.objectContaining({ code: 409 }))
+      })
+    })
+
+    describe('when the org canceledAt value is less than 30 days ago', () => {
+      it('should throw an error', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ id: orgId, canceledAt: isoDateDaysAgo(20) })
+        await expect(organizationCoordinator.deleteCanceledOrg()).rejects
+          .toThrow(expect.objectContaining({ code: 409 }))
+      })
     })
   })
 })
