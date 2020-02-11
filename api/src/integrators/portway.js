@@ -10,21 +10,23 @@ import axios from 'axios'
 export const getProjectDocuments = async (id, key) => {
   const url = getProjectDocumentsUrl(id)
   const res = await sendAuthorizedRequest(url, key)
+  return res.data
 }
 
 export const getDocumentWithFields = async (id, key) => {
-  const url = getProjectDocumentsUrl(id)
+  const url = getDocWithFieldsUrl(id)
   const res = await sendAuthorizedRequest(url, key)
+  return res.data
 }
 
 // Helpers
 
 const sendAuthorizedRequest = async (url, key, method = 'get') => {
-  axios({
+  return axios({
     method,
     url,
     headers: {
-      'authorization': `bearer ${key}`
+      'Authorization': `Bearer ${key}`
     }
   })
 }
