@@ -46,7 +46,11 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
 const createVersionedFieldValue = async function(field) {
   switch (field.type) {
     case FIELD_TYPES.IMAGE: {
-      return await copyContent(convertCDNUrlToS3Key(field.value))
+      if (field.value) {
+        return await copyContent(convertCDNUrlToS3Key(field.value))
+      } else {
+        return field.value
+      }
     }
     default:
       return field.value

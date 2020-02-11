@@ -61,29 +61,49 @@ describe('assetCoordinator', () => {
   })
 
   describe('#deleteAsset', () => {
-    const orgId = 23
-    const assetUrl = 'https://cdn.portway.com/a/bcd/thing.jpg'
-    beforeAll(async () => {
-      jest.spyOn(assetCoordinator, 'recordOrgAsset')
-      await assetCoordinator.deleteAsset(assetUrl, orgId)
+    describe('with a valid url', () => {
+      const orgId = 23
+      const assetUrl = 'https://cdn.portway.com/a/bcd/thing.jpg'
+      beforeAll(async () => {
+        jest.spyOn(assetCoordinator, 'recordOrgAsset')
+        await assetCoordinator.deleteAsset(assetUrl, orgId)
+      })
+
+      it('should call getContentMetadata', () => {
+        expect(getContentMetadata.mock.calls.length).toBe(1)
+      })
+
+      it('should call deleteContent', () => {
+        expect(deleteContent.mock.calls.length).toBe(1)
+      })
+
+      it('should call recordOrgAsset', () => {
+        expect(assetCoordinator.recordOrgAsset.mock.calls.length).toBe(1)
+        expect(assetCoordinator.recordOrgAsset.mock.calls[0][0]).toEqual(orgId)
+        expect(assetCoordinator.recordOrgAsset.mock.calls[0][1]).toBeLessThan(0)
+      })
+
+      afterAll(() => {
+        assetCoordinator.recordOrgAsset.mockRestore()
+      })
     })
 
-    it('should call getContentMetadata', () => {
-      expect(getContentMetadata.mock.calls.length).toBe(1)
-    })
+    describe('with an invalid url', () => {
+      const orgId = 23
+      it('should return undefined with an empty url', async () => {
+        const result = await assetCoordinator.deleteAsset('', orgId)
+        expect(result).toBe(undefined)
+      })
 
-    it('should call deleteContent', () => {
-      expect(deleteContent.mock.calls.length).toBe(1)
-    })
+      it('should return undefined with a null url', async () => {
+        const result = await assetCoordinator.deleteAsset(null, orgId)
+        expect(result).toBe(undefined)
+      })
 
-    it('should call recordOrgAsset', () => {
-      expect(assetCoordinator.recordOrgAsset.mock.calls.length).toBe(1)
-      expect(assetCoordinator.recordOrgAsset.mock.calls[0][0]).toEqual(orgId)
-      expect(assetCoordinator.recordOrgAsset.mock.calls[0][1]).toBeLessThan(0)
-    })
-
-    afterAll(() => {
-      assetCoordinator.recordOrgAsset.mockRestore()
+      it('should return undefined with an undefined url', async () => {
+        const result = await assetCoordinator.deleteAsset(undefined, orgId)
+        expect(result).toBe(undefined)
+      })
     })
   })
 })
