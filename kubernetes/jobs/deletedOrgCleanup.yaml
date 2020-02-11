@@ -18,11 +18,11 @@ spec:
             env:
             - name: ADMIN_API_KEY
               valueFrom:
-              secretKeyRef:
-                name: admin-secrets
-                key: admin_secret_key
+                secretKeyRef:
+                  name: admin-secrets
+                  key: admin_secret_key
             - name: API_URL
               valueFrom:
-              configMapKeyRef:
-                name: web-config
-                key: web.api_url
+                configMapKeyRef:
+                  name: web-config
+                  key: web.api_url
