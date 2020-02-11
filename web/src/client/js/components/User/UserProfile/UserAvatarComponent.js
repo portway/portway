@@ -41,7 +41,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
     }
   }
 
-  const avatarHelpText = `Upload a square image - Formatted as PNG or JPG`
+  const avatarHelpText = `Upload a square photo - Formatted as PNG, SVG, or JPG`
 
   function renderUserAvatar() {
     if (preview) {
@@ -49,11 +49,11 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
         <>
           <ImageCropperComponent circle={true} image={preview} onComplete={cropCompleteHandler}>
             <p>
-              Your profile image will look best as a square.<br />
-              You can crop your image here before saving it.
+              Your profile photo will look best as a square.<br />
+              You can crop your photo here before saving it.
             </p>
             <div className="btn-group">
-              <button className="btn btn--small" type="submit">Save cropped image</button>
+              <button className="btn btn--small" type="submit">Save cropped photo</button>
               <button className="btn btn--small btn--blank" type="button" onClick={cancelCropHandler}>Cancel</button>
             </div>
           </ImageCropperComponent>
@@ -74,8 +74,8 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
 
   return (
     <section>
-      <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my profile image">
-        <h2>Your Profile Image</h2>
+      <Form name={formId} onSubmit={formSubmitHandler} submitLabel="Update my profile photo">
+        <h2>Your Profile Photo</h2>
         <div className={classes}>
           {renderUserAvatar()}
           {!preview &&
@@ -84,7 +84,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
               help={avatarHelpText}
               id="userAvatar"
               errors={errors.file}
-              label="Your profile image"
+              label="Your profile photo"
               name="avatar"
               onChange={(e) => {
                 const data = e.target.files

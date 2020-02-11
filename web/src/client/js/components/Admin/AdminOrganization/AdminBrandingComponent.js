@@ -48,10 +48,10 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
           <ImageCropperComponent circle={true} image={preview} onComplete={cropCompleteHandler}>
             <p>
               Your branding will look best as a square.<br />
-              You can crop your image here before saving it.
+              You can crop your photo here before saving it.
             </p>
             <div className="btn-group">
-              <button className="btn btn--small" type="submit">Save cropped image</button>
+              <button className="btn btn--small" type="submit">Save cropped photo</button>
               <button className="btn btn--small btn--blank" type="button" onClick={cancelCropHandler}>Cancel</button>
             </div>
           </ImageCropperComponent>
@@ -65,7 +65,7 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
     }
   }
 
-  const avatarHelpText = `Upload a square image - Formatted as PNG or JPG`
+  const avatarHelpText = `Upload a square photo - Formatted as PNG, SVG, or JPG`
   const classes = cx({
     'admin-organization__image': true,
     'admin-organization__image--with-preview': preview

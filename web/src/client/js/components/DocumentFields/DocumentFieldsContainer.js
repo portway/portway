@@ -110,7 +110,7 @@ const DocumentFieldsContainer = ({
 
       switch (fieldType) {
         case FIELD_TYPES.IMAGE:
-          type = 'image'
+          type = 'photo'
           break
         case FIELD_TYPES.STRING:
           type = 'string'
