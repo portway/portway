@@ -111,13 +111,20 @@
   &__outline-explainer {
     color: rgba(0, 0 , 0, .5);
     font-size: 1.3rem;
-    line-height: 1rem;
+    line-height: 1.3rem;
     margin:  3rem auto 0;
     text-align: center;
-    width: 50%;
+    width: 80%;
+
+    @include media('>medium') {
+      width: 50%;
+    }
+
     * {
       font-size: 1.3rem;
+      line-height: 1.3rem;
     }
+
   }
 
   &__fields {

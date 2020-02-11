@@ -8,7 +8,9 @@ const SignInController = function(router) {
     if (req._portway.loggedIn) {
       res.redirect(`${PATH_APP}${PATH_PROJECTS}`)
     } else {
-      res.render('index', { ...renderBundles(req, 'Sign in', 'index', { supportLink: SUPPORT_LINK }), url: req.query.url })
+      res.render('index', {
+        ...renderBundles(req, 'Sign in', 'index', { supportLink: SUPPORT_LINK, url: req.query.url })
+      })
     }
   })
 

@@ -1,22 +1,16 @@
 @import 'CSS/inc/_include-media.scss';
 
-.project-settings__teams {
-  // Override field to align-bottom
-  .field-container--row {
-    flex-wrap: wrap;
-  }
-  .field {
-    justify-content: flex-end;
-    &:first-child {
-      flex: 1;
-    }
-  }
-}
 
-.project-settings__team-list {
-  margin: 0;
-  padding: 0;
+/**
+ * @todo - moove the button stuff here to a new button component that has a conditional render
+ * based on the viewport size. A regular button on medium+, an IconButton on small
+ */
+
+.project-settings__team-role-selector {
   width: 100%;
+  .btn--form {
+    width: 100%;
+  }
 }
 
 .project-settings__team-submit {
@@ -26,42 +20,48 @@
   }
 }
 
+.project-settings__teams {
+  .icon-button {
+    @include media('>medium') {
+      display: none;
+    }
+  }
+}
+
+.project-settings__teams-btn {
+  display: none;
+  @include media('>medium') {
+    display: block;
+    width: 100%;
+  }
+}
+
+.project-settings__team-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .project-settings__teammate {
-  align-items: flex-start;
-  display: flex;
-  margin-bottom: 1.6rem;
+  border-bottom: thin solid var(--theme-border-light);
+  padding: 1.75rem 0 0;
 
   @include media('>medium') {
-    align-items: center;
-    margin-bottom: var(--icon-margin);
+    border-bottom: none;
+    margin-bottom: 2rem;
+    padding: 0;
   }
 
-  &-content {
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 0 0 0 var(--icon-margin);
-    @include media('>medium') {
-      align-items: center;
-      flex-direction: row;
-      padding: 0;
-    }
-  }
-  &-name {
+  .field__control {
     align-items: center;
     display: flex;
-    .icon {
-      margin-right: var(--icon-margin);
-    }
   }
-  &-role {
-    flex: 1;
-    padding: var(--icon-margin) 0 0 0;
 
-    @include media('>medium') {
-      padding: 0 1.6rem 0 0;
-      text-align: right;
-    }
-  }
+}
+
+.project-settings__teammate-name {
+  font-size: 1.7rem;
+  line-height: 2.4rem;
+  margin-left: var(--icon-margin);
 }

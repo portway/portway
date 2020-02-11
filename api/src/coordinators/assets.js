@@ -20,6 +20,9 @@ async function recordOrgAsset(orgId, size) {
 }
 
 async function deleteAsset(assetUrlString, orgId) {
+  if (!assetUrlString) {
+    return
+  }
   const s3AssetKey = convertCDNUrlToS3Key(assetUrlString)
   const fileSize = (await getContentMetadata(s3AssetKey)).size
   await deleteContent(s3AssetKey)
