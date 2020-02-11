@@ -1,0 +1,14 @@
+@import '../inc/include-media';
+
+.grid {
+  display: grid;
+  grid-gap: 2rem;
+
+  &--teams-list {
+    grid-template-columns: 2fr 1fr 4rem;
+    @include media('>medium') {
+      grid-template-columns: 2fr 18rem 20rem;
+    }
+  }
+
+}

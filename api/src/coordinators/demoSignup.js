@@ -70,7 +70,7 @@ async function createUsersAndOrganization(name, users) {
 
   await Promise.all(
     orgUsers.map((user) => {
-      const token = tokenIntegrator.generatePasswordResetToken(user.id, user.resetKey)
+      const token = tokenIntegrator.generateAccountInviteToken(user.id, user.resetKey)
 
       const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
 

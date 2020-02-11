@@ -9,7 +9,7 @@ import { CaretIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
 import { Menu, MenuItem } from 'Components/Menu'
 
-const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
+const ProjectRolesDropdown = ({ align, className, defaultValue, disabled, onChange }) => {
   const [permissionMenuLabel, setPermissionMenuLabel] = useState(PROJECT_ROLE_NAMES[defaultValue])
   const [expanded, setExpanded] = useState(false)
   const anchorRef = useRef()
@@ -27,14 +27,23 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
     onChange(roleId)
   }
 
+  const menuButtonStyle = {
+    minWidth: '10rem'
+  }
+
   const buttonStyleOverride = {
     display: 'block',
     padding: '1rem 1.4rem',
     whiteSpace: 'normal',
   }
 
+  const roleDescriptionStyle = {
+    fontSize: '1.3rem',
+    opacity: '0.5',
+  }
+
   return (
-    <PopperGroup anchorRef={containerRef}>
+    <PopperGroup anchorRef={containerRef} className={className}>
       <button
         aria-expanded={expanded}
         aria-haspopup="true"
@@ -43,6 +52,7 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
         disabled={disabled}
         onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
+        style={menuButtonStyle}
         type="button"
       >
         <span className="label">{permissionMenuLabel}</span>
@@ -59,8 +69,8 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
               type="button"
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.READER]}
-              <p className="small">
-                Project Readers can view all of the documents in this project, but that is all.
+              <p className="small" style={roleDescriptionStyle}>
+                Readers can view all of the documents in this project, but that is all.
               </p>
             </button>
           </MenuItem>
@@ -73,8 +83,8 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
               type="button"
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.CONTRIBUTOR]}
-              <p className="small">
-                Project Contributors can create, edit, publish, and delete documents within this
+              <p className="small" style={roleDescriptionStyle}>
+                Contributors can create, edit, publish, and delete documents within this
                 project. They can also view API data.
               </p>
             </button>
@@ -88,9 +98,9 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
               type="button"
             >
               {PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.ADMIN]}
-              <p className="small">
-                Project Contributors can create, edit, publish, and delete documents within this
-                project. They can also view API data.
+              <p className="small" style={roleDescriptionStyle}>
+                Admins can manage the project team, delete the project altogether, and
+                do everything else a contributor can.
               </p>
             </button>
           </MenuItem>
@@ -102,6 +112,7 @@ const ProjectRolesDropdown = ({ align, defaultValue, disabled, onChange }) => {
 
 ProjectRolesDropdown.propTypes = {
   align: PropTypes.oneOf(['left', 'right']),
+  className: PropTypes.string,
   defaultValue: PropTypes.number.isRequired,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired

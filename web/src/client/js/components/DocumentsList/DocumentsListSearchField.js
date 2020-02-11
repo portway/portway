@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import cx from 'classnames'
 
-import { SearchIcon } from 'Components/Icons'
+import { RemoveIcon, SearchIcon } from 'Components/Icons'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
+import { IconButton } from 'Components/Buttons/index'
 
 const DocumentsListSearchField = ({ clearSearchHandler, disabled, searchDocumentsHandler }) => {
   const [isSearching, setIsSearching] = useState(false)
@@ -29,29 +30,42 @@ const DocumentsListSearchField = ({ clearSearchHandler, disabled, searchDocument
     'documents-list__search--disabled': disabled,
   })
 
+  function clearSearchValues() {
+    setIsSearching(false)
+    searchFieldRef.current.value = ''
+    clearSearchHandler()
+  }
+
   return (
     <div className={searchClasses}>
       <div className="documents-list__search-field">
-        <SearchIcon />
+        <label aria-label="Search documents" htmlFor="document-search-field"><SearchIcon /></label>
         <input
+          id="document-search-field"
           // eslint-disable-next-line jsx-a11y/no-autofocus
           onChange={(e) => {
-            if (!isSearching) {
-              setIsSearching(true)
+            if (e.target.value === '' && isSearching) {
+              setIsSearching(false)
+              searchDocumentsHandler(e.target.value)
+              return
             }
+            setIsSearching(true)
             searchDocumentsHandler(e.target.value)
           }}
           onKeyDown={(e) => {
             if (e.key.toLowerCase() === 'escape') {
-              setIsSearching(false)
-              searchFieldRef.current.value = ''
-              clearSearchHandler()
+              clearSearchValues()
             }
           }}
           placeholder="Search documents..."
           ref={searchFieldRef}
           type="search"
         />
+        {isSearching &&
+        <IconButton color="transparent" onClick={clearSearchValues}>
+          <RemoveIcon width="12" height="12" />
+        </IconButton>
+        }
       </div>
     </div>
   )

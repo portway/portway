@@ -1,5 +1,5 @@
 import { renderBundles } from '../libs/express-utilities'
-import { SUPPORT_LINK  } from '../../shared/constants'
+import { SUPPORT_LINK } from '../../shared/constants'
 
 const AppController = function(router) {
   // Sending all requests to dashboard view, for Redux Router

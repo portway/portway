@@ -4,16 +4,18 @@ import cx from 'classnames'
 
 import './IconButton.scss'
 
-const IconButton = ({ children, color, ...props }) => {
+const IconButton = ({ children, className, color, ...props }) => {
   const buttonClasses = cx({
     'icon-button': true,
     [`icon-button--${color}`]: color,
+    [className]: className,
   })
   return <button className={buttonClasses} {...props}>{children}</button>
 }
 
 IconButton.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
   color: PropTypes.string,
 }
 
