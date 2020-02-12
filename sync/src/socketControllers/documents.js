@@ -10,7 +10,7 @@ export default (io) => {
       const currentRoomUsers = localRoomState[room] ? { ...localRoomState[room] } : {}
       localRoomState = { ...localRoomState, [room]: { ...currentRoomUsers, [userId]: true } }
       const roomUsers = Object.keys(localRoomState[room])
-      socket.to(room).emit('userChange', roomUsers)
+      documentsIO.in(room).emit('userChange', roomUsers)
     })
   })
 }

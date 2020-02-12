@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
-import io from 'socket.io-client'
 
 import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
@@ -10,6 +9,7 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
+import { socketStore, updateDocumentRoomUsers, joinDocumentRoom } from '../../sockets/SocketProvider'
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
@@ -29,7 +29,7 @@ const DocumentFieldsContainer = ({
   updateField,
   updateFieldOrder,
 }) => {
-  const socketConnectedRef = useRef()
+  const roomJoined = useRef(false)
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
@@ -38,15 +38,18 @@ const DocumentFieldsContainer = ({
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  let activeUsers = []
-  // fields are done loading so we know it's a valid document id, connect socket
-  if (fieldsLoading === false && socketConnectedRef.current !== true) {
-    const socket = io('http://localhost:3002/documents')
-    socket.emit('room', documentId, currentUserId)
-    socket.on('userChange', (userIds) => {
-      activeUsers = userIds
+  const { state: socketState, dispatch: socketDispatch, documentSocket } = useContext(socketStore)
+
+  const activeUsers = socketState.activeDocumentUsers[documentId]
+
+  // fields are done loading so we know it's a valid document id, connect to document room
+  if (fieldsLoading === false && !roomJoined.current ) {
+    documentSocket.emit('room', documentId, currentUserId)
+    documentSocket.on('userChange', (userIds) => {
+      console.log('userChange')
+      socketDispatch(updateDocumentRoomUsers(documentId, userIds))
     })
-    socketConnectedRef.current = true
+    roomJoined.current = true
   }
 
   // Convert fields object to a sorted array for rendering
