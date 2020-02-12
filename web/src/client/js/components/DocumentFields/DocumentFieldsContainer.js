@@ -9,7 +9,7 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
-import { socketStore, updateDocumentRoomUsers, joinDocumentRoom } from '../../sockets/SocketProvider'
+import { socketStore, updateDocumentRoomUsers, setCurrentDocumentRoom } from '../../sockets/SocketProvider'
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
@@ -29,7 +29,6 @@ const DocumentFieldsContainer = ({
   updateField,
   updateFieldOrder,
 }) => {
-  const roomJoined = useRef(false)
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
@@ -41,16 +40,35 @@ const DocumentFieldsContainer = ({
   const { state: socketState, dispatch: socketDispatch, documentSocket } = useContext(socketStore)
 
   const activeUsers = socketState.activeDocumentUsers[documentId]
+  const currentDocumentRoom = socketState.currentDocumentRoom
 
   // fields are done loading so we know it's a valid document id, connect to document room
-  if (fieldsLoading === false && !roomJoined.current ) {
-    documentSocket.emit('room', documentId, currentUserId)
+  // if (fieldsLoading === false && !roomJoined.current && documentId) {
+  //   documentSocket.emit('room', documentId, currentUserId)
+  //   console.log('joined room ', documentId)
+  //   documentSocket.on('userChange', (userIds) => {
+  //     socketDispatch(updateDocumentRoomUsers(documentId, userIds))
+  //   })
+  //   roomJoined.current = true
+  // }
+
+  // =============================== Web Sockets ====================================
+
+  useEffect(() => {
+    documentSocket.emit('joinRoom', documentId, currentUserId)
+    console.log('joined room ', documentId)
+    socketDispatch(setCurrentDocumentRoom(documentId))
     documentSocket.on('userChange', (userIds) => {
-      console.log('userChange')
       socketDispatch(updateDocumentRoomUsers(documentId, userIds))
     })
-    roomJoined.current = true
-  }
+    return () => {
+      console.log('leaving room', currentDocumentRoom)
+      documentSocket.emit('leaveRoom', currentDocumentRoom, currentUserId)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentId])
+
+  // =================================================================================
 
   // Convert fields object to a sorted array for rendering
   const fieldIds = Object.keys(fields)

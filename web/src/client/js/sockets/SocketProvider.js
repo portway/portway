@@ -4,7 +4,8 @@ import openSocket from 'socket.io-client'
 const documentSocket = openSocket('http://localhost:3002/documents')
 
 const actionTypes = {
-  'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED'
+  'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
+  'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM'
 }
 
 export const updateDocumentRoomUsers = (documentId, userIds) => {
@@ -15,8 +16,16 @@ export const updateDocumentRoomUsers = (documentId, userIds) => {
   }
 }
 
+export const setCurrentDocumentRoom = (documentId) => {
+  return {
+    type: actionTypes.SET_CURRENT_DOCUMENT_ROOM,
+    documentId
+  }
+}
+
 const initialState = {
   activeDocumentUsers: {},
+  currentDocumentRoom: null
 }
 
 const socketStore = createContext(initialState)
@@ -25,10 +34,16 @@ const { Provider } = socketStore
 const SocketProvider = ( { children } ) => {
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case actionTypes.DOCUMENT_ROOM_USERS_RECEIVED:
+      case actionTypes.DOCUMENT_ROOM_USERS_RECEIVED: {
         const { documentId, userIds } = action
         const newState = { ...state, activeDocumentUsers: { ...state.activeDocumentUsers, [documentId]: userIds } }
         return newState
+      }
+      case actionTypes.SET_CURRENT_DOCUMENT_ROOM: {
+        const { documentId } = action
+        const newState = { ...state, currentDocumentRoom: documentId }
+        return newState
+      }
       default:
         throw new Error()
     }
