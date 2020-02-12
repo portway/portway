@@ -7,7 +7,7 @@ import emailCoordinator from './email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
-import portwayCoordinator from './portway'
+import introCoordinator from './intro'
 import ono from 'ono'
 import slackIntegrator from '../integrators/slack'
 
@@ -25,7 +25,8 @@ async function createUserAndOrganization(name, email) {
   const resetKey = passwordResetKey.generate()
 
   // Letting this happen in the background. Should occur before user verifies their email
-  portwayCoordinator.copyIntroProjectToOrg(organization.id)
+  // and if there's an error we don't want it to prevent signup
+  introCoordinator.copyIntroProjectToOrg(organization.id)
 
   const createdUser = await BusinessUser.create({
     name,

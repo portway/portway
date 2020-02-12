@@ -8,10 +8,10 @@ import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 
 const READ_KEY = process.env.PORTWAY_INTRO_PROJECT_READ_KEY
-const fieldPropsToCopy = ['type', 'value', 'order']
+const fieldPropsToCopy = ['type', 'value', 'order', 'name']
 
 const copyIntroProjectToOrg = async (orgId) => {
-  const project = getProject(INTRO_PROJECT_ID, READ_KEY)
+  const project = await getProject(INTRO_PROJECT_ID, READ_KEY)
 
   const newProject = await BusinessProject.create({
     orgId,
@@ -27,24 +27,28 @@ const copyIntroProjectToOrg = async (orgId) => {
       name: docWithFields.name,
       orgId
     })
-    return Promise.all(docWithFields.fields.map(async (field) => {
+
+    docWithFields.fields.reduce(async (fieldCreatePromise, field) => {
+      await fieldCreatePromise // make sure the fields are created in order
       const body = fieldPropsToCopy.reduce((body, fieldProp) => {
         body[fieldProp] = field[fieldProp]
         return body
       }, {})
       if (body.type === FIELD_TYPES.IMAGE) {
-        const key = convertCDNUrlToS3Key(field.value)
-        const keyParts = key.split('/')
-        const name = keyParts[keyParts.length - 1]
-        // published assets are formatted as date-name, so remove date
-        // processing is safe as split with no found character returns the full string
-        const nameParts = name.split('-')
-        const nameNoDate = nameParts[nameParts.length - 1]
-        const newKey = getKeyForDocumentAsset(nameNoDate, newDoc.id, orgId)
-        body.value = await copyContent(key, newKey)
+        return Promise.resolve()
+        // const key = convertCDNUrlToS3Key(field.value)
+        // const keyParts = key.split('/')
+        // const name = keyParts[keyParts.length - 1]
+        // // published assets are formatted as date-name, so remove date
+        // // processing is safe as split with no found character returns the full string
+        // const nameParts = name.split('-')
+        // const nameNoDate = nameParts[nameParts.length - 1]
+        // const newKey = getKeyForDocumentAsset(nameNoDate, newDoc.id, orgId)
+        // body.value = await copyContent(key, newKey)
       }
+      body.orgId = orgId
       return BusinessField.createForDocument(newDoc.id, body)
-    }))
+    }, Promise.resolve())
   }))
 
   console.log('docs')
