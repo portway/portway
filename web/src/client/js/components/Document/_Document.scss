@@ -140,10 +140,6 @@
       padding-top: calc(var(--brand-width) / 2);
     }
 
-    &--edit-mode {
-      padding-bottom: 7rem;
-    }
-
     // When publishing a document, disable everything
     &--disabled {
       pointer-events: none;

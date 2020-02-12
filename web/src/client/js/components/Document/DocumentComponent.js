@@ -121,12 +121,6 @@ const DocumentComponent = ({
           </div>
         </ProjectPermission>
       </header>
-      {documentMode === DOCUMENT_MODE.EDIT &&
-      <div className="document__outline-explainer">
-        Reorder and name your fields in outline mode. Field names are useful when working with the API.{` `}
-        <button className="btn btn--like-a-link" onClick={toggleDocumentMode}>Exit outline mode</button>
-      </div>
-      }
       <DocumentFieldsContainer />
     </div>
   )
