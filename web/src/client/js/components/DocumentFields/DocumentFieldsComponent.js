@@ -24,8 +24,6 @@ const DocumentFieldsComponent = ({
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
-  console.log(fields)
-
   const textFields = fields.filter((field) => {
     return field.type === FIELD_TYPES.TEXT
   })
