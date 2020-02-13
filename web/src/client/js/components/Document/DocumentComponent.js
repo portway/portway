@@ -11,6 +11,7 @@ import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
+import DocumentOutlineContainer from 'Components/DocumentOutline/DocumentOutlineContainer'
 
 import './_Document.scss'
 
@@ -60,6 +61,9 @@ const DocumentComponent = ({
   return (
     <div className="document" key={docKey}>
       <ValidationContainer resource="document" value="name" />
+      {documentMode === DOCUMENT_MODE.EDIT &&
+      <DocumentOutlineContainer />
+      }
       <header className="document__header">
         {mobileView &&
         <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">

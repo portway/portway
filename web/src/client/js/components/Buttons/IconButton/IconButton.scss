@@ -49,4 +49,18 @@
     }
   }
 
+  &--red {
+    background-color: var(--color-red);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-red-dark);
+        }
+      }
+      &:active {
+        background-color: var(--color-red-light);
+      }
+    }
+  }
+
 }
