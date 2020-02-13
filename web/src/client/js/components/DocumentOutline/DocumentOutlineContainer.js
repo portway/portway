@@ -152,9 +152,8 @@ const DocumentOutlineContainer = ({
     const fieldIdToUpdate = draggingElement.current.dataset.id
     const to = Number(draggingElement.current.dataset.order)
     draggingElement.current.classList.remove('document-outline__list-item--dragging')
-    draggingElement.current.setAttribute('draggable', 'false')
     // Trigger action with documentId, fieldId
-    updateFieldOrder(documentId, fieldIdToUpdate, to)
+    updateFieldOrder(projectId, documentId, fieldIdToUpdate, to)
   }
 
   function dragEndHandler(e) {

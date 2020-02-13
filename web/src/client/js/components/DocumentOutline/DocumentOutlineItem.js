@@ -69,6 +69,7 @@ const DocumentOutlineItem = ({
               return
             }
           }}
+          onFocus={focusDocumentFieldHandler}
           onChange={(e) => { onRename(field.id, e.target.value) }}
           type="text" />
       </div>

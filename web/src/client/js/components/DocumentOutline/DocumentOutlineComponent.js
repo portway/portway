@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { Link, useParams } from 'react-router-dom'
 
+import { PATH_PROJECT } from 'Shared/constants'
 import DocumentOutlineItem from './DocumentOutlineItem'
 import './_DocumentOutline.scss'
 
@@ -17,6 +19,7 @@ const DocumentOutlineComponent = ({
   toggleDocumentModeHandler
 }) => {
   const outlineRef = useRef()
+  const { projectId } = useParams()
   useEffect(() => {
     const outlineCopy = outlineRef.current
     if (outlineCopy) {
@@ -31,6 +34,7 @@ const DocumentOutlineComponent = ({
       <header className="document-outline__header">
         <h2 className="document-outline__title">Document outline</h2>
         <p className="document-outline__description note">Drag and drop to reorder your document, or remove fields altogether</p>
+        <p className="document-outline__description note">Name your fields for use in <Link to={`${PATH_PROJECT}/${projectId}/settings/keys`}>the API</Link></p>
       </header>
       <ol className="document-outline__list">
         {fields.map((field, index) => {

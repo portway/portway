@@ -69,6 +69,8 @@
   }
 
   .document-outline__clone-element {
+    background-color: var(--theme-surface);
+    border-radius: var(--border-radius);
     .document-outline__actions {
       display: none;
     }

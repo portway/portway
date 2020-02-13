@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -22,30 +22,20 @@ const DocumentFieldsContainer = ({
   isPublishing,
   updateField,
 }) => {
-  const [orderedFields, setOrderedFields] = useState([])
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  // Convert fields object to a sorted array for rendering
-  const fieldIds = Object.keys(fields)
-  useEffect(() => {
-    const fieldMap = fieldIds.map((fieldId) => {
-      return fields[fieldId]
-    })
-    fieldMap.sort((a, b) => {
-      return a.order - b.order
-    })
-    setOrderedFields(fieldMap)
-    // Note: this is not an ideal dependency but if fields aren't loaded and then load
-    // it will appropriately set the order. `fields` cannot be a dependency as it's an object.
-    // When field order is changed, other handlers will correctly set the ordered fields and
-    // we do not want this effect to run in those cases.
-    // eslint-disable-next-line
-  }, [fieldIds.length])
+  // Sort the fields every re-render
+  const fieldMap = Object.keys(fields).map((fieldId) => {
+    return fields[fieldId]
+  })
+  fieldMap.sort((a, b) => {
+    return a.order - b.order
+  })
 
-  const hasOnlyOneTextField = fieldIds.length === 1 && fields[fieldIds[0]].type === FIELD_TYPES.TEXT
+  const hasOnlyOneTextField = fieldMap.length === 1 && fields[fieldMap[0]].type === FIELD_TYPES.TEXT
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
@@ -67,7 +57,7 @@ const DocumentFieldsContainer = ({
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
 
-  let documentReadOnlyMode
+  let documentReadOnlyMode = false
   // False because null / true == loading
   if (assignmentLoading === false) {
     documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
@@ -135,7 +125,7 @@ const DocumentFieldsContainer = ({
       fieldFocusHandler={fieldFocusHandler}
       fieldBlurHandler={fieldBlurHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
-      fields={orderedFields}
+      fields={fieldMap}
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}

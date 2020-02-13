@@ -1,5 +1,6 @@
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, FIELD_TYPES } from 'Shared/constants'
 import { Fields, Notifications, Validation } from './index'
+import { fetchDocument } from './document'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
 
@@ -27,7 +28,7 @@ export const createField = (projectId, documentId, fieldType, body) => {
 
 export const updateField = (projectId, documentId, fieldId, body) => {
   return async (dispatch) => {
-    dispatch(Fields.initiateUpdate(fieldId))
+    dispatch(Fields.initiateUpdate(documentId, fieldId))
     let data
     let status
     // if we're getting FormData here, it's a file upload, pass the FormData as the body
@@ -37,19 +38,24 @@ export const updateField = (projectId, documentId, fieldId, body) => {
       ({ data, status } = await update(`v1/documents/${documentId}/fields/${fieldId}`, body))
     }
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.FIELD, status))
       return
     }
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
-      dispatch(Fields.receiveOneUpdated(projectId, documentId, data))
+      dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
   }
 }
 
-export const updateFieldOrder = (documentId, fieldId, newOrder) => {
+export const updateFieldOrder = (projectId, documentId, fieldId, newOrder) => {
   return async (dispatch) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
-    await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
+    const { status } = await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
+    if (globalErrorCodes.includes(status)) {
+      // If something bad happens, just fetch the whole document
+      dispatch(fetchDocument(documentId))
+      return
+    }
   }
 }
 

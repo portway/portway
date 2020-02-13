@@ -98,8 +98,8 @@ export const ui = (state = initialState, action) => {
       return { ...state, fields: { ...state.fields, fieldsUpdating } }
     }
     case ActionTypes.RECEIVE_UPDATED_FIELD: {
-      const { id } = action.data
-      const fieldsUpdating = { ...state.fields.fieldsUpdating, [id]: false }
+      const { fieldId } = action
+      const fieldsUpdating = { ...state.fields.fieldsUpdating, [fieldId]: false }
       return { ...state, fields: { ...state.fields, fieldsUpdating } }
     }
 
