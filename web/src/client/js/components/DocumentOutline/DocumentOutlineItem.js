@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { FIELD_TYPES } from 'Shared/constants'
@@ -25,11 +25,20 @@ const DocumentOutlineItem = ({
   onDestroy,
   onRename
 }) => {
+  const listItemRef = useRef()
   const fieldIcons = {
-    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--color-gray-60)" />,
-    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" fill="var(--color-gray-60)" />,
-    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" fill="var(--color-gray-60)" />,
-    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" fill="var(--color-gray-60)" />,
+    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--theme-icon-color)" />,
+    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" fill="var(--theme-icon-color)" />,
+    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" fill="var(--theme-icon-color)" />,
+    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" fill="var(--theme-icon-color)" />,
+  }
+
+  function focusDocumentFieldHandler(e) {
+    if (listItemRef.current) {
+      const docEl = document.querySelector('.document')
+      const documentField = docEl.querySelector(`.document-field[data-id="${listItemRef.current.dataset.id}"]`)
+      documentField.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   return (
@@ -43,9 +52,14 @@ const DocumentOutlineItem = ({
       onDragLeave={dragLeaveHandler}
       onDragStart={dragStartHandler}
       onDrop={dropHandler}
+      ref={listItemRef}
     >
       <div className="document-outline__dragger"><DragIcon fill="var(--color-gray-30)" /></div>
-      <div className="document-outline__icon">{fieldIcons[field.type]}</div>
+      <div className="document-outline__icon">
+        <IconButton color="transparent" onClick={focusDocumentFieldHandler}>
+          {fieldIcons[field.type]}
+        </IconButton>
+      </div>
       <div className="document-outline__name">
         <input
           defaultValue={field.name}

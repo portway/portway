@@ -60,6 +60,7 @@
     &--dragging {
       background-color: var(--color-gray-50);
       border-radius: var(--border-radius);
+      cursor: grabbing;
       * {
         visibility: hidden;
         pointer-events: none;
@@ -74,6 +75,7 @@
   }
 
   .document-outline__dragger {
+    cursor: grab;
     width: 3rem;
   }
 
@@ -102,7 +104,7 @@
   }
 
 .document-outline__button {
-  background-color: var(--theme-overflow);
+  background-color: var(--theme-surface);
   border-top: thin solid var(--theme-border-light);
   padding: 2rem;
   button {

@@ -16,7 +16,7 @@
         background-color: var(--theme-overlay-dark);
       }
     }
-    &:active {
+    &:active, &:focus {
       background-color: var(--theme-overlay-light);
     }
   }
@@ -30,7 +30,7 @@
           background-color: transparent;
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: transparent;
       }
     }
@@ -43,7 +43,7 @@
           background-color: var(--color-green-dark);
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: var(--color-green-light);
       }
     }
@@ -57,7 +57,7 @@
           background-color: var(--color-red-dark);
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: var(--color-red-light);
       }
     }
