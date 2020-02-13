@@ -28,14 +28,17 @@ const DocumentFieldsContainer = ({
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // Sort the fields every re-render
-  const fieldMap = Object.keys(fields).map((fieldId) => {
+  const fieldKeys = Object.keys(fields)
+  const fieldMap = fieldKeys.map((fieldId) => {
     return fields[fieldId]
   })
   fieldMap.sort((a, b) => {
     return a.order - b.order
   })
 
-  const hasOnlyOneTextField = fieldMap.length === 1 && fields[fieldMap[0]].type === FIELD_TYPES.TEXT
+
+  const hasFields = fieldKeys.length >= 1 && fields[fieldMap[0].id]
+  const hasOnlyOneTextField = hasFields && fieldMap.length === 1 && fields[fieldMap[0].id].type === FIELD_TYPES.TEXT
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
