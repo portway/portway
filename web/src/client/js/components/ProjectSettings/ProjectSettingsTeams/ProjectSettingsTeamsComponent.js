@@ -4,8 +4,9 @@ import { debounce } from 'lodash'
 import { Link } from 'react-router-dom'
 const Select = lazy(() => import('react-select'))
 
-import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { PATH_USERS, PATH_PROJECT, PROJECT_ROLE_IDS, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import { AddIcon, ArrowIcon } from 'Components/Icons'
+import OrgPermission from 'Components/Permission/OrgPermission'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
@@ -25,6 +26,7 @@ const ProjectSettingsTeamsComponent = ({
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
   const [newUserRole, setNewUserRole] = useState(PROJECT_ROLE_IDS.READER)
+  const showAddUsersMessage = users.length === 0
 
   return (
     <form className="project-settings__teams form" onSubmit={(e) => { e.preventDefault() }}>
@@ -97,6 +99,14 @@ const ProjectSettingsTeamsComponent = ({
             </div>
           </div>
         </div>
+        <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.ADMIN, ORGANIZATION_ROLE_IDS.OWNER]}>
+          {showAddUsersMessage &&
+          <p className="project-settings__users-warning note">
+            It looks like you haven’t added users to your organization yet. Once you <Link to={PATH_USERS}>add users</Link>,
+            you can assign them to project teams.
+          </p>
+          }
+        </OrgPermission>
         <ValidationContainer resource="project" value="userId" />
       </section>
       <section>
