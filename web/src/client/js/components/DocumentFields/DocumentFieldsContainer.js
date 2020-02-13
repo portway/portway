@@ -36,9 +36,9 @@ const DocumentFieldsContainer = ({
     return a.order - b.order
   })
 
-
-  const hasFields = fieldKeys.length >= 1 && fields[fieldMap[0].id]
+  const hasFields = fieldKeys.length >= 1
   const hasOnlyOneTextField = hasFields && fieldMap.length === 1 && fields[fieldMap[0].id].type === FIELD_TYPES.TEXT
+
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
