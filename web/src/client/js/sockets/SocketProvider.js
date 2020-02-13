@@ -1,7 +1,8 @@
 import React, { createContext, useReducer } from 'react'
 import PropTypes from 'prop-types'
 import openSocket from 'socket.io-client'
-const documentSocket = openSocket('http://localhost:3002/documents')
+import { currentUserId } from 'Libs/currentIds'
+const documentSocket = openSocket(`http://localhost:3002/documents?userId=${currentUserId}`)
 
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',

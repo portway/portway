@@ -55,7 +55,7 @@ const DocumentFieldsContainer = ({
   // =============================== Web Sockets ====================================
 
   useEffect(() => {
-    documentSocket.emit('joinRoom', documentId, currentUserId)
+    documentSocket.emit('joinRoom', documentId)
     console.log('joined room ', documentId)
     socketDispatch(setCurrentDocumentRoom(documentId))
     documentSocket.on('userChange', (userIds) => {
@@ -63,7 +63,7 @@ const DocumentFieldsContainer = ({
     })
     return () => {
       console.log('leaving room', currentDocumentRoom)
-      documentSocket.emit('leaveRoom', currentDocumentRoom, currentUserId)
+      documentSocket.emit('leaveRoom', currentDocumentRoom)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
