@@ -21,6 +21,7 @@ const DocumentOutlineComponent = ({
     const outlineCopy = outlineRef.current
     if (outlineCopy) {
       outlineCopy.classList.add('document-outline--active')
+      console.log('hey')
     }
     return () => {
       outlineCopy.classList.remove('document-outline--active')

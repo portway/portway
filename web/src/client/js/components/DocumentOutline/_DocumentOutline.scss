@@ -48,6 +48,7 @@
   flex: 1;
   list-style: none;
   margin: 0;
+  overflow-y: auto;
   padding: 1rem 1rem 1rem .5rem;
 }
 
@@ -101,6 +102,8 @@
   }
 
 .document-outline__button {
+  background-color: var(--theme-overflow);
+  border-top: thin solid var(--theme-border-light);
   padding: 2rem;
   button {
     width: 100%;
