@@ -80,7 +80,7 @@ const DocumentFieldComponent = ({
     [FIELD_TYPES.TEXT]: 'Text area',
     [FIELD_TYPES.STRING]: 'String',
     [FIELD_TYPES.NUMBER]: 'Number',
-    [FIELD_TYPES.IMAGE]: 'Photo',
+    [FIELD_TYPES.IMAGE]: 'Image',
   }
 
   const fieldIcons = {
