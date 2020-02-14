@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
-import cx from 'classnames'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -48,7 +47,7 @@ const DocumentComponent = ({
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
-  const supportsFullScreen = documentRef.current && documentRef.current.requestFullscreen
+  const supportsFullScreen = documentRef.current && (documentRef.current.requestFullscreen || documentRef.current.webkitRequestFullscreen)
 
   let documentReadOnlyMode
   // False because null / true == loading
