@@ -63,6 +63,7 @@
   --theme-overflow: var(--color-white);          // 5 lightest
   --theme-border: var(--color-gray-10);
   --theme-border-light: var(--color-gray-5);
+  --theme-icon-color: #3b3d3e;
 
   --base-background: var(--color-white);
   --base-color: var(--color-gray-60);
@@ -85,6 +86,7 @@
     --theme-overflow: hsl(0, 0%, 5%);               // 5 darkest
     --theme-border: hsl(218, 7%, 24%);
     --theme-border-light: hsl(223, 7%, 19%);
+    --theme-icon-color: #F2F2F2;
 
     --base-background: hsl(61, 1%, 21%);
     --base-color: hsl(106, 0%, 89%);

@@ -16,7 +16,7 @@
         background-color: var(--theme-overlay-dark);
       }
     }
-    &:active {
+    &:active, &:focus {
       background-color: var(--theme-overlay-light);
     }
   }
@@ -30,7 +30,7 @@
           background-color: transparent;
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: transparent;
       }
     }
@@ -43,8 +43,22 @@
           background-color: var(--color-green-dark);
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: var(--color-green-light);
+      }
+    }
+  }
+
+  &--red {
+    background-color: var(--color-red);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-red-dark);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-red-light);
       }
     }
   }

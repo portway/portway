@@ -1,0 +1,116 @@
+@import 'CSS/inc/_include-media.scss';
+
+.document-outline {
+  background-color: var(--theme-overlay-light);
+  border: thin solid var(--theme-border);
+  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 11.2rem);
+  top: calc(6.4rem + 2rem);
+  position: absolute;
+  right: 2rem;
+  z-index: 10;
+  width: 80%;
+
+  @include media('>medium') {
+    max-width: 300px;
+    width: 40%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translateX(350px);
+    transition: transform 0.2s ease-in-out;
+    &--active {
+      transform: translateX(0);
+    }
+  }
+
+}
+
+.document-outline__header {
+  background-color: var(--theme-overlay-dark);
+  border-bottom: thin solid var(--theme-border);
+  padding: 0 2rem 1rem;
+}
+
+.document-outline__title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.document-outline__description {
+  margin-top: 0;
+}
+
+.document-outline__list {
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  overflow-y: auto;
+  padding: 1rem 1rem 1rem .5rem;
+}
+
+  .document-outline__list-item {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.6rem;
+    &--dragging {
+      background-color: var(--color-gray-50);
+      border-radius: var(--border-radius);
+      cursor: grabbing;
+      * {
+        visibility: hidden;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .document-outline__clone-element {
+    background-color: var(--theme-surface);
+    border-radius: var(--border-radius);
+    .document-outline__actions {
+      display: none;
+    }
+  }
+
+  .document-outline__dragger {
+    cursor: grab;
+    width: 3rem;
+  }
+
+  .document-outline__icon  {
+    height: 2.4rem;
+    margin-right: var(--icon-margin);
+    overflow: hidden;
+  }
+
+  .document-outline__name {
+    flex: 1;
+    padding-right: var(--icon-margin);
+    input {
+      border: thin solid transparent;
+      font-size: 1.3rem;
+      padding: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      .using-mouse & {
+        &:focus {
+          border: thin solid transparent;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+
+.document-outline__button {
+  background-color: var(--theme-surface);
+  border-top: thin solid var(--theme-border-light);
+  padding: 2rem;
+  button {
+    width: 100%;
+  }
+}
+

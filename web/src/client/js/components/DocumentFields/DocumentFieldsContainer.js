@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
-import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
+import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { debounce, getNewNameInSequence } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import { uiConfirm } from 'Actions/ui'
-import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
+import { blurField, createField, focusField, updateField } from 'Actions/field'
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
@@ -17,42 +16,29 @@ const DocumentFieldsContainer = ({
   blurField,
   createField,
   createdFieldId,
-  documentMode,
   disabled,
   fieldsUpdating,
   focusField,
   isPublishing,
-  removeField,
-  uiConfirm,
   updateField,
-  updateFieldOrder,
 }) => {
-  const [orderedFields, setOrderedFields] = useState([])
-  const [dropped, setDropped] = useState(false)
-  const draggingElement = useRef(null)
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  // Convert fields object to a sorted array for rendering
-  const fieldIds = Object.keys(fields)
-  useEffect(() => {
-    const fieldMap = fieldIds.map((fieldId) => {
-      return fields[fieldId]
-    })
-    fieldMap.sort((a, b) => {
-      return a.order - b.order
-    })
-    setOrderedFields(fieldMap)
-    // Note: this is not an ideal dependency but if fields aren't loaded and then load
-    // it will appropriately set the order. `fields` cannot be a dependency as it's an object.
-    // When field order is changed, other handlers will correctly set the ordered fields and
-    // we do not want this effect to run in those cases.
-    // eslint-disable-next-line
-  }, [fieldIds.length])
+  // Sort the fields every re-render
+  const fieldKeys = Object.keys(fields)
+  const fieldMap = fieldKeys.map((fieldId) => {
+    return fields[fieldId]
+  })
+  fieldMap.sort((a, b) => {
+    return a.order - b.order
+  })
 
-  const hasOnlyOneTextField = fieldIds.length === 1 && fields[fieldIds[0]].type === FIELD_TYPES.TEXT
+  const hasFields = fieldKeys.length >= 1
+  const hasOnlyOneTextField = hasFields && fieldMap.length === 1 && fields[fieldMap[0].id].type === FIELD_TYPES.TEXT
+
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
@@ -73,8 +59,8 @@ const DocumentFieldsContainer = ({
   }, [hasOnlyOneTextField])
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
-  const notReadOnlyModeButDontDoDragEvents = documentMode === DOCUMENT_MODE.NORMAL
-  let documentReadOnlyMode
+
+  let documentReadOnlyMode = false
   // False because null / true == loading
   if (assignmentLoading === false) {
     documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
@@ -104,34 +90,6 @@ const DocumentFieldsContainer = ({
     }
   }
 
-  function fieldDestroyHandler(fieldId, fieldType) {
-    if (!documentReadOnlyMode) {
-      let type = 'field'
-
-      switch (fieldType) {
-        case FIELD_TYPES.IMAGE:
-          type = 'image'
-          break
-        case FIELD_TYPES.STRING:
-          type = 'string'
-          break
-        case FIELD_TYPES.NUMBER:
-          type = 'number'
-          break
-        case FIELD_TYPES.TEXT:
-          type = 'text'
-          break
-        default:
-          break
-      }
-
-      const message = <span>Are you sure you want to delete this {type}?</span>
-      const confirmedLabel = 'Yes, delete it.'
-      const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
-      uiConfirm({ message, confirmedAction, confirmedLabel })
-    }
-  }
-
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)
@@ -152,103 +110,6 @@ const DocumentFieldsContainer = ({
     }
   }
 
-  let cloneElement
-  function dragStartHandler(e) {
-    // console.info('drag start')
-    e.stopPropagation()
-    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
-    const listItem = e.currentTarget
-    e.dataTransfer.dropEffect = 'move'
-    e.dataTransfer.effectAllowed = 'copyMove'
-    e.dataTransfer.setData('fieldid', listItem.dataset.id)
-    e.dataTransfer.setData('documentid', documentId)
-    e.dataTransfer.setData('text/html', listItem)
-    draggingElement.current = listItem
-
-    // Create a clone of the item and append it to the document
-    // This is for dragging around a clone of the item we're dragging
-    // this is in a timeout due to a browser bug with dragEnd immediately firing
-    // when DOM is manipulated in dragStart
-
-    cloneElement = listItem.cloneNode(true)
-    cloneElement.style.position = 'absolute'
-    cloneElement.style.zIndex = '-1'
-    cloneElement.style.width = `${listItem.offsetWidth}px`
-    cloneElement.classList.add('document-field--clone-element')
-    cloneElement.setAttribute('draggable', false)
-    cloneElement.setAttribute('id', 'clone-element')
-    document.body.appendChild(cloneElement)
-
-    // Make the default, blurry image of the dragged item disappear
-    e.dataTransfer.setDragImage(cloneElement, 10, 10)
-
-    setTimeout(() => {
-      listItem.classList.add('document-field--dragging')
-    }, 200)
-  }
-
-  function dragEnterHandler(e) {
-    // console.info('drag enter', draggingElement)
-    e.preventDefault()
-    e.stopPropagation()
-    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
-    e.dataTransfer.dropEffect = 'move'
-    if (e.dataTransfer.types.includes('Files')) {
-      return
-    }
-
-    // Swap the fields on drag enter
-    const from = Number(draggingElement.current.dataset.order)
-    const to = Number(e.currentTarget.dataset.order)
-    const fieldData = [...orderedFields]
-    fieldData.splice(to, 0, fieldData.splice(from, 1)[0])
-    setOrderedFields(fieldData)
-    // If the item we're dragging is nowhere in the viewport,
-    // scroll to it
-    window.requestAnimationFrame(() => {
-      if (!isAnyPartOfElementInViewport(draggingElement.current)) {
-        draggingElement.current.scrollIntoView(false, {
-          // behavior: 'smooth'
-        })
-      }
-    })
-  }
-
-  // This is here for debugging
-  function dragLeaveHandler(e) {
-    // console.info('drag leave', draggingElement)
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
-  function dropHandler(e) {
-    // console.info('drag drop', draggingElement)
-    e.preventDefault()
-    e.stopPropagation()
-    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
-    if (e.dataTransfer.types.includes('Files')) {
-      return
-    }
-    const fieldIdToUpdate = draggingElement.current.dataset.id
-    const to = Number(draggingElement.current.dataset.order)
-    draggingElement.current.classList.remove('document-field--dragging')
-    draggingElement.current.setAttribute('draggable', 'false')
-    // Trigger action with documentId, fieldId
-    updateFieldOrder(documentId, fieldIdToUpdate, to)
-  }
-
-  function dragEndHandler(e) {
-    // console.info('drag end', draggingElement)
-    e.preventDefault()
-    e.stopPropagation()
-    if (documentReadOnlyMode || notReadOnlyModeButDontDoDragEvents) return
-    draggingElement.current.classList.remove('document-field--dragging')
-    document.querySelector('#clone-element').remove()
-
-    draggingElement.current = null
-    setDropped(!dropped)
-  }
-
   // Prop handler
   const debouncedValueChangeHandler = debounce(1000, (fieldId, value) => {
     fieldChangeHandler(fieldId, { value: value })
@@ -263,20 +124,12 @@ const DocumentFieldsContainer = ({
       createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
       disabled={disabled}
-      documentMode={documentMode}
-      dragEndHandler={dragEndHandler}
-      dragEnterHandler={dragEnterHandler}
-      dragLeaveHandler={dragLeaveHandler}
-      dragStartHandler={dragStartHandler}
-      dropHandler={dropHandler}
       fieldChangeHandler={debouncedValueChangeHandler}
-      fieldDestroyHandler={fieldDestroyHandler}
       fieldFocusHandler={fieldFocusHandler}
       fieldBlurHandler={fieldBlurHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
-      fields={orderedFields}
+      fields={fieldMap}
       fieldsUpdating={fieldsUpdating}
-      isDragging={draggingElement.current != null}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}
     />
@@ -288,21 +141,16 @@ DocumentFieldsContainer.propTypes = {
   createField: PropTypes.func.isRequired,
   createdFieldId: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
-  documentMode: PropTypes.string,
   fieldsUpdating: PropTypes.object.isRequired,
   focusField: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  removeField: PropTypes.func.isRequired,
-  uiConfirm: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
-  updateFieldOrder: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
     createdFieldId: state.documentFields.lastCreatedFieldId,
     disabled: state.ui.fields.disabled,
-    documentMode: state.ui.document.documentMode,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
     isPublishing: state.ui.documents.isPublishing,
   }
@@ -312,10 +160,7 @@ const mapDispatchToProps = {
   blurField,
   createField,
   focusField,
-  removeField,
   updateField,
-  updateFieldOrder,
-  uiConfirm
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
