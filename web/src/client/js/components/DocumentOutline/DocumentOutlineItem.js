@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { FIELD_TYPES } from 'Shared/constants'
@@ -25,6 +25,7 @@ const DocumentOutlineItem = ({
   onDestroy,
   onRename
 }) => {
+  const [dragEnabled, setDragEnabled] = useState(true)
   const listItemRef = useRef()
   const fieldIcons = {
     [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--theme-icon-color)" />,
@@ -41,16 +42,26 @@ const DocumentOutlineItem = ({
     }
   }
 
+  function disableDragHandler(e) {
+    e.stopPropagation()
+    setDragEnabled(false)
+  }
+
+  function enableDragHandler(e) {
+    e.stopPropagation()
+    setDragEnabled(true)
+  }
+
   return (
     <li
       className="document-outline__list-item"
       data-id={field.id}
       data-order={index}
-      draggable={true}
-      onDragEnd={dragEndHandler}
+      draggable={dragEnabled}
+      onDragEnd={(e) => { dragEnabled ? dragEndHandler(e) : e.preventDefault() }}
       onDragEnter={dragEnterHandler}
       onDragLeave={dragLeaveHandler}
-      onDragStart={dragStartHandler}
+      onDragStart={(e) => { dragEnabled ? dragStartHandler(e) : e.preventDefault() }}
       onDrop={dropHandler}
       ref={listItemRef}
     >
@@ -63,6 +74,7 @@ const DocumentOutlineItem = ({
       <div className="document-outline__name">
         <input
           defaultValue={field.name}
+          onBlur={enableDragHandler}
           onKeyDown={(e) => {
             if (e.key.toLowerCase() === 'escape') {
               e.target.blur()
@@ -70,6 +82,8 @@ const DocumentOutlineItem = ({
             }
           }}
           onFocus={focusDocumentFieldHandler}
+          onMouseDown={disableDragHandler}
+          onMouseUp={enableDragHandler}
           onChange={(e) => { onRename(field.id, e.target.value) }}
           type="text" />
       </div>
