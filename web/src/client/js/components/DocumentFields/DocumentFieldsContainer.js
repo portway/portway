@@ -59,6 +59,7 @@ const DocumentFieldsContainer = ({
     console.log('joined room ', documentId)
     socketDispatch(setCurrentDocumentRoom(documentId))
     documentSocket.on('userChange', (userIds) => {
+      console.log(userIds)
       socketDispatch(updateDocumentRoomUsers(documentId, userIds))
     })
     return () => {

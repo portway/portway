@@ -16,4 +16,8 @@ app.use(passport.initialize())
 const router = express.Router()
 app.use(router)
 
+process.on('uncaughtException', (error) => {
+  console.error(error)
+})
+
 export default app
