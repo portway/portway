@@ -13,7 +13,6 @@ import { socketStore, updateDocumentRoomUsers, setCurrentDocumentRoom } from '..
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
-import { currentUserId } from 'Libs/currentIds'
 
 const DocumentFieldsContainer = ({
   blurField,
@@ -42,29 +41,19 @@ const DocumentFieldsContainer = ({
   const activeUsers = socketState.activeDocumentUsers[documentId]
   const currentDocumentRoom = socketState.currentDocumentRoom
 
-  // fields are done loading so we know it's a valid document id, connect to document room
-  // if (fieldsLoading === false && !roomJoined.current && documentId) {
-  //   documentSocket.emit('room', documentId, currentUserId)
-  //   console.log('joined room ', documentId)
-  //   documentSocket.on('userChange', (userIds) => {
-  //     socketDispatch(updateDocumentRoomUsers(documentId, userIds))
-  //   })
-  //   roomJoined.current = true
-  // }
-
   // =============================== Web Sockets ====================================
 
   useEffect(() => {
     documentSocket.emit('joinRoom', documentId)
-    console.log('joined room ', documentId)
     socketDispatch(setCurrentDocumentRoom(documentId))
     documentSocket.on('userChange', (userIds) => {
-      console.log(userIds)
       socketDispatch(updateDocumentRoomUsers(documentId, userIds))
     })
     return () => {
-      console.log('leaving room', currentDocumentRoom)
-      documentSocket.emit('leaveRoom', currentDocumentRoom)
+      if (currentDocumentRoom) {
+        documentSocket.emit('leaveRoom', currentDocumentRoom)
+        setCurrentDocumentRoom(null)
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
