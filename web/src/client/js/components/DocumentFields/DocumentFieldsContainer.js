@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -9,6 +9,7 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
+import { socketStore, updateDocumentRoomUsers, setCurrentDocumentRoom } from '../../sockets/SocketProvider'
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
@@ -34,6 +35,30 @@ const DocumentFieldsContainer = ({
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+
+  const { state: socketState, dispatch: socketDispatch, documentSocket } = useContext(socketStore)
+
+  const activeUsers = socketState.activeDocumentUsers[documentId]
+  const currentDocumentRoom = socketState.currentDocumentRoom
+
+  // =============================== Web Sockets ====================================
+
+  useEffect(() => {
+    documentSocket.emit('joinRoom', documentId)
+    socketDispatch(setCurrentDocumentRoom(documentId))
+    documentSocket.on('userChange', (userIds) => {
+      socketDispatch(updateDocumentRoomUsers(documentId, userIds))
+    })
+    return () => {
+      if (currentDocumentRoom) {
+        documentSocket.emit('leaveRoom', currentDocumentRoom)
+        setCurrentDocumentRoom(null)
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentId])
+
+  // =================================================================================
 
   // Convert fields object to a sorted array for rendering
   const fieldIds = Object.keys(fields)
@@ -260,6 +285,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
+      activeUsers ={activeUsers}
       createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
       disabled={disabled}

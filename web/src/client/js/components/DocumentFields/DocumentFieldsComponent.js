@@ -10,6 +10,7 @@ import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
+  activeUsers,
   createdFieldId,
   createFieldHandler,
   disabled,
@@ -167,6 +168,7 @@ const DocumentFieldsComponent = ({
   })
   return (
     <div className={fieldsClasses}>
+      <h1>{activeUsers}</h1>
       <ol>
         {renderFields()}
       </ol>
@@ -175,6 +177,7 @@ const DocumentFieldsComponent = ({
 }
 
 DocumentFieldsComponent.propTypes = {
+  activeUsers: PropTypes.array,
   createdFieldId: PropTypes.number,
   createFieldHandler: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
