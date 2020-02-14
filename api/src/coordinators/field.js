@@ -2,13 +2,54 @@ import BusinessField from '../businesstime/field'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { processMarkdownWithWorker } from './markdown'
 import assetCoordinator from './assets'
+import fs from 'fs'
+import path from 'path'
+import util from 'util'
 import ono from 'ono'
+import axios from 'axios'
+import { lookup } from 'mime-types'
+
+const stat = util.promisify(fs.stat)
+
+// EXPORTS
 
 const addFieldToDocument = async function(documentId, body, file) {
   const { orgId } = body
   const fieldBody = await getFieldBodyByType(body, documentId, orgId, file)
 
   return BusinessField.createForDocument(documentId, fieldBody)
+}
+
+const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
+  const filePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
+  const resp = await axios({ url, responseType: 'stream', method: 'get' })
+  const writeStream = fs.createWriteStream(filePath)
+
+  console.log('###########################################')
+  console.log('###########################################')
+  console.log(filePath)
+
+  const urlParts = url.split('/')
+  const name = urlParts[urlParts.length - 1]
+
+  await new Promise((resolve, reject) => {
+    resp.data.on('close', resolve)
+    resp.data.on('error', reject)
+    resp.data.pipe(writeStream)
+  })
+
+  const fileStats = await stat(filePath)
+
+  // This is mimic'ing multer's file object.
+  // Not ideal to be passing the multer object around, but that's a larger rewrite to fix
+  const file = {
+    originalname: name,
+    mimetype: lookup(url),
+    path: filePath,
+    size: fileStats.size
+  }
+
+  addFieldToDocument(documentId, body, file)
 }
 
 const updateDocumentField = async function(fieldId, documentId, orgId, body, file) {
@@ -26,6 +67,8 @@ const removeDocumentField = async function(fieldId, documentId, orgId) {
   // async, but don't wait for it
   cleanupFieldByType(field, orgId)
 }
+
+// HELPERS
 
 // Handles cleanup based on the field type
 const cleanupFieldByType = async function(field, orgId) {
@@ -61,6 +104,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
 
 export default {
   addFieldToDocument,
+  addImageFieldFromUrlToDocument,
   updateDocumentField,
   removeDocumentField
 }

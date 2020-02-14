@@ -1,8 +1,8 @@
 import BusinessProject from '../businesstime/project'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
-import { copyContent, convertCDNUrlToS3Key, getKeyForDocumentAsset } from '../integrators/s3'
 import { getProject, getProjectDocuments, getDocumentWithFields } from '../integrators/portway'
+import fieldCoordinator from './field'
 import { INTRO_PROJECT_ID } from '../constants/intro'
 import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
 import { FIELD_TYPES } from '../constants/fieldTypes'
@@ -34,8 +34,11 @@ const copyIntroProjectToOrg = async (orgId) => {
         body[fieldProp] = field[fieldProp]
         return body
       }, {})
+      body.orgId = orgId
+
       if (body.type === FIELD_TYPES.IMAGE) {
-        return Promise.resolve()
+        // return Promise.resolve()
+        return fieldCoordinator.addImageFieldFromUrlToDocument(newDoc.id, body, field.value)
         // const key = convertCDNUrlToS3Key(field.value)
         // const keyParts = key.split('/')
         // const name = keyParts[keyParts.length - 1]
@@ -46,7 +49,6 @@ const copyIntroProjectToOrg = async (orgId) => {
         // const newKey = getKeyForDocumentAsset(nameNoDate, newDoc.id, orgId)
         // body.value = await copyContent(key, newKey)
       }
-      body.orgId = orgId
       return BusinessField.createForDocument(newDoc.id, body)
     }, Promise.resolve())
   }))
