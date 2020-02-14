@@ -48,6 +48,7 @@ const DocumentComponent = ({
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
   const supportsFullScreen = documentRef.current && (documentRef.current.requestFullscreen || documentRef.current.webkitRequestFullscreen)
+  const isLikelyAniPad = 'TouchEvent' in window && navigator.platform === 'MacIntel'
 
   let documentReadOnlyMode
   // False because null / true == loading
@@ -68,7 +69,7 @@ const DocumentComponent = ({
           <ArrowIcon direction="left" width="12" height="12" />
         </Link>
         }
-        {!mobileView && supportsFullScreen &&
+        {!mobileView && !isLikelyAniPad && supportsFullScreen &&
         <button
           aria-label="Expand the editor to full screen"
           className="btn btn--blank btn--with-circular-icon document__button-expand"
