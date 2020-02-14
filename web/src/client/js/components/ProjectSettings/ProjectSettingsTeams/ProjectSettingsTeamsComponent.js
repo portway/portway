@@ -26,7 +26,9 @@ const ProjectSettingsTeamsComponent = ({
   const selectRef = useRef()
   const [newUserId, setNewUserId] = useState(null)
   const [newUserRole, setNewUserRole] = useState(PROJECT_ROLE_IDS.READER)
-  const showAddUsersMessage = users.length === 0
+
+  // Show a message if there are no users other than the project owner
+  const showAddUsersMessage = users.length === 0 && projectUsers.length === 0
 
   return (
     <form className="project-settings__teams form" onSubmit={(e) => { e.preventDefault() }}>
