@@ -25,10 +25,6 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
   const resp = await axios({ url, responseType: 'stream', method: 'get' })
   const writeStream = fs.createWriteStream(filePath)
 
-  console.log('###########################################')
-  console.log('###########################################')
-  console.log(filePath)
-
   const urlParts = url.split('/')
   const name = urlParts[urlParts.length - 1]
 
@@ -49,7 +45,7 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
     size: fileStats.size
   }
 
-  addFieldToDocument(documentId, body, file)
+  return addFieldToDocument(documentId, body, file)
 }
 
 const updateDocumentField = async function(fieldId, documentId, orgId, body, file) {

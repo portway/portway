@@ -37,23 +37,11 @@ const copyIntroProjectToOrg = async (orgId) => {
       body.orgId = orgId
 
       if (body.type === FIELD_TYPES.IMAGE) {
-        // return Promise.resolve()
         return fieldCoordinator.addImageFieldFromUrlToDocument(newDoc.id, body, field.value)
-        // const key = convertCDNUrlToS3Key(field.value)
-        // const keyParts = key.split('/')
-        // const name = keyParts[keyParts.length - 1]
-        // // published assets are formatted as date-name, so remove date
-        // // processing is safe as split with no found character returns the full string
-        // const nameParts = name.split('-')
-        // const nameNoDate = nameParts[nameParts.length - 1]
-        // const newKey = getKeyForDocumentAsset(nameNoDate, newDoc.id, orgId)
-        // body.value = await copyContent(key, newKey)
       }
       return BusinessField.createForDocument(newDoc.id, body)
     }, Promise.resolve())
   }))
-
-  console.log('docs')
 }
 
 export default {
