@@ -28,10 +28,17 @@
 
 }
 
+.document-outline__toggle {
+  position: absolute;
+  right: 1rem;
+  top: 2rem;
+}
+
 .document-outline__header {
   background-color: var(--theme-overlay-dark);
   border-bottom: thin solid var(--theme-border);
-  padding: 0 2rem 1rem;
+  padding: 0 4rem 1rem 2rem;
+  position: relative;
 }
 
 .document-outline__title {

@@ -29,21 +29,15 @@ const DocumentOutlineContainer = ({
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
 
   // Convert fields object to a sorted array for rendering
-  const fieldIds = Object.keys(fields)
   useEffect(() => {
-    const fieldMap = fieldIds.map((fieldId) => {
+    const fieldMap = Object.keys(fields).map((fieldId) => {
       return fields[fieldId]
     })
     fieldMap.sort((a, b) => {
       return a.order - b.order
     })
     setOrderedFields(fieldMap)
-    // Note: this is not an ideal dependency but if fields aren't loaded and then load
-    // it will appropriately set the order. `fields` cannot be a dependency as it's an object.
-    // When field order is changed, other handlers will correctly set the ordered fields and
-    // we do not want this effect to run in those cases.
-    // eslint-disable-next-line
-  }, [fieldIds.length])
+  }, [fields])
 
   const notReadOnlyModeButDontDoDragEvents = documentMode === DOCUMENT_MODE.NORMAL
 
@@ -103,8 +97,10 @@ const DocumentOutlineContainer = ({
     e.dataTransfer.setDragImage(cloneElement, 10, 10)
 
     setTimeout(() => {
-      listItem.classList.add('document-outline__list-item--dragging')
-    }, 200)
+      if (draggingElement.current) {
+        draggingElement.current.classList.add('document-outline__list-item--dragging')
+      }
+    }, 100)
   }
 
   function dragEnterHandler(e) {
@@ -126,7 +122,7 @@ const DocumentOutlineContainer = ({
     // If the item we're dragging is nowhere in the viewport,
     // scroll to it
     window.requestAnimationFrame(() => {
-      if (!isAnyPartOfElementInViewport(draggingElement.current)) {
+      if (draggingElement.current && !isAnyPartOfElementInViewport(draggingElement.current)) {
         draggingElement.current.scrollIntoView(false, {
           // behavior: 'smooth'
         })
@@ -136,7 +132,6 @@ const DocumentOutlineContainer = ({
 
   // This is here for debugging
   function dragLeaveHandler(e) {
-    // console.info('drag leave', draggingElement)
     e.preventDefault()
     e.stopPropagation()
   }
@@ -158,12 +153,11 @@ const DocumentOutlineContainer = ({
 
   function dragEndHandler(e) {
     // console.info('drag end', draggingElement)
+    draggingElement.current.classList.remove('document-outline__list-item--dragging')
     e.preventDefault()
     e.stopPropagation()
     if (notReadOnlyModeButDontDoDragEvents) return
-    draggingElement.current.classList.remove('document-outline__list-item--dragging')
     document.querySelector('#clone-element').remove()
-
     draggingElement.current = null
     setDropped(!dropped)
   }
