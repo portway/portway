@@ -2,6 +2,7 @@ import BusinessField from '../businesstime/field'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { processMarkdownWithWorker } from './markdown'
 import assetCoordinator from './assets'
+import { promisifyStreamPipe } from '../libs/utils'
 import fs from 'fs'
 import path from 'path'
 import util from 'util'
@@ -22,19 +23,15 @@ const addFieldToDocument = async function(documentId, body, file) {
 
 const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
   const filePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
+
   const resp = await axios({ url, responseType: 'stream', method: 'get' })
   const writeStream = fs.createWriteStream(filePath)
+  await promisifyStreamPipe(resp.data, writeStream)
+
+  const fileStats = await stat(filePath)
 
   const urlParts = url.split('/')
   const name = urlParts[urlParts.length - 1]
-
-  await new Promise((resolve, reject) => {
-    resp.data.on('close', resolve)
-    resp.data.on('error', reject)
-    resp.data.pipe(writeStream)
-  })
-
-  const fileStats = await stat(filePath)
 
   // This is mimic'ing multer's file object.
   // Not ideal to be passing the multer object around, but that's a larger rewrite to fix
@@ -45,7 +42,7 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
     size: fileStats.size
   }
 
-  return addFieldToDocument(documentId, body, file)
+  return fieldCoordinator.addFieldToDocument(documentId, body, file)
 }
 
 const updateDocumentField = async function(fieldId, documentId, orgId, body, file) {
@@ -98,9 +95,11 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
   return fieldBody
 }
 
-export default {
+const fieldCoordinator = {
   addFieldToDocument,
   addImageFieldFromUrlToDocument,
   updateDocumentField,
   removeDocumentField
 }
+
+export default fieldCoordinator

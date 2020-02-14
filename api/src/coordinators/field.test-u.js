@@ -2,10 +2,12 @@ import fieldCoordinator from './field'
 import assetCoordinator from './assets'
 import BusinessField from '../businesstime/field'
 import { processMarkdownWithWorker } from './markdown'
+import fs from 'fs'
 
 jest.mock('../businesstime/field')
 jest.mock('./assets')
 jest.mock('./markdown')
+jest.mock('fs')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
@@ -129,6 +131,27 @@ describe('fieldCoordinator', () => {
         expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(documentId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
       })
+    })
+  })
+
+  describe('#addImageFieldFromUrlToDocument', () => {
+    const url = 'https://bonkeybong.com/picture.jpg'
+    const docId = 12
+    const body = {
+      name: 'field'
+    }
+
+    beforeAll(async () => {
+      jest.spyOn(fieldCoordinator, 'addFieldToDocument')
+      await fieldCoordinator.addImageFieldFromUrlToDocument(docId, body, url)
+    })
+
+    it('should call fs.createWriteStream', () => {
+      expect(fs.createWriteStream.mock.calls.length).toBe(1)
+    })
+
+    afterAll(() => {
+      fieldCoordinator.addFieldToDocument.mockRestore()
     })
   })
 })
