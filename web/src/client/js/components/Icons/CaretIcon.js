@@ -22,7 +22,7 @@ CaretIcon.propTypes = {
 // Caret is special and is defaulting to 12 instead of 18 like all the rest
 CaretIcon.defaultProps = {
   className: 'icon-caret',
-  fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#F2F2F2' : '#3b3d3e',
+  fill: 'var(--theme-icon-color)',
   height: '12',
   width: '12'
 }
