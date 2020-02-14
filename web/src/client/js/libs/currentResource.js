@@ -28,7 +28,15 @@ const currentResource = (resourceName, path) => {
     case 'project':
       // Specifically look at project here, as we may be looking at documents
       const projectPathArray = path.split('/')
+
+      // We're back on the projects list
+      if (projectPathArray[1] === 'projects') {
+        returnValue = returnNull()
+        break
+      }
+
       const projectPath = `/${projectPathArray[1]}/${projectPathArray[2]}`
+
       if (projectPathArray[2] === 'create') {
         returnValue = returnNull()
         break
