@@ -8,6 +8,7 @@ const getGenericMockDocumentData = () => {
 }
 
 export default {
+  createForProject: jest.fn(() => { return { id: 8282 } }),
   findParentProjectByDocumentId: jest.fn(() => getGenericMockDocumentData()),
   deleteAllForOrg: jest.fn()
 }

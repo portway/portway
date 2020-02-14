@@ -21,7 +21,7 @@ const copyIntroProjectToOrg = async (orgId) => {
 
   const docs = await getProjectDocuments(INTRO_PROJECT_ID, READ_KEY)
 
-  Promise.all(docs.map(async (doc) => {
+  return Promise.all(docs.map(async (doc) => {
     const docWithFields = await getDocumentWithFields(doc.id, READ_KEY)
     const newDoc = await BusinessDocument.createForProject(newProject.id, {
       name: docWithFields.name,
