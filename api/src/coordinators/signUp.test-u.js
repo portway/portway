@@ -8,6 +8,7 @@ import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
+import introCoordinator from './intro'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/organization')
@@ -16,6 +17,7 @@ jest.mock('../integrators/stripe')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/email')
 jest.mock('./billing')
+jest.mock('./intro')
 
 describe('signUp coordinator', () => {
   const name = 'Nicolas Cage'
@@ -100,6 +102,10 @@ describe('signUp coordinator', () => {
       expect(sendSingleRecipientEmail.mock.calls[0][0].address).toBe(mockUserEmail)
       expect(sendSingleRecipientEmail.mock.calls[0][0].textBody).toEqual(expect.stringMatching(passwordResetToken))
       expect(sendSingleRecipientEmail.mock.calls[0][0].htmlBody).toEqual(expect.stringMatching(passwordResetToken))
+    })
+
+    it('should call introCoordinator.copyIntroProjectToOrg', () => {
+      expect(introCoordinator.copyIntroProjectToOrg.mock.calls.length).toBe(1)
     })
   })
 })
