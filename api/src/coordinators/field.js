@@ -2,7 +2,7 @@ import BusinessField from '../businesstime/field'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { processMarkdownWithWorker } from './markdown'
 import assetCoordinator from './assets'
-import { promisifyStreamPipe } from '../libs/utils'
+import { promisifyStreamPipe, callFuncWithArgs } from '../libs/utils'
 import fs from 'fs'
 import path from 'path'
 import util from 'util'
@@ -28,7 +28,7 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
   const writeStream = fs.createWriteStream(filePath)
   await promisifyStreamPipe(resp.data, writeStream)
 
-  const fileStats = await stat(filePath)
+  const fileStats = await callFuncWithArgs(stat, filePath)
 
   const urlParts = url.split('/')
   const name = urlParts[urlParts.length - 1]

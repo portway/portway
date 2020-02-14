@@ -2,12 +2,14 @@ import fieldCoordinator from './field'
 import assetCoordinator from './assets'
 import BusinessField from '../businesstime/field'
 import { processMarkdownWithWorker } from './markdown'
-import fs from 'fs'
+import { promisifyStreamPipe, callFuncWithArgs } from '../libs/utils'
+import axios from 'axios'
 
+jest.mock('axios')
 jest.mock('../businesstime/field')
 jest.mock('./assets')
 jest.mock('./markdown')
-jest.mock('fs')
+jest.mock('../libs/utils')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
@@ -143,11 +145,21 @@ describe('fieldCoordinator', () => {
 
     beforeAll(async () => {
       jest.spyOn(fieldCoordinator, 'addFieldToDocument')
+      axios.mockImplementation(() => {
+        return { data: null }
+      })
+      callFuncWithArgs.mockReturnValueOnce({ size: 143 })
       await fieldCoordinator.addImageFieldFromUrlToDocument(docId, body, url)
     })
 
-    it('should call fs.createWriteStream', () => {
-      expect(fs.createWriteStream.mock.calls.length).toBe(1)
+    it('should call utils.promisifyStreamPipe', () => {
+      expect(promisifyStreamPipe.mock.calls.length).toBe(1)
+    })
+
+    it('should call addFieldToDocument', () => {
+      expect(fieldCoordinator.addFieldToDocument.mock.calls.length).toBe(1)
+      expect(fieldCoordinator.addFieldToDocument.mock.calls[0][0]).toEqual(docId)
+      expect(fieldCoordinator.addFieldToDocument.mock.calls[0][1]).toEqual(body)
     })
 
     afterAll(() => {

@@ -20,3 +20,10 @@ export const promisifyStreamPipe = (readStream, writeStream) => {
     readStream.pipe(writeStream)
   })
 }
+
+// This is really just a helper function to make calls
+// to any lib that's hard to mock in tests. It puts the
+// call in a separate file and lets you get on with testing
+export const callFuncWithArgs = (func, ...args) => {
+  return func(...args)
+}
