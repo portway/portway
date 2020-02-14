@@ -2,6 +2,7 @@ import React, { createContext, useReducer } from 'react'
 import PropTypes from 'prop-types'
 import openSocket from 'socket.io-client'
 import { currentUserId } from 'Libs/currentIds'
+// TODO: pass in via env
 const documentSocket = openSocket(`http://localhost:3002/documents?userId=${currentUserId}`)
 
 const actionTypes = {
