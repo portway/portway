@@ -1,11 +1,9 @@
 const Redis = require('ioredis')
-
-const REDIS_PORT = '6379'
-
-const redis = new Redis(REDIS_PORT)
+const REDIS_URL = process.env.REDIS_URL
+const redis = new Redis(REDIS_URL)
 
 redis.on('connect', () => {
-  console.info(`redis connected on port ${REDIS_PORT}`)
+  console.info(`redis connected on port ${REDIS_URL}`)
 })
 
 export default redis
