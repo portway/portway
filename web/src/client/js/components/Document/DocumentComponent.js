@@ -48,7 +48,7 @@ const DocumentComponent = ({
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
   const supportsFullScreen = documentRef.current && (documentRef.current.requestFullscreen || documentRef.current.webkitRequestFullscreen)
-  const isLikelyAniPad = 'TouchEvent' in window && navigator.platform === 'MacIntel'
+  const isLikelyAniPad = 'ontouchstart' in window && navigator.platform === 'MacIntel'
 
   let documentReadOnlyMode
   // False because null / true == loading
