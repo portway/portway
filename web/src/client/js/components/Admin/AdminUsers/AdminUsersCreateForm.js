@@ -3,20 +3,25 @@ import PropTypes from 'prop-types'
 
 import { debounce } from 'Shared/utilities'
 import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
-import SpinnerContainer from 'Components/Spinner/SpinnerContainer'
+
+import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
 import OrgRolesDropdown from 'Components/RolesDropdowns/OrgRolesDropdown'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 
-const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }) => {
+const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, formId, submitHandler }) => {
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [orgRole, setOrgRole] = useState(ORGANIZATION_ROLE_IDS.USER)
 
-  const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--theme-border')
+  function getEmailOrUsersValidationErrors() {
+    // const emailErrorsArray = errors.email ? errors.email : []
+    // const usersErrorsArray = errors.users ? errors.users : []
+    // return [...emailErrorsArray, ...usersErrorsArray]
+    return (errors.email || []).concat(errors.users || [])
+  }
 
-  function formSubmitHandler(e) {
-    e.preventDefault()
+  function formSubmitHandler() {
     submitHandler({ name, email, orgRole })
   }
 
@@ -25,9 +30,9 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
   }
 
   return (
-    <form onSubmit={formSubmitHandler}>
-      <section>
-        <h2>Add a User</h2>
+    <section>
+      <h2>Add a User</h2>
+      <Form cancelHandler={cancelHandler} disabled={isNameOrEmailBlank()} name={formId} onSubmit={formSubmitHandler}>
         <FormField
           errors={errors.name}
           id="userName"
@@ -47,7 +52,7 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
           required
         />
         <FormField
-          errors={errors.email}
+          errors={getEmailOrUsersValidationErrors()}
           id="userEmail"
           label="Email address"
           name="email"
@@ -77,14 +82,8 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, submitHandler }
             </div>
           </div>
         </div>
-      </section>
-
-      <div className="btn-group">
-        <button className="btn btn-primary" disabled={isNameOrEmailBlank()}>Add User</button>
-        <button type="button" className="btn btn--blank" onClick={cancelHandler}>Cancel</button>
-        <SpinnerContainer color={borderColor} />
-      </div>
-    </form>
+      </Form>
+    </section>
   )
 }
 
@@ -92,6 +91,7 @@ AdminUsersCreateForm.propTypes = {
   cancelHandler: PropTypes.func.isRequired,
   errors: PropTypes.object,
   disabled: PropTypes.bool,
+  formId: PropTypes.string.isRequired,
   submitHandler: PropTypes.func.isRequired
 }
 
