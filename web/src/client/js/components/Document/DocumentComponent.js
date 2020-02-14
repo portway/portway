@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
+import cx from 'classnames'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -23,6 +24,7 @@ const DocumentComponent = ({
   toggleFullScreenHandler,
 }) => {
   const { projectId } = useParams()
+  const documentRef = useRef()
   const titleRef = useRef()
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
@@ -46,6 +48,7 @@ const DocumentComponent = ({
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
+  const supportsFullScreen = documentRef.current && documentRef.current.requestFullscreen
 
   let documentReadOnlyMode
   // False because null / true == loading
@@ -58,7 +61,7 @@ const DocumentComponent = ({
   })
 
   return (
-    <div className="document" key={docKey}>
+    <div className="document" key={docKey} ref={documentRef}>
       <ValidationContainer resource="document" value="name" />
       <header className="document__header">
         {mobileView &&
@@ -66,7 +69,7 @@ const DocumentComponent = ({
           <ArrowIcon direction="left" width="12" height="12" />
         </Link>
         }
-        {!mobileView &&
+        {!mobileView && supportsFullScreen &&
         <button
           aria-label="Expand the editor to full screen"
           className="btn btn--blank btn--with-circular-icon document__button-expand"
