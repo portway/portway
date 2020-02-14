@@ -56,7 +56,7 @@ const DocumentOutlineItem = ({
     >
       <div className="document-outline__dragger"><DragIcon fill="var(--color-gray-30)" /></div>
       <div className="document-outline__icon">
-        <IconButton color="transparent" onClick={focusDocumentFieldHandler}>
+        <IconButton color="transparent" square={true} onClick={focusDocumentFieldHandler}>
           {fieldIcons[field.type]}
         </IconButton>
       </div>

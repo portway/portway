@@ -21,6 +21,10 @@
     }
   }
 
+  &--square {
+    border-radius: 0 0;
+  }
+
   // Colors
   &--transparent {
     background-color: transparent;
