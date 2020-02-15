@@ -66,7 +66,7 @@ services:
       POSTGRES_USER: bonkey
       POSTGRES_PASSWORD: bong
     volumes:
-      - postgres-data:/var/lib/redis/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
