@@ -15,9 +15,6 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, formId, submitH
   const [orgRole, setOrgRole] = useState(ORGANIZATION_ROLE_IDS.USER)
 
   function getEmailOrUsersValidationErrors() {
-    // const emailErrorsArray = errors.email ? errors.email : []
-    // const usersErrorsArray = errors.users ? errors.users : []
-    // return [...emailErrorsArray, ...usersErrorsArray]
     return (errors.email || []).concat(errors.users || [])
   }
 
