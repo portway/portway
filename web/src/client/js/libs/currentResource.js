@@ -6,6 +6,8 @@
 import { matchPath } from 'react-router-dom'
 import dataMapper from './dataMapper'
 
+import { PATH_PROJECTS } from 'Shared/constants'
+
 function returnNull() {
   return {
     fetchAction: () => null,
@@ -28,9 +30,10 @@ const currentResource = (resourceName, path) => {
     case 'project':
       // Specifically look at project here, as we may be looking at documents
       const projectPathArray = path.split('/')
+      const projectsPath = PATH_PROJECTS.split('/')[1]
 
       // We're back on the projects list
-      if (projectPathArray[1] === 'projects') {
+      if (projectPathArray[1] === projectsPath) {
         returnValue = returnNull()
         break
       }

@@ -36,11 +36,9 @@ const NavigatorContainer = ({ history, location }) => {
     currentResource('project', location.pathname), [location.pathname]
   )
 
-  let title = ''
-  if (location.pathname === PATH_PROJECTS) {
-    title = 'Projects'
-  } else {
-    title = project ? project.name : 'Projects'
+  let title = 'Projects'
+  if (location.pathname !== PATH_PROJECTS && project) {
+    title = project.name
   }
 
   const [expanded, setExpanded] = useState(false)
