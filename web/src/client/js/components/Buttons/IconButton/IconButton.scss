@@ -21,6 +21,10 @@
     }
   }
 
+  &--square {
+    border-radius: 0 0;
+  }
+
   // Colors
   &--transparent {
     background-color: transparent;
@@ -35,6 +39,21 @@
       }
     }
   }
+
+  &--surface {
+    background-color: var(--theme-surface);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--theme-base);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--theme-overlay-light);
+      }
+    }
+  }
+
   &--green {
     background-color: var(--color-green);
     &:not([disabled]) {

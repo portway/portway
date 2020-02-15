@@ -14,6 +14,7 @@ import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsCon
 import DocumentOutlineContainer from 'Components/DocumentOutline/DocumentOutlineContainer'
 
 import './_Document.scss'
+import { IconButton } from 'Components/Buttons/index'
 
 const DocumentComponent = ({
   document,
@@ -113,18 +114,20 @@ const DocumentComponent = ({
         </div>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <div className="document__toggle-container">
+            {documentMode === DOCUMENT_MODE.NORMAL &&
+            <IconButton color="transparent" onClick={toggleDocumentMode} title="Re-order or remove fields">
+              <SettingsIcon />
+            </IconButton>
+            }
+            {documentMode === DOCUMENT_MODE.EDIT &&
             <button
-              className="btn btn--blank"
+              className="btn btn--small"
               onClick={toggleDocumentMode}
               name="documentSettings"
-              title="Re-order or remove fields">
-              {documentMode === DOCUMENT_MODE.NORMAL &&
-              <SettingsIcon />
-              }
-              {documentMode === DOCUMENT_MODE.EDIT &&
-              <>Done</>
-              }
+              title="Exit outline mode">
+              Done
             </button>
+            }
           </div>
         </ProjectPermission>
       </header>

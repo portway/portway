@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
 
 import { PATH_PROJECT } from 'Shared/constants'
+import { RemoveIcon } from 'Components/Icons'
+import { IconButton } from 'Components/Buttons'
+
 import DocumentOutlineItem from './DocumentOutlineItem'
+
 import './_DocumentOutline.scss'
 
 const DocumentOutlineComponent = ({
@@ -35,6 +39,9 @@ const DocumentOutlineComponent = ({
         <h2 className="document-outline__title">Document outline</h2>
         <p className="document-outline__description note">Drag and drop to reorder your document, or remove fields altogether</p>
         <p className="document-outline__description note">Name your fields for use in <Link to={`${PATH_PROJECT}/${projectId}/settings/keys`}>the API</Link></p>
+        <IconButton className="document-outline__toggle" color="surface" onClick={toggleDocumentModeHandler} title="Exit outline">
+          <RemoveIcon width="14" height="14" />
+        </IconButton>
       </header>
       <ol className="document-outline__list">
         {fields.map((field, index) => {
@@ -55,9 +62,6 @@ const DocumentOutlineComponent = ({
           )
         })}
       </ol>
-      <div className="document-outline__button">
-        <button className="btn" onClick={toggleDocumentModeHandler}>Save changes</button>
-      </div>
     </div>
   )
 }
