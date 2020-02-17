@@ -1,10 +1,6 @@
 
 FROM node:12.13.0-alpine
 
-# bcrypt and alpine linux have some issues:
-# https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions#alpine-linux-based-images
-RUN apk --no-cache add --virtual builds-deps build-base python
-
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
 
