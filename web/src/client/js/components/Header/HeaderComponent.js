@@ -9,6 +9,7 @@ import {
   ORGANIZATION_ROLE_IDS,
   PATH_ADMIN,
   PATH_BILLING,
+  PATH_HELP,
   PATH_PROJECTS,
   PATH_SETTINGS,
   ORG_SUBSCRIPTION_STATUS,
@@ -34,6 +35,22 @@ const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionSt
     'pill--red': LOCKED_ACCOUNT_STATUSES.includes(subscriptionStatus),
     'pill--gray': grayPillStatuses.includes(subscriptionStatus)
   })
+
+  function getHeaderTitle(section) {
+    const sectionPath = `/${section}`
+    switch (sectionPath) {
+      case PATH_SETTINGS:
+        return <>My settings</>
+      case PATH_ADMIN:
+        return <>Administer Organization</>
+      case PATH_HELP:
+        return <>Help</>
+      default:
+        if (!loading) return <NavigatorContainer />
+        return ''
+    }
+  }
+
   if (!isFullScreen) {
     return (
       <>
@@ -45,9 +62,7 @@ const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionSt
               </Link>
             </div>
             <div className="navbar__content">
-              {`/${section}` === PATH_SETTINGS && (<>My Settings</>)}
-              {`/${section}` === PATH_ADMIN && (<>Administer Organization</>)}
-              {`/${section}` !== PATH_ADMIN && `/${section}` !== PATH_SETTINGS && !loading && <NavigatorContainer />}
+              {getHeaderTitle(section)}
             </div>
             <div className="navbar__misc">
               {!window.matchMedia(MOBILE_MATCH_SIZE).matches &&
