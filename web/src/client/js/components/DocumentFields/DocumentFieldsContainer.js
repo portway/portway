@@ -9,7 +9,6 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { blurField, createField, focusField, updateField } from 'Actions/field'
 
-import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
@@ -24,7 +23,7 @@ const DocumentFieldsContainer = ({
 }) => {
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
-  const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // Sort the fields every re-render
@@ -64,16 +63,6 @@ const DocumentFieldsContainer = ({
   // False because null / true == loading
   if (assignmentLoading === false) {
     documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
-  }
-
-  if (fieldsLoading || assignmentLoading) {
-    const overlayDark = getComputedStyle(document.documentElement).getPropertyValue('--theme-overlay-dark')
-    return (
-      <div className="document__loading">
-        <DocumentIcon width="84" height="84" fill={overlayDark} />
-        <p>Loading</p>
-      </div>
-    )
   }
 
   // Actions
