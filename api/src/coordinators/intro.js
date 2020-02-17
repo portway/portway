@@ -1,11 +1,14 @@
 import BusinessProject from '../businesstime/project'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
+import BusinessProjectUser from '../businesstime/projectuser'
+import BusinessOrganization from '../businesstime/organization'
 import { getProject, getProjectDocuments, getDocumentWithFields } from '../integrators/portway'
 import fieldCoordinator from './field'
 import { INTRO_PROJECT_ID } from '../constants/intro'
 import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
 import { FIELD_TYPES } from '../constants/fieldTypes'
+import { PROJECT_ROLE_IDS } from '../constants/roles'
 
 const READ_KEY = process.env.PORTWAY_INTRO_PROJECT_READ_KEY
 const fieldPropsToCopy = ['type', 'value', 'order', 'name']
@@ -18,6 +21,9 @@ const copyIntroProjectToOrg = async (orgId) => {
     name: project.name,
     accessLevel: PROJECT_ACCESS_LEVELS.READ
   })
+
+  const org = await BusinessOrganization.findSanitizedById(orgId)
+  await BusinessProjectUser.addUserIdToProject(org.ownerId, newProject.id, PROJECT_ROLE_IDS.ADMIN, orgId)
 
   const docs = await getProjectDocuments(INTRO_PROJECT_ID, READ_KEY)
 
