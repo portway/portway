@@ -28,7 +28,7 @@ const ProjectSettingsTeamsComponent = ({
   const [newUserRole, setNewUserRole] = useState(PROJECT_ROLE_IDS.READER)
 
   // Show a message if there are no users other than the project owner
-  const showAddUsersMessage = users.length === 0 && projectUsers.length === 0
+  const showAddUsersMessage = users.length === 0 && projectUsers.length === 1
 
   return (
     <form className="project-settings__teams form" onSubmit={(e) => { e.preventDefault() }}>
