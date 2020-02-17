@@ -2,6 +2,8 @@ import introCoordinator from './intro'
 import BusinessProject from '../businesstime/project'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
+import BusinessProjectUser from '../businesstime/projectuser'
+import BusinessOrganization from '../businesstime/organization'
 import { getProject, getProjectDocuments, getDocumentWithFields } from '../integrators/portway'
 import fieldCoordinator from './field'
 import { FIELD_TYPES } from '../constants/fieldTypes'
@@ -11,6 +13,8 @@ import { FIELD_TYPES } from '../constants/fieldTypes'
 jest.mock('../businesstime/project')
 jest.mock('../businesstime/document')
 jest.mock('../businesstime/field')
+jest.mock('../businesstime/projectuser')
+jest.mock('../businesstime/organization')
 jest.mock('../integrators/portway')
 jest.mock('./field')
 
@@ -43,6 +47,16 @@ describe('introCoordinator', () => {
     it('should call BusinessProject.create', () => {
       expect(BusinessProject.create.mock.calls.length).toBe(1)
       expect(BusinessProject.create.mock.calls[0][0].orgId).toEqual(orgId)
+    })
+
+    it('should call BusinessOrganization.findSanitizedById', () => {
+      expect(BusinessOrganization.findSanitizedById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.findSanitizedById.mock.calls[0][0]).toEqual(orgId)
+    })
+
+    it('should call BusinessProjectUser.addUserIdToProject', () => {
+      expect(BusinessProjectUser.addUserIdToProject.mock.calls.length).toBe(1)
+      expect(BusinessProjectUser.addUserIdToProject.mock.calls[0][3]).toEqual(orgId)
     })
 
     it('should call getProjectDocuments', () => {
