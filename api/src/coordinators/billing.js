@@ -92,7 +92,7 @@ const subscribeOrgToPlan = async function(planId, orgId) {
 
   if (planId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
     const message = 'Cannot downgrade from multi user to single user plan'
-    throw ono({ code: 409, errorDetails: [{ key: 'plan', message }], publicMessage: message }, message)
+    throw ono({ code: 409, publicMessage: message, errorDetails: [{ key: 'plan', message }] }, message)
   }
 
   //nothing is changing, return success and move on without updating stripe
@@ -125,7 +125,7 @@ const updatePlanSeats = async function(seats, orgId) {
 
   if (!currentSubscription) {
     const publicMessage = 'No Subscription: Organization must be subscribed to a plan to update seat count'
-    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
   const subscriptionId = currentSubscription.id
@@ -134,7 +134,7 @@ const updatePlanSeats = async function(seats, orgId) {
 
   if (currentPlanId === PLANS.SINGLE_USER) {
     const publicMessage = 'Cannot set seats on a single user plan'
-    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
   //nothing is changing, return success and move on without updating stripe
@@ -146,7 +146,7 @@ const updatePlanSeats = async function(seats, orgId) {
 
   if (userCount > seats) {
     const publicMessage = `You currently have ${userCount} users, you cannot have less seats than users`
-    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
   const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
@@ -228,7 +228,7 @@ const cancelAccount = async function(orgId) {
 
   if (!currentSubscription) {
     const publicMessage = 'Organization does not have a subscription to cancel'
-    throw ono({ code: 409, errorDetails: [{ key: 'seats', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
   const orgSubscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
