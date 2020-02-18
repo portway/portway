@@ -288,7 +288,7 @@ export const UI = {
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
-  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'cancelAction', 'confirmedAction', 'confirmedLabel', 'confirmedText'),
+  initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'options'),
   toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
   toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),

@@ -126,9 +126,12 @@ const DocumentFieldsContainer = ({
       }
 
       const message = <span>Are you sure you want to delete this {type}?</span>
-      const confirmedLabel = 'Yes, delete it.'
-      const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
-      uiConfirm({ message, confirmedAction, confirmedLabel })
+      const options = {
+        confirmedAction: () => { removeField(projectId, documentId, fieldId) },
+        confirmedLabel: 'Yes, delete it.',
+        theme: 'danger'
+      }
+      uiConfirm({ message, options })
     }
   }
 

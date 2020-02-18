@@ -5,10 +5,13 @@ const initialState = {
   confirmation: {
     confirming: false,
     message: '',
-    cancelAction: null,
-    confirmedAction: null,
-    confirmedLabel: '',
-    confirmedText: null,
+    options: {
+      cancelAction: null,
+      confirmedAction: null,
+      confirmedLabel: '',
+      confirmedText: null,
+      theme: null,
+    },
   },
   document: {
     documentMode: DOCUMENT_MODE.NORMAL,
@@ -217,10 +220,10 @@ export const ui = (state = initialState, action) => {
           ...state.confirmation,
           confirming: true,
           message: action.message,
-          cancelAction: action.cancelAction,
-          confirmedAction: action.confirmedAction,
-          confirmedLabel: action.confirmedLabel,
-          confirmedText: action.confirmedText,
+          options: {
+            ...state.confirmation.options,
+            ...action.options
+          }
         }
       }
     }
@@ -232,12 +235,10 @@ export const ui = (state = initialState, action) => {
       }
     }
     case ActionTypes.UI_CANCEL_CONFIRMATION: {
+      const confirmation = initialState.confirmation
       return {
         ...state,
-        confirmation: {
-          ...state.confirmation,
-          confirming: false
-        }
+        confirmation
       }
     }
 

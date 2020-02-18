@@ -40,9 +40,12 @@ const ProjectSettingsTokensContainer = ({ createProjectToken, creating, location
     const message = (
       <span>Deleting this token will prevent access to any application using it. Are you sure?</span>
     )
-    const confirmedLabel = `Yes, delete this token`
-    const confirmedAction = () => { removeProjectToken(projectId, tokenId) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedLabel: `Yes, delete this token`,
+      confirmedAction: () => { removeProjectToken(projectId, tokenId) },
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   function setCreateMode(value) {
