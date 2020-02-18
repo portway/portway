@@ -49,7 +49,6 @@ export const updateField = (projectId, documentId, fieldId, body) => {
 
 export const updateFieldOrder = (projectId, documentId, fieldId, newOrder) => {
   return async (dispatch) => {
-    console.log(documentId, fieldId, newOrder)
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
     const { status } = await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
     if (globalErrorCodes.includes(status)) {
