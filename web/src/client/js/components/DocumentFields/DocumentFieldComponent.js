@@ -45,8 +45,9 @@ const DocumentFieldComponent = ({
   const { currentDocumentUserFieldFocus } = socketState
 
   const currentFieldUsers = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
-    // user is focused on this field, and user is not me
-    if (currentDocumentUserFieldFocus[userId] === field.id && userId !== currentUserId) {
+    // user is focused on this field
+    // TODO: probably want to filter out the current user as well
+    if (currentDocumentUserFieldFocus[userId] === field.id) {
       return [...cur, userId]
     }
     return cur

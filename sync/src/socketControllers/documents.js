@@ -48,11 +48,11 @@ export default (io) => {
 
       socket.leave(documentId)
       // remove user from document room Set
-      const docRoomNs = getDocRoomNs(documentId)
-      await redis.srem(docRoomNs, userSocketNs)
-
-      // delete user/socket current room
+      await redis.srem(getDocRoomNs(documentId), userSocketNs)
+      // remove user/socket cached current room
       await redis.del(userSocketRoomNs)
+      // remove user's focused field
+      await redis.del(getFocusedFieldNs(userSocketNs))
 
       await updateAndBroadcastRoomUsers(documentId)
     })
@@ -66,6 +66,8 @@ export default (io) => {
       await redis.srem(getDocRoomNs(documentId), userSocketNs)
       // remove user/socket cached current room
       await redis.del(userSocketRoomNs)
+      // remove user's focused field
+      await redis.del(getFocusedFieldNs(userSocketNs))
       // broadcast to all users in current room
       await updateAndBroadcastRoomUsers(documentId)
     })
@@ -75,9 +77,10 @@ export default (io) => {
       const documentId = await redis.get(userSocketRoomNs)
       // make sure user is currently in a document room
       if (!documentId) return
-
-      //update and broadcast the update to everyone in the room
+      // update and broadcast the update to everyone in the room
       await updateAndBroadcastFieldFocus(documentId, userSocketNs, userId, fieldId)
+      // refresh the document room expiration, give them more time before deleting
+      await redis.expire(userSocketRoomNs, USER_SOCKET_ROOM_CACHE_EXPIRATION)
     })
   })
 }
