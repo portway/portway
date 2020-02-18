@@ -42,7 +42,9 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
     size: fileStats.size
   }
 
-  return fieldCoordinator.addFieldToDocument(documentId, body, file)
+  const result = await fieldCoordinator.addFieldToDocument(documentId, body, file)
+  fs.unlink(filePath, () => {}) // don't need to await
+  return result
 }
 
 const updateDocumentField = async function(fieldId, documentId, orgId, body, file) {
