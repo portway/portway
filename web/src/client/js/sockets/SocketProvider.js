@@ -15,7 +15,9 @@ const actionTypes = {
   'EMIT_FIELD_CHANGE': 'EMIT_FIELD_CHANGE',
   'SOCKET_ERROR': 'SOCKET_ERROR',
   'DOCUMENT_ROOM_JOINED': 'DOCUMENT_ROOM_JOINED',
-  'DOCUMENT_ROOM_LEFT': 'DOCUMENT_ROOM_LEFT'
+  'DOCUMENT_ROOM_LEFT': 'DOCUMENT_ROOM_LEFT',
+  'FIELD_FOCUS_EMITTED': 'FIELD_FOCUS_EMITTED',
+  'USER_FIELD_FOCUS_UPDATED': 'USER_FIELD_FOCUS_UPDATED'
 }
 
 // ACTIONS
@@ -49,13 +51,33 @@ export const emitLeaveDocumentRoom = (dispatch, documentId) => {
   return { type: actionTypes.DOCUMENT_ROOM_LEFT, documentId }
 }
 
-export const emitFieldFocus = (dispatch, documentId, fieldId) => {
+export const emitFieldFocus = (dispatch, fieldId) => {
   if (!documentSocket.connected) {
     return { type: actionTypes.SOCKET_ERROR }
   }
-  dispatch({ type: actionTypes.EMIT_FIELD_FOCUS, documentId })
+  dispatch({ type: actionTypes.EMIT_FIELD_FOCUS, fieldId })
+  documentSocket.emit('fieldFocus', fieldId)
   return {
     type: actionTypes.FIELD_FOCUS_EMITTED
+  }
+}
+
+export const emitFieldBlur = (dispatch, fieldId) => {
+  if (!documentSocket.connected) {
+    return { type: actionTypes.SOCKET_ERROR }
+  }
+  dispatch({ type: actionTypes.EMIT_FIELD_BLUR, fieldId })
+  documentSocket.emit('fieldFocus', null)
+  return {
+    type: actionTypes.FIELD_BLUR_EMITTED
+  }
+}
+
+export const updateUserFieldFocus = (userId, fieldId) => {
+  return {
+    type: actionTypes.USER_FIELD_FOCUS_UPDATED,
+    userId,
+    fieldId
   }
 }
 
@@ -63,7 +85,9 @@ export const emitFieldFocus = (dispatch, documentId, fieldId) => {
 
 const initialState = {
   activeDocumentUsers: {},
-  currentDocumentRoom: null
+  currentDocumentRoom: null,
+  // focus is stored as { userId : fieldId }
+  currentDocumentUserFieldFocus: {}
 }
 
 const socketStore = createContext(initialState)
@@ -72,11 +96,12 @@ const { Provider } = socketStore
 const SocketProvider = ( { children } ) => {
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
-      case actionTypes.EMIT_JOIN_DOCUMENT_ROOM:
-      case actionTypes.EMIT_LEAVE_DOCUMENT_ROOM:
       case actionTypes.DOCUMENT_ROOM_USERS_RECEIVED: {
         const { documentId, userIds } = action
-        const newState = { ...state, activeDocumentUsers: { ...state.activeDocumentUsers, [documentId]: userIds } }
+        const newState = {
+          ...state,
+          activeDocumentUsers: { ...state.activeDocumentUsers, [documentId]: userIds }
+        }
         return newState
       }
       case actionTypes.DOCUMENT_ROOM_JOINED: {
@@ -86,12 +111,34 @@ const SocketProvider = ( { children } ) => {
       }
       case actionTypes.DOCUMENT_ROOM_LEFT: {
         const { documentId } = action
-        if (state.currentDocumentRoom === documentId ) {
+        if (state.currentDocumentRoom === documentId) {
           const newState = { ...state, currentDocumentRoom: null }
           return newState
         }
         return state
       }
+      case actionTypes.USER_FIELD_FOCUS_UPDATED: {
+        const { userId, fieldId } = action
+        // only update the focus state if user is connected to a document room
+        if (state.currentDocumentRoom) {
+          const newState = {
+            ...state,
+            currentDocumentUserFieldFocus: {
+              ...state.currentDocumentUserFieldFocus,
+              [userId]: fieldId
+            }
+          }
+          return newState
+        }
+        return state
+      }
+      case actionTypes.EMIT_JOIN_DOCUMENT_ROOM:
+      case actionTypes.EMIT_LEAVE_DOCUMENT_ROOM:
+      case actionTypes.EMIT_FIELD_FOCUS:
+      case actionTypes.FIELD_FOCUS_EMITTED:
+      case actionTypes.EMIT_FIELD_BLUR:
+      case actionTypes.FIELD_BLUR_EMITTED:
+        return state
       default:
         throw new Error()
     }

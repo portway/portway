@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
+import useDocumentSocket from '../../hooks/useDocumentSocket'
+import { currentUserId } from '../../libs/currentIds'
 
 import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
 import {
@@ -39,6 +41,17 @@ const DocumentFieldComponent = ({
 }) => {
   const listRef = useRef()
   const nameRef = useRef()
+  const { state: socketState } = useDocumentSocket()
+  const { currentDocumentUserFieldFocus } = socketState
+
+  const currentFieldUsers = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
+    // user is focused on this field, and user is not me
+    if (currentDocumentUserFieldFocus[userId] === field.id && userId !== currentUserId) {
+      return [...cur, userId]
+    }
+    return cur
+  }, [])
+
   useEffect(() => {
     if (isNewField && nameRef.current) {
       nameRef.current.scrollIntoView({ behavior: 'smooth' })
@@ -207,6 +220,8 @@ const DocumentFieldComponent = ({
           </button>
           }
         </div>
+
+        <h3>{currentFieldUsers}</h3>
 
       </div>
     </li>

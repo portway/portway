@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -6,17 +6,17 @@ import { connect } from 'react-redux'
 import { DOCUMENT_MODE, FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
+import useDocumentSocket from 'Hooks/useDocumentSocket'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
 import {
-  socketStore,
   updateDocumentRoomUsers,
-  setCurrentDocumentRoom,
   emitJoinDocumentRoom,
   emitLeaveDocumentRoom,
   emitFieldFocus,
-  emitFieldBlur
+  emitFieldBlur,
+  updateUserFieldFocus
 } from '../../sockets/SocketProvider'
 
 import { DocumentIcon } from 'Components/Icons'
@@ -44,17 +44,20 @@ const DocumentFieldsContainer = ({
   const { data: fields = {}, loading: fieldsLoading } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  const { state: socketState, dispatch: socketDispatch, documentSocket } = useContext(socketStore)
+  const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
 
   const activeUsers = socketState.activeDocumentUsers[documentId]
   const currentDocumentRoom = socketState.currentDocumentRoom
 
-  // =============================== Web Sockets ====================================
+  // =============================== Web Socket events ====================================
 
   useEffect(() => {
     socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
     documentSocket.on('userChange', (userIds) => {
       socketDispatch(updateDocumentRoomUsers(documentId, userIds))
+    })
+    documentSocket.on('userFocusChange', (userId, fieldId) => {
+      socketDispatch(updateUserFieldFocus(userId, fieldId))
     })
     return () => {
       if (currentDocumentRoom) {
@@ -64,7 +67,7 @@ const DocumentFieldsContainer = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
 
-  // =================================================================================
+  // =======================================================================================
 
   // Convert fields object to a sorted array for rendering
   const fieldIds = Object.keys(fields)
@@ -167,7 +170,7 @@ const DocumentFieldsContainer = ({
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)
       // send socket info
-
+      socketDispatch(emitFieldFocus(socketDispatch, fieldId))
     }
   }
 
@@ -175,6 +178,7 @@ const DocumentFieldsContainer = ({
     if (!documentReadOnlyMode) {
       blurField(fieldId, fieldType, fieldData)
       // send socket info
+      socketDispatch(emitFieldBlur(socketDispatch, fieldId))
     }
   }
 
