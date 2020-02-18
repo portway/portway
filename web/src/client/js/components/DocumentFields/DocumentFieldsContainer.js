@@ -9,7 +9,15 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
-import { socketStore, updateDocumentRoomUsers, setCurrentDocumentRoom } from '../../sockets/SocketProvider'
+import {
+  socketStore,
+  updateDocumentRoomUsers,
+  setCurrentDocumentRoom,
+  emitJoinDocumentRoom,
+  emitLeaveDocumentRoom,
+  emitFieldFocus,
+  emitFieldBlur
+} from '../../sockets/SocketProvider'
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
@@ -44,15 +52,13 @@ const DocumentFieldsContainer = ({
   // =============================== Web Sockets ====================================
 
   useEffect(() => {
-    documentSocket.emit('joinRoom', documentId)
-    socketDispatch(setCurrentDocumentRoom(documentId))
+    socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
     documentSocket.on('userChange', (userIds) => {
       socketDispatch(updateDocumentRoomUsers(documentId, userIds))
     })
     return () => {
       if (currentDocumentRoom) {
-        documentSocket.emit('leaveRoom', currentDocumentRoom)
-        setCurrentDocumentRoom(null)
+        socketDispatch(emitLeaveDocumentRoom(socketDispatch, currentDocumentRoom))
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,12 +166,15 @@ const DocumentFieldsContainer = ({
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)
+      // send socket info
+
     }
   }
 
   function fieldBlurHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
       blurField(fieldId, fieldType, fieldData)
+      // send socket info
     }
   }
 
@@ -174,6 +183,7 @@ const DocumentFieldsContainer = ({
       // leave this console in to make sure we're not hammering the API because of useEffect
       // console.info(`Field: ${fieldId} trigger changeHandler`)
       updateField(projectId, documentId, fieldId, body)
+      // send socket info
     }
   }
 
