@@ -42,7 +42,7 @@ async function createUserAndOrganization(name, email) {
   // Letting this happen in the background. Should occur before user verifies their email
   // and if there's an error we don't want it to prevent signup. Note this has to occur after
   // the ownerId has been set on the org!
-  await introCoordinator.copyIntroProjectToOrg(organization.id)
+  introCoordinator.copyIntroProjectToOrg(organization.id)
 
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
