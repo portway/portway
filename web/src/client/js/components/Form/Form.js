@@ -54,7 +54,9 @@ const Form = ({
   }
 
   const debouncedChangeHandler = debounce(200, () => {
-    setFormChanged(true)
+    if (!disabled) {
+      setFormChanged(true)
+    }
   })
 
   const buttonDisabledWhen = !formChanged || submitting || succeeded
