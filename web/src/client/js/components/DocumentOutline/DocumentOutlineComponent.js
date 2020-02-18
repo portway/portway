@@ -43,7 +43,7 @@ const DocumentOutlineComponent = ({
           <RemoveIcon width="14" height="14" />
         </IconButton>
       </header>
-      <ol className="document-outline__list">
+      <ol className="document-outline__list" onDrop={dropHandler}>
         {fields.map((field, index) => {
           return (
             <DocumentOutlineItem

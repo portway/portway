@@ -137,7 +137,7 @@ const DocumentOutlineContainer = ({
   }
 
   function dropHandler(e) {
-    // console.info('drag drop', draggingElement)
+    console.info('drop handler', draggingElement)
     e.preventDefault()
     e.stopPropagation()
     if (notReadOnlyModeButDontDoDragEvents) return
@@ -152,7 +152,8 @@ const DocumentOutlineContainer = ({
   }
 
   function dragEndHandler(e) {
-    // console.info('drag end', draggingElement)
+    console.info('end handler', draggingElement)
+    console.info('-------------------------------')
     draggingElement.current.classList.remove('document-outline__list-item--dragging')
     e.preventDefault()
     e.stopPropagation()
