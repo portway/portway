@@ -15,9 +15,10 @@
 
 .project-settings__team-submit {
   margin-top: 2.4rem; // like --with-space on field-containers
-  @include media('>large') {
-    margin-top: 0;
-  }
+}
+
+.project-settings__users-warning {
+  width: 42rem;
 }
 
 .project-settings__teams {

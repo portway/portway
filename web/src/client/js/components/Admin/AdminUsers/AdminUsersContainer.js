@@ -16,6 +16,7 @@ import { parseParams } from 'Utilities/queryParams'
 import { debounce } from 'Shared/utilities'
 
 import { createUser, reinviteUser, removeUser, sortUsers } from 'Actions/user'
+import { formResetAction } from 'Actions/form'
 import { uiCreateUserMode, uiConfirm } from 'Actions/ui'
 
 import useDataService from 'Hooks/useDataService'
@@ -26,6 +27,7 @@ import AdminUsersComponent from './AdminUsersComponent'
 const AdminUsersContainer = ({
   createUser,
   errors,
+  formResetAction,
   history,
   isCreating,
   isInviting,
@@ -45,8 +47,14 @@ const AdminUsersContainer = ({
   // another action clears out seat data (eg adding/removing users)
   const { data: seats } = useDataService(dataMapper.organizations.seats(), null)
 
+  const formId = 'user-create-form'
+
   function addUserHandler(values) {
-    createUser(values)
+    createUser(formId, values)
+  }
+
+  function cancelUserHandler() {
+    formResetAction(formId)
   }
 
   function reinviteUserHandler(userId) {
@@ -58,9 +66,12 @@ const AdminUsersContainer = ({
     const message = (
       <span>Delete <span className="highlight danger">{user.name}</span>?</span>
     )
-    const confirmedAction = () => { removeUser(userId) }
-    const confirmedLabel = 'Yes, delete this user'
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedAction: () => { removeUser(userId) },
+      confirmedLabel: 'Yes, delete this user',
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   function sortUsersHandler(selectedSortProperty) {
@@ -92,8 +103,10 @@ const AdminUsersContainer = ({
       </Helmet>
       <AdminUsersComponent
         addUserHandler={addUserHandler}
+        cancelUserAddHandler={cancelUserHandler}
         currentUserId={currentUserId}
         errors={errors}
+        formId={formId}
         isCreating={isCreating}
         isInviting={isInviting}
         isSearching={searchTerm}
@@ -113,6 +126,7 @@ const AdminUsersContainer = ({
 }
 
 AdminUsersContainer.propTypes = {
+  formResetAction: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
@@ -135,6 +149,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   createUser,
+  formResetAction,
   reinviteUser,
   removeUser,
   sortUsers,

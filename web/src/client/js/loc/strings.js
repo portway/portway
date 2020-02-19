@@ -5,6 +5,11 @@ module.exports = {
   DELETE_PROJECT_DESCRIPTION: 'This will remove all of the documents, assets, and other media related to this project.',
   DELETE_PROJECT_BUTTON_LABEL: 'Yes, delete this project',
   // Document --------------------------------------------------------------------------------------
+  // Document Publish
+  PUBLISH_CONFIRMATION_TITLE: 'Publish ',
+  PUBLISH_CONFIRMATION_DESCRIPTION: 'Publishing these changes will make them live in the API.',
+  PUBLISH_CONFIRMATION_LABEL: 'Yes, publish this document',
+  PUBLISH_BUTTON_LABEL: 'Publish document',
   // Document Unpublish
   UNPUBLISH_CONFIRMATION_TITLE: 'Unpublish the document',
   UNPUBLISH_CONFIRMATION_DESCRIPTION: 'If you are using this document in a live application, it will be removed.',

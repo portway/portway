@@ -21,12 +21,13 @@ const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
         <p>{strings.DELETE_PROJECT_DESCRIPTION}</p>
       </>
     )
-    const confirmedAction = () => {
-      removeProject(projectId, history)
+    const options = {
+      confirmedAction: () => { removeProject(projectId, history) },
+      confirmedLabel: strings.DELETE_PROJECT_BUTTON_LABEL,
+      confirmedText: projects[projectId].name,
+      theme: 'danger',
     }
-    const confirmedLabel = strings.DELETE_PROJECT_BUTTON_LABEL
-    const confirmedText = projects[projectId].name
-    uiConfirm({ message, confirmedAction, confirmedLabel, confirmedText })
+    uiConfirm({ message, options })
   }
 
   return (
