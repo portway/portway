@@ -67,6 +67,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   // will cause a bunch of API hits
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorRef])
+
   return (
     <div className="document-field__text">
       <textarea ref={textRef} defaultValue={field.value} readOnly={readOnly} />

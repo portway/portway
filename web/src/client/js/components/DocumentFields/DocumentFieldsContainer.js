@@ -17,7 +17,6 @@ import {
   emitLeaveDocumentRoom,
   emitFieldFocus,
   emitFieldBlur,
-  emitFieldChange,
   updateUserFieldFocus
 } from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
@@ -33,7 +32,6 @@ const DocumentFieldsContainer = ({
   focusField,
   isPublishing,
   updateField,
-  updateFieldOrder,
   fetchDocument
 }) => {
   const { projectId, documentId } = useParams()
@@ -42,6 +40,7 @@ const DocumentFieldsContainer = ({
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // =============================== Web Socket events ====================================
+
   const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
 
   const activeUsers = socketState.activeDocumentUsers[documentId]
@@ -143,9 +142,9 @@ const DocumentFieldsContainer = ({
     if (!documentReadOnlyMode) {
       // leave this console in to make sure we're not hammering the API because of useEffect
       // console.info(`Field: ${fieldId} trigger changeHandler`)
-      updateField(projectId, documentId, fieldId, body)
-      // send socket info
-      socketDispatch(emitFieldChange(socketDispatch, fieldId))
+
+      // passing socketDispatch to the action here, need this one dispatched async so that there's no race condition when fetching the data
+      updateField(projectId, documentId, fieldId, body, socketDispatch)
     }
   }
 
@@ -185,7 +184,6 @@ DocumentFieldsContainer.propTypes = {
   focusField: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   updateField: PropTypes.func.isRequired,
-  updateFieldOrder: PropTypes.func.isRequired,
   fetchDocument: PropTypes.func.isRequired
 }
 
