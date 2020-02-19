@@ -42,18 +42,23 @@ const DocumentToolbarContainer = ({
         <p>{strings.PUBLISH_CONFIRMATION_DESCRIPTION}</p>
       </>
     )
-    const confirmedLabel = strings.PUBLISH_CONFIRMATION_LABEL
-    const confirmedAction = () => { publishDocument(document.id) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedLabel: strings.PUBLISH_CONFIRMATION_LABEL,
+      confirmedAction: () => { publishDocument(document.id) }
+    }
+    uiConfirm({ message, options })
   }
 
   function removeDocumentHandler() {
     const message = (
       <span>{strings.DELETE_CONFIRMATION_TITLE_PREFIX} <span className="highlight">{document.name}</span> {strings.DELETE_CONFIRMATION_TITLE_SUFFIX}</span>
     )
-    const confirmedLabel = strings.DELETE_CONFIRMATION_LABEL
-    const confirmedAction = () => { deleteDocument(projectId, document.id, history) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedLabel: strings.DELETE_CONFIRMATION_LABEL,
+      confirmedAction: () => { deleteDocument(projectId, document.id, history) },
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   function unpublishDocumentHandler() {
@@ -63,9 +68,12 @@ const DocumentToolbarContainer = ({
         <p>{strings.UNPUBLISH_CONFIRMATION_DESCRIPTION}</p>
       </>
     )
-    const confirmedLabel = strings.UNPUBLISH_CONFIRMATION_LABEL
-    const confirmedAction = () => { unpublishDocument(document.id) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedLabel: strings.UNPUBLISH_CONFIRMATION_LABEL,
+      confirmedAction: () => { unpublishDocument(document.id) },
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   return (
