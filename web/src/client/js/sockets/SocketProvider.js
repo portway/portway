@@ -17,7 +17,10 @@ const actionTypes = {
   'DOCUMENT_ROOM_JOINED': 'DOCUMENT_ROOM_JOINED',
   'DOCUMENT_ROOM_LEFT': 'DOCUMENT_ROOM_LEFT',
   'FIELD_FOCUS_EMITTED': 'FIELD_FOCUS_EMITTED',
-  'USER_FIELD_FOCUS_UPDATED': 'USER_FIELD_FOCUS_UPDATED'
+  'FIELD_BLUR_EMITTED': 'FIELD_BLUR_EMITTED',
+  'FIELD_CHANGE_EMITTED': 'FIELD_CHANGE_EMITTED',
+  'USER_FIELD_FOCUS_UPDATED': 'USER_FIELD_FOCUS_UPDATED',
+  'FIELD_CHANGE_EVENT_RECEIVED': 'FIELD_CHANGE_EVENT_RECEIVED'
 }
 
 // ACTIONS
@@ -81,6 +84,17 @@ export const updateUserFieldFocus = (userId, fieldId) => {
   }
 }
 
+export const emitFieldChange = (dispatch, fieldId) => {
+  if (!documentSocket.connected) {
+    return { type: actionTypes.SOCKET_ERROR }
+  }
+  dispatch({ type: actionTypes.EMIT_FIELD_CHANGE, fieldId })
+  documentSocket.emit('fieldChange', fieldId)
+  return {
+    type: actionTypes.FIELD_BLUR_EMITTED
+  }
+}
+
 // REDUCERS
 
 const initialState = {
@@ -138,6 +152,8 @@ const SocketProvider = ( { children } ) => {
       case actionTypes.FIELD_FOCUS_EMITTED:
       case actionTypes.EMIT_FIELD_BLUR:
       case actionTypes.FIELD_BLUR_EMITTED:
+      case actionTypes.EMIT_FIELD_CHANGE:
+      case actionTYPES.FIELD_CHANGE_EMITTED:
         return state
       default:
         throw new Error()

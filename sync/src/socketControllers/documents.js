@@ -82,6 +82,14 @@ export default (io) => {
       // refresh the document room expiration, give them more time before deleting
       await redis.expire(userSocketRoomNs, USER_SOCKET_ROOM_CACHE_EXPIRATION)
     })
+
+    socket.on('fieldChange', async (fieldId) => {
+      const documentId = await redis.get(userSocketRoomNs)
+      // make sure user is currently in a document room
+      if (!documentId) return
+      // broadcast the update to everyone else in the room
+      await socket.to(documentId).emit('userFieldChange', userId, fieldId)
+    })
   })
 }
 

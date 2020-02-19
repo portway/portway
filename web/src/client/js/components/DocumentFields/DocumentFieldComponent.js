@@ -46,7 +46,7 @@ const DocumentFieldComponent = ({
 
   const currentFieldUsers = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
-    // TODO: probably want to filter out the current user as well
+    // TODO: do we want to display current user? if not can filter that out in this conditional
     if (currentDocumentUserFieldFocus[userId] === field.id) {
       return [...cur, userId]
     }

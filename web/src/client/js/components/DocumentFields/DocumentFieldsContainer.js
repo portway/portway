@@ -10,14 +10,17 @@ import useDocumentSocket from 'Hooks/useDocumentSocket'
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField, removeField, updateFieldOrder } from 'Actions/field'
+import { fetchDocument } from 'Actions/document'
 import {
   updateDocumentRoomUsers,
   emitJoinDocumentRoom,
   emitLeaveDocumentRoom,
   emitFieldFocus,
   emitFieldBlur,
+  emitFieldChange,
   updateUserFieldFocus
 } from '../../sockets/SocketProvider'
+import { currentUserId } from 'Libs/currentIds'
 
 import { DocumentIcon } from 'Components/Icons'
 import DocumentFieldsComponent from './DocumentFieldsComponent'
@@ -35,6 +38,7 @@ const DocumentFieldsContainer = ({
   uiConfirm,
   updateField,
   updateFieldOrder,
+  fetchDocument
 }) => {
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
@@ -58,6 +62,11 @@ const DocumentFieldsContainer = ({
     })
     documentSocket.on('userFocusChange', (userId, fieldId) => {
       socketDispatch(updateUserFieldFocus(userId, fieldId))
+    })
+    documentSocket.on('userFieldChange', (userId, fieldId) => {
+      if (userId !== currentUserId.toString()) {
+        fetchDocument(documentId)
+      }
     })
     return () => {
       if (currentDocumentRoom) {
@@ -188,6 +197,7 @@ const DocumentFieldsContainer = ({
       // console.info(`Field: ${fieldId} trigger changeHandler`)
       updateField(projectId, documentId, fieldId, body)
       // send socket info
+      socketDispatch(emitFieldChange(socketDispatch, fieldId))
     }
   }
 
@@ -336,6 +346,7 @@ DocumentFieldsContainer.propTypes = {
   uiConfirm: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
+  fetchDocument: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -355,7 +366,8 @@ const mapDispatchToProps = {
   removeField,
   updateField,
   updateFieldOrder,
-  uiConfirm
+  uiConfirm,
+  fetchDocument
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)
