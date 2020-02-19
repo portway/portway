@@ -32,10 +32,7 @@ const DocumentFieldsComponent = ({
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
-  const textFields = fields.filter((field) => {
-    return field.type === FIELD_TYPES.TEXT
-  })
-  const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
+  const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
   const documentEditMode = documentMode === DOCUMENT_MODE.EDIT
 
   const bigInvisibleButton = (
@@ -62,7 +59,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.TEXT:
         fieldTypeComponent = (
           <FieldTextComponent
-            autoFocusElement={lastTextFieldId}
+            autoFocusElement={hasOnlyOneTextField}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
