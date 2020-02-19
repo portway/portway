@@ -61,9 +61,12 @@ const DocumentOutlineContainer = ({
     }
 
     const message = <span>Are you sure you want to delete this {type}?</span>
-    const confirmedLabel = 'Yes, delete it.'
-    const confirmedAction = () => { removeField(projectId, documentId, fieldId) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedLabel: 'Yes, delete it.',
+      confirmedAction: () => { removeField(projectId, documentId, fieldId) },
+      theme: 'danger',
+    }
+    uiConfirm({ message, options })
   }
 
   let cloneElement
