@@ -36,7 +36,15 @@ const DocumentToolbarContainer = ({
   }
 
   function publishDocumentHandler() {
-    publishDocument(document.id)
+    const message = (
+      <>
+        <p><b>{strings.PUBLISH_CONFIRMATION_TITLE} “<span className="highlight">{document.name}</span>”?</b></p>
+        <p>{strings.PUBLISH_CONFIRMATION_DESCRIPTION}</p>
+      </>
+    )
+    const confirmedLabel = strings.PUBLISH_CONFIRMATION_LABEL
+    const confirmedAction = () => { publishDocument(document.id) }
+    uiConfirm({ message, confirmedAction, confirmedLabel })
   }
 
   function removeDocumentHandler() {
