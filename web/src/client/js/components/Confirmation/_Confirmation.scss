@@ -30,7 +30,8 @@
     border: thin solid var(--confirmation-border, gray);
     border-radius: var(--border-radius, 8px);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-    padding: 24px;
+    max-width: 70rem;
+    padding: 2.4rem;
     width: 75vw;
     @include media('>medium') {
       width: 50vw;

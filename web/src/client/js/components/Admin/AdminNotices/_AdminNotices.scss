@@ -16,6 +16,16 @@
     }
   }
 
+  &__notice-title-content {
+    flex: 1;
+    h2 {
+      margin: 0;
+    }
+    .note {
+      margin: 0;
+    }
+  }
+
   .--with-spinner {
     align-items: center;
     display: flex;

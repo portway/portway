@@ -89,7 +89,7 @@ async function createPendingUser(email, name, orgId) {
   const existingUser = await BusinessUser.findByEmail(email)
   if (existingUser) {
     const publicMessage = 'Cannot create user, this email address is already in use'
-    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'users', message: publicMessage }] }, publicMessage)
   }
 
   // look up number of org seats and number of current users,
@@ -98,7 +98,7 @@ async function createPendingUser(email, name, orgId) {
 
   if (!orgBilling.subscription) {
     const publicMessage = 'No Subscription: Organization must be subscribed to a plan before adding users'
-    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'users', message: publicMessage }] }, publicMessage)
   }
 
   const { totalSeats, usedSeats } = orgBilling.subscription
@@ -106,7 +106,7 @@ async function createPendingUser(email, name, orgId) {
   // if subscription doesn't have seats set up, or user count is equal to total seats, throw an error
   if (totalSeats == null || usedSeats >= totalSeats) {
     const publicMessage = 'Cannot create user, all available seats have been used'
-    throw ono({ code: 409, errorDetails: [{ key: 'users', publicMessage }] }, publicMessage)
+    throw ono({ code: 409, errorDetails: [{ key: 'users', message: publicMessage }] }, publicMessage)
   }
 
   const resetKey = passwordResetKey.generate()

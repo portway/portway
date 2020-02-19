@@ -26,14 +26,17 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
     <div className="admin-notices">
       {TRIALING_STATUSES.includes(organization.subscriptionStatus) &&
       <div className="admin-notices__notice">
-        <h2 className="admin-notices__notice-title">
-          <InfoIcon width="22" height="22" /> Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}
-        </h2>
+        <div className="admin-notices__notice-title">
+          <InfoIcon width="22" height="22" />
+          <div className="admin-notices__notice-title-content">
+            <h2>Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}</h2>
+            <p className="note">
+              During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}.
+            </p>
+          </div>
+        </div>
         <p>
-          During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}.
-        </p>
-        <p>
-          Add your payment information below to activate your account or to upgrade to a {PLAN_TITLES[PLAN_TYPES.MULTI_USER]}.
+          <a href="#payment">Add your payment information below</a> to activate your account or to upgrade to a {PLAN_TITLES[PLAN_TYPES.MULTI_USER]}.
         </p>
       </div>
       }

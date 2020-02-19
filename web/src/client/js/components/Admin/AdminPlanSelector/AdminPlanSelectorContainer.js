@@ -20,11 +20,11 @@ const AdminPlanSelectorContainer = ({ updateOrganizationPlan, uiConfirm }) => {
     const message = (
       <p>Change your plan to a {planTitle}? <b>You will be charged {PRICING[val]}</b></p>
     )
-    const confirmedAction = () => {
-      updateOrganizationPlan(planSelectorId, currentOrg.id, { plan: val })
+    const options = {
+      confirmedAction: () => { updateOrganizationPlan(planSelectorId, currentOrg.id, { plan: val }) },
+      confirmedLabel: 'Yes, I understand'
     }
-    const confirmedLabel = 'Yes, I understand'
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    uiConfirm({ message, options })
   }
 
   return (

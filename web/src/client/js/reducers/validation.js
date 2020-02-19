@@ -34,6 +34,17 @@ export const validation = (state = initialState, action) => {
         user: {}
       }
     }
+    case ActionTypes.UI_CREATE_USER_MODE: {
+      const isExiting = action.value === false
+      if (isExiting) {
+        return {
+          ...state,
+          user: {}
+        }
+      } else {
+        return { ...state }
+      }
+    }
     // Project
     case ActionTypes.CREATE_PROJECT:
     case ActionTypes.INITIATE_PROJECT_UPDATE:
