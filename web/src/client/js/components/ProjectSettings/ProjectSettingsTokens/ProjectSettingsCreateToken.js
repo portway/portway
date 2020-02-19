@@ -30,7 +30,7 @@ const ProjectSettingsCreateToken = ({ cancelHandler, createHandler, errors, proj
           </div>
           <ValidationContainer resource="project" value="name" />
         </div>
-        <p className="field-container__help">The name is not important. Use it as a way to identify your differeny keys.</p>
+        <p className="field-container__help">Use the key name to help you differentiate between your project keys.</p>
       </div>
       <div className="field-container">
         <div className="field">
