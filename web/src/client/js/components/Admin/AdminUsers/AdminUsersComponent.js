@@ -16,8 +16,10 @@ import './_AdminUsers.scss'
 
 const AdminUsersComponent = ({
   addUserHandler,
+  cancelUserAddHandler,
   currentUserId,
   errors,
+  formId,
   isCreating,
   isInviting,
   isSearching,
@@ -135,9 +137,13 @@ const AdminUsersComponent = ({
         <>
           {seats && seats.usedSeats < seats.totalSeats &&
           <AdminUsersCreateForm
-            cancelHandler={() => {setCreateMode(false) }}
+            cancelHandler={() => {
+              cancelUserAddHandler()
+              setCreateMode(false)
+            }}
             disabled={seats.usedSeats === seats.totalSeats}
             errors={errors}
+            formId={formId}
             submitHandler={addUserHandler}
           />
           }
@@ -173,8 +179,10 @@ const AdminUsersComponent = ({
 
 AdminUsersComponent.propTypes = {
   addUserHandler: PropTypes.func,
+  cancelUserAddHandler: PropTypes.func.isRequired,
   currentUserId: PropTypes.number.isRequired,
   errors: PropTypes.object,
+  formId: PropTypes.string.isRequired,
   isCreating: PropTypes.bool.isRequired,
   isInviting: PropTypes.bool.isRequired,
   isSearching: PropTypes.string,
