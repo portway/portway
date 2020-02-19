@@ -67,9 +67,12 @@ const ProjectSettingsTeamContainer = ({ location }) => {
   function removeAssignmentHandler(userId, assignmentId) {
     const name = projectUsers[userId].name
     const message = <span>Remove <span className="highlight">{name}</span> from this project?</span>
-    const confirmedAction = () => { Store.dispatch(removeProjectAssignee(projectId, userId, assignmentId)) }
-    const confirmedLabel = `Yes, remove ${name}`
-    Store.dispatch(uiConfirm({ message, confirmedAction, confirmedLabel }))
+    const options = {
+      confirmedAction: () => { Store.dispatch(removeProjectAssignee(projectId, userId, assignmentId)) },
+      confirmedLabel: `Yes, remove ${name}`,
+      theme: 'danger'
+    }
+    Store.dispatch(uiConfirm({ message, options }))
   }
 
   function userSearchHandler(partialNameString) {
