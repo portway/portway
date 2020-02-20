@@ -11,8 +11,10 @@ import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
+import DocumentOutlineContainer from 'Components/DocumentOutline/DocumentOutlineContainer'
 
 import './_Document.scss'
+import { IconButton } from 'Components/Buttons/index'
 
 const DocumentComponent = ({
   document,
@@ -63,6 +65,9 @@ const DocumentComponent = ({
   return (
     <div className="document" key={docKey} ref={documentRef}>
       <ValidationContainer resource="document" value="name" />
+      {documentMode === DOCUMENT_MODE.EDIT &&
+      <DocumentOutlineContainer />
+      }
       <header className="document__header">
         {mobileView &&
         <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">
@@ -109,27 +114,23 @@ const DocumentComponent = ({
         </div>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <div className="document__toggle-container">
+            {documentMode === DOCUMENT_MODE.NORMAL &&
+            <IconButton color="transparent" onClick={toggleDocumentMode} title="Re-order or remove fields">
+              <SettingsIcon />
+            </IconButton>
+            }
+            {documentMode === DOCUMENT_MODE.EDIT &&
             <button
-              className="btn btn--blank"
+              className="btn btn--small"
               onClick={toggleDocumentMode}
               name="documentSettings"
-              title="Re-order or remove fields">
-              {documentMode === DOCUMENT_MODE.NORMAL &&
-              <SettingsIcon />
-              }
-              {documentMode === DOCUMENT_MODE.EDIT &&
-              <>Done</>
-              }
+              title="Exit outline mode">
+              Done
             </button>
+            }
           </div>
         </ProjectPermission>
       </header>
-      {documentMode === DOCUMENT_MODE.EDIT &&
-      <div className="document__outline-explainer">
-        Reorder and name your fields in outline mode. Field names are useful when working with the API.{` `}
-        <button className="btn btn--like-a-link" onClick={toggleDocumentMode}>Exit outline mode</button>
-      </div>
-      }
       <DocumentFieldsContainer />
     </div>
   )

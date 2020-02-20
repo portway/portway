@@ -43,20 +43,38 @@ export const documentFields = (state = initialState, action) => {
       return { ...state, documentFieldsById, lastCreatedFieldId }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
-      const { fieldId } = action
-      const loadingById = { ...state.loading.byId, [fieldId]: true }
-      return { ...state, loading: { ...state.loading, byId: loadingById } }
+      const { documentId, fieldId } = action
+      const byId = { ...state.loading.byId, [fieldId]: true }
+      const byDocument = { ...state.loading.byDocument, [documentId]: true }
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          byDocument,
+          byId
+        }
+      }
     }
     case ActionTypes.RECEIVE_UPDATED_FIELD: {
-      const { id, documentId } = action.data
+      const { projectId, documentId, fieldId } = action
       const documentFields = state.documentFieldsById[documentId] || {}
       const documentFieldsById = {
         ...state.documentFieldsById,
-        [documentId]: { ...documentFields, [id]: action.data }
+        [documentId]: { ...documentFields, [fieldId]: action.data }
       }
       const lastCreatedFieldId = initialState.lastCreatedFieldId
-      const loadingById = { ...state.loading.byId, [id]: false }
-      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
+      const byId = { ...state.loading.byId, [fieldId]: false }
+      const byDocument = { ...state.loading.byDocument, [documentId]: false }
+      return {
+        ...state,
+        documentFieldsById,
+        lastCreatedFieldId,
+        loading: {
+          ...state.loading,
+          byDocument,
+          byId
+        }
+      }
     }
     case ActionTypes.INITIATE_FIELD_ORDER: {
       const { documentId, fieldId, newOrder } = action
