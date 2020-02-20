@@ -153,7 +153,7 @@ const SocketProvider = ( { children } ) => {
       case actionTypes.EMIT_FIELD_BLUR:
       case actionTypes.FIELD_BLUR_EMITTED:
       case actionTypes.EMIT_FIELD_CHANGE:
-      case actionTYPES.FIELD_CHANGE_EMITTED:
+      case actionTypes.FIELD_CHANGE_EMITTED:
         return state
       default:
         throw new Error()
