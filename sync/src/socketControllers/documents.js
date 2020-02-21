@@ -1,4 +1,5 @@
 import redis from '../libs/redis'
+import { extractJwtPayloadWithoutVerification } from '../libs/ioAuth'
 
 // 5 Minutees in seconds, 5 * 60 = 300
 const USER_SOCKET_ROOM_CACHE_EXPIRATION = 300
@@ -13,8 +14,11 @@ export default (io) => {
   }
 
   documentsIO.on('connection', (socket) => {
+    // Payload is already verified against the secret in middleware auth step for all routes
+    // just get the decodable info from the jwt
+    const { orgId, userId } = extractJwtPayloadWithoutVerification(socket.handshake.query.token)
+
     const socketId = socket.id
-    const userId = socket.handshake.query.userId
     const userSocketNs = `sync:user:${userId}:socket:${socketId}`
     const userSocketRoomNs = getUserSocketRoomNs(userSocketNs)
 
