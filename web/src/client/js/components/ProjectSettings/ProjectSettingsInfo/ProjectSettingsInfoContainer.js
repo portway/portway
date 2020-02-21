@@ -32,12 +32,13 @@ const ProjectSettingsInfoContainer = ({ errors, removeProject, uiConfirm, update
         <p>{strings.DELETE_PROJECT_DESCRIPTION}</p>
       </>
     )
-    const confirmedAction = () => {
-      removeProject(project.id, history)
+    const options = {
+      confirmedAction: () => { removeProject(project.id, history) },
+      confirmedLabel: strings.DELETE_PROJECT_BUTTON_LABEL,
+      confirmedText: project.name,
+      theme: 'danger'
     }
-    const confirmedLabel = strings.DELETE_PROJECT_BUTTON_LABEL
-    const confirmedText = project.name
-    uiConfirm({ message, confirmedAction, confirmedLabel, confirmedText })
+    uiConfirm({ message, options })
   }
 
   const debouncedUpdateHandler = (body) => {

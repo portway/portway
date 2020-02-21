@@ -7,21 +7,29 @@ import ConfirmationComponent from './ConfirmationComponent'
 
 const ConfirmationContainer = ({ confirmation, uiConfirmCancel, uiConfirmComplete }) => {
   if (confirmation.confirming) {
+    const {
+      cancelAction,
+      confirmedAction,
+      confirmedLabel,
+      confirmedText,
+      theme
+    } = confirmation.options
     return (
       <ConfirmationComponent
         message={confirmation.message}
         cancelAction={() => {
-          if (confirmation.cancelAction) {
-            confirmation.cancelAction()
+          if (cancelAction) {
+            cancelAction()
           }
           uiConfirmCancel()
         }}
         confirmedAction={() => {
-          confirmation.confirmedAction()
+          confirmedAction()
           uiConfirmComplete()
         }}
-        confirmedLabel={confirmation.confirmedLabel}
-        confirmedText={confirmation.confirmedText} />
+        confirmedLabel={confirmedLabel}
+        confirmedText={confirmedText}
+        theme={theme} />
     )
   } else {
     return null

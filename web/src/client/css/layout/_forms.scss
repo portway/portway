@@ -72,6 +72,13 @@ input[type='password'],
   @include focus(var(--form-background), var(--color-blue));
 }
 
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  appearance: none;
+}
+
 input[type='file'] {
   border: none;
   width: var(--field-container-width);

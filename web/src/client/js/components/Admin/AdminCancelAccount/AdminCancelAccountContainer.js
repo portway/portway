@@ -49,12 +49,13 @@ const AdminCancelAccountContainer = ({ deleteOrganization, uiConfirm }) => {
 
   function deleteAccountHander() {
     const message = TRIALING_STATUSES.includes(currentOrg.subscriptionStatus) ? trialingMessage : paidCustomerMessage
-    const confirmedAction = () => {
-      deleteOrganization(currentOrg.id)
+    const options = {
+      confirmedAction: () => { deleteOrganization(currentOrg.id) },
+      confirmedLabel: 'Yes, cancel my account',
+      confirmedText: currentOrg.name,
+      theme: 'danger'
     }
-    const confirmedLabel = 'Yes, cancel my account'
-    const confirmedText = currentOrg.name
-    uiConfirm({ message, confirmedAction, confirmedLabel, confirmedText })
+    uiConfirm({ message, options })
   }
 
   return (

@@ -30,9 +30,12 @@ const AdminUserViewContainer = ({ match, removeProjectAssignee, updateProjectAss
 
   function removeProjectHandler(projectId, assignmentId) {
     const message = <span>Remove <span className="highlight">{userFromRoute.name}</span> from this project?</span>
-    const confirmedAction = () => { return removeProjectAssignee(projectId, userFromRoute.id, assignmentId) }
-    const confirmedLabel = `Yes`
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedAction: () => { return removeProjectAssignee(projectId, userFromRoute.id, assignmentId) },
+      confirmedLabel: `Yes`,
+      theme: 'danger',
+    }
+    uiConfirm({ message, options })
   }
 
   return (

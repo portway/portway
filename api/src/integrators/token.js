@@ -32,6 +32,20 @@ const generatePasswordResetToken = (id, resetKey) => {
   )
 }
 
+const generateAccountInviteToken = (id, resetKey) => {
+  return jwt.sign(
+    {
+      id,
+      resetKey
+    },
+    tokenSettings.passwordResetTokenSecret,
+    {
+      expiresIn: tokenSettings.accountInviteExpiration,
+      issuer: tokenSettings.issuer
+    }
+  )
+}
+
 const generateProjectToken = (id, secret, orgId) => {
   return jwt.sign(
     {
@@ -48,5 +62,6 @@ const generateProjectToken = (id, secret, orgId) => {
 export default {
   generateToken,
   generatePasswordResetToken,
+  generateAccountInviteToken,
   generateProjectToken
 }

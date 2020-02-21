@@ -37,7 +37,7 @@ export const fetchUser = (id) => {
   }
 }
 
-export const createUser = (values) => {
+export const createUser = (formId, values) => {
   // If we're creating an admin user we have to post a regular user first
   // and then hit the PUT endpoint to make that user an admin
   const body = {
@@ -49,19 +49,23 @@ export const createUser = (values) => {
     role = ORGANIZATION_ROLE_IDS.ADMIN
   }
   return async (dispatch) => {
+    dispatch(formSubmitAction(formId))
     dispatch(Users.create())
     const { data, status } = await add('v1/users', body)
-    if (validationCodes.includes(status)) {
-      dispatch(Validation.create('user', data, status))
-      return
-    }
     if (globalErrorCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    dispatch(Users.receiveOneCreated(data))
-    // If we're trying to be an admin
-    dispatch(updateUserRole(data.id, role))
+    if (validationCodes.includes(status)) {
+      dispatch(formFailedAction(formId))
+      dispatch(Validation.create('user', data, status))
+    } else {
+      dispatch(formSucceededAction(formId))
+      dispatch(Users.receiveOneCreated(data))
+      // If we're trying to add an admin user
+      dispatch(updateUserRole(data.id, role))
+    }
   }
 }
 
