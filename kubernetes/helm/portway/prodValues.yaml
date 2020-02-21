@@ -37,7 +37,7 @@ db:
 
 docs:
   image: 'bonkeybong/portway_docs'
-  tag: 'latest'
+  tag: '1.1.0'
   port: "3003"
 
 serviceNames:
