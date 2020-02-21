@@ -7,8 +7,8 @@ const USER_SOCKET_ROOM_CACHE_EXPIRATION = 300
 export default (io) => {
   const documentsIO = io.of('/documents')
 
-  const updateAndBroadcastRoomUsers = async (documentId) => {
-    const currentRoomUsers = await getReconciledRoomUsers(documentId)
+  const updateAndBroadcastRoomUsers = async (documentId, orgId) => {
+    const currentRoomUsers = await getReconciledRoomUsers(documentId, orgId)
     const uniqueRoomUserIds = getUniqueRoomUserIds(currentRoomUsers)
     documentsIO.in(documentId).emit('userChange', uniqueRoomUserIds)
   }
@@ -19,7 +19,7 @@ export default (io) => {
     const { orgId, userId } = extractJwtPayloadWithoutVerification(socket.handshake.query.token)
 
     const socketId = socket.id
-    const userSocketNs = `sync:user:${userId}:socket:${socketId}`
+    const userSocketNs = `sync:org:${orgId}:user:${userId}:socket:${socketId}`
     const userSocketRoomNs = getUserSocketRoomNs(userSocketNs)
 
     socket.on('joinRoom', async (documentId) => {
@@ -27,7 +27,7 @@ export default (io) => {
 
       socket.join(documentId)
       // add user to document room Set
-      const docRoomNs = getDocRoomNs(documentId)
+      const docRoomNs = getDocRoomNs(documentId, orgId)
       await redis.sadd(docRoomNs, userSocketNs)
 
       // cache current room and set expiration
@@ -35,7 +35,7 @@ export default (io) => {
       await redis.set(userSocketRoomNs, documentId, 'EX', USER_SOCKET_ROOM_CACHE_EXPIRATION)
 
       // send user change message to all room users, including current user
-      await updateAndBroadcastRoomUsers(documentId)
+      await updateAndBroadcastRoomUsers(documentId, orgId)
     })
 
     socket.on('leaveRoom', async (documentId) => {
@@ -43,13 +43,13 @@ export default (io) => {
 
       socket.leave(documentId)
       // remove user from document room Set
-      const docRoomNs = getDocRoomNs(documentId)
+      const docRoomNs = getDocRoomNs(documentId, orgId)
       await redis.srem(docRoomNs, userSocketNs)
 
       // delete user/socket current room
       await redis.del(userSocketRoomNs)
 
-      await updateAndBroadcastRoomUsers(documentId)
+      await updateAndBroadcastRoomUsers(documentId, orgId)
     })
 
     socket.on('disconnect', async (data) => {
@@ -58,17 +58,17 @@ export default (io) => {
       if (!documentId) return
 
       // remove user from document room Set
-      await redis.srem(getDocRoomNs(documentId), userSocketNs)
+      await redis.srem(getDocRoomNs(documentId, orgId), userSocketNs)
       // remove user/socket cached current room
       await redis.del(userSocketRoomNs)
       // broadcast to all users in current room
-      await updateAndBroadcastRoomUsers(documentId)
+      await updateAndBroadcastRoomUsers(documentId, orgId)
     })
   })
 }
 
-const getDocRoomNs = (documentId) => {
-  return `sync:docRoom:${documentId}`
+const getDocRoomNs = (documentId, orgId) => {
+  return `sync:org:${orgId}:docRoom:${documentId}`
 }
 
 const getUserSocketRoomNs = (userSocketNs) => {
@@ -79,8 +79,8 @@ const getUserSocketRoomNs = (userSocketNs) => {
 // Goes through the listed user/sockets in the room Set and looks at each user/socket(key) to cached room value in redis
 // if the cached value doesn't match, either because it's expired, they've disconnected and it doesn't exist,
 // or because they've switched rooms. Then we remove it from the Set
-const getReconciledRoomUsers = async (documentId) => {
-  const docRoomNs = getDocRoomNs(documentId)
+const getReconciledRoomUsers = async (documentId, orgId) => {
+  const docRoomNs = getDocRoomNs(documentId, orgId)
   const roomUserSockets = await redis.smembers(docRoomNs)
   await Promise.all(roomUserSockets.map(async (userSocketNs) => {
     const currentUserSocketRoom = await redis.get(getUserSocketRoomNs(userSocketNs))
@@ -94,7 +94,7 @@ const getReconciledRoomUsers = async (documentId) => {
 
 const getUniqueRoomUserIds = (roomUsers) => {
   const userIds = roomUsers.map((userSocket) => {
-    return userSocket.split(':')[2]
+    return userSocket.split(':')[4]
   })
   return [...new Set(userIds)]
 }
