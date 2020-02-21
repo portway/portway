@@ -56,11 +56,10 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
       editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current) })
-      if (field.id === autoFocusElement) {
+      if (autoFocusElement) {
         window.requestAnimationFrame(() => {
           editorRef.current.focus()
         })
-        // editorRef.current.setCursor(editorRef.current.lineCount(), 0)
       }
     }
   // We're disabling the dependency here because adding field.id or onChange here
@@ -75,7 +74,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
 }
 
 FieldTextComponent.propTypes = {
-  autoFocusElement: PropTypes.number,
+  autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,

@@ -49,9 +49,9 @@
   }
 
   &__button-expand {
-    padding: 0 1.5rem;
+    padding: 0 0 0 1.5rem;
     @include media('>medium') {
-      padding: 0 1.9rem;
+      padding: 0 0 0 1.9rem;
     }
   }
 
@@ -60,6 +60,7 @@
     display: flex;
     height: calc(var(--header-height) - 2);
     flex: 1;
+    padding: 0 1.5rem;
   }
 
   &__title {
@@ -140,13 +141,8 @@
       padding-top: calc(var(--brand-width) / 2);
     }
 
-    &--edit-mode {
-      padding-bottom: 7rem;
-    }
-
     // When publishing a document, disable everything
     &--disabled {
-      opacity: 0.4;
       pointer-events: none;
     }
 

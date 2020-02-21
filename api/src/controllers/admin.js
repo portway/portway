@@ -5,6 +5,8 @@
 import bodyParser from 'body-parser'
 import adminAuth from '../libs/auth/adminAuth'
 import demoSignupCoordinator from '../coordinators/demoSignup'
+import BusinessOrganization from '../businesstime/organization'
+import organizationCoordinator from '../coordinators/organization'
 
 /**
  * Sample Payload
@@ -28,6 +30,16 @@ const adminController = function(router) {
     adminAuth,
     createAccount
   )
+
+  router.delete('/organizations/:id',
+    adminAuth,
+    deleteCanceledOrg
+  )
+
+  router.get('/organizations/canceled',
+    adminAuth,
+    getCanceledOrgs
+  )
 }
 
 const createAccount = async function(req, res, next) {
@@ -36,6 +48,26 @@ const createAccount = async function(req, res, next) {
   try {
     await demoSignupCoordinator.createUsersAndOrganization(name, users)
     res.json({ success: true })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const getCanceledOrgs = async function(req, res, next) {
+  try {
+    const canceledOrgs = await BusinessOrganization.findAllCanceled()
+    res.json({ data: canceledOrgs })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const deleteCanceledOrg = async function(req, res, next) {
+  const { id } = req.params
+
+  try {
+    await organizationCoordinator.deleteCanceledOrg(id)
+    res.status(204).send()
   } catch (e) {
     next(e)
   }

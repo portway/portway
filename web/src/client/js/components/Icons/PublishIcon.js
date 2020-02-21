@@ -21,7 +21,7 @@ PublishIcon.propTypes = {
 
 PublishIcon.defaultProps = {
   className: 'icon-publish',
-  fill: '#3b3d3e',
+  fill: 'var(--theme-icon-color)',
   height: '18',
   width: '18'
 }

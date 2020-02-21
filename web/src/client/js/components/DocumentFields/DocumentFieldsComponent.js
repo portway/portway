@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES } from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
@@ -13,30 +13,18 @@ const DocumentFieldsComponent = ({
   createdFieldId,
   createFieldHandler,
   disabled,
-  documentMode,
-  dragEndHandler,
-  dragEnterHandler,
-  dragLeaveHandler,
-  dragStartHandler,
-  dropHandler,
   fieldBlurHandler,
   fieldChangeHandler,
-  fieldDestroyHandler,
   fieldFocusHandler,
   fieldRenameHandler,
   fields,
   fieldsUpdating,
-  isDragging,
   isPublishing,
   readOnly,
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
-  const textFields = fields.filter((field) => {
-    return field.type === FIELD_TYPES.TEXT
-  })
-  const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
-  const documentEditMode = documentMode === DOCUMENT_MODE.EDIT
+  const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
   const bigInvisibleButton = (
     <li className="document-field" key="bib">
@@ -62,12 +50,11 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.TEXT:
         fieldTypeComponent = (
           <FieldTextComponent
-            autoFocusElement={lastTextFieldId}
+            autoFocusElement={hasOnlyOneTextField}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -79,7 +66,6 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -91,7 +77,6 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -104,7 +89,6 @@ const DocumentFieldsComponent = ({
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
@@ -119,19 +103,11 @@ const DocumentFieldsComponent = ({
       const settingsModeForField = settingsForField === field.id
       return (
         <DocumentFieldComponent
-          documentMode={documentMode}
-          dragEndHandler={dragEndHandler}
-          dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
-          dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
-          dragStartHandler={settingsModeForField ? null : dragStartHandler}
-          dropHandler={settingsModeForField ? null : dropHandler}
           field={field}
           index={index}
-          isDragging={isDragging}
           isNewField={createdFieldId === field.id}
           isUpdating={fieldsUpdating[field.id]}
           key={field.id}
-          onDestroy={() => { fieldDestroyHandler(field.id, field.type) }}
           onRename={fieldRenameHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
@@ -150,7 +126,6 @@ const DocumentFieldsComponent = ({
       if (
         index === fields.length - 1 &&
         field.type !== FIELD_TYPES.TEXT &&
-        documentMode !== DOCUMENT_MODE.EDIT &&
         !readOnly
       ) {
         // append a big invisible button so that you can click there to continue the "body"
@@ -161,8 +136,6 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
-    'document__fields--edit-mode': documentEditMode,
-    'document__fields--is-dragging': isDragging,
     'document__fields--disabled': isPublishing || disabled
   })
   return (
@@ -178,20 +151,12 @@ DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
   createFieldHandler: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  documentMode: PropTypes.string.isRequired,
-  dragEndHandler: PropTypes.func.isRequired,
-  dragEnterHandler: PropTypes.func.isRequired,
-  dragLeaveHandler: PropTypes.func.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
-  dropHandler: PropTypes.func.isRequired,
   fieldBlurHandler: PropTypes.func.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
-  fieldDestroyHandler: PropTypes.func.isRequired,
   fieldFocusHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   readOnly: PropTypes.bool.isRequired,
 }
