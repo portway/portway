@@ -4,9 +4,10 @@ import cx from 'classnames'
 
 import './IconButton.scss'
 
-const IconButton = ({ children, className, color, ...props }) => {
+const IconButton = ({ children, className, color, square, ...props }) => {
   const buttonClasses = cx({
     'icon-button': true,
+    'icon-button--square': square,
     [`icon-button--${color}`]: color,
     [className]: className,
   })
@@ -17,6 +18,7 @@ IconButton.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   color: PropTypes.string,
+  square: PropTypes.bool,
 }
 
 export default IconButton

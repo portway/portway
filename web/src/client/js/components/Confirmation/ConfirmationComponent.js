@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import useClickOutside from 'Hooks/useClickOutside'
 import FormField from 'Components/Form/FormField'
@@ -10,7 +11,8 @@ const ConfirmationComponent = ({
   confirmedAction,
   confirmedLabel,
   confirmedText,
-  message
+  message,
+  theme
 }) => {
   const [typedMessage, setTypedMessage] = useState()
   const confirmationRef = useRef()
@@ -34,8 +36,21 @@ const ConfirmationComponent = ({
     }
   })
 
+  const confirmationClasses = cx({
+    'confirmation': true,
+    'confirmation--danger': theme === 'danger',
+    'confirmation--success': theme === 'success',
+  })
+
+  const confirmationButtonClasses = cx({
+    'btn': true,
+    'btn--white': theme === 'danger',
+    'btn--danger': theme === 'danger',
+    'confirmation__confirm': true,
+  })
+
   return (
-    <div className="confirmation" role="alert">
+    <div className={confirmationClasses} role="alert">
       <div className="confirmation__dialog" ref={confirmationRef}>
         <div className="confirmation__message">
           {message}
@@ -57,7 +72,7 @@ const ConfirmationComponent = ({
           <button className="btn btn--white confirmation__cancel" onClick={cancelAction}>Cancel</button>
           }
           <button
-            className="btn btn--white btn--danger confirmation__confirm"
+            className={confirmationButtonClasses}
             disabled={confirmedText && !confirmationTextMatch()}
             onClick={confirmedAction}
           >
@@ -75,6 +90,7 @@ ConfirmationComponent.propTypes = {
   confirmedLabel: PropTypes.string,
   confirmedText: PropTypes.string,
   message: PropTypes.element.isRequired,
+  theme: PropTypes.string,
 }
 
 ConfirmationComponent.defaultProps = {

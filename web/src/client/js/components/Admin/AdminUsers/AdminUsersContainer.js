@@ -66,9 +66,12 @@ const AdminUsersContainer = ({
     const message = (
       <span>Delete <span className="highlight danger">{user.name}</span>?</span>
     )
-    const confirmedAction = () => { removeUser(userId) }
-    const confirmedLabel = 'Yes, delete this user'
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedAction: () => { removeUser(userId) },
+      confirmedLabel: 'Yes, delete this user',
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   function sortUsersHandler(selectedSortProperty) {
