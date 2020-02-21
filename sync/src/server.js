@@ -1,6 +1,7 @@
 import app from './app'
 import { loadIO } from './libs/io'
 import controllerLoader from './socketControllers'
+import ioAuth from './libs/ioAuth'
 
 const port = process.env.SYNC_PORT
 
@@ -10,4 +11,5 @@ const server = app.listen(port, () => {
 })
 
 const io = loadIO(server)
+io.use(ioAuth.jwtMiddleware)
 controllerLoader(io)
