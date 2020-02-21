@@ -16,9 +16,13 @@
         background-color: var(--theme-overlay-dark);
       }
     }
-    &:active {
+    &:active, &:focus {
       background-color: var(--theme-overlay-light);
     }
+  }
+
+  &--square {
+    border-radius: 0 0;
   }
 
   // Colors
@@ -30,11 +34,26 @@
           background-color: transparent;
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: transparent;
       }
     }
   }
+
+  &--surface {
+    background-color: var(--theme-surface);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--theme-base);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--theme-overlay-light);
+      }
+    }
+  }
+
   &--green {
     background-color: var(--color-green);
     &:not([disabled]) {
@@ -43,8 +62,22 @@
           background-color: var(--color-green-dark);
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: var(--color-green-light);
+      }
+    }
+  }
+
+  &--red {
+    background-color: var(--color-red);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-red-dark);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-red-light);
       }
     }
   }

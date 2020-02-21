@@ -113,18 +113,24 @@ const DocumentsListContainer = ({
         <p>{strings.UNPUBLISH_CONFIRMATION_DESCRIPTION}</p>
       </>
     )
-    const confirmedLabel = strings.UNPUBLISH_CONFIRMATION_LABEL
-    const confirmedAction = () => { unpublishDocument(document.id) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedAction: () => { unpublishDocument(document.id) },
+      confirmedLabel: strings.UNPUBLISH_CONFIRMATION_LABEL,
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   function removeDocumentHandler(document) {
     const message = (
       <span>{strings.DELETE_CONFIRMATION_TITLE_PREFIX} <span className="highlight">{document.name}</span> {strings.DELETE_CONFIRMATION_TITLE_SUFFIX}</span>
     )
-    const confirmedLabel = strings.DELETE_CONFIRMATION_LABEL
-    const confirmedAction = () => { deleteDocument(document.projectId, document.id, history) }
-    uiConfirm({ message, confirmedAction, confirmedLabel })
+    const options = {
+      confirmedAction: () => { deleteDocument(document.projectId, document.id, history) },
+      confirmedLabel: strings.DELETE_CONFIRMATION_LABEL,
+      theme: 'danger'
+    }
+    uiConfirm({ message, options })
   }
 
   function clearSearchHandler() {

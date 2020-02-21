@@ -5,6 +5,7 @@ import ejs from 'ejs'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import BusinessOrganization from '../businesstime/organization'
 import { SUPPORT_EMAIL } from '../constants/email'
+import tokenSettings from '../../src/libs/tokenSettings'
 
 const { CLIENT_URL } = process.env
 
@@ -75,8 +76,9 @@ async function sendPasswordResetEmail(resetLink, email) {
 
 async function sendFreeAccountInvite(linkUrl, email) {
   const subject = 'Welcome to Portway!'
-  const textBody = `Welcome to Portway! We'd like to offer you a free account you can claim here:\n\n${linkUrl}`
-  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.FREE_INVITE]({ linkUrl })
+  const expirePeriod = tokenSettings.accountInviteExpiration // 14 days
+  const textBody = `Welcome to Portway! We'd like to offer you a free account you can claim here:\n\n${linkUrl}\n\nThis invite expires in ${expirePeriod}.`
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.FREE_INVITE]({ linkUrl, expirePeriod })
 
   return sendSingleRecipientEmail({ address: email, htmlBody, textBody, subject })
 }

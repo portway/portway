@@ -3,7 +3,7 @@
 
 .document-field__text {
   --document-field-min-height: 48px;
-  max-width: 1366px;
+  max-width: 800px;
   width: 100%;
 
   // Override the SimpleMDE styling
@@ -20,7 +20,7 @@
     pre {
       font-family: var(--type-sans-serif);
       font-size: 1.5rem;
-      padding: 0;
+      padding: 0; // commented out for wrapping
     }
 
     span[role="presentation"] {
@@ -73,7 +73,7 @@
     .CodeMirror-code {
       font-size: 1.5rem;
       font-weight: 300;
-      letter-spacing: -0.2px;
+      // letter-spacing: -0.2px; // commented out for wrapping
       line-height: 2.4rem;
 
       .cm-hr {
@@ -164,9 +164,6 @@
         color: var(--theme-text-color);
       }
 
-      .cm-quote {
-        color: var(--theme-header-color);
-      }
       .cm-tab + .cm-comment {
         background-color: transparent;
         display: inline-block;
@@ -192,23 +189,32 @@
         color: var(--color-gray-20);
       }
 
+      .cm-formatting-list + .cm-variable-3,
+      .cm-formatting-list + .cm-keyword {
+        color: var(--theme-text-color);
+      }
+
       .cm-formatting-list-ul {
         color: var(--color-gray-20);
         line-height: 2rem;
-        margin-right: .9rem;
       }
 
       .cm-formatting-list-ol {
         color: var(--color-gray-20);
         line-height: 2rem;
-        margin-right: .9rem;
+      }
+
+      .cm-formatting-task.cm-property {
+        color: var(--theme-text-color);
       }
 
       .cm-formatting-quote {
-        border-left: 3px solid var(--color-gray-20);
-        display: inline-block;
-        margin-right: 1.9rem;
-        text-indent: -4000px;
+        color: var(--color-gray-20);
+      }
+
+      .cm-quote {
+        color: var(--theme-header-color);
+        opacity: 0.6;
       }
 
       .cm-strikethrough {
