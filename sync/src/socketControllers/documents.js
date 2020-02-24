@@ -1,8 +1,8 @@
 import redis from '../libs/redis'
 import { extractJwtPayloadWithoutVerification } from '../libs/ioAuth'
 
-// 5 Minutees in seconds, 5 * 60 = 300
-const USER_SOCKET_ROOM_CACHE_EXPIRATION = 300
+const USER_SOCKET_ROOM_CACHE_EXPIRATION = 300 // 5 Minutes
+const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 300 // 5 Minutes
 
 export default (io) => {
   const documentsIO = io.of('/documents')
@@ -11,6 +11,14 @@ export default (io) => {
     const currentRoomUsers = await getReconciledRoomUsers(documentId, orgId)
     const uniqueRoomUserIds = getUniqueRoomUserIds(currentRoomUsers)
     documentsIO.in(documentId).emit('userChange', uniqueRoomUserIds)
+  }
+
+  const updateAndBroadcastFieldFocus = async (documentId, userSocketNs, userId, fieldId) => {
+    // set the currently focused field for the user
+    const userSocketFieldNs = getFocusedFieldNs(userSocketNs)
+    await redis.set(userSocketFieldNs, fieldId, 'EX', USER_SOCKET_FOCUSED_FIELD_EXPIRATION)
+    // broadcast it to the room
+    documentsIO.in(documentId).emit('userFocusChange', userId, fieldId)
   }
 
   documentsIO.on('connection', (socket) => {
@@ -22,6 +30,7 @@ export default (io) => {
     const userSocketNs = `sync:org:${orgId}:user:${userId}:socket:${socketId}`
     const userSocketRoomNs = getUserSocketRoomNs(userSocketNs)
 
+    // Document Room
     socket.on('joinRoom', async (documentId) => {
       if (typeof documentId !== 'string') return
 
@@ -48,11 +57,13 @@ export default (io) => {
 
       // delete user/socket current room
       await redis.del(userSocketRoomNs)
+      // remove user's focused field
+      await redis.del(getFocusedFieldNs(userSocketNs))
 
       await updateAndBroadcastRoomUsers(documentId, orgId)
     })
 
-    socket.on('disconnect', async (data) => {
+    socket.on('disconnect', async () => {
       const documentId = await redis.get(userSocketRoomNs)
 
       if (!documentId) return
@@ -61,8 +72,29 @@ export default (io) => {
       await redis.srem(getDocRoomNs(documentId, orgId), userSocketNs)
       // remove user/socket cached current room
       await redis.del(userSocketRoomNs)
+      // remove user's focused field
+      await redis.del(getFocusedFieldNs(userSocketNs))
       // broadcast to all users in current room
       await updateAndBroadcastRoomUsers(documentId, orgId)
+    })
+
+    // Fields
+    socket.on('fieldFocus', async (fieldId) => {
+      const documentId = await redis.get(userSocketRoomNs)
+      // make sure user is currently in a document room
+      if (!documentId) return
+      // update and broadcast the update to everyone in the room
+      await updateAndBroadcastFieldFocus(documentId, userSocketNs, userId, fieldId)
+      // refresh the document room expiration, give them more time before deleting
+      await redis.expire(userSocketRoomNs, USER_SOCKET_ROOM_CACHE_EXPIRATION)
+    })
+
+    socket.on('fieldChange', async (fieldId) => {
+      const documentId = await redis.get(userSocketRoomNs)
+      // make sure user is currently in a document room
+      if (!documentId) return
+      // broadcast the update to everyone else in the room
+      await socket.to(documentId).emit('userFieldChange', userId, fieldId)
     })
   })
 }
@@ -73,6 +105,10 @@ const getDocRoomNs = (documentId, orgId) => {
 
 const getUserSocketRoomNs = (userSocketNs) => {
   return `${userSocketNs}:currentRoom`
+}
+
+const getFocusedFieldNs = (userSocketNs) => {
+  return `${userSocketNs}:focusedField`
 }
 
 // NOTE: This will mutate redis data

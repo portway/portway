@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -6,9 +6,20 @@ import { connect } from 'react-redux'
 import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
+import useDocumentSocket from 'Hooks/useDocumentSocket'
 import dataMapper from 'Libs/dataMapper'
+import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField } from 'Actions/field'
-import { socketStore, updateDocumentRoomUsers, setCurrentDocumentRoom } from '../../sockets/SocketProvider'
+import { fetchDocument } from 'Actions/document'
+import {
+  updateDocumentRoomUsers,
+  emitJoinDocumentRoom,
+  emitLeaveDocumentRoom,
+  emitFieldFocus,
+  emitFieldBlur,
+  updateUserFieldFocus
+} from '../../sockets/SocketProvider'
+import { currentUserId } from 'Libs/currentIds'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
@@ -21,35 +32,42 @@ const DocumentFieldsContainer = ({
   focusField,
   isPublishing,
   updateField,
+  fetchDocument
 }) => {
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  const { state: socketState, dispatch: socketDispatch, documentSocket } = useContext(socketStore)
+  // =============================== Web Socket events ====================================
+
+  const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
 
   const activeUsers = socketState.activeDocumentUsers[documentId]
   const currentDocumentRoom = socketState.currentDocumentRoom
 
-  // =============================== Web Sockets ====================================
-
   useEffect(() => {
-    documentSocket.emit('joinRoom', documentId)
-    socketDispatch(setCurrentDocumentRoom(documentId))
+    socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
     documentSocket.on('userChange', (userIds) => {
       socketDispatch(updateDocumentRoomUsers(documentId, userIds))
     })
+    documentSocket.on('userFocusChange', (userId, fieldId) => {
+      socketDispatch(updateUserFieldFocus(userId, fieldId))
+    })
+    documentSocket.on('userFieldChange', (userId, fieldId) => {
+      if (userId !== currentUserId.toString()) {
+        fetchDocument(documentId)
+      }
+    })
     return () => {
       if (currentDocumentRoom) {
-        documentSocket.emit('leaveRoom', currentDocumentRoom)
-        setCurrentDocumentRoom(null)
+        socketDispatch(emitLeaveDocumentRoom(socketDispatch, currentDocumentRoom))
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
 
-  // =================================================================================
+  // =======================================================================================
 
   // Sort the fields every re-render
   const fieldKeys = Object.keys(fields)
@@ -107,12 +125,16 @@ const DocumentFieldsContainer = ({
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)
+      // send socket info
+      socketDispatch(emitFieldFocus(socketDispatch, fieldId))
     }
   }
 
   function fieldBlurHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
       blurField(fieldId, fieldType, fieldData)
+      // send socket info
+      socketDispatch(emitFieldBlur(socketDispatch, fieldId))
     }
   }
 
@@ -120,7 +142,9 @@ const DocumentFieldsContainer = ({
     if (!documentReadOnlyMode) {
       // leave this console in to make sure we're not hammering the API because of useEffect
       // console.info(`Field: ${fieldId} trigger changeHandler`)
-      updateField(projectId, documentId, fieldId, body)
+
+      // passing socketDispatch to the action here, need this one dispatched async so that there's no race condition when fetching the data
+      updateField(projectId, documentId, fieldId, body, socketDispatch)
     }
   }
 
@@ -160,6 +184,7 @@ DocumentFieldsContainer.propTypes = {
   focusField: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   updateField: PropTypes.func.isRequired,
+  fetchDocument: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -176,6 +201,8 @@ const mapDispatchToProps = {
   createField,
   focusField,
   updateField,
+  uiConfirm,
+  fetchDocument
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

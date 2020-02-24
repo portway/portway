@@ -3,6 +3,7 @@ import { Fields, Notifications, Validation } from './index'
 import { fetchDocument } from './document'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
+import { emitFieldChange } from '../sockets/SocketProvider'
 
 export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
@@ -26,7 +27,7 @@ export const createField = (projectId, documentId, fieldType, body) => {
   }
 }
 
-export const updateField = (projectId, documentId, fieldId, body) => {
+export const updateField = (projectId, documentId, fieldId, body, socketDispatch) => {
   return async (dispatch) => {
     dispatch(Fields.initiateUpdate(documentId, fieldId))
     let data
@@ -44,6 +45,10 @@ export const updateField = (projectId, documentId, fieldId, body) => {
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
       dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
+    // if we want to sync users, pass in socketDispatch
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, fieldId))
+    }
   }
 }
 

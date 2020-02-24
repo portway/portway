@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
+import useDocumentSocket from '../../hooks/useDocumentSocket'
+import { currentUserId } from '../../libs/currentIds'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
@@ -21,6 +23,18 @@ const DocumentFieldComponent = ({
   settingsMode,
 }) => {
   const nameRef = useRef()
+  const { state: socketState } = useDocumentSocket()
+  const { currentDocumentUserFieldFocus } = socketState
+
+  const currentFieldUsers = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
+    // user is focused on this field
+    // TODO: do we want to display current user? if not can filter that out in this conditional
+    if (currentDocumentUserFieldFocus[userId] === field.id) {
+      return [...cur, userId]
+    }
+    return cur
+  }, [])
+
   useEffect(() => {
     if (isNewField && nameRef.current) {
       nameRef.current.scrollIntoView({ behavior: 'smooth' })
@@ -129,6 +143,8 @@ const DocumentFieldComponent = ({
         </div>
 
         <div className={fieldActionClasses}></div>
+
+        <h3>{currentFieldUsers}</h3>
 
       </div>
     </li>
