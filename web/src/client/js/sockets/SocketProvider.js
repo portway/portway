@@ -1,9 +1,13 @@
 import React, { createContext, useReducer } from 'react'
 import PropTypes from 'prop-types'
 import openSocket from 'socket.io-client'
+import { getCookieValue } from '../utilities/cookieParser'
 import { currentUserId } from 'Libs/currentIds'
+
+
+const token = getCookieValue('token')
 // TODO: pass in via env
-const documentSocket = openSocket(`http://localhost:3002/documents?userId=${currentUserId}`)
+const documentSocket = openSocket(`http://localhost:3002/documents?token=${token}&userId=${currentUserId}`)
 
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
