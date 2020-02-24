@@ -22,8 +22,10 @@ const copyIntroProjectToOrg = async (orgId) => {
     accessLevel: PROJECT_ACCESS_LEVELS.READ
   })
 
-  const org = await BusinessOrganization.findSanitizedById(orgId)
-  await BusinessProjectUser.addUserIdToProject(org.ownerId, newProject.id, PROJECT_ROLE_IDS.ADMIN, orgId)
+  await Promise.all([
+    addUserAsAdminToProject(orgId, newProject.id),
+    BusinessOrganization.updateById(orgId, { introProjectId: newProject.id })
+  ])
 
   const docs = await getProjectDocuments(INTRO_PROJECT_ID, READ_KEY)
 
@@ -48,6 +50,16 @@ const copyIntroProjectToOrg = async (orgId) => {
       return BusinessField.createForDocument(newDoc.id, body)
     }, Promise.resolve())
   }))
+}
+
+async function addUserAsAdminToProject(orgId, projectId) {
+  const org = await BusinessOrganization.findSanitizedById(orgId)
+  return BusinessProjectUser.addUserIdToProject(
+    org.ownerId,
+    projectId,
+    PROJECT_ROLE_IDS.ADMIN,
+    orgId
+  )
 }
 
 export default {
