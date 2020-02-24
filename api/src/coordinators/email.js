@@ -5,7 +5,7 @@ import ejs from 'ejs'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import BusinessOrganization from '../businesstime/organization'
 import { SUPPORT_EMAIL } from '../constants/email'
-import tokenSettings from '../../src/libs/tokenSettings'
+import tokenSettings from '../libs/tokenSettings'
 
 const { CLIENT_URL } = process.env
 
