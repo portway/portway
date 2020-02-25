@@ -1,4 +1,6 @@
 import jwt from 'jsonwebtoken'
+import logger from '../libs/logger'
+import { LOG_LEVELS } from '../constants'
 
 const secret = process.env.JWT_SECRET
 
@@ -7,8 +9,7 @@ export const jwtMiddleware = (socket, next) => {
 
   jwt.verify(token, secret, (err, decoded) => {
     if (err) {
-      // TODO: log this
-      console.error(err)
+      logger(LOG_LEVELS.WARNING, 'Invalid token')
       return next(err)
     }
     next(null)
