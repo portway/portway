@@ -41,6 +41,8 @@ docs:
 
 sync:
   port: "3004"
+  image: "bonkeybong/portway_sync"
+  tag: "latest"
 
 redis:
   port: "6379"

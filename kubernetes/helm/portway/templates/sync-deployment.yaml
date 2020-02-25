@@ -20,7 +20,7 @@ spec:
       imagePullSecrets:
       - name: regcred    
       containers:
-      - image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
+      - image: {{ printf "%s:%s" .Values.sync.image .Values.sync.tag }}
         name: {{ .Values.serviceNames.sync }}
         args: [ "start"  ]     
         env:
