@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sync-deployment
+  labels:
+    app: {{ .Values.serviceNames.sync }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceNames.sync }}
+  template:
+    metadata:
+      labels:
+        run: {{ .Values.serviceNames.sync }}
+        app: {{ .Values.serviceNames.sync }}
+        redeploy: "1"
+    spec:
+      imagePullSecrets:
+      - name: regcred    
+      containers:
+      - image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
+        name: {{ .Values.serviceNames.sync }}
+        args: [ "start"  ]     
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.redis-url
+        - name: SYNC_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: sync-config
+              key: sync.port
+        - name: LOG_TOKEN_SYNC
+          valueFrom:
+            secretKeyRef:
+              name: sync-secrets
+              key: log_token_sync
+        ports:
+        - containerPort: 3001
+          protocol: TCP

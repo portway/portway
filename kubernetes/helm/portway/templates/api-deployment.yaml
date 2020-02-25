@@ -145,5 +145,5 @@ spec:
               name: admin-secrets
               key: admin_secret_key
         ports:
-        - containerPort: 3001
+        - containerPort: {{ .Values.api.port }}
           protocol: TCP

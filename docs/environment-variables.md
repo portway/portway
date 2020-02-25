@@ -56,7 +56,8 @@ Make sure people know they need to update their local .env with the new value!
 **API_URL**: The locally resolveable url to the API. In a kubernetes cluster, this may be `http://api-service:3001` for example.
 **API_PUBLIC_URL**: The publicly accessible FQDN for the API. Used to make API calls from the client javascript app.  
 **FLAG_DISABLE_SIGNUP**: Turns off the sign up form and endpoint when set to the string `true`  
-**LOG_TOKEN_WEB**: An r7insight token for web logging
+**LOG_TOKEN_WEB**: An r7insight token for web logging  
+**SOCKET_URL**: Url for the sync service socket
 
 # Shared Environment Variables
 **JWT_SECRET**: A secret string used to sign and verify JSON Web Tokens used for app authentication  
