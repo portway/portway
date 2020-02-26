@@ -43,6 +43,8 @@ spec:
 apiVersion: v1
 data:
   proxy-body-size: "100M"
+  proxy-read-timeout: "3600"
+  proxy-send-timeout: "3600"
 kind: ConfigMap
 metadata:
   name: nginx-configuration
