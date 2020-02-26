@@ -8,6 +8,7 @@ certIssuer: letsencrypt-prod
 baseUrl: portway.app
 apiPublicUrl: api.portway.app
 docsUrl: docs.portway.app
+syncUrl: sync.portway.app
 
 stripePublishableKey: "pk_live_aZuMG4Z30RhPg54H8JFQOEKJ"
 
