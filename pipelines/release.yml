@@ -4,6 +4,7 @@ stages:
   - Clone Repo
   - Web
   - API
+  - Sync
 steps:
   main_clone:
     title: Cloning main repository...
@@ -38,6 +39,19 @@ steps:
         - name: main_clone
           on:
             - success
+  build_prod_sync_image:
+    stage: Sync
+    title: Building Sync Production Image
+    type: build
+    image_name: bonkeybong/portway_sync
+    working_directory: ./sync/
+    tag: '${{CF_RELEASE_TAG}}'
+    dockerfile: Dockerfile-prod
+    when:
+      steps:
+        - name: main_clone
+          on:
+            - success
   push_web_to_registry:
     stage: Web
     type: push
@@ -62,5 +76,18 @@ steps:
     when:
       steps:
         - name: build_prod_api_image
+          on:
+            - success
+  push_sync_to_registry:
+    stage: Sync
+    type: push
+    title: Push Sync to Docker Registry
+    candidate: ${{build_prod_sync_image}}
+    tag: '${{CF_RELEASE_TAG}}'
+    image_name: bonkeybong/portway_sync
+    registry: bonkeybong
+    when:
+      steps:
+        - name: build_prod_sync_image
           on:
             - success
