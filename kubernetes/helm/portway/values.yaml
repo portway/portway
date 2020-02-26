@@ -36,8 +36,8 @@ db:
   useSsl: "true"
 
 docs:
-  image: "bonkeybong/portway_docs"
-  tag: "latest"
+  image: 'bonkeybong/portway_docs'
+  tag: '1.1.0'
   port: "3003"
 
 sync:
