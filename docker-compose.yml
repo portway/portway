@@ -48,12 +48,12 @@ services:
     entrypoint: /bin/sh
     command: ./wait-for.sh redis:6379 -- ./run.sh devstart
     ports:
-      - 3002:3002
+      - 3004:3004
     env_file:
       - ./sync/.env
     environment:
       NODE_ENV: development
-      SYNC_PORT: 3002
+      SYNC_PORT: 3004
     depends_on:
       - redis
     container_name: portway-sync

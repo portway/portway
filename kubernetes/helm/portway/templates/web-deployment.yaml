@@ -69,6 +69,11 @@ spec:
             secretKeyRef:
               name: log-secrets
               key: log_token_web
+        - name: SYNC_URL
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.sync_url
         ports:
-        - containerPort: 3000
+        - containerPort: {{ .Values.web.port }}
           protocol: TCP

@@ -42,6 +42,11 @@ Slack secrets
 kubectl create secret generic slack-secrets --from-literal=slack_webhook_url='value'
 ```
 
+Sync secrets
+```
+kubectl create secret generic sync-secrets --from-literal=log_token_sync='value'
+```
+
 Audit Log Backup secrets
 These are only needed if the audit log should get backed up in the environment and the audit log backup job is running
 ```

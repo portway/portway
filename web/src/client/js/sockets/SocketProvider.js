@@ -4,10 +4,12 @@ import openSocket from 'socket.io-client'
 import { getCookieValue } from '../utilities/cookieParser'
 import { currentUserId } from 'Libs/currentIds'
 
-
 const token = getCookieValue('token')
-// TODO: pass in via env
-const documentSocket = openSocket(`http://localhost:3002/documents?token=${token}&userId=${currentUserId}`)
+// sync url is defined by the index.ejs template
+// eslint-disable-next-line no-undef
+const documentUrl = new URL(`/documents?token=${token}&userId=${currentUserId}`, SYNC_URL)
+
+const documentSocket = openSocket(documentUrl.href)
 
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
