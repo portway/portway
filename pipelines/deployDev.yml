@@ -20,6 +20,7 @@ steps:
       - KUBE_CONTEXT=dev-kubernetes-portway
       - VALUE_apiTag=$VERSION_TAG
       - VALUE_webTag=$VERSION_TAG
+      - VALUE_sync_tag=$VERSION_TAG
   # This pipeline is broken, disabling until puppeteer tests fixed
   # run_puppeteer_pipeline:
   #   title: Run Puppeteer Pipeline
