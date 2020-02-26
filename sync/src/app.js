@@ -11,9 +11,14 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
 
-// Set up Express
-const router = express.Router()
-app.use(router)
+// Mount a base router to respond to / requests
+// for verifying service is running at FQDN.
+// Added for letsencrypt verification of running service
+const baseRouter = express.Router()
+app.use('/', baseRouter)
+baseRouter.get('/', (req, res) => {
+  res.json({ message: 'Sync Initialized' })
+})
 
 process.on('uncaughtException', (error) => {
   logger(LOG_LEVELS.ERROR, error)
