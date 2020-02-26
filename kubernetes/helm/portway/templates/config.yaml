@@ -28,7 +28,7 @@ items:
     web.api_public_url: {{ printf "https://%s" .Values.apiPublicUrl }}
     web.stripe_publishable_key: {{ .Values.stripePublishableKey | quote }}
     web.flag_disable_signup: {{ .Values.web.flagDisableSignup | quote }}
-    web.sync_url: {{ printf "http://%s-sync-service:%s" .Release.Name .Values.sync.port }}
+    web.sync_url: {{ printf "https://%s" .Values.syncUrl }}
   kind: ConfigMap
   metadata:
     name: web-config
