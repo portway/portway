@@ -141,7 +141,6 @@ const DocumentFieldsComponent = ({
   })
   return (
     <div className={fieldsClasses}>
-      <h1>{activeUsers}</h1>
       <ol>
         {renderFields()}
       </ol>

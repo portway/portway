@@ -12,9 +12,6 @@ import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField } from 'Actions/field'
 import { fetchDocument } from 'Actions/document'
 import {
-  updateDocumentRoomUsers,
-  emitJoinDocumentRoom,
-  emitLeaveDocumentRoom,
   emitFieldFocus,
   emitFieldBlur,
   updateUserFieldFocus
@@ -42,15 +39,9 @@ const DocumentFieldsContainer = ({
   // =============================== Web Socket events ====================================
 
   const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
-
   const activeUsers = socketState.activeDocumentUsers[documentId]
-  const currentDocumentRoom = socketState.currentDocumentRoom
 
   useEffect(() => {
-    socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
-    documentSocket.on('userChange', (userIds) => {
-      socketDispatch(updateDocumentRoomUsers(documentId, userIds))
-    })
     documentSocket.on('userFocusChange', (userId, fieldId) => {
       socketDispatch(updateUserFieldFocus(userId, fieldId))
     })
@@ -59,11 +50,6 @@ const DocumentFieldsContainer = ({
         fetchDocument(documentId)
       }
     })
-    return () => {
-      if (currentDocumentRoom) {
-        socketDispatch(emitLeaveDocumentRoom(socketDispatch, currentDocumentRoom))
-      }
-    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
 
@@ -159,7 +145,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
-      activeUsers ={activeUsers}
+      activeUsers={activeUsers}
       createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
       disabled={disabled}
