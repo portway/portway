@@ -170,7 +170,7 @@ const SocketProvider = ( { children } ) => {
 }
 
 SocketProvider.propTypes = {
-  children: PropTypes.function
+  children: PropTypes.node
 }
 
 export { socketStore, SocketProvider }

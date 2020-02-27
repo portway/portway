@@ -7,6 +7,7 @@ import {
   emitJoinDocumentRoom,
   emitLeaveDocumentRoom
 } from '../../sockets/SocketProvider'
+import DocumentUsersComponent from './DocumentUsersComponent'
 
 const DocumentUsersContainer = () => {
   const { documentId } = useParams()
@@ -28,9 +29,7 @@ const DocumentUsersContainer = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
 
-  console.log(activeUsers)
-
-  return <div />
+  return <DocumentUsersComponent activeUsers={activeUsers} />
 }
 
 DocumentUsersContainer.propTypes = {

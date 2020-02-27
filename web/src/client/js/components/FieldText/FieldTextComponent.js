@@ -68,9 +68,9 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [editorRef])
 
   useEffect(() => {
-    if (editorRef.current && field.value) {
+    if (editorRef.current && field.value !== editorRef.current.getValue()) {
       editorRef.current.getDoc().setValue(field.value)
-      editorRef.current.setCursor(editorRef.current.lineCount(), 0)
+      editorRef.current.refresh()
     }
   }, [field.value])
 

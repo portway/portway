@@ -6,6 +6,7 @@ import { currentUserId } from '../../libs/currentIds'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
+import DocumentFieldUsers from './DocumentFieldUsers'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -17,6 +18,8 @@ const DocumentFieldComponent = ({
   index,
   isNewField,
   isUpdating,
+  onBlur,
+  onFocus,
   onRename,
   readOnly,
   settingsHandler,
@@ -93,7 +96,9 @@ const DocumentFieldComponent = ({
     >
       <div className="document-field__component">
 
-        <div className={fieldToolClasses}></div>
+        <div className={fieldToolClasses}>
+          <DocumentFieldUsers users={currentFieldUsers} />
+        </div>
 
         <div className={fieldContainerClasses}>
 
@@ -110,9 +115,11 @@ const DocumentFieldComponent = ({
                 }
                 e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
               }}
+              onBlur={(e) => { onBlur(field.id, field.type, field) }}
               onChange={(e) => { onRename(field.id, e.target.value) }}
               onFocus={(e) => {
                 if (!readOnly) {
+                  onFocus(field.id, field.type, field)
                   e.target.select()
                 }
               }}
@@ -144,8 +151,6 @@ const DocumentFieldComponent = ({
 
         <div className={fieldActionClasses}></div>
 
-        <h3>{currentFieldUsers}</h3>
-
       </div>
     </li>
   )
@@ -157,6 +162,8 @@ DocumentFieldComponent.propTypes = {
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,
   isUpdating: PropTypes.bool,
+  onBlur: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,

@@ -109,6 +109,8 @@ const DocumentFieldsComponent = ({
           isNewField={createdFieldId === field.id}
           isUpdating={fieldsUpdating[field.id]}
           key={field.id}
+          onBlur={fieldBlurHandler}
+          onFocus={fieldFocusHandler}
           onRename={fieldRenameHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
