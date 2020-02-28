@@ -47,7 +47,7 @@ export const updateField = (projectId, documentId, fieldId, body, socketDispatch
       dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
     // if we want to sync users, pass in socketDispatch
     if (socketDispatch) {
-      socketDispatch(emitFieldChange(socketDispatch, fieldId))
+      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
     }
   }
 }
