@@ -68,7 +68,9 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [editorRef])
 
   useEffect(() => {
-    if (editorRef.current && field.value !== editorRef.current.getValue()) {
+    // If we have an editor, and we have a field value, and the field value is different from
+    // the editors current value, then we got an update from the socket, so update the text
+    if (editorRef.current && field.value && field.value !== editorRef.current.getValue()) {
       editorRef.current.getDoc().setValue(field.value)
       editorRef.current.refresh()
     }
