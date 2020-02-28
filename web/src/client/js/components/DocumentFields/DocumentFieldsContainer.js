@@ -112,7 +112,7 @@ const DocumentFieldsContainer = ({
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)
       // send socket info
-      socketDispatch(emitFieldFocus(socketDispatch, fieldId))
+      socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
     }
   }
 
@@ -120,7 +120,7 @@ const DocumentFieldsContainer = ({
     if (!documentReadOnlyMode) {
       blurField(fieldId, fieldType, fieldData)
       // send socket info
-      socketDispatch(emitFieldBlur(socketDispatch, fieldId))
+      socketDispatch(emitFieldBlur(socketDispatch, fieldId, documentId))
     }
   }
 

@@ -65,23 +65,23 @@ export const emitLeaveDocumentRoom = (dispatch, documentId) => {
   return { type: actionTypes.DOCUMENT_ROOM_LEFT, documentId }
 }
 
-export const emitFieldFocus = (dispatch, fieldId) => {
+export const emitFieldFocus = (dispatch, fieldId, documentId) => {
   if (!documentSocket.connected) {
     return { type: actionTypes.SOCKET_ERROR }
   }
   dispatch({ type: actionTypes.EMIT_FIELD_FOCUS, fieldId })
-  documentSocket.emit('fieldFocus', fieldId)
+  documentSocket.emit('fieldFocus', fieldId, documentId)
   return {
     type: actionTypes.FIELD_FOCUS_EMITTED
   }
 }
 
-export const emitFieldBlur = (dispatch, fieldId) => {
+export const emitFieldBlur = (dispatch, fieldId, documentId) => {
   if (!documentSocket.connected) {
     return { type: actionTypes.SOCKET_ERROR }
   }
   dispatch({ type: actionTypes.EMIT_FIELD_BLUR, fieldId })
-  documentSocket.emit('fieldFocus', null)
+  documentSocket.emit('fieldFocus', null, documentId)
   return {
     type: actionTypes.FIELD_BLUR_EMITTED
   }
@@ -95,12 +95,12 @@ export const updateUserFieldFocus = (userId, fieldId) => {
   }
 }
 
-export const emitFieldChange = (dispatch, fieldId) => {
+export const emitFieldChange = (dispatch, fieldId, documentId) => {
   if (!documentSocket.connected) {
     return { type: actionTypes.SOCKET_ERROR }
   }
   dispatch({ type: actionTypes.EMIT_FIELD_CHANGE, fieldId })
-  documentSocket.emit('fieldChange', fieldId)
+  documentSocket.emit('fieldChange', fieldId, documentId)
   return {
     type: actionTypes.FIELD_BLUR_EMITTED
   }
