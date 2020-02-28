@@ -11,6 +11,11 @@ const documentUrl = new URL(`/documents?token=${token}&userId=${currentUserId}`,
 
 const documentSocket = openSocket(documentUrl.href)
 
+if (!documentSocket.connected) {
+  console.info('Error connecting to user sync service')
+}
+
+
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',
@@ -160,6 +165,9 @@ const SocketProvider = ( { children } ) => {
       case actionTypes.FIELD_BLUR_EMITTED:
       case actionTypes.EMIT_FIELD_CHANGE:
       case actionTypes.FIELD_CHANGE_EMITTED:
+        return state
+      case actionTypes.SOCKET_ERROR:
+        // no need to log, that was done when module loaded, move on silently
         return state
       default:
         throw new Error()
