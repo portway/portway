@@ -109,6 +109,8 @@ const DocumentFieldsComponent = ({
           isNewField={createdFieldId === field.id}
           isUpdating={fieldsUpdating[field.id]}
           key={field.id}
+          onBlur={fieldBlurHandler}
+          onFocus={fieldFocusHandler}
           onRename={fieldRenameHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
@@ -141,7 +143,6 @@ const DocumentFieldsComponent = ({
   })
   return (
     <div className={fieldsClasses}>
-      <h1>{activeUsers}</h1>
       <ol>
         {renderFields()}
       </ol>

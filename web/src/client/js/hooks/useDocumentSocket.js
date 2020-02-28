@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { socketStore } from '../sockets/SocketProvider'
 
 function useDocumentSocket() {

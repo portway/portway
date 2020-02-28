@@ -45,15 +45,15 @@ const Index = () => {
   return (
     <Provider store={store}>
       <Router basename={PATH_APP}>
-        <SocketProvider >
-          <AppContainer>
-            <Helmet>
-              <title>{PRODUCT_NAME}</title>
-            </Helmet>
-            <ErrorBoundaryComponent>
-              <ConfirmationContainer />
-              <NotificationsContainer />
-              <HeaderContainer />
+        <AppContainer>
+          <Helmet>
+            <title>{PRODUCT_NAME}</title>
+          </Helmet>
+          <ErrorBoundaryComponent>
+            <ConfirmationContainer />
+            <NotificationsContainer />
+            <HeaderContainer />
+            <SocketProvider>
               <Suspense fallback={<LoadingComponent />}>
                 {currentOrg &&
                   <Switch>
@@ -67,9 +67,9 @@ const Index = () => {
                   </Switch>
                 }
               </Suspense>
-            </ErrorBoundaryComponent>
-          </AppContainer>
-        </SocketProvider>
+            </SocketProvider>
+          </ErrorBoundaryComponent>
+        </AppContainer>
       </Router>
     </Provider>
   )
