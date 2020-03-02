@@ -18,7 +18,7 @@ const endFuncs = {
     // Makes log aggregation much simpler to dig into endpoint performance
     const url = req.originalUrl || req.url
     const path = (url.split('?')[0]).split('/')
-    return path.map(i => i.replace(/^\d+$/, ':id')).join('/')
+    return `${req.method} ` + path.map(i => i.replace(/^\d+$/, ':id')).join('/')
   },
   method: req => req.method,
   status: (req, res) => res.statusCode,

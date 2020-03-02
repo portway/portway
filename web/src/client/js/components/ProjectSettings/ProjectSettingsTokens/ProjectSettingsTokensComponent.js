@@ -105,8 +105,8 @@ const ProjectSettingsTokensComponent = ({
               }" ${API_BASE}projects/${projectId}/documents`}
             />
             <p>
-              <strong>Hint:</strong> not seeing any documents? Make this project has published
-              documents. Or add the `?draft=true` parameter to the url to view all documents
+              <strong>Hint:</strong> not seeing any documents? Make sure this project has published
+              documents, or add the `?draft=true` parameter to the endpoint url to view all documents
             </p>
           </dd>
           <dt className="project-settings__endpoint-name">

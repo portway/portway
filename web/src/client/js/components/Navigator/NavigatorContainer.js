@@ -9,6 +9,7 @@ import {
   ORGANIZATION_ROLE_IDS,
   ORGANIZATION_SETTINGS,
   PATH_PROJECT,
+  PATH_PROJECTS,
   PATH_PROJECT_CREATE,
   PRODUCT_NAME,
   PROJECT_ROLE_IDS
@@ -34,6 +35,11 @@ const NavigatorContainer = ({ history, location }) => {
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
+
+  let title = 'Projects'
+  if (location.pathname !== PATH_PROJECTS && project) {
+    title = project.name
+  }
 
   const [expanded, setExpanded] = useState(false)
   const selectRef = useRef()
@@ -117,7 +123,7 @@ const NavigatorContainer = ({ history, location }) => {
           ref={anchorRef}
         >
           <CaretIcon />
-          <span className="label">{project ? project.name : 'Projects'}</span>
+          <span className="label">{title}</span>
         </button>
         <Popper anchorRef={anchorRef} autoCollapse={collapseCallback} open={expanded} width="300">
           <Menu anchorRef={anchorRef}>

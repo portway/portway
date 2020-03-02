@@ -2,18 +2,8 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
-import {
-  DragIcon,
-  ImageIcon,
-  NumberIcon,
-  RemoveIcon,
-  SettingsIcon,
-  StringIcon,
-  TextIcon,
-  TrashIcon
-} from 'Components/Icons'
-import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
+import { FIELD_TYPES } from 'Shared/constants'
+import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -21,23 +11,15 @@ import './_DocumentTools.scss'
 
 const DocumentFieldComponent = ({
   children,
-  documentMode,
-  dragEndHandler,
-  dragEnterHandler,
-  dragLeaveHandler,
-  dragStartHandler,
-  dropHandler,
   field,
   index,
   isNewField,
   isUpdating,
-  onDestroy,
   onRename,
   readOnly,
   settingsHandler,
   settingsMode,
 }) => {
-  const listRef = useRef()
   const nameRef = useRef()
   useEffect(() => {
     if (isNewField && nameRef.current) {
@@ -47,7 +29,6 @@ const DocumentFieldComponent = ({
   }, [isNewField])
 
   const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE
-  const documentEditMode = documentMode === DOCUMENT_MODE.EDIT
 
   const fieldClasses = cx({
     'document-field': true,
@@ -58,36 +39,25 @@ const DocumentFieldComponent = ({
     'document-field--string': field.type === FIELD_TYPES.STRING,
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--settings-mode': settingsMode,
-    'document-field--edit-mode': documentEditMode,
   })
 
   const fieldToolClasses = cx({
     'document-field__tools': true,
-    'document-field__tools--visible': documentEditMode,
   })
 
   const fieldActionClasses = cx({
     'document-field__actions': true,
-    'document-field__actions--visible': documentEditMode,
   })
 
   const fieldContainerClasses = cx({
     'document-field__container': true,
-    'document-field__container--edit-mode': documentEditMode,
   })
 
   const fieldLabels = {
     [FIELD_TYPES.TEXT]: 'Text area',
     [FIELD_TYPES.STRING]: 'String',
     [FIELD_TYPES.NUMBER]: 'Number',
-    [FIELD_TYPES.IMAGE]: 'Photo',
-  }
-
-  const fieldIcons = {
-    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--color-gray-40)" />,
-    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" fill="var(--color-gray-40)" />,
-    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" fill="var(--color-gray-40)" />,
-    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" fill="var(--color-gray-40)" />,
+    [FIELD_TYPES.IMAGE]: 'Image',
   }
 
   // Field name handling
@@ -106,57 +76,14 @@ const DocumentFieldComponent = ({
       className={fieldClasses}
       data-id={field.id}
       data-order={index}
-      draggable={false}
-      onDragEnd={dragEndHandler}
-      onDragEnter={dragEnterHandler}
-      onDragOver={e => e.preventDefault()}
-      onDragStart={dragStartHandler}
-      onDrop={dropHandler}
-      ref={listRef}
     >
       <div className="document-field__component">
 
-        <div className={fieldToolClasses}>
-          {documentEditMode &&
-          <div className="document-field__dragger">
-            <button
-              aria-label="Reorder field by dragging"
-              className="btn btn--blank btn--with-circular-icon"
-              onMouseDown={() => { listRef.current.setAttribute('draggable', true) }}
-              onTouchStart={() => { listRef.current.setAttribute('draggable', true) }}
-            >
-              <DragIcon />
-            </button>
-          </div>
-          }
-        </div>
+        <div className={fieldToolClasses}></div>
 
         <div className={fieldContainerClasses}>
-          {documentEditMode &&
-          <div className="document-field__outline">
-            <div className="document-field__outline-icon">{fieldIcons[field.type]}</div>
-            <div className="document-field__outline-name">
-              <input
-                defaultValue={field.name}
-                maxLength={fieldNameMaxLength}
-                onKeyDown={(e) => {
-                  if (e.key.toLowerCase() === 'escape') {
-                    e.target.blur()
-                    return
-                  }
-                }}
-                onChange={(e) => { onRename(field.id, e.target.value) }}
-                type="text" />
-            </div>
-            <div className="document-field__outline-status">
-              {isUpdating &&
-              <SpinnerComponent />
-              }
-            </div>
-          </div>
-          }
 
-          {dataField && !documentEditMode &&
+          {dataField &&
           <div className="document-field__name">
             <span className="document-field__name-label">{fieldLabels[field.type]}</span>
             <input
@@ -181,6 +108,7 @@ const DocumentFieldComponent = ({
               type="text" />
           </div>
           }
+
           <div className="document-field__content">
             <div className="document-field__settings-button">
               <>
@@ -200,13 +128,7 @@ const DocumentFieldComponent = ({
           </div>
         </div>
 
-        <div className={fieldActionClasses}>
-          {documentEditMode &&
-          <button aria-label="Remove field" className="btn btn--blank btn--red btn--with-circular-icon" onClick={onDestroy}>
-            <TrashIcon fill="#ffffff" />
-          </button>
-          }
-        </div>
+        <div className={fieldActionClasses}></div>
 
       </div>
     </li>
@@ -215,17 +137,10 @@ const DocumentFieldComponent = ({
 
 DocumentFieldComponent.propTypes = {
   children: PropTypes.element.isRequired,
-  documentMode: PropTypes.string.isRequired,
-  dragEndHandler: PropTypes.func,
-  dragEnterHandler: PropTypes.func,
-  dragLeaveHandler: PropTypes.func,
-  dragStartHandler: PropTypes.func,
-  dropHandler: PropTypes.func,
   field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isNewField: PropTypes.bool.isRequired,
   isUpdating: PropTypes.bool,
-  onDestroy: PropTypes.func,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,

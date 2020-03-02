@@ -21,7 +21,7 @@ BillingIcon.propTypes = {
 
 BillingIcon.defaultProps = {
   className: 'icon-billing',
-  fill: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#F2F2F2' : '#3b3d3e',
+  fill: 'var(--theme-icon-color)',
   height: '18',
   width: '18'
 }
