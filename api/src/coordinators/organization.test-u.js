@@ -6,7 +6,9 @@ import BusinessProject from '../businesstime/project'
 import BusinessProjectToken from '../businesstime/projecttoken'
 import BusinessUser from '../businesstime/user'
 import BusinessProjectUser from '../businesstime/projectuser'
+import BusinessResourceUsage from '../businesstime/resourceusage'
 import stripeIntegrator from '../integrators/stripe'
+import s3Integrator from '../integrators/s3'
 import organizationCoordinator from '../coordinators/organization'
 
 jest.mock('../businesstime/organization')
@@ -17,7 +19,9 @@ jest.mock('../businesstime/project')
 jest.mock('../businesstime/projecttoken')
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
+jest.mock('../businesstime/resourceUsage')
 jest.mock('../integrators/stripe')
+jest.mock('../integrators/s3')
 // separate these internally used functions from the mock object so we can use them for their unit tests
 const removeAllOrgData = organizationCoordinator.removeAllOrgData
 organizationCoordinator.removeAllOrgData = jest.fn()
@@ -110,6 +114,11 @@ describe('organization coordinator', () => {
     it('should call BusinessProjectUser.deleteAllForOrg', () => {
       expect(BusinessProjectUser.deleteAllForOrg.mock.calls.length).toBe(1)
       expect(BusinessProjectUser.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
+    })
+
+    it('should call BusinessResourceUsage.deleteAllForOrg', () => {
+      expect(BusinessResourceUsage.deleteAllForOrg.mock.calls.length).toBe(1)
+      expect(BusinessResourceUsage.deleteAllForOrg.mock.calls[0][0]).toBe(orgId)
     })
 
     it('should call BusinessOrganization.deleteById', () => {
