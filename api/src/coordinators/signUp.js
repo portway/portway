@@ -7,6 +7,7 @@ import emailCoordinator from './email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
+import introCoordinator from './intro'
 import ono from 'ono'
 import slackIntegrator from '../integrators/slack'
 
@@ -37,6 +38,11 @@ async function createUserAndOrganization(name, email) {
     ownerId: createdUser.id,
     stripeId: customer.id
   })
+
+  // Letting this happen in the background. Should occur before user verifies their email
+  // and if there's an error we don't want it to prevent signup. Note this has to occur after
+  // the ownerId has been set on the org!
+  introCoordinator.copyIntroProjectToOrg(organization.id)
 
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,

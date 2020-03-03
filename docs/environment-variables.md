@@ -49,7 +49,8 @@ Make sure people know they need to update their local .env with the new value!
 **AUDIT_LOG_TOKEN**: When set, the `r7insight` logger is turned on for the audit log  
 **ADMIN_SECRET_KEY**: A secret key used for authorizing admin actions  
 **REDIS_URL**: The url to the redis instance. Optionally used for rate-limiting. Uses in-memory store if not set
-**SLACK_WEBHOOK_URL**: The url to use with the slack webhook api, for posting notifications to the portway-support slack channel
+**SLACK_WEBHOOK_URL**: The url to use with the slack webhook api, for posting notifications to the portway-support slack channel  
+**PORTWAY_INTRO_PROJECT_READ_KEY**: A Portway API key for the intro project. Needs read permissions. Project is copied to new users org to introduce them to Portway.
 
 # Web Environment Variables
 **STRIPE_PUBLISHABLE_KEY**: The publishable key from Stripe. Used to manage subscriptions and collect payment info.  
