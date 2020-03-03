@@ -1,8 +1,9 @@
 import redis from '../libs/redis'
 import { extractJwtPayloadWithoutVerification } from '../libs/ioAuth'
 
-const USER_SOCKET_ROOM_CACHE_EXPIRATION = 300 // 5 Minutes
-const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 300 // 5 Minutes
+// TODO: set this to a large value, 12 hrs ?
+const USER_SOCKET_ROOM_CACHE_EXPIRATION = 60 // 5 Minutes
+const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 60 // 5 Minutes
 
 export default (io) => {
   const documentsIO = io.of('/documents')
@@ -30,9 +31,12 @@ export default (io) => {
     const userSocketNs = `sync:org:${orgId}:user:${userId}:socket:${socketId}`
     const userSocketRoomNs = getUserSocketRoomNs(userSocketNs)
 
-    // Document Room
-    socket.on('joinRoom', async (documentId) => {
+    const joinRoom = async (documentId) => {
       if (typeof documentId !== 'string') return
+
+      const currentDocumentRoomId = await redis.get(userSocketRoomNs)
+
+      if (currentDocumentRoomId === documentId) return
 
       socket.join(documentId)
       // add user to document room Set
@@ -40,12 +44,13 @@ export default (io) => {
       await redis.sadd(docRoomNs, userSocketNs)
 
       // cache current room and set expiration
-      // TODO: refresh this whenever user does something (changes a field, highlights a field etc.)
       await redis.set(userSocketRoomNs, documentId, 'EX', USER_SOCKET_ROOM_CACHE_EXPIRATION)
 
       // send user change message to all room users, including current user
       await updateAndBroadcastRoomUsers(documentId, orgId)
-    })
+    }
+    // Document Room
+    socket.on('joinRoom', joinRoom)
 
     socket.on('leaveRoom', async (documentId) => {
       if (typeof documentId !== 'string') return
@@ -79,22 +84,25 @@ export default (io) => {
     })
 
     // Fields
-    socket.on('fieldFocus', async (fieldId) => {
-      const documentId = await redis.get(userSocketRoomNs)
-      // make sure user is currently in a document room
-      if (!documentId) return
+    socket.on('fieldFocus', async (fieldId, documentId) => {
+      // set the user's current room to the one with target field
+      await joinRoom(documentId)
+
       // update and broadcast the update to everyone in the room
       await updateAndBroadcastFieldFocus(documentId, userSocketNs, userId, fieldId)
       // refresh the document room expiration, give them more time before deleting
       await redis.expire(userSocketRoomNs, USER_SOCKET_ROOM_CACHE_EXPIRATION)
     })
 
-    socket.on('fieldChange', async (fieldId) => {
-      const documentId = await redis.get(userSocketRoomNs)
+    socket.on('fieldChange', async (fieldId, documentId) => {
+      // set the user's current room to the one with target field
+      await joinRoom(documentId)
       // make sure user is currently in a document room
       if (!documentId) return
       // broadcast the update to everyone else in the room
       await socket.to(documentId).emit('userFieldChange', userId, fieldId)
+      // refresh the document room expiration, give them more time before deleting
+      await redis.expire(userSocketRoomNs, USER_SOCKET_ROOM_CACHE_EXPIRATION)
     })
   })
 }
