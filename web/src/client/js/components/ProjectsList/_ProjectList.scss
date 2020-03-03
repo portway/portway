@@ -13,157 +13,101 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+}
 
-  .project-list {
-    display: grid;
-    grid-gap: 2rem;
-    grid-template-columns: 1fr;
-    list-style: none;
-    margin: 0;
-    padding: 2rem 0;
+.project-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 2rem 0;
 
-    @include media('>medium') {
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    }
-
-    &__empty-state {
-      align-items: center;
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 4rem 0;
-      text-align: center;
-    }
-
-    &__empty-state-content {
-      border: thin dashed var(--project-border-color);
-      border-radius: var(--border-radius);
-      padding: 6rem 2rem;
-      width: 80%;
-    }
-
-    &__item {
-      background-color: var(--theme-surface);
-      border: thin solid var(--project-border-color);
-      border-radius: var(--border-radius);
-      display: flex;
-      flex-direction: column;
-      outline: 0;
-      position: relative;
-      @media (hover: hover) {
-        &:hover {
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-        }
-      }
-      &:active {
-        box-shadow: none;
-      }
-      &:focus-within {
-        border: thin solid var(--focus-border-color);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
-        .using-mouse & {
-          border: none;
-        }
-      }
-    }
-
-    &__link {
-      align-items: center;
-      border: thin solid transparent;
-      color: var(--theme-text-color);
-      display: flex;
-      flex: 1;
-      justify-content: space-between;
-      outline: none;
-      padding: 1.5rem 2rem 1.5rem 1rem;
-      text-decoration: none;
-      &:focus {
-        border: thin solid var(--focus-border-color);
-        color: var(--base-link-color);
-        .using-mouse & {
-          border: thin solid transparent;
-          color: var(--theme-text-color);
-        }
-      }
-    }
-
-    &__title-container {
-      h3 {
-        font-size: 1.5rem;
-        line-height: 1.5rem;
-        margin: 0;
-        padding: 0;
-      }
-      .note {
-        color: var(--color-gray-20);
-      }
-    }
-
-    &__title {
-      align-items: center;
-      display: flex;
-      flex: 1;
-      margin: 0 0 0;
-      text-decoration: none;
-    }
-
-    &__icon {
-      margin-right: 1rem;
-    }
-
-    &__public-token {
-      align-items: center;
-      display: flex;
-      font-size: 1.2rem;
-      .label {
-        padding: .2rem 0 0 .6rem;
-      }
-    }
-
-    &__team {
-      align-items: center;
-      display: flex;
-    }
-
-    &__team-title {
-      color: var(--color-gray-10);
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin: 0 1rem 0 0;
-    }
-
-    // The actions and other info under the __info section
-    &__actions {
-      background-color: var(--project-actions-color);
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      min-height: 3.8rem;
-      padding: 0 1.5rem 0 1.5rem;
-      a, button {
-        font-size: 1.2rem;
-        margin-left: 1rem;
-      }
-      .btn--with-circular-icon {
-        border: thin solid transparent;
-        box-shadow: unset;
-        outline: none;
-        .icon {
-          border: thin solid transparent;
-        }
-        &:focus {
-          .icon {
-            border: thin solid var(--color-blue);
-          }
-        }
-      }
-    }
-
-    &__action-buttons {
-      flex: 1;
-      text-align: right;
-    }
-
+  &__top {
+    display: flex;
+    outline: 0;
+    position: relative;
   }
+
+  &__link {
+    align-items: center;
+    border: thin solid transparent;
+    color: var(--theme-text-color);
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    outline: none;
+    padding: 1.5rem 2rem 1.5rem 1rem;
+    text-decoration: none;
+    &:focus {
+      border: thin solid var(--focus-border-color);
+      color: var(--base-link-color);
+      .using-mouse & {
+        border: thin solid transparent;
+        color: var(--theme-text-color);
+      }
+    }
+  }
+
+  &__title-container {
+    h3 {
+      font-size: 1.5rem;
+      line-height: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+    .note {
+      color: var(--color-gray-20);
+    }
+  }
+
+  &__title {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    margin: 0 0 0;
+    text-decoration: none;
+  }
+
+  &__icon {
+    margin-right: 1rem;
+  }
+
+  &__public-token {
+    align-items: center;
+    display: flex;
+    font-size: 1.2rem;
+    .label {
+      padding: .2rem 0 0 .6rem;
+    }
+  }
+
+  &__team {
+    align-items: center;
+    display: flex;
+  }
+
+  &__team-title {
+    color: var(--color-gray-10);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0 1rem 0 0;
+  }
+
+  // The actions and other info under the __info section
+  &__actions {
+    background-color: var(--project-actions-color);
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    min-height: 3.8rem;
+    padding: 0 1.5rem 0 1.5rem;
+    a, button {
+      font-size: 1.2rem;
+      margin-left: 1rem;
+    }
+  }
+
+  &__action-buttons {
+    flex: 1;
+    text-align: right;
+  }
+
 }

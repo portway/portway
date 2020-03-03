@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import dataMapper from 'Libs/dataMapper'
@@ -14,9 +13,11 @@ import DashboardComponent from './DashboardComponent'
 
 const DashboardContainer = ({ removeProject, uiConfirm }) => {
   const { data: projects, loading } = useDataService(dataMapper.projects.list())
-  const history = useHistory()
+  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
 
-  console.log(projects)
+  const specialProject = { ...projects[currentOrg.specialProjectId] }
+  const projectsForList = { ...projects }
+  delete projectsForList[currentOrg.specialProjectId]
 
   const handleDelete = (projectId) => {
     const message = (
@@ -36,10 +37,10 @@ const DashboardContainer = ({ removeProject, uiConfirm }) => {
 
   return (
     <DashboardComponent
-      history={history}
       deleteHandler={handleDelete}
       loading={loading}
-      projects={projects}
+      projects={projectsForList}
+      specialProject={specialProject}
     />
   )
 }
