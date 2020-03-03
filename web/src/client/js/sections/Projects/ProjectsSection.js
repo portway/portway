@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { AddIcon } from 'Components/Icons'
 import Constants from 'Shared/constants'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
-import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
+import DashboardContainer from 'Components/Dashboard/DashboardContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
 
 const { ORGANIZATION_ROLE_IDS, ORGANIZATION_SETTINGS, PATH_PROJECT_CREATE } = Constants
@@ -35,7 +35,7 @@ const ProjectsContainer = () => {
         )}>
         <ToolbarComponent action={toolbarAction} />
       </OrgPermission>
-      <ProjectsListContainer />
+      <DashboardContainer />
     </main>
   )
 }
