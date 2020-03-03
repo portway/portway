@@ -10,7 +10,6 @@ app.use(logger('dev'))
 app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(cookieParser())
-
 // Mount a base router to respond to / requests
 // for verifying service is running at FQDN.
 // Added for letsencrypt verification of running service

@@ -9,7 +9,6 @@ const port = process.env.SYNC_PORT
 const server = app.listen(port, () => {
   console.info('sync running on port ' + port)
 })
-
 const io = loadIO(server)
 io.use(jwtMiddleware)
 controllerLoader(io)

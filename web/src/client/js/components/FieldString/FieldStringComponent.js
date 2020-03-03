@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly }) => {
+  const [fieldValue, setFieldValue] = useState(field.value)
+
+  useEffect(() => {
+    setFieldValue(field.value)
+  }, [field.value])
+
   return (
     <input
       className="document-field__string"
-      defaultValue={field.value}
+      value={fieldValue}
       onBlur={(e) => { onBlur(field.id, field.type, field) }}
-      onChange={(e) => { onChange(field.id, e.target.value) }}
+      onChange={(e) => { setFieldValue(e.target.value); onChange(field.id, e.target.value) }}
       onFocus={(e) => {
         if (!readOnly) {
           onFocus(field.id, field.type, field)
