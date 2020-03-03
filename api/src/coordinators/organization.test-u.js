@@ -8,7 +8,7 @@ import BusinessUser from '../businesstime/user'
 import BusinessProjectUser from '../businesstime/projectuser'
 import BusinessResourceUsage from '../businesstime/resourceusage'
 import stripeIntegrator from '../integrators/stripe'
-import s3Integrator from '../integrators/s3'
+import { deleteOrgDirectory } from '../integrators/s3'
 import organizationCoordinator from '../coordinators/organization'
 
 jest.mock('../businesstime/organization')
@@ -19,7 +19,7 @@ jest.mock('../businesstime/project')
 jest.mock('../businesstime/projecttoken')
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/projectuser')
-jest.mock('../businesstime/resourceUsage')
+jest.mock('../businesstime/resourceusage')
 jest.mock('../integrators/stripe')
 jest.mock('../integrators/s3')
 // separate these internally used functions from the mock object so we can use them for their unit tests
@@ -79,6 +79,11 @@ describe('organization coordinator', () => {
   describe('#removeAllOrgData', () => {
     beforeAll(async () => {
       removeAllOrgData(orgId)
+    })
+
+    it('should call s3Integrator.deleteOrgDirectory', () => {
+      expect(deleteOrgDirectory.mock.calls.length).toBe(1)
+      expect(deleteOrgDirectory.mock.calls[0][0]).toBe(orgId)
     })
 
     it('should call BusinessField.deleteAllForOrg', () => {
