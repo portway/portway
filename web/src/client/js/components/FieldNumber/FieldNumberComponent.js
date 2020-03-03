@@ -14,6 +14,8 @@ const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
       value={fieldValue == null ? '' : fieldValue}
       onBlur={(e) => { onBlur(field.id, field.type, field) }}
       onChange={(e) => {
+        // API will only handle 15 significant digits for number fields
+        if (e.target.value.length > 15) return
         const num = Number.parseFloat(e.target.value)
         if (!isNaN(num)) {
           setFieldValue(num)
