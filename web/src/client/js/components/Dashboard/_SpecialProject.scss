@@ -1,0 +1,117 @@
+@import 'CSS/animations/_pulse.scss';
+
+.special-project {
+  display: flex;
+  margin: 2rem 0 0;
+  position: relative;
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    background-image: url('./special-project-white@2x.png');
+  }
+}
+
+.special-project__stars {
+  left: -8px;
+  opacity: 0.5;
+  position: absolute;
+  top: -10px;
+}
+
+.special-project__link {
+  align-items: center;
+  border: thin solid transparent;
+  color: var(--theme-text-color);
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  outline: none;
+  padding: 1.5rem 2rem 1.5rem 1rem;
+  text-decoration: none;
+}
+
+// Mimic the regular project list as much as possible
+.special-project__title {
+  align-items: center;
+  display: flex;
+  text-decoration: none;
+  .icon {
+    margin-right: 1rem;
+  }
+}
+
+.special-project__title-container {
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.special-project__actions {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+
+  a, button {
+    font-size: 1.2rem;
+    margin-left: 1rem;
+  }
+}
+
+.special-project__multi-plan {
+  align-items: center;
+  display: flex;
+  font-size: 1.3rem;
+  margin: 1em 0 0;
+  .label {
+    padding-left: var(--icon-margin);
+  }
+}
+
+.special-project__description {
+  align-items: center;
+  background-color: var(--color-brand);
+  border-radius: var(--border-radius);
+  border: 4px solid transparent;
+  box-shadow: var(--box-shadow);
+  color: rgba(255, 255, 255, .95);
+  display: flex;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  margin-left: calc(4.2rem + 1rem);
+  padding: .75rem 1.25rem;
+  position: relative;
+  width: 85%;
+
+  a {
+    color: rgba(255, 255, 255, .95);
+  }
+
+  &-content {
+    padding-right: 2rem;
+  }
+
+  &:after, &:before {
+    bottom: 100%;
+    left: 4.4rem;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+  &:after {
+    border-color: rgba(51, 51, 51, 0);
+    border-bottom-color: var(--color-brand);
+    border-width: 14px;
+    margin-left: -14px;
+  }
+  &:before {
+    border-color: rgba(0, 0, 0, 0);
+    border-bottom-color: transparent;
+    border-width: 20px;
+    margin-left: -20px;
+  }
+}

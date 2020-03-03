@@ -1,0 +1,25 @@
+@import 'CSS/inc/_include-media.scss';
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+
+  @include media('>medium') {
+    flex-direction: row;
+  }
+
+  &__projects {
+    flex: 1;
+    @include media('>medium') {
+      width: 60%;
+    }
+  }
+
+  &__sidebar {
+    @include media('>medium') {
+      padding: 0 0 0 2rem;
+      width: 40%;
+    }
+  }
+
+}
