@@ -74,6 +74,11 @@ spec:
             configMapKeyRef:
               name: web-config
               key: web.sync_url
+        - name: SLACK_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: slack-secrets
+              key: slack_webhook_url
         ports:
         - containerPort: {{ .Values.web.port }}
           protocol: TCP
