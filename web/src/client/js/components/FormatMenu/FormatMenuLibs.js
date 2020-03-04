@@ -13,7 +13,7 @@
 export const blockStyles = {
   'bold': '**',
   'code': '```',
-  'italic': '*',
+  'italic': '_',
 }
 
 const insertTexts = {

@@ -63,17 +63,17 @@ const FormatMenuComponent = ({ formatSelection }) => {
           <hr />
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank" onClick={() => formatSelection('bold') }>
-              <span className="format-menu__format">*</span> <b>Bold</b><span className="format-menu__closing">*</span>
+              <span className="format-menu__format">**</span> <b>Bold</b><span className="format-menu__closing">**</span>
             </button>
           </MenuItem>
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank" onClick={() => formatSelection('italic') }>
-              <span className="format-menu__format">/</span> <i>Italic</i><span className="format-menu__closing">/</span>
+              <span className="format-menu__format">_</span> <i>Italic</i><span className="format-menu__closing">_</span>
             </button>
           </MenuItem>
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank" onClick={() => formatSelection('strikethrough') }>
-              <span className="format-menu__format">~</span> <span className="strikethrough">Strike-through</span><span className="format-menu__closing">~</span>
+              <span className="format-menu__format">~~</span> <span className="strikethrough">Strike-through</span><span className="format-menu__closing">~~</span>
             </button>
           </MenuItem>
           <hr />

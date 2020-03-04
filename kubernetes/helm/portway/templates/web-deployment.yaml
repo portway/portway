@@ -69,6 +69,11 @@ spec:
             secretKeyRef:
               name: log-secrets
               key: log_token_web
+        - name: SLACK_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: slack-secrets
+              key: slack_webhook_url
         ports:
         - containerPort: 3000
           protocol: TCP
