@@ -4,7 +4,9 @@ import PropTypes from 'prop-types'
 const DocumentUsersComponent = ({ activeUsers }) => {
   return (
     <div className="document-users">
-      {activeUsers}
+      {activeUsers && activeUsers.map((activeUser) => {
+        return <img key={activeUser.id} src={activeUser.avatar} width="48" height="48" alt={activeUser.name} />
+      })}
     </div>
   )
 }

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import { currentUserId } from 'Libs/currentIds'
 import { fetchUsersWithIds } from 'Actions/user'
 import useDocumentSocket from 'Hooks/useDocumentSocket'
 import { updateDocumentRoomUsers, emitJoinDocumentRoom, emitLeaveDocumentRoom } from '../../sockets/SocketProvider'
@@ -10,6 +11,7 @@ import { updateDocumentRoomUsers, emitJoinDocumentRoom, emitLeaveDocumentRoom } 
 import DocumentUsersComponent from './DocumentUsersComponent'
 
 const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById }) => {
+  const fullActiveUsers = useRef()
   const { documentId } = useParams()
   const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
 
@@ -18,6 +20,16 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById 
   const unloadedIds = activeUsers && activeUsers.filter((userId) => {
     return usersLoadedById[userId] === undefined
   })
+
+  useEffect(() => {
+    fullActiveUsers.current = []
+    if (activeUsers && activeUsers.length) {
+      activeUsers.forEach((userId) => {
+        if (Number(userId) === currentUserId) return
+        fullActiveUsers.current.push(usersById[userId])
+      })
+    }
+  }, [activeUsers, usersById])
 
   useEffect(() => {
     if (unloadedIds && unloadedIds.length > 0) {
@@ -38,7 +50,7 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
 
-  return <DocumentUsersComponent activeUsers={activeUsers} />
+  return <DocumentUsersComponent activeUsers={fullActiveUsers.current} />
 }
 
 DocumentUsersContainer.propTypes = {
