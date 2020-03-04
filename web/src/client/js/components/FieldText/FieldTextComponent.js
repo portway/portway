@@ -50,7 +50,11 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
     if (editorRef.current) {
       function clickURLHandler(e) {
         if (e.target.classList.contains('cm-url')) {
-          window.open(e.target.textContent)
+          let url = e.target.textContent
+          if (!url.match(/^https?:\/\//i)) {
+            url = 'https://' + url
+          }
+          window.open(url, '_blank', 'noopener')
         }
       }
       const editorDomEl = editorRef.current.display.lineDiv
