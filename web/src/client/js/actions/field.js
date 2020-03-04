@@ -5,7 +5,7 @@ import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
 import { emitFieldChange } from '../sockets/SocketProvider'
 
-export const createField = (projectId, documentId, fieldType, body) => {
+export const createField = (projectId, documentId, fieldType, body, socketDispatch) => {
   return async (dispatch) => {
     dispatch(Fields.initiateCreate(documentId, fieldType))
     let data
@@ -24,6 +24,10 @@ export const createField = (projectId, documentId, fieldType, body) => {
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
+    // if we want to sync users, pass in socketDispatch
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, data.id, documentId))
+    }
   }
 }
 
