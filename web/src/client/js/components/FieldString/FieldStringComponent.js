@@ -11,7 +11,7 @@ const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
   return (
     <input
       className="document-field__string"
-      value={fieldValue}
+      value={fieldValue || ''}
       onBlur={(e) => { onBlur(field.id, field.type, field) }}
       onChange={(e) => { setFieldValue(e.target.value); onChange(field.id, e.target.value) }}
       onFocus={(e) => {
