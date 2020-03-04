@@ -9,13 +9,13 @@ export const fetchOrganization = (orgId) => {
     // Get the org and the org's special project Id
     const results = await Promise.all([fetch(`v1/organizations/${orgId}`), fetch(`v1/organizations/${orgId}/introProjectId`)])
     const { data, status } = results[0]
-    // Merge the ID into the org object
-    data.specialProjectId = results[1].data
+    const { data: specialProjectId } = results[1]
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.ORGANIZATION, status))
       return
     }
     dispatch(Organizations.receiveOne(data))
+    dispatch(Organizations.receiveSpecialProjectId(orgId, specialProjectId))
   }
 }
 

@@ -7,19 +7,21 @@ import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import * as strings from 'Loc/strings'
+import { currentOrgId } from 'Libs/currentIds'
 import { uiConfirm } from 'Actions/ui'
 import { removeProject } from 'Actions/project'
 
 import DashboardComponent from './DashboardComponent'
 
-const DashboardContainer = ({ removeProject, uiConfirm }) => {
+const DashboardContainer = ({ organizationData, removeProject, uiConfirm }) => {
   const { data: projects, loading } = useDataService(dataMapper.projects.list())
-  const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const history = useHistory()
 
-  const specialProject = projects[currentOrg.specialProjectId] ? { ...projects[currentOrg.specialProjectId] } : null
+  // Special project
+  const specialProjectId = organizationData[currentOrgId].specialProjectId
+  const specialProject = projects[specialProjectId] ? { ...projects[specialProjectId] } : null
   const projectsForList = { ...projects }
-  delete projectsForList[currentOrg.specialProjectId]
+  delete projectsForList[specialProjectId]
 
   const handleDelete = (projectId) => {
     const message = (
@@ -48,12 +50,15 @@ const DashboardContainer = ({ removeProject, uiConfirm }) => {
 }
 
 DashboardContainer.propTypes = {
+  organizationData: PropTypes.object.isRequired,
   removeProject: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
 }
 
-const mapStateToProps = () => {
-  return {}
+const mapStateToProps = (state) => {
+  return {
+    organizationData: state.organizations.organizationSpecialDataById
+  }
 }
 const mapDispatchToProps = { removeProject, uiConfirm }
 

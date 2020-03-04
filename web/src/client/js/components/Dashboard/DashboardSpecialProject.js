@@ -1,19 +1,31 @@
-import React, { useState } from 'react'
+import React, { lazy, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ACCESS_LEVELS, URL_DOCUMENTATION } from 'Shared/constants'
+import {
+  MULTI_USER_PLAN_TYPES,
+  PATH_PROJECT,
+  PROJECT_ACCESS_LEVELS,
+  PROJECT_ROLE_IDS,
+  URL_DOCUMENTATION
+} from 'Shared/constants'
 import { ProjectIcon, RemoveIcon, SettingsIcon, TrashIcon, UnlockIcon } from 'Components/Icons'
-import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import { IconButton } from 'Components/Buttons'
 
-import stars from './stars.svg'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
+import Stars from './Stars'
+
+// Lazy loading because not all users have access to this
+const ProjectUsersContainer = lazy(() => import(/* webpackChunkName: 'ProjectUsersContainer' */ 'Components/ProjectUsers/ProjectUsersContainer'))
+
 import './_SpecialProject.scss'
 
 const lsShowMessage = localStorage.getItem('sp-message')
 
 const DashboardSpecialProject = ({ deleteHandler, project }) => {
   const [showMessage, setShowMessage] = useState(lsShowMessage)
+  const assignedProject = project.accessLevel == null
   const publiclyReadable = project.accessLevel === PROJECT_ACCESS_LEVELS.READ
 
   function setLocalStorageIgnore() {
@@ -24,7 +36,7 @@ const DashboardSpecialProject = ({ deleteHandler, project }) => {
   return (
     <>
       <div className="special-project">
-        <img className="special-project__stars" src={stars} width="67" height="78" alt="Stars" />
+        <Stars />
         <Link className="special-project__link" to={`${PATH_PROJECT}/${project.id}`}>
           <div className="special-project__title">
             <ProjectIcon fill="var(--color-brand)" width="32" height="32" />
@@ -35,24 +47,34 @@ const DashboardSpecialProject = ({ deleteHandler, project }) => {
               }
             </div>
           </div>
-        </Link>
-        <div className="special-project__actions">
           <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
             {publiclyReadable &&
-            <div className="project-list__public-token">
-              <UnlockIcon width="18" height="18" />
-              <span className="label">Everyone</span>
-            </div>
+              <div
+                aria-label="Organization access"
+                className="special-project__public-token"
+                title="Everyone can view this project"
+              >
+                <UnlockIcon fill="var(--color-green-dark)" width="14" height="14" />
+              </div>
             }
           </OrgPlanPermission>
-          <div className="special-project__action-buttons">
-            <Link aria-label="Project settings" to={`${PATH_PROJECT}/${project.id}/settings`} className="btn btn--blank">
-              <SettingsIcon />
-            </Link>
-            <button aria-label="Delete this project" className="btn btn--blank" onClick={() => { deleteHandler(project.id) }}>
-              <TrashIcon />
-            </button>
-          </div>
+        </Link>
+        <div className="special-project__team">
+          <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+            {assignedProject && <ProjectUsersContainer collapsed={true} projectId={project.id} />}
+          </OrgPlanPermission>
+        </div>
+        <div className="special-project__actions">
+          <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectIdOverride={project.id}>
+            <div className="special-project__action-buttons">
+              <Link aria-label="Project settings" to={`${PATH_PROJECT}/${project.id}/settings`} className="btn btn--blank">
+                <SettingsIcon />
+              </Link>
+              <button aria-label="Delete this project" className="btn btn--blank" onClick={() => { deleteHandler(project.id) }}>
+                <TrashIcon />
+              </button>
+            </div>
+          </ProjectPermission>
         </div>
       </div>
       {JSON.parse(showMessage) !== false &&
