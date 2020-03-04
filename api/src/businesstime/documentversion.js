@@ -24,6 +24,13 @@ async function getLatestDocumentVersion(documentId, orgId) {
   })
 }
 
+async function deleteAllForDocument(documentId, orgId) {
+  const db = getDb()
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId, documentId }
+  })
+}
+
 async function deleteAllForOrg(orgId) {
   const db = getDb()
 
@@ -34,5 +41,6 @@ async function deleteAllForOrg(orgId) {
 
 export default {
   createVersion,
+  deleteAllForDocument,
   deleteAllForOrg
 }
