@@ -42,6 +42,9 @@ const FieldImageComponent = ({
     }
     const formData = new FormData()
     formData.append('file', file)
+    if (!field.value) {
+      formData.append('name', file.name)
+    }
     onChange(field.id, formData)
     previewImage(file)
   }
@@ -92,6 +95,7 @@ const FieldImageComponent = ({
           <FormField
             className="document-field__settings__input"
             defaultValue={field.name}
+            id={`document-field-name-${field.id}`}
             label="Image name"
             name="field-name"
             onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
