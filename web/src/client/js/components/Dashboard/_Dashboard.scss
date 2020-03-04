@@ -11,14 +11,14 @@
   &__projects {
     flex: 1;
     @include media('>medium') {
-      width: 60%;
+      width: 80%;
     }
   }
 
   &__sidebar {
     @include media('>medium') {
       padding: 0 0 0 2rem;
-      width: 40%;
+      width: 20%;
     }
   }
 

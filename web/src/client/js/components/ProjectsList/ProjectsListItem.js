@@ -18,51 +18,55 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
 
   return (
     <li className="project-list__item" name={project.name}>
-      <div className="project-list__top">
-        <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
-          <div className="project-list__title">
-            <ProjectIcon className="project-list__icon" width="32" height="32" />
-            <div className="project-list__title-container">
-              <h3>{project.name}</h3>
-              {project.description &&
-              <span className="note">{project.description}</span>
-              }
-            </div>
-          </div>
-        </Link>
-        <div className="project-list__actions" ref={itemRef}>
-          <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-            {publiclyReadable &&
-            <div className="project-list__public-token">
-              <UnlockIcon width="18" height="18" />
-              <span className="label">Everyone</span>
-            </div>
+      <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
+        <div className="project-list__title">
+          <ProjectIcon
+            className="project-list__icon"
+            fill={publiclyReadable ? 'var(--color-gray-30)' : 'var(--theme-icon-color)'}
+            width="32"
+            height="32"
+          />
+          <div className="project-list__title-container">
+            <h3>{project.name}</h3>
+            {project.description &&
+            <span className="note">{project.description}</span>
             }
-          </OrgPlanPermission>
-          <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectIdOverride={projectId}>
-            <div className="project-list__action-buttons">
-              <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
-                <SettingsIcon />
-              </Link>
-              <button
-                aria-label="Delete project"
-                name="deleteProject"
-                className="btn btn--blank"
-                onClick={handleDelete}
-              >
-                <TrashIcon />
-              </button>
+          </div>
+        </div>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+          {publiclyReadable &&
+            <div
+              aria-label="Organization access"
+              className="project-list__public-token"
+              title="Everyone can view this project"
+            >
+              <UnlockIcon fill="var(--color-green-dark)" width="14" height="14" />
             </div>
-          </ProjectPermission>
-        </div>
+          }
+        </OrgPlanPermission>
+      </Link>
+      <div className="project-list__team">
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+          {assignedProject && <ProjectUsersContainer collapsed={true} projectId={projectId} />}
+        </OrgPlanPermission>
       </div>
-      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-        {assignedProject &&
-        <div className="project-list__team">
-          <ProjectUsersContainer collapsed={true} projectId={projectId} />
-        </div>
-        }
-      </OrgPlanPermission>
+      <div className="project-list__actions" ref={itemRef}>
+        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectIdOverride={projectId}>
+          <div className="project-list__action-buttons">
+            <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
+              <SettingsIcon />
+            </Link>
+            <button
+              aria-label="Delete project"
+              name="deleteProject"
+              className="btn btn--blank"
+              onClick={handleDelete}
+            >
+              <TrashIcon />
+            </button>
+          </div>
+        </ProjectPermission>
+      </div>
     </li>
   )
 }
