@@ -25,8 +25,9 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById 
     fullActiveUsers.current = []
     if (activeUsers && activeUsers.length) {
       activeUsers.forEach((userId) => {
-        if (Number(userId) === currentUserId) return
-        fullActiveUsers.current.push(usersById[userId])
+        if (Number(userId) !== currentUserId) {
+          fullActiveUsers.current.push(usersById[userId])
+        }
       })
     }
   }, [activeUsers, usersById])
