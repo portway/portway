@@ -18,6 +18,11 @@
 .project-list {
   padding: 0 0 2rem 0;
 
+  // Override grid from Table
+  .table__heading, .table__row {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+
   &__link {
     align-items: center;
     border: thin solid transparent;
@@ -33,7 +38,10 @@
 
     @media(hover: hover) {
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.02);
+        .project-list__stars {
+          visibility: visible;
+        }
       }
     }
 

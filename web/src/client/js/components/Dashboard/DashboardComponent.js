@@ -8,8 +8,7 @@ import { AddIcon } from 'Components/Icons'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DashboardProjectsEmptyState from './DashboardProjectsEmptyState'
-import ProjectsListComponent from 'Components/ProjectsList/ProjectListComponent'
-import DashboardSpecialProject from './DashboardSpecialProject'
+import ProjectListComponent from 'Components/ProjectsList/ProjectListComponent'
 
 import './_Dashboard.scss'
 
@@ -38,14 +37,12 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject }
           )}>
           <ToolbarComponent action={toolbarAction} />
         </OrgPermission>
-        {specialProject &&
-          <DashboardSpecialProject deleteHandler={deleteHandler} project={specialProject} />
-        }
         {!loading && hasProjects &&
-          <ProjectsListComponent
+          <ProjectListComponent
             history={history}
             deleteHandler={deleteHandler}
             projects={projects}
+            specialProject={specialProject}
           />
         }
         {!loading && !hasProjects && !specialProject &&
