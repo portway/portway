@@ -156,11 +156,12 @@ async function removeAllProjectAssignmentsForUser(userId, orgId) {
   await db.model(MODEL_NAME).destroy({ where: { userId, orgId } })
 }
 
-async function deleteAllForOrg(orgId) {
+async function deleteAllForOrg(orgId, force = false) {
   const db = getDb()
 
   return db.model(MODEL_NAME).destroy({
-    where: { orgId }
+    where: { orgId },
+    force
   })
 }
 

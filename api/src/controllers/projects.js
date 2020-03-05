@@ -75,6 +75,8 @@ const getProject = async function(req, res, next) {
 const addProject = async function(req, res, next) {
   const { body } = req
   body.orgId = req.requestorInfo.orgId
+  body.createdBy = req.requestorInfo.requestorId
+
   try {
     const project = await projectCoordinator.createProject(
       body,

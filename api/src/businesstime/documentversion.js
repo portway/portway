@@ -31,11 +31,12 @@ async function deleteAllForDocument(documentId, orgId) {
   })
 }
 
-async function deleteAllForOrg(orgId) {
+async function deleteAllForOrg(orgId, force = false) {
   const db = getDb()
 
   return db.model(MODEL_NAME).destroy({
-    where: { orgId }
+    where: { orgId },
+    force
   })
 }
 

@@ -6,7 +6,9 @@ import BusinessProject from '../businesstime/project'
 import BusinessProjectToken from '../businesstime/projecttoken'
 import BusinessUser from '../businesstime/user'
 import BusinessProjectUser from '../businesstime/projectuser'
+import BusinessResourceUsage from '../businesstime/resourceusage'
 import stripeIntegrator from '../integrators/stripe'
+import { deleteOrgDirectory } from '../integrators/s3'
 import ono from 'ono'
 
 const DAYS_AGO_FOR_DELETION = 30
@@ -25,23 +27,26 @@ const updateById = async function(id, body) {
 }
 
 const removeAllOrgData = async function(orgId) {
+  // remove org assets
+  await deleteOrgDirectory(orgId)
   // remove fields
-  await BusinessField.deleteAllForOrg(orgId)
+  await BusinessField.deleteAllForOrg(orgId, true)
   // remove documentVersions
-  await BusinessDocumentVersion.deleteAllForOrg(orgId)
+  await BusinessDocumentVersion.deleteAllForOrg(orgId, true)
   // remove documents
-  await BusinessDocument.deleteAllForOrg(orgId)
-  // remove projects
-  await BusinessProject.deleteAllForOrg(orgId)
+  await BusinessDocument.deleteAllForOrg(orgId, true)
   // remove project tokens
-  await BusinessProjectToken.deleteAllForOrg(orgId)
-  // remove users
-  await BusinessUser.deleteAllForOrg(orgId)
+  await BusinessProjectToken.deleteAllForOrg(orgId, true)
   // remove project users
-  await BusinessProjectUser.deleteAllForOrg(orgId)
-  // TODO remove s3 data
+  await BusinessProjectUser.deleteAllForOrg(orgId, true)
+  // remove projects
+  await BusinessProject.deleteAllForOrg(orgId, true)
+  // remove users
+  await BusinessUser.deleteAllForOrg(orgId, true)
+  // remove org resource usage
+  await BusinessResourceUsage.deleteAllForOrg(orgId, true)
   // remove org
-  await BusinessOrganization.deleteById(orgId)
+  await BusinessOrganization.deleteById(orgId, true)
 }
 
 const deleteCanceledOrg = async function(orgId) {

@@ -8,7 +8,8 @@ export default function(sequelize, DataTypes) {
       accessLevel: {
         type: DataTypes.STRING,
         defaultValue: null
-      }
+      },
+      createdBy: DataTypes.INTEGER
     },
     {
       paranoid: true
