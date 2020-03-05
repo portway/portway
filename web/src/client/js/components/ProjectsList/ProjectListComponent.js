@@ -1,25 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
-import ProjectsListItem from './ProjectsListItem'
+import Table from 'Components/Table/Table'
+import ProjectLink from './ProjectLink'
+import ProjectTeam from './ProjectTeam'
+import ProjectActions from './ProjectActions'
 import './_ProjectList.scss'
 
 function ProjectsListComponent({ deleteHandler, projects }) {
-  const projectList = Object.keys(projects).map((projectId) => {
-    return <ProjectsListItem
-      key={projectId}
-      projectId={Number(projectId)}
-      project={projects[projectId]}
-      handleDelete={(e) => {
-        e.preventDefault()
-        deleteHandler(projectId)
-      }} />
+  const tableHeadings = {
+    project: { label: 'Project', sortable: true },
+    team: { label: 'Team' },
+    updatedAt: { label: 'Last modified', sortable: true },
+    tools: { label: '' }
+  }
+
+  const tableRows = {}
+  Object.values(projects).forEach((project, index) => {
+    const privateProject = project.accessLevel == null
+    const projectId = Number(project.id)
+    function handleDelete(e) {
+      e.preventDefault()
+      deleteHandler(project.id)
+    }
+    tableRows[index] = [
+      <ProjectLink key={`p-${projectId}`} project={project} />,
+      <ProjectTeam key={`pt-${projectId}`} projectId={projectId} show={privateProject} />,
+      <span key={`pu-${projectId}`}>{moment(project.updatedAt).fromNow()}</span>,
+      <ProjectActions key={`pa-${projectId}`} handleDelete={handleDelete} projectId={projectId} />
+    ]
   })
 
   return (
-    <ol className="project-list">
-      {projectList}
-    </ol>
+    <Table
+      className="project-list"
+      headings={tableHeadings}
+      rows={tableRows} />
   )
 }
 

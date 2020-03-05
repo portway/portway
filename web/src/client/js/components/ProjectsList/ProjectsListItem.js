@@ -3,7 +3,7 @@ import React, { lazy, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ACCESS_LEVELS, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { ProjectIcon, SettingsIcon, TrashIcon, UnlockIcon } from 'Components/Icons'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
@@ -13,8 +13,7 @@ const ProjectUsersContainer = lazy(() => import(/* webpackChunkName: 'ProjectUse
 
 const ProjectsListItem = ({ projectId, project, handleDelete }) => {
   const itemRef = useRef()
-  const assignedProject = project.accessLevel == null
-  const publiclyReadable = project.accessLevel === PROJECT_ACCESS_LEVELS.READ
+  const privateProject = project.accessLevel == null
 
   return (
     <li className="project-list__item" name={project.name}>
@@ -22,7 +21,7 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
         <div className="project-list__title">
           <ProjectIcon
             className="project-list__icon"
-            fill={publiclyReadable ? 'var(--color-gray-30)' : 'var(--theme-icon-color)'}
+            fill={!privateProject ? 'var(--color-gray-30)' : 'var(--theme-icon-color)'}
             width="32"
             height="32"
           />
@@ -34,7 +33,7 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
           </div>
         </div>
         <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-          {publiclyReadable &&
+          {!privateProject &&
             <div
               aria-label="Organization access"
               className="project-list__public-token"
@@ -47,7 +46,7 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
       </Link>
       <div className="project-list__team">
         <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-          {assignedProject && <ProjectUsersContainer collapsed={true} projectId={projectId} />}
+          {privateProject && <ProjectUsersContainer collapsed={true} projectId={projectId} />}
         </OrgPlanPermission>
       </div>
       <div className="project-list__actions" ref={itemRef}>

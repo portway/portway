@@ -1,11 +1,11 @@
 import React, { lazy, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 import {
   MULTI_USER_PLAN_TYPES,
   PATH_PROJECT,
-  PROJECT_ACCESS_LEVELS,
   PROJECT_ROLE_IDS,
   URL_DOCUMENTATION
 } from 'Shared/constants'
@@ -21,12 +21,13 @@ const ProjectUsersContainer = lazy(() => import(/* webpackChunkName: 'ProjectUse
 
 import './_SpecialProject.scss'
 
+const expiration = moment().subtract(30, 'days')
 const lsShowMessage = localStorage.getItem('sp-message')
 
 const DashboardSpecialProject = ({ deleteHandler, project }) => {
   const [showMessage, setShowMessage] = useState(lsShowMessage)
-  const assignedProject = project.accessLevel == null
-  const publiclyReadable = project.accessLevel === PROJECT_ACCESS_LEVELS.READ
+  const privateProject = project.accessLevel == null
+  const projectIsOldNow = expiration > moment(project.createdAt)
 
   function setLocalStorageIgnore() {
     setShowMessage(false)
@@ -48,7 +49,7 @@ const DashboardSpecialProject = ({ deleteHandler, project }) => {
             </div>
           </div>
           <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-            {publiclyReadable &&
+            {!privateProject &&
               <div
                 aria-label="Organization access"
                 className="special-project__public-token"
@@ -61,7 +62,7 @@ const DashboardSpecialProject = ({ deleteHandler, project }) => {
         </Link>
         <div className="special-project__team">
           <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-            {assignedProject && <ProjectUsersContainer collapsed={true} projectId={project.id} />}
+            {privateProject && <ProjectUsersContainer collapsed={true} projectId={project.id} />}
           </OrgPlanPermission>
         </div>
         <div className="special-project__actions">
@@ -77,7 +78,7 @@ const DashboardSpecialProject = ({ deleteHandler, project }) => {
           </ProjectPermission>
         </div>
       </div>
-      {JSON.parse(showMessage) !== false &&
+      {JSON.parse(showMessage) !== false && !projectIsOldNow &&
       <div className="special-project__description">
         <div className="special-project__description-content">
           <div>

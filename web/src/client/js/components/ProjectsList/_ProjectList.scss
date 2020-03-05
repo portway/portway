@@ -16,26 +16,7 @@
 }
 
 .project-list {
-  list-style: none;
-  margin: 0;
   padding: 0 0 2rem 0;
-
-  &__item {
-    align-items: center;
-    display: grid;
-    grid-template-columns: 4fr 1fr;
-    position: relative;
-    @include media('>medium') {
-      grid-template-columns: 4fr 1fr 1fr;
-    }
-    @media(hover: hover) {
-      &:hover {
-        .project-list__link {
-          transform: scale(1.05);
-        }
-      }
-    }
-  }
 
   &__link {
     align-items: center;
@@ -49,6 +30,12 @@
     position: relative;
     text-decoration: none;
     transform-origin: left;
+
+    @media(hover: hover) {
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
 
     @media (prefers-reduced-motion: no-preference) {
       transition: transform 0.1s ease-in-out;
