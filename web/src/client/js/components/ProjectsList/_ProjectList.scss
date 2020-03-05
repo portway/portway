@@ -18,107 +18,136 @@
 .project-list {
   padding: 0 0 2rem 0;
 
+
+
   // Override grid from Table
   .table__heading, .table__row {
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-  }
-
-  &__link {
-    align-items: center;
-    border: thin solid transparent;
-    color: var(--theme-text-color);
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    outline: none;
-    padding: 1.5rem 2rem 1.5rem 0;
-    position: relative;
-    text-decoration: none;
-    transform-origin: left;
-
-    @media(hover: hover) {
-      &:hover {
-        transform: scale(1.02);
-        .project-list__stars {
-          visibility: visible;
-        }
-      }
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      transition: transform 0.1s ease-in-out;
-    }
-
-    &:focus {
-      border: thin solid var(--focus-border-color);
-      color: var(--base-link-color);
-      .using-mouse & {
-        border: thin solid transparent;
-        color: var(--theme-text-color);
-      }
-    }
-  }
-
-  &__title-container {
-    h3 {
-      font-size: 1.5rem;
-      line-height: 1.5rem;
-      margin: 0;
-      padding: 0;
-    }
-    .note {
-      color: var(--color-gray-20);
-    }
-  }
-
-  &__title {
-    align-items: center;
-    display: flex;
-    margin: 0 0 0;
-    text-decoration: none;
-    .icon {
-      flex: 1 0 32px;
-      margin-right: 1rem;
-    }
-  }
-
-  &__public-token {
-    left: 20px;
-    position: absolute;
-    bottom: 0px;
-  }
-
-  &__team {
-    align-items: center;
-    display: flex;
-  }
-
-  &__team-title {
-    color: var(--color-gray-10);
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin: 0 1rem 0 0;
-  }
-
-  // The actions and other info under the __info section
-  &__actions {
-    align-items: center;
-    display: none;
-    justify-content: space-between;
-    min-height: 3.8rem;
-    padding: 0 0 0 1.5rem;
+    display: grid; // always
+    grid-template-columns: 2fr 1fr;
     @include media('>medium') {
-      display: flex;
-    }
-    a, button {
-      font-size: 1.2rem;
-      margin-left: 1rem;
+      grid-template-columns: 3fr 1fr 1fr 1fr;
     }
   }
 
-  &__action-buttons {
-    flex: 1;
-    text-align: right;
+  .table__heading-cell, .table__cell {
+    &:nth-child(2) {
+      display: none;
+    }
+    &:nth-child(4) {
+      display: none;
+    }
+    @include media('>medium') {
+      &:nth-child(2) {
+        display: block;
+      }
+      &:nth-child(4) {
+        display: block;
+      }
+    }
   }
 
 }
+
+.project-list__link {
+  align-items: center;
+  border: thin solid transparent;
+  color: var(--theme-text-color);
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  outline: none;
+  padding: 1.5rem 2rem 1.5rem 0;
+  position: relative;
+  text-decoration: none;
+  transform-origin: left;
+
+  @media(hover: hover) {
+    &:hover {
+      transform: scale(1.02);
+      .project-list__stars {
+        visibility: visible;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 0.1s ease-in-out;
+  }
+
+  &:focus {
+    border: thin solid var(--focus-border-color);
+    color: var(--base-link-color);
+    .using-mouse & {
+      border: thin solid transparent;
+      color: var(--theme-text-color);
+    }
+  }
+}
+
+.project-list__title-container {
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  .note {
+    color: var(--color-gray-20);
+  }
+}
+
+.project-list__title {
+  align-items: center;
+  display: flex;
+  margin: 0 0 0;
+  text-decoration: none;
+  .icon {
+    flex: 1 0 32px;
+    margin-right: 1rem;
+  }
+}
+
+.project-list__public-token {
+  left: 20px;
+  position: absolute;
+  bottom: 0px;
+}
+
+.project-list__team {
+  align-items: center;
+  display: flex;
+}
+
+.project-list__updated-at {
+  font-size: 1.1rem;
+}
+
+.project-list__team-title {
+  color: var(--color-gray-10);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0 1rem 0 0;
+}
+
+.project-list__actions {
+  align-items: center;
+  display: none;
+  justify-content: space-between;
+  min-height: 3.8rem;
+  padding: 0 0 0 1.5rem;
+
+  @include media('>medium') {
+    display: flex;
+  }
+
+  a, button {
+    font-size: 1.2rem;
+    margin-left: 1rem;
+  }
+}
+
+.project-list__action-buttons {
+  flex: 1;
+  text-align: right;
+}
+

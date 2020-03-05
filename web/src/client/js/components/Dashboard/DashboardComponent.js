@@ -12,7 +12,7 @@ import ProjectListComponent from 'Components/ProjectsList/ProjectListComponent'
 
 import './_Dashboard.scss'
 
-const DashboardComponent = ({ deleteHandler, loading, projects, specialProject }) => {
+const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, showTeams }) => {
   const history = useHistory()
   const hasProjects = Object.keys(projects).length > 0
 
@@ -42,6 +42,7 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject }
             history={history}
             deleteHandler={deleteHandler}
             projects={projects}
+            showTeams={showTeams}
             specialProject={specialProject}
           />
         }
@@ -59,6 +60,7 @@ DashboardComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   projects: PropTypes.object.isRequired,
+  showTeams: PropTypes.bool.isRequired,
   specialProject: PropTypes.object,
 }
 

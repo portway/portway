@@ -7,6 +7,7 @@ import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import * as strings from 'Loc/strings'
+import { MULTI_USER_PLAN_TYPES } from 'Shared/constants'
 import { currentOrgId } from 'Libs/currentIds'
 import { uiConfirm } from 'Actions/ui'
 import { removeProject } from 'Actions/project'
@@ -14,8 +15,11 @@ import { removeProject } from 'Actions/project'
 import DashboardComponent from './DashboardComponent'
 
 const DashboardContainer = ({ organizationData, removeProject, uiConfirm }) => {
+  const { data: organization } = useDataService(dataMapper.organizations.current())
   const { data: projects, loading } = useDataService(dataMapper.projects.list())
   const history = useHistory()
+
+  const showTeams = MULTI_USER_PLAN_TYPES.includes(organization.plan)
 
   // Special project
   const specialProjectId = organizationData[currentOrgId].specialProjectId
@@ -44,6 +48,7 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm }) => {
       deleteHandler={handleDelete}
       loading={loading}
       projects={projectsForList}
+      showTeams={showTeams}
       specialProject={specialProject}
     />
   )

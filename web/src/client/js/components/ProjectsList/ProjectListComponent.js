@@ -10,14 +10,14 @@ import ProjectActions from './ProjectActions'
 import './_ProjectList.scss'
 import './_SpecialProject.scss'
 
-function ProjectsListComponent({ deleteHandler, projects, specialProject }) {
+function ProjectsListComponent({ deleteHandler, projects, specialProject, showTeams }) {
   function handleDelete(projectId) {
     deleteHandler(projectId)
   }
 
   const tableHeadings = {
     project: { label: 'Project', sortable: true },
-    team: { label: 'Team' },
+    team: { label: showTeams ? 'Team' : '' },
     updatedAt: { label: 'Last modified', sortable: true },
     tools: { label: '' }
   }
@@ -29,7 +29,7 @@ function ProjectsListComponent({ deleteHandler, projects, specialProject }) {
     tableRows[0] = [
       <ProjectLink key={`p-${specialProject.id}`} project={specialProject} special />,
       <ProjectTeam key={`pt-${specialProject.id}`} projectId={specialProject.id} show={specialProject.accessLevel == null} />,
-      <span key={`pu-${specialProject.id}`}>{moment(specialProject.updatedAt).fromNow()}</span>,
+      <span key={`pu-${specialProject.id}`} className="project-list__updated-at">{moment(specialProject.updatedAt).fromNow()}</span>,
       <ProjectActions key={`pa-${specialProject.id}`} handleDelete={() => handleDelete(specialProject.id)} projectId={specialProject.id} />
     ]
   }
@@ -41,7 +41,7 @@ function ProjectsListComponent({ deleteHandler, projects, specialProject }) {
     tableRows[i + 1] = [
       <ProjectLink key={`p-${projectId}`} project={project} />,
       <ProjectTeam key={`pt-${projectId}`} projectId={projectId} show={privateProject} />,
-      <span key={`pu-${projectId}`}>{moment(project.updatedAt).fromNow()}</span>,
+      <span key={`pu-${projectId}`} className="project-list__updated-at">{moment(project.updatedAt).fromNow()}</span>,
       <ProjectActions key={`pa-${projectId}`} handleDelete={() => handleDelete(projectId)} projectId={projectId} />
     ]
   }
@@ -58,6 +58,7 @@ ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
   projects: PropTypes.object.isRequired,
   specialProject: PropTypes.object,
+  showTeams: PropTypes.bool.isRequired,
 }
 
 export default ProjectsListComponent
