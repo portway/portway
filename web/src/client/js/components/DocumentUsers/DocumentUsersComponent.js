@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import './_DocumentUsers.scss'
 
 const DocumentUsersComponent = ({ activeUsers }) => {
-  console.log(activeUsers)
   return (
     <div className="document-users">
       <ol className="document-users__list">
