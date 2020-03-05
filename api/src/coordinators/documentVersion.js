@@ -5,6 +5,8 @@ import ono from 'ono'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { copyContent, convertCDNUrlToS3Key } from '../integrators/s3'
 
+// EXPORTS
+
 const publishDocumentVersion = async function(documentId, projectId, orgId) {
   const doc = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
   if (!doc) {
@@ -42,6 +44,8 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
     lastPublishedAt: null
   })
 }
+
+// HELPERS
 
 const createVersionedFieldValue = async function(field) {
   switch (field.type) {
