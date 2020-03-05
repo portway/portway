@@ -1,13 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly }) => {
+  const [fieldValue, setFieldValue] = useState(field.value)
+
+  useEffect(() => {
+    setFieldValue(field.value)
+  }, [field.value])
+
   return (
     <input
       className="document-field__number"
-      defaultValue={field.value}
+      value={fieldValue == null ? '' : fieldValue}
       onBlur={(e) => { onBlur(field.id, field.type, field) }}
-      onChange={(e) => { onChange(field.id, Number.parseFloat(e.target.value)) }}
+      onChange={(e) => {
+        // API will only handle 15 significant digits for number fields
+        if (e.target.value.length > 15) return
+        const num = Number.parseFloat(e.target.value)
+        if (!isNaN(num)) {
+          setFieldValue(num)
+          onChange(field.id, num)
+        }
+        if (e.target.value === '') {
+          setFieldValue('')
+          onChange(field.id, null)
+        }
+      }}
       onFocus={(e) => {
         if (!readOnly) {
           onFocus(field.id, field.type, field)
