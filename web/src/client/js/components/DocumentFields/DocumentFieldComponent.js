@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 import useDocumentSocket from '../../hooks/useDocumentSocket'
-import { currentUserId } from '../../libs/currentIds'
+import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
@@ -24,16 +24,26 @@ const DocumentFieldComponent = ({
   readOnly,
   settingsHandler,
   settingsMode,
+  usersById
 }) => {
   const nameRef = useRef()
   const { state: socketState } = useDocumentSocket()
   const { currentDocumentUserFieldFocus } = socketState
 
-  const currentFieldUsers = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
+  //Relevant usersById should already be fetched by the document users container
+
+  const currentFieldUserIds = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
     // TODO: do we want to display current user? if not can filter that out in this conditional
     if (currentDocumentUserFieldFocus[userId] === field.id) {
       return [...cur, userId]
+    }
+    return cur
+  }, [])
+
+  const currentFieldUsers = currentFieldUserIds.reduce((cur, userId) => {
+    if (usersById[userId]) {
+      return [...cur, usersById[userId]]
     }
     return cur
   }, [])
@@ -168,6 +178,13 @@ DocumentFieldComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
+  usersById: PropTypes.object
 }
 
-export default DocumentFieldComponent
+const mapStateToProps = (state) => {
+  return {
+    usersById: state.users.usersById
+  }
+}
+
+export default connect(mapStateToProps)(DocumentFieldComponent)
