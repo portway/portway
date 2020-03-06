@@ -8,6 +8,12 @@
     list-style: none;
     margin: 0;
     padding: 0;
+
+    &--vertical {
+      flex-direction: column;
+      padding-top: 4rem;
+    }
+
   }
 
   &__list-item {

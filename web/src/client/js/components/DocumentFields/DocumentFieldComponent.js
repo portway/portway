@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
-import DocumentFieldUsers from './DocumentFieldUsers'
+import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -107,7 +107,7 @@ const DocumentFieldComponent = ({
       <div className="document-field__component">
 
         <div className={fieldToolClasses}>
-          <DocumentFieldUsers users={currentFieldUsers} />
+          <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
         </div>
 
         <div className={fieldContainerClasses}>

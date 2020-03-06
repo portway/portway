@@ -143,7 +143,7 @@ const DocumentFieldsComponent = ({
   })
   return (
     <div className={fieldsClasses}>
-      <ol>
+      <ol className="document__fields-list">
         {renderFields()}
       </ol>
     </div>
