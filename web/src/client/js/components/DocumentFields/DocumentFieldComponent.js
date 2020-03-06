@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
+import { currentUserId } from 'Libs/currentIds'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -34,8 +35,7 @@ const DocumentFieldComponent = ({
 
   const currentFieldUserIds = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
-    // TODO: do we want to display current user? if not can filter that out in this conditional
-    if (currentDocumentUserFieldFocus[userId] === field.id) {
+    if (currentDocumentUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
       return [...cur, userId]
     }
     return cur
