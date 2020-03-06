@@ -2,7 +2,6 @@ import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import thunk from 'redux-thunk'
 
-import { application } from './application'
 import { documentFields } from './documentFields'
 import { documents } from './documents'
 import { forms } from './forms'
@@ -20,7 +19,6 @@ import { users } from './users'
 import { validation } from './validation'
 
 const rootReducer = combineReducers({
-  application,
   documentFields,
   documents,
   forms,

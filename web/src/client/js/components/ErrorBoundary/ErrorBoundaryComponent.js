@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 
-import { SUPPORT_EMAIL, SUPPORT_LINK } from 'Shared/constants'
+import { SUPPORT_EMAIL, SUPPORT_LINK, NETWORK_STATUS } from 'Shared/constants'
+import ApplicationContext from '../../contexts/ApplicationContext'
 import './ErrorBoundary.scss'
 
 class ErrorBoundary extends React.Component {
@@ -19,7 +21,29 @@ class ErrorBoundary extends React.Component {
     // logErrorToMyService(error, info)
   }
 
+  returnHandler() {
+    this.setState({
+      hasError: false
+    }, () => {
+      this.props.history.goBack()
+    })
+  }
+
   render() {
+    if (this.context.networkStatus === NETWORK_STATUS.OFFLINE && this.state.hasError) {
+      return (
+        <main>
+          <section>
+            <h1>You’re offline</h1>
+            <p>
+              It looks like there’s a problem with your internet connection. We couldn’t load this
+              section for you, but you can return to your work and save whatever you can for later.
+            </p>
+            <button onClick={this.returnHandler.bind(this)}>Return to the previous screen</button>
+          </section>
+        </main>
+      )
+    }
     if (this.state.hasError) {
       return (
         <section className="error-boundary">
@@ -33,8 +57,11 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+ErrorBoundary.contextType = ApplicationContext
+
 ErrorBoundary.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  history: PropTypes.object,
 }
 
-export default ErrorBoundary
+export default withRouter(ErrorBoundary)

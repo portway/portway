@@ -1,11 +1,12 @@
 import React, { useCallback, useState, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
 
 import useBlur from 'Hooks/useBlur'
 import useClickOutside from 'Hooks/useClickOutside'
 import useDataService from 'Hooks/useDataService'
+
+// Context
+import ApplicationContext from '../../contexts/ApplicationContext'
 
 import {
   NETWORK_STATUS,
@@ -32,7 +33,7 @@ function logoutAction() {
   Store.dispatch(logoutUser(currentUserId))
 }
 
-const UserMenuContainer = ({ networkStatus }) => {
+const UserMenuContainer = () => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const [expanded, setExpanded] = useState(false)
@@ -58,75 +59,70 @@ const UserMenuContainer = ({ networkStatus }) => {
   }
 
   return (
-    <PopperGroup anchorRef={containerRef} className="user-menu">
-      <button
-        aria-expanded={expanded}
-        aria-haspopup="true"
-        aria-controls="user-menu"
-        className="btn btn--blank user-menu__button"
-        onClick={() => setExpanded(!expanded)}
-        ref={anchorRef}
-        style={{ backgroundImage: `url(${currentUser.avatar || UserIcon}` }}
-      >
-        {currentUser.name}’s avatar
-      </button>
-      {networkStatus === NETWORK_STATUS.OFFLINE &&
-      <div
-        aria-label="Network offline"
-        className="user-menu__network-dot"
-        title="Network offline. Please check your internet connection."
-      />
-      }
-      <Popper
-        id="user-menu"
-        align="right"
-        anchorRef={anchorRef}
-        autoCollapse={collapseCallback}
-        open={expanded}
-        width="200"
-      >
-        <MenuHeader>
-          <h2 className="user-menu__username">{currentUser.name}</h2>
-          <h3 className="user-menu__organization">{currentOrg.name}</h3>
-          <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
+    <ApplicationContext.Consumer>
+      {({ networkStatus }) => (
+        <PopperGroup anchorRef={containerRef} className="user-menu">
+          <button
+            aria-expanded={expanded}
+            aria-haspopup="true"
+            aria-controls="user-menu"
+            className="btn btn--blank user-menu__button"
+            onClick={() => setExpanded(!expanded)}
+            ref={anchorRef}
+            style={{ backgroundImage: `url(${currentUser.avatar || UserIcon}` }}
+          >
+            {currentUser.name}’s avatar
+          </button>
           {networkStatus === NETWORK_STATUS.OFFLINE &&
-          <div className="user-menu__network-status">
-            You are not connected to the internet. Changes will not save until you’re back online.
-          </div>
+          <div
+            aria-label="Network offline"
+            className="user-menu__network-dot"
+            title="Network offline. Please check your internet connection."
+          />
           }
-        </MenuHeader>
-        <Menu anchorRef={anchorRef} isActive={expanded}>
-          <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
-            <MenuItem>
-              <Link className="btn btn--blank" to={PATH_ADMIN} ref={React.createRef()}>
-                Administration
-              </Link>
-            </MenuItem>
-          </OrgPermission>
-          <MenuItem>
-            <Link className="btn btn--blank" to={PATH_HELP} ref={React.createRef()}>
-              Help
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <button className="btn btn--blank" onClick={() => { logoutAction() }} ref={React.createRef()}>
-              Sign out
-            </button>
-          </MenuItem>
-        </Menu>
-      </Popper>
-    </PopperGroup>
+          <Popper
+            id="user-menu"
+            align="right"
+            anchorRef={anchorRef}
+            autoCollapse={collapseCallback}
+            open={expanded}
+            width="200"
+          >
+            <MenuHeader>
+              <h2 className="user-menu__username">{currentUser.name}</h2>
+              <h3 className="user-menu__organization">{currentOrg.name}</h3>
+              <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
+              {networkStatus === NETWORK_STATUS.OFFLINE &&
+              <div className="user-menu__network-status">
+                You are not connected to the internet. Changes will not save until you’re back online.
+              </div>
+              }
+            </MenuHeader>
+            <Menu anchorRef={anchorRef} isActive={expanded}>
+              <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
+                <MenuItem>
+                  <Link className="btn btn--blank" to={PATH_ADMIN} ref={React.createRef()}>
+                    Administration
+                  </Link>
+                </MenuItem>
+              </OrgPermission>
+              <MenuItem>
+                <Link className="btn btn--blank" to={PATH_HELP} ref={React.createRef()}>
+                  Help
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <button className="btn btn--blank" onClick={() => { logoutAction() }} ref={React.createRef()}>
+                  Sign out
+                </button>
+              </MenuItem>
+            </Menu>
+          </Popper>
+        </PopperGroup>
+      )}
+    </ApplicationContext.Consumer>
   )
 }
 
-UserMenuContainer.propTypes = {
-  networkStatus: PropTypes.oneOf([NETWORK_STATUS.ONLINE, NETWORK_STATUS.OFFLINE]).isRequired,
-}
 
-const mapStateToProps = (state) => {
-  return {
-    networkStatus: state.application.network,
-  }
-}
-
-export default connect(mapStateToProps)(UserMenuContainer)
+export default UserMenuContainer
