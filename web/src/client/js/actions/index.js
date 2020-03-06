@@ -1,6 +1,8 @@
 import { makeActionCreator } from '../utilities/redux'
 
 export const ActionTypes = {
+  // Application
+  NETWORK_STATUS_CHANGE: 'NETWORK_STATUS_CHANGE',
   // Projects
   REQUEST_PROJECTS: 'REQUEST_PROJECTS',
   RECEIVE_PROJECTS: 'RECEIVE_PROJECTS',
@@ -132,6 +134,10 @@ export const ActionTypes = {
   UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM',
   // Search
   SEARCH_CLEAR: 'SEARCH_CLEAR',
+}
+
+export const Application = {
+  updateNetworkStatus: makeActionCreator(ActionTypes.NETWORK_STATUS_CHANGE, 'status'),
 }
 
 export const Route = {

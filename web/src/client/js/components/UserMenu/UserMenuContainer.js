@@ -1,11 +1,19 @@
 import React, { useCallback, useState, useRef } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import useBlur from 'Hooks/useBlur'
 import useClickOutside from 'Hooks/useClickOutside'
 import useDataService from 'Hooks/useDataService'
 
-import { ORGANIZATION_ROLE_IDS, PATH_ADMIN, PATH_HELP, PATH_SETTINGS } from 'Shared/constants'
+import {
+  NETWORK_STATUS,
+  ORGANIZATION_ROLE_IDS,
+  PATH_ADMIN,
+  PATH_HELP,
+  PATH_SETTINGS
+} from 'Shared/constants'
 
 import Store from '../../reducers'
 import dataMapper from 'Libs/dataMapper'
@@ -24,7 +32,7 @@ function logoutAction() {
   Store.dispatch(logoutUser(currentUserId))
 }
 
-const UserMenuContainer = () => {
+const UserMenuContainer = ({ networkStatus }) => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
   const { data: currentOrg } = useDataService(dataMapper.organizations.current())
   const [expanded, setExpanded] = useState(false)
@@ -62,6 +70,13 @@ const UserMenuContainer = () => {
       >
         {currentUser.name}’s avatar
       </button>
+      {networkStatus === NETWORK_STATUS.OFFLINE &&
+      <div
+        aria-label="Network offline"
+        className="user-menu__network-dot"
+        title="Network offline. Please check your internet connection."
+      />
+      }
       <Popper
         id="user-menu"
         align="right"
@@ -74,6 +89,11 @@ const UserMenuContainer = () => {
           <h2 className="user-menu__username">{currentUser.name}</h2>
           <h3 className="user-menu__organization">{currentOrg.name}</h3>
           <Link to={PATH_SETTINGS} className="user-menu__link">My settings</Link>
+          {networkStatus === NETWORK_STATUS.OFFLINE &&
+          <div className="user-menu__network-status">
+            You are not connected to the internet. Changes will not save until you’re back online.
+          </div>
+          }
         </MenuHeader>
         <Menu anchorRef={anchorRef} isActive={expanded}>
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}>
@@ -99,4 +119,14 @@ const UserMenuContainer = () => {
   )
 }
 
-export default UserMenuContainer
+UserMenuContainer.propTypes = {
+  networkStatus: PropTypes.oneOf([NETWORK_STATUS.ONLINE, NETWORK_STATUS.OFFLINE]).isRequired,
+}
+
+const mapStateToProps = (state) => {
+  return {
+    networkStatus: state.application.network,
+  }
+}
+
+export default connect(mapStateToProps)(UserMenuContainer)

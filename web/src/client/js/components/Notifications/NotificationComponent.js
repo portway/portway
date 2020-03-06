@@ -45,7 +45,7 @@ NotificationComponent.propTypes = {
   id: PropTypes.string.isRequired,
   notification: PropTypes.shape({
     code: PropTypes.number,
-    resource: PropTypes.string.isRequired,
+    resource: PropTypes.string,
     message: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired
   })
