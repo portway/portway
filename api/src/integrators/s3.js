@@ -129,6 +129,50 @@ export const convertCDNUrlToS3Key = function(url) {
   return decodeURIComponent(assetUrl.pathname.slice(1))
 }
 
+// Recursive function to delete all S3 files in an org directory
+export const deleteOrgDirectory = async function(orgId, continueToken) {
+  const hashId = getHashIdFromOrgId(orgId)
+
+  let listResult
+
+  try {
+    const params = {
+      Bucket: S3_CONTENT_BUCKET,
+      Prefix: `${hashId}/`
+    }
+    if (continueToken) {
+      params.ContinuationToken = continueToken
+    }
+
+    listResult = await s3.listObjectsV2(params).promise()
+
+    const objectsToDelete = listResult.Contents.map((r) => {
+      return { Key: r.Key }
+    })
+
+    if (objectsToDelete.length === 0) {
+      return
+    }
+
+    await s3
+      .deleteObjects({
+        Bucket: S3_CONTENT_BUCKET,
+        Delete: {
+          Objects: objectsToDelete
+        }
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, `AWS s3 failed to list/delete objects for orgId: ${orgId}`)
+  }
+
+  if (listResult.NextContinuationToken) {
+    await deleteOrgDirectory(orgId, listResult.NextContinuationToken)
+  }
+
+  return
+}
+
 // Get the Cloudfront url for the S3 url
 function s3ToCDNLink(s3Location) {
   if (!CDN_HOSTNAME) return s3Location

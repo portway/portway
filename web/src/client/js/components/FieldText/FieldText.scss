@@ -179,6 +179,13 @@
 
       .cm-url {
         color: var(--color-gray-30);
+        cursor: pointer;
+        &:hover {
+          color: var(--color-gray-40);
+        }
+        &:active {
+          color: var(--color-gray-20);
+        }
       }
 
       .cm-formatting-code-block {
