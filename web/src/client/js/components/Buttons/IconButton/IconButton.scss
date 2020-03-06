@@ -82,4 +82,18 @@
     }
   }
 
+  &--brand {
+    background-color: var(--color-brand-darker);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-brand-dark);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-brand-light);
+      }
+    }
+  }
+
 }

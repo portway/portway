@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 
 import dataMapper from 'Libs/dataMapper'
@@ -11,7 +10,7 @@ import { uiConfirm } from 'Actions/ui'
 import { removeProject } from 'Actions/project'
 import ProjectsListComponent from './ProjectListComponent'
 
-const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
+const ProjectsListContainer = ({ removeProject, uiConfirm }) => {
   const { data: projects, loading } = useDataService(dataMapper.projects.list())
 
   const handleDelete = (projectId) => {
@@ -32,13 +31,12 @@ const ProjectsListContainer = ({ history, removeProject, uiConfirm }) => {
 
   return (
     <div className="project-list-container">
-      <ProjectsListComponent history={history} projects={projects} deleteHandler={handleDelete} loading={loading} />
+      <ProjectsListComponent projects={projects} deleteHandler={handleDelete} loading={loading} />
     </div>
   )
 }
 
 ProjectsListContainer.propTypes = {
-  history: PropTypes.object.isRequired,
   removeProject: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired
 }
@@ -48,6 +46,4 @@ const mapStateToProps = () => {
 }
 const mapDispatchToProps = { removeProject, uiConfirm }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(ProjectsListContainer)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectsListContainer)
