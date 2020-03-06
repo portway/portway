@@ -73,11 +73,11 @@ describe('BusinessProject', () => {
       let count
 
       beforeAll(async () => {
-        ({ projects, count } = await BusinessProject.findAll(constants.ORG_ID, { page: 1, perPage: 50 }))
+        ({ projects, count } = await BusinessProject.findAll(constants.ORG_ID, { page: 1, perPage: 3 }))
       })
 
-      it('should return all projects in org', () => {
-        expect(projects.length).toEqual(5)
+      it('should return all paged projects in org', () => {
+        expect(projects.length).toEqual(3)
       })
 
       it('should return projects as POJOs', () => {
