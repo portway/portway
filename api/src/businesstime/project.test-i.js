@@ -70,9 +70,10 @@ describe('BusinessProject', () => {
 
     describe('#findAll', () => {
       let projects
+      let count
 
       beforeAll(async () => {
-        projects = await BusinessProject.findAll(constants.ORG_ID)
+        ({ projects, count } = await BusinessProject.findAll(constants.ORG_ID, { page: 1, perPage: 50 }))
       })
 
       it('should return all projects in org', () => {
@@ -85,6 +86,10 @@ describe('BusinessProject', () => {
           expect(project.constructor).toBe(Object)
           expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
         }
+      })
+
+      it('should return a project count', () => {
+        expect(count).toEqual(5)
       })
     })
 
