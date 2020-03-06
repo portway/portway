@@ -2,11 +2,12 @@ import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 import useDocumentSocket from '../../hooks/useDocumentSocket'
-import { currentUserId } from '../../libs/currentIds'
+import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
-import DocumentFieldUsers from './DocumentFieldUsers'
+import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
+import { currentUserId } from 'Libs/currentIds'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -24,16 +25,25 @@ const DocumentFieldComponent = ({
   readOnly,
   settingsHandler,
   settingsMode,
+  usersById
 }) => {
   const nameRef = useRef()
   const { state: socketState } = useDocumentSocket()
   const { currentDocumentUserFieldFocus } = socketState
 
-  const currentFieldUsers = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
+  //Relevant usersById should already be fetched by the document users container
+
+  const currentFieldUserIds = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
-    // TODO: do we want to display current user? if not can filter that out in this conditional
-    if (currentDocumentUserFieldFocus[userId] === field.id) {
+    if (currentDocumentUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
       return [...cur, userId]
+    }
+    return cur
+  }, [])
+
+  const currentFieldUsers = currentFieldUserIds.reduce((cur, userId) => {
+    if (usersById[userId]) {
+      return [...cur, usersById[userId]]
     }
     return cur
   }, [])
@@ -97,7 +107,7 @@ const DocumentFieldComponent = ({
       <div className="document-field__component">
 
         <div className={fieldToolClasses}>
-          <DocumentFieldUsers users={currentFieldUsers} />
+          <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
         </div>
 
         <div className={fieldContainerClasses}>
@@ -168,6 +178,13 @@ DocumentFieldComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
+  usersById: PropTypes.object
 }
 
-export default DocumentFieldComponent
+const mapStateToProps = (state) => {
+  return {
+    usersById: state.users.usersById
+  }
+}
+
+export default connect(mapStateToProps)(DocumentFieldComponent)
