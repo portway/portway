@@ -10,11 +10,6 @@ const documentUrl = new URL(`/documents?token=${token}`, SYNC_URL)
 
 const documentSocket = openSocket(documentUrl.href)
 
-if (!documentSocket.connected) {
-  console.info('Error connecting to user sync service')
-}
-
-
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',
