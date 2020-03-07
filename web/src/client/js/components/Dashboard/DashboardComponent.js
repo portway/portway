@@ -37,7 +37,7 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, 
           )}>
           <ToolbarComponent action={toolbarAction} />
         </OrgPermission>
-        {!loading && hasProjects &&
+        {!loading && (hasProjects || specialProject) &&
           <ProjectListComponent
             history={history}
             deleteHandler={deleteHandler}
