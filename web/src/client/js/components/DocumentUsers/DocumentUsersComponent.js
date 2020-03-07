@@ -65,7 +65,7 @@ const DocumentUsersComponent = ({ activeUsers, direction = DIRECTION.HORIZONTAL,
 DocumentUsersComponent.propTypes = {
   activeUsers: PropTypes.array,
   direction: PropTypes.oneOf([DIRECTION.HORIZONTAL, DIRECTION.VERTICAL]),
-  mode: PropTypes.oneOf([MODE.DOCUMENT, MODE.VERTICAL])
+  mode: PropTypes.oneOf([MODE.DOCUMENT, MODE.FIELD])
 }
 
 export default DocumentUsersComponent
