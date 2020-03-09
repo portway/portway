@@ -20,9 +20,12 @@ export const createField = (projectId, documentId, fieldType, body) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('field', data, status)) :
+    if (validationCodes.includes(status)) {
+      dispatch(Validation.create('field', data, status))
+    } else {
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
+      dispatch(Fields.focusFieldWithId(data.id, data.type))
+    }
   }
 }
 

@@ -6,6 +6,15 @@
   max-width: 800px;
   width: 100%;
 
+  textarea {
+    background: transparent;
+    border: none;
+    color: transparent;
+    height: 0;
+    position: relative;
+    width: 0;
+  }
+
   // Override the SimpleMDE styling
   .CodeMirror {
     background-color: transparent;
