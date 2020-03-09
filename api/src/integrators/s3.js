@@ -13,14 +13,12 @@ AWS.config.update({ region: AWS_SES_REGION })
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' })
 
 export const uploadContent = async function(documentId, orgId, file) {
-  const hashId = getHashIdFromOrgId(orgId)
-
   let res
   try {
     res = await s3
       .upload({
         Bucket: S3_CONTENT_BUCKET,
-        Key: `${hashId}/d/${documentId}/${Date.now()}-${file.originalname}`,
+        Key: getKeyForDocumentAsset(file.originalname, documentId, orgId),
         ContentType: file.mimetype,
         Body: await readFile(file.path),
         ACL: 'public-read'
@@ -33,6 +31,11 @@ export const uploadContent = async function(documentId, orgId, file) {
     unlink(file.path)
   }
   return s3ToCDNLink(res.Location)
+}
+
+export const getKeyForDocumentAsset = (assetName, documentId, orgId) => {
+  const hashId = getHashIdFromOrgId(orgId)
+  return `${hashId}/d/${documentId}/${Date.now()}-${assetName}`
 }
 
 export const uploadAvatar = async function({ orgId, userId, file }) {
@@ -82,12 +85,7 @@ export const deleteContent = async function(key) {
   console.info(`Successfully deleted S3 content with key: ${key}`)
 }
 
-export const copyContent = async function(key) {
-  const keyParts = key.split('/')
-  const lastIndex = keyParts.length - 1
-  keyParts[lastIndex] = `${Date.now()}-${keyParts[lastIndex]}`
-  const newKey = keyParts.join('/')
-
+export const copyContent = async function(key, newKey) {
   try {
     await s3
       .copyObject({
@@ -129,6 +127,50 @@ export const convertCDNUrlToS3Key = function(url) {
   const assetUrl = new URL(url)
   // remove beginning "/" from pathname
   return decodeURIComponent(assetUrl.pathname.slice(1))
+}
+
+// Recursive function to delete all S3 files in an org directory
+export const deleteOrgDirectory = async function(orgId, continueToken) {
+  const hashId = getHashIdFromOrgId(orgId)
+
+  let listResult
+
+  try {
+    const params = {
+      Bucket: S3_CONTENT_BUCKET,
+      Prefix: `${hashId}/`
+    }
+    if (continueToken) {
+      params.ContinuationToken = continueToken
+    }
+
+    listResult = await s3.listObjectsV2(params).promise()
+
+    const objectsToDelete = listResult.Contents.map((r) => {
+      return { Key: r.Key }
+    })
+
+    if (objectsToDelete.length === 0) {
+      return
+    }
+
+    await s3
+      .deleteObjects({
+        Bucket: S3_CONTENT_BUCKET,
+        Delete: {
+          Objects: objectsToDelete
+        }
+      })
+      .promise()
+  } catch (err) {
+    throw ono(err, { code: 503 }, `AWS s3 failed to list/delete objects for orgId: ${orgId}`)
+  }
+
+  if (listResult.NextContinuationToken) {
+    await deleteOrgDirectory(orgId, listResult.NextContinuationToken)
+  }
+
+  return
 }
 
 // Get the Cloudfront url for the S3 url

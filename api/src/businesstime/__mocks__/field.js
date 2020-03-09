@@ -8,5 +8,6 @@ export default {
     findByIdReturnValue = returnValue
   },
   resetFindByIdReturnValue: () => { findByIdReturnValue = undefined },
+  deleteAllForDocument: jest.fn(),
   deleteAllForOrg: jest.fn()
 }

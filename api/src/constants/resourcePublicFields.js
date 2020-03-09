@@ -6,7 +6,7 @@ const PROJECT_DOCUMENT_PUBLIC_FIELDS = ['name', 'publishedVersionId', 'projectId
 
 const DOCUMENT_PUBLIC_FIELDS = PROJECT_DOCUMENT_PUBLIC_FIELDS.concat(['fields'])
 
-const PROJECT_PUBLIC_FIELDS = ['name', 'description', 'accessLevel'].concat(globalPublicFields)
+const PROJECT_PUBLIC_FIELDS = ['name', 'description', 'accessLevel', 'createdBy'].concat(globalPublicFields)
 
 const FIELD_PUBLIC_FIELDS = [
   'name',

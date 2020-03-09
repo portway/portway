@@ -1,7 +1,7 @@
 import ono from 'ono'
 import Joi from 'joi'
 
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import projectCoordinator from '../coordinators/projectCrud'
 import BusinessProject from '../businesstime/project'
 import BusinessOrganization from '../businesstime/organization'
@@ -10,6 +10,7 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields } from './payloadSchemas/helpers'
 import projectSchema from './payloadSchemas/project'
 import auditLog, { auditActions } from '../integrators/audit'
+import { SORT_METHODS } from '../constants/queryOptions'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.PROJECT,
@@ -32,6 +33,13 @@ const paramSchema = Joi.compile({
   id: Joi.number()
 })
 
+const querySchema = Joi.compile({
+  page: Joi.number(),
+  perPage: Joi.number(),
+  sortBy: Joi.string().valid(['name', 'createdAt', 'createdBy']),
+  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
+})
+
 const projectsController = function(router) {
   router.post(
     '/',
@@ -39,7 +47,7 @@ const projectsController = function(router) {
     conditionalCreatePerm,
     addProject
   )
-  router.get('/', listPerm, getProjects)
+  router.get('/', validateQuery(querySchema), listPerm, getProjects)
   router.get('/:id', validateParams(paramSchema), readPerm, getProject)
   router.put(
     '/:id',
@@ -52,9 +60,12 @@ const projectsController = function(router) {
 }
 
 const getProjects = async function(req, res, next) {
+  const { page = 1, perPage = 50, sortBy, sortMethod } = req.query
+  const options = { page, perPage, sortBy, sortMethod }
+
   try {
-    const projects = await BusinessProject.findAll(req.requestorInfo.orgId)
-    res.json({ data: projects })
+    const { projects, count } = await BusinessProject.findAll(req.requestorInfo.orgId, options)
+    res.json({ data: projects, page, perPage, total: count, totalPages: Math.ceil(count / perPage) })
   } catch (e) {
     next(e)
   }
@@ -75,6 +86,8 @@ const getProject = async function(req, res, next) {
 const addProject = async function(req, res, next) {
   const { body } = req
   body.orgId = req.requestorInfo.orgId
+  body.createdBy = req.requestorInfo.requestorId
+
   try {
     const project = await projectCoordinator.createProject(
       body,

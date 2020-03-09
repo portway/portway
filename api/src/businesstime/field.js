@@ -148,7 +148,7 @@ async function deleteByIdForDocument(id, documentId, orgId) {
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
-  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
+  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot delete`)
 
   await field.destroy()
 
@@ -156,6 +156,19 @@ async function deleteByIdForDocument(id, documentId, orgId) {
   document.markUpdated()
 
   await normalizeFieldOrderAndGetCount(documentId, orgId)
+}
+
+async function deleteAllForDocument(documentId, orgId) {
+  const db = getDb()
+  const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
+
+  if (!document) {
+    throw ono({ code: 404 }, `Cannot delete fields, document not found with id: ${documentId}`)
+  }
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId, documentId }
+  })
 }
 
 async function updateOrderById(id, documentId, orgId, newPosition) {
@@ -313,11 +326,12 @@ async function normalizeFieldOrderAndGetCount(documentId, orgId) {
   return docFields.length
 }
 
-async function deleteAllForOrg(orgId) {
+async function deleteAllForOrg(orgId, force = false) {
   const db = getDb()
 
   return db.model(MODEL_NAME).destroy({
-    where: { orgId }
+    where: { orgId },
+    force
   })
 }
 
@@ -328,6 +342,7 @@ export default {
   findAllForDocument,
   findAllPublishedForDocument,
   deleteByIdForDocument,
+  deleteAllForDocument,
   updateOrderById,
   deleteAllForOrg
 }

@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
       avatar: DataTypes.STRING,
       plan: DataTypes.ENUM(Object.keys(PLANS)),
       subscriptionStatus: DataTypes.STRING,
-      canceledAt: DataTypes.DATE
+      canceledAt: DataTypes.DATE,
+      introProjectId: DataTypes.INTEGER
     },
     {
       paranoid: true

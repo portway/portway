@@ -5,6 +5,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import PROJECT_ACCESS_LEVELS from '../constants/projectAccessLevels'
+import { getPaginationOptions, getSortOptions } from '../libs/queryFilters'
 
 const MODEL_NAME = 'Project'
 
@@ -20,13 +21,20 @@ async function create(body) {
   return publicFields(createdProject)
 }
 
-async function findAll(orgId) {
+async function findAll(orgId, options) {
+  const paginationOptions = getPaginationOptions(options.page, options.perPage)
+  const sortOptions = getSortOptions(options.sortBy, options.sortMethod)
   const db = getDb()
-  return await db.model(MODEL_NAME).findAll({
-    attributes: PUBLIC_FIELDS,
+
+  const query = {
     where: { orgId },
-    raw: true
-  })
+    ...sortOptions,
+    ...paginationOptions
+  }
+
+  const result = await db.model(MODEL_NAME).findAndCountAll(query)
+
+  return { projects: result.rows.map(publicFields), count: result.count }
 }
 
 async function findById(id, orgId) {
@@ -75,11 +83,12 @@ async function findAllForUser(userId, orgId) {
   return projects.map(publicFields)
 }
 
-async function deleteAllForOrg(orgId) {
+async function deleteAllForOrg(orgId, force = false) {
   const db = getDb()
 
   return db.model(MODEL_NAME).destroy({
-    where: { orgId }
+    where: { orgId },
+    force
   })
 }
 

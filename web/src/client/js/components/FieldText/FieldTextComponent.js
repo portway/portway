@@ -48,6 +48,18 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [])
   useEffect(() => {
     if (editorRef.current) {
+      function clickURLHandler(e) {
+        if (e.target.classList.contains('cm-url')) {
+          let url = e.target.textContent
+          if (!url.match(/^https?:\/\//i)) {
+            url = 'https://' + url
+          }
+          window.open(url, '_blank', 'noopener')
+        }
+      }
+      const editorDomEl = editorRef.current.display.lineDiv
+      editorDomEl.addEventListener('click', clickURLHandler)
+      // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
       editorRef.current.on('blur', (cm, e) => { onBlur(field.id, field.type, editorRef.current) })
       editorRef.current.on('change', () => { onChange(field.id, editorRef.current.getValue()) })

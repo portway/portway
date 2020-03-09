@@ -35,7 +35,17 @@ async function findOrCreateUsageByType(orgId, resourceType) {
   return usage
 }
 
+async function deleteAllForOrg(orgId, force = false) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { orgId },
+    force
+  })
+}
+
 export default {
   updateUsageByType,
-  findOrCreateUsageByType
+  findOrCreateUsageByType,
+  deleteAllForOrg
 }

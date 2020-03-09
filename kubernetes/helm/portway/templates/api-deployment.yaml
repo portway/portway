@@ -144,6 +144,11 @@ spec:
             secretKeyRef:
               name: admin-secrets
               key: admin_secret_key
+        - name: PORTWAY_INTRO_PROJECT_READ_KEY
+          valueFrom:
+            secretKeyRef:
+              name: intro-secrets
+              key: intro_project_read_key
         ports:
         - containerPort: {{ .Values.api.port }}
           protocol: TCP

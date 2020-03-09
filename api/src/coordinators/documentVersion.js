@@ -5,6 +5,8 @@ import ono from 'ono'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { copyContent, convertCDNUrlToS3Key } from '../integrators/s3'
 
+// EXPORTS
+
 const publishDocumentVersion = async function(documentId, projectId, orgId) {
   const doc = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
   if (!doc) {
@@ -43,11 +45,18 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
   })
 }
 
+// HELPERS
+
 const createVersionedFieldValue = async function(field) {
   switch (field.type) {
     case FIELD_TYPES.IMAGE: {
       if (field.value) {
-        return await copyContent(convertCDNUrlToS3Key(field.value))
+        const key = convertCDNUrlToS3Key(field.value)
+        const keyParts = key.split('/')
+        const lastIndex = keyParts.length - 1
+        keyParts[lastIndex] = `${Date.now()}-${keyParts[lastIndex]}`
+        const newKey = keyParts.join('/')
+        return await copyContent(key, newKey)
       } else {
         return field.value
       }

@@ -16,7 +16,7 @@ const ProjectUsersContainer = ({ projectId, collapsed }) => {
 }
 
 ProjectUsersContainer.propTypes = {
-  projectId: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
   collapsed: PropTypes.bool
 }
 

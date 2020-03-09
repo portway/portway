@@ -60,9 +60,12 @@ async function findByStripeId(stripeId) {
   return organization.get({ plain: true })
 }
 
-async function deleteById(id) {
+async function deleteById(id, force = false) {
   const db = getDb()
-  return db.model(MODEL_NAME).destroy({ where: { id } })
+  return db.model(MODEL_NAME).destroy({
+    where: { id },
+    force
+  })
 }
 
 async function findAllCanceled() {
