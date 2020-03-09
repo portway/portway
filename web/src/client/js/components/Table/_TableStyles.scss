@@ -47,6 +47,7 @@
   }
   &__row {
     padding: 1rem var(--cell-padding) 0;
+    position: relative;
     &:nth-child(even) {
       background-color: var(--row-alternate-bg-color);
     }

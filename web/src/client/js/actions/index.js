@@ -64,6 +64,7 @@ export const ActionTypes = {
   REMOVE_FIELD: 'REMOVE_FIELD',
   FOCUS_FIELD: 'FOCUS_FIELD',
   BLUR_FIELD: 'BLUR_FIELD',
+  FOCUS_FIELD_WITH_ID: 'FOCUS_FIELD_WITH_ID',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -120,6 +121,7 @@ export const ActionTypes = {
   RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
   REQUEST_ORGANIZATION_SEATS: 'REQUEST_ORGANIZATION_SEATS',
   RECEIVE_ORGANIZATION_SEATS: 'RECEIVE_ORGANIZATION_SEATS',
+  RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID: 'RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID',
   // UI
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -221,9 +223,11 @@ export const Fields = {
   // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId'),
-  // Blur / Focus
+  // Blur / Focus events
   blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
   focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  // Focus action
+  focusFieldWithId: makeActionCreator(ActionTypes.FOCUS_FIELD_WITH_ID, 'id', 'type'),
 }
 
 export const Notifications = {
@@ -280,6 +284,8 @@ export const Organizations = {
   // Remove account
   initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
   receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
+  // Special project ID
+  receiveSpecialProjectId: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID, 'orgId', 'projectId'),
 }
 
 export const UI = {

@@ -45,6 +45,8 @@ describe('assetCoordinator', () => {
     beforeAll(async () => {
       BusinessOrganization.findSanitizedById.mockClear()
       BusinessResourceUsage.updateUsageByType.mockClear()
+      // Needs a plan to calculate usage
+      BusinessOrganization.findSanitizedById.mockReturnValueOnce({ plan: 'yes' })
       await assetCoordinator.recordOrgAsset(orgId, file.size)
     })
 
@@ -57,6 +59,18 @@ describe('assetCoordinator', () => {
       expect(BusinessResourceUsage.updateUsageByType.mock.calls.length).toBe(1)
       expect(BusinessResourceUsage.updateUsageByType.mock.calls[0][0]).toEqual(orgId)
       expect(BusinessResourceUsage.updateUsageByType.mock.calls[0][2]).toEqual(file.size)
+    })
+
+    describe('without an org plan', () => {
+      beforeAll(async () => {
+        BusinessOrganization.findSanitizedById.mockClear()
+        BusinessResourceUsage.updateUsageByType.mockClear()
+        await assetCoordinator.recordOrgAsset(orgId, file.size)
+      })
+
+      it('should not call BusinessResourceUsage.updateUsageByType', () => {
+        expect(BusinessResourceUsage.updateUsageByType.mock.calls.length).toBe(0)
+      })
     })
   })
 
