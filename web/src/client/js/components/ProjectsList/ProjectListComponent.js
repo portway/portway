@@ -1,75 +1,64 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import moment from 'moment'
 
-import { ProjectIcon } from 'Components/Icons'
-import { PATH_PROJECT_CREATE } from 'Shared/constants'
-import useClickOutside from 'Hooks/useClickOutside'
-import ProjectsListItem from './ProjectsListItem'
+import Table from 'Components/Table/Table'
+import ProjectLink from './ProjectLink'
+import ProjectTeam from './ProjectTeam'
+import ProjectActions from './ProjectActions'
+
 import './_ProjectList.scss'
+import './_SpecialProject.scss'
 
-function ProjectsListComponent({ deleteHandler, history, loading, projects }) {
-  const [activeProjectId, setActiveProjectId] = useState(null)
-
-  const nodeRef = useRef()
-  const collapseCallback = useCallback(() => {
-    setActiveProjectId(null)
-  }, [])
-  useClickOutside(nodeRef, collapseCallback)
-
-  function projectToggleHandler(projectId) {
-    if (projectId === null) {
-      setActiveProjectId(null)
-      return false
-    }
-    setActiveProjectId(projectId)
+function ProjectsListComponent({ deleteHandler, projects, specialProject, showTeams }) {
+  function handleDelete(projectId) {
+    deleteHandler(projectId)
   }
 
-  const projectList = Object.keys(projects).map((projectId) => {
-    return <ProjectsListItem
-      activeProjectId={activeProjectId}
-      animate={true}
-      callback={projectToggleHandler}
-      history={history}
-      key={projectId}
-      projectId={projectId}
-      project={projects[projectId]}
-      handleDelete={(e) => {
-        e.preventDefault()
-        deleteHandler(projectId)
-      }} />
-  })
+  const tableHeadings = {
+    project: { label: 'Project', sortable: true },
+    team: { label: showTeams ? 'Team' : '' },
+    updatedAt: { label: 'Last modified', sortable: true },
+    tools: { label: '' }
+  }
 
-  if (!loading && projectList.length === 0) {
-    const colorSurface = getComputedStyle(document.documentElement).getPropertyValue('--theme-surface')
-    return (
-      <div className="project-list__empty-state">
-        <div className="notice">
-          <div className="notice__icon">
-            <ProjectIcon fill={colorSurface} width="32" height="32" />
-          </div>
-          <h2 className="notice__header">Create your first project</h2>
-          <p>Let’s get you going! Create a project and start adding or importing documents</p>
-          <Link to={PATH_PROJECT_CREATE} className="btn">Get started</Link>
-        </div>
-      </div>
-    )
+  const tableRows = {}
+
+  // Special project should always be first
+  if (specialProject) {
+    tableRows[0] = [
+      <ProjectLink key={`p-${specialProject.id}`} project={specialProject} special />,
+      <ProjectTeam key={`pt-${specialProject.id}`} projectId={specialProject.id} show={specialProject.accessLevel == null} />,
+      <span key={`pu-${specialProject.id}`} className="project-list__updated-at">{moment(specialProject.updatedAt).fromNow()}</span>,
+      <ProjectActions key={`pa-${specialProject.id}`} handleDelete={() => handleDelete(specialProject.id)} projectId={specialProject.id} />
+    ]
+  }
+
+  for (let i = 0; i < Object.values(projects).length; i++) {
+    const project = Object.values(projects)[i]
+    const privateProject = project.accessLevel == null
+    const projectId = Number(project.id)
+    tableRows[i + 1] = [
+      <ProjectLink key={`p-${projectId}`} project={project} />,
+      <ProjectTeam key={`pt-${projectId}`} projectId={projectId} show={privateProject} />,
+      <span key={`pu-${projectId}`} className="project-list__updated-at">{moment(project.updatedAt).fromNow()}</span>,
+      <ProjectActions key={`pa-${projectId}`} handleDelete={() => handleDelete(projectId)} projectId={projectId} />
+    ]
   }
 
   return (
-    <ol className="project-list" ref={nodeRef}>{projectList}</ol>
+    <Table
+      className="project-list"
+      headings={tableHeadings}
+      rows={tableRows} />
   )
 }
 
 ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
-  history: PropTypes.object,
-  loading: PropTypes.bool,
-  projects: PropTypes.object.isRequired
-}
-
-ProjectsListComponent.defaultProps = {
-  loading: true,
+  projects: PropTypes.object.isRequired,
+  specialProject: PropTypes.object,
+  showTeams: PropTypes.bool.isRequired,
 }
 
 export default ProjectsListComponent
