@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 import { AddIcon } from 'Components/Icons'
-import Constants from 'Shared/constants'
+import {
+  ORGANIZATION_ROLE_IDS,
+  ORGANIZATION_SETTINGS,
+  PATH_PROJECT_CREATE,
+  PRODUCT_NAME,
+  TITLE_PROJECTS
+} from 'Shared/constants'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import ProjectsListContainer from 'Components/ProjectsList/ProjectsListContainer'
 import OrgPermission from 'Components/Permission/OrgPermission'
-
-const { ORGANIZATION_ROLE_IDS, ORGANIZATION_SETTINGS, PATH_PROJECT_CREATE } = Constants
 
 const ProjectsContainer = () => {
   const history = useHistory()
@@ -26,17 +31,22 @@ const ProjectsContainer = () => {
     title: 'New Project'
   }
   return (
-    <main>
-      <OrgPermission
-        acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-        acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}
-        elseRender={(
-          <ToolbarComponent action={{}} />
-        )}>
-        <ToolbarComponent action={toolbarAction} />
-      </OrgPermission>
-      <ProjectsListContainer />
-    </main>
+    <>
+      <Helmet>
+        <title>{TITLE_PROJECTS} –– {PRODUCT_NAME}</title>
+      </Helmet>
+      <main>
+        <OrgPermission
+          acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+          acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}
+          elseRender={(
+            <ToolbarComponent action={{}} />
+          )}>
+          <ToolbarComponent action={toolbarAction} />
+        </OrgPermission>
+        <ProjectsListContainer />
+      </main>
+    </>
   )
 }
 

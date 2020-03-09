@@ -12,7 +12,8 @@ import {
   PATH_PROJECTS,
   PATH_PROJECT_CREATE,
   PRODUCT_NAME,
-  PROJECT_ROLE_IDS
+  PROJECT_ROLE_IDS,
+  TITLE_PROJECTS
 } from 'Shared/constants'
 
 import useDataService from 'Hooks/useDataService'
@@ -112,7 +113,7 @@ const NavigatorContainer = ({ history, location }) => {
   return (
     <>
       <Helmet>
-        <title>{project ? project.name : 'My Projects'} –– {PRODUCT_NAME}</title>
+        <title>{project ? project.name : TITLE_PROJECTS} –– {PRODUCT_NAME}</title>
       </Helmet>
       <PopperGroup anchorRef={nodeRef} className="navigator">
         <button
