@@ -9,6 +9,8 @@ import util from 'util'
 import ono from 'ono'
 import axios from 'axios'
 import { lookup } from 'mime-types'
+import logger from '../integrators/logger'
+import { LOG_LEVELS } from '../constants/logging'
 
 const stat = util.promisify(fs.stat)
 
@@ -43,7 +45,11 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
   }
 
   const result = await fieldCoordinator.addFieldToDocument(documentId, body, file)
-  fs.unlink(filePath, () => {}) // don't need to await
+  try {
+    fs.unlink(filePath, () => {}) // don't need to await
+  } catch(e) {
+    logger(LOG_LEVELS.ERROR, e)
+  }
   return result
 }
 
