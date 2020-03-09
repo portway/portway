@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
 
@@ -9,12 +9,25 @@ import OrgPermission from 'Components/Permission/OrgPermission'
 import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DashboardProjectsEmptyState from './DashboardProjectsEmptyState'
 import ProjectListComponent from 'Components/ProjectsList/ProjectListComponent'
+import { currentUserId } from 'Libs/currentIds'
 
 import './_Dashboard.scss'
 
 const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, showTeams }) => {
+  const [showMyProjects, toggleMyProjects] = useState(false)
   const history = useHistory()
-  const hasProjects = Object.keys(projects).length > 0
+  const objectKeys = Object.keys(projects)
+  const hasProjects = objectKeys.length > 0
+  const { myProjects, notMyProjects } = objectKeys.reduce((cur, key) => {
+    if (projects[key].createdBy === currentUserId) {
+      cur.myProjects[key] = projects[key]
+    } else {
+      cur.notMyProjects[key] = projects[key]
+    }
+    return cur
+  }, { myProjects: {}, notMyProjects: {} })
+
+  console.log(myProjects, notMyProjects)
 
   const toolbarAction = {
     callback: () => {
@@ -41,7 +54,7 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, 
           <ProjectListComponent
             history={history}
             deleteHandler={deleteHandler}
-            projects={projects}
+            projects={showMyProjects ? myProjects : projects}
             showTeams={showTeams}
             specialProject={specialProject}
           />
