@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -31,6 +31,7 @@ const DocumentFieldsContainer = ({
   updateField,
   fetchDocument
 }) => {
+  const listenersAttached = useRef(false)
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
@@ -42,14 +43,17 @@ const DocumentFieldsContainer = ({
   const activeUsers = socketState.activeDocumentUsers[documentId]
 
   useEffect(() => {
-    documentSocket.on('userFocusChange', (userId, fieldId) => {
-      socketDispatch(updateUserFieldFocus(userId, fieldId))
-    })
-    documentSocket.on('userFieldChange', (userId, fieldId) => {
-      if (userId !== currentUserId.toString()) {
-        fetchDocument(documentId)
-      }
-    })
+    if (!listenersAttached.current) {
+      documentSocket.on('userFocusChange', (userId, fieldId) => {
+        socketDispatch(updateUserFieldFocus(userId, fieldId))
+      })
+      documentSocket.on('userFieldChange', (userId, fieldId) => {
+        if (userId !== currentUserId.toString()) {
+          fetchDocument(documentId)
+        }
+      })
+      listenersAttached.current = true
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
 
