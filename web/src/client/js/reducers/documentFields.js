@@ -30,7 +30,8 @@ export const documentFields = (state = initialState, action) => {
         return object
       }, {})
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: documentFieldsObject }
-      return { ...state, documentFieldsById, loading: { ...state.loading, byDocument } }
+      const lastCreatedFieldId = initialState.lastCreatedFieldId
+      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byDocument } }
     }
     case ActionTypes.RECEIVE_CREATED_FIELD: {
       const { id, documentId } = action.data
@@ -46,8 +47,10 @@ export const documentFields = (state = initialState, action) => {
       const { documentId, fieldId } = action
       const byId = { ...state.loading.byId, [fieldId]: true }
       const byDocument = { ...state.loading.byDocument, [documentId]: true }
+      const lastCreatedFieldId = initialState.lastCreatedFieldId
       return {
         ...state,
+        lastCreatedFieldId,
         loading: {
           ...state.loading,
           byDocument,
@@ -81,6 +84,7 @@ export const documentFields = (state = initialState, action) => {
       const documentFields = { ...state.documentFieldsById[documentId] }
       const { [fieldId]: fieldToUpdate, ...remainingFields } = documentFields
       const oldOrder = fieldToUpdate.order
+      const lastCreatedFieldId = initialState.lastCreatedFieldId
 
       // No change, early return
       if (oldOrder === newOrder) return { ...state }
@@ -113,6 +117,7 @@ export const documentFields = (state = initialState, action) => {
 
       return {
         ...state,
+        lastCreatedFieldId,
         documentFieldsById: {
           ...state.documentFieldsById,
           [documentId]: updatedFields
@@ -147,7 +152,8 @@ export const documentFields = (state = initialState, action) => {
       focused.id = fieldId
       focused.type = fieldType
       focused.data = fieldData
-      return { ...state, focused }
+      const lastCreatedFieldId = initialState.lastCreatedFieldId
+      return { ...state, lastCreatedFieldId, focused }
     }
     default:
       return state
