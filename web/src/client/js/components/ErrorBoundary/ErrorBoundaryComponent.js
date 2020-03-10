@@ -21,14 +21,6 @@ class ErrorBoundary extends React.Component {
     // logErrorToMyService(error, info)
   }
 
-  returnHandler() {
-    this.setState({
-      hasError: false
-    }, () => {
-      this.props.history.goBack()
-    })
-  }
-
   render() {
     if (this.context.networkStatus === NETWORK_STATUS.OFFLINE && this.state.hasError) {
       return (
@@ -36,10 +28,8 @@ class ErrorBoundary extends React.Component {
           <section>
             <h1>You’re offline</h1>
             <p>
-              It looks like there’s a problem with your internet connection. We couldn’t load this
-              section for you, but you can return to your work and save whatever you can for later.
+              It looks like there’s a problem with your internet connection.
             </p>
-            <button onClick={this.returnHandler.bind(this)}>Return to the previous screen</button>
           </section>
         </main>
       )
