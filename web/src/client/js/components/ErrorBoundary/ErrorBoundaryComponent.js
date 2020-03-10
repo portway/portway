@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
 
 import { SUPPORT_EMAIL, SUPPORT_LINK, NETWORK_STATUS } from 'Shared/constants'
 import ApplicationContext from '../../contexts/ApplicationContext'
@@ -51,7 +50,6 @@ ErrorBoundary.contextType = ApplicationContext
 
 ErrorBoundary.propTypes = {
   children: PropTypes.node,
-  history: PropTypes.object,
 }
 
-export default withRouter(ErrorBoundary)
+export default ErrorBoundary
