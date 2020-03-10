@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom'
 
 import { ORGANIZATION_ROLE_IDS, ORGANIZATION_SETTINGS, PATH_PROJECT_CREATE } from 'Shared/constants'
 import { AddIcon } from 'Components/Icons'
+import { currentUserId } from 'Libs/currentIds'
 
 import OrgPermission from 'Components/Permission/OrgPermission'
-import ToolbarComponent from 'Components/Toolbar/ToolbarComponent'
 import DashboardProjectsEmptyState from './DashboardProjectsEmptyState'
 import ProjectListComponent from 'Components/ProjectsList/ProjectListComponent'
-import { currentUserId } from 'Libs/currentIds'
+import { ToggleButton } from 'Components/Buttons'
 
 import './_Dashboard.scss'
 
@@ -26,38 +26,52 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, 
     }
     return cur
   }, { myProjects: {}, notMyProjects: {} })
-
-  console.log(myProjects, notMyProjects)
-
-  const toolbarAction = {
-    callback: () => {
-      history.push({ pathname: PATH_PROJECT_CREATE })
-    },
-    label: `New Project`,
-    icon: <AddIcon width="12" height="12" />,
-    title: 'New Project'
-  }
+  const notMyProjectsLength = Object.keys(notMyProjects).length
 
   return (
     <div className="dashboard">
       <div className="dashboard__projects">
         <h3>Projects</h3>
-        <OrgPermission
-          acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-          acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}
-          elseRender={(
-            <ToolbarComponent action={{}} />
-          )}>
-          <ToolbarComponent action={toolbarAction} />
-        </OrgPermission>
-        {!loading && (hasProjects || specialProject) &&
-          <ProjectListComponent
-            history={history}
-            deleteHandler={deleteHandler}
-            projects={showMyProjects ? myProjects : projects}
-            showTeams={showTeams}
-            specialProject={specialProject}
+        <div className="dashboard__toolbar">
+          <OrgPermission
+            acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+            acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
+            <button
+              aria-label="Create a new project"
+              className="btn btn--blank btn--with-circular-icon"
+              onClick={() => history.push({ pathname: PATH_PROJECT_CREATE })}
+            >
+              <AddIcon width="12" height="12" />
+              <span className="label">New project</span>
+            </button>
+          </OrgPermission>
+          <ToggleButton
+            checked={showMyProjects}
+            label="Filter projects"
+            onClick={(checked) => { toggleMyProjects(checked) }}
+            options={['All', 'Mine only']}
           />
+        </div>
+        {!loading && (hasProjects || specialProject) &&
+          <>
+            <ProjectListComponent
+              history={history}
+              deleteHandler={deleteHandler}
+              projects={showMyProjects ? myProjects : projects}
+              showTeams={showTeams}
+              specialProject={specialProject}
+            />
+            {showMyProjects && notMyProjectsLength > 0 &&
+            <div className="dashboard__footer">
+              <button
+                className="btn btn--like-a-link"
+                onClick={() => { toggleMyProjects(false) }}
+              >
+                Hiding {notMyProjectsLength} {notMyProjectsLength > 1 ? 'projects' : 'project'}...
+              </button>
+            </div>
+            }
+          </>
         }
         {!loading && !hasProjects && !specialProject &&
           <DashboardProjectsEmptyState />

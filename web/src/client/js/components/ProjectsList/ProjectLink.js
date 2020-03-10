@@ -21,7 +21,7 @@ const ProjectLink = ({ project, special }) => {
     if (special) {
       return 'var(--color-brand)'
     }
-    return !privateProject ? 'var(--color-gray-30)' : 'var(--theme-icon-color)'
+    return !privateProject ? 'var(--color-gray-30)' : 'var(--color-blue)'
   }
 
   return (
