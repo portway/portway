@@ -43,16 +43,22 @@ const DocumentFieldsContainer = ({
   const activeUsers = socketState.activeDocumentUsers[documentId]
 
   useEffect(() => {
+    function userFocusChange(userId, fieldId) {
+      socketDispatch(updateUserFieldFocus(userId, fieldId))
+    }
+    function userFieldChange(userId, fieldId) {
+      if (userId !== currentUserId.toString()) {
+        fetchDocument(documentId)
+      }
+    }
     if (!listenersAttached.current) {
-      documentSocket.on('userFocusChange', (userId, fieldId) => {
-        socketDispatch(updateUserFieldFocus(userId, fieldId))
-      })
-      documentSocket.on('userFieldChange', (userId, fieldId) => {
-        if (userId !== currentUserId.toString()) {
-          fetchDocument(documentId)
-        }
-      })
+      documentSocket.on('userFocusChange', userFocusChange)
+      documentSocket.on('userFieldChange', userFieldChange)
       listenersAttached.current = true
+    }
+    return () => {
+      documentSocket.off('userFocusChange', userFocusChange)
+      documentSocket.off('userFieldChange', userFieldChange)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
