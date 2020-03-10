@@ -18,6 +18,7 @@ window.CodeMirror = CodeMirror
 const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly }) => {
   const textRef = useRef()
   const editorRef = useRef()
+  const isEditingRef = useRef(false)
   // Mount the SimpleMDE Editor
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
@@ -61,7 +62,13 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorDomEl.addEventListener('click', clickURLHandler)
       // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
-      editorRef.current.on('blur', (cm, e) => { onBlur(field.id, field.type, editorRef.current) })
+      editorRef.current.on('blur', (cm, e) => {
+        onBlur(field.id, field.type, editorRef.current)
+        isEditingRef.current = false
+        if (e.origin !== 'setValue') {
+          onChange(field.id, editorRef.current.getValue())
+        }
+      })
       editorRef.current.on('change', (cm, e) => {
         if (e.origin !== 'setValue') {
           onChange(field.id, editorRef.current.getValue())
@@ -71,7 +78,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragenter', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
-      editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current) })
+      editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current); isEditingRef.current = true })
       if (autoFocusElement) {
         window.requestAnimationFrame(() => {
           editorRef.current.focus()
@@ -86,7 +93,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   useEffect(() => {
     // If we have an editor, and we have a field value, and the field value is different from
     // the editors current value, then we got an update from the socket, so update the text
-    if (editorRef.current && field.value && field.value !== editorRef.current.getValue()) {
+    if (!isEditingRef.current && editorRef.current && field.value && field.value !== editorRef.current.getValue()) {
       editorRef.current.getDoc().setValue(field.value)
       editorRef.current.refresh()
     }
