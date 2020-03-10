@@ -17,29 +17,27 @@ import './_ProjectToolbar.scss'
 
 const ProjectToolbarComponent = ({ projectId }) => {
   return (
-    <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
-      <footer className="project-toolbar">
-        <>
-          <OrgPermission
-            acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
-            acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
-            <Link
-              className="btn btn--blank btn--with-circular-icon"
-              title="Create a new project"
-              to={PATH_PROJECT_CREATE}>
-              <AddIcon />
-              <span className="label">New Project</span>
-            </Link>
-          </OrgPermission>
-          <NavLink to={`${PATH_PROJECT}/${projectId}/settings`}
-            className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
-            title="Adjust this project's settings">
-            <SettingsIcon />
-            <span className="label">Project Settings</span>
-          </NavLink>
-        </>
-      </footer>
-    </ProjectPermission>
+    <footer className="project-toolbar">
+      <OrgPermission
+        acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
+        acceptedSettings={[ORGANIZATION_SETTINGS.ALLOW_USER_PROJECT_CREATION]}>
+        <Link
+          className="btn btn--blank btn--with-circular-icon"
+          title="Create a new project"
+          to={PATH_PROJECT_CREATE}>
+          <AddIcon />
+          <span className="label">New Project</span>
+        </Link>
+      </OrgPermission>
+      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+        <NavLink to={`${PATH_PROJECT}/${projectId}/settings`}
+          className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
+          title="Adjust this project's settings">
+          <SettingsIcon />
+          <span className="label">Project Settings</span>
+        </NavLink>
+      </ProjectPermission>
+    </footer>
   )
 }
 
