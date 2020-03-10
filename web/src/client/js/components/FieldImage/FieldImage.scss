@@ -17,7 +17,9 @@
   &-container {
     position: relative;
     .document-field--settings-mode & {
+      display: flex;
       max-height: 400px;
+      min-height: 250px;
       overflow: hidden;
     }
   }
