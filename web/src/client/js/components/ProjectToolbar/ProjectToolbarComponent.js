@@ -17,7 +17,7 @@ import './_ProjectToolbar.scss'
 
 const ProjectToolbarComponent = ({ projectId }) => {
   return (
-    <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+    <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
       <footer className="project-toolbar">
         <>
           <OrgPermission
