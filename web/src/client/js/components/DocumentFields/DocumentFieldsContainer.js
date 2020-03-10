@@ -30,7 +30,6 @@ const DocumentFieldsContainer = ({
   updateField,
   fetchDocument
 }) => {
-  // const listenersAttached = useRef(false)
   const { projectId, documentId } = useParams()
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
