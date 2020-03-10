@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -8,6 +8,10 @@ import { uiToggleDocumentMode, uiToggleFullScreen } from 'Actions/ui'
 import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
+import useDocumentSocket from 'Hooks/useDocumentSocket'
+import { updateUserFieldFocus } from '../../sockets/SocketProvider'
+import { currentUserId } from 'Libs/currentIds'
+import { fetchDocument } from 'Actions/document'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
@@ -20,6 +24,7 @@ const defaultDocument = {
 const DocumentContainer = ({
   createMode,
   documentMode,
+  fetchDocument,
   isFullScreen,
   location,
   match,
@@ -35,6 +40,26 @@ const DocumentContainer = ({
   ])
 
   let currentDocument = document
+  const currentDocumentId = document && currentDocument.id
+  // =============================== Web Socket events ====================================
+
+  const { dispatch: socketDispatch, documentSocket } = useDocumentSocket()
+
+  useEffect(() => {
+    if (currentDocumentId) {
+      documentSocket.on('userFocusChange', (userId, fieldId) => {
+        socketDispatch(updateUserFieldFocus(userId, fieldId))
+      })
+      documentSocket.on('userFieldChange', (userId, fieldId) => {
+        if (userId !== currentUserId.toString()) {
+          fetchDocument(currentDocumentId)
+        }
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentDocumentId])
+
+  // =======================================================================================
 
   /**
    * If we're creating a document, render nothing
@@ -120,6 +145,7 @@ const DocumentContainer = ({
 DocumentContainer.propTypes = {
   createMode: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
+  fetchDocument: PropTypes.func.isRequired,
   fields: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
@@ -139,6 +165,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
+  fetchDocument,
   updateDocument,
   uiToggleDocumentMode,
   uiToggleFullScreen,
