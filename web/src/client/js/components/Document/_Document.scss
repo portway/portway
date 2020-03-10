@@ -128,6 +128,12 @@
 
   }
 
+  &__users-list {
+    &--without-settings {
+      padding: 0 1.8rem;
+    }
+  }
+
   &__fields {
     flex: 1;
     overflow-y: auto;

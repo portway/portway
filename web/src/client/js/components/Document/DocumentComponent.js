@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
+import cx from 'classnames'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -66,6 +67,11 @@ const DocumentComponent = ({
     documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
   }
 
+  const documentUsersClasses = cx({
+    'document__users-list': true,
+    'document__users-list--without-settings': documentReadOnlyMode
+  })
+
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
   })
@@ -121,7 +127,9 @@ const DocumentComponent = ({
             ref={titleRef} />
         </div>
         <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-          <DocumentUsersContainer />
+          <div className={documentUsersClasses}>
+            <DocumentUsersContainer />
+          </div>
         </OrgPlanPermission>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <div className="document__toggle-container">
