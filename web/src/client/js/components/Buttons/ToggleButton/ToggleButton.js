@@ -1,11 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import cuid from 'cuid'
 
 import './_ToggleButton.scss'
 
 const ToggleButton = ({ checked, label, onClick, options }) => {
-  // const [checked, setChecked] = useState(false)
   const uid = useRef(cuid.slug())
   return (
     <div className="toggle-button">

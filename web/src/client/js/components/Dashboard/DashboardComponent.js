@@ -31,7 +31,6 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, 
   return (
     <div className="dashboard">
       <div className="dashboard__projects">
-        <h3>Projects</h3>
         <div className="dashboard__toolbar">
           <OrgPermission
             acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER, ORGANIZATION_ROLE_IDS.ADMIN]}
