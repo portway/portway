@@ -7,16 +7,15 @@ import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import useDocumentSocket from 'Hooks/useDocumentSocket'
+
 import dataMapper from 'Libs/dataMapper'
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField } from 'Actions/field'
 import { fetchDocument } from 'Actions/document'
 import {
   emitFieldFocus,
-  emitFieldBlur,
-  updateUserFieldFocus
+  emitFieldBlur
 } from '../../sockets/SocketProvider'
-import { currentUserId } from 'Libs/currentIds'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
@@ -36,24 +35,8 @@ const DocumentFieldsContainer = ({
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  // =============================== Web Socket events ====================================
-
-  const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
+  const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const activeUsers = socketState.activeDocumentUsers[documentId]
-
-  useEffect(() => {
-    documentSocket.on('userFocusChange', (userId, fieldId) => {
-      socketDispatch(updateUserFieldFocus(userId, fieldId))
-    })
-    documentSocket.on('userFieldChange', (userId, fieldId) => {
-      if (userId !== currentUserId.toString()) {
-        fetchDocument(documentId)
-      }
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentId])
-
-  // =======================================================================================
 
   // Sort the fields every re-render
   const fieldKeys = Object.keys(fields)

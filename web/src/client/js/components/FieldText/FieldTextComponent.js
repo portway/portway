@@ -62,7 +62,11 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
       editorRef.current.on('blur', (cm, e) => { onBlur(field.id, field.type, editorRef.current) })
-      editorRef.current.on('change', () => { onChange(field.id, editorRef.current.getValue()) })
+      editorRef.current.on('change', (cm, e) => {
+        if (e.origin !== 'setValue') {
+          onChange(field.id, editorRef.current.getValue())
+        }
+      })
       editorRef.current.on('dragstart', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragenter', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
