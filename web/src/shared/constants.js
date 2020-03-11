@@ -147,11 +147,18 @@ const DOCUMENT_MODE = {
   EDIT: 'EDIT',
 }
 
+const NETWORK_STATUS = {
+  OFFLINE: 'offline',
+  ONLINE: 'online',
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Portway',
   PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
+  // Application
+  NETWORK_STATUS: NETWORK_STATUS,
   // Documentation
   URL_WEBSITE: 'https://getportway.com/',
   URL_DOCUMENTATION: 'https://docs.portway.app/',
