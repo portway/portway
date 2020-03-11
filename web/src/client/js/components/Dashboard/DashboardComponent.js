@@ -8,7 +8,7 @@ import { currentUserId } from 'Libs/currentIds'
 
 import OrgPermission from 'Components/Permission/OrgPermission'
 import DashboardProjectsEmptyState from './DashboardProjectsEmptyState'
-import ProjectListComponent from 'Components/ProjectsList/ProjectListComponent'
+import ProjectsListComponent from 'Components/ProjectsList/ProjectsListComponent'
 import { ToggleButton } from 'Components/Buttons'
 
 import './_Dashboard.scss'
@@ -53,9 +53,10 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, 
         </div>
         {!loading && (hasProjects || specialProject) &&
           <>
-            <ProjectListComponent
+            <ProjectsListComponent
               history={history}
               deleteHandler={deleteHandler}
+              myProjectsOnly={showMyProjects}
               projects={showMyProjects ? myProjects : projects}
               showTeams={showTeams}
               specialProject={specialProject}
