@@ -46,6 +46,17 @@ const RegistrationForm = () => {
         }
         {submitting && <SpinnerComponent color={green} />}
       </div>
+      <div className="registration__newsletter">
+        <span className="registration__newsletter-label">We’ll send an occasional product update about new features</span>
+        <div className="field-container">
+          <div className="field field--checkbox">
+            <label htmlFor="mailchimp-subscribe">Sign up for Portway email updates</label>
+            <div className="field__control">
+              <input checked type="checkbox" name="mailchimp" id="mailchimp-subscribe" />
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
   )
 }
