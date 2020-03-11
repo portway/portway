@@ -10,7 +10,13 @@ import ProjectActions from './ProjectActions'
 import './_ProjectList.scss'
 import './_SpecialProject.scss'
 
-function ProjectsListComponent({ deleteHandler, projects, specialProject, showTeams }) {
+function ProjectsListComponent({
+  deleteHandler,
+  myProjectsOnly,
+  projects,
+  specialProject,
+  showTeams
+}) {
   function handleDelete(projectId) {
     deleteHandler(projectId)
   }
@@ -25,7 +31,7 @@ function ProjectsListComponent({ deleteHandler, projects, specialProject, showTe
   const tableRows = {}
 
   // Special project should always be first
-  if (specialProject) {
+  if (specialProject && !myProjectsOnly) {
     tableRows[0] = [
       <ProjectLink key={`p-${specialProject.id}`} project={specialProject} special />,
       <ProjectTeam key={`pt-${specialProject.id}`} projectId={specialProject.id} show={specialProject.accessLevel == null} />,
@@ -56,6 +62,7 @@ function ProjectsListComponent({ deleteHandler, projects, specialProject, showTe
 
 ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
+  myProjectsOnly: PropTypes.bool.isRequired,
   projects: PropTypes.object.isRequired,
   specialProject: PropTypes.object,
   showTeams: PropTypes.bool.isRequired,
