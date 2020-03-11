@@ -40,12 +40,14 @@ const HelpSection = () => {
             </div>
             <aside className="help-section__aside">
               <h2>Documentation</h2>
-              <ul className="list list--blank">
+              <ul className="list list--blank help-section__descriptive-list">
                 <li>
-                  <a href={URL_GUIDES} target="_blank" rel="noopener noreferrer">Guides</a>
+                  <p>Learn what you can do with Portway by perusing our handy guides website.</p>
+                  <a href={URL_GUIDES} className="btn btn--small btn--white" target="_blank" rel="noopener noreferrer">View the Guides</a>
                 </li>
                 <li>
-                  <a href={URL_API_DOCS} target="_blank" rel="noopener noreferrer">API Documentation</a>
+                  <p>Develop your own applications, integrations, or shortcuts using the robust Portway API.</p>
+                  <a href={URL_API_DOCS} className="btn btn--small btn--white" target="_blank" rel="noopener noreferrer">Read the API</a>
                 </li>
               </ul>
               <h2>Helpful links</h2>
