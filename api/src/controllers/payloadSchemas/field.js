@@ -13,7 +13,6 @@ export const rawSchema = {
     ],
     otherwise: Joi.invalid()
   }).allow(null).allow(''),
-  //Joi.alternatives(Joi.string(), Joi.number().strict()).allow(null).allow(''),
   // TODO: probably want a shared json parse validator on structuredValue
   structuredValue: Joi.string().allow(null),
   type: Joi.number().valid(...Object.values(fieldTypes.FIELD_TYPES)).required()
