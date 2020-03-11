@@ -1,5 +1,5 @@
 import ono from 'ono'
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 
 import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import projectCoordinator from '../coordinators/projectCrud'
@@ -36,8 +36,8 @@ const paramSchema = Joi.compile({
 const querySchema = Joi.compile({
   page: Joi.number(),
   perPage: Joi.number(),
-  sortBy: Joi.string().valid(['name', 'createdAt', 'createdBy']),
-  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
+  sortBy: Joi.string().valid('name', 'createdAt', 'createdBy'),
+  sortMethod: Joi.string().valid(SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING)
 })
 
 const projectsController = function(router) {

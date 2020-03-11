@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 
 import { validateParams } from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
