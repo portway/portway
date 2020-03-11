@@ -164,6 +164,8 @@ module.exports = {
   URL_DOCUMENTATION: 'https://docs.portway.app/',
   URL_API_DOCS: 'https://docs.portway.app/api',
   URL_GUIDES: 'https://docs.portway.app/guides',
+  URL_PRIVACY: 'https://getportway.com/privacy',
+  URL_TWITTER: 'https://twitter.com/portwayapp',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',

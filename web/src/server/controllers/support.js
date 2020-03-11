@@ -8,7 +8,11 @@ const SupportController = function(router) {
       `:question: Support :question: \n Email: ${email} \n Name: ${name} \n Company: ${company} \n Subject: ${subject} \n Message: ${message}`
     )
     await addRequest(email, message, company, name, subject)
-    res.redirect('https://getportway.com/support?received=true')
+    if (req.hostname === 'getportway.com' || req.hostname === 'localhost:8080') {
+      res.redirect('https://getportway.com/support?received=true')
+    } else {
+      res.send()
+    }
   })
 }
 

@@ -29,15 +29,9 @@
   }
 
   &__aside {
-
     @include media('>medium') {
       border-left: thin solid var(--theme-border);
       padding: 0 2rem;
-    }
-
-    h2:first-child {
-      line-height: 2.7rem;
-      margin-top: 0;
     }
   }
 

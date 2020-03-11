@@ -1,4 +1,7 @@
-import { Form } from './index'
+import axios from 'axios'
+
+import { NOTIFICATION_TYPES } from 'Shared/constants'
+import { Form, Notifications } from './index'
 
 export const formSubmitAction = (name) => {
   return async (dispatch) => {
@@ -26,3 +29,20 @@ export const formFailedAction = (name) => {
     dispatch(Form.failed(name))
   }
 }
+
+export const standardFormSubmit = (name, body) => {
+  return async (dispatch) => {
+    formSubmitAction(name)
+    console.log(body)
+    axios
+      .post('/squishymuffins', body)
+      .then((response) => {
+        dispatch(formSucceededAction(name))
+      })
+      .catch((error) => {
+        dispatch(formFailedAction(name))
+        dispatch(Notifications.create('Cannot submit form', NOTIFICATION_TYPES.ERROR, 'form', error.status))
+      })
+  }
+}
+

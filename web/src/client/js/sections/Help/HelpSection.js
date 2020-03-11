@@ -1,8 +1,15 @@
 import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 
-import { URL_API_DOCS, PRODUCT_NAME, FEEDBACK_EMAIL } from 'Shared/constants'
+import {
+  URL_API_DOCS,
+  URL_GUIDES,
+  URL_PRIVACY,
+  URL_TWITTER,
+  PRODUCT_NAME,
+} from 'Shared/constants'
 
+import HelpForm from './HelpForm'
 import './_Help.scss'
 
 const HelpSection = () => {
@@ -13,8 +20,6 @@ const HelpSection = () => {
     }
   }, [])
 
-  const feedbackEmail = `mailto:${FEEDBACK_EMAIL}`
-
   return (
     <>
       <Helmet>
@@ -22,59 +27,34 @@ const HelpSection = () => {
       </Helmet>
       <main className="help-section">
         <article className="section">
-          <header className="header">
-            <h1>Help</h1>
-            <span className="pill pill--blue">Preview</span>
-          </header>
           <div className="help-section__grid">
             <div className="help-section__content">
+              <h2>Contact us</h2>
               <p>
-                Thanks for trying out Portway. We hope you enjoy kicking the tires on our new app.
-                If you have anything you’d like to share, please{' '}
-                <a target="_blank" rel="noopener noreferrer" href={feedbackEmail}>
-                  contact us
-                </a>{' '}
-                . We’d love to hear your thoughts.
+                Have a feature request or having a problem? Let us know, and we will try our hardest
+                to get back to you within a day. Don’t worry, we don’t do anything creepy with your
+                information. If you’d like to know more about that, read our{' '}
+                <a href={URL_PRIVACY} target="_blank" rel="noopener noreferrer">privacy policy</a>.
               </p>
-              <h2>What is Portway?</h2>
-              <p>
-                Note apps. They’re simple, quick, and for the more organized amongst us,
-                satisfying to categorize. But what do notes look like if you stick an API behind
-                them? What about a sprinkling of content management? (We promise, just a
-                sprinkling!)
-              </p>
-              <p>
-                We think it looks like Portway. The beauty and simplicity of notes with the power
-                of the connected web.
-              </p>
-
-              <h2>Your free Team plan</h2>
-              <p>
-                We’ve given you a free Team plan. Invite your friends and coworkers, create some
-                projects, and unleash them wherever you choose via the Portway API. Or use it as a
-                private space to organize your team’s thoughts and documents. Or do both!
-                We’ll leave that up to you.
-              </p>
-
-              <p>
-                We’ll continue to push regular updates, so be on the lookout for new features. In
-                the meantime,{' '}
-                <a rel="noopener noreferrer" target="_blank" href={feedbackEmail}>
-                  let us know what you think!
-                </a>
-              </p>
-
-              <p className="section">
-                <b>Thanks again!</b>
-                <br />
-                Your friends at BonkeyBong ❤️
-              </p>
+              <HelpForm />
             </div>
             <aside className="help-section__aside">
+              <h2>Documentation</h2>
+              <ul className="list list--blank">
+                <li>
+                  <a href={URL_GUIDES} target="_blank" rel="noopener noreferrer">Guides</a>
+                </li>
+                <li>
+                  <a href={URL_API_DOCS} target="_blank" rel="noopener noreferrer">API Documentation</a>
+                </li>
+              </ul>
               <h2>Helpful links</h2>
               <ul className="list list--blank">
                 <li>
-                  <a href={URL_API_DOCS}>Portway API Docs</a>
+                  <a href={URL_TWITTER} target="_blank" rel="noopener noreferrer">@portwayapp on Twitter</a>
+                </li>
+                <li>
+                  <a href={URL_PRIVACY} target="_blank" rel="noopener noreferrer">Your privacy</a>
                 </li>
               </ul>
             </aside>
