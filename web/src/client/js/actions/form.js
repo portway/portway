@@ -33,7 +33,6 @@ export const formFailedAction = (name) => {
 export const standardFormSubmit = (name, body) => {
   return async (dispatch) => {
     formSubmitAction(name)
-    console.log(body)
     axios
       .post('/squishymuffins', body)
       .then((response) => {
