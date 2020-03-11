@@ -32,7 +32,7 @@ import OrgPermission from 'Components/Permission/OrgPermission'
 import './_Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
-  const { data: projects } = useDataService(dataMapper.projects.list())
+  const { data: { projects } } = useDataService(dataMapper.projects.list())
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )

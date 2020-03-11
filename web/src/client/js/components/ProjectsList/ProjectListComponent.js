@@ -10,7 +10,7 @@ import ProjectActions from './ProjectActions'
 import './_ProjectList.scss'
 import './_SpecialProject.scss'
 
-function ProjectsListComponent({ deleteHandler, projects, specialProject, showTeams }) {
+function ProjectsListComponent({ deleteHandler, sortProjectsHandler, projects, specialProject, showTeams, sortBy, sortMethod }) {
   function handleDelete(projectId) {
     deleteHandler(projectId)
   }
@@ -50,12 +50,17 @@ function ProjectsListComponent({ deleteHandler, projects, specialProject, showTe
     <Table
       className="project-list"
       headings={tableHeadings}
-      rows={tableRows} />
+      rows={tableRows}
+      sortCallback={sortProjectsHandler}
+      sortedBy={sortBy}
+      sortMethod={sortMethod}
+    />
   )
 }
 
 ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
+  sortProjectsHandler: PropTypes.func.isRequired,
   projects: PropTypes.object.isRequired,
   specialProject: PropTypes.object,
   showTeams: PropTypes.bool.isRequired,

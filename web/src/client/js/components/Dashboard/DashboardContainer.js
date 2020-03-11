@@ -16,7 +16,7 @@ import DashboardComponent from './DashboardComponent'
 
 const DashboardContainer = ({ organizationData, removeProject, uiConfirm }) => {
   const { data: organization } = useDataService(dataMapper.organizations.current())
-  const { data: projects, loading } = useDataService(dataMapper.projects.list())
+  const { data: { projects }, loading } = useDataService(dataMapper.projects.list())
   const history = useHistory()
 
   const showTeams = MULTI_USER_PLAN_TYPES.includes(organization.plan)

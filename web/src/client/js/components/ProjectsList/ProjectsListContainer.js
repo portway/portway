@@ -1,17 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import * as strings from 'Loc/strings'
 import { uiConfirm } from 'Actions/ui'
-import { removeProject } from 'Actions/project'
+import { removeProject, sortProjects } from 'Actions/project'
 import ProjectsListComponent from './ProjectListComponent'
+import { QUERY_PARAMS } from 'Shared/constants'
 
 const ProjectsListContainer = ({ removeProject, uiConfirm }) => {
-  const { data: projects, loading } = useDataService(dataMapper.projects.list())
+  const { sortBy, sortMethod } = useParams()
+  const page = 1
+
+  const { data: { projects }, loading } = useDataService(dataMapper.projects.list(page, sortBy, sortMethod), [sortBy, sortMethod])
 
   const handleDelete = (projectId) => {
     const message = (
@@ -29,9 +34,29 @@ const ProjectsListContainer = ({ removeProject, uiConfirm }) => {
     uiConfirm({ message, options })
   }
 
+  function sortProjectsHandler(selectedSortProperty) {
+    let newSortMethod
+    if (sortBy === selectedSortProperty && sortMethod === QUERY_PARAMS.ASCENDING) {
+      newSortMethod = QUERY_PARAMS.DESCENDING
+    } else {
+      newSortMethod = QUERY_PARAMS.ASCENDING
+    }
+
+    history.push({
+      search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}`
+    })
+    sortProjects(sortBy, sortMethod)
+  }
+
   return (
     <div className="project-list-container">
-      <ProjectsListComponent projects={projects} deleteHandler={handleDelete} loading={loading} />
+      <ProjectsListComponent
+        projects={projects}
+        deleteHandler={handleDelete}
+        sortProjectsHandler={sortProjectsHandler}
+        loading={loading}
+        sortBy={sortBy}
+        sortMethod={sortMethod}/>
     </div>
   )
 }
