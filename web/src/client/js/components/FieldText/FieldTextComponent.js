@@ -1,6 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
+
+import { currentUserId } from 'Libs/currentIds'
+import useSyncFieldChange from 'Hooks/useSyncFieldChange'
 
 import 'codemirror/addon/display/autorefresh'
 import 'codemirror/addon/edit/continuelist'
@@ -13,12 +16,21 @@ import 'codemirror/mode/clike/clike'
 import './codemirror.css'
 import './FieldText.scss'
 
+
 window.CodeMirror = CodeMirror
 
 const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly }) => {
   const textRef = useRef()
   const editorRef = useRef()
   const isEditingRef = useRef(false)
+  const fieldHasChangedRef = useRef(false)
+  const [forcedRefresh, setForcedRefresh] = useState()
+
+  useSyncFieldChange(field.documentId, (userId, fieldId) => {
+    if (userId !== currentUserId && fieldId === field.id) {
+      fieldHasChangedRef.current = true
+    }
+  })
   // Mount the SimpleMDE Editor
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
@@ -65,7 +77,17 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('blur', (cm, e) => {
         onBlur(field.id, field.type, editorRef.current)
         isEditingRef.current = false
-        if (e.origin !== 'setValue') {
+        // check for updates while current user was editing
+        if (fieldHasChangedRef.current === true) {
+          const accept = window.confirm('Someone else has made changes to this field, do you want to overwrite their changes?')
+          isEditingRef.current = false
+          fieldHasChangedRef.current = false
+          if (accept) {
+            onChange(field.id, editorRef.current.getValue())
+          } else {
+            setForcedRefresh(Date.now())
+          }
+        } else {
           onChange(field.id, editorRef.current.getValue())
         }
       })
@@ -78,7 +100,10 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragenter', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
-      editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current); isEditingRef.current = true })
+      editorRef.current.on('focus', (cm, e) => {
+        onFocus(field.id, field.type, editorRef.current)
+        isEditingRef.current = true
+      })
       if (autoFocusElement) {
         window.requestAnimationFrame(() => {
           editorRef.current.focus()
@@ -90,6 +115,12 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorRef])
 
+  // const setTextValue = useCallback(() => {
+  //   editorRef.current.getDoc().setValue(field.value)
+  //   editorRef.current.refresh()
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [field.value, isEditingRef])
+
   useEffect(() => {
     // If we have an editor, and we have a field value, and the field value is different from
     // the editors current value, then we got an update from the socket, so update the text
@@ -97,7 +128,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.getDoc().setValue(field.value)
       editorRef.current.refresh()
     }
-  }, [field.value])
+  }, [field.value, forcedRefresh])
 
   return (
     <div className="document-field__text">
