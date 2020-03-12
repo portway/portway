@@ -8,11 +8,11 @@ const SupportController = function(router) {
       `:question: Support :question: \n Email: ${email} \n Name: ${name} \n Company: ${company} \n Subject: ${subject} \n Message: ${message}`
     )
     await addRequest(email, message, company, name, subject)
-    if (req.get('origin') === 'https://getportway.com') {
-      res.redirect('https://getportway.com/support?received=true')
-    } else if (req.get('origin') === 'http://localhost:8080') {
-      res.redirect('http://localhost:8080/support?received=true')
+    // If we're getting hit from the external website, do a redirect
+    if (req.get('origin') === process.env.SUPPORT_FORM_SUBMIT_ORIGIN) {
+      res.redirect(process.env.SUPPORT_FORM_REDIRECT_TO)
     } else {
+      // otherwise respond for xhr since we can't stop redirects
       res.send()
     }
   })

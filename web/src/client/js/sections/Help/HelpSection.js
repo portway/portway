@@ -31,10 +31,8 @@ const HelpSection = () => {
             <div className="help-section__content">
               <h2>Contact us</h2>
               <p>
-                Have a feature request or having a problem? Let us know, and we will try our hardest
-                to get back to you within a day. Don’t worry, we don’t do anything creepy with your
-                information. If you’d like to know more about that, read our{' '}
-                <a href={URL_PRIVACY} target="_blank" rel="noopener noreferrer">privacy policy</a>.
+                Have a feature request or having a problem? Let us know, and we will get back to you
+                as soon as we can.
               </p>
               <HelpForm />
             </div>
@@ -47,7 +45,7 @@ const HelpSection = () => {
                 </li>
                 <li>
                   <p>Develop your own applications, integrations, or shortcuts using the robust Portway API.</p>
-                  <a href={URL_API_DOCS} className="btn btn--small btn--white" target="_blank" rel="noopener noreferrer">Read the API</a>
+                  <a href={URL_API_DOCS} className="btn btn--small btn--white" target="_blank" rel="noopener noreferrer">Read the API docs</a>
                 </li>
               </ul>
               <h2>Helpful links</h2>
