@@ -10,7 +10,10 @@ const SupportController = function(router) {
     await addRequest(email, message, company, name, subject)
     // If we're getting hit from the external website, do a redirect
     if (req.get('origin') === process.env.SUPPORT_FORM_SUBMIT_ORIGIN) {
-      res.redirect(process.env.SUPPORT_FORM_REDIRECT_TO)
+      const base = process.env.SUPPORT_FORM_SUBMIT_ORIGIN
+      const path = 'support?received=true'
+      const url = new URL(path, base)
+      res.redirect(url.toString())
     } else {
       // otherwise respond for xhr since we can't stop redirects
       res.send()

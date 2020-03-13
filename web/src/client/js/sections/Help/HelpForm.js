@@ -60,42 +60,42 @@ const HelpForm = () => {
           id="form-request"
           label="Feature request"
           name="subject"
-          value="[Website] Feature request"
+          value="[App] Feature request"
           type="radio"
         />
         <FormField
           label="Pricing"
           id="form-pricing"
           name="subject"
-          value="[Website] Pricing"
+          value="[App] Pricing"
           type="radio"
         />
         <FormField
           label="Bug"
           id="form-bug"
           name="subject"
-          value="[Website] Bug report"
+          value="[App] Bug report"
           type="radio"
         />
         <FormField
           label="Account / billing"
           id="form-account"
           name="subject"
-          value="[Website] Account / billing"
+          value="[App] Account / billing"
           type="radio"
         />
         <FormField
           label="Question"
           id="form-question"
           name="subject"
-          value="[Website] Question"
+          value="[App] Question"
           type="radio"
         />
         <FormField
           label="Other"
           id="form-other"
           name="subject"
-          value="[Website] Other"
+          value="[App] Other"
           type="radio"
         />
       </div>
