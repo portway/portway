@@ -2,6 +2,7 @@ import React, { createContext, useReducer } from 'react'
 import PropTypes from 'prop-types'
 import openSocket from 'socket.io-client'
 import { getCookieValue } from '../utilities/cookieParser'
+import { currentUserId } from 'Libs/currentIds'
 
 const token = getCookieValue('token')
 // sync url is defined by the index.ejs template
@@ -11,6 +12,7 @@ const documentUrl = new URL(`/documents?token=${token}`, SYNC_URL)
 const documentSocket = openSocket(documentUrl.href)
 
 const actionTypes = {
+  'DOCUMENT_ROOM_FIELD_CHANGES_UPDATED': 'DOCUMENT_ROOM_FIELD_CHANGES_UPDATED',
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',
   'EMIT_JOIN_DOCUMENT_ROOM': 'EMIT_JOIN_DOCUMENT_ROOM',
@@ -29,14 +31,6 @@ const actionTypes = {
 }
 
 // ACTIONS
-
-export const updateDocumentRoomUsers = (documentId, userIds) => {
-  return {
-    type: actionTypes.DOCUMENT_ROOM_USERS_RECEIVED,
-    documentId,
-    userIds
-  }
-}
 
 export const emitJoinDocumentRoom = (dispatch, documentId) => {
   if (!documentSocket.connected) {
@@ -81,6 +75,25 @@ export const emitFieldBlur = (dispatch, fieldId, documentId) => {
   }
 }
 
+export const emitFieldChange = (dispatch, fieldId, documentId) => {
+  if (!documentSocket.connected) {
+    return { type: actionTypes.SOCKET_ERROR }
+  }
+  dispatch({ type: actionTypes.EMIT_FIELD_CHANGE, fieldId })
+  documentSocket.emit('fieldChange', fieldId, documentId)
+  return {
+    type: actionTypes.FIELD_CHANGE_EMITTED
+  }
+}
+
+export const updateDocumentRoomUsers = (documentId, userIds) => {
+  return {
+    type: actionTypes.DOCUMENT_ROOM_USERS_RECEIVED,
+    documentId,
+    userIds
+  }
+}
+
 export const updateUserFieldFocus = (userId, fieldId) => {
   return {
     type: actionTypes.USER_FIELD_FOCUS_UPDATED,
@@ -89,14 +102,11 @@ export const updateUserFieldFocus = (userId, fieldId) => {
   }
 }
 
-export const emitFieldChange = (dispatch, fieldId, documentId) => {
-  if (!documentSocket.connected) {
-    return { type: actionTypes.SOCKET_ERROR }
-  }
-  dispatch({ type: actionTypes.EMIT_FIELD_CHANGE, fieldId })
-  documentSocket.emit('fieldChange', fieldId, documentId)
+export const updateDocumentRoomFieldChanges = (userId, fieldId) => {
   return {
-    type: actionTypes.FIELD_BLUR_EMITTED
+    type: actionTypes.DOCUMENT_ROOM_FIELD_CHANGES_UPDATED,
+    userId,
+    fieldId
   }
 }
 
@@ -106,7 +116,8 @@ const initialState = {
   activeDocumentUsers: {},
   currentDocumentRoom: null,
   // focus is stored as { userId : fieldId }
-  currentDocumentUserFieldFocus: {}
+  currentDocumentUserFieldFocus: {},
+  remoteFieldChangesInCurrentlyFocusedField: []
 }
 
 const socketStore = createContext(initialState)
@@ -147,7 +158,23 @@ const SocketProvider = ( { children } ) => {
               [userId]: fieldId
             }
           }
+          // if it's my current user focus, wipe out tracked field changes
+          if (Number(userId) === currentUserId) {
+            newState.remoteFieldChangesInCurrentlyFocusedField = []
+          }
           return newState
+        }
+        return state
+      }
+      case actionTypes.DOCUMENT_ROOM_FIELD_CHANGES_UPDATED: {
+        const { userId, fieldId } = action
+        // for now, we're only logging changes to the currently focused field
+        if (fieldId === state.currentDocumentUserFieldFocus[currentUserId]) {
+          const remoteFieldChangesInCurrentlyFocusedField = [...state.remoteFieldChangesInCurrentlyFocusedField, { userId, fieldId }]
+          return {
+            ...state,
+            remoteFieldChangesInCurrentlyFocusedField
+          }
         }
         return state
       }

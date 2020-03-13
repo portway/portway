@@ -18,6 +18,7 @@ import {
 } from '../../sockets/SocketProvider'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
+import { currentUserId } from 'Libs/currentIds'
 
 const DocumentFieldsContainer = ({
   blurField,
@@ -37,6 +38,8 @@ const DocumentFieldsContainer = ({
 
   const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const activeUsers = socketState.activeDocumentUsers[documentId]
+  const currentlyFocusedFieldId = socketState.currentDocumentUserFieldFocus[currentUserId]
+  const { remoteChangesInCurrentlyFocusedField, currentDocumentUserFieldFocus } = socketState
 
   // Sort the fields every re-render
   const fieldKeys = Object.keys(fields)
@@ -140,6 +143,9 @@ const DocumentFieldsContainer = ({
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}
+      currentDocumentUserFieldFocus={currentDocumentUserFieldFocus}
+      currentlyFocusedFieldId={currentlyFocusedFieldId}
+      remoteChangesInCurrentlyFocusedField={remoteChangesInCurrentlyFocusedField}
     />
   )
 }

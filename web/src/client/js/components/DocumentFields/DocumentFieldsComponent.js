@@ -22,6 +22,9 @@ const DocumentFieldsComponent = ({
   fieldsUpdating,
   isPublishing,
   readOnly,
+  currentDocumentUserFieldFocus,
+  currentlyFocusedFieldId,
+  remoteChangesInCurrentlyFocusedField
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
@@ -46,6 +49,8 @@ const DocumentFieldsComponent = ({
   }
 
   function renderFieldType(field, index) {
+    const isCurrentlyFocusedField = currentlyFocusedFieldId === field.id
+
     let fieldTypeComponent
     switch (field.type) {
       case FIELD_TYPES.TEXT:
@@ -102,6 +107,7 @@ const DocumentFieldsComponent = ({
     }
     if (field) {
       const settingsModeForField = settingsForField === field.id
+
       return (
         <DocumentFieldComponent
           field={field}
@@ -111,10 +117,14 @@ const DocumentFieldsComponent = ({
           key={field.id}
           onBlur={fieldBlurHandler}
           onFocus={fieldFocusHandler}
+          onChange={fieldChangeHandler}
           onRename={fieldRenameHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
+          currentDocumentUserFieldFocus={currentDocumentUserFieldFocus}
+          isCurrentlyFocusedField={isCurrentlyFocusedField}
+          remoteChangesInCurrentlyFocusedField={isCurrentlyFocusedField ? remoteChangesInCurrentlyFocusedField : undefined}
         >
           {fieldTypeComponent}
         </DocumentFieldComponent>
@@ -163,6 +173,9 @@ DocumentFieldsComponent.propTypes = {
   fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  currentDocumentUserFieldFocus: PropTypes.object,
+  currentlyFocusedFieldId: PropTypes.number,
+  remoteChangesInCurrentlyFocusedField: PropTypes.array
 }
 
 export default DocumentFieldsComponent

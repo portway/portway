@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
 
-import { currentUserId } from 'Libs/currentIds'
-import useSyncFieldChange from 'Hooks/useSyncFieldChange'
-
 import 'codemirror/addon/display/autorefresh'
 import 'codemirror/addon/edit/continuelist'
 import 'codemirror/mode/gfm/gfm'
@@ -19,20 +16,9 @@ import './FieldText.scss'
 
 window.CodeMirror = CodeMirror
 
-const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly }) => {
+const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly, handleFieldBodyUpdate, fieldBody, isCurrentlyFocusedField }) => {
   const textRef = useRef()
   const editorRef = useRef()
-  const hasFocusRef = useRef(false)
-  const hasLocalChangeSinceFocusRef = useRef(false)
-  const hasRemoteChangeSinceFocusRef = useRef(false)
-  const [forcedRefresh, setForcedRefresh] = useState()
-
-  useSyncFieldChange(field.documentId, (userId, fieldId) => {
-    // A remote change came through, make sure it's from another user and applicable to this field and update Ref
-    if (userId !== currentUserId && fieldId === field.id && hasFocusRef.current) {
-      hasRemoteChangeSinceFocusRef.current = true
-    }
-  })
 
   // Mount the SimpleMDE Editor
   useEffect(() => {
@@ -78,38 +64,36 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
 
-      editorRef.current.on('blur', (cm, e) => {
-        console.log('has local change', hasLocalChangeSinceFocusRef)
-        console.log('has remote change', hasRemoteChangeSinceFocusRef)
-        onBlur(field.id, field.type, editorRef.current)
-        // Remote and local changes, ask the user if they want to overwrite
-        if (hasRemoteChangeSinceFocusRef.current && hasLocalChangeSinceFocusRef.current) {
-          const accept = window.confirm('Someone else has made changes to this field, do you want to overwrite their changes?')       
-          if (accept) {
-            onChange(field.id, editorRef.current.getValue())
-          } else {
-            setForcedRefresh(Date.now())
-          }
-        // No remote changes, just local ones, update via api
-        } else if (hasLocalChangeSinceFocusRef.current) {
-          onChange(field.id, editorRef.current.getValue())
-        // Just remote changes, nothing changed locally, refresh to get remote changes
-        } else if (!hasLocalChangeSinceFocusRef.current && hasRemoteChangeSinceFocusRef.current) {
-          setForcedRefresh(Date.now())
-        }
-        // Set all these Ref values regardless of whether there were changes
-        hasFocusRef.current = false
-        hasLocalChangeSinceFocusRef.current = false
-        hasRemoteChangeSinceFocusRef.current = false
-      })
+      // editorRef.current.on('blur', (cm, e) => {
+      //   console.log('has local change', hasLocalChangeSinceFocusRef)
+      //   console.log('has remote change', hasRemoteChangeSinceFocusRef)
+      //   onBlur(field.id, field.type, editorRef.current)
+      //   // Remote and local changes, ask the user if they want to overwrite
+      //   if (hasRemoteChangeSinceFocusRef.current && hasLocalChangeSinceFocusRef.current) {
+      //     const accept = window.confirm('Someone else has made changes to this field, do you want to overwrite their changes?')       
+      //     if (accept) {
+      //       onChange(field.id, editorRef.current.getValue())
+      //     } else {
+      //       setForcedRefresh(Date.now())
+      //     }
+      //   // No remote changes, just local ones, update via api
+      //   } else if (hasLocalChangeSinceFocusRef.current) {
+      //     onChange(field.id, editorRef.current.getValue())
+      //   // Just remote changes, nothing changed locally, refresh to get remote changes
+      //   } else if (!hasLocalChangeSinceFocusRef.current && hasRemoteChangeSinceFocusRef.current) {
+      //     setForcedRefresh(Date.now())
+      //   }
+      //   // Set all these Ref values regardless of whether there were changes
+      //   hasFocusRef.current = false
+      //   hasLocalChangeSinceFocusRef.current = false
+      //   hasRemoteChangeSinceFocusRef.current = false
+      // })
 
       editorRef.current.on('change', (cm, e) => {
-        // If there are remote changes, only update via API on blur, not here
-        if (e.origin !== 'setValue' && !hasRemoteChangeSinceFocusRef.current) {
-          onChange(field.id, editorRef.current.getValue())
-          if (hasFocusRef.current) {
-            hasLocalChangeSinceFocusRef.current = true
-          }
+        console.log(e.origin)
+        // only update via API when changes are local, not when triggered by remote changes
+        if (e.origin !== 'setValue' ) {
+          handleFieldBodyUpdate(editorRef.current.getValue())
         }
       })
       editorRef.current.on('dragstart', (cm, e) => { e.preventDefault() })
@@ -118,9 +102,6 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
       editorRef.current.on('focus', (cm, e) => {
         onFocus(field.id, field.type, editorRef.current)
-        hasFocusRef.current = true
-        hasLocalChangeSinceFocusRef.current = false
-        hasRemoteChangeSinceFocusRef.current = false
       })
       if (autoFocusElement) {
         window.requestAnimationFrame(() => {
@@ -134,10 +115,9 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [editorRef])
 
   useEffect(() => {
-    // We're not focused, we have an editor, and we have a field value, and the field value is different from
-    // the editors current value, then we got an update from the socket, so update the text
+    // we have an editor, and we have a field value, and the field value is different from
+    // the editors current value, this means we have an update from the socket, so update the text
     if (
-      !hasFocusRef.current &&
       editorRef.current &&
       field.value &&
       field.value !== editorRef.current.getValue()
@@ -145,7 +125,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.getDoc().setValue(field.value)
       editorRef.current.refresh()
     }
-  }, [field.value, forcedRefresh])
+  }, [field.value])
 
   return (
     <div className="document-field__text">
@@ -158,9 +138,11 @@ FieldTextComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  handleFieldBodyUpdate: PropTypes.func,
+  fieldBody: PropTypes.string,
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldTextComponent

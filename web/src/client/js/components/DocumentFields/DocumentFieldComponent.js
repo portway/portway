@@ -1,13 +1,13 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
-import useDocumentSocket from '../../hooks/useDocumentSocket'
 import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { currentUserId } from 'Libs/currentIds'
+// import useSyncFieldChange from 'Hooks/useSyncFieldChange'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -21,15 +21,68 @@ const DocumentFieldComponent = ({
   isUpdating,
   onBlur,
   onFocus,
+  onChange,
   onRename,
   readOnly,
   settingsHandler,
   settingsMode,
-  usersById
+  usersById,
+  currentDocumentUserFieldFocus,
+  isCurrentlyFocusedField,
+  remoteChanges
 }) => {
   const nameRef = useRef()
-  const { state: socketState } = useDocumentSocket()
-  const { currentDocumentUserFieldFocus } = socketState
+  const [fieldBody, setFieldBody] = useState(field.value)
+  const hasRemoteChanges = remoteChanges && remoteChanges.length
+
+  function handleFieldBodyUpdate(body) {
+    // remote changes, just update body state and wait for acceptance by user
+    if (hasRemoteChanges) {
+      return setFieldBody(field.id, body)
+    }
+
+    // no remote changes, update via API
+    onChange(field.id, body)
+  }
+
+
+  // console.log(setFieldBody)
+  // console.log
+  // const { currentDocumentUserFieldFocus,  } = socketState
+
+  // useSyncFieldChange(field.documentId, (userId, fieldId) => {
+  //   // A remote change came through, make sure it's from another user and applicable to this field and update Ref
+  //   if (userId !== currentUserId && fieldId === field.id && hasFocusRef.current) {
+  //     hasRemoteChangeSinceFocusRef.current = true
+  //   }
+  // })
+
+  // const onChildFieldBlur = (fieldId, fieldType, editorRef) => {
+  //   console.log('has local change', hasLocalChangeSinceFocusRef)
+  //   console.log('has remote change', hasRemoteChangeSinceFocusRef)
+  //   onBlur(field.id, field.type, editorRef.current)
+  //   // Remote and local changes, ask the user if they want to overwrite
+  //   if (hasRemoteChangeSinceFocusRef.current && hasLocalChangeSinceFocusRef.current) {
+  //     const accept = window.confirm(
+  //       'Someone else has made changes to this field, do you want to overwrite their changes?'
+  //     )
+  //     if (accept) {
+  //       onChange(field.id, editorRef.current.getValue())
+  //     } else {
+  //       setForcedRefresh(Date.now())
+  //     }
+  //     // No remote changes, just local ones, update via api
+  //   } else if (hasLocalChangeSinceFocusRef.current) {
+  //     onChange(field.id, editorRef.current.getValue())
+  //     // Just remote changes, nothing changed locally, refresh to get remote changes
+  //   } else if (!hasLocalChangeSinceFocusRef.current && hasRemoteChangeSinceFocusRef.current) {
+  //     setForcedRefresh(Date.now())
+  //   }
+  //   // Set all these Ref values regardless of whether there were changes
+  //   hasFocusRef.current = false
+  //   hasLocalChangeSinceFocusRef.current = false
+  //   hasRemoteChangeSinceFocusRef.current = false
+  // }
 
   //Relevant usersById should already be fetched by the document users container
 
@@ -110,6 +163,10 @@ const DocumentFieldComponent = ({
           <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
         </div>
 
+        <div>
+          {hasRemoteChanges ? <button onClick={() => { onChange(field.id, fieldBody )} }>save</button> : null}
+        </div>
+
         <div className={fieldContainerClasses}>
 
           {dataField &&
@@ -155,7 +212,7 @@ const DocumentFieldComponent = ({
               }
               </>
             </div>
-            {children}
+            {React.cloneElement(children, { handleFieldBodyUpdate, fieldId: field.id, fieldBody, isCurrentlyFocusedField })}
           </div>
         </div>
 
@@ -174,11 +231,15 @@ DocumentFieldComponent.propTypes = {
   isUpdating: PropTypes.bool,
   onBlur: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
-  usersById: PropTypes.object
+  usersById: PropTypes.object,
+  currentDocumentUserFieldFocus: PropTypes.object,
+  isCurrentlyFocusedField: PropTypes.bool,
+  remoteChanges: PropTypes.array
 }
 
 const mapStateToProps = (state) => {
