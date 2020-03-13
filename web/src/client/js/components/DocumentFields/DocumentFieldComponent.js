@@ -31,6 +31,7 @@ const DocumentFieldComponent = ({
   isCurrentlyFocusedField,
   remoteChanges
 }) => {
+  console.log(remoteChanges)
   const nameRef = useRef()
   const [fieldBody, setFieldBody] = useState(field.value)
   const hasRemoteChanges = remoteChanges && remoteChanges.length

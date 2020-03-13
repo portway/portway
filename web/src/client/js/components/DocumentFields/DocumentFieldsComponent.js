@@ -26,6 +26,7 @@ const DocumentFieldsComponent = ({
   currentlyFocusedFieldId,
   remoteChangesInCurrentlyFocusedField
 }) => {
+  console.log(remoteChangesInCurrentlyFocusedField)
   const [settingsForField, setSettingsForField] = useState(null)
 
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
@@ -124,7 +125,7 @@ const DocumentFieldsComponent = ({
           settingsMode={settingsModeForField}
           remoteUserFieldFocus={remoteUserFieldFocus}
           isCurrentlyFocusedField={isCurrentlyFocusedField}
-          remoteChangesInCurrentlyFocusedField={isCurrentlyFocusedField ? remoteChangesInCurrentlyFocusedField : undefined}
+          remoteChanges={isCurrentlyFocusedField ? remoteChangesInCurrentlyFocusedField : undefined}
         >
           {fieldTypeComponent}
         </DocumentFieldComponent>

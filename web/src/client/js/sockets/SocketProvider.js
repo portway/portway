@@ -2,7 +2,6 @@ import React, { createContext, useReducer } from 'react'
 import PropTypes from 'prop-types'
 import openSocket from 'socket.io-client'
 import { getCookieValue } from '../utilities/cookieParser'
-import { currentUserId } from 'Libs/currentIds'
 
 const token = getCookieValue('token')
 // sync url is defined by the index.ejs template
@@ -128,7 +127,7 @@ const initialState = {
   myFocusedFieldId: null,
   // focus is stored as { userId : fieldId }
   remoteUserFieldFocus: {},
-  remoteFieldChangesInCurrentlyFocusedField: []
+  remoteChangesInCurrentlyFocusedField: []
 }
 
 const socketStore = createContext(initialState)
@@ -159,10 +158,9 @@ const SocketProvider = ( { children } ) => {
         return state
       }
       case actionTypes.MY_FIELD_FOCUS_UPDATED: {
-        console.log(action)
         const { fieldId } = action
         // change my field focus, also wipe out remote changes array to start fresh
-        return { ...state, myFocusedFieldId: fieldId, remoteFieldChangesInCurrentlyFocusedField: [] }
+        return { ...state, myFocusedFieldId: fieldId, remoteChangesInCurrentlyFocusedField: [] }
       }
       case actionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED: {
         const { userId, fieldId } = action
@@ -183,10 +181,10 @@ const SocketProvider = ( { children } ) => {
         const { userId, fieldId } = action
         // for now, we're only logging changes to the currently focused field
         if (fieldId === state.myFocusedFieldId) {
-          const remoteFieldChangesInCurrentlyFocusedField = [...state.remoteFieldChangesInCurrentlyFocusedField, { userId, fieldId }]
+          const remoteChangesInCurrentlyFocusedField = [...state.remoteChangesInCurrentlyFocusedField, { userId, fieldId }]
           return {
             ...state,
-            remoteFieldChangesInCurrentlyFocusedField
+            remoteChangesInCurrentlyFocusedField
           }
         }
         return state
@@ -204,7 +202,6 @@ const SocketProvider = ( { children } ) => {
         // no need to log, that was done when module loaded, move on silently
         return state
       default:
-        console.log(action)
         throw new Error(`Invalid action type: ${action.type}`)
     }
   }, initialState)
