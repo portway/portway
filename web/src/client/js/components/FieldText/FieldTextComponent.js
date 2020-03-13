@@ -68,31 +68,6 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
         onBlur(field.id, field.type, editorRef.current)
       })
 
-      // editorRef.current.on('blur', (cm, e) => {
-      //   console.log('has local change', hasLocalChangeSinceFocusRef)
-      //   console.log('has remote change', hasRemoteChangeSinceFocusRef)
-      //   onBlur(field.id, field.type, editorRef.current)
-      //   // Remote and local changes, ask the user if they want to overwrite
-      //   if (hasRemoteChangeSinceFocusRef.current && hasLocalChangeSinceFocusRef.current) {
-      //     const accept = window.confirm('Someone else has made changes to this field, do you want to overwrite their changes?')       
-      //     if (accept) {
-      //       onChange(field.id, editorRef.current.getValue())
-      //     } else {
-      //       setForcedRefresh(Date.now())
-      //     }
-      //   // No remote changes, just local ones, update via api
-      //   } else if (hasLocalChangeSinceFocusRef.current) {
-      //     onChange(field.id, editorRef.current.getValue())
-      //   // Just remote changes, nothing changed locally, refresh to get remote changes
-      //   } else if (!hasLocalChangeSinceFocusRef.current && hasRemoteChangeSinceFocusRef.current) {
-      //     setForcedRefresh(Date.now())
-      //   }
-      //   // Set all these Ref values regardless of whether there were changes
-      //   hasFocusRef.current = false
-      //   hasLocalChangeSinceFocusRef.current = false
-      //   hasRemoteChangeSinceFocusRef.current = false
-      // })
-
       editorRef.current.on('change', (cm, e) => {
         // only update via API when changes are local, not when triggered by remote changes
         if (e.origin !== 'setValue' ) {
@@ -117,22 +92,22 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorRef])
 
-  useEffect(() => {
-    // we have an editor, and we have a field value, and the field value is different from
-    // the editors current value, this means we have an update from the socket, so update the text
-    if (
-      editorRef.current &&
-      field.value &&
-      field.value !== editorRef.current.getValue()
-    ) {
-      editorRef.current.getDoc().setValue(field.value)
-      editorRef.current.refresh()
-    }
-  }, [field.value])
+  // useEffect(() => {
+  //   // we have an editor, and we have a field value, and the field value is different from
+  //   // the editors current value, this means we have an update from the socket, so update the text
+  //   if (
+  //     editorRef.current &&
+  //     field.value &&
+  //     field.value !== editorRef.current.getValue()
+  //   ) {
+  //     editorRef.current.getDoc().setValue(field.value)
+  //     editorRef.current.refresh()
+  //   }
+  // }, [field.value])
 
   return (
     <div className="document-field__text">
-      <textarea ref={textRef} defaultValue={field.value} readOnly={readOnly} />
+      <textarea ref={textRef} defaultValue={fieldBody} readOnly={readOnly} />
     </div>
   )
 }

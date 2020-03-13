@@ -23,10 +23,9 @@ const DocumentFieldsComponent = ({
   isPublishing,
   readOnly,
   remoteUserFieldFocus,
-  currentlyFocusedFieldId,
+  myFocusedFieldId,
   remoteChangesInCurrentlyFocusedField
 }) => {
-  console.log(remoteChangesInCurrentlyFocusedField)
   const [settingsForField, setSettingsForField] = useState(null)
 
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
@@ -50,7 +49,7 @@ const DocumentFieldsComponent = ({
   }
 
   function renderFieldType(field, index) {
-    const isCurrentlyFocusedField = currentlyFocusedFieldId === field.id
+    const isCurrentlyFocusedField = myFocusedFieldId === field.id
 
     let fieldTypeComponent
     switch (field.type) {
@@ -125,7 +124,7 @@ const DocumentFieldsComponent = ({
           settingsMode={settingsModeForField}
           remoteUserFieldFocus={remoteUserFieldFocus}
           isCurrentlyFocusedField={isCurrentlyFocusedField}
-          remoteChanges={isCurrentlyFocusedField ? remoteChangesInCurrentlyFocusedField : undefined}
+          remoteChanges={isCurrentlyFocusedField ? remoteChangesInCurrentlyFocusedField : []}
         >
           {fieldTypeComponent}
         </DocumentFieldComponent>

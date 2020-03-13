@@ -31,21 +31,26 @@ const DocumentFieldComponent = ({
   isCurrentlyFocusedField,
   remoteChanges
 }) => {
-  console.log(remoteChanges)
+  const hasRemoteChanges = remoteChanges.length > 0
   const nameRef = useRef()
-  const [fieldBody, setFieldBody] = useState(field.value)
-  const hasRemoteChanges = remoteChanges && remoteChanges.length
+  // set the field body from redux state on initial load
+  const fieldBodyRef = useRef(field.value)
+
+  // we're not focused, always set the field body from passed in field prop
+  if (!isCurrentlyFocusedField) {
+    fieldBodyRef.current = field.value
+  }
 
   function handleFieldBodyUpdate(body) {
     // always set the field body
-    setFieldBody(field.id, body)
-
+    fieldBodyRef.current = body
     // no remote changes, update via API.  If there are remote changes, API update will be manually triggered by user
     if (!hasRemoteChanges) {
       onChange(field.id, body)
     }
   }
 
+  console.log(isCurrentlyFocusedField)
 
   // console.log(setFieldBody)
   // console.log
@@ -165,7 +170,7 @@ const DocumentFieldComponent = ({
         </div>
 
         <div>
-          {hasRemoteChanges ? <button onClick={() => { onChange(field.id, fieldBody )} }>save</button> : null}
+          {hasRemoteChanges ? <button onClick={() => { onChange(field.id, fieldBodyRef.current )} }>save</button> : null}
         </div>
 
         <div className={fieldContainerClasses}>
@@ -213,7 +218,7 @@ const DocumentFieldComponent = ({
               }
               </>
             </div>
-            {React.cloneElement(children, { handleFieldBodyUpdate, fieldId: field.id, fieldBody, isCurrentlyFocusedField })}
+            {React.cloneElement(children, { handleFieldBodyUpdate, fieldId: field.id, fieldBody: fieldBodyRef.current, isCurrentlyFocusedField })}
           </div>
         </div>
 
@@ -238,8 +243,8 @@ DocumentFieldComponent.propTypes = {
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   usersById: PropTypes.object,
-  currentDocumentUserFieldFocus: PropTypes.object,
   isCurrentlyFocusedField: PropTypes.bool,
+  remoteUserFieldFocus: PropTypes.object,
   remoteChanges: PropTypes.array
 }
 
