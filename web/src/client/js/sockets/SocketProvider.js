@@ -12,7 +12,6 @@ const documentUrl = new URL(`/documents?token=${token}`, SYNC_URL)
 const documentSocket = openSocket(documentUrl.href)
 
 const actionTypes = {
-  'DOCUMENT_ROOM_FIELD_CHANGES_UPDATED': 'DOCUMENT_ROOM_FIELD_CHANGES_UPDATED',
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',
   'EMIT_JOIN_DOCUMENT_ROOM': 'EMIT_JOIN_DOCUMENT_ROOM',
@@ -26,8 +25,9 @@ const actionTypes = {
   'FIELD_FOCUS_EMITTED': 'FIELD_FOCUS_EMITTED',
   'FIELD_BLUR_EMITTED': 'FIELD_BLUR_EMITTED',
   'FIELD_CHANGE_EMITTED': 'FIELD_CHANGE_EMITTED',
-  'USER_FIELD_FOCUS_UPDATED': 'USER_FIELD_FOCUS_UPDATED',
-  'FIELD_CHANGE_EVENT_RECEIVED': 'FIELD_CHANGE_EVENT_RECEIVED'
+  'MY_FIELD_FOCUS_UPDATED': 'MY_FIELD_FOCUS_UPDATED',
+  'REMOTE_USER_FIELD_FOCUS_UPDATED': 'USER_FIELD_FOCUS_UPDATED',
+  'REMOTE_FIELD_CHANGE_EVENT_RECEIVED': 'REMOTE_FIELD_CHANGE_EVENT_RECEIVED'
 }
 
 // ACTIONS
@@ -58,6 +58,8 @@ export const emitFieldFocus = (dispatch, fieldId, documentId) => {
     return { type: actionTypes.SOCKET_ERROR }
   }
   dispatch({ type: actionTypes.EMIT_FIELD_FOCUS, fieldId })
+  dispatch(updateMyFieldFocus(fieldId))
+
   documentSocket.emit('fieldFocus', fieldId, documentId)
   return {
     type: actionTypes.FIELD_FOCUS_EMITTED
@@ -69,6 +71,7 @@ export const emitFieldBlur = (dispatch, fieldId, documentId) => {
     return { type: actionTypes.SOCKET_ERROR }
   }
   dispatch({ type: actionTypes.EMIT_FIELD_BLUR, fieldId })
+  dispatch(updateMyFieldFocus(null))
   documentSocket.emit('fieldFocus', null, documentId)
   return {
     type: actionTypes.FIELD_BLUR_EMITTED
@@ -94,17 +97,24 @@ export const updateDocumentRoomUsers = (documentId, userIds) => {
   }
 }
 
-export const updateUserFieldFocus = (userId, fieldId) => {
+export const updateRemoteUserFieldFocus = (userId, fieldId) => {
   return {
-    type: actionTypes.USER_FIELD_FOCUS_UPDATED,
+    type: actionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED,
     userId,
     fieldId
   }
 }
 
-export const updateDocumentRoomFieldChanges = (userId, fieldId) => {
+export const updateMyFieldFocus = (fieldId) => {
   return {
-    type: actionTypes.DOCUMENT_ROOM_FIELD_CHANGES_UPDATED,
+    type: actionTypes.MY_FIELD_FOCUS_UPDATED,
+    fieldId
+  }
+}
+
+export const receiveRemoteFieldChange = (userId, fieldId) => {
+  return {
+    type: actionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED,
     userId,
     fieldId
   }
@@ -115,8 +125,9 @@ export const updateDocumentRoomFieldChanges = (userId, fieldId) => {
 const initialState = {
   activeDocumentUsers: {},
   currentDocumentRoom: null,
+  myFocusedFieldId: null,
   // focus is stored as { userId : fieldId }
-  currentDocumentUserFieldFocus: {},
+  remoteUserFieldFocus: {},
   remoteFieldChangesInCurrentlyFocusedField: []
 }
 
@@ -147,29 +158,31 @@ const SocketProvider = ( { children } ) => {
         }
         return state
       }
-      case actionTypes.USER_FIELD_FOCUS_UPDATED: {
+      case actionTypes.MY_FIELD_FOCUS_UPDATED: {
+        console.log(action)
+        const { fieldId } = action
+        // change my field focus, also wipe out remote changes array to start fresh
+        return { ...state, myFocusedFieldId: fieldId, remoteFieldChangesInCurrentlyFocusedField: [] }
+      }
+      case actionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED: {
         const { userId, fieldId } = action
         // only update the focus state if user is connected to a document room
         if (state.currentDocumentRoom) {
           const newState = {
             ...state,
-            currentDocumentUserFieldFocus: {
-              ...state.currentDocumentUserFieldFocus,
+            remoteUserFieldFocus: {
+              ...state.remoteUserFieldFocus,
               [userId]: fieldId
             }
-          }
-          // if it's my current user focus, wipe out tracked field changes
-          if (Number(userId) === currentUserId) {
-            newState.remoteFieldChangesInCurrentlyFocusedField = []
           }
           return newState
         }
         return state
       }
-      case actionTypes.DOCUMENT_ROOM_FIELD_CHANGES_UPDATED: {
+      case actionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED: {
         const { userId, fieldId } = action
         // for now, we're only logging changes to the currently focused field
-        if (fieldId === state.currentDocumentUserFieldFocus[currentUserId]) {
+        if (fieldId === state.myFocusedFieldId) {
           const remoteFieldChangesInCurrentlyFocusedField = [...state.remoteFieldChangesInCurrentlyFocusedField, { userId, fieldId }]
           return {
             ...state,
@@ -191,7 +204,8 @@ const SocketProvider = ( { children } ) => {
         // no need to log, that was done when module loaded, move on silently
         return state
       default:
-        throw new Error()
+        console.log(action)
+        throw new Error(`Invalid action type: ${action.type}`)
     }
   }, initialState)
 

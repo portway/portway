@@ -22,7 +22,7 @@ const DocumentFieldsComponent = ({
   fieldsUpdating,
   isPublishing,
   readOnly,
-  currentDocumentUserFieldFocus,
+  remoteUserFieldFocus,
   currentlyFocusedFieldId,
   remoteChangesInCurrentlyFocusedField
 }) => {
@@ -122,7 +122,7 @@ const DocumentFieldsComponent = ({
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
-          currentDocumentUserFieldFocus={currentDocumentUserFieldFocus}
+          remoteUserFieldFocus={remoteUserFieldFocus}
           isCurrentlyFocusedField={isCurrentlyFocusedField}
           remoteChangesInCurrentlyFocusedField={isCurrentlyFocusedField ? remoteChangesInCurrentlyFocusedField : undefined}
         >
@@ -173,8 +173,8 @@ DocumentFieldsComponent.propTypes = {
   fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  currentDocumentUserFieldFocus: PropTypes.object,
-  currentlyFocusedFieldId: PropTypes.number,
+  remoteUserFieldFocus: PropTypes.object,
+  myFocusedFieldId: PropTypes.number,
   remoteChangesInCurrentlyFocusedField: PropTypes.array
 }
 

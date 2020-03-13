@@ -64,6 +64,10 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
       // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
 
+      editorRef.current.on('blur', (cm, e) => {
+        onBlur(field.id, field.type, editorRef.current)
+      })
+
       // editorRef.current.on('blur', (cm, e) => {
       //   console.log('has local change', hasLocalChangeSinceFocusRef)
       //   console.log('has remote change', hasRemoteChangeSinceFocusRef)
@@ -90,7 +94,6 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
       // })
 
       editorRef.current.on('change', (cm, e) => {
-        console.log(e.origin)
         // only update via API when changes are local, not when triggered by remote changes
         if (e.origin !== 'setValue' ) {
           handleFieldBodyUpdate(editorRef.current.getValue())

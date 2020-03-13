@@ -38,8 +38,8 @@ const DocumentFieldsContainer = ({
 
   const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const activeUsers = socketState.activeDocumentUsers[documentId]
-  const currentlyFocusedFieldId = socketState.currentDocumentUserFieldFocus[currentUserId]
-  const { remoteChangesInCurrentlyFocusedField, currentDocumentUserFieldFocus } = socketState
+  const { remoteChangesInCurrentlyFocusedField, myFocusedFieldId, remoteUserFieldFocus } = socketState
+  console.log(socketState)
 
   // Sort the fields every re-render
   const fieldKeys = Object.keys(fields)
@@ -143,8 +143,8 @@ const DocumentFieldsContainer = ({
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}
-      currentDocumentUserFieldFocus={currentDocumentUserFieldFocus}
-      currentlyFocusedFieldId={currentlyFocusedFieldId}
+      remoteUserFieldFocus={remoteUserFieldFocus}
+      myFocusedFieldId={myFocusedFieldId}
       remoteChangesInCurrentlyFocusedField={remoteChangesInCurrentlyFocusedField}
     />
   )

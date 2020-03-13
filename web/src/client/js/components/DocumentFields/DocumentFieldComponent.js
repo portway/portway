@@ -27,7 +27,7 @@ const DocumentFieldComponent = ({
   settingsHandler,
   settingsMode,
   usersById,
-  currentDocumentUserFieldFocus,
+  remoteUserFieldFocus,
   isCurrentlyFocusedField,
   remoteChanges
 }) => {
@@ -36,13 +36,13 @@ const DocumentFieldComponent = ({
   const hasRemoteChanges = remoteChanges && remoteChanges.length
 
   function handleFieldBodyUpdate(body) {
-    // remote changes, just update body state and wait for acceptance by user
-    if (hasRemoteChanges) {
-      return setFieldBody(field.id, body)
-    }
+    // always set the field body
+    setFieldBody(field.id, body)
 
-    // no remote changes, update via API
-    onChange(field.id, body)
+    // no remote changes, update via API.  If there are remote changes, API update will be manually triggered by user
+    if (!hasRemoteChanges) {
+      onChange(field.id, body)
+    }
   }
 
 
@@ -86,9 +86,9 @@ const DocumentFieldComponent = ({
 
   //Relevant usersById should already be fetched by the document users container
 
-  const currentFieldUserIds = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
+  const currentFieldUserIds = Object.keys(remoteUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
-    if (currentDocumentUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
+    if (remoteUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
       return [...cur, userId]
     }
     return cur
