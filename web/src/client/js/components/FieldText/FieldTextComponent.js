@@ -92,18 +92,18 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorRef])
 
-  // useEffect(() => {
-  //   // we have an editor, and we have a field value, and the field value is different from
-  //   // the editors current value, this means we have an update from the socket, so update the text
-  //   if (
-  //     editorRef.current &&
-  //     field.value &&
-  //     field.value !== editorRef.current.getValue()
-  //   ) {
-  //     editorRef.current.getDoc().setValue(field.value)
-  //     editorRef.current.refresh()
-  //   }
-  // }, [field.value])
+  useEffect(() => {
+    // we have an editor, and we have a field body, and the field body is different from
+    // the editors current value, this means we have an update from the socket, so update the text
+    if (
+      editorRef.current &&
+      fieldBody &&
+      fieldBody !== editorRef.current.getValue()
+    ) {
+      editorRef.current.getDoc().setValue(fieldBody)
+      editorRef.current.refresh()
+    }
+  }, [fieldBody])
 
   return (
     <div className="document-field__text">

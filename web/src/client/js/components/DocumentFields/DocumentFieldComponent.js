@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { connect } from 'react-redux'
@@ -12,6 +12,7 @@ import { currentUserId } from 'Libs/currentIds'
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
+import { updateDocument } from 'Actions/document'
 
 const DocumentFieldComponent = ({
   children,
@@ -50,46 +51,6 @@ const DocumentFieldComponent = ({
     }
   }
 
-  console.log(isCurrentlyFocusedField)
-
-  // console.log(setFieldBody)
-  // console.log
-  // const { currentDocumentUserFieldFocus,  } = socketState
-
-  // useSyncFieldChange(field.documentId, (userId, fieldId) => {
-  //   // A remote change came through, make sure it's from another user and applicable to this field and update Ref
-  //   if (userId !== currentUserId && fieldId === field.id && hasFocusRef.current) {
-  //     hasRemoteChangeSinceFocusRef.current = true
-  //   }
-  // })
-
-  // const onChildFieldBlur = (fieldId, fieldType, editorRef) => {
-  //   console.log('has local change', hasLocalChangeSinceFocusRef)
-  //   console.log('has remote change', hasRemoteChangeSinceFocusRef)
-  //   onBlur(field.id, field.type, editorRef.current)
-  //   // Remote and local changes, ask the user if they want to overwrite
-  //   if (hasRemoteChangeSinceFocusRef.current && hasLocalChangeSinceFocusRef.current) {
-  //     const accept = window.confirm(
-  //       'Someone else has made changes to this field, do you want to overwrite their changes?'
-  //     )
-  //     if (accept) {
-  //       onChange(field.id, editorRef.current.getValue())
-  //     } else {
-  //       setForcedRefresh(Date.now())
-  //     }
-  //     // No remote changes, just local ones, update via api
-  //   } else if (hasLocalChangeSinceFocusRef.current) {
-  //     onChange(field.id, editorRef.current.getValue())
-  //     // Just remote changes, nothing changed locally, refresh to get remote changes
-  //   } else if (!hasLocalChangeSinceFocusRef.current && hasRemoteChangeSinceFocusRef.current) {
-  //     setForcedRefresh(Date.now())
-  //   }
-  //   // Set all these Ref values regardless of whether there were changes
-  //   hasFocusRef.current = false
-  //   hasLocalChangeSinceFocusRef.current = false
-  //   hasRemoteChangeSinceFocusRef.current = false
-  // }
-
   //Relevant usersById should already be fetched by the document users container
 
   const currentFieldUserIds = Object.keys(remoteUserFieldFocus).reduce((cur, userId) => {
@@ -106,6 +67,15 @@ const DocumentFieldComponent = ({
     }
     return cur
   }, [])
+
+  const remoteUserChangeNames = remoteChanges.reduce((set, remoteChange) => {
+    const { userId } = remoteChange
+    const user = usersById[userId]
+    if (user) {
+      set.add(user.name)
+    }
+    return set
+  }, new Set())
 
   useEffect(() => {
     if (isNewField && nameRef.current) {
@@ -170,7 +140,14 @@ const DocumentFieldComponent = ({
         </div>
 
         <div>
-          {hasRemoteChanges ? <button onClick={() => { onChange(field.id, fieldBodyRef.current )} }>save</button> : null}
+          {hasRemoteChanges ?
+            <>
+              <div>{remoteUserChangeNames || 'Someone'} has made changes to this field</div>
+              <button onClick={() => { onChange(field.id, fieldBodyRef.current )} }>Overwrite their changes</button>
+              <button onClick={() => { updateDocument(field.documentId)} }>Discard your work</button>
+            </> :
+            null
+          }
         </div>
 
         <div className={fieldContainerClasses}>
