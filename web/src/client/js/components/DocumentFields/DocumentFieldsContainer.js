@@ -18,7 +18,6 @@ import {
 } from '../../sockets/SocketProvider'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
-import { currentUserId } from 'Libs/currentIds'
 
 const DocumentFieldsContainer = ({
   blurField,
@@ -38,7 +37,6 @@ const DocumentFieldsContainer = ({
 
   const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const activeUsers = socketState.activeDocumentUsers[documentId]
-  const { remoteChangesInCurrentlyFocusedField, myFocusedFieldId, remoteUserFieldFocus } = socketState
 
   // Sort the fields every re-render
   const fieldKeys = Object.keys(fields)
@@ -95,7 +93,7 @@ const DocumentFieldsContainer = ({
 
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
-      focusField(fieldId, fieldType, fieldData)
+      // focusField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
     }
@@ -103,7 +101,7 @@ const DocumentFieldsContainer = ({
 
   function fieldBlurHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
-      blurField(fieldId, fieldType, fieldData)
+      // blurField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldBlur(socketDispatch, fieldId, documentId))
     }
@@ -119,8 +117,12 @@ const DocumentFieldsContainer = ({
     }
   }
 
+  function fieldDiscardHandler(documentId) {
+    fetchDocument(documentId)
+  }
+
   // Prop handler
-  const debouncedValueChangeHandler = debounce(1000, (fieldId, value) => {
+  const debouncedValueChangeHandler = debounce(3000, (fieldId, value) => {
     fieldChangeHandler(fieldId, { value: value })
   })
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
@@ -138,13 +140,11 @@ const DocumentFieldsContainer = ({
       fieldFocusHandler={fieldFocusHandler}
       fieldBlurHandler={fieldBlurHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
+      fieldDiscardHandler={fieldDiscardHandler}
       fields={fieldMap}
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}
-      remoteUserFieldFocus={remoteUserFieldFocus}
-      myFocusedFieldId={myFocusedFieldId}
-      remoteChangesInCurrentlyFocusedField={remoteChangesInCurrentlyFocusedField}
     />
   )
 }

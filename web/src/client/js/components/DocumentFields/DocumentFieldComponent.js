@@ -7,12 +7,11 @@ import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { currentUserId } from 'Libs/currentIds'
-// import useSyncFieldChange from 'Hooks/useSyncFieldChange'
+import useDocumentSocket from 'Hooks/useDocumentSocket'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
-import { updateDocument } from 'Actions/document'
 
 const DocumentFieldComponent = ({
   children,
@@ -24,18 +23,31 @@ const DocumentFieldComponent = ({
   onFocus,
   onChange,
   onRename,
+  onDiscard,
   readOnly,
   settingsHandler,
   settingsMode,
-  usersById,
-  remoteUserFieldFocus,
-  isCurrentlyFocusedField,
-  remoteChanges
+  usersById
 }) => {
-  const hasRemoteChanges = remoteChanges.length > 0
+  const { state: socketState } = useDocumentSocket()
+  const {
+    remoteChangesInCurrentlyFocusedField,
+    myFocusedFieldId,
+    remoteUserFieldFocus
+  } = socketState
+
+  const isCurrentlyFocusedField = myFocusedFieldId === field.id
+  const hasRemoteChanges = isCurrentlyFocusedField && remoteChangesInCurrentlyFocusedField.length
+
+  // console.log(remoteChanges)
   const nameRef = useRef()
-  // set the field body from redux state on initial load
+  // // set the field body from redux state on initial load
   const fieldBodyRef = useRef(field.value)
+  // const hasRemoteChangesRef = useRef(remoteChanges.length > 0)
+
+  // useEffect(() => {
+  //   hasRemoteChangesRef.current = remoteChanges.length > 0
+  // }, [remoteChanges.length])
 
   // we're not focused, always set the field body from passed in field prop
   if (!isCurrentlyFocusedField) {
@@ -49,6 +61,16 @@ const DocumentFieldComponent = ({
     if (!hasRemoteChanges) {
       onChange(field.id, body)
     }
+  }
+
+  function handleDiscard() {
+    console.log('dicarding')
+    // onDiscard(field.documentId)
+  }
+
+  function handleManualSave() {
+    console.log('handle manual Save')
+    // onChange(field.id, fieldBodyRef.current)
   }
 
   //Relevant usersById should already be fetched by the document users container
@@ -68,14 +90,18 @@ const DocumentFieldComponent = ({
     return cur
   }, [])
 
-  const remoteUserChangeNames = remoteChanges.reduce((set, remoteChange) => {
-    const { userId } = remoteChange
-    const user = usersById[userId]
-    if (user) {
-      set.add(user.name)
-    }
-    return set
-  }, new Set())
+  const remoteUserChangeNames = new Set()
+
+  if (hasRemoteChanges) {
+    remoteChangesInCurrentlyFocusedField.forEach((set, remoteChange) => {
+      const { userId } = remoteChange
+      const user = usersById[userId]
+      if (user) {
+        remoteUserChangeNames.add(user.name)
+      }
+      return set
+    })
+  }
 
   useEffect(() => {
     if (isNewField && nameRef.current) {
@@ -109,6 +135,11 @@ const DocumentFieldComponent = ({
     'document-field__container': true,
   })
 
+  const fieldChangeButtonClasses = cx({
+    'document-field__focus-buttons': true,
+    'document-field__focus-buttons--active': hasRemoteChanges
+  })
+
   const fieldLabels = {
     [FIELD_TYPES.TEXT]: 'Text area',
     [FIELD_TYPES.STRING]: 'String',
@@ -137,18 +168,13 @@ const DocumentFieldComponent = ({
 
         <div className={fieldToolClasses}>
           <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
+          <div className={fieldChangeButtonClasses}>
+            <div>{remoteUserChangeNames || 'Someone'} has made changes to this field</div>
+            <button onClick={handleManualSave}>Overwrite their changes</button>
+            <button onClick={handleDiscard}>Discard your work</button>
+          </div>
         </div>
 
-        <div>
-          {hasRemoteChanges ?
-            <>
-              <div>{remoteUserChangeNames || 'Someone'} has made changes to this field</div>
-              <button onClick={() => { onChange(field.id, fieldBodyRef.current )} }>Overwrite their changes</button>
-              <button onClick={() => { updateDocument(field.documentId)} }>Discard your work</button>
-            </> :
-            null
-          }
-        </div>
 
         <div className={fieldContainerClasses}>
 
@@ -216,13 +242,11 @@ DocumentFieldComponent.propTypes = {
   onFocus: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,
+  onDiscard: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
-  usersById: PropTypes.object,
-  isCurrentlyFocusedField: PropTypes.bool,
-  remoteUserFieldFocus: PropTypes.object,
-  remoteChanges: PropTypes.array
+  usersById: PropTypes.object
 }
 
 const mapStateToProps = (state) => {

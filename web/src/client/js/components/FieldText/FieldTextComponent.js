@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
 
@@ -16,7 +16,7 @@ import './FieldText.scss'
 
 window.CodeMirror = CodeMirror
 
-const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly, handleFieldBodyUpdate, fieldBody, isCurrentlyFocusedField }) => {
+const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly, handleFieldBodyUpdate, isCurrentlyFocusedField }) => {
   const textRef = useRef()
   const editorRef = useRef()
 
@@ -65,6 +65,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
 
       editorRef.current.on('blur', (cm, e) => {
+        console.log('blurring')
         onBlur(field.id, field.type, editorRef.current)
       })
 
@@ -92,22 +93,22 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onFocus, readOnly
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorRef])
 
-  useEffect(() => {
-    // we have an editor, and we have a field body, and the field body is different from
-    // the editors current value, this means we have an update from the socket, so update the text
-    if (
-      editorRef.current &&
-      fieldBody &&
-      fieldBody !== editorRef.current.getValue()
-    ) {
-      editorRef.current.getDoc().setValue(fieldBody)
-      editorRef.current.refresh()
-    }
-  }, [fieldBody])
+  // useEffect(() => {
+  //   // we have an editor, and we have a field body, and the field body is different from
+  //   // the editors current value, this means we have an update from the socket, so update the text
+  //   if (
+  //     editorRef.current &&
+  //     field.value &&
+  //     field.value !== editorRef.current.getValue()
+  //   ) {
+  //     editorRef.current.getDoc().setValue(field.value)
+  //     editorRef.current.refresh()
+  //   }
+  // }, [field.value])
 
   return (
     <div className="document-field__text">
-      <textarea ref={textRef} defaultValue={fieldBody} readOnly={readOnly} />
+      <textarea ref={textRef} defaultValue={field.value} readOnly={readOnly} />
     </div>
   )
 }
@@ -119,7 +120,6 @@ FieldTextComponent.propTypes = {
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   handleFieldBodyUpdate: PropTypes.func,
-  fieldBody: PropTypes.string,
   isCurrentlyFocusedField: PropTypes.bool
 }
 

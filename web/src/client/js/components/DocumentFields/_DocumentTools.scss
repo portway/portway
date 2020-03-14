@@ -10,6 +10,13 @@
   z-index: 2;
 }
 
+.document-field__focus-buttons {
+  display: none;
+  &--active {
+    display: block;
+  }
+}
+
 /**
  * Document Field Actions
  * Actions is the right column of the editor that contains the delete button
