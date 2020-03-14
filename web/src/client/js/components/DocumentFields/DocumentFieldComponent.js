@@ -43,23 +43,18 @@ const DocumentFieldComponent = ({
   const nameRef = useRef()
   // // set the field body from redux state on initial load
   const fieldBodyRef = useRef(field.value)
-  // const hasRemoteChangesRef = useRef(remoteChanges.length > 0)
-
-  // useEffect(() => {
-  //   hasRemoteChangesRef.current = remoteChanges.length > 0
-  // }, [remoteChanges.length])
 
   // we're not focused, always set the field body from passed in field prop
   if (!isCurrentlyFocusedField) {
     fieldBodyRef.current = field.value
   }
 
-  function handleFieldBodyUpdate(body) {
+  function handleFieldBodyUpdate(fieldId, body) {
     // always set the field body
     fieldBodyRef.current = body
     // no remote changes, update via API.  If there are remote changes, API update will be manually triggered by user
     if (!hasRemoteChanges) {
-      onChange(field.id, body)
+      onChange(fieldId, body)
     }
   }
 
@@ -221,7 +216,7 @@ const DocumentFieldComponent = ({
               }
               </>
             </div>
-            {React.cloneElement(children, { handleFieldBodyUpdate, fieldId: field.id, fieldBody: fieldBodyRef.current, isCurrentlyFocusedField })}
+            {React.cloneElement(children, { onChange: handleFieldBodyUpdate, isCurrentlyFocusedField })}
           </div>
         </div>
 

@@ -54,6 +54,7 @@ const DocumentFieldsComponent = ({
             autoFocusElement={hasOnlyOneTextField}
             field={field}
             onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
