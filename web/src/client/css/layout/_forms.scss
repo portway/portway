@@ -89,6 +89,15 @@ input[type='number'] {
   appearance: textfield;
 }
 
+.field {
+  textarea {
+    min-height: 250px;
+    padding: 8px;
+    resize: vertical;
+    width: 95%;
+  }
+}
+
 // form -> form-container -> field -> field__label, field__control, field__help
 // field-container is a container for one or more fields
 .field-container {
@@ -109,6 +118,13 @@ input[type='number'] {
 
   &--large {
     width: 100%;
+  }
+
+  &--hidden {
+    margin: 0;
+    .field {
+      display: none;
+    }
   }
 
   // Need some top padding to separate your field a little?
@@ -160,10 +176,11 @@ input[type='number'] {
     width: 100%;
   }
 
-  &--checkbox {
+  &--checkbox, &--radio {
     align-items: center;
     flex-direction: row-reverse;
     justify-content: flex-end;
+    label { flex: 1 0 90%; }
   }
 
   &--centered {
