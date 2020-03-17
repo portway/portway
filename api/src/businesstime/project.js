@@ -65,22 +65,27 @@ async function deleteById(id, orgId) {
   await project.destroy()
 }
 
-async function findAllForUser(userId, orgId) {
+async function findAllForUser(userId, orgId, options) {
   const db = getDb()
+  const paginationOptions = getPaginationOptions(options.page, options.perPage)
+  const sortOptions = getSortOptions(options.sortBy, options.sortMethod)
 
-  const projects = await db.model(MODEL_NAME).findAll({
+  const result = await db.model(MODEL_NAME).findAndCountAll({
     where: db.or(
       db.or({ orgId, accessLevel: PROJECT_ACCESS_LEVELS.READ }, { orgId, accessLevel: PROJECT_ACCESS_LEVELS.WRITE }),
       { '$ProjectUsers.userId$': userId }
     ),
+    ...sortOptions,
+    ...paginationOptions,
     include: [{
       model: db.model('ProjectUser'),
       where: { userId, orgId },
-      required: false
+      required: false,
+      duplicating: false
     }]
   })
 
-  return projects.map(publicFields)
+  return { projects: result.rows.map(publicFields), count: result.count }
 }
 
 async function deleteAllForOrg(orgId, force = false) {
