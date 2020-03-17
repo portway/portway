@@ -18,6 +18,8 @@ window.CodeMirror = CodeMirror
 const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly, isCurrentlyFocusedField }) => {
   const textRef = useRef()
   const editorRef = useRef()
+  const isCurrentlyFocusedFieldRef = useRef(isCurrentlyFocusedField)
+  isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
   // Mount the SimpleMDE Editor
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
@@ -64,8 +66,10 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('blur', (cm, e) => {
         onBlur(field.id, field.type, editorRef.current)
       })
-      editorRef.current.on('change', () => {
-        onChange(field.id, editorRef.current.getValue())
+      editorRef.current.on('change', (e) => {
+        if (e.origin !== 'setValue' && isCurrentlyFocusedFieldRef.current) {
+          onChange(field.id, editorRef.current.getValue())
+        }
       })
       editorRef.current.on('dragstart', (cm, e) => {
         e.preventDefault()
@@ -97,7 +101,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
     // we're not focused, we have an editor, and we have a field value. The field value is different from
     // the editors current value, this means we have an update from the socket, so update the text
     if (
-      !isCurrentlyFocusedField &&
+      !isCurrentlyFocusedFieldRef.current &&
       editorRef.current &&
       field.value &&
       field.value !== editorRef.current.getValue()
@@ -105,7 +109,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.getDoc().setValue(field.value)
       editorRef.current.refresh()
     }
-  }, [field.value, isCurrentlyFocusedField])
+  }, [field.value, isCurrentlyFocusedFieldRef])
 
   return (
     <div className="document-field__text">
@@ -118,10 +122,10 @@ FieldTextComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool.isRequired
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldTextComponent

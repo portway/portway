@@ -122,7 +122,7 @@ const DocumentFieldsContainer = ({
   }
 
   // Prop handler
-  const debouncedValueChangeHandler = debounce(3000, (fieldId, value) => {
+  const debouncedValueChangeHandler = debounce(1000, (fieldId, value) => {
     fieldChangeHandler(fieldId, { value: value })
   })
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {

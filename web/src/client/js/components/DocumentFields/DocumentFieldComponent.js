@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { connect } from 'react-redux'
@@ -35,37 +35,31 @@ const DocumentFieldComponent = ({
     myFocusedFieldId,
     remoteUserFieldFocus
   } = socketState
+  const hasRemoteChangesRef = useRef()
+  hasRemoteChangesRef.current = Boolean(myFocusedFieldId === field.id && remoteChangesInCurrentlyFocusedField.length)
 
-  const isCurrentlyFocusedField = myFocusedFieldId === field.id
-  const hasRemoteChanges = isCurrentlyFocusedField && remoteChangesInCurrentlyFocusedField.length
-
-  // console.log(remoteChanges)
   const nameRef = useRef()
-  // // set the field body from redux state on initial load
-  const fieldBodyRef = useRef(field.value)
-
-  // we're not focused, always set the field body from passed in field prop
-  if (!isCurrentlyFocusedField) {
-    fieldBodyRef.current = field.value
-  }
+  const [cachedLocalChanges, setCachedLocalChanges] = useState()
 
   function handleFieldBodyUpdate(fieldId, body) {
-    // always set the field body
-    fieldBodyRef.current = body
-    // no remote changes, update via API.  If there are remote changes, API update will be manually triggered by user
-    if (!hasRemoteChanges) {
+    // set the unsaved state if applicable
+    if (!hasRemoteChangesRef.current) {
       onChange(fieldId, body)
+    } else {
+      setCachedLocalChanges(body)
     }
   }
 
   function handleDiscard() {
-    console.log('dicarding')
-    // onDiscard(field.documentId)
+    // refetch document
+    onDiscard(field.documentId)
+    // clear out any local changes
+    setCachedLocalChanges(null)
   }
 
   function handleManualSave() {
-    console.log('handle manual Save')
-    // onChange(field.id, fieldBodyRef.current)
+    onChange(field.id, cachedLocalChanges)
+    setCachedLocalChanges(null)
   }
 
   //Relevant usersById should already be fetched by the document users container
@@ -87,7 +81,7 @@ const DocumentFieldComponent = ({
 
   const remoteUserChangeNames = new Set()
 
-  if (hasRemoteChanges) {
+  if (hasRemoteChangesRef.current) {
     remoteChangesInCurrentlyFocusedField.forEach((set, remoteChange) => {
       const { userId } = remoteChange
       const user = usersById[userId]
@@ -132,7 +126,7 @@ const DocumentFieldComponent = ({
 
   const fieldChangeButtonClasses = cx({
     'document-field__focus-buttons': true,
-    'document-field__focus-buttons--active': hasRemoteChanges
+    'document-field__focus-buttons--active': cachedLocalChanges
   })
 
   const fieldLabels = {
@@ -216,7 +210,10 @@ const DocumentFieldComponent = ({
               }
               </>
             </div>
-            {React.cloneElement(children, { onChange: handleFieldBodyUpdate, isCurrentlyFocusedField })}
+            {React.cloneElement(children, {
+              onChange: handleFieldBodyUpdate,
+              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id
+            })}
           </div>
         </div>
 

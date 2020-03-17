@@ -34,7 +34,7 @@ const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
 FieldStringComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
 }

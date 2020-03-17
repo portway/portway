@@ -109,7 +109,7 @@ const FieldImageComponent = ({
 
 FieldImageComponent.propTypes = {
   field: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
