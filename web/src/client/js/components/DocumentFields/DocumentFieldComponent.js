@@ -5,9 +5,11 @@ import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
-import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { currentUserId } from 'Libs/currentIds'
+
 import useDocumentSocket from 'Hooks/useDocumentSocket'
+import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
+import { Popper } from 'Components/Popper/Popper'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -39,6 +41,7 @@ const DocumentFieldComponent = ({
   hasRemoteChangesRef.current = Boolean(myFocusedFieldId === field.id && remoteChangesInCurrentlyFocusedField.length)
 
   const nameRef = useRef()
+  const toolsRef = useRef()
   const [cachedLocalChanges, setCachedLocalChanges] = useState()
 
   function handleFieldBodyUpdate(fieldId, body) {
@@ -124,11 +127,6 @@ const DocumentFieldComponent = ({
     'document-field__container': true,
   })
 
-  const fieldChangeButtonClasses = cx({
-    'document-field__focus-buttons': true,
-    'document-field__focus-buttons--active': cachedLocalChanges
-  })
-
   const fieldLabels = {
     [FIELD_TYPES.TEXT]: 'Text area',
     [FIELD_TYPES.STRING]: 'String',
@@ -155,15 +153,18 @@ const DocumentFieldComponent = ({
     >
       <div className="document-field__component">
 
-        <div className={fieldToolClasses}>
+        <div className={fieldToolClasses} ref={toolsRef}>
           <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
-          <div className={fieldChangeButtonClasses}>
-            <div>{remoteUserChangeNames || 'Someone'} has made changes to this field</div>
-            <button onClick={handleManualSave}>Overwrite their changes</button>
-            <button onClick={handleDiscard}>Discard your work</button>
-          </div>
+          <Popper align="left" anchorRef={toolsRef} open={cachedLocalChanges} placement="top" width="400">
+            <div className="document-field__focus-buttons">
+              <div>{remoteUserChangeNames || 'Someone'} has made changes to this field</div>
+              <div className="document-field__focus-button-group">
+                <button className="btn btn--white btn--small" onClick={handleManualSave}>Overwrite their changes</button>
+                <button className="btn btn--small" onClick={handleDiscard}>Discard your work</button>
+              </div>
+            </div>
+          </Popper>
         </div>
-
 
         <div className={fieldContainerClasses}>
 
