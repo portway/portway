@@ -1,13 +1,15 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
-import useDocumentSocket from '../../hooks/useDocumentSocket'
 import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
-import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { currentUserId } from 'Libs/currentIds'
+
+import useDocumentSocket from 'Hooks/useDocumentSocket'
+import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
+import { Popper } from 'Components/Popper/Popper'
 
 import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
@@ -21,21 +23,55 @@ const DocumentFieldComponent = ({
   isUpdating,
   onBlur,
   onFocus,
+  onChange,
   onRename,
+  onDiscard,
   readOnly,
   settingsHandler,
   settingsMode,
   usersById
 }) => {
-  const nameRef = useRef()
   const { state: socketState } = useDocumentSocket()
-  const { currentDocumentUserFieldFocus } = socketState
+  const {
+    remoteChangesInCurrentlyFocusedField,
+    myFocusedFieldId,
+    remoteUserFieldFocus
+  } = socketState
+  const remoteChangesRef = useRef()
+  remoteChangesRef.current = myFocusedFieldId === field.id ? remoteChangesInCurrentlyFocusedField : remoteChangesRef.current || []
+
+  const nameRef = useRef()
+  const toolsRef = useRef()
+  const [cachedLocalChanges, setCachedLocalChanges] = useState()
+
+  function handleFieldBodyUpdate(fieldId, body) {
+    // set the unsaved state if applicable
+    if (!remoteChangesRef.current.length) {
+      onChange(fieldId, body)
+    } else {
+      setCachedLocalChanges(body)
+    }
+  }
+
+  function handleDiscard() {
+    // refetch document
+    onDiscard(field.documentId)
+    // clear out any local changes
+    setCachedLocalChanges(null)
+    remoteChangesRef.current = []
+  }
+
+  function handleManualSave() {
+    onChange(field.id, cachedLocalChanges)
+    setCachedLocalChanges(null)
+    remoteChangesRef.current = []
+  }
 
   //Relevant usersById should already be fetched by the document users container
 
-  const currentFieldUserIds = Object.keys(currentDocumentUserFieldFocus).reduce((cur, userId) => {
+  const currentFieldUserIds = Object.keys(remoteUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
-    if (currentDocumentUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
+    if (remoteUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
       return [...cur, userId]
     }
     return cur
@@ -47,6 +83,18 @@ const DocumentFieldComponent = ({
     }
     return cur
   }, [])
+
+  const remoteUserChangeNames = new Set()
+
+  if (remoteChangesRef.current.length) {
+    remoteChangesRef.current.forEach((remoteChange) => {
+      const { userId } = remoteChange
+      const user = usersById[userId]
+      if (user) {
+        remoteUserChangeNames.add(user.name)
+      }
+    })
+  }
 
   useEffect(() => {
     if (isNewField && nameRef.current) {
@@ -106,8 +154,17 @@ const DocumentFieldComponent = ({
     >
       <div className="document-field__component">
 
-        <div className={fieldToolClasses}>
+        <div className={fieldToolClasses} ref={toolsRef}>
           <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
+          <Popper align="left" anchorRef={toolsRef} open={Boolean(cachedLocalChanges)} placement="top" width="400">
+            <div className="document-field__focus-buttons">
+              <div>{remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'} {remoteUserChangeNames.length > 1 ? 'have' : 'has'} made changes to this field</div>
+              <div className="document-field__focus-button-group">
+                <button className="btn btn--white btn--small" onClick={handleManualSave}>Overwrite their changes</button>
+                <button className="btn btn--small" onClick={handleDiscard}>Discard your work</button>
+              </div>
+            </div>
+          </Popper>
         </div>
 
         <div className={fieldContainerClasses}>
@@ -155,7 +212,10 @@ const DocumentFieldComponent = ({
               }
               </>
             </div>
-            {children}
+            {React.cloneElement(children, {
+              onChange: handleFieldBodyUpdate,
+              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id
+            })}
           </div>
         </div>
 
@@ -174,7 +234,9 @@ DocumentFieldComponent.propTypes = {
   isUpdating: PropTypes.bool,
   onBlur: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,
+  onDiscard: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,

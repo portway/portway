@@ -48,7 +48,7 @@ const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
 FieldNumberComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
 }

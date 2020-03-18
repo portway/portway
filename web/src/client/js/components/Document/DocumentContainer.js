@@ -9,7 +9,7 @@ import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import useDocumentSocket from 'Hooks/useDocumentSocket'
-import { updateUserFieldFocus } from '../../sockets/SocketProvider'
+import { updateRemoteUserFieldFocus, receiveRemoteFieldChange } from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
 import { fetchDocument } from 'Actions/document'
 
@@ -48,9 +48,10 @@ const DocumentContainer = ({
   useEffect(() => {
     if (currentDocumentId) {
       documentSocket.on('userFocusChange', (userId, fieldId) => {
-        socketDispatch(updateUserFieldFocus(userId, fieldId))
+        socketDispatch(updateRemoteUserFieldFocus(userId, fieldId))
       })
       documentSocket.on('userFieldChange', (userId, fieldId) => {
+        socketDispatch(receiveRemoteFieldChange(userId, fieldId))
         if (userId !== currentUserId.toString()) {
           fetchDocument(currentDocumentId)
         }

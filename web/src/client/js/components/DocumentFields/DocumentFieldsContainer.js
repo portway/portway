@@ -93,7 +93,7 @@ const DocumentFieldsContainer = ({
 
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
-      focusField(fieldId, fieldType, fieldData)
+      // focusField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
     }
@@ -101,7 +101,7 @@ const DocumentFieldsContainer = ({
 
   function fieldBlurHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
-      blurField(fieldId, fieldType, fieldData)
+      // blurField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldBlur(socketDispatch, fieldId, documentId))
     }
@@ -115,6 +115,10 @@ const DocumentFieldsContainer = ({
       // passing socketDispatch to the action here, need this one dispatched async so that there's no race condition when fetching the data
       updateField(projectId, documentId, fieldId, body, socketDispatch)
     }
+  }
+
+  function fieldDiscardHandler(documentId) {
+    fetchDocument(documentId)
   }
 
   // Prop handler
@@ -136,6 +140,7 @@ const DocumentFieldsContainer = ({
       fieldFocusHandler={fieldFocusHandler}
       fieldBlurHandler={fieldBlurHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
+      fieldDiscardHandler={fieldDiscardHandler}
       fields={fieldMap}
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}

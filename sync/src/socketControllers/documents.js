@@ -8,21 +8,20 @@ const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 60 // 5 Minutes
 export default (io) => {
   const documentsIO = io.of('/documents')
 
-  const updateAndBroadcastRoomUsers = async (documentId, orgId) => {
-    const currentRoomUsers = await getReconciledRoomUsers(documentId, orgId)
-    const uniqueRoomUserIds = getUniqueRoomUserIds(currentRoomUsers)
-    documentsIO.in(documentId).emit('userChange', uniqueRoomUserIds)
-  }
-
-  const updateAndBroadcastFieldFocus = async (documentId, userSocketNs, userId, fieldId) => {
-    // set the currently focused field for the user
-    const userSocketFieldNs = getFocusedFieldNs(userSocketNs)
-    await redis.set(userSocketFieldNs, fieldId, 'EX', USER_SOCKET_FOCUSED_FIELD_EXPIRATION)
-    // broadcast it to the room
-    documentsIO.in(documentId).emit('userFocusChange', userId, fieldId)
-  }
-
   documentsIO.on('connection', (socket) => {
+    const updateAndBroadcastRoomUsers = async (documentId, orgId) => {
+      const currentRoomUsers = await getReconciledRoomUsers(documentId, orgId)
+      const uniqueRoomUserIds = getUniqueRoomUserIds(currentRoomUsers)
+      documentsIO.in(documentId).emit('userChange', uniqueRoomUserIds)
+    }
+
+    const updateAndBroadcastFieldFocus = async (documentId, userSocketNs, userId, fieldId) => {
+      // set the currently focused field for the user
+      const userSocketFieldNs = getFocusedFieldNs(userSocketNs)
+      await redis.set(userSocketFieldNs, fieldId, 'EX', USER_SOCKET_FOCUSED_FIELD_EXPIRATION)
+      // broadcast it to the everyone else in the room
+      socket.to(documentId).emit('userFocusChange', userId, fieldId)
+    }
     // Payload is already verified against the secret in middleware auth step for all routes
     // just get the decodable info from the jwt
     const { orgId, userId } = extractJwtPayloadWithoutVerification(socket.handshake.query.token)

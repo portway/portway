@@ -7,7 +7,21 @@
   flex-direction: column;
   position: relative;
   width: 2.4rem;
-  z-index: 2;
+  z-index: 12;
+}
+
+.document-field__focus-buttons {
+  background-color: var(--theme-overlay-light);
+  padding: 2rem;
+}
+
+.document-field__focus-button-group {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 2rem;
+  button {
+    margin-left: var(--icon-margin);
+  }
 }
 
 /**

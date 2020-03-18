@@ -10,7 +10,6 @@ import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 
 const DocumentFieldsComponent = ({
-  activeUsers,
   createdFieldId,
   createFieldHandler,
   disabled,
@@ -18,10 +17,11 @@ const DocumentFieldsComponent = ({
   fieldChangeHandler,
   fieldFocusHandler,
   fieldRenameHandler,
+  fieldDiscardHandler,
   fields,
   fieldsUpdating,
   isPublishing,
-  readOnly,
+  readOnly
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
 
@@ -54,7 +54,6 @@ const DocumentFieldsComponent = ({
             autoFocusElement={hasOnlyOneTextField}
             field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -65,7 +64,6 @@ const DocumentFieldsComponent = ({
           <FieldNumberComponent
             field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -76,7 +74,6 @@ const DocumentFieldsComponent = ({
           <FieldStringComponent
             field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -87,9 +84,9 @@ const DocumentFieldsComponent = ({
           <FieldImageComponent
             field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
+            onDiscard={fieldDiscardHandler}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
@@ -102,6 +99,7 @@ const DocumentFieldsComponent = ({
     }
     if (field) {
       const settingsModeForField = settingsForField === field.id
+
       return (
         <DocumentFieldComponent
           field={field}
@@ -111,7 +109,9 @@ const DocumentFieldsComponent = ({
           key={field.id}
           onBlur={fieldBlurHandler}
           onFocus={fieldFocusHandler}
+          onChange={fieldChangeHandler}
           onRename={fieldRenameHandler}
+          onDiscard={fieldDiscardHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
@@ -151,7 +151,6 @@ const DocumentFieldsComponent = ({
 }
 
 DocumentFieldsComponent.propTypes = {
-  activeUsers: PropTypes.array,
   createdFieldId: PropTypes.number,
   createFieldHandler: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
@@ -159,10 +158,11 @@ DocumentFieldsComponent.propTypes = {
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldFocusHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
+  fieldDiscardHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired
 }
 
 export default DocumentFieldsComponent

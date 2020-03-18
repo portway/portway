@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly }) => {
+const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly, isCurrentlyFocusedField }) => {
   const [fieldValue, setFieldValue] = useState(field.value)
 
-  const isEditingRef = useRef(false)
+  const isCurrentlyFocusedFieldRef = useRef(isCurrentlyFocusedField)
+  isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
 
   useEffect(() => {
-    if (!isEditingRef.current) {
+    if (!isCurrentlyFocusedFieldRef.current) {
       setFieldValue(field.value)
     }
   }, [field.value])
@@ -16,13 +17,16 @@ const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
     <input
       className="document-field__string"
       value={fieldValue || ''}
-      onBlur={(e) => { onBlur(field.id, field.type, field); isEditingRef.current = false; onChange(field.id, e.target.value) }}
-      onChange={(e) => { setFieldValue(e.target.value); onChange(field.id, e.target.value) }}
+      onBlur={(e) => { onBlur(field.id, field.type, field) }}
+      onChange={(e) => {
+        if (isCurrentlyFocusedField) {
+          setFieldValue(e.target.value); onChange(field.id, e.target.value)
+        }
+      }}
       onFocus={(e) => {
         if (!readOnly) {
           onFocus(field.id, field.type, field)
           e.target.select()
-          isEditingRef.current = true
         }
       }}
       placeholder="A string value..."
@@ -34,9 +38,10 @@ const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
 FieldStringComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldStringComponent
