@@ -16,7 +16,7 @@ function ProjectListComponent({ deleteHandler, sortProjectsHandler, projects, sp
   }
 
   const tableHeadings = {
-    project: { label: 'Project', sortable: true },
+    name: { label: 'Project', sortable: true },
     team: { label: showTeams ? 'Team' : '' },
     updatedAt: { label: 'Last modified', sortable: true },
     tools: { label: '' }
@@ -45,7 +45,8 @@ function ProjectListComponent({ deleteHandler, sortProjectsHandler, projects, sp
       <ProjectActions key={`pa-${projectId}`} handleDelete={() => handleDelete(projectId)} projectId={projectId} />
     ]
   }
-
+  console.log(sortBy)
+  console.log(sortMethod)
   return (
     <Table
       className="project-list"

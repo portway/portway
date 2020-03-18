@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
@@ -12,12 +12,13 @@ import { currentOrgId } from 'Libs/currentIds'
 import { uiConfirm } from 'Actions/ui'
 import { removeProject, sortProjects } from 'Actions/project'
 import { QUERY_PARAMS } from 'Shared/constants'
+import { parseParams } from 'Utilities/queryParams'
 
 import DashboardComponent from './DashboardComponent'
 
 const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortProjects }) => {
-  const { sortBy, sortMethod } = useParams()
-  const page = 1
+  const params = parseParams(location.search)
+  const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
 
   const { data: { projects }, loading } = useDataService(dataMapper.projects.list(page, sortBy, sortMethod), [sortBy, sortMethod])
   const { data: organization } = useDataService(dataMapper.organizations.current())
@@ -70,6 +71,8 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
       showTeams={showTeams}
       specialProject={specialProject}
       sortProjectsHandler={sortProjectsHandler}
+      sortBy={sortBy}
+      sortMethod={sortMethod}
     />
   )
 }
