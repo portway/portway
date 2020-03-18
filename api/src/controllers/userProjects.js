@@ -38,7 +38,7 @@ const paramSchema = Joi.compile({
 const querySchema = Joi.compile({
   page: Joi.number(),
   perPage: Joi.number(),
-  sortBy: Joi.string().valid(['name', 'createdAt', 'createdBy']),
+  sortBy: Joi.string().valid(['name', 'updatedAt']),
   sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
 })
 
