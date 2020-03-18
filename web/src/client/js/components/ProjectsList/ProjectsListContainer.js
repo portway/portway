@@ -15,7 +15,6 @@ import { QUERY_PARAMS } from 'Shared/constants'
 const ProjectsListContainer = ({ removeProject, uiConfirm }) => {
   const { sortBy, sortMethod } = useParams()
   const page = 1
-
   const { data: { projects }, loading } = useDataService(dataMapper.projects.list(page, sortBy, sortMethod), [sortBy, sortMethod])
 
   const handleDelete = (projectId) => {
@@ -34,7 +33,7 @@ const ProjectsListContainer = ({ removeProject, uiConfirm }) => {
     uiConfirm({ message, options })
   }
 
-  function sortProjectsHandler(selectedSortProperty) {
+  const sortProjectsHandler = (selectedSortProperty) => {
     let newSortMethod
     if (sortBy === selectedSortProperty && sortMethod === QUERY_PARAMS.ASCENDING) {
       newSortMethod = QUERY_PARAMS.DESCENDING

@@ -154,8 +154,8 @@ export const Form = {
 }
 
 export const Projects = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data'),
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS, 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_PROJECT, 'data'),
   receiveError: makeActionCreator(ActionTypes.RECEIVE_PROJECT_ERROR, 'projectId'),
@@ -166,7 +166,8 @@ export const Projects = {
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id'),
   requestForUser: makeActionCreator(ActionTypes.REQUEST_USER_PROJECTS, 'userId'),
-  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data')
+  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data'),
+  sort: makeActionCreator(ActionTypes.SORT_PROJECTS, 'sortBy', 'sortMethod')
 }
 
 export const ProjectAssignees = {

@@ -10,12 +10,11 @@ import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES 
  */
 export const fetchProjects = (page = 1, sortBy = 'createdAt', sortMethod = 'DESC') => {
   return async (dispatch) => {
-    dispatch(Projects.request())
-    const { data, status } = await fetch(`v1/users/${currentUserId}/projects?page=${page}&sortBy=${sortBy}&sortMethod=${sortMethod}`)
-    console.log(data)
+    dispatch(Projects.request(page))
+    const { data, status, totalPages } = await fetch(`v1/users/${currentUserId}/projects?page=${page}&sortBy=${sortBy}&sortMethod=${sortMethod}`)
     globalErrorCodes.includes(status) ?
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
-      dispatch(Projects.receive(data))
+      dispatch(Projects.receive(data, page, totalPages))
   }
 }
 

@@ -10,7 +10,7 @@ import ProjectActions from './ProjectActions'
 import './_ProjectList.scss'
 import './_SpecialProject.scss'
 
-function ProjectsListComponent({ deleteHandler, sortProjectsHandler, projects, specialProject, showTeams, sortBy, sortMethod }) {
+function ProjectListComponent({ deleteHandler, sortProjectsHandler, projects, specialProject, showTeams, sortBy, sortMethod }) {
   function handleDelete(projectId) {
     deleteHandler(projectId)
   }
@@ -58,12 +58,14 @@ function ProjectsListComponent({ deleteHandler, sortProjectsHandler, projects, s
   )
 }
 
-ProjectsListComponent.propTypes = {
+ProjectListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
   sortProjectsHandler: PropTypes.func.isRequired,
   projects: PropTypes.object.isRequired,
   specialProject: PropTypes.object,
   showTeams: PropTypes.bool.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  sortMethod: PropTypes.string.isRequired
 }
 
-export default ProjectsListComponent
+export default ProjectListComponent
