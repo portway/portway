@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 
 import billingCoordinator from '../coordinators/billing'
@@ -10,7 +10,7 @@ import ACTIONS from '../constants/actions'
 import { PLANS } from '../constants/plans'
 
 const bodySchema = Joi.compile({
-  plan: Joi.string().valid(Object.keys(PLANS)).required()
+  plan: Joi.string().valid(...Object.keys(PLANS)).required()
 })
 
 const paramSchema = Joi.compile({

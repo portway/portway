@@ -29,6 +29,8 @@ const createMany = async function(numberOfFields, override = {} ) {
       case FIELD_TYPES.NUMBER:
         value = faker.random.number()
         break
+      case FIELD_TYPES.DATE:
+        value = faker.random.date()
     }
   }
 
