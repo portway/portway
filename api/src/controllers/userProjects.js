@@ -1,11 +1,12 @@
 import Joi from 'joi'
 
-import { validateParams } from '../libs/middleware/payloadValidation'
+import { validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import BusinessProject from '../businesstime/project'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import crudPerms from '../libs/middleware/reqCrudPerms'
+import { SORT_METHODS } from '../constants/queryOptions'
 
 const { listPerm } = crudPerms(RESOURCE_TYPES.PROJECT,
   (req) => {
@@ -34,11 +35,19 @@ const paramSchema = Joi.compile({
   userId: Joi.number().required()
 })
 
+const querySchema = Joi.compile({
+  page: Joi.number(),
+  perPage: Joi.number(),
+  sortBy: Joi.string().valid(['name', 'createdAt', 'createdBy']),
+  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
+})
+
 const userProjectsController = function(router) {
   // all routes are nested at users/:userId/projects and receive req.params.userId
   router.get(
     '/',
     validateParams(paramSchema),
+    validateQuery(querySchema),
     conditionalListPerm,
     getUserProjects
   )
@@ -47,10 +56,12 @@ const userProjectsController = function(router) {
 const getUserProjects = async function(req, res, next) {
   const { userId } = req.params
   const { orgId } = req.requestorInfo
+  const { page = 1, perPage = 50, sortBy, sortMethod } = req.query
+  const options = { page, perPage, sortBy, sortMethod }
 
   try {
-    const userProjects = await BusinessProject.findAllForUser(userId, orgId)
-    res.status(200).json({ data: userProjects })
+    const { projects, count } = await BusinessProject.findAllForUser(userId, orgId, options)
+    res.json({ data: projects, page, perPage, total: count, totalPages: Math.ceil(count / perPage) })
   } catch (e) {
     next(e)
   }
