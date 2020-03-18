@@ -37,8 +37,8 @@ const DocumentFieldComponent = ({
     myFocusedFieldId,
     remoteUserFieldFocus
   } = socketState
-  const hasRemoteChangesRef = useRef()
-  hasRemoteChangesRef.current = Boolean(myFocusedFieldId === field.id && remoteChangesInCurrentlyFocusedField.length)
+  const remoteChangesRef = useRef()
+  remoteChangesRef.current = myFocusedFieldId === field.id ? remoteChangesInCurrentlyFocusedField : remoteChangesRef.current || []
 
   const nameRef = useRef()
   const toolsRef = useRef()
@@ -46,7 +46,7 @@ const DocumentFieldComponent = ({
 
   function handleFieldBodyUpdate(fieldId, body) {
     // set the unsaved state if applicable
-    if (!hasRemoteChangesRef.current) {
+    if (!remoteChangesRef.current.length) {
       onChange(fieldId, body)
     } else {
       setCachedLocalChanges(body)
@@ -58,11 +58,13 @@ const DocumentFieldComponent = ({
     onDiscard(field.documentId)
     // clear out any local changes
     setCachedLocalChanges(null)
+    remoteChangesRef.current = []
   }
 
   function handleManualSave() {
     onChange(field.id, cachedLocalChanges)
     setCachedLocalChanges(null)
+    remoteChangesRef.current = []
   }
 
   //Relevant usersById should already be fetched by the document users container
@@ -84,14 +86,13 @@ const DocumentFieldComponent = ({
 
   const remoteUserChangeNames = new Set()
 
-  if (hasRemoteChangesRef.current) {
-    remoteChangesInCurrentlyFocusedField.forEach((set, remoteChange) => {
+  if (remoteChangesRef.current.length) {
+    remoteChangesRef.current.forEach((remoteChange) => {
       const { userId } = remoteChange
       const user = usersById[userId]
       if (user) {
         remoteUserChangeNames.add(user.name)
       }
-      return set
     })
   }
 
@@ -155,9 +156,9 @@ const DocumentFieldComponent = ({
 
         <div className={fieldToolClasses} ref={toolsRef}>
           <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
-          <Popper align="left" anchorRef={toolsRef} open={cachedLocalChanges} placement="top" width="400">
+          <Popper align="left" anchorRef={toolsRef} open={Boolean(cachedLocalChanges)} placement="top" width="400">
             <div className="document-field__focus-buttons">
-              <div>{remoteUserChangeNames || 'Someone'} has made changes to this field</div>
+              <div>{remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'} {remoteUserChangeNames.length > 1 ? 'have' : 'has'} made changes to this field</div>
               <div className="document-field__focus-button-group">
                 <button className="btn btn--white btn--small" onClick={handleManualSave}>Overwrite their changes</button>
                 <button className="btn btn--small" onClick={handleDiscard}>Discard your work</button>
