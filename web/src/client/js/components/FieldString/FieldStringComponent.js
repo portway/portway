@@ -41,7 +41,7 @@ FieldStringComponent.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool.isRequired
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldStringComponent
