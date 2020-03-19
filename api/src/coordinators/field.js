@@ -1,6 +1,6 @@
 import BusinessField from '../businesstime/field'
 import { FIELD_TYPES } from '../constants/fieldTypes'
-import { processMarkdownWithWorker } from './markdown'
+import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { promisifyStreamPipe, callFuncWithArgs } from '../libs/utils'
 import fs from 'fs'
@@ -47,7 +47,7 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
   const result = await fieldCoordinator.addFieldToDocument(documentId, body, file)
   try {
     fs.unlink(filePath, () => {}) // don't need to await
-  } catch(e) {
+  } catch (e) {
     logger(LOG_LEVELS.ERROR, e)
   }
   return result
@@ -93,7 +93,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
       break
     case FIELD_TYPES.TEXT:
       const inputBody = body.value || ''
-      fieldBody.structuredValue = await processMarkdownWithWorker(inputBody)
+      fieldBody.structuredValue = await processMarkdownSync(inputBody)
       break
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.NUMBER:
