@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 import { validateParams } from '../libs/middleware/payloadValidation'
 import BusinessDocument from '../businesstime/document'

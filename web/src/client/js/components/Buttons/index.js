@@ -4,3 +4,4 @@
 
 export { default as ButtonGroup } from './ButtonGroup'
 export { default as IconButton } from './IconButton/IconButton'
+export { default as ToggleButton } from './ToggleButton/ToggleButton'
