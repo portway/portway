@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { Redirect } from 'react-router-dom'
@@ -40,12 +40,18 @@ const AdminUsersContainer = ({
   const params = parseParams(location.search)
   const [searchTerm, setSearchTerm] = useState(null)
   const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
+
+  useEffect(() => {
+    sortUsers(sortBy, sortMethod)
+  }, [sortBy, sortMethod, sortUsers])
+
   const { data: { users = [], totalPages } } = useDataService(dataMapper.users.list(page, sortBy, sortMethod), [page, sortBy, sortMethod])
 
   const { data: { userSearchResults = [], totalSearchPages } } = useDataService(dataMapper.users.searchByName(searchTerm), [searchTerm])
   // setting `null` as the second arg to useDataService will force seats to reload whenever
   // another action clears out seat data (eg adding/removing users)
   const { data: seats } = useDataService(dataMapper.organizations.seats(), null)
+
 
   const formId = 'user-create-form'
 
@@ -83,7 +89,6 @@ const AdminUsersContainer = ({
     }
 
     history.push({ search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}` })
-    sortUsers(sortBy, sortMethod)
   }
 
   const searchUsersByName = debounce(500, (value) => {

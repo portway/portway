@@ -8,7 +8,7 @@ import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES 
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchProjects = (page = 1, sortBy = 'createdAt', sortMethod = 'DESC') => {
+export const fetchProjects = (page = 1, sortBy = 'updatedAt', sortMethod = 'DESC') => {
   return async (dispatch) => {
     dispatch(Projects.request(page))
     const { data, status, totalPages } = await fetch(`v1/users/${currentUserId}/projects?page=${page}&sortBy=${sortBy}&sortMethod=${sortMethod}`)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -18,12 +18,15 @@ import DashboardComponent from './DashboardComponent'
 
 const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortProjects }) => {
   const params = parseParams(location.search)
-  const { page = 1, sortBy = 'createdAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
+  const { page = 1, sortBy = 'updatedAt', sortMethod = QUERY_PARAMS.DESCENDING } = params
+
+  useEffect(() => {
+    sortProjects(sortBy, sortMethod)
+  }, [sortBy, sortMethod, sortProjects])
 
   const { data: { projects }, loading } = useDataService(dataMapper.projects.list(page, sortBy, sortMethod), [sortBy, sortMethod])
   const { data: organization } = useDataService(dataMapper.organizations.current())
   const history = useHistory()
-
   const showTeams = MULTI_USER_PLAN_TYPES.includes(organization.plan)
 
   // Special project
@@ -59,7 +62,6 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
     history.push({
       search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}`
     })
-    sortProjects(sortBy, sortMethod)
   }
 
   return (
