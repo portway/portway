@@ -37,7 +37,7 @@ const paramSchema = Joi.compile({
 
 const querySchema = Joi.compile({
   page: Joi.number(),
-  perPage: Joi.number(),
+  perPage: Joi.number().max(50),
   sortBy: Joi.string().valid('name', 'updatedAt'),
   sortMethod: Joi.string().valid(SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING)
 })
@@ -47,7 +47,7 @@ const userProjectsController = function(router) {
   router.get(
     '/',
     validateParams(paramSchema),
-    validateQuery(querySchema),
+    validateQuery(querySchema, { includeDetails: true }),
     conditionalListPerm,
     getUserProjects
   )

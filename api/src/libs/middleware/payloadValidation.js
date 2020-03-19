@@ -72,6 +72,11 @@ export function validateQuery(schema, options = {}) {
 
     const apiError = new ono({ code: 400, publicMessage: PUBLIC_MESSAGES.INVALID_QUERY }, error.message)
 
+    if (error.name === 'ValidationError') {
+      apiError.errorDetails = error.details.map((detail) => { return { message: `Query: ${detail.message}`, key: detail.context.key }})
+      apiError.errorType = apiErrorTypes.ValidationError
+    }
+
     next(apiError)
   }
 }
