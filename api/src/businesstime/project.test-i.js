@@ -146,6 +146,7 @@ describe('BusinessProject', () => {
     let publicReadProject
     let publicWriteProject
     let projects
+    let count
 
     beforeAll(async () => {
       await clearDb()
@@ -166,7 +167,7 @@ describe('BusinessProject', () => {
     })
 
     beforeAll(async () => {
-      projects = await BusinessProject.findAllForUser(factoryUser.id, constants.ORG_ID)
+      ({ projects, count } = await BusinessProject.findAllForUser(factoryUser.id, constants.ORG_ID, {}))
     })
 
     it('should return all user assigned projects and public projects in organization', () => {
@@ -180,6 +181,10 @@ describe('BusinessProject', () => {
         expect(project.constructor).toBe(Object)
         expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
       }
+    })
+
+    it('should return the project count', () => {
+      expect(count).toBe(3)
     })
   })
 })
