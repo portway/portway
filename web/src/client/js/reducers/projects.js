@@ -93,8 +93,6 @@ export const projects = (state = initialState, action) => {
       return { ...state, projectsById, loading: { ...state.loading, list: false } }
     }
     case ActionTypes.SORT_PROJECTS: {
-      console.log(action.sortMethod)
-      console.log(state.sortMethod)
       if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {
         return {
           ...state,

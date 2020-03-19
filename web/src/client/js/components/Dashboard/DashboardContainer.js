@@ -55,7 +55,6 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
     } else {
       newSortMethod = QUERY_PARAMS.ASCENDING
     }
-    console.log(newSortMethod)
 
     history.push({
       search: `?sortBy=${selectedSortProperty}&sortMethod=${newSortMethod}&page=${page}`
