@@ -1,9 +1,14 @@
 import { ActionTypes } from '../actions'
+import { QUERY_PARAMS } from 'Shared/constants'
 
 const initialState = {
+  sortBy: 'createdAt',
+  sortMethod: QUERY_PARAMS.DESCENDING,
   projectsById: {},
+  projectIdsByPage: { 1: [] },
+  totalPages: null,
   loading: {
-    list: null,
+    byPage: {},
     byId: {}
   }
 }
@@ -19,13 +24,27 @@ export const projects = (state = initialState, action) => {
         return projectsById
       }, {})
 
+      const projectIds = action.data.map(project => project.id)
+      const loadingByPage = { ...state.loading.byPage, [action.page]: false }
+
       const loadingById = action.data.reduce((loadingById, project) => {
         loadingById[project.id] = false
         return loadingById
       }, {})
 
-      return { ...state, projectsById, loading: { ...state.loading, list: false, byId: { ...state.loading.byId, ...loadingById } } }
+      return {
+        ...state,
+        projectsById: { ...state.projectsById, ...projectsById },
+        loading: {
+          ...state.loading,
+          byPage: loadingByPage,
+          byId: { ...state.loading.byId, ...loadingById }
+        },
+        projectIdsByPage: { ...state.projectIdsByPage, [action.page]: projectIds },
+        totalPages: action.totalPages
+      }
     }
+
     case ActionTypes.REQUEST_PROJECT: {
       const loadingById = { ...state.loading.byId, [action.id]: false }
       return {
@@ -72,6 +91,19 @@ export const projects = (state = initialState, action) => {
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...projectsById } = state.projectsById
       return { ...state, projectsById, loading: { ...state.loading, list: false } }
+    }
+    case ActionTypes.SORT_PROJECTS: {
+      if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {
+        return {
+          ...state,
+          projectIdsByPage: {},
+          totalPages: null,
+          sortBy: action.sortBy,
+          sortMethod: action.sortMethod,
+          loading: { ...state.loading, byPage: {} }
+        }
+      }
+      return state
     }
     default:
       return state

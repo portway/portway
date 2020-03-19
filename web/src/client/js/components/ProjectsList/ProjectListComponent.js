@@ -10,16 +10,7 @@ import ProjectActions from './ProjectActions'
 import './_ProjectList.scss'
 import './_SpecialProject.scss'
 
-function ProjectsListComponent({
-  deleteHandler,
-  myProjectsOnly,
-  projects,
-  specialProject,
-  showTeams,
-  sortProjectsHandler,
-  sortBy,
-  sortMethod
-}) {
+function ProjectListComponent({ deleteHandler, sortProjectsHandler, projects, specialProject, showTeams, sortBy, sortMethod }) {
   function handleDelete(projectId) {
     deleteHandler(projectId)
   }
@@ -34,7 +25,7 @@ function ProjectsListComponent({
   const tableRows = {}
 
   // Special project should always be first
-  if (specialProject && !myProjectsOnly) {
+  if (specialProject) {
     tableRows[0] = [
       <ProjectLink key={`p-${specialProject.id}`} project={specialProject} special />,
       <ProjectTeam key={`pt-${specialProject.id}`} projectId={specialProject.id} show={specialProject.accessLevel == null} />,
@@ -67,10 +58,9 @@ function ProjectsListComponent({
   )
 }
 
-ProjectsListComponent.propTypes = {
+ProjectListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
   sortProjectsHandler: PropTypes.func.isRequired,
-  myProjectsOnly: PropTypes.bool.isRequired,
   projects: PropTypes.object.isRequired,
   specialProject: PropTypes.object,
   showTeams: PropTypes.bool.isRequired,
@@ -78,4 +68,4 @@ ProjectsListComponent.propTypes = {
   sortMethod: PropTypes.string.isRequired
 }
 
-export default ProjectsListComponent
+export default ProjectListComponent

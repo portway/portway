@@ -7,7 +7,7 @@ import useDataService from 'Hooks/useDataService'
 import SimpleProjectListComponent from './SimpleProjectListComponent'
 
 const SimpleProjectListContainer = ({ limit = 5 }) => {
-  const { data: projects } = useDataService(dataMapper.projects.list())
+  const { data: { projects } } = useDataService(dataMapper.projects.list())
   if (!projects) return null
 
   const projectsArray = Object.values(projects)
