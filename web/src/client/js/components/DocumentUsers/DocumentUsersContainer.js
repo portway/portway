@@ -38,6 +38,7 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById 
     }
   }, [fetchUsersWithIds, unloadedIds])
 
+  // TODO: connect to hook
   useEffect(() => {
     socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
     documentSocket.on('userChange', (userIds) => {

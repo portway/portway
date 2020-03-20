@@ -10,6 +10,10 @@ const documentUrl = new URL(`/documents?token=${token}`, SYNC_URL)
 
 const documentSocket = openSocket(documentUrl.href)
 
+documentSocket.on('connect', () => {
+  console.log('connected')
+})
+
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',
