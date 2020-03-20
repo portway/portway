@@ -8,6 +8,7 @@ import tokenIntegrator from '../integrators/token'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
+import { AVATAR_URLS } from '../constants/avatars'
 import { pick } from '../libs/utils'
 import emailCoordinator from '../coordinators/email'
 import billingCoordinator from './billing'
@@ -124,7 +125,9 @@ async function createPendingUser(email, name, orgId) {
       name,
       orgRoleId: ORGANIZATION_ROLE_IDS.USER,
       orgId,
-      resetKey
+      resetKey,
+      // eslint-disable-next-line no-bitwise
+      avatar: AVATAR_URLS[(Math.random() * AVATAR_URLS.length) | 0] // assign random avatar from list
     })
   }
 
