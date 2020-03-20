@@ -30,12 +30,32 @@ export default (io) => {
     const userSocketNs = `sync:org:${orgId}:user:${userId}:socket:${socketId}`
     const userSocketRoomNs = getUserSocketRoomNs(userSocketNs)
 
+    const leaveRoom = async (documentId) => {
+      if (typeof documentId !== 'string') return
+
+      socket.leave(documentId)
+      // remove user from document room Set
+      const docRoomNs = getDocRoomNs(documentId, orgId)
+      await redis.srem(docRoomNs, userSocketNs)
+
+      // delete user/socket current room
+      await redis.del(userSocketRoomNs)
+      // remove user's focused field
+      await redis.del(getFocusedFieldNs(userSocketNs))
+
+      await updateAndBroadcastRoomUsers(documentId, orgId)
+    }
+
     const joinRoom = async (documentId) => {
       if (typeof documentId !== 'string') return
 
       const currentDocumentRoomId = await redis.get(userSocketRoomNs)
-
       if (currentDocumentRoomId === documentId) return
+
+      // automatically leave current room if there is one, only one room at a time
+      if (currentDocumentRoomId) {
+        await leaveRoom(currentDocumentRoomId)
+      }
 
       socket.join(documentId)
       // add user to document room Set
@@ -51,21 +71,7 @@ export default (io) => {
     // Document Room
     socket.on('joinRoom', joinRoom)
 
-    socket.on('leaveRoom', async (documentId) => {
-      if (typeof documentId !== 'string') return
-
-      socket.leave(documentId)
-      // remove user from document room Set
-      const docRoomNs = getDocRoomNs(documentId, orgId)
-      await redis.srem(docRoomNs, userSocketNs)
-
-      // delete user/socket current room
-      await redis.del(userSocketRoomNs)
-      // remove user's focused field
-      await redis.del(getFocusedFieldNs(userSocketNs))
-
-      await updateAndBroadcastRoomUsers(documentId, orgId)
-    })
+    socket.on('leaveRoom', leaveRoom)
 
     socket.on('disconnect', async () => {
       const documentId = await redis.get(userSocketRoomNs)

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -7,30 +7,28 @@ import { currentUserId } from 'Libs/currentIds'
 import { fetchUsersWithIds } from 'Actions/user'
 import useDocumentSocket from 'Hooks/useDocumentSocket'
 import useSyncDocumentRoom from 'Hooks/useSyncDocumentRoom'
-import { updateDocumentRoomUsers } from '../../sockets/SocketProvider'
 
 import DocumentUsersComponent from './DocumentUsersComponent'
 
 const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById }) => {
-  const fullActiveUsers = useRef()
   const { documentId } = useParams()
+
+  useSyncDocumentRoom(documentId)
+
   const { state: socketState } = useDocumentSocket()
 
-  const activeUsers = socketState.activeDocumentUsers[documentId]
+  const activeUsers = socketState.activeDocumentUsers[documentId] || []
+
   const unloadedIds = activeUsers && activeUsers.filter((userId) => {
     return usersLoadedById[userId] === undefined
   })
 
-  useEffect(() => {
-    fullActiveUsers.current = []
-    if (activeUsers && activeUsers.length) {
-      activeUsers.forEach((userId) => {
-        if (Number(userId) !== currentUserId) {
-          fullActiveUsers.current.push(usersById[userId])
-        }
-      })
+  const fullActiveUsers = activeUsers.reduce((cur, userId) => {
+    if (Number(userId) !== currentUserId && usersById[userId]) {
+      cur = [...cur, usersById[userId]]
     }
-  }, [activeUsers, usersById])
+    return cur
+  }, [])
 
   useEffect(() => {
     if (unloadedIds && unloadedIds.length > 0) {
@@ -38,9 +36,7 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById 
     }
   }, [fetchUsersWithIds, unloadedIds])
 
-  useSyncDocumentRoom(documentId)
-
-  return <DocumentUsersComponent activeUsers={fullActiveUsers.current} />
+  return <DocumentUsersComponent activeUsers={fullActiveUsers} />
 }
 
 DocumentUsersContainer.propTypes = {
