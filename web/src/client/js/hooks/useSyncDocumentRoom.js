@@ -3,9 +3,9 @@ import useDocumentSocket from './useDocumentSocket'
 import { emitJoinDocumentRoom, emitLeaveDocumentRoom, updateDocumentRoomUsers } from '../sockets/SocketProvider'
 
 export default function(documentId) {
-  useEffect(() => {
-    const { documentSocket, socketDispatch } = useDocumentSocket()
+  const { documentSocket, dispatch: socketDispatch } = useDocumentSocket()
 
+  useEffect(() => {
     socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
 
     const handleUserChange = (userIds) => {

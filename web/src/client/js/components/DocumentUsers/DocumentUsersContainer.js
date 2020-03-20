@@ -6,17 +6,17 @@ import { useParams } from 'react-router-dom'
 import { currentUserId } from 'Libs/currentIds'
 import { fetchUsersWithIds } from 'Actions/user'
 import useDocumentSocket from 'Hooks/useDocumentSocket'
-import { updateDocumentRoomUsers, emitJoinDocumentRoom, emitLeaveDocumentRoom } from '../../sockets/SocketProvider'
+import useSyncDocumentRoom from 'Hooks/useSyncDocumentRoom'
+import { updateDocumentRoomUsers } from '../../sockets/SocketProvider'
 
 import DocumentUsersComponent from './DocumentUsersComponent'
 
 const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById }) => {
   const fullActiveUsers = useRef()
   const { documentId } = useParams()
-  const { state: socketState, dispatch: socketDispatch, documentSocket } = useDocumentSocket()
+  const { state: socketState } = useDocumentSocket()
 
   const activeUsers = socketState.activeDocumentUsers[documentId]
-  const currentDocumentRoom = socketState.currentDocumentRoom
   const unloadedIds = activeUsers && activeUsers.filter((userId) => {
     return usersLoadedById[userId] === undefined
   })
@@ -38,19 +38,7 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById 
     }
   }, [fetchUsersWithIds, unloadedIds])
 
-  // TODO: connect to hook
-  useEffect(() => {
-    socketDispatch(emitJoinDocumentRoom(socketDispatch, documentId))
-    documentSocket.on('userChange', (userIds) => {
-      socketDispatch(updateDocumentRoomUsers(documentId, userIds))
-    })
-    return () => {
-      if (currentDocumentRoom) {
-        socketDispatch(emitLeaveDocumentRoom(socketDispatch, currentDocumentRoom))
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentId])
+  useSyncDocumentRoom(documentId)
 
   return <DocumentUsersComponent activeUsers={fullActiveUsers.current} />
 }
