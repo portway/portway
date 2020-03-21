@@ -11,7 +11,7 @@ const documentUrl = new URL(`/documents?token=${token}`, SYNC_URL)
 const documentSocket = openSocket(documentUrl.href)
 
 documentSocket.on('connect', () => {
-  console.log('Connected to sync service')
+  console.info('Connected to sync service')
 })
 
 const actionTypes = {
