@@ -14,6 +14,7 @@ import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/con
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
 import useSyncUserFocus from 'Hooks/useSyncUserFocus'
+import useSyncFieldChange from 'Hooks/useSyncFieldChange'
 
 const defaultDocument = {
   name: ''
@@ -41,6 +42,7 @@ const DocumentContainer = ({
 
   const currentDocumentId = currentDocument && currentDocument.id
   useSyncUserFocus(currentDocumentId)
+  useSyncFieldChange(currentDocumentId, fetchDocument)
 
   /**
    * If we're creating a document, render nothing

@@ -1,24 +1,20 @@
 import { useEffect } from 'react'
 import useDocumentSocket from './useDocumentSocket'
-import { updateRemoteUserFieldFocus, receiveRemoteFieldChange } from '../sockets/SocketProvider'
-import { currentUserId } from 'Libs/currentIds'
-import { fetchDocument } from 'Actions/document'
+import { updateRemoteUserFieldFocus } from '../sockets/SocketProvider'
 
 export default function(documentId) {
   const { documentSocket, dispatch: socketDispatch } = useDocumentSocket()
 
   return useEffect(() => {
-    if (documentId) {
-      documentSocket.on('userFocusChange', (userId, fieldId) => {
-        socketDispatch(updateRemoteUserFieldFocus(userId, fieldId))
-      })
-      documentSocket.on('userFieldChange', (userId, fieldId) => {
-        socketDispatch(receiveRemoteFieldChange(userId, fieldId))
-        if (userId !== currentUserId.toString()) {
-          fetchDocument(documentId)
-        }
-      })
+    const handleUserFocus = (userId, fieldId) => {
+      socketDispatch(updateRemoteUserFieldFocus(userId, fieldId))
+    }
+
+    documentSocket.on('userFocusChange', handleUserFocus)
+
+    return () => {
+      documentSocket.off('userFocusChange', handleUserFocus)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentId])
+  }, [])
 }
