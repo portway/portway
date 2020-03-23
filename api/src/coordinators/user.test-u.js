@@ -239,13 +239,13 @@ describe('user coordinator', () => {
     it('should call BusinessUser.create with the correct body', () => {
       const mockResetKey = passwordResetKey.generate.mock.results[0].value
       expect(BusinessUser.create.mock.calls.length).toBe(1)
-      expect(BusinessUser.create.mock.calls[0][0]).toEqual({
+      expect(BusinessUser.create.mock.calls[0][0]).toEqual(expect.objectContaining({
         email,
         name,
         orgId,
         resetKey: mockResetKey,
         orgRoleId: ORGANIZATION_ROLE_IDS.USER
-      })
+      }))
     })
 
     it('should call tokenIntegrator.generatePasswordResetToken with the user id and reset key', () => {
