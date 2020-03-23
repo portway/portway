@@ -54,11 +54,12 @@ export const updateFieldOrder = (projectId, documentId, fieldId, newOrder) => {
   return async (dispatch) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
     const { status } = await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
-    if (globalErrorCodes.includes(status)) {
-      // If something bad happens, just fetch the whole document
-      dispatch(fetchDocument(documentId))
-      return
-    }
+    dispatch(fetchDocument(documentId))
+    // if (globalErrorCodes.includes(status)) {
+    //   // If something bad happens, just fetch the whole document
+    //   dispatch(fetchDocument(documentId))
+    //   return
+    // }
   }
 }
 
