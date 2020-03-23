@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -8,14 +8,13 @@ import { uiToggleDocumentMode, uiToggleFullScreen } from 'Actions/ui'
 import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
-import useDocumentSocket from 'Hooks/useDocumentSocket'
-import { updateRemoteUserFieldFocus, receiveRemoteFieldChange } from '../../sockets/SocketProvider'
-import { currentUserId } from 'Libs/currentIds'
 import { fetchDocument } from 'Actions/document'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
+import useSyncUserFocus from 'Hooks/useSyncUserFocus'
+import useSyncFieldChange from 'Hooks/useSyncFieldChange'
 
 const defaultDocument = {
   name: ''
@@ -40,27 +39,10 @@ const DocumentContainer = ({
   ])
 
   let currentDocument = document
-  const currentDocumentId = document && currentDocument.id
-  // =============================== Web Socket events ====================================
 
-  const { dispatch: socketDispatch, documentSocket } = useDocumentSocket()
-
-  useEffect(() => {
-    if (currentDocumentId) {
-      documentSocket.on('userFocusChange', (userId, fieldId) => {
-        socketDispatch(updateRemoteUserFieldFocus(userId, fieldId))
-      })
-      documentSocket.on('userFieldChange', (userId, fieldId) => {
-        socketDispatch(receiveRemoteFieldChange(userId, fieldId))
-        if (userId !== currentUserId.toString()) {
-          fetchDocument(currentDocumentId)
-        }
-      })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDocumentId])
-
-  // =======================================================================================
+  const currentDocumentId = currentDocument && currentDocument.id
+  useSyncUserFocus(currentDocumentId)
+  useSyncFieldChange(currentDocumentId, fetchDocument)
 
   /**
    * If we're creating a document, render nothing

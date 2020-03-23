@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly }) => {
+const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly, isCurrentlyFocusedField }) => {
   const [fieldValue, setFieldValue] = useState(field.value)
+
+  const isCurrentlyFocusedFieldRef = useRef(isCurrentlyFocusedField)
+  isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
 
   const isEditingRef = useRef(false)
 
   useEffect(() => {
-    if (!isEditingRef.current) {
+    if (!isCurrentlyFocusedFieldRef.current) {
       setFieldValue(field.value)
     }
   }, [field.value])
@@ -30,8 +33,12 @@ const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly }) =>
     <input
       className="document-field__number"
       value={fieldValue == null ? '' : fieldValue}
-      onBlur={(e) => { onBlur(field.id, field.type, field); isEditingRef.current = false; handleChange(e) }}
-      onChange={handleChange}
+      onBlur={(e) => { onBlur(field.id, field.type, field) }}
+      onChange={(e) => {
+        if (isCurrentlyFocusedField) {
+          setFieldValue(e.target.value); handleChange(e)
+        }
+      }}
       onFocus={(e) => {
         if (!readOnly) {
           onFocus(field.id, field.type, field)
@@ -51,6 +58,7 @@ FieldNumberComponent.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldNumberComponent

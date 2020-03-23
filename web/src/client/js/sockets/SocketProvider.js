@@ -10,6 +10,10 @@ const documentUrl = new URL(`/documents?token=${token}`, SYNC_URL)
 
 const documentSocket = openSocket(documentUrl.href)
 
+documentSocket.on('connect', () => {
+  console.info('Connected to sync service')
+})
+
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',
@@ -37,6 +41,7 @@ export const emitJoinDocumentRoom = (dispatch, documentId) => {
   }
   dispatch({ type: actionTypes.EMIT_JOIN_DOCUMENT_ROOM, documentId })
   documentSocket.emit('joinRoom', documentId)
+
   return {
     type: actionTypes.DOCUMENT_ROOM_JOINED,
     documentId
