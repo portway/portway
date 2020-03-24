@@ -52,7 +52,7 @@ const RegistrationForm = () => {
           <div className="field field--checkbox">
             <label htmlFor="mailchimp-subscribe">Sign up for Portway email updates</label>
             <div className="field__control">
-              <input checked type="checkbox" name="mailchimp" id="mailchimp-subscribe" />
+              <input defaultChecked={true} type="checkbox" name="mailchimp" id="mailchimp-subscribe" />
             </div>
           </div>
         </div>
