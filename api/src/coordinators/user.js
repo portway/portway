@@ -12,6 +12,7 @@ import { pick } from '../libs/utils'
 import emailCoordinator from '../coordinators/email'
 import billingCoordinator from './billing'
 import slackIntegrator from '../integrators/slack'
+import mailchimpIntegrator from '../integrators/mailchimp'
 
 const PUBLIC_FIELDS = resourcePublicFields[resourceTypes.USER]
 
@@ -35,7 +36,7 @@ async function updatePassword(userId, currentPassword, newPassword, confirmNewPa
   emailCoordinator.sendPasswordChangeEmail(user.email)
 }
 
-async function setInitialPassword(id, password) {
+async function setInitialPassword(id, password, joinNewsletter = false) {
   if (!password) {
     throw ono({ code: 400 }, 'A valid password must be provided')
   }
@@ -60,6 +61,11 @@ async function setInitialPassword(id, password) {
 
   // not awaiting this, sends a notification to slack channel
   slackIntegrator.sendNotification(`${user.email} has verified their account`)
+
+  // join the mailchimp list if user selected
+  if (joinNewsletter) {
+    mailchimpIntegrator.joinList(user.email)
+  }
 
   return token
 }
