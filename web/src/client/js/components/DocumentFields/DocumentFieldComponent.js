@@ -58,6 +58,7 @@ const DocumentFieldComponent = ({
     [FIELD_TYPES.STRING]: 'String',
     [FIELD_TYPES.NUMBER]: 'Number',
     [FIELD_TYPES.IMAGE]: 'Image',
+    [FIELD_TYPES.DATE]: 'Date',
   }
 
   // Field name handling

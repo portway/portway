@@ -1,0 +1,106 @@
+@import 'CSS/inc/_include-media.scss';
+
+.document-field__date {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @include media('>medium') {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .react-datepicker {
+    background-color: var(--theme-overlay-light);
+    border-radius: var(--border-radius);
+    border: thin solid var(--theme-border);
+    box-shadow: var(--box-shadow);
+    color: var(--theme-text-color);
+    font-family: unset;
+  }
+  .react-datepicker-wrapper {
+    display: block;
+  }
+  .react-datepicker-popper[data-placement^="top"] .react-datepicker__triangle {
+    border-top-color: var(--theme-overlay-light);
+  }
+  .react-datepicker-popper[data-placement^="top"] .react-datepicker__triangle::before {
+    border-top-color: var(--theme-border);
+  }
+
+  // Date
+  .react-datepicker__header {
+    background-color: var(--theme-overlay-dark);
+    border-bottom: thin solid var(--theme-surface);
+    padding: 1.2rem 1.6rem 0 1.6rem;
+
+    &--time {
+      padding: 1.2rem 1.6rem 1.2rem 1.6rem;
+    }
+
+  }
+  .react-datepicker__navigation {
+    top: 14px;
+    &--previous {
+      left: 14px;
+    }
+    &--next {
+      right: 14px;
+    }
+  }
+  .react-datepicker__month {
+    margin: 1rem;
+  }
+  .react-datepicker__day-names {
+    padding-top: 12px;
+  }
+  .react-datepicker__day-name {
+    color: var(--color-gray-50);
+    font-size: 1.2rem;
+    width: 2.4rem;
+  }
+  .react-datepicker__day {
+    border-radius: var(--border-radius);
+    font-size: 1.2rem;
+    padding: 4px;
+    width: 2.4rem;
+    &--selected {
+      background-color: var(--color-purple);
+    }
+  }
+
+  .react-datepicker__time {
+    background-color: var(--theme-surface);
+  }
+
+  .react-datepicker__time-container {
+    .react-datepicker__time {
+      .react-datepicker__time-box {
+        ul.react-datepicker__time-list {
+          li.react-datepicker__time-list-item {
+            height: auto;
+            font-size: 1.3rem;
+            &--selected {
+              background-color: var(--color-purple);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.document-field__date-input-container {
+  align-items: center;
+  display: flex;
+  padding: .6rem .8rem 1.2rem;
+  @include media('>medium') {
+    margin-right: var(--icon-margin);
+    padding: 0;
+  }
+}
+
+.document-field__date-button {
+  margin-right: var(--icon-margin);
+}
