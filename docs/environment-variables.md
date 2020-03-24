@@ -58,7 +58,9 @@ Make sure people know they need to update their local .env with the new value!
 **API_PUBLIC_URL**: The publicly accessible FQDN for the API. Used to make API calls from the client javascript app.  
 **FLAG_DISABLE_SIGNUP**: Turns off the sign up form and endpoint when set to the string `true`  
 **LOG_TOKEN_WEB**: An r7insight token for web logging  
-**SYNC_URL**: Url for the sync service socket
+**LOG_TOKEN_WEB**: An r7insight token for web logging
+**SUPPORT_FORM_SUBMIT_ORIGIN**: An origin to send a redirect back to after support form data is submitted. Support form submits to zendesk. This allows both the Portway app and getportway.com to utilize the same form submission    
+**SYNC_URL**: Url for the sync service socket  
 
 # Shared Environment Variables
 **JWT_SECRET**: A secret string used to sign and verify JSON Web Tokens used for app authentication  

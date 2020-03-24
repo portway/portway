@@ -59,6 +59,11 @@ spec:
             configMapKeyRef:
               name: web-config
               key: web.flag_disable_signup
+        - name: SUPPORT_FORM_SUBMIT_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.support_form_submit_origin
         - name: ZENDESK_API_TOKEN
           valueFrom:
             secretKeyRef:

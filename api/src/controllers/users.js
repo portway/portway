@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 import multer from 'multer'
 
@@ -25,8 +25,8 @@ const querySchema = Joi.compile({
   page: Joi.number(),
   perPage: Joi.number(),
   nameSearch: Joi.string(),
-  sortBy: Joi.string().valid(['name', 'createdAt']),
-  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING]),
+  sortBy: Joi.string().valid('name', 'createdAt'),
+  sortMethod: Joi.string().valid(SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING),
   ids: Joi.array().items(Joi.number())
 })
 

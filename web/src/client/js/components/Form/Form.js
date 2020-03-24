@@ -48,7 +48,7 @@ const Form = ({
 
   function submitHandler(e) {
     e.preventDefault()
-    onSubmit()
+    onSubmit(e)
     setFormChanged(false)
     return false
   }

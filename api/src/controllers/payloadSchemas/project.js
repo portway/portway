@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import PROJECT_ACCESS_LEVELS from '../../constants/projectAccessLevels'
 
 export const rawSchema = {
@@ -7,7 +7,7 @@ export const rawSchema = {
     .allow('')
     .allow(null),
   accessLevel: Joi.string()
-    .valid(Object.values(PROJECT_ACCESS_LEVELS))
+    .valid(...Object.values(PROJECT_ACCESS_LEVELS))
     .allow(null)
 }
 

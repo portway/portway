@@ -1,7 +1,9 @@
 import { ActionTypes } from '../actions'
+import { QUERY_PARAMS } from 'Shared/constants'
 
 const initialState = {
   sortBy: 'createdAt',
+  sortMethod: QUERY_PARAMS.DESCENDING,
   usersById: {},
   userIdsByPage: {},
   totalPages: null,

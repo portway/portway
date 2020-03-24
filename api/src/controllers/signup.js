@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 
 import { validateBody } from '../libs/middleware/payloadValidation'
 import signUpCoordinator from '../coordinators/signUp'

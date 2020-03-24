@@ -147,16 +147,25 @@ const DOCUMENT_MODE = {
   EDIT: 'EDIT',
 }
 
+const NETWORK_STATUS = {
+  OFFLINE: 'offline',
+  ONLINE: 'online',
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Portway',
   PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
+  // Application
+  NETWORK_STATUS: NETWORK_STATUS,
   // Documentation
   URL_WEBSITE: 'https://getportway.com/',
   URL_DOCUMENTATION: 'https://docs.portway.app/',
   URL_API_DOCS: 'https://docs.portway.app/api',
   URL_GUIDES: 'https://docs.portway.app/guides',
+  URL_PRIVACY: 'https://getportway.com/privacy',
+  URL_TWITTER: 'https://twitter.com/portwayapp',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
@@ -171,6 +180,8 @@ module.exports = {
   MAX_FILE_SIZE: 10000000,
   MAX_AVATAR_SIZE: 1024 * 1000,
   MIN_PASSWORD_LENGTH: 8,
+  // Page titles
+  TITLE_PROJECTS: 'Projects',
   // Notifications
   NOTIFICATION_TYPES: NOTIFICATION_TYPES,
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,

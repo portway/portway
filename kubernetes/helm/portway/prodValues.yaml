@@ -21,6 +21,7 @@ webTag: "0.12.1"
 web:
   port: "3000"
   flagDisableSignup: "true"
+  support_form_submit_origin: "https://getportway.com"
 
 api:
   cdnHostname: "https://www.portwaycontent.com"

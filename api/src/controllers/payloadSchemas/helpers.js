@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import RESOURCE_TYPES from '../../constants/resourceTypes'
 import * as user from './user'
 import * as projectUser from './projectUser'

@@ -15,6 +15,7 @@ export const ActionTypes = {
   REMOVE_PROJECT: 'REMOVE_PROJECT',
   REQUEST_USER_PROJECTS: 'REQUEST_USER_PROJECTS',
   RECEIVE_USER_PROJECTS: 'RECEIVE_USER_PROJECTS',
+  SORT_PROJECTS: 'SORT_PROJECTS',
   // Project Assignments
   REQUEST_PROJECT_ASSIGNEES: 'REQUEST_PROJECT_ASSIGNEES',
   RECEIVE_PROJECT_ASSIGNEES: 'RECEIVE_PROJECT_ASSIGNEES',
@@ -64,6 +65,7 @@ export const ActionTypes = {
   REMOVE_FIELD: 'REMOVE_FIELD',
   FOCUS_FIELD: 'FOCUS_FIELD',
   BLUR_FIELD: 'BLUR_FIELD',
+  FOCUS_FIELD_WITH_ID: 'FOCUS_FIELD_WITH_ID',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -154,8 +156,8 @@ export const Form = {
 }
 
 export const Projects = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data'),
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS, 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_PROJECT, 'data'),
   receiveError: makeActionCreator(ActionTypes.RECEIVE_PROJECT_ERROR, 'projectId'),
@@ -166,7 +168,8 @@ export const Projects = {
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id'),
   requestForUser: makeActionCreator(ActionTypes.REQUEST_USER_PROJECTS, 'userId'),
-  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data')
+  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data'),
+  sort: makeActionCreator(ActionTypes.SORT_PROJECTS, 'sortBy', 'sortMethod')
 }
 
 export const ProjectAssignees = {
@@ -224,9 +227,11 @@ export const Fields = {
   // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId'),
-  // Blur / Focus
+  // Blur / Focus events
   blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
   focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  // Focus action
+  focusFieldWithId: makeActionCreator(ActionTypes.FOCUS_FIELD_WITH_ID, 'id', 'type'),
 }
 
 export const Notifications = {

@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
+import { Helmet } from 'react-helmet'
 
+import { PRODUCT_NAME, TITLE_PROJECTS } from 'Shared/constants'
 import DashboardContainer from 'Components/Dashboard/DashboardContainer'
 
 const ProjectsContainer = () => {
@@ -10,9 +12,14 @@ const ProjectsContainer = () => {
     }
   }, [])
   return (
-    <main>
-      <DashboardContainer />
-    </main>
+    <>
+      <Helmet>
+        <title>{TITLE_PROJECTS} –– {PRODUCT_NAME}</title>
+      </Helmet>
+      <main>
+        <DashboardContainer />
+      </main>
+    </>
   )
 }
 
