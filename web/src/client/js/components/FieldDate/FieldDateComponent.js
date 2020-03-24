@@ -65,12 +65,14 @@ const FieldDateComponent = ({
             boundariesElement: 'viewport'
           }
         }}
+        readOnly={readOnly}
         selected={fieldDate}
       />
       <DatePicker
         customInput={<CustomTimeInput />}
         dateFormat="yyyy-MM-dd hh:mm:ss"
         onChange={internalChangeHandler}
+        readOnly={readOnly}
         selected={fieldDate}
         showTimeSelect
         showTimeSelectOnly
