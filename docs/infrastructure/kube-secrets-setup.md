@@ -52,3 +52,6 @@ These are only needed if the audit log should get backed up in the environment a
 ```
 kubectl create secret generic audit-log-backup --from-literal=access_key_id='value' --from-literal=secret_access_key='value' --from-literal=api_key='value' --from-literal=log_id='value'
 ```
+
+kubectl create secret generic mailchimp-secrets --from-literal=mailchimp_secret_key='value'
+```
