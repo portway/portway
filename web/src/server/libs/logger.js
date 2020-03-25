@@ -26,6 +26,13 @@ switch (LOGGER) {
       console.error(err)
     })
     break
+  case LOGGER_TYPES.NONE:
+    logger = {
+      log: () => {},
+      info: () => {},
+      error: () => {}
+    }
+    break
   default:
     // eslint-disable-next-line no-console
     logger = console
