@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
 import { partialFields, requiredFields } from './payloadSchemas/helpers'

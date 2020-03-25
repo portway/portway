@@ -1,0 +1,29 @@
+.toggle-button {
+  --toggle-color: var(--color-gray-50);
+  &__label {
+    font-size: 1.3rem;
+    padding: 0 .75rem 0 .25rem;
+    opacity: 0.4;
+  }
+  &__button {
+    border-radius: var(--border-radius);
+    min-height: unset;
+    padding: 0;
+  }
+  &__value {
+    border-radius: var(--border-radius);
+    display: inline-block;
+    font-size: 1.3rem;
+    padding: .25rem 1rem;
+    text-align: center;
+  }
+  [role="switch"][aria-checked="false"] :first-child,
+  [role="switch"][aria-checked="true"] :last-child {
+    background: var(--toggle-color);
+    color: #fff;
+  }
+  [role="switch"][aria-checked="true"] :first-child,
+  [role="switch"][aria-checked="false"] :last-child {
+    color: var(--toggle-color);
+  }
+}

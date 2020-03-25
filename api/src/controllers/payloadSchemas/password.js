@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { MIN_PASSWORD_LENGTH } from '../../constants/password'
 
 export const rawSchema = Joi.compile({
