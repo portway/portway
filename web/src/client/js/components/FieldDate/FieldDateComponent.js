@@ -67,11 +67,16 @@ const FieldDateComponent = ({
     if (validity.patternMismatch) {
       // Show a custom error message which shows the current time in the right format
       const currentTime = new Date()
-      const hours = currentTime.getHours()
+      let hour = currentTime.getHours()
       const min = (currentTime.getMinutes() < 10 ? '0' : '') + currentTime.getMinutes()
-      const meridiem = (hours >= 12) ? 'PM' : 'AM'
+      const meridiem = (hour >= 12) ? 'pm' : 'am'
+      if (hour === 0) {
+        hour = 12
+      } else if (hour > 12) {
+        hour = hour - 12
+      }
       setValidity(
-        <>Please enter a valid time<br />Example: {hours}:{min} {meridiem}</>
+        <>Please enter a valid time<br />Example: {hour}:{min} {meridiem}</>
       )
     } else {
       setValidity(null)

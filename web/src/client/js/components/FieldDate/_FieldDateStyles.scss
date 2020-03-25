@@ -144,5 +144,11 @@
   input {
     padding: 0;
     width: auto;
+    &:invalid {
+      border: none;
+      box-shadow: none;
+      color: var(--color-red);
+      outline: none;
+    }
   }
 }
