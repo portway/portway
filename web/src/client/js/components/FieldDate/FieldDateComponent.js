@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -43,11 +43,6 @@ const FieldDateComponent = ({
   const timeRef = useRef()
   const [fieldDate, setFieldDate] = useState(startDate)
   const [validity, setValidity] = useState(null)
-
-  useEffect(() => {
-    // todo: delete me then merge
-    console.log(fieldDate)
-  }, [fieldDate])
 
   function internalChangeHandler(date) {
     setFieldDate(date)
