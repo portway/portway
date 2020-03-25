@@ -92,11 +92,14 @@
       background-color: var(--color-purple);
     }
   }
+  .react-datepicker__day--outside-month {
+    opacity: 0.2;
+  }
 
+  // Time
   .react-datepicker__time {
     background-color: var(--theme-surface);
   }
-
   .react-datepicker__time-container {
     .react-datepicker__time {
       .react-datepicker__time-box {
