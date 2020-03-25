@@ -21,7 +21,7 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
         <div className="project-list__title">
           <ProjectIcon
             className="project-list__icon"
-            fill={!privateProject ? 'var(--color-gray-30)' : 'var(--theme-icon-color)'}
+            fill={!privateProject ? 'var(--color-gray-30)' : 'var(--color-blue)'}
             width="32"
             height="32"
           />

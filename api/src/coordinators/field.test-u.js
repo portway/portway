@@ -1,7 +1,7 @@
 import fieldCoordinator from './field'
 import assetCoordinator from './assets'
 import BusinessField from '../businesstime/field'
-import { processMarkdownWithWorker } from './markdown'
+import { processMarkdownSync } from './markdown'
 import { promisifyStreamPipe, callFuncWithArgs } from '../libs/utils'
 import axios from 'axios'
 
@@ -53,13 +53,13 @@ describe('fieldCoordinator', () => {
           type: 2
         }
         beforeAll(async () => {
-          processMarkdownWithWorker.mockReset()
+          processMarkdownSync.mockReset()
           await fieldCoordinator.addFieldToDocument(documentId, inputBody)
         })
 
-        it('should call processMarkdownWithWorker', () => {
-          expect(processMarkdownWithWorker.mock.calls.length).toBe(1)
-          expect(processMarkdownWithWorker.mock.calls[0][0]).toBe('')
+        it('should call processMarkdownSync', () => {
+          expect(processMarkdownSync.mock.calls.length).toBe(1)
+          expect(processMarkdownSync.mock.calls[0][0]).toBe('')
         })
       })
 
@@ -70,13 +70,13 @@ describe('fieldCoordinator', () => {
           value: '# Markdown Header \n and pretty colors'
         }
         beforeAll(async () => {
-          processMarkdownWithWorker.mockReset()
+          processMarkdownSync.mockReset()
           await fieldCoordinator.addFieldToDocument(documentId, inputBody)
         })
 
-        it('should call processMarkdownWithWorker', () => {
-          expect(processMarkdownWithWorker.mock.calls.length).toBe(1)
-          expect(processMarkdownWithWorker.mock.calls[0][0]).toBe(inputBody.value)
+        it('should call processMarkdownSync', () => {
+          expect(processMarkdownSync.mock.calls.length).toBe(1)
+          expect(processMarkdownSync.mock.calls[0][0]).toBe(inputBody.value)
         })
       })
     })

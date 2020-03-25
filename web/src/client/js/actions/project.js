@@ -8,12 +8,14 @@ import { PATH_PROJECT, PATH_PROJECTS, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES 
  * Redux action
  * @returns Redux dispatch with data
  */
-export const fetchProjects = async (dispatch) => {
-  dispatch(Projects.request())
-  const { data, status } = await fetch(`v1/users/${currentUserId}/projects`)
-  globalErrorCodes.includes(status) ?
-    dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
-    dispatch(Projects.receive(data))
+export const fetchProjects = (page = 1, sortBy = 'updatedAt', sortMethod = 'DESC') => {
+  return async (dispatch) => {
+    dispatch(Projects.request(page))
+    const { data, status, totalPages } = await fetch(`v1/users/${currentUserId}/projects?page=${page}&sortBy=${sortBy}&sortMethod=${sortMethod}`)
+    globalErrorCodes.includes(status) ?
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECTS, status)) :
+      dispatch(Projects.receive(data, page, totalPages))
+  }
 }
 
 export const fetchProjectsForUser = (userId) => {
@@ -185,5 +187,11 @@ export const removeProjectToken = (projectId, tokenId) => {
       return
     }
     dispatch(ProjectTokens.removedOne(projectId, tokenId))
+  }
+}
+
+export const sortProjects = (sortBy, sortMethod) => {
+  return (dispatch) => {
+    return dispatch(Projects.sort(sortBy, sortMethod))
   }
 }

@@ -19,7 +19,7 @@ const SearchFieldContainer = ({
   searchTerm
 }) => {
   const location = useLocation()
-  const { data: projects } = useDataService(dataMapper.projects.list())
+  const { data: { projects } } = useDataService(dataMapper.projects.list())
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
