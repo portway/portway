@@ -2,13 +2,16 @@
 
 .document-field__date {
   align-items: flex-start;
+  cursor: default;
   display: flex;
   flex-direction: column;
+  padding: .8rem;
   width: 100%;
 
   @include media('>medium') {
     align-items: center;
     flex-direction: row;
+    padding: 0;
   }
 
   .react-datepicker {
@@ -19,6 +22,9 @@
     color: var(--theme-text-color);
     font-family: unset;
   }
+  .react-datepicker-popper {
+    z-index: 10;
+  }
   .react-datepicker-wrapper {
     display: block;
   }
@@ -27,6 +33,9 @@
   }
   .react-datepicker-popper[data-placement^="top"] .react-datepicker__triangle::before {
     border-top-color: var(--theme-border);
+  }
+  .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle::before {
+    border-bottom-color: var(--theme-border);
   }
 
   // Date
@@ -52,6 +61,15 @@
   .react-datepicker__month {
     margin: 1rem;
   }
+  .react-datepicker__month-dropdown-container--select {
+    padding: 1rem 0 0;
+  }
+  .react-datepicker__month-select {
+    font-size: 1rem;
+  }
+  .react-datepicker__year-select {
+    font-size: 1rem;
+  }
   .react-datepicker__day-names {
     padding-top: 12px;
   }
@@ -59,12 +77,17 @@
     color: var(--color-gray-50);
     font-size: 1.2rem;
     width: 2.4rem;
+    &:first-child { color: var(--color-red-dark); }
+    &:last-child { color: var(--color-red-dark); }
   }
   .react-datepicker__day {
     border-radius: var(--border-radius);
     font-size: 1.2rem;
     padding: 4px;
     width: 2.4rem;
+    &--weekend {
+      color: var(--color-red-dark);
+    }
     &--selected {
       background-color: var(--color-purple);
     }
@@ -91,10 +114,14 @@
   }
 }
 
+.document-field__date-field {
+  align-items: center;
+  display: flex;
+}
+
 .document-field__date-input-container {
   align-items: center;
   display: flex;
-  padding: .6rem .8rem 1.2rem;
   @include media('>medium') {
     margin-right: var(--icon-margin);
     padding: 0;
@@ -103,4 +130,16 @@
 
 .document-field__date-button {
   margin-right: var(--icon-margin);
+}
+
+.document-field__date-label {
+  margin-right: 1.3rem;
+}
+
+.document-field__date-time {
+  position: relative;
+  input {
+    padding: 0;
+    width: auto;
+  }
 }
