@@ -28,6 +28,7 @@ items:
     web.api_public_url: {{ printf "https://%s" .Values.apiPublicUrl }}
     web.stripe_publishable_key: {{ .Values.stripePublishableKey | quote }}
     web.flag_disable_signup: {{ .Values.web.flagDisableSignup | quote }}
+    web.support_form_submit_origin: {{ .Values.web.support_form_submit_origin }}
   kind: ConfigMap
   metadata:
     name: web-config

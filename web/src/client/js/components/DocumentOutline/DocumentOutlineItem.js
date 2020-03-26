@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import {
+  DateIcon,
   DragIcon,
   ImageIcon,
   NumberIcon,
@@ -28,10 +29,11 @@ const DocumentOutlineItem = ({
   const [dragEnabled, setDragEnabled] = useState(true)
   const listItemRef = useRef()
   const fieldIcons = {
-    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--theme-icon-color)" />,
-    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" fill="var(--theme-icon-color)" />,
-    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" fill="var(--theme-icon-color)" />,
-    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" fill="var(--theme-icon-color)" />,
+    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" />,
+    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" />,
+    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" />,
+    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" />,
+    [FIELD_TYPES.DATE]: <DateIcon width="24" height="24" />,
   }
 
   function focusDocumentFieldHandler(e) {
