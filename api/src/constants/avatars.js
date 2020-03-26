@@ -11,7 +11,9 @@ const AVATAR_FILES = [
   '4.svg',
   '5.svg',
   '6.svg',
-  '7.svg'
+  '7.svg',
+  '8.svg',
+  '9.svg'
 ]
 
 export const AVATAR_URLS = AVATAR_FILES.map((file) => {
