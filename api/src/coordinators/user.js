@@ -64,7 +64,7 @@ async function setInitialPassword(id, password, joinNewsletter = false) {
 
   // join the mailchimp list if user selected
   if (joinNewsletter) {
-    mailchimpIntegrator.joinList(user.email)
+    mailchimpIntegrator.joinList(user.email, user.name)
   }
 
   return token
