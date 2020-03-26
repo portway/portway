@@ -86,13 +86,7 @@ async function validatePasswordResetKey(userId, resetKey) {
   return user
 }
 
-async function createPendingUser(email, name, orgId) {
-  const existingUser = await BusinessUser.findByEmail(email)
-  if (existingUser) {
-    const publicMessage = 'Cannot create user, this email address is already in use'
-    throw ono({ code: 409, errorDetails: [{ key: 'users', message: publicMessage }] }, publicMessage)
-  }
-
+async function createOrgUser(email, name, orgId) {
   // look up number of org seats and number of current users,
   // make sure org isn't maxed out
   const orgBilling = await billingCoordinator.getOrgBilling(orgId)
@@ -110,6 +104,38 @@ async function createPendingUser(email, name, orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'users', message: publicMessage }] }, publicMessage)
   }
 
+  const user = await userCoordinator.createPendingUser(email, name, orgId)
+  const token = tokenIntegrator.generatePasswordResetToken(user.id, user.resetKey)
+  await emailCoordinator.sendInvitationEmail(user.email, token, orgId)
+  return pick(user, PUBLIC_FIELDS)
+}
+
+/**
+ * ALL user creation should run through this function! It does not check org seats, send invites,
+ * or handle any logic beyond creating the user with a resetKey.
+ *
+ * Note the returned user object will have a resetKey, which can be used to send out invite links etc.
+ * @param {String} email
+ * @param {String} name
+ * @param {String} orgId
+ * @param {String} orgRoleId
+ * @return {Object} User with resetKey property
+ */
+async function createPendingUser(
+  email,
+  name,
+  orgId,
+  orgRoleId = ORGANIZATION_ROLE_IDS.USER
+) {
+  const existingUser = await BusinessUser.findByEmail(email)
+  if (existingUser) {
+    const publicMessage = 'Cannot create user, this email address is already in use'
+    throw ono(
+      { code: 409, errorDetails: [{ key: 'users', message: publicMessage }] },
+      publicMessage
+    )
+  }
+
   const resetKey = passwordResetKey.generate()
 
   //look for existing soft-deleted user
@@ -118,24 +144,27 @@ async function createPendingUser(email, name, orgId) {
   let user
 
   if (previouslyDeletedUser) {
-    user = await BusinessUser.restoreSoftDeleted(previouslyDeletedUser.id, resetKey, orgId, ORGANIZATION_ROLE_IDS.USER)
+    user = await BusinessUser.restoreSoftDeleted(
+      previouslyDeletedUser.id,
+      resetKey,
+      orgId,
+      ORGANIZATION_ROLE_IDS.USER
+    )
   } else {
     user = await BusinessUser.create({
       email,
       name,
-      orgRoleId: ORGANIZATION_ROLE_IDS.USER,
+      orgRoleId,
       orgId,
       resetKey,
       // eslint-disable-next-line no-bitwise
       avatar: AVATAR_URLS[(Math.random() * AVATAR_URLS.length) | 0] // assign random avatar from list
     })
   }
+  // Not a public field, but we return it here so invites can be sent
+  user.resetKey = resetKey
 
-  const token = tokenIntegrator.generatePasswordResetToken(user.id, resetKey)
-
-  await emailCoordinator.sendInvitationEmail(user.email, token, orgId)
-
-  return pick(user, PUBLIC_FIELDS)
+  return user
 }
 
 async function deleteById(userId, orgId) {
@@ -156,12 +185,15 @@ async function resendInvite(userId, orgId) {
   await emailCoordinator.sendInvitationEmail(updatedUser.email, token, orgId)
 }
 
-export default {
+const userCoordinator = {
   updatePassword,
   setInitialPassword,
   validateEmailPasswordCombo,
   validatePasswordResetKey,
+  createOrgUser,
   createPendingUser,
   deleteById,
   resendInvite
 }
+
+export default userCoordinator
