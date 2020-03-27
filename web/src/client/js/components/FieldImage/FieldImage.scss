@@ -64,7 +64,9 @@
 }
 
 .document-field__image-container {
-  // max-width: 45%;
+  align-items: center;
+  display: flex;
+  min-height: 135px;
   position: relative;
 }
 

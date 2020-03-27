@@ -70,11 +70,9 @@ const FieldImageComponent = ({
       const reader = new FileReader()
       reader.readAsDataURL(previewRef.current)
       reader.onload = (e) => {
-        console.log('preview loaded')
         imageRef.current = new Image()
         imageRef.current.src = e.target.result
         imageRef.current.onload = () => {
-          console.log('image tag loaded')
           if (isMounted.current) {
             setImageSrc(e.target.result)
             // Updating the preview
