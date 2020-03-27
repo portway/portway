@@ -86,16 +86,8 @@ const conditionalDeletePerm = async (req, res, next) => {
   return deletePerm(req, res, next)
 }
 
-const dirkMiddleware = (req, res, next) => {
-  console.log('#######################')
-  typeof req.query.ids
-  console.log(req.query.ids)
-  console.log('#######################')
-  next()
-}
-
 const usersController = function(router) {
-  router.get('/', dirkMiddleware, validateQuery(querySchema), listPerm, getUsers)
+  router.get('/', validateQuery(querySchema), listPerm, getUsers)
   router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getUser)
   router.post('/', validateBody(bodySchema, { includeDetails: true }), createPerm, createUser)
   router.put(

@@ -40,7 +40,8 @@ export const fetchUser = (id) => {
 export const fetchUsersWithIds = (userIds) => {
   return async (dispatch) => {
     dispatch(Users.requestMultipleUnloadedIds(userIds))
-    const { data, status } = await fetch(`v1/users?ids=[${userIds}]`)
+    const userIdsQs = userIds.join('&ids[]=')
+    const { data, status } = await fetch(`v1/users?ids[]=${userIdsQs}`)
     if (globalErrorCodes.includes(status)) {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
