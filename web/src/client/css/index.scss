@@ -64,6 +64,25 @@ form {
 
 }
 
+.registration__newsletter {
+  background: var(--theme-overlay-light);
+  border-radius: var(--border-radius);
+  margin: 2rem 2rem 2rem 2rem;
+  padding: 1rem 1rem;
+
+  &-label {
+    border-bottom: thin solid var(--theme-overlay-dark);
+    display: block;
+  }
+
+  .field-container {
+    margin: .5rem 0 0;
+    label {
+      font-weight: 300;
+    }
+  }
+}
+
 footer {
   padding: 0 0 10rem 0;
   text-align: center;

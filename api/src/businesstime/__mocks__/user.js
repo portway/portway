@@ -1,4 +1,5 @@
 import resourceTypes from '../../constants/resourceTypes'
+import { ORGANIZATION_ROLE_IDS } from '../../constants/roles'
 import resourcePublicFields from '../../constants/resourcePublicFields'
 import { pick } from '../../libs/utils'
 
@@ -10,7 +11,11 @@ const getGenericMockUserData = () => {
     orgId: 666,
     password: 'not-a-real-hashed-password',
     resetKey: 'not-a-real-reset-key',
-    avatar: 'not-a-real-user-avatar'
+    avatar: 'not-a-real-user-avatar',
+    createdAt: '2020-10-20T04:28:13',
+    updatedAt: '2020-10-20T04:28:13',
+    orgRoleId: ORGANIZATION_ROLE_IDS.USER,
+    pending: false
   }
 }
 
