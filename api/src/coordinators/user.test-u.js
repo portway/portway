@@ -217,35 +217,14 @@ describe('user coordinator', () => {
     })
   })
 
-  describe('#createPendingUser', () => {
+  describe('#createOrgUser', () => {
     const email = 'not-a-real-email@email.fun'
     const name = 'Fakothy McGee'
     let createdUser
 
     beforeAll(async () => {
       BusinessUser.findByEmail.mockReturnValueOnce(null)
-      createdUser = await userCoordinator.createPendingUser(email, name, orgId)
-    })
-
-    it('should call passwordResetKey.generate', () => {
-      expect(passwordResetKey.generate.mock.calls.length).toBe(1)
-    })
-
-    it('should call BusinessUser.findSoftDeletedByEmail with the passed in email', () => {
-      expect(BusinessUser.findSoftDeletedByEmail.mock.calls.length).toBe(1)
-      expect(BusinessUser.findSoftDeletedByEmail.mock.calls[0][0]).toBe(email)
-    })
-
-    it('should call BusinessUser.create with the correct body', () => {
-      const mockResetKey = passwordResetKey.generate.mock.results[0].value
-      expect(BusinessUser.create.mock.calls.length).toBe(1)
-      expect(BusinessUser.create.mock.calls[0][0]).toEqual({
-        email,
-        name,
-        orgId,
-        resetKey: mockResetKey,
-        orgRoleId: ORGANIZATION_ROLE_IDS.USER
-      })
+      createdUser = await userCoordinator.createOrgUser(email, name, orgId)
     })
 
     it('should call tokenIntegrator.generatePasswordResetToken with the user id and reset key', () => {
@@ -274,7 +253,7 @@ describe('user coordinator', () => {
         BusinessUser.findByEmail.mockReturnValueOnce(null)
         billingCoordinator.getOrgBilling.mockReturnValueOnce({})
         await expect(userCoordinator
-          .createPendingUser(email, name, orgId))
+          .createOrgUser(email, name, orgId))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
@@ -285,10 +264,58 @@ describe('user coordinator', () => {
         billingCoordinator.getOrgBilling.mockReturnValueOnce({
           subscription: { totalSeats: 5, usedSeats: 5 }
         })
-        await expect(userCoordinator.createPendingUser(email, name, orgId)).rejects.toEqual(
+        await expect(userCoordinator.createOrgUser(email, name, orgId)).rejects.toEqual(
           expect.objectContaining({ code: 409 })
         )
       })
+    })
+  })
+
+  describe('#createPendingUser', () => {
+    const email = 'bonkey-kidz@email.fun'
+    const name = 'BonkeyBob'
+    let createdUser
+
+    beforeAll(async () => {
+      passwordResetKey.generate.mockClear()
+      BusinessUser.findSoftDeletedByEmail.mockClear()
+      BusinessUser.create.mockClear()
+      createdUser = await userCoordinator.createPendingUser(
+        email, name, orgId
+      )
+    })
+
+    it('should call passwordResetKey.generate', () => {
+      expect(passwordResetKey.generate.mock.calls.length).toBe(1)
+    })
+
+    it('should call BusinessUser.findSoftDeletedByEmail with the passed in email', () => {
+      expect(BusinessUser.findSoftDeletedByEmail.mock.calls.length).toBe(1)
+      expect(BusinessUser.findSoftDeletedByEmail.mock.calls[0][0]).toBe(email)
+    })
+
+    it('should call BusinessUser.create with the correct body', () => {
+      const mockResetKey = passwordResetKey.generate.mock.results[0].value
+      expect(BusinessUser.create.mock.calls.length).toBe(1)
+      expect(BusinessUser.create.mock.calls[0][0]).toEqual(
+        expect.objectContaining({
+          email,
+          name,
+          orgId,
+          resetKey: mockResetKey,
+          orgRoleId: ORGANIZATION_ROLE_IDS.USER
+        })
+      )
+    })
+
+    it('should return a user with an avatar', () => {
+      expect(createdUser.avatar.length).toBeGreaterThan(10)
+    })
+
+    it('should return the created user with only public fields and resetKey exposed', () => {
+      expect(Object.keys(createdUser)).toEqual(
+        expect.arrayContaining([...resourcePublicFields[resourceTypes.USER], 'resetKey'])
+      )
     })
 
     describe('when there is a returned soft-deleted user', () => {

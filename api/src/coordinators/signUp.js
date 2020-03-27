@@ -1,13 +1,13 @@
 import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
-import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import emailCoordinator from './email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
 import introCoordinator from './intro'
+import userCoordinator from './user'
 import ono from 'ono'
 import slackIntegrator from '../integrators/slack'
 import logger from '../integrators/logger'
@@ -24,15 +24,10 @@ async function createUserAndOrganization(name, email) {
 
   const organizationName = `${name}'s Organization`
   const organization = await BusinessOrganization.create({ name: organizationName })
-  const resetKey = passwordResetKey.generate()
 
-  const createdUser = await BusinessUser.create({
-    name,
-    email,
-    orgId: organization.id,
-    orgRoleId: ORGANIZATION_ROLE_IDS.OWNER,
-    resetKey
-  })
+  const createdUser = await userCoordinator.createPendingUser(
+    email, name, organization.id, ORGANIZATION_ROLE_IDS.OWNER
+  )
 
   const customer = await stripeIntegrator.createCustomer({ name: organization.name, description: `Customer for Org Owner: ${email}`, email })
 
@@ -57,10 +52,8 @@ async function createUserAndOrganization(name, email) {
     orgId: organization.id
   })
 
-  const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, resetKey)
-
+  const token = tokenIntegrator.generatePasswordResetToken(createdUser.id, createdUser.resetKey)
   const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
-
   await emailCoordinator.sendSignupVerification(linkUrl, createdUser.email)
 
   // not awaiting this, sends a notification to slack channel
