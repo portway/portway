@@ -61,6 +61,11 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
               <ImageIcon width="26" height="26" /> <span className="label">Image</span>
             </button>
           </MenuItem>
+          <MenuItem tabIndex="-1">
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.FILE) }}>
+              <ImageIcon width="26" height="26" /> <span className="label">File</span>
+            </button>
+          </MenuItem>
         </Menu>
         <MenuHeader><h2>Data</h2></MenuHeader>
         <Menu anchorRef={anchorRef}>
