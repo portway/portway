@@ -1,30 +1,19 @@
 .file-uploader {
   align-items: center;
-  border: thin solid var(--theme-border);
+  background-color: hsla(255, 255%, 255%, .9);
   border-radius: var(--border-radius);
+  border: thin solid var(--theme-border);
   display: flex;
-  padding: 3.4rem 0;
+  height: 100%;
+  left: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
   width: 100%;
 
   &--dragged-over {
     background-color: var(--color-gray-5);
     cursor: copy;
-  }
-
-  &--with-value {
-    background-color: hsla(0, 0%, 0%, .7);
-    border-radius: 0;
-    border: none;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-
-    .btn--blank {
-      color: var(--color-gray-50);
-      font-size: 1.2rem;
-    }
-
   }
 
   &--uploading {
@@ -34,12 +23,7 @@
   }
 
   &__icon {
-    margin-bottom: 1.1rem;
-    .file-uploader--with-value & {
-      path {
-        fill: var(--color-gray-2);
-      }
-    }
+    margin-bottom: .6rem;
   }
 
   &__content {
@@ -51,18 +35,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 1.2rem;
     width: 100%;
   }
 
   &__label {
     display: block;
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     font-weight: 500;
     margin-bottom: 1.8rem;
     text-align: center;
-    .file-uploader--with-value & {
-      color: var(--color-gray-2);
-    }
+
   }
 
   &__status {

@@ -1,10 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
+
+import useIsMounted from 'Hooks/useIsMounted'
 
 import { MAX_FILE_SIZE } from 'Shared/constants'
+import { RemoveIcon, EditIcon } from 'Components/Icons'
+import { IconButton } from 'Components/Buttons'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
-import Form from 'Components/Form/Form'
-import FormField from 'Components/Form/FormField'
+
+import IconImage from '../../../images/icon/image.svg'
 import './FieldImage.scss'
 
 const ALLOWED_TYPES = [
@@ -19,6 +24,7 @@ const ALLOWED_TYPES = [
 ]
 
 const FieldImageComponent = ({
+  autoFocusElement,
   field,
   onChange,
   onRename,
@@ -27,87 +33,159 @@ const FieldImageComponent = ({
   settingsMode,
   updating
 }) => {
+  const isMounted = useIsMounted()
   const [warning, setWarning] = useState(null)
-  const imageNodeRef = useRef()
+
+  // Image
+  const imageRef = useRef() // temporary image to do width/height
+  const imageNodeRef = useRef() // the actual <img /> tag
+  const [imageSrc, setImageSrc] = useState(field.value || IconImage) // the source of the image
+  const [imageDetails, setImageDetails] = useState({}) // image metadata
+  const isUpdatingTheActualImage = settingsMode && updating
+
+  // Previews
+  const previewRef = useRef() // the File data
+
+  useEffect(() => {
+    // If the source of the image changes (field.value), let's create a new
+    // image to get its size and dimensions
+    if (field.value) {
+      imageRef.current = new Image()
+      imageRef.current.src = field.value
+      imageRef.current.onload = () => {
+        if (isMounted.current) {
+          setImageDetails({
+            height: imageRef.current.naturalHeight,
+            width: imageRef.current.naturalWidth,
+          })
+        }
+      }
+    }
+  }, [isMounted, field.value])
+
+  useEffect(() => {
+    // When the image src is updating, render a preview of the image with the
+    // new details
+    if (isUpdatingTheActualImage) {
+      const reader = new FileReader()
+      reader.readAsDataURL(previewRef.current)
+      reader.onload = (e) => {
+        console.log('preview loaded')
+        imageRef.current = new Image()
+        imageRef.current.src = e.target.result
+        imageRef.current.onload = () => {
+          console.log('image tag loaded')
+          if (isMounted.current) {
+            setImageSrc(e.target.result)
+            // Updating the preview
+            setImageDetails({
+              height: imageRef.current.naturalHeight,
+              width: imageRef.current.naturalWidth,
+            })
+          }
+        }
+      }
+    }
+  }, [isMounted, isUpdatingTheActualImage, previewRef])
 
   function uploadImage(file) {
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
       setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
+      settingsHandler(field.id)
       return
     }
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setWarning(`The image type "${file.type}" is not supported.`)
+      setWarning(`Sorry, the image type “${file.type}” is not supported. Try a jpg, png, or gif!`)
+      settingsHandler(field.id)
       return
     }
+    // Save the file for previewing AFTER updating starts
+    // This fixes the display bug where the image was previewed before it started
+    // uploading, so it was weird
+    previewRef.current = file
+    // Start the uploading
     const formData = new FormData()
     formData.append('file', file)
     if (!field.value) {
       formData.append('name', file.name)
     }
     onChange(field.id, formData)
-    previewImage(file)
   }
 
-  function previewImage(file) {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onloadend = function() {
-      field.value = reader.result
-    }
-  }
+  const imageClassnames = cx({
+    'document-field__image-tag': true,
+    'document-field__image-tag--empty': !field.value,
+  })
 
   return (
     <div className="document-field__image">
-      <div className="document-field__image-container">
-        {field.value &&
-        <img src={field.value} alt={field.name} ref={imageNodeRef} lazy="true" />
-        }
-        {(settingsMode || !field.value || updating) &&
-        <FileUploaderComponent
-          accept="image/*"
-          hasValue={field.value !== null}
-          isUpdating={updating}
-          label="Drag and drop an image"
-          fileChangeHandler={uploadImage}
-          fileUploadedHandler={() => { settingsHandler(field.id) }}>
-          {settingsMode &&
-          <button
-            className="btn btn--blank"
-            onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
-            Cancel
-          </button>
+      <figure className="document-field__image-figure">
+        <div className="document-field__image-container">
+          {imageSrc &&
+          <img
+            className={imageClassnames}
+            src={imageSrc}
+            alt={field && field.name}
+            ref={imageNodeRef}
+            lazy="true"
+          />
           }
+          <div className="document-field__settings-button">
+            <>
+              {!settingsMode && !readOnly && field.value &&
+                <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { settingsHandler(field.id) }}>
+                  <EditIcon width="14" height="14" />
+                </IconButton>
+              }
+              {settingsMode && field.value &&
+                <IconButton color="dark" aria-label="Exit settings" onClick={() => { settingsHandler(field.id) }}>
+                  <RemoveIcon width="12" height="12" />
+                </IconButton>
+              }
+            </>
+          </div>
+          {(settingsMode || !field.value || isUpdatingTheActualImage) &&
+          <FileUploaderComponent
+            accept="image/*"
+            hasValue={field.value !== null}
+            isUpdating={updating}
+            label="Drag and drop an image"
+            fileChangeHandler={uploadImage}
+            fileUploadedHandler={() => { settingsHandler(field.id) }}>
+          </FileUploaderComponent>
+          }
+        </div>
+        <figcaption className="document-field__image-details">
+          <ul className="list list--blank">
+            <li className="document-field__image-details">
+              <input
+                // eslint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus={autoFocusElement}
+                className="input--without-styling"
+                defaultValue={field.name}
+                onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
+                placeholder="Name your image"
+                type="text"
+              />
+            </li>
+            {imageDetails && imageDetails.width && imageDetails.height &&
+            <li className="document-field__image-details document-field__image-details--meta">
+              {`${imageDetails.width}x${imageDetails.height}`}
+            </li>
+            }
+          </ul>
           {warning &&
           <p className="small warning">{warning}</p>
           }
-        </FileUploaderComponent>
-        }
-      </div>
-      {settingsMode && field.value &&
-      <div className="document-field__settings">
-        <Form
-          id="field-image-settings"
-          name="field-image-settings"
-          onSubmit={() => { settingsHandler(field.id) }}
-          submitLabel="Save settings"
-        >
-          <FormField
-            className="document-field__settings__input"
-            defaultValue={field.name}
-            id={`document-field-name-${field.id}`}
-            label="Image name"
-            name="field-name"
-            onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
-          />
-        </Form>
-      </div>
-      }
+        </figcaption>
+      </figure>
     </div>
   )
 }
 
 FieldImageComponent.propTypes = {
+  autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,

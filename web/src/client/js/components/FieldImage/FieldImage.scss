@@ -14,30 +14,84 @@
 .document-field__image {
   position: relative;
 
-  &-container {
-    position: relative;
-    .document-field--settings-mode & {
-      display: flex;
-      max-height: 400px;
-      min-height: 250px;
-      overflow: hidden;
+  // Override
+  .document-field__settings-button {
+    left: 1.75rem;
+    position: absolute;
+    top: 1.75rem;
+    z-index: 5;
+  }
+
+  .file-uploader {
+    border: thin solid var(--theme-overlay-dark);
+  }
+
+  input.input--without-styling {
+    background-color: var(--theme-overlay-dark);
+    border-radius: var(--border-radius);
+    font-size: 1.2rem;
+    min-height: auto;
+    overflow: hidden;
+    padding: 2px;
+    text-align: center;
+    text-overflow: ellipsis;
+    width: auto;
+    &:focus {
+      background-color: var(--theme-overlay-light);
     }
   }
 
-  img {
-    height: auto;
-    margin: auto;
-    max-width: 100%;
+  // Only show the edit button on hover of the whole field
+  @media (hover: hover) {
+    .document-field__edit-btn {
+      display: none;
+    }
+    &:hover {
+      .document-field__edit-btn {
+        display: block;
+      }
+    }
   }
 
-  .document-field__progress {
-    background: var(--field-edit-mode-background);
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 2;
+}
+
+.document-field__image-figure {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0;
+}
+
+.document-field__image-container {
+  // max-width: 45%;
+  position: relative;
+}
+
+.document-field__image-details {
+  flex: 1;
+  margin: 0;
+  padding: 0 1rem;
+  text-align: center;
+  width: 100%;
+  // Lighter text
+  &--meta {
+    color: var(--color-gray-40);
+    font-size: 1.1rem;
+  }
+}
+
+.document-field__image-tag {
+  // background-color: var(--theme-overlay-light);
+  border-radius: var(--border-radius);
+  height: auto;
+  max-width: 100%;
+  padding: calc(var(--icon-margin) * 2);
+
+  &--empty {
+    height: 400px;
+    opacity: 0.3;
+    width: 400px;
   }
 
 }

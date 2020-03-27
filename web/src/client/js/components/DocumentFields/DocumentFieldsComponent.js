@@ -85,6 +85,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.IMAGE:
         fieldTypeComponent = (
           <FieldImageComponent
+            autoFocusElement={createdFieldId === field.id}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
@@ -92,7 +93,7 @@ const DocumentFieldsComponent = ({
             onRename={fieldRenameHandler}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-            settingsMode={settingsForField === field.id}
+            settingsMode={settingsForField === field.id || !field.value}
             updating={fieldsUpdating[field.id]}
           />
         )

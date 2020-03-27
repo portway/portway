@@ -90,7 +90,7 @@ const FileUploaderComponent = ({
       onDrop={dropHandler}>
       {!uploading && !isUpdating &&
       <form className="file-uploader__form" method="post" encType="multipart/form-data">
-        <DropIcon className="file-uploader__icon" width="46" height="46" />
+        <DropIcon className="file-uploader__icon" width="32" height="32" />
         <label className="file-uploader__content">
           <span className="file-uploader__label">{label}</span>
           <span className="btn btn--small btn--cyan">Or select a file</span>
