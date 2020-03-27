@@ -19,7 +19,16 @@ import { ToggleButton } from 'Components/Buttons'
 
 import './_Dashboard.scss'
 
-const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, showTeams, sortProjectsHandler, sortBy, sortMethod }) => {
+const DashboardComponent = ({
+  deleteHandler,
+  loading,
+  projects,
+  specialProject,
+  showTeams,
+  sortProjectsHandler,
+  sortBy,
+  sortMethod
+}) => {
   const [showMyProjects, toggleMyProjects] = useState(false)
   const history = useHistory()
   const objectKeys = Object.keys(projects)
@@ -65,7 +74,7 @@ const DashboardComponent = ({ deleteHandler, loading, projects, specialProject, 
               history={history}
               deleteHandler={deleteHandler}
               myProjectsOnly={showMyProjects}
-              projects={projects}
+              projects={showMyProjects ? myProjects : projects}
               showTeams={showTeams}
               specialProject={specialProject}
               sortProjectsHandler={sortProjectsHandler}

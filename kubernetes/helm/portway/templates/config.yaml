@@ -29,6 +29,7 @@ items:
     web.stripe_publishable_key: {{ .Values.stripePublishableKey | quote }}
     web.flag_disable_signup: {{ .Values.web.flagDisableSignup | quote }}
     web.sync_url: {{ printf "https://%s" .Values.syncUrl }}
+    web.support_form_submit_origin: {{ .Values.web.support_form_submit_origin }}
   kind: ConfigMap
   metadata:
     name: web-config
