@@ -11,7 +11,6 @@ spec:
   - hosts:
     - {{ .Values.baseUrl }}
     - {{ .Values.apiPublicUrl }}
-    - {{ .Values.docsUrl }}
     - {{ .Values.syncUrl }}
     secretName: {{ .Values.certIssuer }}-cert
   rules:
@@ -27,12 +26,6 @@ spec:
       - backend:
           serviceName: {{ .Release.Name }}-web-service
           servicePort: {{ .Values.web.port }}
-  - host: {{ .Values.docsUrl }}
-    http:
-      paths:
-      - backend:
-          serviceName: {{ .Release.Name }}-docs-service
-          servicePort: {{ .Values.docs.port }}
   - host: {{ .Values.syncUrl }}
     http:
       paths:

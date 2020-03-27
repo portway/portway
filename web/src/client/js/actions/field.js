@@ -63,12 +63,9 @@ export const updateField = (projectId, documentId, fieldId, body, socketDispatch
 export const updateFieldOrder = (projectId, documentId, fieldId, newOrder, socketDispatch) => {
   return async (dispatch) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
-    const { status } = await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
-    if (globalErrorCodes.includes(status)) {
-      // If something bad happens, just fetch the whole document
-      dispatch(fetchDocument(documentId))
-      return
-    }
+    await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
+    dispatch(fetchDocument(documentId))
+
     if (socketDispatch) {
       socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
     }

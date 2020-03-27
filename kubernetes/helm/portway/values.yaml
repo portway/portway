@@ -36,11 +36,6 @@ db:
   name: "defaultdb"
   useSsl: "true"
 
-docs:
-  image: 'bonkeybong/portway_docs'
-  tag: '1.1.1'
-  port: "3003"
-
 sync:
   port: "3004"
   image: "bonkeybong/portway_sync"
@@ -54,6 +49,4 @@ serviceNames:
   web: web
   db: db
   redis: redis
-  docs: docs
   sync: sync
-
