@@ -1,4 +1,4 @@
-@import 'CSS/inc/_mixins.scss';
+@import 'CSS/inc/_include-media.scss';
 
 // Field
 .document-field--image {
@@ -91,9 +91,14 @@
   padding: calc(var(--icon-margin) * 2);
 
   &--empty {
-    height: 400px;
+    height: 250px;
     opacity: 0.3;
-    width: 400px;
+    width: 250px;
+
+    @include media('>medium') {
+      height: 400px;
+      width: 400px;
+    }
   }
 
 }
