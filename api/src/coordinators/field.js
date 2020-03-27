@@ -74,7 +74,8 @@ const removeDocumentField = async function(fieldId, documentId, orgId) {
 // Handles cleanup based on the field type
 const cleanupFieldByType = async function(field, orgId) {
   switch (field.type) {
-    case FIELD_TYPES.IMAGE: {
+    case FIELD_TYPES.IMAGE:
+    case FIELD_TYPES.FILE: {
       await assetCoordinator.deleteAsset(field.value, orgId)
     }
   }
@@ -85,6 +86,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
 
   switch (body.type) {
     case FIELD_TYPES.IMAGE:
+    case FIELD_TYPES.FILE:
       let url
       if (file) {
         url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
