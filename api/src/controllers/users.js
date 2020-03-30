@@ -144,7 +144,7 @@ const createUser = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    const user = await userCoordinator.createPendingUser(email, name, orgId)
+    const user = await userCoordinator.createOrgUser(email, name, orgId)
     res.status(201).json({ data: user })
   } catch (e) {
     next(e)

@@ -149,11 +149,12 @@ spec:
             secretKeyRef:
               name: intro-secrets
               key: intro_project_read_key
-        - mame: MAILCHIMP_SECRET_KEY
+        - name: MAILCHIMP_SECRET_KEY
           valueFrom:
             secretKeyRef:
               name: mailchimp-secrets
               key: mailchimp_secret_key
+              optional: true
         ports:
         - containerPort: {{ .Values.api.port }}
           protocol: TCP
