@@ -8,6 +8,7 @@ import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import { currentUserId } from 'Libs/currentIds'
 
 import useDocumentSocket from 'Hooks/useDocumentSocket'
+import { emitFieldFocus } from '../../sockets/SocketProvider'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
 
@@ -31,7 +32,7 @@ const DocumentFieldComponent = ({
   settingsMode,
   usersById
 }) => {
-  const { state: socketState } = useDocumentSocket()
+  const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const {
     remoteChangesInCurrentlyFocusedField,
     myFocusedFieldId,
@@ -51,6 +52,9 @@ const DocumentFieldComponent = ({
     } else {
       setCachedLocalChanges(body)
     }
+    // always update the field focus when a user makes a change
+    // NOTE: this is not throttled, lots of field focus updates are being transmitted
+    emitFieldFocus(socketDispatch, field.id, field.documentId)
   }
 
   function handleDiscard() {
