@@ -25,6 +25,7 @@
   &__avatar {
     border: var(--document-users-border);
     border-radius: 50% 50%;
+    box-shadow: var(--box-shadow);
     display: block;
     height: var(--document-users-size);
     overflow: hidden;
