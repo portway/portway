@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { FIELD_TYPES } from 'Shared/constants'
 
 const FieldStringComponent = ({ id, type, value, onBlur, onChange, onFocus, readOnly }) => {
   return (
@@ -28,7 +29,7 @@ FieldStringComponent.propTypes = {
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   id: PropTypes.number,
-  type: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.STRING]),
   value: PropTypes.string
 }
 

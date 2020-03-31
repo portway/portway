@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
+import { FIELD_TYPES } from 'Shared/constants'
 
 import 'codemirror/addon/display/autorefresh'
 import 'codemirror/addon/edit/continuelist'
@@ -127,7 +128,7 @@ FieldTextComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   isCurrentlyFocusedField: PropTypes.bool,
   id: PropTypes.number,
-  type: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.TEXT]),
   value: PropTypes.string
 }
 
