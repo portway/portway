@@ -91,17 +91,15 @@ const DocumentFieldsContainer = ({
     }
   }
 
-  function fieldFocusHandler(fieldId, fieldType, fieldData) {
+  function fieldFocusHandler(fieldId, fieldType) {
     if (!documentReadOnlyMode) {
-      // focusField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
     }
   }
 
-  function fieldBlurHandler(fieldId, fieldType, fieldData) {
+  function fieldBlurHandler(fieldId, fieldType) {
     if (!documentReadOnlyMode) {
-      // blurField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldBlur(socketDispatch, fieldId, documentId))
     }

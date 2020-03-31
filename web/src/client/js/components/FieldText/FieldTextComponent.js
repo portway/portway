@@ -127,7 +127,7 @@ FieldTextComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   isCurrentlyFocusedField: PropTypes.bool,
   id: PropTypes.number,
-  type: PropTypes.string,
+  type: PropTypes.number,
   value: PropTypes.string
 }
 
