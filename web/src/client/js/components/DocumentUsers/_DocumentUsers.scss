@@ -2,6 +2,11 @@
   --document-users-size: 2.4rem;
   --document-users-border: 2px solid var(--theme-overflow);
 
+  &--vertical {
+    position: sticky;
+    top: 0;
+  }
+
   &__list {
     align-items: center;
     display: flex;
@@ -11,9 +16,7 @@
 
     &--vertical {
       flex-direction: column;
-      position: absolute;
-      top: 25%;
-      transform: translateY(-25%);
+      padding: 2rem 0;
     }
 
   }

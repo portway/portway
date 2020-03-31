@@ -63,9 +63,9 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorDomEl.addEventListener('click', clickURLHandler)
       // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
-      editorRef.current.on('blur', (cm, e) => {
-        onBlur(field.id, field.type, editorRef.current)
-      })
+      // editorRef.current.on('blur', (cm, e) => {
+      //   onBlur(field.id, field.type, editorRef.current)
+      // })
       editorRef.current.on('change', (e) => {
         if (e.origin !== 'setValue' && isCurrentlyFocusedFieldRef.current) {
           onChange(field.id, editorRef.current.getValue())
