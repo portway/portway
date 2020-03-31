@@ -36,15 +36,16 @@ const FieldImageComponent = ({
   const isMounted = useIsMounted()
   const [warning, setWarning] = useState(null)
 
+  // Previews
+  const previewRef = useRef() // the File data
+
   // Image
   const imageRef = useRef() // temporary image to do width/height
   const imageNodeRef = useRef() // the actual <img /> tag
   const [imageSrc, setImageSrc] = useState(field.value || IconImage) // the source of the image
   const [imageDetails, setImageDetails] = useState({}) // image metadata
-  const isUpdatingTheActualImage = settingsMode && updating
-
-  // Previews
-  const previewRef = useRef() // the File data
+  const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
+  const nameRef = useRef()
 
   useEffect(() => {
     // If the source of the image changes (field.value), let's create a new
@@ -54,6 +55,7 @@ const FieldImageComponent = ({
       imageRef.current.src = field.value
       imageRef.current.onload = () => {
         if (isMounted.current) {
+          nameRef.current.value = field.name
           setImageDetails({
             height: imageRef.current.naturalHeight,
             width: imageRef.current.naturalWidth,
@@ -61,7 +63,7 @@ const FieldImageComponent = ({
         }
       }
     }
-  }, [isMounted, field.value])
+  }, [isMounted, field.value, field.name])
 
   useEffect(() => {
     // When the image src is updating, render a preview of the image with the
@@ -102,6 +104,7 @@ const FieldImageComponent = ({
     // This fixes the display bug where the image was previewed before it started
     // uploading, so it was weird
     previewRef.current = file
+    nameRef.current.blur()
     // Start the uploading
     const formData = new FormData()
     formData.append('file', file)
@@ -164,6 +167,7 @@ const FieldImageComponent = ({
                 defaultValue={field.name}
                 onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
                 placeholder="Name your image"
+                ref={nameRef}
                 type="text"
               />
             </li>
