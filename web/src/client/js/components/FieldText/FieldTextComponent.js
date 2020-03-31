@@ -10,6 +10,9 @@ import 'codemirror/mode/css/css'
 import 'codemirror/mode/htmlmixed/htmlmixed'
 import 'codemirror/mode/clike/clike'
 
+// Our own custom plugins
+import './codemirror/tablist'
+
 import './codemirror.css'
 import './FieldText.scss'
 
