@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
     'FieldTypeFileValue',
     {
       orgId: DataTypes.INTEGER,
-      value: DataTypes.TEXT
+      value: DataTypes.TEXT,
+      meta: DataTypes.JSON
     },
     {
       paranoid: true

@@ -85,8 +85,12 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
   const fieldBody = { ...body }
 
   switch (body.type) {
-    case FIELD_TYPES.IMAGE:
     case FIELD_TYPES.FILE:
+      // set the meta data for file type, and pass through without break to upload in same manner as image
+      if (file) {
+        fieldBody.meta = JSON.stringify({ originalName: file.originalname, mimeType: file.mimetype, size: file.size })
+      }
+    case FIELD_TYPES.IMAGE:
       let url
       if (file) {
         url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
