@@ -18,7 +18,7 @@ export const blockStyles = {
 
 const insertTexts = {
   link: ['[', '](#url#)'],
-  horizontalRule: ['', '\n\n---\n\n'],
+  horizontalRule: ['---', ''],
 }
 
 /**
