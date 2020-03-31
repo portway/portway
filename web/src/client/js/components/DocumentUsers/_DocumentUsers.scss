@@ -25,11 +25,14 @@
   &__avatar {
     border: var(--document-users-border);
     border-radius: 50% 50%;
-    box-shadow: var(--box-shadow);
     display: block;
     height: var(--document-users-size);
     overflow: hidden;
     width: var(--document-users-size);
+
+    .document-users__list--vertical & {
+      box-shadow: var(--box-shadow);
+    }
   }
 
   &__placeholder {
@@ -37,13 +40,16 @@
     background-color: var(--theme-overlay-dark);
     border: var(--document-users-border);
     border-radius: 50% 50%;
-    box-shadow: var(--box-shadow);
     color: var(--theme-headline-color);
     display: inline-flex;
     font-size: 1.1rem;
     height: var(--document-users-size);
     justify-content: center;
     width: var(--document-users-size);
+
+    .document-users__list--vertical & {
+      box-shadow: var(--box-shadow);
+    }
   }
 
 }
