@@ -10,9 +10,6 @@ import 'codemirror/mode/css/css'
 import 'codemirror/mode/htmlmixed/htmlmixed'
 import 'codemirror/mode/clike/clike'
 
-// Our own custom plugins
-import './codemirror/tablist'
-
 import './codemirror.css'
 import './FieldText.scss'
 
@@ -28,9 +25,19 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       autoRefresh: true,
       dragDrop: false,
       extraKeys: {
+        'Cmd-Alt-1': 'toggleHeading1',
+        'Cmd-Alt-2': 'toggleHeading2',
+        'Cmd-Alt-3': 'toggleHeading3',
+        'Cmd-Alt-4': 'toggleHeading4',
+        'Cmd-Alt-5': 'toggleHeading5',
+        'Cmd-Alt-6': 'toggleHeading6',
+        'Cmd-B': 'toggleBold',
+        'Cmd-I': 'toggleItalic',
+        'Cmd-K': 'drawLink',
         'Enter': 'newlineAndIndentContinueMarkdownList',
+        'Shift-Cmd-U': 'toggleBlockquote',
+        'Shift-Tab': 'shiftTabAndUnindentMarkdownList',
         'Tab': 'tabAndIndentMarkdownList',
-        'Shift-Tab': 'shiftTabAndUnindentMarkdownList'
       },
       lineNumbers: false,
       lineWrapping: true,
