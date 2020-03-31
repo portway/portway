@@ -103,22 +103,6 @@ const FieldTextComponent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorRef])
 
-  // useEffect(() => {
-  //   console.log('FieldTextComponent useEffect')
-  //   console.log('isCurrentlyFocusedFieldRef', isCurrentlyFocusedFieldRef.current)
-  //   // we're not focused, we have an editor, and we have a field value. The field value is different from
-  //   // the editors current value, this means we have an update from the socket, so update the text
-  //   if (
-  //     !isCurrentlyFocusedFieldRef.current &&
-  //     editorRef.current &&
-  //     value &&
-  //     value !== editorRef.current.getValue()
-  //   ) {
-  //     // editorRef.current.getDoc().setValue(value)
-  //     // editorRef.current.refresh()
-  //   }
-  // }, [value, isCurrentlyFocusedFieldRef])
-
   useEffect(() => {
     // This check prevents codeMirror from unnecessarily re-rendering if it
     // already has the updated value
@@ -141,7 +125,10 @@ FieldTextComponent.propTypes = {
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool
+  isCurrentlyFocusedField: PropTypes.bool,
+  id: PropTypes.number,
+  type: PropTypes.string,
+  value: PropTypes.string
 }
 
 export default FieldTextComponent

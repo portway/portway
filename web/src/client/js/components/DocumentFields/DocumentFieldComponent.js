@@ -42,8 +42,6 @@ const DocumentFieldComponent = ({
   const toolsRef = useRef()
   const [currentValue, setCurrentValue] = useState(field.value)
 
-  console.log({ remoteChangesInCurrentlyFocusedField })
-
   remoteChangesRef.current =
     myFocusedFieldId === field.id
       ? remoteChangesInCurrentlyFocusedField
@@ -58,21 +56,15 @@ const DocumentFieldComponent = ({
 
 
   function handleFieldBodyUpdate(fieldId, body) {
-    console.log('handleFieldBodyUPdate')
-    // set the unsaved state if applicable
     setCurrentValue(body)
     if (!remoteChangesRef.current.length) {
-      // console.log('handleFieldBodyUpdate: field onChange')
       onChange(fieldId, body)
-    } else {
-      // console.log('handleFieldBodyUpdate: set cached local changes')
-      // setCurrentValue(body)
     }
   }
 
   function handleDiscard() {
-    console.log('handleDiscard')
-    // clear out any local changes
+    // reset current value to the remote/redux state,
+    // discarding any local changes
     setCurrentValue(field.value)
     remoteChangesRef.current = []
     // refetch document
@@ -80,12 +72,9 @@ const DocumentFieldComponent = ({
   }
 
   function handleManualSave() {
-    console.log(currentValue)
     onChange(field.id, currentValue)
     remoteChangesRef.current = []
   }
-
-  //Relevant usersById should already be fetched by the document users container
 
   const currentFieldUserIds = Object.keys(remoteUserFieldFocus).reduce((cur, userId) => {
     // user is focused on this field
@@ -96,6 +85,7 @@ const DocumentFieldComponent = ({
   }, [])
 
   const currentFieldUsers = currentFieldUserIds.reduce((cur, userId) => {
+    //Relevant usersById should already be fetched by the document users container
     if (usersById[userId]) {
       return [...cur, usersById[userId]]
     }

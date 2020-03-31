@@ -8,13 +8,11 @@ export default function(documentId, cb) {
   const documentIdRef = useRef()
   documentIdRef.current = documentId
 
-  const handleUserFieldChange = (userId) => {
-    documentSocket.on('userFieldChange', (userId, fieldId) => {
-      socketDispatch(receiveRemoteFieldChange(userId, fieldId))
-      if (userId !== currentUserId.toString()) {
-        cb(documentIdRef.current)
-      }
-    })
+  const handleUserFieldChange = (userId, fieldId) => {
+    socketDispatch(receiveRemoteFieldChange(userId, fieldId))
+    if (userId !== currentUserId.toString()) {
+      cb(documentIdRef.current)
+    }
   }
 
   useEffect(() => {

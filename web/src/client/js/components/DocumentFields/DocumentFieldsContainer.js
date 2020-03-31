@@ -109,9 +109,6 @@ const DocumentFieldsContainer = ({
 
   function fieldChangeHandler(fieldId, body) {
     if (!documentReadOnlyMode) {
-      // leave this console in to make sure we're not hammering the API because of useEffect
-      // console.info(`Field: ${fieldId} trigger changeHandler`)
-
       // passing socketDispatch to the action here, need this one dispatched async so that there's no race condition when fetching the data
       updateField(projectId, documentId, fieldId, body, socketDispatch)
     }
