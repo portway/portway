@@ -53,7 +53,6 @@ const DocumentFieldsComponent = ({
         fieldTypeComponent = (
           <FieldTextComponent
             autoFocusElement={hasOnlyOneTextField || createdFieldId === field.id}
-            field={field}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
@@ -63,7 +62,6 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
-            field={field}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
@@ -73,7 +71,6 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
-            field={field}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
@@ -83,7 +80,6 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.IMAGE:
         fieldTypeComponent = (
           <FieldImageComponent
-            field={field}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
@@ -98,7 +94,6 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.DATE:
         fieldTypeComponent = (
           <FieldDateComponent
-            field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}

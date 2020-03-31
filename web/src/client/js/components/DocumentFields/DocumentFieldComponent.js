@@ -38,32 +38,50 @@ const DocumentFieldComponent = ({
     remoteUserFieldFocus
   } = socketState
   const remoteChangesRef = useRef()
-  remoteChangesRef.current = myFocusedFieldId === field.id ? remoteChangesInCurrentlyFocusedField : remoteChangesRef.current || []
-
   const nameRef = useRef()
   const toolsRef = useRef()
-  const [cachedLocalChanges, setCachedLocalChanges] = useState()
+  const [currentValue, setCurrentValue] = useState(field.value)
+
+  console.log({ remoteChangesInCurrentlyFocusedField })
+
+  remoteChangesRef.current =
+    myFocusedFieldId === field.id
+      ? remoteChangesInCurrentlyFocusedField
+      : remoteChangesRef.current || []
+
+  useEffect(() => {
+    if (myFocusedFieldId !== field.id) {
+      setCurrentValue(field.value)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field.id, field.value])
+
 
   function handleFieldBodyUpdate(fieldId, body) {
+    console.log('handleFieldBodyUPdate')
     // set the unsaved state if applicable
+    setCurrentValue(body)
     if (!remoteChangesRef.current.length) {
+      // console.log('handleFieldBodyUpdate: field onChange')
       onChange(fieldId, body)
     } else {
-      setCachedLocalChanges(body)
+      // console.log('handleFieldBodyUpdate: set cached local changes')
+      // setCurrentValue(body)
     }
   }
 
   function handleDiscard() {
+    console.log('handleDiscard')
+    // clear out any local changes
+    setCurrentValue(field.value)
+    remoteChangesRef.current = []
     // refetch document
     onDiscard(field.documentId)
-    // clear out any local changes
-    setCachedLocalChanges(null)
-    remoteChangesRef.current = []
   }
 
   function handleManualSave() {
-    onChange(field.id, cachedLocalChanges)
-    setCachedLocalChanges(null)
+    console.log(currentValue)
+    onChange(field.id, currentValue)
     remoteChangesRef.current = []
   }
 
@@ -148,80 +166,107 @@ const DocumentFieldComponent = ({
   }
 
   return (
-    <li
-      className={fieldClasses}
-      data-id={field.id}
-      data-order={index}
-    >
+    <li className={fieldClasses} data-id={field.id} data-order={index}>
       <div className="document-field__component">
-
         <div className={fieldToolClasses} ref={toolsRef}>
-          <DocumentUsersComponent activeUsers={currentFieldUsers} direction="vertical" mode="field" />
-          <Popper align="left" anchorRef={toolsRef} open={Boolean(cachedLocalChanges)} placement="top" width="400">
+          <DocumentUsersComponent
+            activeUsers={currentFieldUsers}
+            direction="vertical"
+            mode="field"
+          />
+          <Popper
+            align="left"
+            anchorRef={toolsRef}
+            open={remoteChangesRef.current.length > 0}
+            placement="top"
+            width="400">
             <div className="document-field__focus-buttons">
-              <div>{remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'} {remoteUserChangeNames.length > 1 ? 'have' : 'has'} made changes to this field</div>
+              <div>
+                {remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'}{' '}
+                {remoteUserChangeNames.length > 1 ? 'have' : 'has'} made changes to this field
+              </div>
               <div className="document-field__focus-button-group">
-                <button className="btn btn--white btn--small" onClick={handleManualSave}>Overwrite their changes</button>
-                <button className="btn btn--small" onClick={handleDiscard}>Discard your work</button>
+                <button className="btn btn--white btn--small" onClick={handleManualSave}>
+                  Overwrite their changes
+                </button>
+                <button className="btn btn--small" onClick={handleDiscard}>
+                  Discard your work
+                </button>
               </div>
             </div>
           </Popper>
         </div>
 
         <div className={fieldContainerClasses}>
-
-          {dataField &&
-          <div className="document-field__name">
-            <span className="document-field__name-label">{fieldLabels[field.type]}</span>
-            <input
-              defaultValue={field.name}
-              maxLength={fieldNameMaxLength}
-              onKeyDown={(e) => {
-                if (e.key.toLowerCase() === 'escape') {
-                  e.target.blur()
-                  return
-                }
-                e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
-              }}
-              onBlur={(e) => { onBlur(field.id, field.type, field) }}
-              onChange={(e) => { onRename(field.id, e.target.value) }}
-              onFocus={(e) => {
-                if (!readOnly) {
-                  onFocus(field.id, field.type, field)
-                  e.target.select()
-                }
-              }}
-              readOnly={readOnly}
-              ref={nameRef}
-              style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
-              type="text" />
-          </div>
-          }
+          {dataField && (
+            <div className="document-field__name">
+              <span className="document-field__name-label">{fieldLabels[field.type]}</span>
+              <input
+                defaultValue={field.name}
+                maxLength={fieldNameMaxLength}
+                onKeyDown={(e) => {
+                  if (e.key.toLowerCase() === 'escape') {
+                    e.target.blur()
+                    return
+                  }
+                  e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
+                }}
+                onBlur={(e) => {
+                  onBlur(field.id, field.type, field)
+                }}
+                onChange={(e) => {
+                  onRename(field.id, e.target.value)
+                }}
+                onFocus={(e) => {
+                  if (!readOnly) {
+                    onFocus(field.id, field.type, field)
+                    e.target.select()
+                  }
+                }}
+                readOnly={readOnly}
+                ref={nameRef}
+                style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
+                type="text"
+              />
+            </div>
+          )}
 
           <div className="document-field__content">
             <div className="document-field__settings-button">
               <>
-              {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode && !readOnly &&
-                <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
-                  <SettingsIcon />
-                </button>
-              }
-              {settingsMode && !readOnly &&
-                <button aria-label="Exit settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
-                  <RemoveIcon width="32" height="32" />
-                </button>
-              }
+                {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode && !readOnly && (
+                  <button
+                    aria-label="Field settings"
+                    className="btn btn--blank btn--with-circular-icon"
+                    onClick={() => {
+                      settingsHandler(field.id)
+                    }}>
+                    <SettingsIcon />
+                  </button>
+                )}
+                {settingsMode && !readOnly && (
+                  <button
+                    aria-label="Exit settings"
+                    className="btn btn--blank btn--with-circular-icon"
+                    onClick={() => {
+                      settingsHandler(field.id)
+                    }}>
+                    <RemoveIcon width="32" height="32" />
+                  </button>
+                )}
               </>
             </div>
             {React.cloneElement(children, {
+              id: field.id,
+              type: field.type,
+              value: currentValue,
               onChange: handleFieldBodyUpdate,
               isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id
             })}
           </div>
         </div>
 
-        <div className={fieldActionClasses}></div>
-
+        <div className={fieldActionClasses} />
       </div>
     </li>
   )
