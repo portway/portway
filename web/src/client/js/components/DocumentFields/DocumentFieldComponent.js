@@ -4,6 +4,7 @@ import cx from 'classnames'
 import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
+import { debounce } from 'Shared/utilities'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import { currentUserId } from 'Libs/currentIds'
 
@@ -45,6 +46,10 @@ const DocumentFieldComponent = ({
   const toolsRef = useRef()
   const [cachedLocalChanges, setCachedLocalChanges] = useState()
 
+  const sendDebouncedFocusMessage = debounce(500, (fieldId, documentId) => {
+    socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
+  })
+
   function handleFieldBodyUpdate(fieldId, body) {
     // set the unsaved state if applicable
     if (!remoteChangesRef.current.length) {
@@ -52,9 +57,8 @@ const DocumentFieldComponent = ({
     } else {
       setCachedLocalChanges(body)
     }
-    // always update the field focus when a user makes a change
-    // NOTE: this is not throttled, lots of field focus updates are being transmitted
-    emitFieldFocus(socketDispatch, field.id, field.documentId)
+    // always update the field focus when a user makes a change, debounced so we don't slam the sync service
+    sendDebouncedFocusMessage(fieldId, field.documentId)
   }
 
   function handleDiscard() {
