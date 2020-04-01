@@ -1,49 +1,32 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly, isCurrentlyFocusedField }) => {
-  const [fieldValue, setFieldValue] = useState(field.value)
-
-  const isCurrentlyFocusedFieldRef = useRef(isCurrentlyFocusedField)
-  isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
-
-  const isEditingRef = useRef(false)
-
-  useEffect(() => {
-    if (!isCurrentlyFocusedFieldRef.current) {
-      setFieldValue(field.value)
-    }
-  }, [field.value])
-
+const FieldNumberComponent = ({ id, type, value, onBlur, onChange, onFocus, readOnly }) => {
   const handleChange = (e) => {
     // API will only handle 15 significant digits for number fields
     if (e.target.value.length > 15) return
     const num = Number.parseFloat(e.target.value)
     if (!isNaN(num)) {
-      setFieldValue(num)
-      onChange(field.id, num)
+      onChange(id, num)
     }
     if (e.target.value === '') {
-      setFieldValue('')
-      onChange(field.id, null)
+      onChange(id, null)
     }
   }
 
   return (
     <input
       className="document-field__number"
-      value={fieldValue == null ? '' : fieldValue}
-      onBlur={(e) => { onBlur(field.id, field.type, field) }}
+      value={value || ''}
+      onBlur={(e) => { onBlur(id, type) }}
       onChange={(e) => {
-        if (isCurrentlyFocusedField) {
-          setFieldValue(e.target.value); handleChange(e)
-        }
+        handleChange(e)
       }}
       onFocus={(e) => {
         if (!readOnly) {
-          onFocus(field.id, field.type, field)
+          onFocus(id, type)
           e.target.select()
-          isEditingRef.current = true
         }
       }}
       placeholder="A number value..."
@@ -53,12 +36,14 @@ const FieldNumberComponent = ({ field, onBlur, onChange, onFocus, readOnly, isCu
 }
 
 FieldNumberComponent.propTypes = {
-  field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool
+  isCurrentlyFocusedField: PropTypes.bool,
+  id: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.NUMBER]),
+  value: PropTypes.number
 }
 
 export default FieldNumberComponent

@@ -1,31 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly, isCurrentlyFocusedField }) => {
-  const [fieldValue, setFieldValue] = useState(field.value)
-
-  const isCurrentlyFocusedFieldRef = useRef(isCurrentlyFocusedField)
-  isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
-
-  useEffect(() => {
-    if (!isCurrentlyFocusedFieldRef.current) {
-      setFieldValue(field.value)
-    }
-  }, [field.value])
-
+const FieldStringComponent = ({ id, type, value, onBlur, onChange, onFocus, readOnly }) => {
   return (
     <input
       className="document-field__string"
-      value={fieldValue || ''}
-      onBlur={(e) => { onBlur(field.id, field.type, field) }}
+      value={value || ''}
+      onBlur={(e) => { onBlur(id, type) }}
       onChange={(e) => {
-        if (isCurrentlyFocusedField) {
-          setFieldValue(e.target.value); onChange(field.id, e.target.value)
-        }
+        onChange(id, e.target.value)
       }}
       onFocus={(e) => {
         if (!readOnly) {
-          onFocus(field.id, field.type, field)
+          onFocus(id, type)
           e.target.select()
         }
       }}
@@ -36,12 +24,13 @@ const FieldStringComponent = ({ field, onBlur, onChange, onFocus, readOnly, isCu
 }
 
 FieldStringComponent.propTypes = {
-  field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool
+  id: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.STRING]),
+  value: PropTypes.string
 }
 
 export default FieldStringComponent

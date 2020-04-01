@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
+import { FIELD_TYPES } from 'Shared/constants'
 
 import 'codemirror/addon/display/autorefresh'
 import 'codemirror/addon/edit/continuelist'
@@ -15,10 +16,12 @@ import './FieldText.scss'
 
 window.CodeMirror = CodeMirror
 
-const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus, readOnly, isCurrentlyFocusedField }) => {
+const FieldTextComponent = ({
+  autoFocusElement, onBlur, onChange,
+  onFocus, readOnly, isCurrentlyFocusedField, id, type, value }) => {
   const textRef = useRef()
   const editorRef = useRef()
-  const isCurrentlyFocusedFieldRef = useRef(isCurrentlyFocusedField)
+  const isCurrentlyFocusedFieldRef = useRef()
   isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
   // Mount the SimpleMDE Editor
   useEffect(() => {
@@ -48,6 +51,10 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
     // causes problems. We only want setEditor to run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // I think this useEffect can be put into the above useEffect to run once on setup.
+  // The current editorRef dependency will not change unless the component is
+  // unmounted and remounted, in which case this useEffect will run
   useEffect(() => {
     if (editorRef.current) {
       function clickURLHandler(e) {
@@ -64,11 +71,11 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       // CodeMirror specific events
       editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
       editorRef.current.on('blur', (cm, e) => {
-        onBlur(field.id, field.type, editorRef.current)
+        onBlur(id, type, editorRef.current)
       })
       editorRef.current.on('change', (e) => {
         if (e.origin !== 'setValue' && isCurrentlyFocusedFieldRef.current) {
-          onChange(field.id, editorRef.current.getValue())
+          onChange(id, editorRef.current.getValue())
         }
       })
       editorRef.current.on('dragstart', (cm, e) => {
@@ -84,7 +91,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
         e.preventDefault()
       })
       editorRef.current.on('focus', (cm, e) => {
-        onFocus(field.id, field.type, editorRef.current)
+        onFocus(id, type, editorRef.current)
       })
       if (autoFocusElement) {
         window.requestAnimationFrame(() => {
@@ -98,34 +105,31 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
   }, [editorRef])
 
   useEffect(() => {
-    // we're not focused, we have an editor, and we have a field value. The field value is different from
-    // the editors current value, this means we have an update from the socket, so update the text
-    if (
-      !isCurrentlyFocusedFieldRef.current &&
-      editorRef.current &&
-      field.value &&
-      field.value !== editorRef.current.getValue()
-    ) {
-      editorRef.current.getDoc().setValue(field.value)
+    // This check prevents codeMirror from unnecessarily re-rendering if it
+    // already has the updated value
+    if (value && value !== editorRef.current.getValue()) {
+      editorRef.current.getDoc().setValue(value)
       editorRef.current.refresh()
     }
-  }, [field.value, isCurrentlyFocusedFieldRef])
+  }, [value])
 
   return (
     <div className="document-field__text">
-      <textarea ref={textRef} defaultValue={field.value} readOnly={readOnly} />
+      <textarea ref={textRef} defaultValue={value} readOnly={readOnly} />
     </div>
   )
 }
 
 FieldTextComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
-  field: PropTypes.object.isRequired,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool
+  isCurrentlyFocusedField: PropTypes.bool,
+  id: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.TEXT]),
+  value: PropTypes.string
 }
 
 export default FieldTextComponent
