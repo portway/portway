@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -38,6 +38,29 @@ const DocumentFieldsContainer = ({
   const hasFields = fieldKeys.length >= 1
   const hasOnlyOneTextField = hasFields && fieldMap.length === 1 && fields[fieldMap[0].id].type === FIELD_TYPES.TEXT
 
+  const createTextFieldHandler = useCallback(() => {
+    if (!documentReadOnlyMode) {
+      // This is triggered by the Big Invisible Button™
+      // It should append a new text field to the end of the document, making it seem as though the
+      // user is clicking to continue the document body
+      const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
+      createField(projectId, documentId, FIELD_TYPES.TEXT, {
+        name: newName,
+        type: FIELD_TYPES.TEXT
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (!hasFields) {
+      document.addEventListener('click', createTextFieldHandler, false)
+      return function cleanup() {
+        document.removeEventListener('click', createTextFieldHandler, false)
+      }
+    }
+  }, [createTextFieldHandler, hasFields])
+
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
     // clicking anywhere within the document should focus that field
@@ -66,19 +89,6 @@ const DocumentFieldsContainer = ({
   }
 
   // Actions
-  function createTextFieldHandler() {
-    if (!documentReadOnlyMode) {
-      // This is triggered by the Big Invisible Button™
-      // It should append a new text field to the end of the document, making it seem as though the
-      // user is clicking to continue the document body
-      const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
-      createField(projectId, documentId, FIELD_TYPES.TEXT, {
-        name: newName,
-        type: FIELD_TYPES.TEXT
-      })
-    }
-  }
-
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)

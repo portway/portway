@@ -25,6 +25,7 @@ export const createField = (projectId, documentId, fieldType, body) => {
     } else {
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
       dispatch(Fields.focusFieldWithId(data.id, data.type))
+      return data
     }
   }
 }
@@ -55,6 +56,7 @@ export const updateFieldOrder = (projectId, documentId, fieldId, newOrder) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
     await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
     dispatch(fetchDocument(documentId))
+    return newOrder
   }
 }
 
