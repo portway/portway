@@ -88,7 +88,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
     case FIELD_TYPES.FILE:
       // set the meta data for file type, and pass through without break to upload in same manner as image
       if (file) {
-        fieldBody.meta = JSON.stringify({ originalName: file.originalname, mimeType: file.mimetype, size: file.size })
+        fieldBody.meta = { originalName: file.originalname, mimeType: file.mimetype, size: file.size }
       }
     case FIELD_TYPES.IMAGE:
       let url

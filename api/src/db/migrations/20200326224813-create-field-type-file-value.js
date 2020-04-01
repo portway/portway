@@ -17,9 +17,6 @@ module.exports = {
       value: {
         type: Sequelize.TEXT
       },
-      meta: {
-        type: Sequelize.JSON
-      },
       fieldId: {
         type: Sequelize.INTEGER,
         references: {

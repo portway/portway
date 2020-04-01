@@ -60,7 +60,7 @@ const FieldFileComponent = ({
     <div className="document-field__file">
       <div className="document-field__file-container">
         {field.value &&
-          <h1>FILE IMAGE</h1>
+          <h1>FILE ICON HERE</h1>
         }
         {(settingsMode || !field.value || updating) &&
         <FileUploaderComponent

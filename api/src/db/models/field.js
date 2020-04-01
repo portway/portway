@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           min: 0
         }
-      }
+      },
+      meta: DataTypes.JSON
     },
     {
       paranoid: true,

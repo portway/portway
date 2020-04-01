@@ -122,9 +122,8 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot edit`)
 
   validateFieldValueByType(body.value, field.type)
-  console.log(body)
+
   const updatedField = await field.update(body)
-  console.log(updatedField)
   const fieldValue = await updatedField.getFieldValue()
 
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
