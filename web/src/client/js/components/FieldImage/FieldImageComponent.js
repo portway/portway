@@ -56,6 +56,7 @@ const FieldImageComponent = ({
       imageRef.current.onload = () => {
         if (isMounted.current) {
           nameRef.current.value = field.name
+          setImageSrc(field.value)
           setImageDetails({
             height: imageRef.current.naturalHeight,
             width: imageRef.current.naturalWidth,
@@ -92,12 +93,10 @@ const FieldImageComponent = ({
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
       setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
-      settingsHandler(field.id)
       return
     }
     if (!ALLOWED_TYPES.includes(file.type)) {
       setWarning(`Sorry, the image type “${file.type}” is not supported. Try a jpg, png, or gif!`)
-      settingsHandler(field.id)
       return
     }
     // Save the file for previewing AFTER updating starts
@@ -146,14 +145,21 @@ const FieldImageComponent = ({
               }
             </>
           </div>
-          {(settingsMode || !field.value || isUpdatingTheActualImage) &&
+          {(settingsMode || !field.value) &&
           <FileUploaderComponent
             accept="image/*"
             hasValue={field.value !== null}
             isUpdating={updating}
             label="Drag and drop an image"
             fileChangeHandler={uploadImage}
-            fileUploadedHandler={() => { settingsHandler(field.id) }}>
+            fileUploadedHandler={() => {
+              // Since we render this uploader if there is no field.value,
+              // once the field gets a value it will remove it
+              // However, when updating an image, we have to manually remove it
+              if (field.value && settingsMode) {
+                settingsHandler(field.id)
+              }
+            }}>
           </FileUploaderComponent>
           }
         </div>

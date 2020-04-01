@@ -93,7 +93,7 @@ const DocumentFieldsComponent = ({
             onRename={fieldRenameHandler}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-            settingsMode={settingsForField === field.id || !field.value}
+            settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]}
           />
         )
