@@ -160,7 +160,7 @@ const DocumentOutlineContainer = ({
     const fieldIdToUpdate = draggingElement.current.dataset.id
     const to = Number(draggingElement.current.dataset.order)
     // Trigger action with documentId, fieldId
-    updateFieldOrder(projectId, documentId, fieldIdToUpdate, to)
+    updateFieldOrder(projectId, documentId, fieldIdToUpdate, to, true)
     // Clean up
     document.querySelector('#clone-element').remove()
     draggingElement.current = null

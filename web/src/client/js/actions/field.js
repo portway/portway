@@ -51,11 +51,13 @@ export const updateField = (projectId, documentId, fieldId, body) => {
   }
 }
 
-export const updateFieldOrder = (projectId, documentId, fieldId, newOrder) => {
+export const updateFieldOrder = (projectId, documentId, fieldId, newOrder, fetch = false) => {
   return async (dispatch) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
     await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
-    dispatch(fetchDocument(documentId))
+    if (fetch) {
+      dispatch(fetchDocument(documentId))
+    }
     return newOrder
   }
 }

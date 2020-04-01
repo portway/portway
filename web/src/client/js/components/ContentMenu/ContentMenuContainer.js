@@ -65,7 +65,7 @@ const ContentMenuContainer = ({ createField, fields, focusedField, updateFieldOr
               updateFieldOrder(project.id, document.id, createdField.id, fieldWithCursorOrder.current + 1)
                 .then((newOrder) => {
                   // Order the split field
-                  updateFieldOrder(project.id, document.id, splitField.id, newOrder + 1)
+                  updateFieldOrder(project.id, document.id, splitField.id, newOrder + 1, true)
                   // Reset
                   fieldWithCursorOrder.current = null
                   textAfterCursor.current = null

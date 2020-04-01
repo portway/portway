@@ -22,7 +22,7 @@ const DocumentFieldComponent = ({
 }) => {
   const nameRef = useRef()
 
-  // Removing this because if we are inserting right where your cursor is, you don't need this
+  // @todo Removing this because if we are inserting right where your cursor is, you don't need this
   // useEffect(() => {
   //   if (isNewField && nameRef.current) {
   //     nameRef.current.scrollIntoView({ behavior: 'smooth' })
