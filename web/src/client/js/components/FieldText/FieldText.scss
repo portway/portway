@@ -86,10 +86,9 @@
       line-height: 2.4rem;
 
       .cm-hr {
-        border-top: thin solid var(--theme-border);
+        color: var(--theme-border);
         display: block;
-        height: 1px;
-        overflow: hidden;
+        font-weight: bold;
         width: 100%;
       }
 
