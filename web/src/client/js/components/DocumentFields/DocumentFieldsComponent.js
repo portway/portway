@@ -51,7 +51,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.TEXT:
         fieldTypeComponent = (
           <FieldTextComponent
-            autoFocusElement={hasOnlyOneTextField || createdFieldId === field.id}
+            autoFocusElement={hasOnlyOneTextField}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}

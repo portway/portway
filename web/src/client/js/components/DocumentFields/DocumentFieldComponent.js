@@ -21,12 +21,14 @@ const DocumentFieldComponent = ({
   settingsMode,
 }) => {
   const nameRef = useRef()
-  useEffect(() => {
-    if (isNewField && nameRef.current) {
-      nameRef.current.scrollIntoView({ behavior: 'smooth' })
-      nameRef.current.focus()
-    }
-  }, [isNewField])
+
+  // Removing this because if we are inserting right where your cursor is, you don't need this
+  // useEffect(() => {
+  //   if (isNewField && nameRef.current) {
+  //     nameRef.current.scrollIntoView({ behavior: 'smooth' })
+  //     nameRef.current.focus()
+  //   }
+  // }, [isNewField])
 
   const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE
 

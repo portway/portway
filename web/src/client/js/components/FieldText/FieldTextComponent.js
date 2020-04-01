@@ -78,6 +78,7 @@ const FieldTextComponent = ({ autoFocusElement, field, onBlur, onChange, onFocus
       editorRef.current.on('dragover', (cm, e) => { e.preventDefault() })
       editorRef.current.on('dragleave', (cm, e) => { e.preventDefault() })
       editorRef.current.on('focus', (cm, e) => { onFocus(field.id, field.type, editorRef.current) })
+      console.log(autoFocusElement)
       if (autoFocusElement) {
         window.requestAnimationFrame(() => {
           editorRef.current.focus()
