@@ -88,9 +88,26 @@ export const projects = (state = initialState, action) => {
     }
     case ActionTypes.REMOVE_PROJECT: {
       const id = action.id
+      const projectIdsByPage = { ...state.projectIdsByPage }
+      const totalPages = state.totalPages
+      let n = 1
+      console.log(n, totalPages)
+      // Find the project ID among the pages loaded and remove it
+      while (n <= totalPages) {
+        const pageArray = projectIdsByPage[n]
+        const idIndex = pageArray.indexOf(id)
+        console.log(pageArray, idIndex)
+        if (idIndex !== -1) {
+          console.log('Remove', pageArray[idIndex])
+          pageArray.splice(idIndex, 1)
+          break
+        }
+        n++
+      }
+      console.log(projectIdsByPage)
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...projectsById } = state.projectsById
-      return { ...state, projectsById, loading: { ...state.loading, list: false } }
+      return { ...state, projectsById, projectIdsByPage, loading: { ...state.loading, list: false } }
     }
     case ActionTypes.SORT_PROJECTS: {
       if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {
