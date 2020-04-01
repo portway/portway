@@ -24,7 +24,6 @@ export const createField = (projectId, documentId, fieldType, body) => {
       dispatch(Validation.create('field', data, status))
     } else {
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
-      dispatch(Fields.focusFieldWithId(data.id, data.type))
       return data
     }
   }
