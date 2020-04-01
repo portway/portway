@@ -21,8 +21,7 @@ const FieldTextComponent = ({
   onFocus, readOnly, isCurrentlyFocusedField, id, type, value }) => {
   const textRef = useRef()
   const editorRef = useRef()
-  const isCurrentlyFocusedFieldRef = useRef()
-  isCurrentlyFocusedFieldRef.current = isCurrentlyFocusedField
+
   // Mount the SimpleMDE Editor
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
@@ -57,62 +56,53 @@ const FieldTextComponent = ({
         list1: 'formatting-list-ul'
       }
     })
+
+    function clickURLHandler(e) {
+      if (e.target.classList.contains('cm-url')) {
+        let url = e.target.textContent
+        if (!url.match(/^https?:\/\//i)) {
+          url = 'https://' + url
+        }
+        window.open(url, '_blank', 'noopener')
+      }
+    }
+    const editorDomEl = editorRef.current.display.lineDiv
+    editorDomEl.addEventListener('click', clickURLHandler)
+    // CodeMirror specific events
+    editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
+    editorRef.current.on('blur', (cm, e) => {
+      onBlur(id, type, editorRef.current)
+    })
+    editorRef.current.on('change', (e) => {
+      if (e.origin !== 'setValue' && isCurrentlyFocusedField) {
+        onChange(id, editorRef.current.getValue())
+      }
+    })
+    editorRef.current.on('dragstart', (cm, e) => {
+      e.preventDefault()
+    })
+    editorRef.current.on('dragenter', (cm, e) => {
+      e.preventDefault()
+    })
+    editorRef.current.on('dragover', (cm, e) => {
+      e.preventDefault()
+    })
+    editorRef.current.on('dragleave', (cm, e) => {
+      e.preventDefault()
+    })
+    editorRef.current.on('focus', (cm, e) => {
+      onFocus(id, type, editorRef.current)
+    })
+    if (autoFocusElement) {
+      window.requestAnimationFrame(() => {
+        editorRef.current.focus()
+      })
+    }
+
     // We're disabling the dependency warning here because anything other than []
     // causes problems. We only want setEditor to run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // I think this useEffect can be put into the above useEffect to run once on setup.
-  // The current editorRef dependency will not change unless the component is
-  // unmounted and remounted, in which case this useEffect will run
-  useEffect(() => {
-    if (editorRef.current) {
-      function clickURLHandler(e) {
-        if (e.target.classList.contains('cm-url')) {
-          let url = e.target.textContent
-          if (!url.match(/^https?:\/\//i)) {
-            url = 'https://' + url
-          }
-          window.open(url, '_blank', 'noopener')
-        }
-      }
-      const editorDomEl = editorRef.current.display.lineDiv
-      editorDomEl.addEventListener('click', clickURLHandler)
-      // CodeMirror specific events
-      editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
-      editorRef.current.on('blur', (cm, e) => {
-        onBlur(id, type, editorRef.current)
-      })
-      editorRef.current.on('change', (e) => {
-        if (e.origin !== 'setValue' && isCurrentlyFocusedFieldRef.current) {
-          onChange(id, editorRef.current.getValue())
-        }
-      })
-      editorRef.current.on('dragstart', (cm, e) => {
-        e.preventDefault()
-      })
-      editorRef.current.on('dragenter', (cm, e) => {
-        e.preventDefault()
-      })
-      editorRef.current.on('dragover', (cm, e) => {
-        e.preventDefault()
-      })
-      editorRef.current.on('dragleave', (cm, e) => {
-        e.preventDefault()
-      })
-      editorRef.current.on('focus', (cm, e) => {
-        onFocus(id, type, editorRef.current)
-      })
-      if (autoFocusElement) {
-        window.requestAnimationFrame(() => {
-          editorRef.current.focus()
-        })
-      }
-    }
-    // We're disabling the dependency here because adding field.id or onChange here
-    // will cause a bunch of API hits
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorRef])
 
   useEffect(() => {
     // This check prevents codeMirror from unnecessarily re-rendering if it
