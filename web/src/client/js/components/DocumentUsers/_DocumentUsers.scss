@@ -2,6 +2,11 @@
   --document-users-size: 2.4rem;
   --document-users-border: 2px solid var(--theme-overflow);
 
+  &--vertical {
+    position: sticky;
+    top: 0;
+  }
+
   &__list {
     align-items: center;
     display: flex;
@@ -11,7 +16,7 @@
 
     &--vertical {
       flex-direction: column;
-      padding-top: 2.5rem;
+      padding: 2rem 0;
     }
 
   }
@@ -27,6 +32,10 @@
     height: var(--document-users-size);
     overflow: hidden;
     width: var(--document-users-size);
+
+    .document-users__list--vertical & {
+      box-shadow: var(--box-shadow);
+    }
   }
 
   &__placeholder {
@@ -40,6 +49,10 @@
     height: var(--document-users-size);
     justify-content: center;
     width: var(--document-users-size);
+
+    .document-users__list--vertical & {
+      box-shadow: var(--box-shadow);
+    }
   }
 
 }

@@ -16,6 +16,10 @@ const MODE = {
 
 const DocumentUsersComponent = ({ activeUsers, direction = DIRECTION.HORIZONTAL, mode = MODE.DOCUMENT }) => {
   const action = mode === MODE.FIELD ? 'editing' : 'viewing'
+  const documentUsers = cx({
+    'document-users': true,
+    'document-users--vertical': direction === DIRECTION.VERTICAL,
+  })
   const usersListClasses = cx({
     'document-users__list': true,
     'document-users__list--vertical': direction === DIRECTION.VERTICAL,
@@ -25,7 +29,7 @@ const DocumentUsersComponent = ({ activeUsers, direction = DIRECTION.HORIZONTAL,
     'document-users__list--field': mode === MODE.FIELD,
   })
   return (
-    <div className="document-users">
+    <div className={documentUsers}>
       <ol className={usersListClasses}>
         {activeUsers && activeUsers.map((activeUser) => {
           if (activeUser) {
