@@ -43,6 +43,7 @@ const DocumentFieldComponent = ({
   const nameRef = useRef()
   const toolsRef = useRef()
   const [currentValue, setCurrentValue] = useState(field.value)
+  const [showConflictPopper, setShowConflictPopper] = useState(false)
 
   remoteChangesRef.current =
     myFocusedFieldId === field.id
@@ -50,7 +51,14 @@ const DocumentFieldComponent = ({
       : remoteChangesRef.current || []
 
   useEffect(() => {
-    if (myFocusedFieldId !== field.id) {
+    if (remoteChangesRef.current.length > 0) {
+      setShowConflictPopper(true)
+    }
+  }, [remoteChangesRef.current.length])
+
+  useEffect(() => {
+    // Accept remote changes to field if it's not focused and the conflict popper isn't open
+    if (myFocusedFieldId !== field.id && !showConflictPopper) {
       setCurrentValue(field.value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,6 +82,7 @@ const DocumentFieldComponent = ({
     // reset current value to the remote/redux state,
     // discarding any local changes
     setCurrentValue(field.value)
+    setShowConflictPopper(false)
     remoteChangesRef.current = []
     // refetch document
     onDiscard(field.documentId)
@@ -81,6 +90,7 @@ const DocumentFieldComponent = ({
 
   function handleManualSave() {
     onChange(field.id, currentValue)
+    setShowConflictPopper(false)
     remoteChangesRef.current = []
   }
 
@@ -175,7 +185,7 @@ const DocumentFieldComponent = ({
           <Popper
             align="left"
             anchorRef={toolsRef}
-            open={remoteChangesRef.current.length > 0}
+            open={showConflictPopper}
             placement="top"
             width="400">
             <div className="document-field__focus-buttons">
