@@ -4,10 +4,12 @@ import cx from 'classnames'
 import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
+import { debounce } from 'Shared/utilities'
 import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import { currentUserId } from 'Libs/currentIds'
 
 import useDocumentSocket from 'Hooks/useDocumentSocket'
+import { emitFieldFocus } from '../../sockets/SocketProvider'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
 
@@ -31,7 +33,7 @@ const DocumentFieldComponent = ({
   settingsMode,
   usersById
 }) => {
-  const { state: socketState } = useDocumentSocket()
+  const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const {
     remoteChangesInCurrentlyFocusedField,
     myFocusedFieldId,
@@ -44,6 +46,10 @@ const DocumentFieldComponent = ({
   const toolsRef = useRef()
   const [cachedLocalChanges, setCachedLocalChanges] = useState()
 
+  const sendDebouncedFocusMessage = debounce(500, (fieldId, documentId) => {
+    socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
+  })
+
   function handleFieldBodyUpdate(fieldId, body) {
     // set the unsaved state if applicable
     if (!remoteChangesRef.current.length) {
@@ -51,6 +57,8 @@ const DocumentFieldComponent = ({
     } else {
       setCachedLocalChanges(body)
     }
+    // always update the field focus when a user makes a change, debounced so we don't slam the sync service
+    sendDebouncedFocusMessage(fieldId, field.documentId)
   }
 
   function handleDiscard() {
