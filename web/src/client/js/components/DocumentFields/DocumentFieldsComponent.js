@@ -80,6 +80,8 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.IMAGE:
         fieldTypeComponent = (
           <FieldImageComponent
+            autoFocusElement={createdFieldId === field.id}
+            field={field}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}

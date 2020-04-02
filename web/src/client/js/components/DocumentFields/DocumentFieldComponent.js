@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 import { currentUserId } from 'Libs/currentIds'
 
 import useDocumentSocket from 'Hooks/useDocumentSocket'
@@ -14,7 +13,6 @@ import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersCompon
 import { Popper } from 'Components/Popper/Popper'
 
 import './_DocumentField.scss'
-import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
 
 const DocumentFieldComponent = ({
@@ -29,7 +27,6 @@ const DocumentFieldComponent = ({
   onRename,
   onDiscard,
   readOnly,
-  settingsHandler,
   settingsMode,
   usersById
 }) => {
@@ -240,30 +237,6 @@ const DocumentFieldComponent = ({
           )}
 
           <div className="document-field__content">
-            <div className="document-field__settings-button">
-              <>
-                {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode && !readOnly && (
-                  <button
-                    aria-label="Field settings"
-                    className="btn btn--blank btn--with-circular-icon"
-                    onClick={() => {
-                      settingsHandler(field.id)
-                    }}>
-                    <SettingsIcon />
-                  </button>
-                )}
-                {settingsMode && !readOnly && (
-                  <button
-                    aria-label="Exit settings"
-                    className="btn btn--blank btn--with-circular-icon"
-                    onClick={() => {
-                      settingsHandler(field.id)
-                    }}>
-                    <RemoveIcon width="32" height="32" />
-                  </button>
-                )}
-              </>
-            </div>
             {React.cloneElement(children, {
               id: field.id,
               type: field.type,
@@ -292,7 +265,6 @@ DocumentFieldComponent.propTypes = {
   onRename: PropTypes.func.isRequired,
   onDiscard: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   usersById: PropTypes.object
 }
