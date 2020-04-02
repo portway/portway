@@ -29,6 +29,8 @@ const DocumentComponent = ({
   const titleRef = useRef()
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
+  console.log('Render document')
+
   // If we've exited fullscreen, but the UI is still in fullscreen
   // This happens when hitting the escape key when in fullscreen
   useEffect(() => {

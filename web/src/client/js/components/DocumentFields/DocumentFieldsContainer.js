@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -22,16 +22,16 @@ const DocumentFieldsContainer = ({
   updateField,
 }) => {
   const { projectId, documentId } = useParams()
-  const [fieldMap, setFieldMap] = useState([])
   const fieldKeys = useRef([])
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  console.log('render container')
 
   // This is in a useEffect and using useState because before it would cause many re-renders, since
   // fieldMap was changing a few times
-  useEffect(() => {
+  const sortedFields = useMemo(() => {
     // Sort the fields every re-render
     fieldKeys.current = Object.keys(fields)
     const fieldMapTemp = fieldKeys.current.map((fieldId) => {
@@ -40,11 +40,12 @@ const DocumentFieldsContainer = ({
     fieldMapTemp.sort((a, b) => {
       return a.order - b.order
     })
-    setFieldMap(fieldMapTemp)
+    console.log('render memo')
+    return fieldMapTemp
   }, [fields])
 
   const hasFields = fieldKeys.current.length >= 1
-  const hasOnlyOneTextField = hasFields && fieldMap.length === 1 && fields[fieldMap[0].id].type === FIELD_TYPES.TEXT
+  const hasOnlyOneTextField = hasFields && sortedFields.length === 1 && fields[sortedFields[0].id].type === FIELD_TYPES.TEXT
 
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
@@ -125,7 +126,7 @@ const DocumentFieldsContainer = ({
       fieldFocusHandler={fieldFocusHandler}
       fieldBlurHandler={fieldBlurHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
-      fields={fieldMap}
+      fields={sortedFields}
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}

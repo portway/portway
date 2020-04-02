@@ -59,6 +59,8 @@ const Project = ({ isFullScreen }) => {
     return <NoProject />
   }
 
+  console.log('Project')
+
   return (
     <>
       <main className="project">
