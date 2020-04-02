@@ -79,7 +79,7 @@ const AdminBrandingComponent = ({ errors, formId, organization, submitHandler })
           {renderOrganizationAvatar()}
           {!preview &&
             <FormField
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/svg+xml"
               help={avatarHelpText}
               id="orgAvatar"
               errors={errors.file}
