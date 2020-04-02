@@ -84,6 +84,19 @@ export const projects = (state = initialState, action) => {
     }
     case ActionTypes.REMOVE_PROJECT: {
       const id = action.id
+      // const projectIdsByPage = { ...state.projectIdsByPage }
+      // s
+      // let n = 1
+      // // Find the project ID among the pages loaded and remove it
+      // while (n <= totalPages) {
+      //   const pageArray = projectIdsByPage[n]
+      //   const idIndex = pageArray.indexOf(id)
+      //   if (idIndex !== -1) {
+      //     pageArray.splice(idIndex, 1)
+      //     break
+      //   }
+      //   n++
+      // }
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...projectsById } = state.projectsById
 

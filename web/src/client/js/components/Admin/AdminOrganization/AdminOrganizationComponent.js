@@ -29,7 +29,7 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
         <FormField
           errors={errors.name}
           id="orgName"
-          label="Organization Name"
+          label="Organization name"
           name="name"
           onChange={(e) => {
             setName(e.target.value)
