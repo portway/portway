@@ -115,6 +115,57 @@ export const copyField = (projectId, currentDocumentId, newDocumentId, field) =>
   }
 }
 
+export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropriately = (
+  documentId,
+  editor,
+  fieldWithCursorOrder,
+  newFieldName,
+  fieldType,
+  newSplitTextName
+) => {
+  return async (dispatch) => {
+    const currLine = editor.getCursor().line
+    const currChar = editor.getCursor().ch
+    const lastLine = editor.lastLine()
+    const lastLineContent = editor.getLine(lastLine)
+
+    // Get the selection of the field after the current cursor pos
+    const startRange = { line: currLine, ch: currChar }
+    const endRange = { line: lastLine, ch: lastLineContent.length }
+
+    // Save the text after the cursor
+    const textAfterCursor = editor.getRange(startRange, endRange)
+
+    // Create the new field
+    const { data: newField, status: newFieldStatus } = await add(`v1/documents/${documentId}/fields`, { name: newFieldName, type: fieldType })
+    if (globalErrorCodes.includes(newFieldStatus)) {
+      dispatch(Notifications.create(newField.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+
+    // Create the new split text field
+    const splitFieldData = {
+      name: newSplitTextName,
+      type: FIELD_TYPES.TEXT,
+      value: textAfterCursor,
+    }
+    const { data: newSplitField, status: newSplitFieldStatus } = await add(`v1/documents/${documentId}/fields`, splitFieldData)
+    if (globalErrorCodes.includes(newSplitFieldStatus)) {
+      dispatch(Notifications.create(newField.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+
+    // Re-order the two new fields
+    await update(`v1/documents/${documentId}/fields/${newField.id}/order`, { order: fieldWithCursorOrder + 1 })
+    await update(`v1/documents/${documentId}/fields/${newSplitField.id}/order`, { order: fieldWithCursorOrder + 2 })
+
+    // Replace the text
+    editor.replaceRange('', startRange, endRange)
+    // Fetch the document for a total re-render now that we have everything set up
+    dispatch(fetchDocument(documentId))
+  }
+}
+
 const _getFieldBody = async function(field) {
   let body = {
     name: field.name,
