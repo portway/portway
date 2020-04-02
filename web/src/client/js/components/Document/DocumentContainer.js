@@ -35,7 +35,7 @@ const DocumentContainer = ({
     location.pathname
   ])
 
-  console.log('render document container')
+  console.log('Render Document Container')
 
   let currentDocument = document
 
@@ -128,12 +128,6 @@ DocumentContainer.propTypes = {
   uiToggleDocumentMode: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
-}
-
-DocumentContainer.defaultProps = {
-  createMode: false,
-  documentMode: DOCUMENT_MODE.NORMAL,
-  isFullScreen: false,
 }
 
 const mapStateToProps = (state) => {
