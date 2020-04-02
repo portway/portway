@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -22,20 +22,28 @@ const DocumentFieldsContainer = ({
   updateField,
 }) => {
   const { projectId, documentId } = useParams()
-  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  const [fieldMap, setFieldMap] = useState([])
+  const fieldKeys = useRef([])
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
-  // Sort the fields every re-render
-  const fieldKeys = Object.keys(fields)
-  const fieldMap = fieldKeys.map((fieldId) => {
-    return fields[fieldId]
-  })
-  fieldMap.sort((a, b) => {
-    return a.order - b.order
-  })
+  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
 
-  const hasFields = fieldKeys.length >= 1
+  // This is in a useEffect and using useState because before it would cause many re-renders, since
+  // fieldMap was changing a few times
+  useEffect(() => {
+    // Sort the fields every re-render
+    fieldKeys.current = Object.keys(fields)
+    const fieldMapTemp = fieldKeys.current.map((fieldId) => {
+      return fields[fieldId]
+    })
+    fieldMapTemp.sort((a, b) => {
+      return a.order - b.order
+    })
+    setFieldMap(fieldMapTemp)
+  }, [fields])
+
+  const hasFields = fieldKeys.current.length >= 1
   const hasOnlyOneTextField = hasFields && fieldMap.length === 1 && fields[fieldMap[0].id].type === FIELD_TYPES.TEXT
 
   useEffect(() => {
