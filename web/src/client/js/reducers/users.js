@@ -106,20 +106,18 @@ export const users = (state = initialState, action) => {
         userSearchResultIdsByNameString: { ...state.userSearchResultIdsByNameString, [action.partialNameString]: userIds }
       }
     }
-    case ActionTypes.INITIATE_USER_REMOVE: {
-      return { ...state, loading: { ...state.loading, list: true } }
-    }
     case ActionTypes.REMOVE_USER: {
       const id = action.userId
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...usersById } = state.usersById
+
       const userIdsByPage = Object.keys(state.userIdsByPage).reduce((cur, pageNum) => {
         const validIds = state.userIdsByPage[pageNum].filter(pageUserId => pageUserId !== id)
         cur[pageNum] = validIds
         return cur
       }, {})
 
-      return { ...state, usersById, userIdsByPage, loading: { ...state.loading, list: false } }
+      return { ...state, usersById, userIdsByPage }
     }
     case ActionTypes.SORT_USERS: {
       if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {

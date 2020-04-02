@@ -82,14 +82,18 @@ export const projects = (state = initialState, action) => {
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, projectsById, loading: { ...state.loading, byId: loadingById } }
     }
-    case ActionTypes.INITIATE_PROJECT_REMOVE: {
-      return { ...state, loading: { ...state.loading } }
-    }
     case ActionTypes.REMOVE_PROJECT: {
       const id = action.id
       // eslint-disable-next-line no-unused-vars
       const { [id]: __, ...projectsById } = state.projectsById
-      return { ...state, projectsById, loading: { ...state.loading, list: false } }
+
+      const projectIdsByPage = Object.keys(state.projectIdsByPage).reduce((cur, pageNum) => {
+        const validIds = state.projectIdsByPage[pageNum].filter(pageProjectId => pageProjectId !== id)
+        cur[pageNum] = validIds
+        return cur
+      }, {})
+
+      return { ...state, projectsById, projectIdsByPage }
     }
     case ActionTypes.SORT_PROJECTS: {
       if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {
