@@ -80,7 +80,7 @@ const UserProfileComponent = ({ errors, formId, user, submitHandler }) => {
           {renderUserAvatar()}
           {!preview &&
             <FormField
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/svg+xml"
               help={avatarHelpText}
               id="userAvatar"
               errors={errors.file}
