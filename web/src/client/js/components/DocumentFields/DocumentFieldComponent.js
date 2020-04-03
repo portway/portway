@@ -25,10 +25,6 @@ const DocumentFieldComponent = ({
     }
   }, [isNewField])
 
-  useEffect(() => {
-    console.log('DocumentFieldComponent render')
-  })
-
   const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE
 
   const fieldClasses = cx({

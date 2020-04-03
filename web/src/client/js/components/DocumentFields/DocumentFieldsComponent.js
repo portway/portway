@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -25,10 +25,6 @@ const DocumentFieldsComponent = ({
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
-
-  useEffect(() => {
-    console.log('DocumentFieldsComponent render')
-  })
 
   const bigInvisibleButton = (
     <li className="document-field" key="bib">

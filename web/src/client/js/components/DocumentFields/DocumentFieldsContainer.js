@@ -28,10 +28,6 @@ const DocumentFieldsContainer = ({
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
 
-  useEffect(() => {
-    console.log('DocumentFieldsContainer render')
-  })
-
   // This is in a useEffect and using useState because before it would cause many re-renders, since
   // fieldMap was changing a few times
   const sortedFields = useMemo(() => {
