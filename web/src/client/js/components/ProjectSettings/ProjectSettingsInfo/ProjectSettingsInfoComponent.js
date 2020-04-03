@@ -35,11 +35,11 @@ const ProjectSettingsInfoComponent = ({
     <>
       <Form className="project-settings__info" name={formId} onSubmit={submitHandler} submitLabel="Update project settings">
         <section>
-          <Link to={`${PATH_PROJECT}/${project.id}`} className="link link--back"><ArrowIcon direction="left" /> Back to Project</Link>
+          <Link to={`${PATH_PROJECT}/${project.id}`} className="link link--back"><ArrowIcon direction="left" /> Back to project</Link>
           <h2>General information</h2>
           <FormField
             id="projectName"
-            label="Project Name"
+            label="Project name"
             name="name"
             errors={errors.name}
             onChange={(e) => { setProjectName(e.target.value) }}
