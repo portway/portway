@@ -9,6 +9,10 @@ import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
 
+// Fields that are of the "data" type in the content menu
+// These get the name, and white box around them
+const DATA_FIELD_TYPES = [FIELD_TYPES.STRING, FIELD_TYPES.NUMBER, FIELD_TYPES.DATE]
+
 const DocumentFieldComponent = ({
   children,
   field,
@@ -28,7 +32,7 @@ const DocumentFieldComponent = ({
     }
   }, [isNewField])
 
-  const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE && field.type !== FIELD_TYPES.FILE
+  const dataField = DATA_FIELD_TYPES.includes(field.type)
 
   const fieldClasses = cx({
     'document-field': true,
