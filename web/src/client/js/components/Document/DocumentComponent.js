@@ -45,6 +45,8 @@ const DocumentComponent = ({
     }
   })
 
+  if (!document.id) return null
+
   const docKey = document ? document.id : 0
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]

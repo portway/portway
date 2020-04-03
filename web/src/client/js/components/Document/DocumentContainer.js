@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -21,12 +21,13 @@ const DocumentContainer = ({
   createMode,
   documentMode,
   isFullScreen,
-  location,
-  match,
   uiToggleDocumentMode,
   uiToggleFullScreen,
   updateDocument,
 }) => {
+  const location = useLocation()
+  const params = useParams()
+
   const { data: project, loading: projectLoading } = useDataService(currentResource('project', location.pathname), [
     location.pathname
   ])
@@ -39,18 +40,18 @@ const DocumentContainer = ({
   /**
    * If we're creating a document, render nothing
    */
-  if (createMode || match.params.documentId === PATH_DOCUMENT_NEW_PARAM) {
+  if (createMode || params.documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
   }
 
   // if we don't have a documentId (null or undefined),
   // we shouldn't be loading this component
-  if (match.params.documentId == null) {
+  if (params.documentId == null) {
     return null
   }
 
   //if the document id isn't a valid number, redirect to 404
-  if (isNaN(match.params.documentId)) {
+  if (isNaN(params.documentId)) {
     return <NoDocument />
   }
 
@@ -70,7 +71,7 @@ const DocumentContainer = ({
   // The current document doesn't match the url params, usually because
   // the user has switched docs and the new doc hasn't loaded from currentResource helper.
   // In that case, we want to render a blank document
-  if (currentDocument && currentDocument.id !== Number(match.params.documentId)) {
+  if (currentDocument && currentDocument.id !== Number(params.documentId)) {
     currentDocument = defaultDocument
   }
 
@@ -122,8 +123,6 @@ DocumentContainer.propTypes = {
   documentMode: PropTypes.string,
   fields: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
-  location: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
   uiToggleDocumentMode: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
@@ -144,6 +143,4 @@ const mapDispatchToProps = {
   uiToggleFullScreen,
 }
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
