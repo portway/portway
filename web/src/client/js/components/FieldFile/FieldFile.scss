@@ -1,0 +1,43 @@
+@import 'CSS/inc/_mixins.scss';
+
+// Field
+.document-field--image {
+  margin: 1.8rem 0;
+
+  .document-field__content {
+    align-items: unset;
+  }
+
+}
+
+// Actual component
+.document-field__image {
+  position: relative;
+
+  &-container {
+    position: relative;
+    .document-field--settings-mode & {
+      display: flex;
+      max-height: 400px;
+      min-height: 250px;
+      overflow: hidden;
+    }
+  }
+
+  img {
+    height: auto;
+    margin: auto;
+    max-width: 100%;
+  }
+
+  .document-field__progress {
+    background: var(--field-edit-mode-background);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+  }
+
+}

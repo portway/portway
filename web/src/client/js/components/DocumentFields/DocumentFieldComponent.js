@@ -9,6 +9,10 @@ import './_DocumentField.scss'
 import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
 
+// Fields that are of the "data" type in the content menu
+// These get the name, and white box around them
+const DATA_FIELD_TYPES = [FIELD_TYPES.STRING, FIELD_TYPES.NUMBER, FIELD_TYPES.DATE]
+
 const DocumentFieldComponent = ({
   children,
   field,
@@ -28,7 +32,7 @@ const DocumentFieldComponent = ({
     }
   }, [isNewField])
 
-  const dataField = field.type !== FIELD_TYPES.TEXT && field.type !== FIELD_TYPES.IMAGE
+  const dataField = DATA_FIELD_TYPES.includes(field.type)
 
   const fieldClasses = cx({
     'document-field': true,
@@ -38,6 +42,7 @@ const DocumentFieldComponent = ({
     'document-field--number': field.type === FIELD_TYPES.NUMBER,
     'document-field--string': field.type === FIELD_TYPES.STRING,
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
+    'document-field--file': field.type === FIELD_TYPES.FILE,
     'document-field--settings-mode': settingsMode,
   })
 
@@ -59,6 +64,7 @@ const DocumentFieldComponent = ({
     [FIELD_TYPES.NUMBER]: 'Number',
     [FIELD_TYPES.IMAGE]: 'Image',
     [FIELD_TYPES.DATE]: 'Date',
+    [FIELD_TYPES.FILE]: 'File'
   }
 
   // Field name handling
@@ -113,7 +119,7 @@ const DocumentFieldComponent = ({
           <div className="document-field__content">
             <div className="document-field__settings-button">
               <>
-              {field.type === FIELD_TYPES.IMAGE && field.value && !settingsMode && !readOnly &&
+              {(field.type === FIELD_TYPES.IMAGE || field.type === FIELD_TYPES.FILE) && field.value && !settingsMode && !readOnly &&
                 <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
                   <SettingsIcon />
                 </button>
