@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import NotificationComponent from './NotificationComponent'
 
 const NotificationList = ({ dismissHandler, notifications }) => {
-  console.log(notifications)
   const codeArray = []
   const trimmedNotificationsList = notifications.filter((note) => {
     if (!codeArray.includes(note.notification.code)) {
@@ -12,7 +11,6 @@ const NotificationList = ({ dismissHandler, notifications }) => {
       return note
     }
   })
-  console.log(trimmedNotificationsList)
   if (trimmedNotificationsList.length > 0) {
     return (
       <ol className="notifications__list">
