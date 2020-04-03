@@ -35,8 +35,6 @@ const DocumentContainer = ({
     location.pathname
   ])
 
-  console.log('Render Document Container')
-
   let currentDocument = document
 
   /**

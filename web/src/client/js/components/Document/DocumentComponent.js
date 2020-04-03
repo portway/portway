@@ -46,7 +46,6 @@ const DocumentComponent = ({
   })
 
   if (!document.id) return null
-  console.log('Render Document Component')
 
   const docKey = document ? document.id : 0
   const projectAssignment = userProjectAssignments[Number(projectId)]

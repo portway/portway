@@ -27,7 +27,10 @@ const DocumentFieldsContainer = ({
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
-  console.log('render container')
+
+  useEffect(() => {
+    console.log('DocumentFieldsContainer render')
+  })
 
   // This is in a useEffect and using useState because before it would cause many re-renders, since
   // fieldMap was changing a few times
@@ -40,7 +43,6 @@ const DocumentFieldsContainer = ({
     fieldMapTemp.sort((a, b) => {
       return a.order - b.order
     })
-    console.log('render memo')
     return fieldMapTemp
   }, [fields])
 

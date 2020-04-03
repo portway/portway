@@ -27,8 +27,8 @@ const DocumentFieldsComponent = ({
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
   useEffect(() => {
-    console.log('render component')
-  }, [fields])
+    console.log('DocumentFieldsComponent render')
+  })
 
   const bigInvisibleButton = (
     <li className="document-field" key="bib">
