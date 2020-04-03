@@ -91,8 +91,11 @@ const DocumentFieldsContainer = ({
     }
   }
 
-  function fieldFocusHandler(fieldId, fieldType) {
+  function fieldFocusHandler(fieldId, fieldType, fieldData) {
+    // Unfortunately we're tracking focus state both in redux and within the sync
+    // context. We may want to look into hooking sync into redux? -Dirk 4/20
     if (!documentReadOnlyMode) {
+      focusField(fieldId, fieldType, fieldData)
       // send socket info
       socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
     }
@@ -100,6 +103,7 @@ const DocumentFieldsContainer = ({
 
   function fieldBlurHandler(fieldId, fieldType) {
     if (!documentReadOnlyMode) {
+      blurField(fieldId, fieldType)
       // send socket info
       socketDispatch(emitFieldBlur(socketDispatch, fieldId, documentId))
     }
