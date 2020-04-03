@@ -177,7 +177,7 @@ module.exports = {
   },
   FIELD_TYPES: FIELD_TYPES,
   // Default text strings
-  LABEL_NEW_DOCUMENT: 'New Document',
+  LABEL_NEW_DOCUMENT: 'New document',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days
   MAX_FILE_SIZE: 10000000,
   MAX_AVATAR_SIZE: 1024 * 1000,

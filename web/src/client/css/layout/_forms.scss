@@ -89,6 +89,10 @@ input[type='number'] {
   appearance: textfield;
 }
 
+input.input--without-styling {
+  padding: 0;
+}
+
 .field {
   textarea {
     min-height: 250px;

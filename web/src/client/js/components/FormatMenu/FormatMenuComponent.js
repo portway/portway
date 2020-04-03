@@ -84,17 +84,17 @@ const FormatMenuComponent = ({ formatSelection }) => {
           </MenuItem>
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank" onClick={() => formatSelection('hr') }>
-              <span className="format-menu__format">---</span> Horizontal Rule
+              <span className="format-menu__format">---</span> Horizontal rule
             </button>
           </MenuItem>
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank" onClick={() => formatSelection('ul') }>
-              <span className="format-menu__format">*</span> Unordered List
+              <span className="format-menu__format">*</span> Unordered list
             </button>
           </MenuItem>
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank" onClick={() => formatSelection('ol') }>
-              <span className="format-menu__format">1.</span> Ordered List
+              <span className="format-menu__format">1.</span> Ordered list
             </button>
           </MenuItem>
           <MenuItem tabIndex="-1">
