@@ -10,7 +10,8 @@ const ImageCropperComponent = ({ children, circle, height, image, onComplete, wi
   const cropperRef = useRef()
 
   const imageStyle = {
-    maxWidth: '350px'
+    maxWidth: '350px',
+    minWidth: '64px',
   }
 
   function changeCropHandler(newCrop) {

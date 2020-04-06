@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import { FIELD_TYPES } from 'Shared/constants'
-import { RemoveIcon, SettingsIcon } from 'Components/Icons'
 
 import './_DocumentField.scss'
-import './_DocumentFieldSettings.scss'
 import './_DocumentTools.scss'
 
 // Fields that are of the "data" type in the content menu
@@ -21,7 +19,6 @@ const DocumentFieldComponent = ({
   isUpdating,
   onRename,
   readOnly,
-  settingsHandler,
   settingsMode,
 }) => {
   const nameRef = useRef()
@@ -117,22 +114,9 @@ const DocumentFieldComponent = ({
           }
 
           <div className="document-field__content">
-            <div className="document-field__settings-button">
-              <>
-              {(field.type === FIELD_TYPES.IMAGE || field.type === FIELD_TYPES.FILE) && field.value && !settingsMode && !readOnly &&
-                <button aria-label="Field settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
-                  <SettingsIcon />
-                </button>
-              }
-              {settingsMode && !readOnly &&
-                <button aria-label="Exit settings" className="btn btn--blank btn--with-circular-icon" onClick={() => { settingsHandler(field.id) }}>
-                  <RemoveIcon width="32" height="32" />
-                </button>
-              }
-              </>
-            </div>
             {children}
           </div>
+
         </div>
 
         <div className={fieldActionClasses}></div>
@@ -150,7 +134,6 @@ DocumentFieldComponent.propTypes = {
   isUpdating: PropTypes.bool,
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
 }
 

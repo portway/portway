@@ -33,9 +33,8 @@ const ProjectSettingsTeamsComponent = ({
   return (
     <form className="project-settings__teams form" onSubmit={(e) => { e.preventDefault() }}>
       <section>
-        <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><ArrowIcon direction="left" /> Back to Project</Link>
-        <h2>Manage your team</h2>
-        <h3>Add a teammate to this project</h3>
+        <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back"><ArrowIcon direction="left" /> Back to project</Link>
+        <h2>Manage your project’s team</h2>
         <div className="grid grid--teams-list">
           <div className="field">
             <label htmlFor="team-list">Team member</label>
