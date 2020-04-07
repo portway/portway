@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import CodeMirror from 'codemirror/lib/codemirror'
 import { FIELD_TYPES } from 'Shared/constants'
@@ -21,8 +21,24 @@ const FieldTextComponent = ({
   onFocus, readOnly, isCurrentlyFocusedField, id, type, value }) => {
   const textRef = useRef()
   const editorRef = useRef()
+  const [editorMounted, setEditorMounted] = useState(false)
 
-  // Mount the SimpleMDE Editor
+  const changeCallback = useCallback((e) => {
+    if (e.origin !== 'setValue' && isCurrentlyFocusedField) {
+      onChange(id, editorRef.current.getValue())
+    }
+  }, [id, isCurrentlyFocusedField, onChange])
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.on('change', changeCallback)
+
+      return () => {
+        editorRef.current.off('change', changeCallback)
+      }
+    }
+  }, [changeCallback, editorMounted])
+
   useEffect(() => {
     editorRef.current = CodeMirror.fromTextArea(textRef.current, {
       addModeClass: true,
@@ -38,10 +54,10 @@ const FieldTextComponent = ({
         'Cmd-B': 'toggleBold',
         'Cmd-I': 'toggleItalic',
         'Cmd-K': 'drawLink',
-        'Enter': 'newlineAndIndentContinueMarkdownList',
+        Enter: 'newlineAndIndentContinueMarkdownList',
         'Shift-Cmd-U': 'toggleBlockquote',
         'Shift-Tab': 'shiftTabAndUnindentMarkdownList',
-        'Tab': 'tabAndIndentMarkdownList',
+        Tab: 'tabAndIndentMarkdownList'
       },
       lineNumbers: false,
       lineWrapping: true,
@@ -69,14 +85,8 @@ const FieldTextComponent = ({
     const editorDomEl = editorRef.current.display.lineDiv
     editorDomEl.addEventListener('click', clickURLHandler)
     // CodeMirror specific events
-    editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
     editorRef.current.on('blur', (cm, e) => {
       onBlur(id, type, editorRef.current)
-    })
-    editorRef.current.on('change', (e) => {
-      if (e.origin !== 'setValue' && isCurrentlyFocusedField) {
-        onChange(id, editorRef.current.getValue())
-      }
     })
     editorRef.current.on('dragstart', (cm, e) => {
       e.preventDefault()
@@ -93,16 +103,30 @@ const FieldTextComponent = ({
     editorRef.current.on('focus', (cm, e) => {
       onFocus(id, type, editorRef.current)
     })
+
+    setEditorMounted(true)
+
+    return () => {
+      setEditorMounted(false)
+    }
+    // We're disabling the dependency warning here because anything other than []
+    // causes problems. We only want setEditor to run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (autoFocusElement) {
       window.requestAnimationFrame(() => {
         editorRef.current.focus()
       })
     }
-
-    // We're disabling the dependency warning here because anything other than []
-    // causes problems. We only want setEditor to run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [autoFocusElement, editorMounted])
+
+  useEffect(() => {
+    editorRef.current.options.readOnly = readOnly ? 'nocursor' : false
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [readOnly, editorMounted])
 
   useEffect(() => {
     // This check prevents codeMirror from unnecessarily re-rendering if it
@@ -111,6 +135,7 @@ const FieldTextComponent = ({
       editorRef.current.getDoc().setValue(value)
       editorRef.current.refresh()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   return (
