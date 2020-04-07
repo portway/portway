@@ -30,8 +30,7 @@ export const documentFields = (state = initialState, action) => {
         return object
       }, {})
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: documentFieldsObject }
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
-      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byDocument } }
+      return { ...state, documentFieldsById, loading: { ...state.loading, byDocument } }
     }
     case ActionTypes.RECEIVE_CREATED_FIELD: {
       const { id, documentId } = action.data
@@ -40,17 +39,14 @@ export const documentFields = (state = initialState, action) => {
         ...state.documentFieldsById,
         [documentId]: { ...documentFields, [id]: action.data }
       }
-      const lastCreatedFieldId = id
-      return { ...state, documentFieldsById, lastCreatedFieldId }
+      return { ...state, documentFieldsById }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
       const { documentId, fieldId } = action
       const byId = { ...state.loading.byId, [fieldId]: true }
       const byDocument = { ...state.loading.byDocument, [documentId]: true }
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
       return {
         ...state,
-        lastCreatedFieldId,
         loading: {
           ...state.loading,
           byDocument,
@@ -59,19 +55,17 @@ export const documentFields = (state = initialState, action) => {
       }
     }
     case ActionTypes.RECEIVE_UPDATED_FIELD: {
-      const { projectId, documentId, fieldId } = action
+      const { documentId, fieldId } = action
       const documentFields = state.documentFieldsById[documentId] || {}
       const documentFieldsById = {
         ...state.documentFieldsById,
         [documentId]: { ...documentFields, [fieldId]: action.data }
       }
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
       const byId = { ...state.loading.byId, [fieldId]: false }
       const byDocument = { ...state.loading.byDocument, [documentId]: false }
       return {
         ...state,
         documentFieldsById,
-        lastCreatedFieldId,
         loading: {
           ...state.loading,
           byDocument,
@@ -84,7 +78,6 @@ export const documentFields = (state = initialState, action) => {
       const documentFields = { ...state.documentFieldsById[documentId] }
       const { [fieldId]: fieldToUpdate, ...remainingFields } = documentFields
       const oldOrder = fieldToUpdate.order
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
 
       // No change, early return
       if (oldOrder === newOrder) return { ...state }
@@ -117,7 +110,6 @@ export const documentFields = (state = initialState, action) => {
 
       return {
         ...state,
-        lastCreatedFieldId,
         documentFieldsById: {
           ...state.documentFieldsById,
           [documentId]: updatedFields
@@ -135,9 +127,8 @@ export const documentFields = (state = initialState, action) => {
       // eslint-disable-next-line no-unused-vars
       const { [fieldId]: __, ...restDocumentFields } = documentFields
       const loadingById = { ...state.loading.byId, [fieldId]: false }
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: restDocumentFields }
-      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, documentFieldsById, loading: { ...state.loading, byId: loadingById } }
     }
     // Blur field resets focus data
     // case ActionTypes.BLUR_FIELD: {
@@ -152,8 +143,14 @@ export const documentFields = (state = initialState, action) => {
       focused.id = fieldId
       focused.type = fieldType
       focused.data = fieldData
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
-      return { ...state, lastCreatedFieldId, focused }
+      return { ...state, focused }
+    }
+    // Set / Remove lastCreatedFieldId
+    case ActionTypes.SET_LAST_CREATED_FIELD_ID: {
+      return { ...state, lastCreatedFieldId: action.fieldId }
+    }
+    case ActionTypes.REMOVE_LAST_CREATED_FIELD_ID: {
+      return { ...state, lastCreatedFieldId: null }
     }
     default:
       return state

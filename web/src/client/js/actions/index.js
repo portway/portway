@@ -65,6 +65,8 @@ export const ActionTypes = {
   REMOVE_FIELD: 'REMOVE_FIELD',
   FOCUS_FIELD: 'FOCUS_FIELD',
   BLUR_FIELD: 'BLUR_FIELD',
+  SET_LAST_CREATED_FIELD_ID: 'SET_LAST_CREATED_FIELD_ID',
+  REMOVE_LAST_CREATED_FIELD_ID: 'REMOVE_LAST_CREATED_FIELD_ID',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -227,6 +229,9 @@ export const Fields = {
   // Blur / Focus events
   blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
   focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  // Created field Id
+  setLastCreatedFieldId: makeActionCreator(ActionTypes.SET_LAST_CREATED_FIELD_ID, 'fieldId'),
+  removeLastCreatedFieldId: makeActionCreator(ActionTypes.REMOVE_LAST_CREATED_FIELD_ID, 'fieldId'),
 }
 
 export const Notifications = {

@@ -33,6 +33,7 @@ const CustomTimeInput = forwardRef(({ value, onClick }, ref) => (
 ))
 
 const FieldDateComponent = ({
+  autoFocusElement,
   field,
   onBlur,
   onChange,
@@ -157,6 +158,8 @@ const FieldDateComponent = ({
         />
         <div className="document-field__date-time">
           <input
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={autoFocusElement}
             ref={timeRef}
             type="text"
             defaultValue={moment(fieldDate).format('h:mm a')}
@@ -175,6 +178,7 @@ const FieldDateComponent = ({
 }
 
 FieldDateComponent.propTypes = {
+  autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,

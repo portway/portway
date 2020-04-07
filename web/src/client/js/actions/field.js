@@ -24,6 +24,7 @@ export const createField = (projectId, documentId, fieldType, body) => {
       dispatch(Validation.create('field', data, status))
     } else {
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
+      dispatch(Fields.setLastCreatedFieldId(data.id))
       return data
     }
   }
@@ -85,6 +86,18 @@ export const focusField = (fieldId, fieldType, fieldData) => {
   }
 }
 
+export const setLastCreatedFieldId = (fieldId) => {
+  return async (dispatch) => {
+    dispatch(Fields.setLastCreatedFieldId(fieldId))
+  }
+}
+
+export const removeLastCreatedFieldId = (fieldId) => {
+  return async (dispatch) => {
+    dispatch(Fields.removeLastCreatedFieldId(fieldId))
+  }
+}
+
 /**
  * Creates a new field in newDocumentId using an existing field's data
  * Then removes that field from the currentDocumentId
@@ -117,6 +130,7 @@ export const copyField = (projectId, currentDocumentId, newDocumentId, field) =>
 
 export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropriately = (
   documentId,
+  fieldId,
   editor,
   fieldWithCursorOrder,
   newFieldName,
@@ -129,11 +143,16 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
     const lastLine = editor.lastLine()
     const lastLineContent = editor.getLine(lastLine)
 
+    let splitFieldData = null
+    let newSplitField = null
+
     // Get the selection of the field after the current cursor pos
+    const zeroRange = { line: 0, ch: 0 }
     const startRange = { line: currLine, ch: currChar }
     const endRange = { line: lastLine, ch: lastLineContent.length }
 
     // Save the text after the cursor
+    const textBeforeCursor = editor.getRange(zeroRange, startRange)
     const textAfterCursor = editor.getRange(startRange, endRange)
 
     // Create the new field
@@ -143,26 +162,37 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
       return
     }
 
-    // Create the new split text field
-    const splitFieldData = {
-      name: newSplitTextName,
-      type: FIELD_TYPES.TEXT,
-      value: textAfterCursor,
+    if (textAfterCursor !== '') {
+      // Create the new split text field
+      splitFieldData = {
+        name: newSplitTextName,
+        type: FIELD_TYPES.TEXT,
+        value: textAfterCursor,
+      }
+      const { data: newSplitFieldData, status: newSplitFieldStatus } = await add(`v1/documents/${documentId}/fields`, splitFieldData)
+      if (globalErrorCodes.includes(newSplitFieldStatus)) {
+        dispatch(Notifications.create(newField.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+        return
+      }
+      newSplitField = newSplitFieldData
     }
-    const { data: newSplitField, status: newSplitFieldStatus } = await add(`v1/documents/${documentId}/fields`, splitFieldData)
-    if (globalErrorCodes.includes(newSplitFieldStatus)) {
-      dispatch(Notifications.create(newField.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
-      return
-    }
+
+    // Manually update the current textfield
+    await update(`v1/documents/${documentId}/fields/${fieldId}`, { value: textBeforeCursor })
 
     // Re-order the two new fields
     await update(`v1/documents/${documentId}/fields/${newField.id}/order`, { order: fieldWithCursorOrder + 1 })
-    await update(`v1/documents/${documentId}/fields/${newSplitField.id}/order`, { order: fieldWithCursorOrder + 2 })
+    if (textAfterCursor !== '') {
+      await update(`v1/documents/${documentId}/fields/${newSplitField.id}/order`, { order: fieldWithCursorOrder + 2 })
+    }
 
     // Replace the text
-    editor.replaceRange('', startRange, endRange)
+    // removed this and am manually calling the field update API so we don't get an onChange
+    // editor.replaceRange('', startRange, endRange)
+
     // Fetch the document for a total re-render now that we have everything set up
     dispatch(fetchDocument(documentId))
+    dispatch(Fields.setLastCreatedFieldId(newField.id))
   }
 }
 

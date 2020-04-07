@@ -26,6 +26,8 @@ const DocumentFieldsComponent = ({
   const [settingsForField, setSettingsForField] = useState(null)
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
+  console.log(fields)
+
   const bigInvisibleButton = (
     <li className="document-field" key="bib">
       <button
@@ -62,6 +64,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
+            autoFocusElement={createdFieldId === field.id}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
@@ -73,6 +76,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
+            autoFocusElement={createdFieldId === field.id}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
@@ -100,6 +104,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.DATE:
         fieldTypeComponent = (
           <FieldDateComponent
+            autoFocusElement={createdFieldId === field.id}
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}

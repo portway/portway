@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const FieldNumberComponent = ({ field, onChange, readOnly }) => {
+const FieldNumberComponent = ({ autoFocusElement, field, onChange, readOnly }) => {
   return (
     <input
+      // eslint-disable-next-line jsx-a11y/no-autofocus
+      autoFocus={autoFocusElement}
       className="document-field__number"
       defaultValue={field.value}
       onChange={(e) => { onChange(field.id, Number.parseFloat(e.target.value)) }}
@@ -19,6 +21,7 @@ const FieldNumberComponent = ({ field, onChange, readOnly }) => {
 }
 
 FieldNumberComponent.propTypes = {
+  autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,

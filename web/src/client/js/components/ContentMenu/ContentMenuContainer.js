@@ -41,7 +41,7 @@ const ContentMenuContainer = ({
       // The current order of the field we're splitting
       const fieldWithCursorOrder = fields[focusedField.id].order
 
-      createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropriately(document.id, editor, fieldWithCursorOrder, newFieldName, fieldType, newSplitTextName)
+      createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropriately(document.id, focusedField.id, editor, fieldWithCursorOrder, newFieldName, fieldType, newSplitTextName)
     } else {
       const newName = getNewNameInSequence(fields, fieldType)
       createField(project.id, document.id, fieldType, { name: newName, type: fieldType })
