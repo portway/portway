@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { currentUserId } from 'Libs/currentIds'
 
@@ -42,16 +42,32 @@ const DocumentFieldComponent = ({
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)
 
+  const singleUserEditField = SYNC_SINGLE_USER_EDIT_FIELDS.includes(field.type)
+
+  // Track if field should be readOnly based on props + sync state
+  let readOnlyField = readOnly
+
   remoteChangesRef.current =
     myFocusedFieldId === field.id
       ? remoteChangesInCurrentlyFocusedField
       : remoteChangesRef.current || []
 
+  // Can this be a useEffect? Not sure `remoteUserFieldFocus` can be a dependency?
+  if (singleUserEditField) {
+    // Disable the field if it's single user editable and remotely focused
+    Object.keys(remoteUserFieldFocus).find((userId) => {
+      if (remoteUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
+        readOnlyField = true
+        return true // satisfy array `find` to stop execution
+      }
+    })
+  }
+
   useEffect(() => {
-    if (remoteChangesRef.current.length > 0) {
+    if (remoteChangesRef.current.length > 0 && !singleUserEditField) {
       setShowConflictPopper(true)
     }
-  }, [remoteChangesRef.current.length])
+  }, [remoteChangesRef.current.length, singleUserEditField])
 
   useEffect(() => {
     // Accept remote changes to field if it's not focused and the conflict popper isn't open
@@ -223,12 +239,12 @@ const DocumentFieldComponent = ({
                   onRename(field.id, e.target.value)
                 }}
                 onFocus={(e) => {
-                  if (!readOnly) {
+                  if (!readOnlyField) {
                     onFocus(field.id, field.type, field)
                     e.target.select()
                   }
                 }}
-                readOnly={readOnly}
+                readOnly={readOnlyField}
                 ref={nameRef}
                 style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
                 type="text"
