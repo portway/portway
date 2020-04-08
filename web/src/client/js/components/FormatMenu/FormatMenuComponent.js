@@ -44,61 +44,61 @@ const FormatMenuComponent = ({ formatSelection }) => {
         <FormatIcon width="24" height="24" />
       </button>
       <Popper id="format-menu" anchorRef={anchorRef} open={expanded} placement="bottom" width="200">
-        <Menu anchorRef={anchorRef}>
-          <MenuItem tabIndex="0">
-            <button className="btn btn--blank" onClick={() => formatSelection('h1') }>
+        <Menu anchorRef={anchorRef} isActive={expanded}>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('h1') } ref={React.createRef()}>
               <span className="format-menu__format">#</span> Heading 1
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('h2') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('h2') } ref={React.createRef()}>
               <span className="format-menu__format">##</span> Heading 2
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('h3') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('h3') } ref={React.createRef()}>
               <span className="format-menu__format">###</span> Heading 3
             </button>
           </MenuItem>
           <hr />
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('bold') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('bold') } ref={React.createRef()}>
               <span className="format-menu__format">**</span> <b>Bold</b><span className="format-menu__closing">**</span>
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('italic') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('italic') } ref={React.createRef()}>
               <span className="format-menu__format">_</span> <i>Italic</i><span className="format-menu__closing">_</span>
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('strikethrough') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('strikethrough') } ref={React.createRef()}>
               <span className="format-menu__format">~~</span> <span className="strikethrough">Strike-through</span><span className="format-menu__closing">~~</span>
             </button>
           </MenuItem>
           <hr />
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('link') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('link') } ref={React.createRef()}>
               <span className="format-menu__format">[</span> <span className="format-menu__link">Link</span><span className="format-menu__closing">]</span>
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('hr') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('hr') } ref={React.createRef()}>
               <span className="format-menu__format">---</span> Horizontal rule
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('ul') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('ul') } ref={React.createRef()}>
               <span className="format-menu__format">*</span> Unordered list
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('ol') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('ol') } ref={React.createRef()}>
               <span className="format-menu__format">1.</span> Ordered list
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank" onClick={() => formatSelection('blockquote') }>
+          <MenuItem>
+            <button className="btn btn--blank" onClick={() => formatSelection('blockquote') } ref={React.createRef()}>
               <span className="format-menu__format">&gt;</span> Blockquote
             </button>
           </MenuItem>

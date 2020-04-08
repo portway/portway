@@ -16,7 +16,7 @@ import {
 } from 'Components/Icons'
 import { FIELD_TYPES } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuHeader, MenuItem } from 'Components/Menu'
+import { Menu, MenuDivider, MenuHeader, MenuItem } from 'Components/Menu'
 
 const ContentMenuComponent = ({ createFieldHandler }) => {
   const [expanded, setExpanded] = useState(false)
@@ -58,38 +58,36 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         width="130"
       >
         <MenuHeader><h2>Content</h2></MenuHeader>
-        <Menu anchorRef={anchorRef}>
-          <MenuItem tabIndex="0">
-            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }}>
+        <Menu anchorRef={anchorRef} isActive={expanded}>
+          <MenuItem>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }} ref={React.createRef()}>
               <TextIcon width="26" height="26" /> <span className="label">Body</span>
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.IMAGE) }}>
+          <MenuItem>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.IMAGE) }} ref={React.createRef()}>
               <ImageIcon width="26" height="26" /> <span className="label">Image</span>
             </button>
           </MenuItem>
-          <MenuItem tabIndex="-1">
-            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.FILE) }}>
-              <FileIcon width="26" height="26" /> <span className="label">File</span>
-            </button>
-          </MenuItem>
-        </Menu>
-        <MenuHeader><h2>Data</h2></MenuHeader>
-        <Menu anchorRef={anchorRef}>
+          <MenuDivider><h2>Data</h2></MenuDivider>
           <MenuItem>
-            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.STRING) }}>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.STRING) }} ref={React.createRef()}>
               <StringIcon width="26" height="26" /> <span className="label">String</span>
             </button>
           </MenuItem>
           <MenuItem>
-            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.NUMBER) }}>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.NUMBER) }} ref={React.createRef()}>
               <NumberIcon width="26" height="26" /> <span className="label">Number</span>
             </button>
           </MenuItem>
           <MenuItem>
-            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.DATE) }}>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.DATE) }} ref={React.createRef()}>
               <DateIcon width="26" height="26" /> <span className="label">Date</span>
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.FILE) }} ref={React.createRef()}>
+              <FileIcon width="26" height="26" /> <span className="label">File</span>
             </button>
           </MenuItem>
         </Menu>
