@@ -1,43 +1,76 @@
-@import 'CSS/inc/_mixins.scss';
+@import 'CSS/inc/_include-media.scss';
 
 // Field
-.document-field--image {
+.document-field--file {
   margin: 1.8rem 0;
 
-  .document-field__content {
-    align-items: unset;
+  // .document-field__content {
+  //   align-items: unset;
+  // }
+
+  .file-uploader {
+    border: none;
+    position: static;
   }
 
 }
 
 // Actual component
-.document-field__image {
+.document-field__file {
   position: relative;
+  width: 100%;
 
-  &-container {
-    position: relative;
-    .document-field--settings-mode & {
-      display: flex;
-      max-height: 400px;
-      min-height: 250px;
-      overflow: hidden;
+  // Only show the edit button on hover of the whole field
+  @media (hover: hover) {
+    .document-field__edit-btn {
+      visibility: hidden;
+    }
+    &:hover {
+      .document-field__edit-btn {
+        visibility: visible;
+      }
     }
   }
+}
 
-  img {
-    height: auto;
-    margin: auto;
-    max-width: 100%;
+.document-field__edit-btn {
+  position: absolute;
+  right: 1rem;
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+.document-field__file-container {
+  align-items: center;
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.document-field__file-meta {
+  color: var(--color-gray-40);
+  font-size: 1.3rem;
+  margin-left: var(--icon-margin);
+}
+
+.document-field__file-value {
+  align-items: center;
+  display: flex;
+  width: 100%;
+
+  .icon-file {
+    margin-right: var(--icon-margin);
   }
 
-  .document-field__progress {
-    background: var(--field-edit-mode-background);
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 2;
+  &--empty {
+    height: 250px;
+    opacity: 0.3;
+    width: 250px;
+
+    @include media('>medium') {
+      height: 200px;
+      width: 400px;
+    }
   }
 
 }

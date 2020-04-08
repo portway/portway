@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import { MAX_FILE_SIZE } from 'Shared/constants'
+import { EditIcon, FileIcon, RemoveIcon } from 'Components/Icons'
+import { IconButton } from 'Components/Buttons'
+import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
-import Form from 'Components/Form/Form'
-import FormField from 'Components/Form/FormField'
+
 import './FieldFile.scss'
 
 const DISALLOWED_EXTENSIONS = [
@@ -14,7 +17,6 @@ const DISALLOWED_EXTENSIONS = [
 const FieldFileComponent = ({
   field,
   onChange,
-  onRename,
   readOnly,
   settingsHandler,
   settingsMode,
@@ -40,57 +42,61 @@ const FieldFileComponent = ({
     onChange(field.id, formData)
   }
 
+  const fileClassNames = cx({
+    'document-field__file-value': true,
+    'document-field__file-value--empty': !field.value,
+  })
+
+  const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
+
   return (
     <div className="document-field__file">
       <div className="document-field__file-container">
-        {field.value &&
-          <h1>FILE ICON HERE</h1>
-        }
-        {(settingsMode || !field.value || updating) &&
-        <FileUploaderComponent
-          accept="*"
-          hasValue={field.value !== null}
-          isUpdating={updating}
-          label="Drag and drop a file"
-          fileChangeHandler={uploadFile}
-          fileUploadedHandler={() => { settingsHandler(field.id) }}>
-          {settingsMode &&
-          <button
-            className="btn btn--blank"
-            onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
-            Cancel
-          </button>
+        <div className={fileClassNames}>
+          {field.value && field.meta && !settingsMode &&
+          <>
+            <FileIcon width="36" height="36" extension={fileExtension.toUpperCase()} />
+            <a href={field.value} target="_blank" rel="noopener noreferrer">{field.meta.originalName}</a>
+            <span className="document-field__file-meta">(Size: {humanFileSize(field.meta.size, true)})</span>
+            {!readOnly &&
+            <IconButton className="document-field__edit-btn" aria-label="Change file" onClick={() => { settingsHandler(field.id) }}>
+              <EditIcon width="14" height="14" />
+            </IconButton>
+            }
+          </>
           }
-          {warning &&
-          <p className="small warning">{warning}</p>
+          {(settingsMode || !field.value) &&
+          <>
+            <FileUploaderComponent
+              hasValue={field.value !== null}
+              isUpdating={updating}
+              label="Drag and drop a file"
+              fileChangeHandler={uploadFile}
+              fileUploadedHandler={() => {
+                // Since we render this uploader if there is no field.value,
+                // once the field gets a value it will remove it
+                // However, when updating an image, we have to manually remove it
+                if (field.value && settingsMode) {
+                  settingsHandler(field.id)
+                }
+              }}>
+            </FileUploaderComponent>
+            <IconButton aria-label="Cancel editing" onClick={() => { settingsHandler(field.id) }}>
+              <RemoveIcon width="12" height="12" />
+            </IconButton>
+          </>
           }
-        </FileUploaderComponent>
-        }
+        </div>
       </div>
-      {settingsMode && field.value &&
-      <div className="document-field__settings">
-        <Form
-          id="field-file-settings"
-          name="field-file-settings"
-          onSubmit={() => { settingsHandler(field.id) }}
-          submitLabel="Save settings"
-        >
-          <FormField
-            className="document-field__settings__input"
-            defaultValue={field.name}
-            id={`document-field-name-${field.id}`}
-            label="File name"
-            name="field-name"
-            onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
-          />
-        </Form>
-      </div>
+      {warning &&
+      <p className="small warning">{warning}</p>
       }
     </div>
   )
 }
 
 FieldFileComponent.propTypes = {
+  autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,

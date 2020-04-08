@@ -9,7 +9,12 @@ import './_DocumentTools.scss'
 
 // Fields that are of the "data" type in the content menu
 // These get the name, and white box around them
-const DATA_FIELD_TYPES = [FIELD_TYPES.STRING, FIELD_TYPES.NUMBER, FIELD_TYPES.DATE]
+const DATA_FIELD_TYPES = [
+  FIELD_TYPES.DATE,
+  FIELD_TYPES.FILE,
+  FIELD_TYPES.NUMBER,
+  FIELD_TYPES.STRING,
+]
 
 const DocumentFieldComponent = ({
   children,
