@@ -4,11 +4,9 @@ import cx from 'classnames'
 import { connect } from 'react-redux'
 
 import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
-import { debounce } from 'Shared/utilities'
 import { currentUserId } from 'Libs/currentIds'
 
 import useDocumentSocket from 'Hooks/useDocumentSocket'
-import { emitFieldFocus } from '../../sockets/SocketProvider'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
 
@@ -30,7 +28,7 @@ const DocumentFieldComponent = ({
   settingsMode,
   usersById
 }) => {
-  const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
+  const { state: socketState } = useDocumentSocket()
   const {
     remoteChangesInCurrentlyFocusedField,
     myFocusedFieldId,
@@ -75,20 +73,18 @@ const DocumentFieldComponent = ({
       setCurrentValue(field.value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.id, field.value])
-
-
-  const sendDebouncedFocusMessage = debounce(500, (fieldId, documentId) => {
-    socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
-  })
+  }, [field.id, field.value, myFocusedFieldId])
 
   function handleFieldBodyUpdate(fieldId, body) {
+    // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
+    // up the chain of callbacks. Any actions performed here that invokes DocumentFieldsContainer
+    // regardless of whether they cause a re-render or not will set in motion a chain of devastating
+    // events, resulting in a broken debounced onChange that will hit the API until it dies
+    // -Dirk 4/2020
     setCurrentValue(body)
     if (!remoteChangesRef.current.length) {
       onChange(fieldId, body)
     }
-    // always update the field focus when a user makes a change, debounced so we don't slam the sync service
-    sendDebouncedFocusMessage(fieldId, field.documentId)
   }
 
   function handleDiscard() {
