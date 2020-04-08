@@ -26,12 +26,13 @@ const FieldFileComponent = ({
 
   function uploadFile(file) {
     setWarning(null)
+    const extension = getFileExtension(file.name)
     if (file.size >= MAX_FILE_SIZE) {
       setWarning(`Your file must be less than ${MAX_FILE_SIZE / 100}MB.`)
       return
     }
-    if (DISALLOWED_EXTENSIONS.includes(file.type)) {
-      setWarning(`The file type "${file.type}" is not supported.`)
+    if (DISALLOWED_EXTENSIONS.includes(extension)) {
+      setWarning(`This type of file is not supported.`)
       return
     }
     const formData = new FormData()
@@ -59,13 +60,17 @@ const FieldFileComponent = ({
             <a href={field.value} target="_blank" rel="noopener noreferrer">{field.meta.originalName}</a>
             <span className="document-field__file-meta">(Size: {humanFileSize(field.meta.size, true)})</span>
             {!readOnly &&
-            <IconButton className="document-field__edit-btn" aria-label="Change file" onClick={() => { settingsHandler(field.id) }}>
+            <IconButton
+              className="document-field__edit-btn"
+              aria-label="Change file"
+              onClick={ () => { settingsHandler(field.id) }}
+            >
               <EditIcon width="14" height="14" />
             </IconButton>
             }
           </>
           }
-          {(settingsMode || !field.value) &&
+          {(settingsMode || !field.value) && !warning &&
           <FileUploaderComponent
             hasValue={field.value !== null}
             isUpdating={updating}
@@ -82,15 +87,24 @@ const FieldFileComponent = ({
           </FileUploaderComponent>
           }
           {settingsMode &&
-          <IconButton aria-label="Cancel editing" onClick={() => { settingsHandler(field.id) }}>
+          <IconButton
+            className="document-field__cancel-btn"
+            aria-label="Cancel editing"
+            onClick={
+              () => {
+                setWarning(null)
+                settingsHandler(field.id)
+              }
+            }
+          >
             <RemoveIcon width="12" height="12" />
           </IconButton>
           }
+          {warning &&
+          <p className="small warning">{warning}</p>
+          }
         </div>
       </div>
-      {warning &&
-      <p className="small warning">{warning}</p>
-      }
     </div>
   )
 }
