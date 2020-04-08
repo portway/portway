@@ -66,25 +66,25 @@ const FieldFileComponent = ({
           </>
           }
           {(settingsMode || !field.value) &&
-          <>
-            <FileUploaderComponent
-              hasValue={field.value !== null}
-              isUpdating={updating}
-              label="Drag and drop a file"
-              fileChangeHandler={uploadFile}
-              fileUploadedHandler={() => {
-                // Since we render this uploader if there is no field.value,
-                // once the field gets a value it will remove it
-                // However, when updating an image, we have to manually remove it
-                if (field.value && settingsMode) {
-                  settingsHandler(field.id)
-                }
-              }}>
-            </FileUploaderComponent>
-            <IconButton aria-label="Cancel editing" onClick={() => { settingsHandler(field.id) }}>
-              <RemoveIcon width="12" height="12" />
-            </IconButton>
-          </>
+          <FileUploaderComponent
+            hasValue={field.value !== null}
+            isUpdating={updating}
+            label="Drag and drop a file"
+            fileChangeHandler={uploadFile}
+            fileUploadedHandler={() => {
+              // Since we render this uploader if there is no field.value,
+              // once the field gets a value it will remove it
+              // However, when updating an image, we have to manually remove it
+              if (field.value && settingsMode) {
+                settingsHandler(field.id)
+              }
+            }}>
+          </FileUploaderComponent>
+          }
+          {settingsMode &&
+          <IconButton aria-label="Cancel editing" onClick={() => { settingsHandler(field.id) }}>
+            <RemoveIcon width="12" height="12" />
+          </IconButton>
           }
         </div>
       </div>
