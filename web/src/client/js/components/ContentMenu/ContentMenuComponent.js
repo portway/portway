@@ -5,7 +5,15 @@ import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 import useKeyboardShortcut from 'Hooks/useKeyboardShortcut'
 
-import { AddIcon, DateIcon, TextIcon, StringIcon, ImageIcon, NumberIcon } from 'Components/Icons'
+import {
+  AddIcon,
+  DateIcon,
+  FileIcon,
+  TextIcon,
+  StringIcon,
+  ImageIcon,
+  NumberIcon
+} from 'Components/Icons'
 import { FIELD_TYPES } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
 import { Menu, MenuHeader, MenuItem } from 'Components/Menu'
@@ -63,7 +71,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
           </MenuItem>
           <MenuItem tabIndex="-1">
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.FILE) }}>
-              <ImageIcon width="26" height="26" /> <span className="label">File</span>
+              <FileIcon width="26" height="26" /> <span className="label">File</span>
             </button>
           </MenuItem>
         </Menu>

@@ -7,15 +7,8 @@ import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
 import './FieldFile.scss'
 
-const ALLOWED_TYPES = [
-  'image/apng',
-  'image/bmp',
-  'image/gif',
-  'image/jpeg',
-  'image/png',
-  'image/svg+xml',
-  'image/webp',
-  'image/x-icon'
+const DISALLOWED_EXTENSIONS = [
+  'exe',
 ]
 
 const FieldFileComponent = ({
@@ -29,14 +22,14 @@ const FieldFileComponent = ({
 }) => {
   const [warning, setWarning] = useState(null)
 
-  function uploadImage(file) {
+  function uploadFile(file) {
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
+      setWarning(`Your file must be less than ${MAX_FILE_SIZE / 100}MB.`)
       return
     }
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      setWarning(`The image type "${file.type}" is not supported.`)
+    if (DISALLOWED_EXTENSIONS.includes(file.type)) {
+      setWarning(`The file type "${file.type}" is not supported.`)
       return
     }
     const formData = new FormData()
@@ -45,15 +38,6 @@ const FieldFileComponent = ({
       formData.append('name', file.name)
     }
     onChange(field.id, formData)
-    previewImage(file)
-  }
-
-  function previewImage(file) {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onloadend = function() {
-      field.value = reader.result
-    }
   }
 
   return (
@@ -68,7 +52,7 @@ const FieldFileComponent = ({
           hasValue={field.value !== null}
           isUpdating={updating}
           label="Drag and drop a file"
-          fileChangeHandler={uploadImage}
+          fileChangeHandler={uploadFile}
           fileUploadedHandler={() => { settingsHandler(field.id) }}>
           {settingsMode &&
           <button
@@ -95,7 +79,7 @@ const FieldFileComponent = ({
             className="document-field__settings__input"
             defaultValue={field.name}
             id={`document-field-name-${field.id}`}
-            label="Image name"
+            label="File name"
             name="field-name"
             onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
           />
