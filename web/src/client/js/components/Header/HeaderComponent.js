@@ -42,7 +42,7 @@ const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionSt
       case PATH_SETTINGS:
         return <>My settings</>
       case PATH_ADMIN:
-        return <>Administer Organization</>
+        return <>Administer organization</>
       case PATH_HELP:
         return <>Help</>
       default:

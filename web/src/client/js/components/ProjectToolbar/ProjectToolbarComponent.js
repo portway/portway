@@ -26,7 +26,7 @@ const ProjectToolbarComponent = ({ projectId }) => {
           title="Create a new project"
           to={PATH_PROJECT_CREATE}>
           <AddIcon />
-          <span className="label">New Project</span>
+          <span className="label">New project</span>
         </Link>
       </OrgPermission>
       <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
@@ -34,7 +34,7 @@ const ProjectToolbarComponent = ({ projectId }) => {
           className="btn btn--blank btn--with-circular-icon navbar__project-settings-link"
           title="Adjust this project's settings">
           <SettingsIcon />
-          <span className="label">Project Settings</span>
+          <span className="label">Project settings</span>
         </NavLink>
       </ProjectPermission>
     </footer>
