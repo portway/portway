@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
 import useDocumentSocket from 'Hooks/useDocumentSocket'
@@ -40,16 +40,32 @@ const DocumentFieldComponent = ({
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)
 
+  const singleUserEditField = SYNC_SINGLE_USER_EDIT_FIELDS.includes(field.type)
+
+  // Track if field should be readOnly based on props + sync state
+  let readOnlyField = readOnly
+
   remoteChangesRef.current =
     myFocusedFieldId === field.id
       ? remoteChangesInCurrentlyFocusedField
       : remoteChangesRef.current || []
 
+  // Can this be a useEffect? Not sure `remoteUserFieldFocus` can be a dependency?
+  if (singleUserEditField) {
+    // Disable the field if it's single user editable and remotely focused
+    Object.keys(remoteUserFieldFocus).find((userId) => {
+      if (remoteUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
+        readOnlyField = true
+        return true // satisfy array `find` to stop execution
+      }
+    })
+  }
+
   useEffect(() => {
-    if (remoteChangesRef.current.length > 0) {
+    if (remoteChangesRef.current.length > 0 && !singleUserEditField) {
       setShowConflictPopper(true)
     }
-  }, [remoteChangesRef.current.length])
+  }, [remoteChangesRef.current.length, singleUserEditField])
 
   useEffect(() => {
     // Accept remote changes to field if it's not focused and the conflict popper isn't open
@@ -57,13 +73,13 @@ const DocumentFieldComponent = ({
       setCurrentValue(field.value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.id, field.value])
+  }, [field.id, field.value, myFocusedFieldId])
 
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
-    // up the chain of callbacks. Any actions performed here that invoke DocumentFieldsContainer
-    // regardless of whether they cause a re-render or not will set in chain a devastating series
-    // of events, resulting in a broken debounced onChange that will hit the API until it dies
+    // up the chain of callbacks. Any actions performed here that invokes DocumentFieldsContainer
+    // regardless of whether they cause a re-render or not will set in motion a chain of devastating
+    // events, resulting in a broken debounced onChange that will hit the API until it dies
     // -Dirk 4/2020
     setCurrentValue(body)
     if (!remoteChangesRef.current.length) {
@@ -219,12 +235,12 @@ const DocumentFieldComponent = ({
                   onRename(field.id, e.target.value)
                 }}
                 onFocus={(e) => {
-                  if (!readOnly) {
+                  if (!readOnlyField) {
                     onFocus(field.id, field.type, field)
                     e.target.select()
                   }
                 }}
-                readOnly={readOnly}
+                readOnly={readOnlyField}
                 ref={nameRef}
                 style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
                 type="text"
