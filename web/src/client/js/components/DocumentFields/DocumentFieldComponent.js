@@ -254,7 +254,8 @@ const DocumentFieldComponent = ({
               type: field.type,
               value: currentValue,
               onChange: handleFieldBodyUpdate,
-              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id
+              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id,
+              readOnlyOverride: readOnlyField
             })}
           </div>
         </div>

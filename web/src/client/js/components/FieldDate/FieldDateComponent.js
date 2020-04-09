@@ -36,20 +36,22 @@ const CustomTimeInput = forwardRef(({ value, onClick }, ref) => (
 const FieldDateComponent = ({
   id,
   type,
-  field,
+  value,
   onBlur,
   onChange,
   onFocus,
-  readOnly
+  readOnly,
+  readOnlyOverride
 }) => {
-  const startDate = field && field.value ? new Date(field.value) : new Date()
+  const isReadOnly = readOnlyOverride || readOnly
+  const startDate = value ? new Date(value) : new Date()
   const timeRef = useRef()
   const [fieldDate, setFieldDate] = useState(startDate)
   const [validity, setValidity] = useState(null)
 
   function internalChangeHandler(date) {
     setFieldDate(date)
-    onChange(field.id, date)
+    onChange(id, date)
   }
 
   function updateTimeForDate(hour, minutes) {
@@ -103,7 +105,7 @@ const FieldDateComponent = ({
           dropdownMode="select"
           onChange={internalChangeHandler}
           onCalendarOpen={(e) => {
-            if (!readOnly) {
+            if (!isReadOnly) {
               onFocus(id, type)
             }
           }}
@@ -121,7 +123,7 @@ const FieldDateComponent = ({
               boundariesElement: 'viewport'
             }
           }}
-          readOnly={readOnly}
+          readOnly={isReadOnly}
           selected={fieldDate}
           showMonthDropdown
           showYearDropdown
@@ -151,7 +153,7 @@ const FieldDateComponent = ({
             updateTimeForDate(hour, minutes)
           }}
           onCalendarOpen={(e) => {
-            if (!readOnly) {
+            if (!isReadOnly) {
               onFocus(id, type)
             }
           }}
@@ -169,7 +171,7 @@ const FieldDateComponent = ({
               boundariesElement: 'viewport'
             }
           }}
-          readOnly={readOnly}
+          readOnly={isReadOnly}
           selected={fieldDate}
           showTimeSelect
           showTimeSelectOnly
@@ -196,14 +198,14 @@ const FieldDateComponent = ({
 }
 
 FieldDateComponent.propTypes = {
-  field: PropTypes.object.isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   readOnly: PropTypes.bool.isRequired,
   id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
-  value: PropTypes.string
+  value: PropTypes.string,
+  readOnlyOverride: PropTypes.bool
 }
 
 export default FieldDateComponent
