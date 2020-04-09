@@ -1,27 +1,22 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import cx from 'classnames'
 
 import { MAX_FILE_SIZE } from 'Shared/constants'
+import { EditIcon, FileIcon, RemoveIcon } from 'Components/Icons'
+import { IconButton } from 'Components/Buttons'
+import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
-import Form from 'Components/Form/Form'
-import FormField from 'Components/Form/FormField'
+
 import './FieldFile.scss'
 
-const ALLOWED_TYPES = [
-  'image/apng',
-  'image/bmp',
-  'image/gif',
-  'image/jpeg',
-  'image/png',
-  'image/svg+xml',
-  'image/webp',
-  'image/x-icon'
+const DISALLOWED_EXTENSIONS = [
+  'exe',
 ]
 
 const FieldFileComponent = ({
   field,
   onChange,
-  onRename,
   readOnly,
   settingsHandler,
   settingsMode,
@@ -29,14 +24,15 @@ const FieldFileComponent = ({
 }) => {
   const [warning, setWarning] = useState(null)
 
-  function uploadImage(file) {
+  function uploadFile(file) {
     setWarning(null)
+    const extension = getFileExtension(file.name)
     if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
+      setWarning(`Your file must be less than ${MAX_FILE_SIZE / 100}MB.`)
       return
     }
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      setWarning(`The image type "${file.type}" is not supported.`)
+    if (DISALLOWED_EXTENSIONS.includes(extension)) {
+      setWarning(`This type of file is not supported.`)
       return
     }
     const formData = new FormData()
@@ -45,68 +41,76 @@ const FieldFileComponent = ({
       formData.append('name', file.name)
     }
     onChange(field.id, formData)
-    previewImage(file)
   }
 
-  function previewImage(file) {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onloadend = function() {
-      field.value = reader.result
-    }
-  }
+  const fileClassNames = cx({
+    'document-field__file-value': true,
+    'document-field__file-value--empty': !field.value,
+  })
+
+  const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
 
   return (
     <div className="document-field__file">
       <div className="document-field__file-container">
-        {field.value &&
-          <h1>FILE ICON HERE</h1>
-        }
-        {(settingsMode || !field.value || updating) &&
-        <FileUploaderComponent
-          accept="*"
-          hasValue={field.value !== null}
-          isUpdating={updating}
-          label="Drag and drop a file"
-          fileChangeHandler={uploadImage}
-          fileUploadedHandler={() => { settingsHandler(field.id) }}>
+        <div className={fileClassNames}>
+          {field.value && field.meta && !settingsMode &&
+          <>
+            <FileIcon width="36" height="36" extension={fileExtension.toUpperCase()} />
+            <a href={field.value} target="_blank" rel="noopener noreferrer">{field.meta.originalName}</a>
+            <span className="document-field__file-meta">(Size: {humanFileSize(field.meta.size, true)})</span>
+            {!readOnly &&
+            <IconButton
+              className="document-field__edit-btn"
+              aria-label="Change file"
+              onClick={ () => { settingsHandler(field.id) }}
+            >
+              <EditIcon width="14" height="14" />
+            </IconButton>
+            }
+          </>
+          }
+          {(settingsMode || !field.value) && !warning &&
+          <FileUploaderComponent
+            hasValue={field.value !== null}
+            isUpdating={updating}
+            label="Drag and drop a file"
+            fileChangeHandler={uploadFile}
+            fileUploadedHandler={() => {
+              // Since we render this uploader if there is no field.value,
+              // once the field gets a value it will remove it
+              // However, when updating an image, we have to manually remove it
+              if (field.value && settingsMode) {
+                settingsHandler(field.id)
+              }
+            }}>
+          </FileUploaderComponent>
+          }
           {settingsMode &&
-          <button
-            className="btn btn--blank"
-            onClick={(e) => { e.preventDefault(); settingsHandler(field.id) }}>
-            Cancel
-          </button>
+          <IconButton
+            className="document-field__cancel-btn"
+            aria-label="Cancel editing"
+            onClick={
+              () => {
+                setWarning(null)
+                settingsHandler(field.id)
+              }
+            }
+          >
+            <RemoveIcon width="12" height="12" />
+          </IconButton>
           }
           {warning &&
           <p className="small warning">{warning}</p>
           }
-        </FileUploaderComponent>
-        }
+        </div>
       </div>
-      {settingsMode && field.value &&
-      <div className="document-field__settings">
-        <Form
-          id="field-file-settings"
-          name="field-file-settings"
-          onSubmit={() => { settingsHandler(field.id) }}
-          submitLabel="Save settings"
-        >
-          <FormField
-            className="document-field__settings__input"
-            defaultValue={field.name}
-            id={`document-field-name-${field.id}`}
-            label="Image name"
-            name="field-name"
-            onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
-          />
-        </Form>
-      </div>
-      }
     </div>
   )
 }
 
 FieldFileComponent.propTypes = {
+  autoFocusElement: PropTypes.bool,
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onRename: PropTypes.func.isRequired,
