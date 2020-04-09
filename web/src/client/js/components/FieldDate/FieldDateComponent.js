@@ -51,7 +51,7 @@ const FieldDateComponent = ({
 
   function internalChangeHandler(date) {
     setFieldDate(date)
-    onChange(id, date)
+    onChange(id, date.toString())
   }
 
   function updateTimeForDate(hour, minutes) {
