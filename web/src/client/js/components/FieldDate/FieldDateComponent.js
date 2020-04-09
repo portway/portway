@@ -41,9 +41,9 @@ const FieldDateComponent = ({
   onChange,
   onFocus,
   readOnly,
-  readOnlyOverride
+  isBeingRemotelyEdited
 }) => {
-  const isReadOnly = readOnlyOverride || readOnly
+  const isReadOnly = isBeingRemotelyEdited || readOnly
   const startDate = value ? new Date(value) : new Date()
   const timeRef = useRef()
   const [fieldDate, setFieldDate] = useState(startDate)
@@ -205,7 +205,7 @@ FieldDateComponent.propTypes = {
   id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
   value: PropTypes.string,
-  readOnlyOverride: PropTypes.bool
+  isBeingRemotelyEdited: PropTypes.bool
 }
 
 export default FieldDateComponent
