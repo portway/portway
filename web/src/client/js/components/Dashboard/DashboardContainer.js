@@ -31,8 +31,11 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
 
   // Special project
   const specialProjectId = organizationData[currentOrgId].specialProjectId
-  const specialProject = projects && projects[specialProjectId] ? { ...projects[specialProjectId] } : null
-  const projectsForList = { ...projects }
+  const specialProject = projects.find(project => project.id === specialProjectId)
+  const projectsForList = projects.reduce((projectsForList, project) => {
+    projectsForList[project.id] = project
+    return projectsForList
+  }, {})
   delete projectsForList[specialProjectId]
 
   const handleDelete = (projectId) => {

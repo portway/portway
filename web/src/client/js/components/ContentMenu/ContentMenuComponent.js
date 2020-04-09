@@ -23,10 +23,6 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
     setExpanded(true)
   }, [])
 
-  const toggleCallback = useCallback(() => {
-    anchorRef.current.focus()
-  }, [])
-
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
   useKeyboardShortcut('+', expandCallback)
