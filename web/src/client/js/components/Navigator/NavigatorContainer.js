@@ -140,7 +140,7 @@ const NavigatorContainer = ({ history, location }) => {
                 })
                 collapseCallback()
               }}
-              options={Object.values(projects).map((project) => {
+              options={projects && Object.values(projects).map((project) => {
                 return { label: project.name, value: String(project.id) }
               })}
               value={null} />
@@ -152,7 +152,7 @@ const NavigatorContainer = ({ history, location }) => {
                   className="btn btn--small btn--blank navigator__project-btn"
                   onClick={collapseCallback}
                   title="Create a new project">
-                  New Project
+                  New project
                 </Link>
               </OrgPermission>
             </footer>

@@ -43,10 +43,10 @@ const ProjectSettingsTokensComponent = ({
     <div className="project-settings__tokens">
       <section>
         <Link to={`${PATH_PROJECT}/${projectId}`} className="link link--back">
-          <ArrowIcon direction="left" /> Back to Project
+          <ArrowIcon direction="left" /> Back to project
         </Link>
         <header className="header header--with-button">
-          <h2>Project Keys</h2>
+          <h2>Project keys</h2>
           <button className="btn" disabled={createMode} onClick={createModeHandler}>
             Add project key
           </button>
@@ -69,7 +69,7 @@ const ProjectSettingsTokensComponent = ({
         </section>
       )}
       <section>
-        <h2>Project Endpoints</h2>
+        <h2>Project endpoints</h2>
         <p>
           Test your project keys with the following endpoints. You can select a different key to
           see results for different types of keys. For example, you can test creating a document

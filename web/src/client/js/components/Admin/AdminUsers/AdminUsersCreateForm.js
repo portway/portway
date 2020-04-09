@@ -28,7 +28,7 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, formId, submitH
 
   return (
     <section>
-      <h2>Add a User</h2>
+      <h2>Add a user</h2>
       <Form cancelHandler={cancelHandler} disabled={isNameOrEmailBlank()} name={formId} onSubmit={formSubmitHandler}>
         <FormField
           errors={errors.name}
@@ -69,7 +69,7 @@ const AdminUsersCreateForm = ({ cancelHandler, disabled, errors, formId, submitH
         />
         <div className="field-container">
           <div className="field">
-            <label htmlFor="orgRole">Select a Role</label>
+            <label htmlFor="orgRole">Select a role</label>
             <div className="control">
               <OrgRolesDropdown
                 defaultValue={orgRole}
