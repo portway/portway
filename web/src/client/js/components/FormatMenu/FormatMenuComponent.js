@@ -21,13 +21,13 @@ const FormatMenuComponent = ({ formatSelection }) => {
     setExpanded(false)
   }, [])
 
-  const toggleCallback = useCallback(() => {
-    anchorRef.current.focus()
+  const expandCallback = useCallback(() => {
+    setExpanded(true)
   }, [])
 
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
-  useKeyboardShortcut('n', toggleCallback)
+  useKeyboardShortcut('b', expandCallback)
 
   return (
     <PopperGroup className="document-menu format-menu" anchorRef={containerRef}>
@@ -35,11 +35,11 @@ const FormatMenuComponent = ({ formatSelection }) => {
         aria-expanded={expanded}
         aria-haspopup="true"
         aria-controls="format-menu"
-        aria-label="Add a field"
+        aria-label="Format text"
         className="btn btn--blank btn--with-circular-icon document-menu__button"
         onClick={() => setExpanded(!expanded)}
         ref={anchorRef}
-        title="Add a field"
+        title="Format text"
       >
         <FormatIcon width="24" height="24" />
       </button>

@@ -19,13 +19,17 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
     setExpanded(false)
   }, [])
 
+  const expandCallback = useCallback(() => {
+    setExpanded(true)
+  }, [])
+
   const toggleCallback = useCallback(() => {
     anchorRef.current.focus()
   }, [])
 
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
-  useKeyboardShortcut('+', toggleCallback)
+  useKeyboardShortcut('+', expandCallback)
 
   return (
     <PopperGroup className="document-menu" anchorRef={containerRef}>
