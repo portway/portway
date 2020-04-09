@@ -44,18 +44,24 @@ const FieldDateComponent = ({
   isBeingRemotelyEdited
 }) => {
   const isReadOnly = isBeingRemotelyEdited || readOnly
-  const startDate = value ? new Date(value) : new Date()
+  const fieldDate = value ? new Date(value) : new Date()
   const timeRef = useRef()
-  const [fieldDate, setFieldDate] = useState(startDate)
   const [validity, setValidity] = useState(null)
 
   function internalChangeHandler(date) {
-    setFieldDate(date)
-    onChange(id, date.toString())
+    onChange(id, date.toISOString())
+  }
+
+  function delayedBlurHandler(id, type) {
+  // we need to delay the blur event until after the field has successfully changed
+  // to prevent useEffect triggers in the parent component
+    setTimeout(2000, () => {
+      onBlur(id, type)
+    })
   }
 
   function updateTimeForDate(hour, minutes) {
-    const newTime = new Date(fieldDate)
+    const newTime = new Date(value)
     newTime.setHours(hour)
     newTime.setMinutes(minutes)
     internalChangeHandler(newTime)
@@ -110,7 +116,7 @@ const FieldDateComponent = ({
             }
           }}
           onCalendarClose={(e) => {
-            onBlur(id, type)
+            delayedBlurHandler(id, type)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -158,7 +164,7 @@ const FieldDateComponent = ({
             }
           }}
           onCalendarClose={(e) => {
-            onBlur(id, type)
+            delayedBlurHandler(id, type)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -185,6 +191,14 @@ const FieldDateComponent = ({
             defaultValue={moment(fieldDate).format('h:mm a')}
             pattern="\b((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))"
             onChange={setTimeValue}
+            onFocus={(e) => {
+              if (!isReadOnly) {
+                onFocus(id, type)
+              }
+            }}
+            onBlur={(e) => {
+              onBlur(id, type)
+            }}
           />
           {validity && (
             <Popper anchorRef={timeRef} open={validity !== null} role="tooltip" withArrow>
