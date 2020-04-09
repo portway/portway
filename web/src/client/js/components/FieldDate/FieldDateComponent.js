@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 
+import { FIELD_TYPES } from 'Shared/constants'
 import { DateIcon, TimeIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { Popper } from 'Components/Popper/Popper'
@@ -33,6 +34,8 @@ const CustomTimeInput = forwardRef(({ value, onClick }, ref) => (
 ))
 
 const FieldDateComponent = ({
+  id,
+  type,
   field,
   onBlur,
   onChange,
@@ -99,6 +102,14 @@ const FieldDateComponent = ({
           dateFormat="yyyy-MM-dd hh:mm:ss"
           dropdownMode="select"
           onChange={internalChangeHandler}
+          onCalendarOpen={(e) => {
+            if (!readOnly) {
+              onFocus(id, type)
+            }
+          }}
+          onCalendarClose={(e) => {
+            onBlur(id, type)
+          }}
           popperPlacement="top-start"
           popperModifiers={{
             flip: {
@@ -115,7 +126,9 @@ const FieldDateComponent = ({
           showMonthDropdown
           showYearDropdown
         />
-        <span className="document-field__date-label">{moment(fieldDate).format('dddd MMMM Do, YYYY')}</span>
+        <span className="document-field__date-label">
+          {moment(fieldDate).format('dddd MMMM Do, YYYY')}
+        </span>
       </div>
       <div className="document-field__date-field">
         <DatePicker
@@ -136,6 +149,14 @@ const FieldDateComponent = ({
             timeRef.current.value = `${hour}:${minutes} ${meridiem}`
             // Update the time
             updateTimeForDate(hour, minutes)
+          }}
+          onCalendarOpen={(e) => {
+            if (!readOnly) {
+              onFocus(id, type)
+            }
+          }}
+          onCalendarClose={(e) => {
+            onBlur(id, type)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -163,11 +184,11 @@ const FieldDateComponent = ({
             pattern="\b((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))"
             onChange={setTimeValue}
           />
-          {validity &&
-          <Popper anchorRef={timeRef} open={validity !== null} role="tooltip" withArrow>
-            <p className="note">{validity}</p>
-          </Popper>
-          }
+          {validity && (
+            <Popper anchorRef={timeRef} open={validity !== null} role="tooltip" withArrow>
+              <p className="note">{validity}</p>
+            </Popper>
+          )}
         </div>
       </div>
     </div>
@@ -180,6 +201,9 @@ FieldDateComponent.propTypes = {
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   readOnly: PropTypes.bool.isRequired,
+  id: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.DATE]),
+  value: PropTypes.string
 }
 
 export default FieldDateComponent

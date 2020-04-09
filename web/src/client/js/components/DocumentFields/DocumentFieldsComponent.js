@@ -98,9 +98,7 @@ const DocumentFieldsComponent = ({
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            onRename={fieldRenameHandler}
             readOnly={readOnly}
-            updating={fieldsUpdating[field.id]}
           />
         )
         break
