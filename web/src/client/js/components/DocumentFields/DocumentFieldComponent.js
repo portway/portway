@@ -42,8 +42,8 @@ const DocumentFieldComponent = ({
 
   const singleUserEditField = SYNC_SINGLE_USER_EDIT_FIELDS.includes(field.type)
 
-  // Track if field should be readOnly based on props + sync state
-  let readOnlyField = readOnly
+  // Track if a remote user is editing this field
+  let isBeingRemotelyEdited
 
   remoteChangesRef.current =
     myFocusedFieldId === field.id
@@ -51,15 +51,15 @@ const DocumentFieldComponent = ({
       : remoteChangesRef.current || []
 
   // Can this be a useEffect? Not sure `remoteUserFieldFocus` can be a dependency?
-  if (singleUserEditField) {
-    // Disable the field if it's single user editable and remotely focused
-    Object.keys(remoteUserFieldFocus).find((userId) => {
-      if (remoteUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
-        readOnlyField = true
-        return true // satisfy array `find` to stop execution
-      }
-    })
-  }
+  Object.keys(remoteUserFieldFocus).find((userId) => {
+    if (remoteUserFieldFocus[userId] === field.id && Number(userId) !== currentUserId) {
+      isBeingRemotelyEdited = true
+      return true // satisfy array `find` to stop execution
+    }
+  })
+
+  // Disable name change if the field is read only, or single user editable and remotely focused
+  const shouldLockNameChange = readOnly || (singleUserEditField && isBeingRemotelyEdited)
 
   useEffect(() => {
     if (remoteChangesRef.current.length > 0 && !singleUserEditField) {
@@ -73,7 +73,7 @@ const DocumentFieldComponent = ({
       setCurrentValue(field.value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.id, field.value, myFocusedFieldId])
+  }, [field.id, field.value])
 
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
@@ -235,12 +235,12 @@ const DocumentFieldComponent = ({
                   onRename(field.id, e.target.value)
                 }}
                 onFocus={(e) => {
-                  if (!readOnlyField) {
+                  if (!readOnly && !isBeingRemotelyEdited) {
                     onFocus(field.id, field.type, field)
                     e.target.select()
                   }
                 }}
-                readOnly={readOnlyField}
+                readOnly={shouldLockNameChange}
                 ref={nameRef}
                 style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
                 type="text"
@@ -254,7 +254,8 @@ const DocumentFieldComponent = ({
               type: field.type,
               value: currentValue,
               onChange: handleFieldBodyUpdate,
-              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id
+              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id,
+              isBeingRemotelyEdited
             })}
           </div>
         </div>
