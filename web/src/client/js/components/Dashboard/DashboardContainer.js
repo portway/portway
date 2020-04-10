@@ -31,11 +31,12 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
 
   // Special project
   const specialProjectId = organizationData[currentOrgId].specialProjectId
-  const specialProject = projects[specialProjectId] ? { ...projects[specialProjectId] } : null
+  const specialProject = projects && projects[specialProjectId] ? { ...projects[specialProjectId] } : null
   const projectsForList = { ...projects }
   delete projectsForList[specialProjectId]
 
   const handleDelete = (projectId) => {
+    const project = projects.find(project => project.id === projectId)
     const message = (
       <>
         <p className="danger">{strings.DELETE_PROJECT_TITLE}</p>
@@ -45,7 +46,7 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
     const options = {
       confirmedAction: () => { removeProject(projectId, history) },
       confirmedLabel: strings.DELETE_PROJECT_BUTTON_LABEL,
-      confirmedText: projects[projectId].name,
+      confirmedText: project.name,
       theme: 'danger',
     }
     uiConfirm({ message, options })

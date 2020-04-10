@@ -25,7 +25,6 @@ const DocumentFieldsComponent = ({
   readOnly
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
-
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
   const bigInvisibleButton = (

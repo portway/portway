@@ -112,7 +112,7 @@ const AdminUsersComponent = ({
     <div>
       <section>
         <header className="header header--with-button">
-          <h2>User Management</h2>
+          <h2>User management</h2>
           {seats && seats.usedSeats === seats.totalSeats &&
           <p className="admin-users__seats-warning">
             You have filled all of your <b>{seats.totalSeats}</b> seats.<br />
@@ -129,7 +129,7 @@ const AdminUsersComponent = ({
             className="btn"
             disabled={isCreating}
             onClick={() => { setCreateMode(true) }}>
-              Add User
+              Add user
           </button>
           }
         </header>
