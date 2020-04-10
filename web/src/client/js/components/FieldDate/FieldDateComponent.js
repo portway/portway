@@ -202,6 +202,7 @@ const FieldDateComponent = ({
             onBlur={(e) => {
               onBlur(id, type)
             }}
+            readOnly={isReadOnly}
           />
           {validity && (
             <Popper anchorRef={timeRef} open={validity !== null} role="tooltip" withArrow>
