@@ -46,6 +46,7 @@ const FieldDateComponent = ({
 }) => {
   const isReadOnly = isBeingRemotelyEdited || readOnly
   const fieldDate = value ? new Date(value) : new Date()
+  const calendarRef = useRef()
   const timeRef = useRef()
   const [validity, setValidity] = useState(null)
 
@@ -131,11 +132,12 @@ const FieldDateComponent = ({
             }
           }}
           readOnly={isReadOnly}
+          ref={calendarRef}
           selected={fieldDate}
           showMonthDropdown
           showYearDropdown
         />
-        <span className="document-field__date-label">
+        <span className="document-field__date-label" onClick={() => { calendarRef.current.setOpen(true) }}>
           {moment(fieldDate).format('dddd MMMM Do, YYYY')}
         </span>
       </div>
