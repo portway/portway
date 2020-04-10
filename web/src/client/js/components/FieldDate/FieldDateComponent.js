@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
@@ -41,7 +41,8 @@ const FieldDateComponent = ({
   onChange,
   onFocus,
   readOnly,
-  isBeingRemotelyEdited
+  isBeingRemotelyEdited,
+  isCurrentlyFocusedField
 }) => {
   const isReadOnly = isBeingRemotelyEdited || readOnly
   const fieldDate = value ? new Date(value) : new Date()
@@ -59,6 +60,13 @@ const FieldDateComponent = ({
       onBlur(id, type)
     })
   }
+  // value has changed, and not currently focused, update the time display
+  useEffect(() => {
+    if (!isCurrentlyFocusedField) {
+      timeRef.current.value = moment(fieldDate).format('h:mm a')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
 
   function updateTimeForDate(hour, minutes) {
     const newTime = new Date(value)
@@ -219,7 +227,8 @@ FieldDateComponent.propTypes = {
   id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
   value: PropTypes.string,
-  isBeingRemotelyEdited: PropTypes.bool
+  isBeingRemotelyEdited: PropTypes.bool,
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldDateComponent
