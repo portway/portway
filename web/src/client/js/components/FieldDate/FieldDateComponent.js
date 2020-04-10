@@ -53,13 +53,6 @@ const FieldDateComponent = ({
     onChange(id, date.toISOString())
   }
 
-  function delayedBlurHandler(id, type) {
-  // we need to delay the blur event until after the field has successfully changed
-  // to prevent useEffect triggers in the parent component
-    setTimeout(2000, () => {
-      onBlur(id, type)
-    })
-  }
   // value has changed, and not currently focused, update the time display
   useEffect(() => {
     if (!isCurrentlyFocusedField) {
@@ -124,7 +117,7 @@ const FieldDateComponent = ({
             }
           }}
           onCalendarClose={(e) => {
-            delayedBlurHandler(id, type)
+            onBlur(id, type)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -172,7 +165,7 @@ const FieldDateComponent = ({
             }
           }}
           onCalendarClose={(e) => {
-            delayedBlurHandler(id, type)
+            onBlur(id, type)
           }}
           popperPlacement="top-start"
           popperModifiers={{
