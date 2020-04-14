@@ -28,13 +28,18 @@ const FieldImageComponent = ({
   field,
   onChange,
   onRename,
+  onFocus,
+  onBlur,
   readOnly,
   settingsHandler,
   settingsMode,
-  updating
+  updating,
+  isCurrentlyFocusedField,
+  isBeingRemotelyEdited
 }) => {
   const isMounted = useIsMounted()
   const [warning, setWarning] = useState(null)
+  const isReadOnly = isBeingRemotelyEdited || readOnly
 
   // Previews
   const previewRef = useRef() // the File data
@@ -46,6 +51,12 @@ const FieldImageComponent = ({
   const [imageDetails, setImageDetails] = useState({}) // image metadata
   const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
   const nameRef = useRef()
+
+  // Name
+  // There was a field name change and we're not currently focused, update the uncontrolled value
+  if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField) {
+    nameRef.current.value = field.name
+  }
 
   useEffect(() => {
     // If the source of the image changes (field.value), let's create a new
@@ -171,10 +182,20 @@ const FieldImageComponent = ({
                 autoFocus={autoFocusElement}
                 className="input--without-styling"
                 defaultValue={field.name}
+                onFocus={(e) => { 
+                  if (!isReadOnly) {
+                    onFocus(field.id, field.type, field)
+                    e.target.select()
+                  }
+                }}
+                onBlur={(e) => {
+                  onBlur(field.id, field.type, field)
+                }}
                 onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
                 placeholder="Name your image"
                 ref={nameRef}
                 type="text"
+                readOnly={isReadOnly}
               />
             </li>
             {imageDetails && imageDetails.width && imageDetails.height &&
@@ -197,10 +218,13 @@ FieldImageComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func,
   onRename: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
+  isCurrentlyFocusedField: PropTypes.bool,
+  isBeingRemotelyEdited: PropTypes.bool
 }
 
 FieldImageComponent.defaultProps = {
