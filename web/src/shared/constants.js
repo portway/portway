@@ -4,6 +4,7 @@ const FIELD_TYPES = {
   NUMBER: 3,
   IMAGE: 4,
   DATE: 5,
+  FILE: 6
 }
 
 const PLAN_TYPES = {
@@ -174,6 +175,7 @@ module.exports = {
     [FIELD_TYPES.NUMBER]: 'number-',
     [FIELD_TYPES.IMAGE]: 'image-',
     [FIELD_TYPES.DATE]: 'date-',
+    [FIELD_TYPES.FILE]: 'file-'
   },
   FIELD_TYPES: FIELD_TYPES,
   // Default text strings

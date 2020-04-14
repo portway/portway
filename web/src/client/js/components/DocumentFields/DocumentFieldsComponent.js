@@ -9,6 +9,7 @@ import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 import FieldDateComponent from 'Components/FieldDate/FieldDateComponent'
+import FieldFileComponent from 'Components/FieldFile/FieldFileComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
@@ -106,6 +107,21 @@ const DocumentFieldsComponent = ({
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
             readOnly={readOnly}
+            updating={fieldsUpdating[field.id]}
+          />
+        )
+        break
+      case FIELD_TYPES.FILE:
+        fieldTypeComponent = (
+          <FieldFileComponent
+            field={field}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+            onRename={fieldRenameHandler}
+            readOnly={readOnly}
+            settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+            settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]}
           />
         )

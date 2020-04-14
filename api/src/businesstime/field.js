@@ -267,6 +267,7 @@ function validateFieldValueByType(fieldValue, type) {
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.TEXT:
     case FIELD_TYPES.IMAGE:
+    case FIELD_TYPES.FILE:
     case FIELD_TYPES.DATE:
       isValidType = typeof fieldValue === 'string'
       break
