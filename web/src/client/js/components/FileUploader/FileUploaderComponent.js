@@ -137,7 +137,6 @@ FileUploaderComponent.propTypes = {
 }
 
 FileUploaderComponent.defaultProps = {
-  accept: 'image/*',
   hasValue: false,
   isUpdating: false,
   label: 'Drag and drop a file',

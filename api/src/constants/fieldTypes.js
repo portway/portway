@@ -4,7 +4,8 @@ export const FIELD_TYPES = {
   TEXT: 2,
   NUMBER: 3,
   IMAGE: 4,
-  DATE: 5
+  DATE: 5,
+  FILE: 6
 }
 
 export const FIELD_TYPE_MODELS = {
@@ -12,7 +13,8 @@ export const FIELD_TYPE_MODELS = {
   [FIELD_TYPES.TEXT]: 'FieldTypeTextValue',
   [FIELD_TYPES.NUMBER]: 'FieldTypeNumberValue',
   [FIELD_TYPES.IMAGE]: 'FieldTypeImageValue',
-  [FIELD_TYPES.DATE]: 'FieldTypeDateValue'
+  [FIELD_TYPES.DATE]: 'FieldTypeDateValue',
+  [FIELD_TYPES.FILE]: 'FieldTypeFileValue'
 }
 
 export const MAX_NUMBER_PRECISION = 15

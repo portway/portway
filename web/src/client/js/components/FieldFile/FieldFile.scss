@@ -1,0 +1,65 @@
+@import 'CSS/inc/_include-media.scss';
+
+// Field
+.document-field--file {
+  margin: 1.8rem 0;
+
+  // .document-field__content {
+  //   align-items: unset;
+  // }
+
+  .file-uploader {
+    border: none;
+    position: static;
+  }
+
+}
+
+// Actual component
+.document-field__file {
+  position: relative;
+  width: 100%;
+
+  // Only show the edit button on hover of the whole field
+  @media (hover: hover) {
+    .document-field__edit-btn {
+      visibility: hidden;
+    }
+    &:hover {
+      .document-field__edit-btn {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+.document-field__edit-btn, .document-field__cancel-btn {
+  position: absolute;
+  right: 1rem;
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+.document-field__file-container {
+  align-items: center;
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.document-field__file-meta {
+  color: var(--color-gray-40);
+  font-size: 1.3rem;
+  margin-left: var(--icon-margin);
+}
+
+.document-field__file-value {
+  align-items: center;
+  display: flex;
+  width: 100%;
+
+  .icon-file {
+    margin-right: var(--icon-margin);
+  }
+
+}
