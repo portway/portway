@@ -233,6 +233,7 @@ FieldImageComponent.propTypes = {
   onChange: PropTypes.func,
   onRename: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
