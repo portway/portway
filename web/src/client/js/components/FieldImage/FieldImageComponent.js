@@ -100,6 +100,18 @@ const FieldImageComponent = ({
     }
   }, [isMounted, isUpdatingTheActualImage, previewRef])
 
+  function internalSettingsFocusHandler(fieldId, fieldType) {
+    if (!isReadOnly) {
+      settingsHandler(fieldId)
+      onFocus(fieldId, fieldType)
+    }
+  }
+
+  function internalSettingsBlurHandler(fieldId, fieldType) {
+    settingsHandler(fieldId)
+    onBlur(fieldId, fieldType)
+  }
+
   function uploadImage(file) {
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
@@ -145,12 +157,12 @@ const FieldImageComponent = ({
           <div className="document-field__settings-button">
             <>
               {!settingsMode && !readOnly && field.value &&
-                <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { settingsHandler(field.id) }}>
+                <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
                   <EditIcon width="14" height="14" />
                 </IconButton>
               }
               {settingsMode && field.value &&
-                <IconButton color="dark" aria-label="Exit settings" onClick={() => { settingsHandler(field.id) }}>
+                <IconButton color="dark" aria-label="Exit settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
                   <RemoveIcon width="12" height="12" />
                 </IconButton>
               }
