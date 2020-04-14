@@ -163,6 +163,8 @@ const FieldImageComponent = ({
             isUpdating={updating}
             label="Drag and drop an image"
             fileChangeHandler={uploadImage}
+            clickHandler={() => { onFocus(field.id, field.type) }}
+            blurHandler={() => { onBlur(field.id, field.type )}}
             fileUploadedHandler={() => {
               // Since we render this uploader if there is no field.value,
               // once the field gets a value it will remove it

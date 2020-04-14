@@ -14,6 +14,8 @@ const FileUploaderComponent = ({
   isUpdating,
   label,
   fileChangeHandler,
+  clickHandler,
+  blurHandler,
   fileUploadedHandler,
   multiple
 }) => {
@@ -99,7 +101,11 @@ const FileUploaderComponent = ({
             type="file"
             accept={accept}
             multiple={multiple}
+            onClick={() => { clickHandler && clickHandler() }}
+            onBlur={console.log}
             onChange={(e) => {
+              console.log('change')
+              blurHandler && blurHandler()
               setUploading(true)
               fileChangeHandler(multiple ? e.target.files : e.target.files[0])
             }}
@@ -124,6 +130,8 @@ FileUploaderComponent.propTypes = {
   isUpdating: PropTypes.bool,
   label: PropTypes.string,
   fileChangeHandler: PropTypes.func.isRequired,
+  clickHandler: PropTypes.func,
+  blurHandler: PropTypes.func,
   fileUploadedHandler: PropTypes.func,
   multiple: PropTypes.bool,
 }
