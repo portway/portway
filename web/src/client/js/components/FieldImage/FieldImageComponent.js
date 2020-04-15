@@ -28,13 +28,18 @@ const FieldImageComponent = ({
   field,
   onChange,
   onRename,
+  onFocus,
+  onBlur,
   readOnly,
   settingsHandler,
   settingsMode,
-  updating
+  updating,
+  isCurrentlyFocusedField,
+  isBeingRemotelyEdited
 }) => {
   const isMounted = useIsMounted()
   const [warning, setWarning] = useState(null)
+  const isReadOnly = isBeingRemotelyEdited || readOnly
 
   // Previews
   const previewRef = useRef() // the File data
@@ -46,6 +51,12 @@ const FieldImageComponent = ({
   const [imageDetails, setImageDetails] = useState({}) // image metadata
   const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
   const nameRef = useRef()
+
+  // Name
+  // There was a field name change and we're not currently focused, update the uncontrolled value
+  if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField) {
+    nameRef.current.value = field.name
+  }
 
   useEffect(() => {
     // If the source of the image changes (field.value), let's create a new
@@ -88,6 +99,18 @@ const FieldImageComponent = ({
       }
     }
   }, [isMounted, isUpdatingTheActualImage, previewRef])
+
+  function internalSettingsFocusHandler(fieldId, fieldType) {
+    if (!isReadOnly) {
+      settingsHandler(fieldId)
+      onFocus(fieldId, fieldType)
+    }
+  }
+
+  function internalSettingsBlurHandler(fieldId, fieldType) {
+    settingsHandler(fieldId)
+    onBlur(fieldId, fieldType)
+  }
 
   function uploadImage(file) {
     setWarning(null)
@@ -134,12 +157,12 @@ const FieldImageComponent = ({
           <div className="document-field__settings-button">
             <>
               {!settingsMode && !readOnly && field.value &&
-                <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { settingsHandler(field.id) }}>
+                <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
                   <EditIcon width="14" height="14" />
                 </IconButton>
               }
               {settingsMode && field.value &&
-                <IconButton color="dark" aria-label="Exit settings" onClick={() => { settingsHandler(field.id) }}>
+                <IconButton color="dark" aria-label="Exit settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
                   <RemoveIcon width="12" height="12" />
                 </IconButton>
               }
@@ -152,6 +175,8 @@ const FieldImageComponent = ({
             isUpdating={updating}
             label="Drag and drop an image"
             fileChangeHandler={uploadImage}
+            clickHandler={() => { onFocus(field.id, field.type) }}
+            blurHandler={() => { onBlur(field.id, field.type )}}
             fileUploadedHandler={() => {
               // Since we render this uploader if there is no field.value,
               // once the field gets a value it will remove it
@@ -171,10 +196,20 @@ const FieldImageComponent = ({
                 autoFocus={autoFocusElement}
                 className="input--without-styling"
                 defaultValue={field.name}
+                onFocus={(e) => { 
+                  if (!isReadOnly) {
+                    onFocus(field.id, field.type, field)
+                    e.target.select()
+                  }
+                }}
+                onBlur={(e) => {
+                  onBlur(field.id, field.type, field)
+                }}
                 onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
                 placeholder="Name your image"
                 ref={nameRef}
                 type="text"
+                readOnly={isReadOnly}
               />
             </li>
             {imageDetails && imageDetails.width && imageDetails.height &&
@@ -197,10 +232,14 @@ FieldImageComponent.propTypes = {
   field: PropTypes.object.isRequired,
   onChange: PropTypes.func,
   onRename: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
+  isCurrentlyFocusedField: PropTypes.bool,
+  isBeingRemotelyEdited: PropTypes.bool
 }
 
 FieldImageComponent.defaultProps = {
