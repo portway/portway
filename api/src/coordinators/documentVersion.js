@@ -67,7 +67,7 @@ const createVersionedFieldValue = async function(field) {
       if (field.value instanceof Date) {
         return field.value.toISOString()
       } else {
-        return field.values
+        return field.value
       }
     default:
       return field.value
