@@ -9,7 +9,7 @@ const FIELD_TYPES = {
 
 // Fields that only a single user can edit at once
 const SYNC_SINGLE_USER_EDIT_FIELDS = [
-  FIELD_TYPES.DATE, FIELD_TYPES.IMAGE
+  FIELD_TYPES.DATE, FIELD_TYPES.IMAGE, FIELD_TYPES.FILE
 ]
 
 const PLAN_TYPES = {
