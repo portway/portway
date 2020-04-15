@@ -49,7 +49,9 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
 
 const createVersionedFieldValue = async function(field) {
   switch (field.type) {
-    case FIELD_TYPES.IMAGE: {
+    case FIELD_TYPES.IMAGE:
+    case FIELD_TYPES.FILE:
+    {
       if (field.value) {
         const key = convertCDNUrlToS3Key(field.value)
         const keyParts = key.split('/')
