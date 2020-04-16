@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
+import { SocketProvider } from './sockets/SocketProvider'
 import store from './reducers'
 import {
   LOCKED_ACCOUNT_STATUSES,
@@ -52,19 +53,21 @@ const Index = () => {
             <ConfirmationContainer />
             <NotificationsContainer />
             <HeaderContainer />
-            <Suspense fallback={<LoadingComponent />}>
-              {currentOrg &&
-                <Switch>
-                  <Route exact path="/"><Redirect to="/projects" /></Route>
-                  <Route exact path={PATH_PROJECTS} component={lockedComponent || ProjectsSection} />
-                  <Route path={`${PATH_PROJECT}/:projectId`} component={lockedComponent || ProjectSection} />
-                  <Route path={PATH_SETTINGS} component={lockedComponent || UserSection} />
-                  <Route path={PATH_ADMIN} component={AdminSection} />
-                  <Route path={PATH_HELP} component={HelpSection} />
-                  <Route component={FourZeroFour} />
-                </Switch>
-              }
-            </Suspense>
+            <SocketProvider>
+              <Suspense fallback={<LoadingComponent />}>
+                {currentOrg &&
+                  <Switch>
+                    <Route exact path="/"><Redirect to="/projects" /></Route>
+                    <Route exact path={PATH_PROJECTS} component={lockedComponent || ProjectsSection} />
+                    <Route path={`${PATH_PROJECT}/:projectId`} component={lockedComponent || ProjectSection} />
+                    <Route path={PATH_SETTINGS} component={lockedComponent || UserSection} />
+                    <Route path={PATH_ADMIN} component={AdminSection} />
+                    <Route path={PATH_HELP} component={HelpSection} />
+                    <Route component={FourZeroFour} />
+                  </Switch>
+                }
+              </Suspense>
+            </SocketProvider>
           </ErrorBoundaryComponent>
         </AppContainer>
       </Router>

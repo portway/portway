@@ -1,16 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldNumberComponent = ({ autoFocusElement, field, onChange, readOnly }) => {
+const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onChange, onFocus, readOnly }) => {
+  const handleChange = (e) => {
+    // API will only handle 15 significant digits for number fields
+    if (e.target.value.length > 15) return
+    const num = Number.parseFloat(e.target.value)
+    if (!isNaN(num)) {
+      onChange(id, num)
+    }
+    if (e.target.value === '') {
+      onChange(id, null)
+    }
+  }
+
   return (
     <input
       // eslint-disable-next-line jsx-a11y/no-autofocus
       autoFocus={autoFocusElement}
       className="document-field__number"
-      defaultValue={field.value}
-      onChange={(e) => { onChange(field.id, Number.parseFloat(e.target.value)) }}
+      value={value || ''}
+      onBlur={(e) => { onBlur(id, type) }}
+      onChange={(e) => {
+        handleChange(e)
+      }}
       onFocus={(e) => {
         if (!readOnly) {
+          onFocus(id, type)
           e.target.select()
         }
       }}
@@ -22,9 +39,14 @@ const FieldNumberComponent = ({ autoFocusElement, field, onChange, readOnly }) =
 
 FieldNumberComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
-  field: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  isCurrentlyFocusedField: PropTypes.bool,
+  id: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.NUMBER]),
+  value: PropTypes.number
 }
 
 export default FieldNumberComponent

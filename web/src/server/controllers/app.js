@@ -9,7 +9,8 @@ const AppController = function(router) {
       {
         ...bundleTemplateVars,
         apiPublicUrl: process.env.API_PUBLIC_URL,
-        stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+        stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+        syncUrl: process.env.SYNC_URL
       }
     )
   })

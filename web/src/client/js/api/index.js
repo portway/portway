@@ -9,7 +9,7 @@ const token = getCookieValue('token')
 // express server needs process.env.API_PUBLIC_URL set
 // eslint-disable-next-line no-undef
 const baseURL = (new URL('api', API_PUBLIC_URL)).href
-const globalErrorCodes = [403, 404, 408, 500, 503]
+const globalErrorCodes = [403, 404, 408, 429, 500, 503]
 const validationCodes = [400, 402, 409, 413, 415]
 
 // Handles various uncatchable errors, like timeouts,

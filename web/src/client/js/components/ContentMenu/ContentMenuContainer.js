@@ -12,6 +12,7 @@ import {
 } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
+import useDocumentSocket from 'Hooks/useDocumentSocket'
 
 import ContentMenuComponent from './ContentMenuComponent'
 
@@ -28,6 +29,7 @@ const ContentMenuContainer = ({
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+  const { dispatch: socketDispatch } = useDocumentSocket()
 
   if (!project || !document) return null
 
@@ -37,14 +39,12 @@ const ContentMenuContainer = ({
       const editor = focusedField.data
       const newFieldName = getNewNameInSequence(fields, fieldType)
       const newSplitTextName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
-
       // The current order of the field we're splitting
       const fieldWithCursorOrder = fields[focusedField.id].order
-
       createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropriately(document.id, focusedField.id, editor, fieldWithCursorOrder, newFieldName, fieldType, newSplitTextName)
     } else {
       const newName = getNewNameInSequence(fields, fieldType)
-      createField(project.id, document.id, fieldType, { name: newName, type: fieldType })
+      createField(project.id, document.id, fieldType, { name: newName, type: fieldType }, socketDispatch)
     }
   }
 

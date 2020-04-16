@@ -17,6 +17,7 @@ const initialState = {
 
 export const users = (state = initialState, action) => {
   switch (action.type) {
+    // Get paged users
     case ActionTypes.REQUEST_USERS: {
       const loadingByPage = { ...state.loading.byPage, [action.page]: true }
       return { ...state, loading: { ...state.loading, byPage: loadingByPage } }
@@ -37,6 +38,7 @@ export const users = (state = initialState, action) => {
         totalPages: action.totalPages
       }
     }
+    // Get single user
     case ActionTypes.REQUEST_USER: {
       const loadingById = { ...state.loading.byId, [action.userId]: true }
       return {
@@ -49,6 +51,29 @@ export const users = (state = initialState, action) => {
       const usersById = { ...state.usersById, [id]: action.data }
       const loadingById = { ...state.loading.byId, [id]: false }
       return { ...state, usersById, loading: { ...state.loading, byId: loadingById } }
+    }
+    // Get multiple users
+    case ActionTypes.REQUEST_MULTIPLE_USERS: {
+      const { userIds } = action
+      const loadingById = { ...state.loading.byId }
+      userIds.forEach(userId => loadingById[userId] = true)
+      return {
+        ...state,
+        loading: { ...state.loading, byId: loadingById }
+      }
+    }
+    case ActionTypes.RECEIEVE_MULTIPLE_USERS: {
+      const usersById = action.data.reduce((usersById, user) => {
+        usersById[user.id] = user
+        return usersById
+      }, {})
+      const loadingById = { ...state.loading.byId }
+      Object.keys(usersById).forEach(userId => loadingById[userId] = false)
+      return {
+        ...state,
+        loading: { ...state.loading, byId: loadingById },
+        usersById: { ...state.usersById, ...usersById },
+      }
     }
     case ActionTypes.RECEIVE_CREATED_USER: {
       const id = action.data.id

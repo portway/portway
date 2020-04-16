@@ -156,5 +156,5 @@ spec:
               key: mailchimp_secret_key
               optional: true
         ports:
-        - containerPort: 3001
+        - containerPort: {{ .Values.api.port }}
           protocol: TCP

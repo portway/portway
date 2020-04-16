@@ -69,6 +69,13 @@ async function findAllSanitized(orgId, options) {
     ...paginationOptions
   }
 
+  if (options.ids) {
+    query.where = {
+      ...query.where,
+      id: options.ids
+    }
+  }
+
   if (options.nameSearch) {
     query.where = {
       [db.Op.and]: [

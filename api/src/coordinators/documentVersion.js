@@ -49,7 +49,9 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
 
 const createVersionedFieldValue = async function(field) {
   switch (field.type) {
-    case FIELD_TYPES.IMAGE: {
+    case FIELD_TYPES.IMAGE:
+    case FIELD_TYPES.FILE:
+    {
       if (field.value) {
         const key = convertCDNUrlToS3Key(field.value)
         const keyParts = key.split('/')
@@ -61,6 +63,12 @@ const createVersionedFieldValue = async function(field) {
         return field.value
       }
     }
+    case FIELD_TYPES.DATE:
+      if (field.value instanceof Date) {
+        return field.value.toISOString()
+      } else {
+        return field.value
+      }
     default:
       return field.value
   }
