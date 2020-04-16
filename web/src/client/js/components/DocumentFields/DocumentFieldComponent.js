@@ -46,6 +46,8 @@ const DocumentFieldComponent = ({
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
+  const fieldRef = useRef()
+
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)
 
@@ -83,6 +85,15 @@ const DocumentFieldComponent = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field.id, field.value])
+
+  useEffect(() => {
+    if (isNewField) {
+      // Scroll to the center of the new field
+      window.requestAnimationFrame(() => {
+        fieldRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
+    }
+  }, [isNewField])
 
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
@@ -187,7 +198,7 @@ const DocumentFieldComponent = ({
   }
 
   return (
-    <li className={fieldClasses} data-id={field.id} data-order={index}>
+    <li className={fieldClasses} data-id={field.id} data-order={index} ref={fieldRef}>
       <div className="document-field__component">
         <div className={fieldToolClasses} ref={toolsRef}>
           <DocumentUsersComponent
