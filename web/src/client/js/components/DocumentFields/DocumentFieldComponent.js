@@ -159,6 +159,7 @@ const DocumentFieldComponent = ({
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--file': field.type === FIELD_TYPES.FILE,
     'document-field--settings-mode': settingsMode,
+    'document-field--is-being-remotely-edited': isBeingRemotelyEdited,
   })
 
   const fieldToolClasses = cx({
