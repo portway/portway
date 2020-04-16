@@ -8,6 +8,8 @@ import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
+import FieldDateComponent from 'Components/FieldDate/FieldDateComponent'
+import FieldFileComponent from 'Components/FieldFile/FieldFileComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
@@ -17,13 +19,13 @@ const DocumentFieldsComponent = ({
   fieldChangeHandler,
   fieldFocusHandler,
   fieldRenameHandler,
+  fieldDiscardHandler,
   fields,
   fieldsUpdating,
   isPublishing,
-  readOnly,
+  readOnly
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
-
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
   const bigInvisibleButton = (
@@ -50,10 +52,8 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.TEXT:
         fieldTypeComponent = (
           <FieldTextComponent
-            autoFocusElement={hasOnlyOneTextField}
-            field={field}
+            autoFocusElement={hasOnlyOneTextField || createdFieldId === field.id}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -62,9 +62,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
-            field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -73,9 +71,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
-            field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -84,6 +80,32 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.IMAGE:
         fieldTypeComponent = (
           <FieldImageComponent
+            autoFocusElement={createdFieldId === field.id}
+            field={field}
+            onBlur={fieldBlurHandler}
+            onFocus={fieldFocusHandler}
+            onRename={fieldRenameHandler}
+            onDiscard={fieldDiscardHandler}
+            readOnly={readOnly}
+            settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+            settingsMode={settingsForField === field.id}
+            updating={fieldsUpdating[field.id]}
+          />
+        )
+        break
+      case FIELD_TYPES.DATE:
+        fieldTypeComponent = (
+          <FieldDateComponent
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+            readOnly={readOnly}
+          />
+        )
+        break
+      case FIELD_TYPES.FILE:
+        fieldTypeComponent = (
+          <FieldFileComponent
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
@@ -101,6 +123,7 @@ const DocumentFieldsComponent = ({
     }
     if (field) {
       const settingsModeForField = settingsForField === field.id
+
       return (
         <DocumentFieldComponent
           field={field}
@@ -108,7 +131,11 @@ const DocumentFieldsComponent = ({
           isNewField={createdFieldId === field.id}
           isUpdating={fieldsUpdating[field.id]}
           key={field.id}
+          onBlur={fieldBlurHandler}
+          onFocus={fieldFocusHandler}
+          onChange={fieldChangeHandler}
           onRename={fieldRenameHandler}
+          onDiscard={fieldDiscardHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
@@ -140,7 +167,7 @@ const DocumentFieldsComponent = ({
   })
   return (
     <div className={fieldsClasses}>
-      <ol>
+      <ol className="document__fields-list">
         {renderFields()}
       </ol>
     </div>
@@ -155,10 +182,11 @@ DocumentFieldsComponent.propTypes = {
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldFocusHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
+  fieldDiscardHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired
 }
 
 export default DocumentFieldsComponent

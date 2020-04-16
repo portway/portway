@@ -15,6 +15,7 @@ export const ActionTypes = {
   REMOVE_PROJECT: 'REMOVE_PROJECT',
   REQUEST_USER_PROJECTS: 'REQUEST_USER_PROJECTS',
   RECEIVE_USER_PROJECTS: 'RECEIVE_USER_PROJECTS',
+  SORT_PROJECTS: 'SORT_PROJECTS',
   // Project Assignments
   REQUEST_PROJECT_ASSIGNEES: 'REQUEST_PROJECT_ASSIGNEES',
   RECEIVE_PROJECT_ASSIGNEES: 'RECEIVE_PROJECT_ASSIGNEES',
@@ -64,6 +65,7 @@ export const ActionTypes = {
   REMOVE_FIELD: 'REMOVE_FIELD',
   FOCUS_FIELD: 'FOCUS_FIELD',
   BLUR_FIELD: 'BLUR_FIELD',
+  FOCUS_FIELD_WITH_ID: 'FOCUS_FIELD_WITH_ID',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -82,6 +84,8 @@ export const ActionTypes = {
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
   RECEIVE_USER: 'RECEIVE_USER',
+  REQUEST_MULTIPLE_USERS: 'REQUEST_MULTIPLE_USERS',
+  RECEIEVE_MULTIPLE_USERS: 'RECEIEVE_MULTIPLE_USERS',
   INITIATE_USER_UPDATE: 'INITIATE_USER_UPDATE',
   RECEIVE_UPDATED_USER: 'RECEIVE_UPDATED_USER',
   RECEIVE_UPDATED_USER_ROLE: 'RECEIVE_UPDATED_USER_ROLE',
@@ -120,6 +124,7 @@ export const ActionTypes = {
   RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
   REQUEST_ORGANIZATION_SEATS: 'REQUEST_ORGANIZATION_SEATS',
   RECEIVE_ORGANIZATION_SEATS: 'RECEIVE_ORGANIZATION_SEATS',
+  RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID: 'RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID',
   // UI
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -151,8 +156,8 @@ export const Form = {
 }
 
 export const Projects = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data'),
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS, 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_PROJECT, 'data'),
   receiveError: makeActionCreator(ActionTypes.RECEIVE_PROJECT_ERROR, 'projectId'),
@@ -163,7 +168,8 @@ export const Projects = {
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id'),
   requestForUser: makeActionCreator(ActionTypes.REQUEST_USER_PROJECTS, 'userId'),
-  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data')
+  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data'),
+  sort: makeActionCreator(ActionTypes.SORT_PROJECTS, 'sortBy', 'sortMethod')
 }
 
 export const ProjectAssignees = {
@@ -221,9 +227,11 @@ export const Fields = {
   // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId'),
-  // Blur / Focus
+  // Blur / Focus events
   blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
   focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  // Focus action
+  focusFieldWithId: makeActionCreator(ActionTypes.FOCUS_FIELD_WITH_ID, 'id', 'type'),
 }
 
 export const Notifications = {
@@ -236,6 +244,8 @@ export const Users = {
   receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
+  requestMultipleUnloadedIds: makeActionCreator(ActionTypes.REQUEST_MULTIPLE_USERS, 'userIds'),
+  receiveMultipleIds: makeActionCreator(ActionTypes.RECEIEVE_MULTIPLE_USERS, 'data'),
   create: makeActionCreator(ActionTypes.INITIATE_USER_CREATE, 'userId'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_USER, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
@@ -280,6 +290,8 @@ export const Organizations = {
   // Remove account
   initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
   receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
+  // Special project ID
+  receiveSpecialProjectId: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID, 'orgId', 'projectId'),
 }
 
 export const UI = {

@@ -8,6 +8,7 @@ import constants from '../db/__testSetup__/constants'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import apiErrorTypes from '../constants/apiErrorTypes'
+import { FIELD_TYPES } from '../constants/fieldTypes'
 
 describe('BusinessField', () => {
   let factoryProject
@@ -112,6 +113,41 @@ describe('BusinessField', () => {
               value: 1111111111.999999
             })
           ).rejects.toEqual(expect.objectContaining({ code: 400, errorType: apiErrorTypes.ValidationError }))
+        })
+      })
+    })
+
+    describe('when the field is a date', () => {
+
+      describe('with a valid value', () => {
+        let createdFields = []
+        const validDateValues = [
+          '2018-03-30',
+          '2020-12-13 08:00:00',
+          '1998-01-01 23:00:00 -8:00',
+          '2007-04-05T14:30Z'
+        ]
+
+        beforeAll(async () => {
+          createdFields = await Promise.all(validDateValues.map((value) => {
+            return BusinessField.createForDocument(factoryDocument.id, {
+              ...fieldBody,
+              type: FIELD_TYPES.DATE,
+              value
+            })
+          }))
+        })
+
+        it('should create the date fields', () => {
+          expect(createdFields.length).toBe(validDateValues.length)
+        })
+
+        it('should return the date values', () => {
+          validDateValues.forEach((value, index) => {
+            expect((new Date(value)).toUTCString).toEqual(
+              (new Date(createdFields[index].value)).toUTCString
+            )
+          })
         })
       })
     })

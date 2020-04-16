@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 import multer from 'multer'
 
@@ -58,6 +58,7 @@ const organizationsController = function(router) {
   //TODO: do we even want this POST endpoint?
   router.post('/', validateBody(requiredFields(RESOURCE_TYPES.ORGANIZATION, 'name')), createPerm, addOrganization)
   router.get('/:id', validateParams(paramSchema), conditionalReadPerm, getOrganization)
+  router.get('/:id/introProjectId', validateParams(paramSchema), conditionalReadPerm, getIntroProjectId)
   router.put('/:id', validateParams(paramSchema), validateBody(orgSchema), conditionalUpdatePerm, updateOrganization)
   router.put(
     '/:id/avatar',
@@ -82,6 +83,18 @@ const getOrganization = async function(req, res, next) {
     const org = await BusinessOrganization.findSanitizedById(id)
     if (!org) throw ono({ code: 404 }, `No organization with id ${id}`)
     res.json({ data: org })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const getIntroProjectId = async function(req, res, next) {
+  const { id } = req.params
+
+  try {
+    const org = await BusinessOrganization.findById(id)
+    if (!org) throw ono({ code: 404 }, `No organization with id ${id}`)
+    res.json({ data: org.introProjectId })
   } catch (e) {
     next(e)
   }

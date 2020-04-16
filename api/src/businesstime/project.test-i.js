@@ -70,13 +70,14 @@ describe('BusinessProject', () => {
 
     describe('#findAll', () => {
       let projects
+      let count
 
       beforeAll(async () => {
-        projects = await BusinessProject.findAll(constants.ORG_ID)
+        ({ projects, count } = await BusinessProject.findAll(constants.ORG_ID, { page: 1, perPage: 3 }))
       })
 
-      it('should return all projects in org', () => {
-        expect(projects.length).toEqual(5)
+      it('should return all paged projects in org', () => {
+        expect(projects.length).toEqual(3)
       })
 
       it('should return projects as POJOs', () => {
@@ -85,6 +86,10 @@ describe('BusinessProject', () => {
           expect(project.constructor).toBe(Object)
           expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
         }
+      })
+
+      it('should return a project count', () => {
+        expect(count).toEqual(5)
       })
     })
 
@@ -141,6 +146,7 @@ describe('BusinessProject', () => {
     let publicReadProject
     let publicWriteProject
     let projects
+    let count
 
     beforeAll(async () => {
       await clearDb()
@@ -161,7 +167,7 @@ describe('BusinessProject', () => {
     })
 
     beforeAll(async () => {
-      projects = await BusinessProject.findAllForUser(factoryUser.id, constants.ORG_ID)
+      ({ projects, count } = await BusinessProject.findAllForUser(factoryUser.id, constants.ORG_ID, {}))
     })
 
     it('should return all user assigned projects and public projects in organization', () => {
@@ -175,6 +181,10 @@ describe('BusinessProject', () => {
         expect(project.constructor).toBe(Object)
         expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
       }
+    })
+
+    it('should return the project count', () => {
+      expect(count).toBe(3)
     })
   })
 })

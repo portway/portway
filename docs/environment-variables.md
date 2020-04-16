@@ -49,14 +49,18 @@ Make sure people know they need to update their local .env with the new value!
 **AUDIT_LOG_TOKEN**: When set, the `r7insight` logger is turned on for the audit log  
 **ADMIN_SECRET_KEY**: A secret key used for authorizing admin actions  
 **REDIS_URL**: The url to the redis instance. Optionally used for rate-limiting. Uses in-memory store if not set
-**SLACK_WEBHOOK_URL**: The url to use with the slack webhook api, for posting notifications to the portway-support slack channel
+**SLACK_WEBHOOK_URL**: The url to use with the slack webhook api, for posting notifications to the portway-support slack channel  
+**PORTWAY_INTRO_PROJECT_READ_KEY**: A Portway API key for the intro project. Needs read permissions. Project is copied to new users org to introduce them to Portway.
 
 # Web Environment Variables
 **STRIPE_PUBLISHABLE_KEY**: The publishable key from Stripe. Used to manage subscriptions and collect payment info.  
 **API_URL**: The locally resolveable url to the API. In a kubernetes cluster, this may be `http://api-service:3001` for example.
 **API_PUBLIC_URL**: The publicly accessible FQDN for the API. Used to make API calls from the client javascript app.  
 **FLAG_DISABLE_SIGNUP**: Turns off the sign up form and endpoint when set to the string `true`  
+**LOG_TOKEN_WEB**: An r7insight token for web logging  
 **LOG_TOKEN_WEB**: An r7insight token for web logging
+**SUPPORT_FORM_SUBMIT_ORIGIN**: An origin to send a redirect back to after support form data is submitted. Support form submits to zendesk. This allows both the Portway app and getportway.com to utilize the same form submission    
+**SYNC_URL**: Url for the sync service socket  
 
 # Shared Environment Variables
 **JWT_SECRET**: A secret string used to sign and verify JSON Web Tokens used for app authentication  

@@ -7,6 +7,7 @@ import { getNewNameInSequence } from 'Shared/utilities'
 import { createField } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
+import useDocumentSocket from 'Hooks/useDocumentSocket'
 
 import ContentMenuComponent from './ContentMenuComponent'
 
@@ -17,6 +18,7 @@ const ContentMenuContainer = ({ createField, fields, location }) => {
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
+  const { dispatch: socketDispatch } = useDocumentSocket()
 
   if (!project || !document) return null
 
@@ -25,7 +27,8 @@ const ContentMenuContainer = ({ createField, fields, location }) => {
     createField(project.id, document.id, fieldType, {
       name: newName,
       type: fieldType
-    })
+    },
+    socketDispatch)
   }
 
   return <ContentMenuComponent createFieldHandler={fieldCreationHandler} />

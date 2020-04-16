@@ -12,7 +12,8 @@ import {
   PATH_PROJECTS,
   PATH_PROJECT_CREATE,
   PRODUCT_NAME,
-  PROJECT_ROLE_IDS
+  PROJECT_ROLE_IDS,
+  TITLE_PROJECTS
 } from 'Shared/constants'
 
 import useDataService from 'Hooks/useDataService'
@@ -31,7 +32,7 @@ import OrgPermission from 'Components/Permission/OrgPermission'
 import './_Navigator.scss'
 
 const NavigatorContainer = ({ history, location }) => {
-  const { data: projects } = useDataService(dataMapper.projects.list())
+  const { data: { projects } } = useDataService(dataMapper.projects.list())
   const { data: project } = useDataService(
     currentResource('project', location.pathname), [location.pathname]
   )
@@ -112,7 +113,7 @@ const NavigatorContainer = ({ history, location }) => {
   return (
     <>
       <Helmet>
-        <title>{project ? project.name : 'My Projects'} –– {PRODUCT_NAME}</title>
+        <title>{project ? project.name : TITLE_PROJECTS} –– {PRODUCT_NAME}</title>
       </Helmet>
       <PopperGroup anchorRef={nodeRef} className="navigator">
         <button
@@ -139,7 +140,7 @@ const NavigatorContainer = ({ history, location }) => {
                 })
                 collapseCallback()
               }}
-              options={Object.values(projects).map((project) => {
+              options={projects && Object.values(projects).map((project) => {
                 return { label: project.name, value: String(project.id) }
               })}
               value={null} />
@@ -151,7 +152,7 @@ const NavigatorContainer = ({ history, location }) => {
                   className="btn btn--small btn--blank navigator__project-btn"
                   onClick={collapseCallback}
                   title="Create a new project">
-                  New Project
+                  New project
                 </Link>
               </OrgPermission>
             </footer>

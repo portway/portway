@@ -41,14 +41,14 @@ const Form = ({
   }, [forms, name, succeeded])
 
   useEffect(() => {
-    if (!disabled) {
+    if (disabled === false) {
       setFormChanged(true)
     }
   }, [disabled])
 
   function submitHandler(e) {
     e.preventDefault()
-    onSubmit()
+    onSubmit(e)
     setFormChanged(false)
     return false
   }
@@ -109,7 +109,7 @@ Form.propTypes = {
 }
 
 Form.defaultProps = {
-  disabled: true,
+  // disabled: true,
   submitLabel: 'Submit',
 }
 

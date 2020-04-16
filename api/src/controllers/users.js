@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 import multer from 'multer'
 
@@ -25,8 +25,9 @@ const querySchema = Joi.compile({
   page: Joi.number(),
   perPage: Joi.number(),
   nameSearch: Joi.string(),
-  sortBy: Joi.string().valid(['name', 'createdAt']),
-  sortMethod: Joi.string().valid([SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING])
+  sortBy: Joi.string().valid('name', 'createdAt'),
+  sortMethod: Joi.string().valid(SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING),
+  ids: Joi.array().items(Joi.number())
 })
 
 const bodySchema = requiredFields(RESOURCE_TYPES.USER, 'email', 'name')
@@ -114,8 +115,8 @@ const usersController = function(router) {
 }
 
 const getUsers = async function(req, res, next) {
-  const { page = 1, perPage = 20, nameSearch, sortBy, sortMethod } = req.query
-  const options = { page, perPage, sortBy, sortMethod, nameSearch }
+  const { page = 1, perPage = 20, nameSearch, sortBy, sortMethod, ids } = req.query
+  const options = { page, perPage, sortBy, sortMethod, nameSearch, ids }
 
   try {
     const { users, count } = await BusinessUser.findAllSanitized(req.requestorInfo.orgId, options)
@@ -143,7 +144,7 @@ const createUser = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    const user = await userCoordinator.createPendingUser(email, name, orgId)
+    const user = await userCoordinator.createOrgUser(email, name, orgId)
     res.status(201).json({ data: user })
   } catch (e) {
     next(e)

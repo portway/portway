@@ -5,8 +5,8 @@ metadata:
   name: {{ .Release.Name }}-api-service
 spec:
   selector:
-    app: api
+    app: {{ .Values.serviceNames.api }}
   ports:
   - protocol: TCP
-    port: 3001
-    targetPort: 3001
+    port: {{ .Values.api.port }}
+    targetPort: {{ .Values.api.port }}

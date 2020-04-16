@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { SUPPORT_EMAIL, SUPPORT_LINK } from 'Shared/constants'
+import { SUPPORT_EMAIL, SUPPORT_LINK, NETWORK_STATUS } from 'Shared/constants'
+import ApplicationContext from '../../contexts/ApplicationContext'
 import './ErrorBoundary.scss'
 
 class ErrorBoundary extends React.Component {
@@ -20,6 +21,18 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
+    if (this.context.networkStatus === NETWORK_STATUS.OFFLINE && this.state.hasError) {
+      return (
+        <main>
+          <section>
+            <h1>You’re offline</h1>
+            <p>
+              It looks like there’s a problem with your internet connection.
+            </p>
+          </section>
+        </main>
+      )
+    }
     if (this.state.hasError) {
       return (
         <section className="error-boundary">
@@ -33,8 +46,10 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+ErrorBoundary.contextType = ApplicationContext
+
 ErrorBoundary.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 }
 
 export default ErrorBoundary

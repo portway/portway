@@ -20,8 +20,8 @@ const AdminUserViewComponent = ({
   user
 }) => {
   const projectTableHeadings = {
-    project: { label: 'Project Name' },
-    projectRole: { label: 'Project Role' },
+    project: { label: 'Project name' },
+    projectRole: { label: 'Project role' },
     tools: { label: '' }
   }
 
@@ -58,7 +58,7 @@ const AdminUserViewComponent = ({
   return (
     <div className="admin-user">
       <Link to={`${PATH_ADMIN}/users`} className="link--back">
-        <ArrowIcon direction="left" /><span className="label">Back to Users</span>
+        <ArrowIcon direction="left" /><span className="label">Back to users</span>
       </Link>
       <header className="header">
         <h2>{user.name}</h2>
@@ -79,7 +79,7 @@ const AdminUserViewComponent = ({
         </dl>
       </section>
       <section>
-        <h2>{user.name}&apos;s Projects</h2>
+        <h2>{user.name}&apos;s projects</h2>
         <Table headings={projectTableHeadings} rows={projectTableRows} />
       </section>
 

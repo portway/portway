@@ -13,6 +13,9 @@ installweb:
 installapi:
 	docker-compose exec api npm install
 
+installsync:
+	docker-compose exec sync npm install
+
 cleardev:
 	docker-compose down && docker volume rm portway_postgres-data
 

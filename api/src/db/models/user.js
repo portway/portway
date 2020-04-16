@@ -8,7 +8,7 @@ export default function(sequelize, DataTypes) {
       orgId: DataTypes.INTEGER,
       orgRoleId: DataTypes.INTEGER,
       resetKey: DataTypes.STRING,
-      avatar: DataTypes.STRING
+      avatar: DataTypes.STRING // url to avatar
     },
     {
       paranoid: true,

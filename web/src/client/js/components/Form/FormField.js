@@ -8,6 +8,7 @@ import ValidationComponent from 'Components/Validation/ValidationComponent'
 const CHECKED_FIELD_TYPES = ['checkbox', 'radio']
 
 const FormField = React.forwardRef(({
+  checked,
   disabled,
   errors,
   help,
@@ -23,10 +24,12 @@ const FormField = React.forwardRef(({
   const formFieldClasses = cx({
     'field-container': true,
     'field-container--large': large,
+    'field-container--hidden': type === 'hidden',
   })
   const fieldClasses = cx({
     'field': true,
     'field--checkbox': type === 'checkbox',
+    'field--radio': type === 'radio',
     'field--error': errors.length > 0,
     'field--file': type === 'file',
     'field--large': large,
@@ -41,16 +44,21 @@ const FormField = React.forwardRef(({
       <div className={fieldClasses}>
         <label htmlFor={id}>{label}</label>
         <div className={controlClasses}>
-          <input
-            defaultChecked={CHECKED_FIELD_TYPES.includes(type) ? value : null}
-            defaultValue={value}
-            disabled={disabled}
-            id={id}
-            name={name}
-            ref={ref}
-            type={type}
-            {...props}
-          />
+          {type !== 'textarea' &&
+            <input
+              defaultChecked={CHECKED_FIELD_TYPES.includes(type) ? checked : null}
+              defaultValue={value}
+              disabled={disabled}
+              id={id}
+              name={name}
+              ref={ref}
+              type={type}
+              {...props}
+            />
+          }
+          {type === 'textarea' &&
+          <textarea defaultValue={value} id={id} name={name} ref={ref} {...props}></textarea>
+          }
           {status &&
           <div className="field__status">{status}</div>
           }
@@ -63,9 +71,11 @@ const FormField = React.forwardRef(({
 })
 
 FormField.propTypes = {
+  checked: PropTypes.bool,
   errors: PropTypes.array,
   disabled: PropTypes.bool,
   help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  hidden: PropTypes.bool,
   id: PropTypes.string.isRequired,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   large: PropTypes.bool,

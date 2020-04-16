@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessUser from '../businesstime/user'
 import RESOURCE_TYPES from '../constants/resourceTypes'
@@ -15,7 +15,7 @@ const updatePerm = perms((req) => {
 })
 
 const bodySchema = Joi.compile({
-  orgRoleId: Joi.number().valid([ACCEPTABLE_ROLE_ID_UPDATE_VALUES]).required()
+  orgRoleId: Joi.number().valid(...ACCEPTABLE_ROLE_ID_UPDATE_VALUES).required()
 })
 
 const paramSchema = Joi.compile({

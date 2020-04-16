@@ -36,6 +36,14 @@ const elementStyles = {
   }
 }
 
+const hiddenFieldStyles = {
+  height: 0,
+  opacity: 0,
+  minHeight: 'unset',
+  padding: 0,
+  position: 'absolute',
+}
+
 const elementClasses = {
   focus: 'focus',
   empty: 'empty',
@@ -49,7 +57,8 @@ class StripeComponent extends React.Component {
     this.formRef = React.createRef()
     this.state = {
       hasError: false,
-      errorObject: null
+      errorObject: null,
+      countryValue: null,
     }
   }
 
@@ -107,7 +116,20 @@ class StripeComponent extends React.Component {
                 className="react-select-container"
                 classNamePrefix="react-select"
                 name="country"
-                options={CountryList} />
+                options={CountryList}
+                onChange={(option) => {
+                  this.setState({ countryValue: option.value })
+                }}
+              />
+              <input
+                className="admin-payment__hidden-field"
+                tabIndex={-1}
+                autoComplete="off"
+                style={hiddenFieldStyles}
+                value={this.state.countryValue}
+                type="text"
+                required
+              />
             </div>
           </div>
           <div className="field">
@@ -116,12 +138,14 @@ class StripeComponent extends React.Component {
             </label>
             <div className="field__control field__control--state">
               <input
-                id="state"
+                autoComplete="section-billing address-level1"
                 className="input"
-                type="text"
+                id="state"
                 name="state"
                 placeholder="OR"
-                autoComplete="section-billing address-level1" />
+                required
+                type="text"
+              />
             </div>
           </div>
         </div>
@@ -133,12 +157,14 @@ class StripeComponent extends React.Component {
             </label>
             <div className="field__control field__control--postal">
               <input
-                id="postal-code"
+                autoComplete="section-billing postal-code"
                 className="input"
-                type="number"
+                id="postal-code"
                 name="postal-code"
                 placeholder="97215"
-                autoComplete="section-billing postal-code" />
+                required
+                type="number"
+              />
             </div>
           </div>
         </div>

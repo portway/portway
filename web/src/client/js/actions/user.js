@@ -37,6 +37,19 @@ export const fetchUser = (id) => {
   }
 }
 
+export const fetchUsersWithIds = (userIds) => {
+  return async (dispatch) => {
+    dispatch(Users.requestMultipleUnloadedIds(userIds))
+    const userIdsQs = userIds.join('&ids[]=')
+    const { data, status } = await fetch(`v1/users?ids[]=${userIdsQs}`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+    return dispatch(Users.receiveMultipleIds(data))
+  }
+}
+
 export const createUser = (formId, values) => {
   // If we're creating an admin user we have to post a regular user first
   // and then hit the PUT endpoint to make that user an admin

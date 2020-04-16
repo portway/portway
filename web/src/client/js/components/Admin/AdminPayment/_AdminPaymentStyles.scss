@@ -1,6 +1,11 @@
 @import 'CSS/inc/_include-media.scss';
 
 .admin-payment {
+  &__hidden-field {
+    &input[type="text"] {
+      min-height: unset;
+    }
+  }
   &__date {
     font-size: 1.3rem;
   }
