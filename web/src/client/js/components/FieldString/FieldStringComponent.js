@@ -27,11 +27,11 @@ const FieldStringComponent = ({ autoFocusElement, id, type, value, onBlur, onCha
 
 FieldStringComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
+  id: PropTypes.number,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.STRING]),
   value: PropTypes.string
 }

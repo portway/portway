@@ -220,15 +220,15 @@ const FieldDateComponent = ({
 
 FieldDateComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
+  id: PropTypes.number,
+  isBeingRemotelyEdited: PropTypes.bool,
+  isCurrentlyFocusedField: PropTypes.bool,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   readOnly: PropTypes.bool.isRequired,
-  id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
   value: PropTypes.string,
-  isBeingRemotelyEdited: PropTypes.bool,
-  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldDateComponent

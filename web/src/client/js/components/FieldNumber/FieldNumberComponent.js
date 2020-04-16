@@ -39,14 +39,14 @@ const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onCha
 
 FieldNumberComponent.propTypes = {
   autoFocusElement: PropTypes.bool,
+  id: PropTypes.number,
+  isCurrentlyFocusedField: PropTypes.bool,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func,
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  isCurrentlyFocusedField: PropTypes.bool,
-  id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.NUMBER]),
-  value: PropTypes.number
+  value: PropTypes.number,
 }
 
 export default FieldNumberComponent
