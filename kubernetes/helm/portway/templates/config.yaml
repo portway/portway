@@ -3,7 +3,7 @@ apiVersion: v1
 items:
 - apiVersion: v1
   data:
-    api.port: {{ .Values.apiPort | quote }}
+    api.port: {{ .Values.api.port | quote }}
     api.db-host: {{ .Values.db.host }}
     api.db-port: {{ .Values.db.port | quote }}
     api.db-user: {{ .Values.db.user }}
@@ -15,7 +15,7 @@ items:
     api.s3-content-bucket: {{ .Values.api.s3ContentBucket }}
     api.cdn-hostname: {{ .Values.api.cdnHostname | quote }}
     api.logger: {{ .Values.api.logger | quote }}
-    api.redis-url: {{ printf "redis://%s-redis-service:%s" .Release.Name .Values.redisPort }}
+    api.redis-url: {{ printf "redis://%s-redis-service:%s" .Release.Name .Values.redis.port }}
     api.slack-webhook-url: {{ .Values.slackWebhookUrl | quote }}
   kind: ConfigMap
   metadata:
@@ -23,13 +23,22 @@ items:
     namespace: default
 - apiVersion: v1
   data:
-    web.static_port: "3000"
-    web.api_url: {{ printf "http://%s-api-service:%s" .Release.Name .Values.apiPort }}
+    web.static_port: {{ .Values.web.port | quote }}
+    web.api_url: {{ printf "http://%s-api-service:%s" .Release.Name .Values.api.port }}
     web.api_public_url: {{ printf "https://%s" .Values.apiPublicUrl }}
     web.stripe_publishable_key: {{ .Values.stripePublishableKey | quote }}
     web.flag_disable_signup: {{ .Values.web.flagDisableSignup | quote }}
+    web.sync_url: {{ printf "https://%s" .Values.syncUrl }}
+    web.support_form_submit_origin: {{ .Values.web.support_form_submit_origin }}
   kind: ConfigMap
   metadata:
     name: web-config
+    namespace: default
+- apiVersion: v1
+  data:
+    sync.port: {{ .Values.sync.port | quote }}
+  kind: ConfigMap
+  metadata:
+    name: sync-config
     namespace: default
 kind: List

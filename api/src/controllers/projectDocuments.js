@@ -1,7 +1,8 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import ono from 'ono'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessDocument from '../businesstime/document'
+import documentCoordinator from '../coordinators/document'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields } from './payloadSchemas/helpers'
@@ -114,7 +115,7 @@ const deleteProjectDocument = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    await BusinessDocument.deleteByIdForProject(id, projectId, orgId)
+    await documentCoordinator.deleteDocument(id, projectId, orgId)
     res.status(204).send()
     auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: id, action: auditActions.REMOVED_PRIMARY })
   } catch (e) {

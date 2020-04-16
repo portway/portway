@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 
 export const rawSchema = {
   order: Joi.number().min(0)

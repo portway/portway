@@ -13,7 +13,8 @@ export const LOG_LEVELS = {
 
 export const LOGGER_TYPES = {
   R7_INSIGHT: 'r7insight',
-  CONSOLE: 'console'
+  CONSOLE: 'console',
+  NONE: 'none'
 }
 
 export const DEFAULT_LOG_LEVEL = LOG_LEVELS.INFO

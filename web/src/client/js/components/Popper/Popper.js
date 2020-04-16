@@ -14,7 +14,18 @@ import './_Popper.scss'
  * @param placement top / right / bottom / left position from anchorRef
  * @param role optional aria role
  */
-export const Popper = ({ align, anchorRef, autoCollapse, children, open, placement, role, width, ...props }) => {
+export const Popper = ({
+  align,
+  anchorRef,
+  autoCollapse,
+  children,
+  open,
+  placement,
+  role,
+  width,
+  withArrow,
+  ...props
+}) => {
   const popperRef = useRef()
 
   // Get the size and position of the anchor element
@@ -37,6 +48,7 @@ export const Popper = ({ align, anchorRef, autoCollapse, children, open, placeme
     'popper--placement-right': placement === 'right',
     'popper--placement-bottom': placement === 'bottom',
     'popper--placement-left': placement === 'left',
+    'popper--with-arrow': withArrow,
   })
   const style = {
     bottom: placement === 'bottom' ? spacing[placement] : 'unset',
@@ -63,7 +75,9 @@ export const Popper = ({ align, anchorRef, autoCollapse, children, open, placeme
       tabIndex="-1"
       {...props}
     >
-      {children}
+      <div className="popper__container">
+        {children}
+      </div>
     </div>
   )
 }
@@ -77,6 +91,7 @@ Popper.propTypes = {
   placement: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
   role: PropTypes.string,
   width: PropTypes.string,
+  withArrow: PropTypes.bool,
 }
 
 Popper.defaultProps = {
@@ -84,6 +99,7 @@ Popper.defaultProps = {
   open: false,
   placement: 'top',
   role: 'listbox',
+  withArrow: false,
 }
 
 /**

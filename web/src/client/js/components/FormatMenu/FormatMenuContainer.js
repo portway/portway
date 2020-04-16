@@ -4,12 +4,17 @@ import { connect } from 'react-redux'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import {
-  blockStyles,
   drawLink,
   drawHorizontalRule,
-  toggleBlock,
-  toggleHeading,
-  toggleLine
+  toggleStrikeThrough,
+  toggleBold,
+  toggleHeading1,
+  toggleHeading2,
+  toggleHeading3,
+  toggleItalic,
+  toggleBlockquote,
+  toggleUnorderedList,
+  toggleOrderedList
 } from './FormatMenuLibs'
 import FormatMenuComponent from './FormatMenuComponent'
 
@@ -19,22 +24,22 @@ const FormatMenuContainer = ({ focusedField }) => {
       const editor = focusedField.data
       switch (format) {
         case 'h1':
-          toggleHeading(editor, 1)
+          toggleHeading1(editor)
           break
         case 'h2':
-          toggleHeading(editor, 2)
+          toggleHeading2(editor)
           break
         case 'h3':
-          toggleHeading(editor, 3)
+          toggleHeading3(editor)
           break
         case 'bold':
-          toggleBlock(editor, 'bold', blockStyles.bold)
+          toggleBold(editor)
           break
         case 'italic':
-          toggleBlock(editor, 'italic', blockStyles.italic)
+          toggleItalic(editor)
           break
         case 'strikethrough':
-          toggleBlock(editor, 'strikethrough', '~~')
+          toggleStrikeThrough(editor)
           break
         case 'link':
           drawLink(editor)
@@ -43,13 +48,13 @@ const FormatMenuContainer = ({ focusedField }) => {
           drawHorizontalRule(editor)
           break
         case 'ul':
-          toggleLine(editor, 'unordered-list')
+          toggleUnorderedList(editor)
           break
         case 'ol':
-          toggleLine(editor, 'ordered-list')
+          toggleOrderedList(editor)
           break
         case 'blockquote':
-          toggleLine(editor, 'quote')
+          toggleBlockquote(editor)
           break
         default:
           break

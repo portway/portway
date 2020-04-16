@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import {
+  DateIcon,
   DragIcon,
+  FileIcon,
   ImageIcon,
   NumberIcon,
   RemoveIcon,
@@ -11,6 +13,7 @@ import {
   TextIcon,
 } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
+import { getFileExtension } from 'Utilities/fileUtilities'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const DocumentOutlineItem = ({
@@ -27,11 +30,15 @@ const DocumentOutlineItem = ({
 }) => {
   const [dragEnabled, setDragEnabled] = useState(true)
   const listItemRef = useRef()
+
+  const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
   const fieldIcons = {
-    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" fill="var(--theme-icon-color)" />,
-    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" fill="var(--theme-icon-color)" />,
-    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" fill="var(--theme-icon-color)" />,
-    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" fill="var(--theme-icon-color)" />,
+    [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" />,
+    [FIELD_TYPES.STRING]: <StringIcon width="24" height="24" />,
+    [FIELD_TYPES.NUMBER]: <NumberIcon width="24" height="24" />,
+    [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" />,
+    [FIELD_TYPES.DATE]: <DateIcon width="24" height="24" />,
+    [FIELD_TYPES.FILE]: <FileIcon width="24" height="24" extension={fileExtension} />,
   }
 
   function focusDocumentFieldHandler(e) {

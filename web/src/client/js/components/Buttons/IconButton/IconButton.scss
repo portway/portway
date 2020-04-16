@@ -3,6 +3,7 @@
   background-color: var(--theme-border-light);
   border: thin solid transparent;
   border-radius: 50% 50%;
+  cursor: pointer;
   display: inline-flex;
   height: 26px;
   justify-content: center;
@@ -78,6 +79,37 @@
       }
       &:active, &:focus {
         background-color: var(--color-red-light);
+      }
+    }
+  }
+
+  &--brand {
+    background-color: var(--color-brand-darker);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-brand-dark);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-brand-light);
+      }
+    }
+  }
+
+  &--dark {
+    background-color: var(--color-gray-70);
+    path {
+      fill: var(--color-gray-10);
+    }
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-gray-80);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-gray-60);
       }
     }
   }

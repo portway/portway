@@ -6,6 +6,15 @@
   max-width: 800px;
   width: 100%;
 
+  textarea {
+    background: transparent;
+    border: none;
+    color: transparent;
+    height: 0;
+    position: relative;
+    width: 0;
+  }
+
   // Override the SimpleMDE styling
   .CodeMirror {
     background-color: transparent;
@@ -77,10 +86,9 @@
       line-height: 2.4rem;
 
       .cm-hr {
-        border-top: thin solid var(--theme-border);
+        color: var(--theme-border);
         display: block;
-        height: 1px;
-        overflow: hidden;
+        font-weight: bold;
         width: 100%;
       }
 
@@ -179,6 +187,13 @@
 
       .cm-url {
         color: var(--color-gray-30);
+        cursor: pointer;
+        &:hover {
+          color: var(--color-gray-40);
+        }
+        &:active {
+          color: var(--color-gray-20);
+        }
       }
 
       .cm-formatting-code-block {

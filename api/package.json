@@ -52,8 +52,10 @@
     "pretty-quick": "^1.10.0"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
     "@slack/webhook": "^5.0.2",
     "aws-sdk": "^2.463.0",
+    "axios": "^0.19.2",
     "bcrypt": "^3.0.6",
     "bignumber.js": "^8.1.1",
     "cuid": "^2.1.6",
@@ -62,9 +64,9 @@
     "express": "^4.16.4",
     "hashids": "^1.2.2",
     "ioredis": "^4.14.1",
-    "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
     "markdown-it": "^10.0.0",
+    "mime-types": "^2.1.26",
     "multer": "^1.4.2",
     "ono": "^5.0.1",
     "passport": "^0.4.0",

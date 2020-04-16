@@ -2,6 +2,7 @@ import { ActionTypes } from '../actions'
 
 const initialState = {
   currentOrganizationId: null,
+  organizationSpecialDataById: {},
   organizationsById: {},
   organizationsBillingById: {},
   seatsById: {},
@@ -35,6 +36,16 @@ export const organizations = (state = initialState, action) => {
           ...state.loading,
           byId: loadingById
         }
+      }
+    }
+    case ActionTypes.RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID: {
+      const { orgId, projectId } = action
+      const orgData = { ...state.organizationSpecialDataById[orgId] }
+      orgData.specialProjectId = projectId
+      const organizationSpecialDataById = { ...state.organizationSpecialDataById, [orgId]: orgData }
+      return {
+        ...state,
+        organizationSpecialDataById
       }
     }
     case ActionTypes.INITIATE_ORGANIZATION_UPDATE: {

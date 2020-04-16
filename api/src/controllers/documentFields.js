@@ -1,5 +1,4 @@
-import Joi from 'joi'
-import ono from 'ono'
+import Joi from '@hapi/joi'
 import multer from 'multer'
 
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'

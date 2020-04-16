@@ -8,6 +8,8 @@ import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
+import introCoordinator from './intro'
+import userCoordinator from './user'
 
 jest.mock('../businesstime/user')
 jest.mock('../businesstime/organization')
@@ -16,6 +18,8 @@ jest.mock('../integrators/stripe')
 jest.mock('../libs/passwordResetKey')
 jest.mock('../integrators/email')
 jest.mock('./billing')
+jest.mock('./intro')
+jest.mock('./user')
 
 describe('signUp coordinator', () => {
   const name = 'Nicolas Cage'
@@ -25,6 +29,12 @@ describe('signUp coordinator', () => {
     beforeAll(async () => {
       BusinessOrganization.updateById.mockClear()
       BusinessUser.findByEmail.mockReturnValueOnce(undefined)
+      userCoordinator.createPendingUser.mockReturnValueOnce({
+        name,
+        email,
+        id: 12,
+        resetKey: 'blahblah'
+      })
       await signUpCoordinator.createUserAndOrganization(
         name,
         email
@@ -40,21 +50,10 @@ describe('signUp coordinator', () => {
       expect(BusinessOrganization.create.mock.calls.length).toBe(1)
     })
 
-    it('should call passwordResetKey.generate', () => {
-      expect(passwordResetKey.generate.mock.calls.length).toBe(1)
-    })
-
-    it('should call BusinessUser.create with the correct body', () => {
-      const mockResetKey = passwordResetKey.generate.mock.results[0].value
-      const mockOrgId = BusinessOrganization.create.mock.results[0].value.id
-      expect(BusinessUser.create.mock.calls.length).toBe(1)
-      expect(BusinessUser.create.mock.calls[0][0]).toEqual({
-        name,
-        email,
-        orgId: mockOrgId,
-        resetKey: mockResetKey,
-        orgRoleId: ORGANIZATION_ROLE_IDS.OWNER
-      })
+    it('should call userCoordinator.createPendingUser', () => {
+      expect(userCoordinator.createPendingUser.mock.calls.length).toBe(1)
+      expect(userCoordinator.createPendingUser.mock.calls[0][0]).toEqual(email)
+      expect(userCoordinator.createPendingUser.mock.calls[0][1]).toEqual(name)
     })
 
     it('should call stripeIntegrator.createCustomer with the org name and a description containing owner email', () => {
@@ -78,7 +77,7 @@ describe('signUp coordinator', () => {
     it('should call BusinessOrganization.updateById with the org id, owner id, stripe id', () => {
       const stripeId = stripeIntegrator.createCustomer.mock.results[0].value.id
       const mockOrgId = BusinessOrganization.create.mock.results[0].value.id
-      const mockOwnerId = BusinessUser.create.mock.results[0].value.id
+      const mockOwnerId = userCoordinator.createPendingUser.mock.results[0].value.id
       expect(BusinessOrganization.updateById.mock.calls.length).toBe(1)
       expect(BusinessOrganization.updateById.mock.calls[0][0]).toEqual(mockOrgId)
       expect(BusinessOrganization.updateById.mock.calls[0][1]).toEqual({ ownerId: mockOwnerId, stripeId })
@@ -86,20 +85,24 @@ describe('signUp coordinator', () => {
 
     // eslint-disable-next-line max-len
     it('should call tokenIntegrator.generatePasswordResetToken with the user id and reset key', () => {
-      const mockResetKey = passwordResetKey.generate.mock.results[0].value
-      const mockUserId = BusinessUser.create.mock.results[0].value.id
+      const mockResetKey = userCoordinator.createPendingUser.mock.results[0].value.resetKey
+      const mockUserId = userCoordinator.createPendingUser.mock.results[0].value.id
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls.length).toBe(1)
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][0]).toBe(mockUserId)
       expect(tokenIntegrator.generatePasswordResetToken.mock.calls[0][1]).toBe(mockResetKey)
     })
 
     it('should call emailIntegrator.sendSingleRecipientEmail with the user email and email bodies with password token', () => {
-      const mockUserEmail = BusinessUser.create.mock.results[0].value.email
+      const mockUserEmail = userCoordinator.createPendingUser.mock.results[0].value.email
       const passwordResetToken = tokenIntegrator.generatePasswordResetToken.mock.results[0].value
       expect(sendSingleRecipientEmail.mock.calls.length).toBe(1)
       expect(sendSingleRecipientEmail.mock.calls[0][0].address).toBe(mockUserEmail)
       expect(sendSingleRecipientEmail.mock.calls[0][0].textBody).toEqual(expect.stringMatching(passwordResetToken))
       expect(sendSingleRecipientEmail.mock.calls[0][0].htmlBody).toEqual(expect.stringMatching(passwordResetToken))
+    })
+
+    it('should call introCoordinator.copyIntroProjectToOrg', () => {
+      expect(introCoordinator.copyIntroProjectToOrg.mock.calls.length).toBe(1)
     })
   })
 })

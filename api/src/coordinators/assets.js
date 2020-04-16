@@ -15,6 +15,8 @@ async function addAssetForDocument(documentId, orgId, file) {
 
 async function recordOrgAsset(orgId, size) {
   const org = await BusinessOrganization.findSanitizedById(orgId)
+  // Handles case where org isn't verified and has no plan but we're adding assets in the intro project
+  if (!org.plan) return
   const maxBytes = PLAN_ASSET_STORAGE_BYTES[org.plan]
   await BusinessResourceUsage.updateUsageByType(orgId, RESOURCE_TYPES.ASSET, size, maxBytes)
 }

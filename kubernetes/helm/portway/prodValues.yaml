@@ -8,8 +8,7 @@ certIssuer: letsencrypt-prod
 baseUrl: portway.app
 apiPublicUrl: api.portway.app
 docsUrl: docs.portway.app
-apiPort: "3001"
-redisPort: "6379"
+syncUrl: sync.portway.app
 
 stripePublishableKey: "pk_live_aZuMG4Z30RhPg54H8JFQOEKJ"
 
@@ -22,11 +21,13 @@ webTag: "0.12.5"
 web:
   port: "3000"
   flagDisableSignup: "true"
+  support_form_submit_origin: "https://getportway.com"
 
 api:
-  cdnHostname: 'https://www.portwaycontent.com'
-  s3ContentBucket: 'portway-content-prod'
-  logger: 'r7insight'
+  cdnHostname: "https://www.portwaycontent.com"
+  s3ContentBucket: "portway-content-prod"
+  logger: "r7insight"
+  port: "3001"
 
 db:
   host: "db-postgresql-sfo2-43619-do-user-2269753-0.db.ondigitalocean.com"
@@ -35,15 +36,17 @@ db:
   name: "defaultdb"
   useSsl: "true"
 
-docs:
-  image: 'bonkeybong/portway_docs'
-  tag: '1.1.0'
-  port: "3003"
+sync:
+  port: "3004"
+  image: "bonkeybong/portway_sync"
+  tag: "latest"
+
+redis:
+  port: "6379"
 
 serviceNames:
   api: api
   web: web
   db: db
   redis: redis
-  docs: docs
-
+  sync: sync

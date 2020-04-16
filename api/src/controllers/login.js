@@ -1,7 +1,7 @@
 import auth from '../libs/auth/auth'
 import tokenIntegrator from '../integrators/token'
 import passwordResetCoordinator from '../coordinators/passwordReset'
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { validateBody } from '../libs/middleware/payloadValidation'
 import passwordPayloadSchema from './payloadSchemas/password'
 import logger from '../integrators/logger'

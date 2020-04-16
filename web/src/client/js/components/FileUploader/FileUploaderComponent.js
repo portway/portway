@@ -14,6 +14,8 @@ const FileUploaderComponent = ({
   isUpdating,
   label,
   fileChangeHandler,
+  clickHandler,
+  blurHandler,
   fileUploadedHandler,
   multiple
 }) => {
@@ -28,15 +30,15 @@ const FileUploaderComponent = ({
       console.info('⏱ Monitoring file...')
       setMonitor(true)
     }
-    return function cleanup() {
+    if (monitor && uploading && !isUpdating) {
       // If our watched variable is true, uploading is true, and isUpdating is false,
       // that means we are actually done uploading the file
-      if (monitor && uploading && !isUpdating) {
-        setMonitor(false)
-        setUploading(false)
+      setMonitor(false)
+      setUploading(false)
+      if (fileUploadedHandler) {
         fileUploadedHandler()
-        console.info(`✅ Upload complete`)
       }
+      console.info(`✅ Upload complete`)
     }
   }, [monitor, uploading, isUpdating, fileUploadedHandler])
 
@@ -90,7 +92,7 @@ const FileUploaderComponent = ({
       onDrop={dropHandler}>
       {!uploading && !isUpdating &&
       <form className="file-uploader__form" method="post" encType="multipart/form-data">
-        <DropIcon className="file-uploader__icon" width="46" height="46" />
+        <DropIcon className="file-uploader__icon" width="32" height="32" />
         <label className="file-uploader__content">
           <span className="file-uploader__label">{label}</span>
           <span className="btn btn--small btn--cyan">Or select a file</span>
@@ -99,7 +101,14 @@ const FileUploaderComponent = ({
             type="file"
             accept={accept}
             multiple={multiple}
-            onChange={(e) => { fileChangeHandler(multiple ? e.target.files : e.target.files[0]) }}
+            onClick={() => { clickHandler && clickHandler() }}
+            onBlur={console.log}
+            onChange={(e) => {
+              console.log('change')
+              blurHandler && blurHandler()
+              setUploading(true)
+              fileChangeHandler(multiple ? e.target.files : e.target.files[0])
+            }}
           />
         </label>
         {children}
@@ -121,12 +130,13 @@ FileUploaderComponent.propTypes = {
   isUpdating: PropTypes.bool,
   label: PropTypes.string,
   fileChangeHandler: PropTypes.func.isRequired,
-  fileUploadedHandler: PropTypes.func.isRequired,
+  clickHandler: PropTypes.func,
+  blurHandler: PropTypes.func,
+  fileUploadedHandler: PropTypes.func,
   multiple: PropTypes.bool,
 }
 
 FileUploaderComponent.defaultProps = {
-  accept: 'image/*',
   hasValue: false,
   isUpdating: false,
   label: 'Drag and drop a file',

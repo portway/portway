@@ -114,6 +114,10 @@
   justify-content: center;
   position: relative;
 
+  .document-field--text & {
+    display: block;
+  }
+
   input {
     border: thin solid transparent;
     .using-mouse & {

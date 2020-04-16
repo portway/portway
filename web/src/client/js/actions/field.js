@@ -3,8 +3,9 @@ import { Fields, Notifications, Validation } from './index'
 import { fetchDocument } from './document'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
+import { emitFieldChange } from '../sockets/SocketProvider'
 
-export const createField = (projectId, documentId, fieldType, body) => {
+export const createField = (projectId, documentId, fieldType, body, socketDispatch) => {
   return async (dispatch) => {
     dispatch(Fields.initiateCreate(documentId, fieldType))
     let data
@@ -20,13 +21,21 @@ export const createField = (projectId, documentId, fieldType, body) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('field', data, status)) :
+    if (validationCodes.includes(status)) {
+      dispatch(Validation.create('field', data, status))
+    } else {
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
+      dispatch(Fields.focusFieldWithId(data.id, data.type))
+    }
+
+    // if we want to sync users, pass in socketDispatch
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, data.id, documentId))
+    }
   }
 }
 
-export const updateField = (projectId, documentId, fieldId, body) => {
+export const updateField = (projectId, documentId, fieldId, body, socketDispatch) => {
   return async (dispatch) => {
     dispatch(Fields.initiateUpdate(documentId, fieldId))
     let data
@@ -44,22 +53,26 @@ export const updateField = (projectId, documentId, fieldId, body) => {
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
       dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
-  }
-}
-
-export const updateFieldOrder = (projectId, documentId, fieldId, newOrder) => {
-  return async (dispatch) => {
-    dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
-    const { status } = await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
-    if (globalErrorCodes.includes(status)) {
-      // If something bad happens, just fetch the whole document
-      dispatch(fetchDocument(documentId))
-      return
+    // if we want to sync users, pass in socketDispatch
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
     }
   }
 }
 
-export const removeField = (projectId, documentId, fieldId) => {
+export const updateFieldOrder = (projectId, documentId, fieldId, newOrder, socketDispatch) => {
+  return async (dispatch) => {
+    dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
+    await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
+    dispatch(fetchDocument(documentId))
+
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
+    }
+  }
+}
+
+export const removeField = (projectId, documentId, fieldId, socketDispatch) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())
     const { data, status } = await remove(`v1/documents/${documentId}/fields/${fieldId}`)
@@ -68,6 +81,10 @@ export const removeField = (projectId, documentId, fieldId) => {
       return
     }
     dispatch(Fields.removeOne(projectId, documentId, fieldId))
+    // if we want to sync users, pass in socketDispatch
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
+    }
   }
 }
 

@@ -3,7 +3,7 @@ import React, { lazy, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ACCESS_LEVELS, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { ProjectIcon, SettingsIcon, TrashIcon, UnlockIcon } from 'Components/Icons'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
@@ -11,28 +11,20 @@ import ProjectPermission from 'Components/Permission/ProjectPermission'
 // Lazy loading because not all users have access to this
 const ProjectUsersContainer = lazy(() => import(/* webpackChunkName: 'ProjectUsersContainer' */ 'Components/ProjectUsers/ProjectUsersContainer'))
 
-const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
+const ProjectsListItem = ({ projectId, project, handleDelete }) => {
   const itemRef = useRef()
-  const assignedProject = project.accessLevel == null
-  const publiclyReadable = project.accessLevel === PROJECT_ACCESS_LEVELS.READ
-
-  function itemClickHandler(e) {
-    if (e.target === itemRef.current) {
-      history.push(`${PATH_PROJECT}/${projectId}`)
-    }
-  }
+  const privateProject = project.accessLevel == null
 
   return (
-    <li
-      className="project-list__item"
-      onClick={itemClickHandler}
-      onKeyDown={itemClickHandler}
-      tabIndex={0}
-      name={project.name}
-      role="button">
+    <li className="project-list__item" name={project.name}>
       <Link className="project-list__link" to={`${PATH_PROJECT}/${projectId}`}>
         <div className="project-list__title">
-          <ProjectIcon className="project-list__icon" width="32" height="32" />
+          <ProjectIcon
+            className="project-list__icon"
+            fill={!privateProject ? 'var(--color-gray-30)' : 'var(--color-blue)'}
+            width="32"
+            height="32"
+          />
           <div className="project-list__title-container">
             <h3>{project.name}</h3>
             {project.description &&
@@ -41,20 +33,23 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
           </div>
         </div>
         <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
-          {assignedProject &&
-          <div className="project-list__team">
-            <ProjectUsersContainer collapsed={true} projectId={projectId} />
-          </div>
+          {!privateProject &&
+            <div
+              aria-label="Organization access"
+              className="project-list__public-token"
+              title="Everyone can view this project"
+            >
+              <UnlockIcon fill="var(--color-green-dark)" width="14" height="14" />
+            </div>
           }
         </OrgPlanPermission>
       </Link>
+      <div className="project-list__team">
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+          {privateProject && <ProjectUsersContainer collapsed={true} projectId={projectId} />}
+        </OrgPlanPermission>
+      </div>
       <div className="project-list__actions" ref={itemRef}>
-        {publiclyReadable &&
-        <div className="project-list__public-token">
-          <UnlockIcon width="18" height="18" />
-          <span className="label">Everyone</span>
-        </div>
-        }
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]} projectIdOverride={projectId}>
           <div className="project-list__action-buttons">
             <Link aria-label="Project settings" to={`/project/${projectId}/settings`} className="btn btn--blank">
@@ -76,13 +71,10 @@ const ProjectsListItem = ({ history, projectId, project, handleDelete }) => {
 }
 
 ProjectsListItem.propTypes = {
-  activeProjectId: PropTypes.string,
-  animate: PropTypes.bool,
-  callback: PropTypes.func.isRequired,
-  history: PropTypes.object,
-  projectId: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
   project: PropTypes.object.isRequired,
-  handleDelete: PropTypes.func.isRequired
+  handleDelete: PropTypes.func.isRequired,
+  special: PropTypes.bool,
 }
 
 export default ProjectsListItem

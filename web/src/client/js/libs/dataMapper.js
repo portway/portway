@@ -83,14 +83,17 @@ export default {
     },
   },
   projects: {
-    list: function() {
+    list: function(page = 1, sortBy, sortMethod) {
       return {
-        fetchAction: fetchProjects,
+        fetchAction: fetchProjects(page, sortBy, sortMethod),
         getLoadingStatusFromState: (state) => {
-          return state.projects.loading.list
+          return state.projects.loading.byPage[page]
         },
         getDataFromState: (state) => {
-          return state.projects.projectsById
+          const ids = state.projects.projectIdsByPage[page]
+          const projects = ids && ids.map(id => state.projects.projectsById[id])
+          const totalPages = state.projects.totalPages
+          return { projects, totalPages }
         }
       }
     },
