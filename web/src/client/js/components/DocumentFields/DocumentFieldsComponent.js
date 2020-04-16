@@ -19,10 +19,11 @@ const DocumentFieldsComponent = ({
   fieldChangeHandler,
   fieldFocusHandler,
   fieldRenameHandler,
+  fieldDiscardHandler,
   fields,
   fieldsUpdating,
   isPublishing,
-  readOnly,
+  readOnly
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
@@ -52,9 +53,7 @@ const DocumentFieldsComponent = ({
         fieldTypeComponent = (
           <FieldTextComponent
             autoFocusElement={hasOnlyOneTextField || createdFieldId === field.id}
-            field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -63,9 +62,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
-            field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -74,9 +71,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
-            field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
           />
@@ -88,9 +83,9 @@ const DocumentFieldsComponent = ({
             autoFocusElement={createdFieldId === field.id}
             field={field}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
+            onDiscard={fieldDiscardHandler}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
@@ -101,13 +96,10 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.DATE:
         fieldTypeComponent = (
           <FieldDateComponent
-            field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            onRename={fieldRenameHandler}
             readOnly={readOnly}
-            updating={fieldsUpdating[field.id]}
           />
         )
         break
@@ -131,6 +123,7 @@ const DocumentFieldsComponent = ({
     }
     if (field) {
       const settingsModeForField = settingsForField === field.id
+
       return (
         <DocumentFieldComponent
           field={field}
@@ -138,7 +131,11 @@ const DocumentFieldsComponent = ({
           isNewField={createdFieldId === field.id}
           isUpdating={fieldsUpdating[field.id]}
           key={field.id}
+          onBlur={fieldBlurHandler}
+          onFocus={fieldFocusHandler}
+          onChange={fieldChangeHandler}
           onRename={fieldRenameHandler}
+          onDiscard={fieldDiscardHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
@@ -170,7 +167,7 @@ const DocumentFieldsComponent = ({
   })
   return (
     <div className={fieldsClasses}>
-      <ol>
+      <ol className="document__fields-list">
         {renderFields()}
       </ol>
     </div>
@@ -185,10 +182,11 @@ DocumentFieldsComponent.propTypes = {
   fieldChangeHandler: PropTypes.func.isRequired,
   fieldFocusHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
+  fieldDiscardHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired
 }
 
 export default DocumentFieldsComponent

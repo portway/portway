@@ -42,6 +42,11 @@ Slack secrets
 kubectl create secret generic slack-secrets --from-literal=slack_webhook_url='value'
 ```
 
+Sync secrets
+```
+kubectl create secret generic sync-secrets --from-literal=log_token_sync='value'
+```
+
 Intro secrets
 ```
 kubectl create secret generic intro-secrets --from-literal=intro_project_read_key='value'

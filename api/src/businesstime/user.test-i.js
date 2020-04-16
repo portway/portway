@@ -143,6 +143,14 @@ describe('BusinessUser', () => {
           expect(user.constructor).toBe(Object)
         }
       })
+
+      describe('when passed options.ids', () => {
+        it('should only return users with those ids', async () => {
+          const ids = [users[0].id, users[1].id]
+          const idUsers = (await BusinessUser.findAllSanitized(constants.ORG_ID, { ids })).users
+          expect(idUsers.map(user => user.id).sort()).toEqual(ids.sort())
+        })
+      })
     })
 
     describe('#findSanitizedById', () => {

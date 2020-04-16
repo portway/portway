@@ -38,6 +38,26 @@ services:
       - db
     container_name: portway-api
 
+  sync:
+    build:
+      context: ./sync
+    volumes:
+      - ./sync:/sync
+      - /sync/node_modules
+    working_dir: /sync
+    entrypoint: /bin/sh
+    command: ./wait-for.sh redis:6379 -- ./run.sh devstart
+    ports:
+      - 3004:3004
+    env_file:
+      - ./sync/.env
+    environment:
+      NODE_ENV: development
+      SYNC_PORT: 3004
+    depends_on:
+      - redis
+    container_name: portway-sync
+
   db:
     image: postgres:11.2-alpine
     restart: always
@@ -49,5 +69,13 @@ services:
       - postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  redis:
+    restart: always
+    image: redis:5.0.7-alpine
+    ports:
+      - 6379:6379
+
 volumes:
   postgres-data:
+

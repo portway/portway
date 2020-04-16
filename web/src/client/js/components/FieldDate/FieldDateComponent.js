@@ -1,8 +1,9 @@
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 
+import { FIELD_TYPES } from 'Shared/constants'
 import { DateIcon, TimeIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { Popper } from 'Components/Popper/Popper'
@@ -33,24 +34,36 @@ const CustomTimeInput = forwardRef(({ value, onClick }, ref) => (
 ))
 
 const FieldDateComponent = ({
-  field,
+  id,
+  type,
+  value,
   onBlur,
   onChange,
   onFocus,
-  readOnly
+  readOnly,
+  isBeingRemotelyEdited,
+  isCurrentlyFocusedField
 }) => {
-  const startDate = field && field.value ? new Date(field.value) : new Date()
+  const isReadOnly = isBeingRemotelyEdited || readOnly
+  const fieldDate = value ? new Date(value) : new Date()
+  const calendarRef = useRef()
   const timeRef = useRef()
-  const [fieldDate, setFieldDate] = useState(startDate)
   const [validity, setValidity] = useState(null)
 
   function internalChangeHandler(date) {
-    setFieldDate(date)
-    onChange(field.id, date)
+    onChange(id, date.toISOString())
   }
 
+  // value has changed, and not currently focused, update the time display
+  useEffect(() => {
+    if (!isCurrentlyFocusedField) {
+      timeRef.current.value = moment(fieldDate).format('h:mm a')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
+
   function updateTimeForDate(hour, minutes) {
-    const newTime = new Date(fieldDate)
+    const newTime = new Date(value)
     newTime.setHours(hour)
     newTime.setMinutes(minutes)
     internalChangeHandler(newTime)
@@ -99,6 +112,14 @@ const FieldDateComponent = ({
           dateFormat="yyyy-MM-dd hh:mm:ss"
           dropdownMode="select"
           onChange={internalChangeHandler}
+          onCalendarOpen={(e) => {
+            if (!isReadOnly) {
+              onFocus(id, type)
+            }
+          }}
+          onCalendarClose={(e) => {
+            onBlur(id, type)
+          }}
           popperPlacement="top-start"
           popperModifiers={{
             flip: {
@@ -110,12 +131,15 @@ const FieldDateComponent = ({
               boundariesElement: 'viewport'
             }
           }}
-          readOnly={readOnly}
+          readOnly={isReadOnly}
+          ref={calendarRef}
           selected={fieldDate}
           showMonthDropdown
           showYearDropdown
         />
-        <span className="document-field__date-label">{moment(fieldDate).format('dddd MMMM Do, YYYY')}</span>
+        <span className="document-field__date-label" onClick={() => { calendarRef.current.setOpen(true) }}>
+          {moment(fieldDate).format('dddd MMMM Do, YYYY')}
+        </span>
       </div>
       <div className="document-field__date-field">
         <DatePicker
@@ -137,6 +161,14 @@ const FieldDateComponent = ({
             // Update the time
             updateTimeForDate(hour, minutes)
           }}
+          onCalendarOpen={(e) => {
+            if (!isReadOnly) {
+              onFocus(id, type)
+            }
+          }}
+          onCalendarClose={(e) => {
+            onBlur(id, type)
+          }}
           popperPlacement="top-start"
           popperModifiers={{
             flip: {
@@ -148,7 +180,7 @@ const FieldDateComponent = ({
               boundariesElement: 'viewport'
             }
           }}
-          readOnly={readOnly}
+          readOnly={isReadOnly}
           selected={fieldDate}
           showTimeSelect
           showTimeSelectOnly
@@ -162,12 +194,21 @@ const FieldDateComponent = ({
             defaultValue={moment(fieldDate).format('h:mm a')}
             pattern="\b((1[0-2]|0?[1-9]):([0-5][0-9]) ([AaPp][Mm]))"
             onChange={setTimeValue}
+            onFocus={(e) => {
+              if (!isReadOnly) {
+                onFocus(id, type)
+              }
+            }}
+            onBlur={(e) => {
+              onBlur(id, type)
+            }}
+            readOnly={isReadOnly}
           />
-          {validity &&
-          <Popper anchorRef={timeRef} open={validity !== null} role="tooltip" withArrow>
-            <p className="note">{validity}</p>
-          </Popper>
-          }
+          {validity && (
+            <Popper anchorRef={timeRef} open={validity !== null} role="tooltip" withArrow>
+              <p className="note">{validity}</p>
+            </Popper>
+          )}
         </div>
       </div>
     </div>
@@ -175,11 +216,15 @@ const FieldDateComponent = ({
 }
 
 FieldDateComponent.propTypes = {
-  field: PropTypes.object.isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   readOnly: PropTypes.bool.isRequired,
+  id: PropTypes.number,
+  type: PropTypes.oneOf([FIELD_TYPES.DATE]),
+  value: PropTypes.string,
+  isBeingRemotelyEdited: PropTypes.bool,
+  isCurrentlyFocusedField: PropTypes.bool
 }
 
 export default FieldDateComponent

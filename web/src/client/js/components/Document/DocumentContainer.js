@@ -8,10 +8,13 @@ import { uiToggleDocumentMode, uiToggleFullScreen } from 'Actions/ui'
 import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
+import { fetchDocument } from 'Actions/document'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
+import useSyncUserFocus from 'Hooks/useSyncUserFocus'
+import useSyncFieldChange from 'Hooks/useSyncFieldChange'
 
 const defaultDocument = {
   name: ''
@@ -20,6 +23,7 @@ const defaultDocument = {
 const DocumentContainer = ({
   createMode,
   documentMode,
+  fetchDocument,
   isFullScreen,
   uiToggleDocumentMode,
   uiToggleFullScreen,
@@ -36,6 +40,10 @@ const DocumentContainer = ({
   ])
 
   let currentDocument = document
+
+  const currentDocumentId = currentDocument && currentDocument.id
+  useSyncUserFocus(currentDocumentId)
+  useSyncFieldChange(currentDocumentId, fetchDocument)
 
   /**
    * If we're creating a document, render nothing
@@ -121,6 +129,7 @@ const DocumentContainer = ({
 DocumentContainer.propTypes = {
   createMode: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
+  fetchDocument: PropTypes.func.isRequired,
   fields: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
   uiToggleDocumentMode: PropTypes.func.isRequired,
@@ -138,6 +147,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
+  fetchDocument,
   updateDocument,
   uiToggleDocumentMode,
   uiToggleFullScreen,

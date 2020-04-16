@@ -11,6 +11,7 @@ spec:
   - hosts:
     - {{ .Values.baseUrl }}
     - {{ .Values.apiPublicUrl }}
+    - {{ .Values.syncUrl }}
     secretName: {{ .Values.certIssuer }}-cert
   rules:
   - host: {{ .Values.apiPublicUrl }}
@@ -18,17 +19,25 @@ spec:
       paths:
       - backend:
           serviceName: {{ .Release.Name }}-api-service
-          servicePort: {{ .Values.apiPort }}
+          servicePort: {{ .Values.api.port }}
   - host: {{ .Values.baseUrl }}
     http:
       paths:
       - backend:
           serviceName: {{ .Release.Name }}-web-service
           servicePort: {{ .Values.web.port }}
+  - host: {{ .Values.syncUrl }}
+    http:
+      paths:
+      - backend:
+          serviceName: {{ .Release.Name }}-sync-service
+          servicePort: {{ .Values.sync.port }}
 ---
 apiVersion: v1
 data:
   proxy-body-size: "100M"
+  proxy-read-timeout: "3600"
+  proxy-send-timeout: "3600"
 kind: ConfigMap
 metadata:
   name: nginx-configuration

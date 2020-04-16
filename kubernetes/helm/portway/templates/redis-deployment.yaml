@@ -20,5 +20,5 @@ spec:
       - image: redis:5.0-alpine
         name: {{ .Values.serviceNames.redis }}
         ports:
-        - containerPort: {{ .Values.redisPort }}
+        - containerPort: {{ .Values.redis.port }}
           protocol: TCP

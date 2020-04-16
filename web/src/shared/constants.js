@@ -7,6 +7,11 @@ const FIELD_TYPES = {
   FILE: 6
 }
 
+// Fields that only a single user can edit at once
+const SYNC_SINGLE_USER_EDIT_FIELDS = [
+  FIELD_TYPES.DATE, FIELD_TYPES.IMAGE, FIELD_TYPES.FILE
+]
+
 const PLAN_TYPES = {
   MULTI_USER: 'MULTI_USER',
   SINGLE_USER: 'SINGLE_USER',
@@ -178,6 +183,7 @@ module.exports = {
     [FIELD_TYPES.FILE]: 'file-'
   },
   FIELD_TYPES: FIELD_TYPES,
+  SYNC_SINGLE_USER_EDIT_FIELDS: SYNC_SINGLE_USER_EDIT_FIELDS,
   // Default text strings
   LABEL_NEW_DOCUMENT: 'New document',
   MAX_COOKIE_AGE_MS: '604800000', // 7 days

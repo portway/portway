@@ -1,17 +1,26 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
+import cx from 'classnames'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-import { DOCUMENT_MODE, MOBILE_MATCH_SIZE, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import {
+  DOCUMENT_MODE,
+  MOBILE_MATCH_SIZE,
+  MULTI_USER_PLAN_TYPES,
+  PATH_PROJECT,
+  PROJECT_ROLE_IDS
+} from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 import DocumentOutlineContainer from 'Components/DocumentOutline/DocumentOutlineContainer'
+import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContainer'
 
 import './_Document.scss'
 import { IconButton } from 'Components/Buttons/index'
@@ -59,6 +68,11 @@ const DocumentComponent = ({
   if (assignmentLoading === false) {
     documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
   }
+
+  const documentUsersClasses = cx({
+    'document__users-list': true,
+    'document__users-list--without-settings': documentReadOnlyMode
+  })
 
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
@@ -114,6 +128,11 @@ const DocumentComponent = ({
             readOnly={documentReadOnlyMode}
             ref={titleRef} />
         </div>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+          <div className={documentUsersClasses}>
+            <DocumentUsersContainer />
+          </div>
+        </OrgPlanPermission>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <div className="document__toggle-container">
             {documentMode === DOCUMENT_MODE.NORMAL &&
