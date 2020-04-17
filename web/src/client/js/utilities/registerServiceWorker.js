@@ -20,7 +20,7 @@ export default function register() {
                   console.info('An update to Portway is available. Refresh for the latest updates!')
                   const message = (
                     <>
-                      🎁 An update to Portway is available. <a href={location.href}>Refresh for the latest updates!</a>
+                      🚚 An update to Portway has been delivered. <a href={location.href}>Refresh for the latest updates!</a>
                     </>
                   )
                   Store.dispatch(createNotification(message, NOTIFICATION_TYPES.SUCCESS))
