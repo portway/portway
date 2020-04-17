@@ -22,6 +22,12 @@ const DATA_FIELD_TYPES = [
   FIELD_TYPES.STRING,
 ]
 
+const FIELDS_THAT_DISABLE_WHEN_EDITING = [
+  FIELD_TYPES.IMAGE,
+  FIELD_TYPES.FILE,
+  FIELD_TYPES.DATE,
+]
+
 const DocumentFieldComponent = ({
   children,
   field,
@@ -159,7 +165,7 @@ const DocumentFieldComponent = ({
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--file': field.type === FIELD_TYPES.FILE,
     'document-field--settings-mode': settingsMode,
-    'document-field--is-being-remotely-edited': isBeingRemotelyEdited,
+    'document-field--is-being-remotely-edited': isBeingRemotelyEdited && singleUserEditField
   })
 
   const fieldToolClasses = cx({
