@@ -152,7 +152,8 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
   fieldWithCursorOrder,
   newFieldName,
   fieldType,
-  newSplitTextName
+  newSplitTextName,
+  socketDispatch
 ) => {
   return async (dispatch) => {
     const currLine = editor.getCursor().line
@@ -210,6 +211,10 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
     // Fetch the document for a total re-render now that we have everything set up
     dispatch(fetchDocument(documentId))
     dispatch(Fields.setLastCreatedFieldId(newField.id))
+
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
+    }
   }
 }
 
