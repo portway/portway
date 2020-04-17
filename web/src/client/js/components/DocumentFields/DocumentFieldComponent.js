@@ -102,12 +102,20 @@ const DocumentFieldComponent = ({
     setCurrentValue(field.value)
     setShowConflictPopper(false)
     remoteChangesRef.current = []
+    // set the field name to the one in current redux state
+    if (nameRef.current) {
+      nameRef.current.value = field.name
+    }
     // refetch document
     onDiscard(field.documentId)
   }
 
   function handleManualSave() {
     onChange(field.id, currentValue)
+    // there's something different in the name field than there is in the redux state, so send those changes
+    if (nameRef.current && nameRef.current.value !== field.name) {
+      onRename(field.id, nameRef.current.value)
+    }
     setShowConflictPopper(false)
     remoteChangesRef.current = []
   }
@@ -140,12 +148,22 @@ const DocumentFieldComponent = ({
     })
   }
 
+  const isCurrentlyFocusedField = Number(myFocusedFieldId) === field.id
+
   useEffect(() => {
     if (isNewField && nameRef.current) {
       nameRef.current.scrollIntoView({ behavior: 'smooth' })
       nameRef.current.focus()
     }
   }, [isNewField])
+
+  // field name has been updated, set the uncontrolled value
+  useEffect(() => {
+    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value) {
+      nameRef.current.value = field.name
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field.name])
 
   const dataField = DATA_FIELD_TYPES.includes(field.type)
 
@@ -265,7 +283,7 @@ const DocumentFieldComponent = ({
               type: field.type,
               value: currentValue,
               onChange: handleFieldBodyUpdate,
-              isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id,
+              isCurrentlyFocusedField,
               isBeingRemotelyEdited
             })}
           </div>
