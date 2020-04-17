@@ -109,11 +109,13 @@ export const setLastCreatedFieldId = (fieldId) => {
   }
 }
 
-export const removeLastCreatedFieldId = (fieldId) => {
-  return async (dispatch) => {
-    dispatch(Fields.removeLastCreatedFieldId(fieldId))
-  }
-}
+// TODO: last created field id is not currently being un-set, use this to unset it if that causes
+// problems with focus in the future
+// export const removeLastCreatedFieldId = (fieldId) => {
+//   return async (dispatch) => {
+//     dispatch(Fields.removeLastCreatedFieldId(fieldId))
+//   }
+// }
 
 /**
  * Creates a new field in newDocumentId using an existing field's data

@@ -233,7 +233,9 @@ export const Fields = {
   focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
   // Created field Id
   setLastCreatedFieldId: makeActionCreator(ActionTypes.SET_LAST_CREATED_FIELD_ID, 'fieldId'),
-  removeLastCreatedFieldId: makeActionCreator(ActionTypes.REMOVE_LAST_CREATED_FIELD_ID, 'fieldId'),
+  // TODO: last created field id is not currently being un-set, use this to unset it if that causes
+  // problems with focus in the future
+  // removeLastCreatedFieldId: makeActionCreator(ActionTypes.REMOVE_LAST_CREATED_FIELD_ID, 'fieldId'),
 }
 
 export const Notifications = {
