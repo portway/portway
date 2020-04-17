@@ -208,8 +208,16 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
     // removed this and am manually calling the field update API so we don't get an onChange
     // editor.replaceRange('', startRange, endRange)
 
+    // Save the current window position so nothing moves
+    const df = document.querySelector('.document__fields')
+    const oldHeight = df.offsetHeight
+    const oldScrollTop = df.scrollTop
+
     // Fetch the document for a total re-render now that we have everything set up
-    dispatch(fetchDocument(documentId))
+    dispatch(fetchDocument(documentId)).then(() => {
+      // When the document re-renders, set its scroll manually to where it was before
+      df.scrollTop = oldScrollTop + (df.offsetHeight - oldHeight)
+    })
     dispatch(Fields.setLastCreatedFieldId(newField.id))
 
     if (socketDispatch) {
