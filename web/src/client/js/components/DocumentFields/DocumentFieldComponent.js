@@ -86,15 +86,6 @@ const DocumentFieldComponent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [field.id, field.value])
 
-  useEffect(() => {
-    if (isNewField) {
-      // Scroll to the center of the new field
-      window.requestAnimationFrame(() => {
-        fieldRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      })
-    }
-  }, [isNewField])
-
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
     // up the chain of callbacks. Any actions performed here that invokes DocumentFieldsContainer
