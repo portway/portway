@@ -8,10 +8,15 @@
   position: relative;
   width: 2.4rem;
   z-index: 12;
+
+  .popper--with-arrow {
+    &:before { margin-left: -28px; }
+    &:after { margin-left: -27px; }
+  }
+
 }
 
 .document-field__focus-buttons {
-  background-color: var(--theme-overlay-light);
   padding: 2rem;
 }
 
