@@ -37,8 +37,14 @@ const DocumentFieldsContainer = ({
 
   const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const activeUsers = socketState.activeDocumentUsers[documentId]
+  const projectAssignment = userProjectAssignments[Number(projectId)]
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  let documentReadOnlyMode = false
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
 
   const sortedFields = useMemo(() => {
     // Sort the fields every re-render
@@ -66,8 +72,7 @@ const DocumentFieldsContainer = ({
         type: FIELD_TYPES.TEXT
       })
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [documentReadOnlyMode, fields, createField, documentId, projectId])
 
   useEffect(() => {
     if (!hasFields) {
@@ -96,14 +101,6 @@ const DocumentFieldsContainer = ({
       }
     }
   }, [hasOnlyOneTextField])
-
-  const projectAssignment = userProjectAssignments[Number(projectId)]
-
-  let documentReadOnlyMode = false
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
-  }
 
   // Actions
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
