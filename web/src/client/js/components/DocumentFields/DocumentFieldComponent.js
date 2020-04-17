@@ -22,12 +22,6 @@ const DATA_FIELD_TYPES = [
   FIELD_TYPES.STRING,
 ]
 
-const FIELDS_THAT_DISABLE_WHEN_EDITING = [
-  FIELD_TYPES.IMAGE,
-  FIELD_TYPES.FILE,
-  FIELD_TYPES.DATE,
-]
-
 const DocumentFieldComponent = ({
   children,
   field,
