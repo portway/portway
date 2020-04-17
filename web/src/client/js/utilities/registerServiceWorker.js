@@ -17,6 +17,7 @@ export default function register() {
             installingWorker.onstatechange = () => {
               if (installingWorker.state === 'installed') {
                 if (navigator.serviceWorker.controller) {
+                  console.info('An update to Portway is available. Refresh for the latest updates!')
                   const message = (
                     <>
                       🎁 An update to Portway is available. <a href={location.href}>Refresh for the latest updates!</a>
