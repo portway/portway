@@ -50,6 +50,7 @@ const DocumentFieldComponent = ({
   const [showConflictPopper, setShowConflictPopper] = useState(false)
 
   const singleUserEditField = SYNC_SINGLE_USER_EDIT_FIELDS.includes(field.type)
+  const isCurrentlyFocusedField = Number(myFocusedFieldId) === field.id
 
   // Track if a remote user is editing this field
   let isBeingRemotelyEdited
@@ -78,7 +79,7 @@ const DocumentFieldComponent = ({
 
   useEffect(() => {
     // Accept remote changes to field if it's not focused and the conflict popper isn't open
-    if (myFocusedFieldId !== field.id && !showConflictPopper) {
+    if (!isCurrentlyFocusedField && !showConflictPopper) {
       setCurrentValue(field.value)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +113,7 @@ const DocumentFieldComponent = ({
 
   function handleManualSave() {
     onChange(field.id, currentValue)
-    // there's something different in the name field than there is in the redux state, so send those changes
+    // there's something different in the name field than there is in the redux state, send those changes
     if (nameRef.current && nameRef.current.value !== field.name) {
       onRename(field.id, nameRef.current.value)
     }
@@ -148,7 +149,6 @@ const DocumentFieldComponent = ({
     })
   }
 
-  const isCurrentlyFocusedField = Number(myFocusedFieldId) === field.id
 
   useEffect(() => {
     if (isNewField && nameRef.current) {
@@ -264,7 +264,7 @@ const DocumentFieldComponent = ({
                   onRename(field.id, e.target.value)
                 }}
                 onFocus={(e) => {
-                  if (!readOnly && !isBeingRemotelyEdited) {
+                  if (!shouldLockNameChange) {
                     onFocus(field.id, field.type, field)
                     e.target.select()
                   }
