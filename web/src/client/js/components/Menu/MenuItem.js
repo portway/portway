@@ -15,6 +15,8 @@ const MenuItem = ({ className, children, padded, ...props }) => {
   )
 }
 
+MenuItem.displayName = 'MenuItem'
+
 MenuItem.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,

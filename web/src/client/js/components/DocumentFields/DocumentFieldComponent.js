@@ -46,6 +46,8 @@ const DocumentFieldComponent = ({
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
+  const fieldRef = useRef()
+
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)
 
@@ -149,21 +151,12 @@ const DocumentFieldComponent = ({
     })
   }
 
-
-  useEffect(() => {
-    if (isNewField && nameRef.current) {
-      nameRef.current.scrollIntoView({ behavior: 'smooth' })
-      nameRef.current.focus()
-    }
-  }, [isNewField])
-
   // field name has been updated, set the uncontrolled value
   useEffect(() => {
     if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value) {
       nameRef.current.value = field.name
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.name])
+  }, [field.name, isCurrentlyFocusedField])
 
   const dataField = DATA_FIELD_TYPES.includes(field.type)
 
@@ -177,6 +170,7 @@ const DocumentFieldComponent = ({
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--file': field.type === FIELD_TYPES.FILE,
     'document-field--settings-mode': settingsMode,
+    'document-field--is-being-remotely-edited': isBeingRemotelyEdited && singleUserEditField
   })
 
   const fieldToolClasses = cx({
@@ -212,7 +206,7 @@ const DocumentFieldComponent = ({
   }
 
   return (
-    <li className={fieldClasses} data-id={field.id} data-order={index}>
+    <li className={fieldClasses} data-id={field.id} data-order={index} ref={fieldRef}>
       <div className="document-field__component">
         <div className={fieldToolClasses} ref={toolsRef}>
           <DocumentUsersComponent

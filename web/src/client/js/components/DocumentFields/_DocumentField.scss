@@ -14,6 +14,15 @@
   margin-top: 2.4rem;
   max-width: 1200px;
   outline: 0;
+  transition: opacity 0.2s linear, filter 0.2s linear;
+
+  &--is-being-remotely-edited {
+    cursor: pointer;
+    filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
 } // document-field
 
 
@@ -72,10 +81,10 @@
     align-items: flex-start;
     border-right: thin solid var(--theme-border);
     display: flex;
-    flex: 0 0 var(--field-name-width);
     flex-direction: column;
     justify-content: center;
     padding: .7rem 1.2rem;
+    width: var(--field-name-width);
   }
 
   &-label {

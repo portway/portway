@@ -48,7 +48,7 @@ const Menu = ({ anchorRef, className, children, isActive, ...props }) => {
         activeFirstTime.current = false
       }
       const menuItemComponents = React.Children.toArray(children).filter((child) => {
-        return child.type.name === 'MenuItem'
+        return child.type.displayName === 'MenuItem'
       })
       const menuItemChildren = menuItemComponents.map((child) => {
         return child.props.children
