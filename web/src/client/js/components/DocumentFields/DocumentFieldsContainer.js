@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react'
+import React, { useCallback, useEffect, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -37,8 +37,14 @@ const DocumentFieldsContainer = ({
 
   const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
   const activeUsers = socketState.activeDocumentUsers[documentId]
+  const projectAssignment = userProjectAssignments[Number(projectId)]
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
+  let documentReadOnlyMode = false
+  // False because null / true == loading
+  if (assignmentLoading === false) {
+    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+  }
 
   const sortedFields = useMemo(() => {
     // Sort the fields every re-render
@@ -54,6 +60,28 @@ const DocumentFieldsContainer = ({
 
   const hasFields = fieldKeys.current.length >= 1
   const hasOnlyOneTextField = hasFields && sortedFields.length === 1 && fields[sortedFields[0].id].type === FIELD_TYPES.TEXT
+
+  const createTextFieldHandler = useCallback(() => {
+    if (!documentReadOnlyMode) {
+      // This is triggered by the Big Invisible Button™
+      // It should append a new text field to the end of the document, making it seem as though the
+      // user is clicking to continue the document body
+      const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
+      createField(projectId, documentId, FIELD_TYPES.TEXT, {
+        name: newName,
+        type: FIELD_TYPES.TEXT
+      })
+    }
+  }, [documentReadOnlyMode, fields, createField, documentId, projectId])
+
+  useEffect(() => {
+    if (!hasFields) {
+      document.addEventListener('click', createTextFieldHandler, false)
+      return function cleanup() {
+        document.removeEventListener('click', createTextFieldHandler, false)
+      }
+    }
+  }, [createTextFieldHandler, hasFields])
 
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
@@ -74,28 +102,7 @@ const DocumentFieldsContainer = ({
     }
   }, [hasOnlyOneTextField])
 
-  const projectAssignment = userProjectAssignments[Number(projectId)]
-
-  let documentReadOnlyMode = false
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
-  }
-
   // Actions
-  function createTextFieldHandler() {
-    if (!documentReadOnlyMode) {
-      // This is triggered by the Big Invisible Button™
-      // It should append a new text field to the end of the document, making it seem as though the
-      // user is clicking to continue the document body
-      const newName = getNewNameInSequence(fields, FIELD_TYPES.TEXT)
-      createField(projectId, documentId, FIELD_TYPES.TEXT, {
-        name: newName,
-        type: FIELD_TYPES.TEXT
-      })
-    }
-  }
-
   function fieldFocusHandler(fieldId, fieldType, fieldData) {
     // Unfortunately we're tracking focus state both in redux and within the sync
     // context. We may want to look into hooking sync into redux? -Dirk 4/20

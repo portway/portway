@@ -46,6 +46,8 @@ const DocumentFieldComponent = ({
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
+  const fieldRef = useRef()
+
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)
 
@@ -140,13 +142,6 @@ const DocumentFieldComponent = ({
     })
   }
 
-  useEffect(() => {
-    if (isNewField && nameRef.current) {
-      nameRef.current.scrollIntoView({ behavior: 'smooth' })
-      nameRef.current.focus()
-    }
-  }, [isNewField])
-
   const dataField = DATA_FIELD_TYPES.includes(field.type)
 
   const fieldClasses = cx({
@@ -194,7 +189,7 @@ const DocumentFieldComponent = ({
   }
 
   return (
-    <li className={fieldClasses} data-id={field.id} data-order={index}>
+    <li className={fieldClasses} data-id={field.id} data-order={index} ref={fieldRef}>
       <div className="document-field__component">
         <div className={fieldToolClasses} ref={toolsRef}>
           <DocumentUsersComponent
