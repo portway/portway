@@ -81,10 +81,10 @@
     align-items: flex-start;
     border-right: thin solid var(--theme-border);
     display: flex;
-    flex: 0 0 var(--field-name-width);
     flex-direction: column;
     justify-content: center;
     padding: .7rem 1.2rem;
+    width: var(--field-name-width);
   }
 
   &-label {
