@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useLocation, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -45,6 +45,14 @@ const DocumentContainer = ({
   useSyncUserFocus(currentDocumentId)
   useSyncFieldChange(currentDocumentId, fetchDocument)
 
+  useEffect(() => {
+    console.log("mounting DocumentContainer")
+    return () => {
+      console.log("unmounting DocumentContainer")
+    }
+  })
+
+  console.log({createMode, paramDocId: params.documentId, documentLoading, currentDocument, projectLoading, project })
   /**
    * If we're creating a document, render nothing
    */
@@ -73,8 +81,11 @@ const DocumentContainer = ({
     return <NoDocument />
   }
 
-  //things are still loading, return null
-  if (!project) return null
+  // vital things haven't started loading yet, return null
+  if (documentLoading == null || projectLoading == null) return null
+
+  // things are still loading, return null
+  if (!project || documentLoading) return null
 
   // The current document doesn't match the url params, usually because
   // the user has switched docs and the new doc hasn't loaded from currentResource helper.
