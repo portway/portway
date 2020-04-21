@@ -9,6 +9,12 @@
   width: 2.4rem;
   z-index: 12;
 
+  .popper {
+    margin-left: -12px;
+    position: sticky;
+    top: 6.4rem !important;
+  }
+
   .popper--with-arrow {
     &:before { margin-left: -28px; }
     &:after { margin-left: -27px; }
