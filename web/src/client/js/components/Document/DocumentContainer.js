@@ -9,13 +9,16 @@ import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import { fetchDocument } from 'Actions/document'
+import receiveRemoteFieldChange from 'Actions/userSync'
+import updateRemoteUserFieldFocus from 'Actions/userSync'
+import documentSocket from '../../sockets/SocketProvider'
+import { currentUserId } from 'Libs/currentIds'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
-import useSyncUserFocus from 'Hooks/useSyncUserFocus'
-import useSyncFieldChange from 'Hooks/useSyncFieldChange'
-import documentSocket from '../../sockets/SocketProvider'
+// import useSyncUserFocus from 'Hooks/useSyncUserFocus'
+// import useSyncFieldChange from 'Hooks/useSyncFieldChange'
 
 const defaultDocument = {
   name: ''
@@ -29,6 +32,7 @@ const DocumentContainer = ({
   uiToggleDocumentMode,
   uiToggleFullScreen,
   updateDocument,
+  receiveRemoteFieldChange
 }) => {
   const location = useLocation()
   const params = useParams()
@@ -48,10 +52,20 @@ const DocumentContainer = ({
 
   // on mount, set up sync field change and focus change listeners
   useEffect(() => {
+    const handleUserFieldChange = (userId, fieldId) => {
+      receiveRemoteFieldChange(userId, fieldId)
+      if (userId !== currentUserId.toString()) {
+        fetchDocument(currentDocumentId)
+      }
+    }
+
     documentSocket.on('userFieldChange', handleUserFieldChange)
+    documentSocket.on('userFocusChange', updateRemoteUserFieldFocus)
     return () => {
       documentSocket.off('userFieldChange', handleUserFieldChange)
+      documentSocket.off('userFocusChange', updateRemoteUserFieldFocus)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -155,6 +169,7 @@ DocumentContainer.propTypes = {
   uiToggleDocumentMode: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
+  receiveRemoteFieldChange: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -171,6 +186,8 @@ const mapDispatchToProps = {
   updateDocument,
   uiToggleDocumentMode,
   uiToggleFullScreen,
+  receiveRemoteFieldChange,
+  updateRemoteUserFieldFocus
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
