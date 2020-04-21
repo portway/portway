@@ -138,6 +138,22 @@ export const ActionTypes = {
   UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM',
   // Search
   SEARCH_CLEAR: 'SEARCH_CLEAR',
+  // User Sync
+  DOCUMENT_ROOM_USERS_RECEIVED: 'DOCUMENT_ROOM_USERS_RECEIVED',
+  EMIT_JOIN_DOCUMENT_ROOM: 'EMIT_JOIN_DOCUMENT_ROOM',
+  EMIT_LEAVE_DOCUMENT_ROOM: 'EMIT_LEAVE_DOCUMENT_ROOM',
+  EMIT_FIELD_FOCUS: 'EMIT_FIELD_FOCUS',
+  EMIT_FIELD_BLUR: 'EMIT_FIELD_BLUR',
+  EMIT_FIELD_CHANGE: 'EMIT_FIELD_CHANGE',
+  SOCKET_ERROR: 'SOCKET_ERROR',
+  DOCUMENT_ROOM_JOINED: 'DOCUMENT_ROOM_JOINED',
+  DOCUMENT_ROOM_LEFT: 'DOCUMENT_ROOM_LEFT',
+  FIELD_FOCUS_EMITTED: 'FIELD_FOCUS_EMITTED',
+  FIELD_BLUR_EMITTED: 'FIELD_BLUR_EMITTED',
+  FIELD_CHANGE_EMITTED: 'FIELD_CHANGE_EMITTED',
+  MY_FIELD_FOCUS_UPDATED: 'MY_FIELD_FOCUS_UPDATED',
+  REMOTE_USER_FIELD_FOCUS_UPDATED: 'USER_FIELD_FOCUS_UPDATED',
+  REMOTE_FIELD_CHANGE_EVENT_RECEIVED: 'REMOTE_FIELD_CHANGE_EVENT_RECEIVED'
 }
 
 export const Route = {
@@ -312,4 +328,22 @@ export const UI = {
 
 export const Search = {
   clearSearch: makeActionCreator(ActionTypes.SEARCH_CLEAR),
+}
+
+export const UserSync = {
+  documentRoomUsersReceived: makeActionCreator(ActionTypes.DOCUMENT_ROOM_USERS_RECEIVED, 'documentId', 'userIds'),
+  emitJoinDocumentRoom: makeActionCreator(ActionTypes.EMIT_JOIN_DOCUMENT_ROOM, 'documentId'),
+  emitLeaveDocumentRoom: makeActionCreator(ActionTypes.EMIT_LEAVE_DOCUMENT_ROOM, 'documentId'),
+  emitFieldFocus: makeActionCreator(ActionTypes.EMIT_FIELD_FOCUS, 'fieldId'),
+  emitFieldBlur: makeActionCreator(ActionTypes.EMIT_FIELD_BLUR, 'fieldId'),
+  emitFieldChange: makeActionCreator(ActionTypes.EMIT_FIELD_CHANGE, 'fieldId'),
+  socketError: makeActionCreator(ActionTypes.SOCKET_ERROR),
+  documentRoomJoined: makeActionCreator(ActionTypes.DOCUMENT_ROOM_JOINED, 'documentId'),
+  documentRoomLeft: makeActionCreator(ActionTypes.DOCUMENT_ROOM_LEFT, 'documentId'),
+  fieldFocusEmitted: makeActionCreator(ActionTypes.FIELD_FOCUS_EMITTED, 'fieldId'),
+  fieldBlurEmitted: makeActionCreator(ActionTypes.FIELD_BLUR_EMITTED, 'fieldId'),
+  fieldChangeEmitted: makeActionCreator(ActionTypes.FIELD_CHANGE_EMITTED, 'fieldId'),
+  myFieldFocusUpdated: makeActionCreator(ActionTypes.MY_FIELD_FOCUS_UPDATE, 'fieldId'),
+  remoteUserFieldFocusUpdated: makeActionCreator(ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED, 'userId', 'fieldId'),
+  remoteFieldChangeEventReceived: makeActionCreator(ActionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED, 'userId', 'fieldId')
 }

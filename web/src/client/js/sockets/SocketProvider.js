@@ -20,6 +20,8 @@ documentSocket.on('connect', () => {
   console.info('Connected to sync service')
 })
 
+export default documentSocket
+
 const actionTypes = {
   'DOCUMENT_ROOM_USERS_RECEIVED': 'DOCUMENT_ROOM_USERS_RECEIVED',
   'SET_CURRENT_DOCUMENT_ROOM': 'SET_CURRENT_DOCUMENT_ROOM',

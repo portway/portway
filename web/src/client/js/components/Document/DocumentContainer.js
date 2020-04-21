@@ -15,6 +15,7 @@ import DocumentComponent from './DocumentComponent'
 import NoDocument from './NoDocument'
 import useSyncUserFocus from 'Hooks/useSyncUserFocus'
 import useSyncFieldChange from 'Hooks/useSyncFieldChange'
+import documentSocket from '../../sockets/SocketProvider'
 
 const defaultDocument = {
   name: ''
@@ -42,8 +43,16 @@ const DocumentContainer = ({
   let currentDocument = document
 
   const currentDocumentId = currentDocument && currentDocument.id
-  useSyncUserFocus(currentDocumentId)
-  useSyncFieldChange(currentDocumentId, fetchDocument)
+  // useSyncUserFocus(currentDocumentId)
+  // useSyncFieldChange(currentDocumentId, fetchDocument)
+
+  // on mount, set up sync field change and focus change listeners
+  useEffect(() => {
+    documentSocket.on('userFieldChange', handleUserFieldChange)
+    return () => {
+      documentSocket.off('userFieldChange', handleUserFieldChange)
+    }
+  }, [])
 
   useEffect(() => {
     console.log("mounting DocumentContainer")
@@ -119,7 +128,7 @@ const DocumentContainer = ({
     const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
     uiToggleDocumentMode(mode)
   }
-
+  console.log('here')
   return (
     <>
       <Helmet>
