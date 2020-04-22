@@ -3,7 +3,6 @@ import { ActionTypes } from '../actions'
 const initialState = {
   activeDocumentUsers: {},
   currentDocumentRoom: null,
-  myFocusedFieldId: null,
   // focus is stored as { userId : fieldId }
   remoteUserFieldFocus: {},
   remoteChangesInCurrentlyFocusedField: []
@@ -32,11 +31,6 @@ export const userSync = (state = initialState, action) => {
       }
       return { ...state }
     }
-    case ActionTypes.MY_FIELD_FOCUS_UPDATED: {
-      const { fieldId } = action
-      // change my field focus, also wipe out remote changes array to start fresh
-      return { ...state, myFocusedFieldId: fieldId, remoteChangesInCurrentlyFocusedField: [] }
-    }
     case ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED: {
       const { userId, fieldId } = action
       // only update the focus state if user is connected to a document room
@@ -53,9 +47,9 @@ export const userSync = (state = initialState, action) => {
       return { ...state }
     }
     case ActionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED: {
-      const { userId, fieldId } = action
+      const { userId, fieldId, focusedFieldId } = action
       // for now, we're only logging changes to the currently focused field
-      if (fieldId === state.myFocusedFieldId) {
+      if (fieldId === focusedFieldId) {
         const remoteChangesInCurrentlyFocusedField = [
           ...state.remoteChangesInCurrentlyFocusedField,
           { userId, fieldId }

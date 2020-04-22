@@ -91,7 +91,7 @@ export const blurField = (fieldId, fieldType, fieldData, documentId) => {
   }
 }
 
-export const focusField = (fieldId, fieldType, fieldData, documentId) => {
+export const focusField = (fieldId, fieldType, documentId, fieldData) => {
   return async (dispatch) => {
     dispatch(Fields.focusField(fieldId, fieldType, fieldData))
     // emit user sync message

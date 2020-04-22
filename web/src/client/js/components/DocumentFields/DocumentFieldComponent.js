@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
-// import useDocumentSocket from 'Hooks/useDocumentSocket'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
 
@@ -40,6 +39,7 @@ const DocumentFieldComponent = ({
   myFocusedFieldId,
   remoteUserFieldFocus
 }) => {
+  console.log(remoteUserFieldFocus)
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
@@ -288,7 +288,7 @@ DocumentFieldComponent.propTypes = {
   settingsMode: PropTypes.bool.isRequired,
   usersById: PropTypes.object,
   remoteChangesInCurrentlyFocusedField: PropTypes.array,
-  myFocusedFieldId: PropTypes.string,
+  myFocusedFieldId: PropTypes.number,
   remoteUserFieldFocus: PropTypes.object
 }
 
@@ -296,7 +296,7 @@ const mapStateToProps = (state) => {
   return {
     usersById: state.users.usersById,
     remoteChangesInCurrentlyFocusedField: state.userSync.remoteChangesInCurrentlyFocusedField,
-    myFocusedFieldId: state.userSync.myFocusedFieldId,
+    myFocusedFieldId: state.documentFields.focused.id,
     remoteUserFieldFocus: state.userSync.remoteUserFieldFocus
   }
 }

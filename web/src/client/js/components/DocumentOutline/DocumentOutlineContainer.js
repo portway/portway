@@ -7,7 +7,6 @@ import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
 import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import useDocumentSocket from 'Hooks/useDocumentSocket'
 
 import { uiConfirm, uiToggleDocumentMode } from 'Actions/ui'
 import { removeField, updateField, updateFieldOrder } from 'Actions/field'
@@ -28,8 +27,6 @@ const DocumentOutlineContainer = ({
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
-
-  const { dispatch: socketDispatch } = useDocumentSocket()
 
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
@@ -66,7 +63,7 @@ const DocumentOutlineContainer = ({
     const message = <span>Are you sure you want to delete this {type}?</span>
     const options = {
       confirmedLabel: 'Yes, delete it.',
-      confirmedAction: () => { removeField(projectId, documentId, fieldId, socketDispatch) },
+      confirmedAction: () => { removeField(projectId, documentId, fieldId) },
       theme: 'danger',
     }
     uiConfirm({ message, options })

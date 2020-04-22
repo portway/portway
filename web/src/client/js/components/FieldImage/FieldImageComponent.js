@@ -241,7 +241,7 @@ FieldImageComponent.propTypes = {
   updating: PropTypes.bool.isRequired,
   isCurrentlyFocusedField: PropTypes.bool,
   isBeingRemotelyEdited: PropTypes.bool,
-  documentId: PropTypes.number.isRequired
+  documentId: PropTypes.number
 }
 
 FieldImageComponent.defaultProps = {

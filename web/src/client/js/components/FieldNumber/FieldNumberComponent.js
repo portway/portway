@@ -47,7 +47,7 @@ FieldNumberComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   type: PropTypes.oneOf([FIELD_TYPES.NUMBER]),
   value: PropTypes.number,
-  documentId: PropTypes.number.isRequired
+  documentId: PropTypes.number
 }
 
 export default FieldNumberComponent

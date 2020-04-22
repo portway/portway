@@ -12,7 +12,6 @@ import {
 } from 'Actions/field'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
-import useDocumentSocket from 'Hooks/useDocumentSocket'
 
 import ContentMenuComponent from './ContentMenuComponent'
 
@@ -29,7 +28,6 @@ const ContentMenuContainer = ({
   const { data: document } = useDataService(currentResource('document', location.pathname), [
     location.pathname
   ])
-  const { dispatch: socketDispatch } = useDocumentSocket()
 
   if (!project || !document) return null
 
@@ -48,12 +46,11 @@ const ContentMenuContainer = ({
         fieldWithCursorOrder,
         newFieldName,
         fieldType,
-        newSplitTextName,
-        socketDispatch
+        newSplitTextName
       )
     } else {
       const newName = getNewNameInSequence(fields, fieldType)
-      createField(project.id, document.id, fieldType, { name: newName, type: fieldType }, socketDispatch)
+      createField(project.id, document.id, fieldType, { name: newName, type: fieldType })
     }
   }
 

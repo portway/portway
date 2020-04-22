@@ -230,7 +230,7 @@ FieldDateComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
   value: PropTypes.string,
-  documentId: PropTypes.number.isRequired
+  documentId: PropTypes.number
 }
 
 export default FieldDateComponent

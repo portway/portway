@@ -131,13 +131,22 @@ export const documentFields = (state = initialState, action) => {
       return { ...state, documentFieldsById, loading: { ...state.loading, byId: loadingById } }
     }
     // Blur field resets focus data
-    // case ActionTypes.BLUR_FIELD: {
-    //   @todo Do whatever in here for multiple user stuff
-    // }
+    case ActionTypes.BLUR_FIELD: {
+      const { fieldId } = action
+      const focused = { ...state.focused }
+      // we have a match, trying to blur the currently focused field, clear out all focus values
+      if (fieldId === focused.id) {
+        focused.id = null
+        focused.type = null
+        focused.data = null
+      }
+      return { ...state, focused }
+    }
     // Focus field tracks field ID and certain data per type of field
     // This is so we can interact with the actual field component or ref from
     // somewhere else within the app
     case ActionTypes.FOCUS_FIELD: {
+      console.log(action)
       const { fieldId, fieldData, fieldType } = action
       const focused = { ...state.focused }
       focused.id = fieldId

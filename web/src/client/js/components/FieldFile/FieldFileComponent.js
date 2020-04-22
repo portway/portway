@@ -138,7 +138,7 @@ FieldFileComponent.propTypes = {
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
   isBeingRemotelyEdited: PropTypes.bool,
-  documentId: PropTypes.number.isRequired
+  documentId: PropTypes.number
 }
 
 FieldFileComponent.defaultProps = {

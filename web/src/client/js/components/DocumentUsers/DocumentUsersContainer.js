@@ -5,14 +5,23 @@ import { useParams } from 'react-router-dom'
 
 import { currentUserId } from 'Libs/currentIds'
 import { fetchUsersWithIds } from 'Actions/user'
-import useSyncDocumentRoom from 'Hooks/useSyncDocumentRoom'
+import { emitJoinDocumentRoom, emitLeaveDocumentRoom } from 'Actions/userSync'
 
 import DocumentUsersComponent from './DocumentUsersComponent'
 
-const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById, activeDocumentUsers }) => {
+const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById, activeDocumentUsers, emitJoinDocumentRoom, emitLeaveDocumentRoom }) => {
   const { documentId } = useParams()
 
-  useSyncDocumentRoom(documentId)
+  // User Sync for document room join/leave
+  useEffect(() => {
+    if (document) {
+      emitJoinDocumentRoom(documentId)
+    }
+    return () => {
+      emitLeaveDocumentRoom()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentId])
 
   const activeUsers = activeDocumentUsers[documentId] || []
 
@@ -40,7 +49,9 @@ DocumentUsersContainer.propTypes = {
   fetchUsersWithIds: PropTypes.func.isRequired,
   usersById: PropTypes.object,
   usersLoadedById: PropTypes.object,
-  activeDocumentUsers: PropTypes.object
+  activeDocumentUsers: PropTypes.object,
+  emitJoinDocumentRoom: PropTypes.func.isRequired,
+  emitLeaveDocumentRoom: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -51,6 +62,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { fetchUsersWithIds }
+const mapDispatchToProps = { fetchUsersWithIds, emitJoinDocumentRoom, emitLeaveDocumentRoom }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentUsersContainer)
