@@ -39,11 +39,11 @@ const DocumentFieldComponent = ({
   myFocusedFieldId,
   remoteUserFieldFocus
 }) => {
-  console.log(remoteUserFieldFocus)
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
   const fieldRef = useRef()
+  console.log(remoteChangesInCurrentlyFocusedField)
 
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)

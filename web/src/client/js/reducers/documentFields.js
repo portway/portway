@@ -146,7 +146,6 @@ export const documentFields = (state = initialState, action) => {
     // This is so we can interact with the actual field component or ref from
     // somewhere else within the app
     case ActionTypes.FOCUS_FIELD: {
-      console.log(action)
       const { fieldId, fieldData, fieldType } = action
       const focused = { ...state.focused }
       focused.id = fieldId
