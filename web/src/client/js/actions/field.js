@@ -83,19 +83,19 @@ export const removeField = (projectId, documentId, fieldId) => {
   }
 }
 
-export const blurField = (fieldId, fieldType, fieldData) => {
+export const blurField = (fieldId, fieldType, fieldData, documentId) => {
   return async (dispatch) => {
     dispatch(Fields.blurField(fieldId, fieldType, fieldData))
     // emit user sync message
-    dispatch(emitFieldBlur)
+    dispatch(emitFieldBlur(fieldId, documentId))
   }
 }
 
-export const focusField = (fieldId, fieldType, fieldData) => {
+export const focusField = (fieldId, fieldType, fieldData, documentId) => {
   return async (dispatch) => {
     dispatch(Fields.focusField(fieldId, fieldType, fieldData))
     // emit user sync message
-    dispatch(emitFieldFocus)
+    dispatch(emitFieldFocus(fieldId, documentId))
   }
 }
 

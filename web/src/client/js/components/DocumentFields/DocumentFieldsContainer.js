@@ -97,7 +97,7 @@ const DocumentFieldsContainer = ({
   }, [hasOnlyOneTextField])
 
   // Actions
-  function fieldFocusHandler(fieldId, fieldType, fieldData) {
+  function fieldFocusHandler(fieldId, fieldType, documentId, fieldData) {
     // Unfortunately we're tracking focus state both in redux and within the sync
     // context. We may want to look into hooking sync into redux? -Dirk 4/20
     if (!documentReadOnlyMode) {
@@ -105,9 +105,9 @@ const DocumentFieldsContainer = ({
     }
   }
 
-  function fieldBlurHandler(fieldId, fieldType) {
+  function fieldBlurHandler(fieldId, fieldType, documentId) {
     if (!documentReadOnlyMode) {
-      blurField(fieldId, fieldType)
+      blurField(fieldId, fieldType, documentId)
     }
   }
 

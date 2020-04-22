@@ -343,7 +343,7 @@ export const UserSync = {
   fieldFocusEmitted: makeActionCreator(ActionTypes.FIELD_FOCUS_EMITTED, 'fieldId'),
   fieldBlurEmitted: makeActionCreator(ActionTypes.FIELD_BLUR_EMITTED, 'fieldId'),
   fieldChangeEmitted: makeActionCreator(ActionTypes.FIELD_CHANGE_EMITTED, 'fieldId'),
-  myFieldFocusUpdated: makeActionCreator(ActionTypes.MY_FIELD_FOCUS_UPDATE, 'fieldId'),
+  myFieldFocusUpdated: makeActionCreator(ActionTypes.MY_FIELD_FOCUS_UPDATED, 'fieldId'),
   remoteUserFieldFocusUpdated: makeActionCreator(ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED, 'userId', 'fieldId'),
   remoteFieldChangeEventReceived: makeActionCreator(ActionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED, 'userId', 'fieldId')
 }

@@ -40,12 +40,6 @@ const DocumentFieldComponent = ({
   myFocusedFieldId,
   remoteUserFieldFocus
 }) => {
-  // const { state: socketState } = useDocumentSocket()
-  // const {
-  //   remoteChangesInCurrentlyFocusedField,
-  //   myFocusedFieldId,
-  //   remoteUserFieldFocus
-  // } = socketState
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
@@ -241,14 +235,14 @@ const DocumentFieldComponent = ({
                   e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
                 }}
                 onBlur={(e) => {
-                  onBlur(field.id, field.type, field)
+                  onBlur(field.id, field.type, field.documentId, field)
                 }}
                 onChange={(e) => {
                   onRename(field.id, e.target.value)
                 }}
                 onFocus={(e) => {
                   if (!readOnly && !isBeingRemotelyEdited) {
-                    onFocus(field.id, field.type, field)
+                    onFocus(field.id, field.type, field.documentId, field)
                     e.target.select()
                   }
                 }}
@@ -267,7 +261,8 @@ const DocumentFieldComponent = ({
               value: currentValue,
               onChange: handleFieldBodyUpdate,
               isCurrentlyFocusedField: Number(myFocusedFieldId) === field.id,
-              isBeingRemotelyEdited
+              isBeingRemotelyEdited,
+              documentId: field.documentId
             })}
           </div>
         </div>

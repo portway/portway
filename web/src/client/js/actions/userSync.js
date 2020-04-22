@@ -24,19 +24,23 @@ export const emitLeaveDocumentRoom = (documentId) => {
 }
 
 export const emitFieldFocus = (fieldId, documentId) => {
+  console.log('emitting field focus')
   return async (dispatch) => {
     if (!documentSocket.connected) {
       return dispatch(UserSync.socketError())
     }
     dispatch(UserSync.emitFieldFocus(fieldId))
+    console.log('here')
     dispatch(updateMyFieldFocus(fieldId))
-
+    console.log('here')
     documentSocket.emit('fieldFocus', fieldId, documentId)
     dispatch(UserSync.fieldFocusEmitted(fieldId))
+    console.log('here too')
   }
 }
 
 export const emitFieldBlur = (fieldId, documentId) => {
+  console.log('emitting fieldf blur')
   return async (dispatch) => {
     if (!documentSocket.connected) {
       return dispatch(UserSync.socketError())
@@ -60,17 +64,25 @@ export const emitFieldChange = (fieldId, documentId) => {
 }
 
 export const updateDocumentRoomUsers = (documentId, userIds) => {
-  return UserSync.documentRoomUsersReceived(documentId, userIds)
+  return async (dispatch) => {
+    dispatch(UserSync.documentRoomUsersReceived(documentId, userIds))
+  }
 }
 
 export const updateRemoteUserFieldFocus = (userId, fieldId) => {
-  return UserSync.remoteUserFieldFocusUpdated(userId, fieldId)
+  return async (dispatch) => {
+    dispatch(UserSync.remoteUserFieldFocusUpdated(userId, fieldId))
+  }
 }
 
 export const updateMyFieldFocus = (fieldId) => {
-  return UserSync.myFieldFocusUpdated(fieldId)
+  return async (dispatch) => {
+    dispatch(UserSync.myFieldFocusUpdated(fieldId))
+  }
 }
 
 export const receiveRemoteFieldChange = (userId, fieldId) => {
-  return UserSync.remoteFieldChangeEventReceived(userId, fieldId)
+  return async (dispatch) => {
+    dispatch(UserSync.remoteFieldChangeEventReceived(userId, fieldId))
+  }
 }
