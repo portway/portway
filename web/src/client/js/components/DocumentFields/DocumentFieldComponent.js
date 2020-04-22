@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
-import useDocumentSocket from 'Hooks/useDocumentSocket'
+// import useDocumentSocket from 'Hooks/useDocumentSocket'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
 
@@ -35,14 +35,17 @@ const DocumentFieldComponent = ({
   onDiscard,
   readOnly,
   settingsMode,
-  usersById
+  usersById,
+  remoteChangesInCurrentlyFocusedField,
+  myFocusedFieldId,
+  remoteUserFieldFocus
 }) => {
-  const { state: socketState } = useDocumentSocket()
-  const {
-    remoteChangesInCurrentlyFocusedField,
-    myFocusedFieldId,
-    remoteUserFieldFocus
-  } = socketState
+  // const { state: socketState } = useDocumentSocket()
+  // const {
+  //   remoteChangesInCurrentlyFocusedField,
+  //   myFocusedFieldId,
+  //   remoteUserFieldFocus
+  // } = socketState
   const remoteChangesRef = useRef()
   const nameRef = useRef()
   const toolsRef = useRef()
@@ -158,15 +161,15 @@ const DocumentFieldComponent = ({
   })
 
   const fieldToolClasses = cx({
-    'document-field__tools': true,
+    'document-field__tools': true
   })
 
   const fieldActionClasses = cx({
-    'document-field__actions': true,
+    'document-field__actions': true
   })
 
   const fieldContainerClasses = cx({
-    'document-field__container': true,
+    'document-field__container': true
   })
 
   const fieldLabels = {
@@ -186,7 +189,9 @@ const DocumentFieldComponent = ({
     if (length > fieldNameMaxLength) {
       return
     }
-    return length * fieldLengthFactor > fieldMinimumWidth ? length * fieldLengthFactor : fieldMinimumWidth
+    return length * fieldLengthFactor > fieldMinimumWidth
+      ? length * fieldLengthFactor
+      : fieldMinimumWidth
   }
 
   return (
@@ -286,12 +291,18 @@ DocumentFieldComponent.propTypes = {
   onDiscard: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsMode: PropTypes.bool.isRequired,
-  usersById: PropTypes.object
+  usersById: PropTypes.object,
+  remoteChangesInCurrentlyFocusedField: PropTypes.array,
+  myFocusedFieldId: PropTypes.string,
+  remoteUserFieldFocus: PropTypes.object
 }
 
 const mapStateToProps = (state) => {
   return {
-    usersById: state.users.usersById
+    usersById: state.users.usersById,
+    remoteChangesInCurrentlyFocusedField: state.userSync.remoteChangesInCurrentlyFocusedField,
+    myFocusedFieldId: state.userSync.myFocusedFieldId,
+    remoteUserFieldFocus: state.userSync.remoteUserFieldFocus
   }
 }
 

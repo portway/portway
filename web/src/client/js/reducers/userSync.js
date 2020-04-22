@@ -30,7 +30,7 @@ export const userSync = (state = initialState, action) => {
         const newState = { ...state, currentDocumentRoom: null }
         return newState
       }
-      return state
+      return { ...state }
     }
     case ActionTypes.MY_FIELD_FOCUS_UPDATED: {
       const { fieldId } = action
@@ -38,6 +38,7 @@ export const userSync = (state = initialState, action) => {
       return { ...state, myFocusedFieldId: fieldId, remoteChangesInCurrentlyFocusedField: [] }
     }
     case ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED: {
+      console.log('remote focus change')
       const { userId, fieldId } = action
       // only update the focus state if user is connected to a document room
       if (state.currentDocumentRoom) {
@@ -50,7 +51,7 @@ export const userSync = (state = initialState, action) => {
         }
         return newState
       }
-      return state
+      return { ...state }
     }
     case ActionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED: {
       const { userId, fieldId } = action
@@ -66,7 +67,7 @@ export const userSync = (state = initialState, action) => {
         }
         return newState
       }
-      return state
+      return { ...state }
     }
     case ActionTypes.EMIT_JOIN_DOCUMENT_ROOM:
     case ActionTypes.EMIT_LEAVE_DOCUMENT_ROOM:
@@ -76,11 +77,11 @@ export const userSync = (state = initialState, action) => {
     case ActionTypes.FIELD_BLUR_EMITTED:
     case ActionTypes.EMIT_FIELD_CHANGE:
     case ActionTypes.FIELD_CHANGE_EMITTED:
-      return state
+      return { ...state }
     case ActionTypes.SOCKET_ERROR:
       // no need to log, that was done when module loaded, move on silently
-      return state
+      return { ...state }
     default:
-      return state
+      return { ...state }
   }
 }

@@ -1,22 +1,21 @@
 import { useEffect, useRef } from 'react'
 import useDocumentSocket from './useDocumentSocket'
+import { receiveRemoteFieldChange } from '../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
-import documentSocket from '../sockets/SocketProvider'
-import Store from '../reducers'
 
 export default function(documentId, cb) {
   const { documentSocket, dispatch: socketDispatch } = useDocumentSocket()
   const documentIdRef = useRef()
   documentIdRef.current = documentId
 
-  useEffect(() => {
-    const handleUserFieldChange = (userId, fieldId) => {
-      socketDispatch(receiveRemoteFieldChange(userId, fieldId))
-      if (userId !== currentUserId.toString()) {
-        cb(documentIdRef.current)
-      }
+  const handleUserFieldChange = (userId, fieldId) => {
+    socketDispatch(receiveRemoteFieldChange(userId, fieldId))
+    if (userId !== currentUserId.toString()) {
+      cb(documentIdRef.current)
     }
+  }
 
+  useEffect(() => {
     documentSocket.on('userFieldChange', handleUserFieldChange)
     return () => {
       documentSocket.off('userFieldChange', handleUserFieldChange)

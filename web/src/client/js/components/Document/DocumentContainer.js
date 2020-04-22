@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useLocation, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -9,8 +9,7 @@ import { updateDocument } from 'Actions/document'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import { fetchDocument } from 'Actions/document'
-import receiveRemoteFieldChange from 'Actions/userSync'
-import updateRemoteUserFieldFocus from 'Actions/userSync'
+import { receiveRemoteFieldChange, updateRemoteUserFieldFocus } from 'Actions/userSync'
 import documentSocket from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
 
@@ -36,6 +35,7 @@ const DocumentContainer = ({
 }) => {
   const location = useLocation()
   const params = useParams()
+  const currentDocumentIdRef = useRef()
 
   const { data: project, loading: projectLoading } = useDataService(currentResource('project', location.pathname), [
     location.pathname
@@ -46,16 +46,14 @@ const DocumentContainer = ({
 
   let currentDocument = document
 
-  const currentDocumentId = currentDocument && currentDocument.id
-  // useSyncUserFocus(currentDocumentId)
-  // useSyncFieldChange(currentDocumentId, fetchDocument)
+  currentDocumentIdRef.current = currentDocument && currentDocument.id
 
   // on mount, set up sync field change and focus change listeners
   useEffect(() => {
     const handleUserFieldChange = (userId, fieldId) => {
       receiveRemoteFieldChange(userId, fieldId)
       if (userId !== currentUserId.toString()) {
-        fetchDocument(currentDocumentId)
+        fetchDocument(currentDocumentIdRef.current)
       }
     }
 
@@ -75,7 +73,6 @@ const DocumentContainer = ({
     }
   })
 
-  console.log({createMode, paramDocId: params.documentId, documentLoading, currentDocument, projectLoading, project })
   /**
    * If we're creating a document, render nothing
    */
@@ -105,10 +102,14 @@ const DocumentContainer = ({
   }
 
   // vital things haven't started loading yet, return null
-  if (documentLoading == null || projectLoading == null) return null
+  if (documentLoading == null || projectLoading == null) {
+    return null
+  }
 
   // things are still loading, return null
-  if (!project || documentLoading) return null
+  if (!project || (documentLoading && !currentDocument)) {
+    return null
+  }
 
   // The current document doesn't match the url params, usually because
   // the user has switched docs and the new doc hasn't loaded from currentResource helper.
@@ -142,7 +143,7 @@ const DocumentContainer = ({
     const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
     uiToggleDocumentMode(mode)
   }
-  console.log('here')
+
   return (
     <>
       <Helmet>

@@ -58,7 +58,7 @@ const Project = ({ isFullScreen }) => {
   if (projectId && isNaN(projectId)) {
     return <NoProject />
   }
-
+  console.log('rendering Project.js')
   return (
     <>
       <main className="project">
