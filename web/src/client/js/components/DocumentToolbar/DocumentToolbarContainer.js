@@ -29,7 +29,7 @@ const DocumentToolbarContainer = ({
     location.pathname
   ])
 
-  if (!document) return null
+  if (!documentId || !document) return null
 
   if (isCreating && documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
