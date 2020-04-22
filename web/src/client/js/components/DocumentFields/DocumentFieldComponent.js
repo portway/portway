@@ -43,7 +43,6 @@ const DocumentFieldComponent = ({
   const nameRef = useRef()
   const toolsRef = useRef()
   const fieldRef = useRef()
-  console.log(remoteChangesInCurrentlyFocusedField)
 
   const [currentValue, setCurrentValue] = useState(field.value)
   const [showConflictPopper, setShowConflictPopper] = useState(false)

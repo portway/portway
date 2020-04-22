@@ -18,11 +18,10 @@ window.CodeMirror = CodeMirror
 
 const FieldTextComponent = ({
   autoFocusElement, onBlur, onChange,
-  onFocus, readOnly, isCurrentlyFocusedField, id, type, value }) => {
+  onFocus, readOnly, isCurrentlyFocusedField, id, type, value, documentId }) => {
   const textRef = useRef()
   const editorRef = useRef()
   const [editorMounted, setEditorMounted] = useState(false)
-
   const changeCallback = useCallback((e) => {
     if (e.origin !== 'setValue' && isCurrentlyFocusedField) {
       onChange(id, editorRef.current.getValue())
@@ -86,7 +85,7 @@ const FieldTextComponent = ({
     editorDomEl.addEventListener('click', clickURLHandler)
     // CodeMirror specific events
     editorRef.current.on('blur', (cm, e) => {
-      onBlur(id, type, editorRef.current)
+      onBlur(id, type, documentId, editorRef.current)
     })
     editorRef.current.on('dragstart', (cm, e) => {
       e.preventDefault()
@@ -101,7 +100,7 @@ const FieldTextComponent = ({
       e.preventDefault()
     })
     editorRef.current.on('focus', (cm, e) => {
-      onFocus(id, type, editorRef.current)
+      onFocus(id, type, documentId, editorRef.current)
     })
 
     setEditorMounted(true)
@@ -154,7 +153,8 @@ FieldTextComponent.propTypes = {
   isCurrentlyFocusedField: PropTypes.bool,
   id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.TEXT]),
-  value: PropTypes.string
+  value: PropTypes.string,
+  documentId: PropTypes.number
 }
 
 export default FieldTextComponent

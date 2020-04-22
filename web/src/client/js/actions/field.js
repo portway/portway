@@ -83,7 +83,7 @@ export const removeField = (projectId, documentId, fieldId) => {
   }
 }
 
-export const blurField = (fieldId, fieldType, fieldData, documentId) => {
+export const blurField = (fieldId, fieldType, documentId, fieldData) => {
   return async (dispatch) => {
     dispatch(Fields.blurField(fieldId, fieldType, fieldData))
     // emit user sync message
