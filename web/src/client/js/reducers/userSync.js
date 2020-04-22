@@ -62,8 +62,7 @@ export const userSync = (state = initialState, action) => {
       }
       return { ...state }
     }
-    case ActionTypes.EMIT_FIELD_FOCUS: {
-      console.log('removing remote changes')
+    case ActionTypes.FOCUS_FIELD: {
       return { ...state, remoteChangesInCurrentlyFocusedField: [] }
     }
     case ActionTypes.EMIT_JOIN_DOCUMENT_ROOM:
