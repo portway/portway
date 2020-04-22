@@ -219,7 +219,8 @@ const DocumentFieldComponent = ({
             anchorRef={toolsRef}
             open={showConflictPopper}
             placement="top"
-            width="400">
+            width="400"
+            withArrow>
             <div className="document-field__focus-buttons">
               <div>
                 {remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'}{' '}
