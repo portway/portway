@@ -6,16 +6,11 @@ import { connect } from 'react-redux'
 import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { debounce, getNewNameInSequence } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
-import useDocumentSocket from 'Hooks/useDocumentSocket'
-
 import dataMapper from 'Libs/dataMapper'
+
 import { uiConfirm } from 'Actions/ui'
 import { blurField, createField, focusField, updateField } from 'Actions/field'
 import { fetchDocument } from 'Actions/document'
-import {
-  emitFieldFocus,
-  emitFieldBlur
-} from '../../sockets/SocketProvider'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
@@ -28,15 +23,14 @@ const DocumentFieldsContainer = ({
   focusField,
   isPublishing,
   updateField,
-  fetchDocument
+  fetchDocument,
+  activeDocumentUsers
 }) => {
   const { projectId, documentId } = useParams()
   const fieldKeys = useRef([])
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
-
-  const { state: socketState, dispatch: socketDispatch } = useDocumentSocket()
-  const activeUsers = socketState.activeDocumentUsers[documentId]
+  const activeUsers = activeDocumentUsers[documentId]
   const projectAssignment = userProjectAssignments[Number(projectId)]
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
@@ -108,23 +102,18 @@ const DocumentFieldsContainer = ({
     // context. We may want to look into hooking sync into redux? -Dirk 4/20
     if (!documentReadOnlyMode) {
       focusField(fieldId, fieldType, fieldData)
-      // send socket info
-      socketDispatch(emitFieldFocus(socketDispatch, fieldId, documentId))
     }
   }
 
   function fieldBlurHandler(fieldId, fieldType) {
     if (!documentReadOnlyMode) {
       blurField(fieldId, fieldType)
-      // send socket info
-      socketDispatch(emitFieldBlur(socketDispatch, fieldId, documentId))
     }
   }
 
   function fieldChangeHandler(fieldId, body) {
     if (!documentReadOnlyMode) {
-      // passing socketDispatch to the action here, need this one dispatched async so that there's no race condition when fetching the data
-      updateField(projectId, documentId, fieldId, body, socketDispatch)
+      updateField(projectId, documentId, fieldId, body)
     }
   }
 
@@ -169,7 +158,8 @@ DocumentFieldsContainer.propTypes = {
   focusField: PropTypes.func.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   updateField: PropTypes.func.isRequired,
-  fetchDocument: PropTypes.func.isRequired
+  fetchDocument: PropTypes.func.isRequired,
+  activeDocumentUsers: PropTypes.object
 }
 
 const mapStateToProps = (state) => {
@@ -178,6 +168,7 @@ const mapStateToProps = (state) => {
     disabled: state.ui.fields.disabled,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
     isPublishing: state.ui.documents.isPublishing,
+    activeDocumentUsers: state.userSync.activeDocumentUsers
   }
 }
 

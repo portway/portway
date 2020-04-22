@@ -46,6 +46,8 @@ const DocumentContainer = ({
 
   let currentDocument = document
 
+  // need to reset on every render and track using a ref so that the handleUserFieldChange function has access
+  // to the current id value
   currentDocumentIdRef.current = currentDocument && currentDocument.id
 
   // on mount, set up sync field change and focus change listeners
@@ -65,13 +67,6 @@ const DocumentContainer = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  useEffect(() => {
-    console.log("mounting DocumentContainer")
-    return () => {
-      console.log("unmounting DocumentContainer")
-    }
-  })
 
   /**
    * If we're creating a document, render nothing

@@ -12,7 +12,7 @@ export const emitJoinDocumentRoom = (documentId) => {
   }
 }
 
-export const emitLeaveDocumentRoom = (dispatch, documentId) => {
+export const emitLeaveDocumentRoom = (documentId) => {
   return async (dispatch) => {
     if (!documentSocket.connected) {
       return dispatch(UserSync.socketError())
@@ -23,7 +23,7 @@ export const emitLeaveDocumentRoom = (dispatch, documentId) => {
   }
 }
 
-export const emitFieldFocus = (dispatch, fieldId, documentId) => {
+export const emitFieldFocus = (fieldId, documentId) => {
   return async (dispatch) => {
     if (!documentSocket.connected) {
       return dispatch(UserSync.socketError())
@@ -36,7 +36,7 @@ export const emitFieldFocus = (dispatch, fieldId, documentId) => {
   }
 }
 
-export const emitFieldBlur = (dispatch, fieldId, documentId) => {
+export const emitFieldBlur = (fieldId, documentId) => {
   return async (dispatch) => {
     if (!documentSocket.connected) {
       return dispatch(UserSync.socketError())
@@ -48,7 +48,7 @@ export const emitFieldBlur = (dispatch, fieldId, documentId) => {
   }
 }
 
-export const emitFieldChange = (dispatch, fieldId, documentId) => {
+export const emitFieldChange = (fieldId, documentId) => {
   return async (dispatch) => {
     if (!documentSocket.connected) {
       return dispatch(UserSync.socketError())

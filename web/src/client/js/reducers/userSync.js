@@ -38,7 +38,6 @@ export const userSync = (state = initialState, action) => {
       return { ...state, myFocusedFieldId: fieldId, remoteChangesInCurrentlyFocusedField: [] }
     }
     case ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED: {
-      console.log('remote focus change')
       const { userId, fieldId } = action
       // only update the focus state if user is connected to a document room
       if (state.currentDocumentRoom) {
