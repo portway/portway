@@ -39,7 +39,7 @@ const DocumentFieldComponent = ({
   myFocusedFieldId,
   remoteUserFieldFocus
 }) => {
-  const remoteChangesRef = useRef()
+  const remoteChangesRef = useRef([])
   const nameRef = useRef()
   const toolsRef = useRef()
   const fieldRef = useRef()
@@ -49,14 +49,21 @@ const DocumentFieldComponent = ({
 
   const singleUserEditField = SYNC_SINGLE_USER_EDIT_FIELDS.includes(field.type)
   const isCurrentlyFocusedField = Number(myFocusedFieldId) === field.id
-
   // Track if a remote user is editing this field
   let isBeingRemotelyEdited
 
-  remoteChangesRef.current =
-    myFocusedFieldId === field.id
-      ? remoteChangesInCurrentlyFocusedField
-      : remoteChangesRef.current || []
+  useEffect(() => {
+    // we only care if there are some changes present
+    if (!remoteChangesInCurrentlyFocusedField.length) return
+    // we're currently focused on this field, collect all the changes that come down the pipeline
+    if (isCurrentlyFocusedField) {
+      remoteChangesRef.current = remoteChangesInCurrentlyFocusedField
+    }
+    // if we're not focused on this field, but we're already showing the conflict popper, accept the changes to updated the popper
+    if (!isCurrentlyFocusedField && showConflictPopper) {
+      remoteChangesRef.current = remoteChangesInCurrentlyFocusedField
+    }
+  }, [remoteChangesInCurrentlyFocusedField, isCurrentlyFocusedField, showConflictPopper])
 
   // Can this be a useEffect? Not sure `remoteUserFieldFocus` can be a dependency?
   Object.keys(remoteUserFieldFocus).find((userId) => {
