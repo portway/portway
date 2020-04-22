@@ -160,7 +160,7 @@ const DocumentOutlineContainer = ({
     const fieldIdToUpdate = draggingElement.current.dataset.id
     const to = Number(draggingElement.current.dataset.order)
     // Trigger action with documentId, fieldId
-    updateFieldOrder(documentId, fieldIdToUpdate, to, true, socketDispatch)
+    updateFieldOrder(documentId, fieldIdToUpdate, to, true)
     // Clean up
     document.querySelector('#clone-element').remove()
     draggingElement.current = null
@@ -169,7 +169,7 @@ const DocumentOutlineContainer = ({
 
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
     if (value === '') return
-    updateField(projectId, documentId, fieldId, { name: value }, socketDispatch)
+    updateField(projectId, documentId, fieldId, { name: value })
   })
 
   function toggleDocumentMode(e) {
