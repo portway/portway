@@ -35,7 +35,8 @@ const FieldImageComponent = ({
   settingsMode,
   updating,
   isCurrentlyFocusedField,
-  isBeingRemotelyEdited
+  isBeingRemotelyEdited,
+  documentId
 }) => {
   const isMounted = useIsMounted()
   const [warning, setWarning] = useState(null)
@@ -103,13 +104,13 @@ const FieldImageComponent = ({
   function internalSettingsFocusHandler(fieldId, fieldType) {
     if (!isReadOnly) {
       settingsHandler(fieldId)
-      onFocus(fieldId, fieldType)
+      onFocus(fieldId, fieldType, documentId)
     }
   }
 
   function internalSettingsBlurHandler(fieldId, fieldType) {
     settingsHandler(fieldId)
-    onBlur(fieldId, fieldType)
+    onBlur(fieldId, fieldType, documentId)
   }
 
   function uploadImage(file) {
@@ -175,8 +176,8 @@ const FieldImageComponent = ({
             isUpdating={updating}
             label="Drag and drop an image"
             fileChangeHandler={uploadImage}
-            clickHandler={() => { onFocus(field.id, field.type) }}
-            blurHandler={() => { onBlur(field.id, field.type )}}
+            clickHandler={() => { onFocus(field.id, field.type, documentId) }}
+            blurHandler={() => { onBlur(field.id, field.type, documentId )}}
             fileUploadedHandler={() => {
               // Since we render this uploader if there is no field.value,
               // once the field gets a value it will remove it
@@ -196,14 +197,14 @@ const FieldImageComponent = ({
                 autoFocus={autoFocusElement}
                 className="input--without-styling"
                 defaultValue={field.name}
-                onFocus={(e) => { 
+                onFocus={(e) => {
                   if (!isReadOnly) {
-                    onFocus(field.id, field.type, field)
+                    onFocus(field.id, field.type, documentId, field)
                     e.target.select()
                   }
                 }}
                 onBlur={(e) => {
-                  onBlur(field.id, field.type, field)
+                  onBlur(field.id, field.type, documentId, field)
                 }}
                 onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
                 placeholder="Name your image"
@@ -239,7 +240,8 @@ FieldImageComponent.propTypes = {
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
   isCurrentlyFocusedField: PropTypes.bool,
-  isBeingRemotelyEdited: PropTypes.bool
+  isBeingRemotelyEdited: PropTypes.bool,
+  documentId: PropTypes.number
 }
 
 FieldImageComponent.defaultProps = {

@@ -102,9 +102,7 @@ const FileUploaderComponent = ({
             accept={accept}
             multiple={multiple}
             onClick={() => { clickHandler && clickHandler() }}
-            onBlur={console.log}
             onChange={(e) => {
-              console.log('change')
               blurHandler && blurHandler()
               setUploading(true)
               fileChangeHandler(multiple ? e.target.files : e.target.files[0])

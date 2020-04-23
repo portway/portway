@@ -30,6 +30,7 @@ const DocumentOutlineItem = ({
 }) => {
   const [dragEnabled, setDragEnabled] = useState(true)
   const listItemRef = useRef()
+  const nameRef = useRef()
 
   const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
   const fieldIcons = {
@@ -39,6 +40,11 @@ const DocumentOutlineItem = ({
     [FIELD_TYPES.IMAGE]: <ImageIcon width="24" height="24" />,
     [FIELD_TYPES.DATE]: <DateIcon width="24" height="24" />,
     [FIELD_TYPES.FILE]: <FileIcon width="24" height="24" extension={fileExtension} />,
+  }
+
+  if (nameRef.current && nameRef.current.value !== field.name) {
+    // we've had a name change come through, update the un-controlled name value
+    nameRef.current.value = field.name
   }
 
   function focusDocumentFieldHandler(e) {
@@ -92,7 +98,8 @@ const DocumentOutlineItem = ({
           onMouseDown={disableDragHandler}
           onMouseUp={enableDragHandler}
           onChange={(e) => { onRename(field.id, e.target.value) }}
-          type="text" />
+          type="text"
+          ref={nameRef}/>
       </div>
       <div className="document-outline__status">
         {isUpdating &&

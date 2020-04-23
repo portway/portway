@@ -43,7 +43,14 @@ const FormatMenuComponent = ({ formatSelection }) => {
       >
         <FormatIcon width="24" height="24" />
       </button>
-      <Popper id="format-menu" anchorRef={anchorRef} open={expanded} placement="bottom" width="200">
+      <Popper
+        anchorRef={anchorRef}
+        autoCollapse={collapseCallback}
+        id="format-menu"
+        open={expanded}
+        placement="bottom"
+        width="200"
+      >
         <Menu anchorRef={anchorRef} isActive={expanded}>
           <MenuItem>
             <button className="btn btn--blank" onClick={() => formatSelection('h1') } ref={React.createRef()}>

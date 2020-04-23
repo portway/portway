@@ -34,6 +34,7 @@ const CustomTimeInput = forwardRef(({ value, onClick }, ref) => (
 ))
 
 const FieldDateComponent = ({
+  autoFocusElement,
   id,
   type,
   value,
@@ -42,7 +43,8 @@ const FieldDateComponent = ({
   onFocus,
   readOnly,
   isBeingRemotelyEdited,
-  isCurrentlyFocusedField
+  isCurrentlyFocusedField,
+  documentId
 }) => {
   const isReadOnly = isBeingRemotelyEdited || readOnly
   const fieldDate = value ? new Date(value) : new Date()
@@ -114,11 +116,11 @@ const FieldDateComponent = ({
           onChange={internalChangeHandler}
           onCalendarOpen={(e) => {
             if (!isReadOnly) {
-              onFocus(id, type)
+              onFocus(id, type, documentId)
             }
           }}
           onCalendarClose={(e) => {
-            onBlur(id, type)
+            onBlur(id, type, documentId)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -163,11 +165,11 @@ const FieldDateComponent = ({
           }}
           onCalendarOpen={(e) => {
             if (!isReadOnly) {
-              onFocus(id, type)
+              onFocus(id, type, documentId)
             }
           }}
           onCalendarClose={(e) => {
-            onBlur(id, type)
+            onBlur(id, type, documentId)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -189,6 +191,8 @@ const FieldDateComponent = ({
         />
         <div className="document-field__date-time">
           <input
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={autoFocusElement}
             ref={timeRef}
             type="text"
             defaultValue={moment(fieldDate).format('h:mm a')}
@@ -196,11 +200,11 @@ const FieldDateComponent = ({
             onChange={setTimeValue}
             onFocus={(e) => {
               if (!isReadOnly) {
-                onFocus(id, type)
+                onFocus(id, type, documentId)
               }
             }}
             onBlur={(e) => {
-              onBlur(id, type)
+              onBlur(id, type, documentId)
             }}
             readOnly={isReadOnly}
           />
@@ -216,15 +220,17 @@ const FieldDateComponent = ({
 }
 
 FieldDateComponent.propTypes = {
+  autoFocusElement: PropTypes.bool,
+  id: PropTypes.number,
+  isBeingRemotelyEdited: PropTypes.bool,
+  isCurrentlyFocusedField: PropTypes.bool,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   readOnly: PropTypes.bool.isRequired,
-  id: PropTypes.number,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
   value: PropTypes.string,
-  isBeingRemotelyEdited: PropTypes.bool,
-  isCurrentlyFocusedField: PropTypes.bool
+  documentId: PropTypes.number
 }
 
 export default FieldDateComponent
