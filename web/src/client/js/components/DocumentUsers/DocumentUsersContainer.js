@@ -20,8 +20,7 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById,
     return () => {
       emitLeaveDocumentRoom(documentId)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [documentId])
+  }, [documentId, emitJoinDocumentRoom, emitLeaveDocumentRoom])
 
   const activeUsers = activeDocumentUsers[documentId] || []
 
