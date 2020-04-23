@@ -43,7 +43,8 @@ const FieldDateComponent = ({
   onFocus,
   readOnly,
   isBeingRemotelyEdited,
-  isCurrentlyFocusedField
+  isCurrentlyFocusedField,
+  documentId
 }) => {
   const isReadOnly = isBeingRemotelyEdited || readOnly
   const fieldDate = value ? new Date(value) : new Date()
@@ -115,11 +116,11 @@ const FieldDateComponent = ({
           onChange={internalChangeHandler}
           onCalendarOpen={(e) => {
             if (!isReadOnly) {
-              onFocus(id, type)
+              onFocus(id, type, documentId)
             }
           }}
           onCalendarClose={(e) => {
-            onBlur(id, type)
+            onBlur(id, type, documentId)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -164,11 +165,11 @@ const FieldDateComponent = ({
           }}
           onCalendarOpen={(e) => {
             if (!isReadOnly) {
-              onFocus(id, type)
+              onFocus(id, type, documentId)
             }
           }}
           onCalendarClose={(e) => {
-            onBlur(id, type)
+            onBlur(id, type, documentId)
           }}
           popperPlacement="top-start"
           popperModifiers={{
@@ -199,11 +200,11 @@ const FieldDateComponent = ({
             onChange={setTimeValue}
             onFocus={(e) => {
               if (!isReadOnly) {
-                onFocus(id, type)
+                onFocus(id, type, documentId)
               }
             }}
             onBlur={(e) => {
-              onBlur(id, type)
+              onBlur(id, type, documentId)
             }}
             readOnly={isReadOnly}
           />
@@ -229,6 +230,7 @@ FieldDateComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   type: PropTypes.oneOf([FIELD_TYPES.DATE]),
   value: PropTypes.string,
+  documentId: PropTypes.number
 }
 
 export default FieldDateComponent

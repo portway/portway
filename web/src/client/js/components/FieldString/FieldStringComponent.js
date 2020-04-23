@@ -2,20 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldStringComponent = ({ autoFocusElement, id, type, value, onBlur, onChange, onFocus, readOnly }) => {
+const FieldStringComponent = ({ autoFocusElement, id, type, value, documentId, onBlur, onChange, onFocus, readOnly }) => {
   return (
     <input
       // eslint-disable-next-line jsx-a11y/no-autofocus
       autoFocus={autoFocusElement}
       className="document-field__string"
       value={value || ''}
-      onBlur={(e) => { onBlur(id, type) }}
+      onBlur={(e) => { onBlur(id, type, documentId) }}
       onChange={(e) => {
         onChange(id, e.target.value)
       }}
       onFocus={(e) => {
         if (!readOnly) {
-          onFocus(id, type)
+          onFocus(id, type, documentId)
           e.target.select()
         }
       }}
@@ -33,7 +33,8 @@ FieldStringComponent.propTypes = {
   onFocus: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   type: PropTypes.oneOf([FIELD_TYPES.STRING]),
-  value: PropTypes.string
+  value: PropTypes.string,
+  documentId: PropTypes.number
 }
 
 export default FieldStringComponent

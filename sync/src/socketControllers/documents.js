@@ -12,7 +12,7 @@ export default (io) => {
     const updateAndBroadcastRoomUsers = async (documentId, orgId) => {
       const currentRoomUsers = await getReconciledRoomUsers(documentId, orgId)
       const uniqueRoomUserIds = getUniqueRoomUserIds(currentRoomUsers)
-      documentsIO.in(documentId).emit('userChange', uniqueRoomUserIds)
+      documentsIO.in(documentId).emit('documentRoomUsersUpdated', uniqueRoomUserIds)
     }
 
     const updateAndBroadcastFieldFocus = async (documentId, userSocketNs, userId, fieldId) => {

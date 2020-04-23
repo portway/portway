@@ -7,7 +7,6 @@ import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
 import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import useDocumentSocket from 'Hooks/useDocumentSocket'
 
 import { uiConfirm, uiToggleDocumentMode } from 'Actions/ui'
 import { removeField, updateField, updateFieldOrder } from 'Actions/field'
@@ -28,8 +27,6 @@ const DocumentOutlineContainer = ({
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
-
-  const { dispatch: socketDispatch } = useDocumentSocket()
 
   // Convert fields object to a sorted array for rendering
   useEffect(() => {
@@ -66,7 +63,7 @@ const DocumentOutlineContainer = ({
     const message = <span>Are you sure you want to delete this {type}?</span>
     const options = {
       confirmedLabel: 'Yes, delete it.',
-      confirmedAction: () => { removeField(projectId, documentId, fieldId, socketDispatch) },
+      confirmedAction: () => { removeField(projectId, documentId, fieldId) },
       theme: 'danger',
     }
     uiConfirm({ message, options })
@@ -163,7 +160,7 @@ const DocumentOutlineContainer = ({
     const fieldIdToUpdate = draggingElement.current.dataset.id
     const to = Number(draggingElement.current.dataset.order)
     // Trigger action with documentId, fieldId
-    updateFieldOrder(documentId, fieldIdToUpdate, to, true, socketDispatch)
+    updateFieldOrder(documentId, fieldIdToUpdate, to, true)
     // Clean up
     document.querySelector('#clone-element').remove()
     draggingElement.current = null
@@ -172,7 +169,7 @@ const DocumentOutlineContainer = ({
 
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
     if (value === '') return
-    updateField(projectId, documentId, fieldId, { name: value }, socketDispatch)
+    updateField(projectId, documentId, fieldId, { name: value })
   })
 
   function toggleDocumentMode(e) {

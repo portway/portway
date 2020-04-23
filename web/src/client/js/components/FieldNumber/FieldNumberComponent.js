@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onChange, onFocus, readOnly }) => {
+const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onChange, onFocus, readOnly, documentId }) => {
   const handleChange = (e) => {
     // API will only handle 15 significant digits for number fields
     if (e.target.value.length > 15) return
@@ -21,13 +21,13 @@ const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onCha
       autoFocus={autoFocusElement}
       className="document-field__number"
       value={value || ''}
-      onBlur={(e) => { onBlur(id, type) }}
+      onBlur={(e) => { onBlur(id, type, documentId) }}
       onChange={(e) => {
         handleChange(e)
       }}
       onFocus={(e) => {
         if (!readOnly) {
-          onFocus(id, type)
+          onFocus(id, type, documentId)
           e.target.select()
         }
       }}
@@ -47,6 +47,7 @@ FieldNumberComponent.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   type: PropTypes.oneOf([FIELD_TYPES.NUMBER]),
   value: PropTypes.number,
+  documentId: PropTypes.number
 }
 
 export default FieldNumberComponent

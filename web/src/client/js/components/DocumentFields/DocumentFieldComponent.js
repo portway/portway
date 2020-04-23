@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
-import useDocumentSocket from 'Hooks/useDocumentSocket'
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
 
@@ -35,15 +34,12 @@ const DocumentFieldComponent = ({
   onDiscard,
   readOnly,
   settingsMode,
-  usersById
+  usersById,
+  remoteChangesInCurrentlyFocusedField,
+  myFocusedFieldId,
+  remoteUserFieldFocus
 }) => {
-  const { state: socketState } = useDocumentSocket()
-  const {
-    remoteChangesInCurrentlyFocusedField,
-    myFocusedFieldId,
-    remoteUserFieldFocus
-  } = socketState
-  const remoteChangesRef = useRef()
+  const remoteChangesRef = useRef([])
   const nameRef = useRef()
   const toolsRef = useRef()
   const fieldRef = useRef()
@@ -53,14 +49,21 @@ const DocumentFieldComponent = ({
 
   const singleUserEditField = SYNC_SINGLE_USER_EDIT_FIELDS.includes(field.type)
   const isCurrentlyFocusedField = Number(myFocusedFieldId) === field.id
-
   // Track if a remote user is editing this field
   let isBeingRemotelyEdited
 
-  remoteChangesRef.current =
-    myFocusedFieldId === field.id
-      ? remoteChangesInCurrentlyFocusedField
-      : remoteChangesRef.current || []
+  useEffect(() => {
+    // we only care if there are some changes present
+    if (!remoteChangesInCurrentlyFocusedField.length) return
+    // we're currently focused on this field, collect all the changes that come down the pipeline
+    if (isCurrentlyFocusedField) {
+      remoteChangesRef.current = remoteChangesInCurrentlyFocusedField
+    }
+    // if we're not focused on this field, but we're already showing the conflict popper, accept the changes to updated the popper
+    if (!isCurrentlyFocusedField && showConflictPopper) {
+      remoteChangesRef.current = remoteChangesInCurrentlyFocusedField
+    }
+  }, [remoteChangesInCurrentlyFocusedField, isCurrentlyFocusedField, showConflictPopper])
 
   // Can this be a useEffect? Not sure `remoteUserFieldFocus` can be a dependency?
   Object.keys(remoteUserFieldFocus).find((userId) => {
@@ -174,15 +177,15 @@ const DocumentFieldComponent = ({
   })
 
   const fieldToolClasses = cx({
-    'document-field__tools': true,
+    'document-field__tools': true
   })
 
   const fieldActionClasses = cx({
-    'document-field__actions': true,
+    'document-field__actions': true
   })
 
   const fieldContainerClasses = cx({
-    'document-field__container': true,
+    'document-field__container': true
   })
 
   const fieldLabels = {
@@ -202,7 +205,9 @@ const DocumentFieldComponent = ({
     if (length > fieldNameMaxLength) {
       return
     }
-    return length * fieldLengthFactor > fieldMinimumWidth ? length * fieldLengthFactor : fieldMinimumWidth
+    return length * fieldLengthFactor > fieldMinimumWidth
+      ? length * fieldLengthFactor
+      : fieldMinimumWidth
   }
 
   return (
@@ -253,14 +258,14 @@ const DocumentFieldComponent = ({
                   e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
                 }}
                 onBlur={(e) => {
-                  onBlur(field.id, field.type, field)
+                  onBlur(field.id, field.type, field.documentId, field)
                 }}
                 onChange={(e) => {
                   onRename(field.id, e.target.value)
                 }}
                 onFocus={(e) => {
                   if (!shouldLockNameChange) {
-                    onFocus(field.id, field.type, field)
+                    onFocus(field.id, field.type, field.documentId, field)
                     e.target.select()
                   }
                 }}
@@ -279,7 +284,8 @@ const DocumentFieldComponent = ({
               value: currentValue,
               onChange: handleFieldBodyUpdate,
               isCurrentlyFocusedField,
-              isBeingRemotelyEdited
+              isBeingRemotelyEdited,
+              documentId: field.documentId
             })}
           </div>
         </div>
@@ -303,12 +309,18 @@ DocumentFieldComponent.propTypes = {
   onDiscard: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsMode: PropTypes.bool.isRequired,
-  usersById: PropTypes.object
+  usersById: PropTypes.object,
+  remoteChangesInCurrentlyFocusedField: PropTypes.array,
+  myFocusedFieldId: PropTypes.number,
+  remoteUserFieldFocus: PropTypes.object
 }
 
 const mapStateToProps = (state) => {
   return {
-    usersById: state.users.usersById
+    usersById: state.users.usersById,
+    remoteChangesInCurrentlyFocusedField: state.userSync.remoteChangesInCurrentlyFocusedField,
+    myFocusedFieldId: state.documentFields.focused.id,
+    remoteUserFieldFocus: state.userSync.remoteUserFieldFocus
   }
 }
 

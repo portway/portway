@@ -3,9 +3,9 @@ import { Fields, Notifications, Validation } from './index'
 import { fetchDocument } from './document'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
-import { emitFieldChange } from '../sockets/SocketProvider'
+import { emitFieldChange, emitFieldFocus, emitFieldBlur } from './userSync'
 
-export const createField = (projectId, documentId, fieldType, body, socketDispatch) => {
+export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateCreate(documentId, fieldType))
     let data
@@ -28,15 +28,12 @@ export const createField = (projectId, documentId, fieldType, body, socketDispat
       dispatch(Fields.setLastCreatedFieldId(data.id))
       return data
     }
-
-    // if we want to sync users, pass in socketDispatch
-    if (socketDispatch) {
-      socketDispatch(emitFieldChange(socketDispatch, data.id, documentId))
-    }
+    // emit user sync message
+    dispatch(emitFieldChange(data.id, documentId))
   }
 }
 
-export const updateField = (projectId, documentId, fieldId, body, socketDispatch) => {
+export const updateField = (projectId, documentId, fieldId, body) => {
   return async (dispatch) => {
     dispatch(Fields.initiateUpdate(documentId, fieldId))
     let data
@@ -54,28 +51,25 @@ export const updateField = (projectId, documentId, fieldId, body, socketDispatch
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
       dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
-    // if we want to sync users, pass in socketDispatch
-    if (socketDispatch) {
-      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
-    }
+    // emit user sync message
+    dispatch(emitFieldChange(fieldId, documentId))
   }
 }
 
-export const updateFieldOrder = (documentId, fieldId, newOrder, fetch = false, socketDispatch) => {
+export const updateFieldOrder = (documentId, fieldId, newOrder, fetch = false) => {
   return async (dispatch) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
     await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
     if (fetch) {
       dispatch(fetchDocument(documentId))
     }
-    if (socketDispatch) {
-      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
-    }
+    // emit user sync message
+    dispatch(emitFieldChange(fieldId, documentId))
     return newOrder
   }
 }
 
-export const removeField = (projectId, documentId, fieldId, socketDispatch) => {
+export const removeField = (projectId, documentId, fieldId) => {
   return async (dispatch) => {
     dispatch(Fields.initiateRemove())
     const { data, status } = await remove(`v1/documents/${documentId}/fields/${fieldId}`)
@@ -84,22 +78,24 @@ export const removeField = (projectId, documentId, fieldId, socketDispatch) => {
       return
     }
     dispatch(Fields.removeOne(projectId, documentId, fieldId))
-    // if we want to sync users, pass in socketDispatch
-    if (socketDispatch) {
-      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
-    }
+    // emit user sync message
+    dispatch(emitFieldChange(fieldId, documentId))
   }
 }
 
-export const blurField = (fieldId, fieldType, fieldData) => {
+export const blurField = (fieldId, fieldType, documentId, fieldData) => {
   return async (dispatch) => {
     dispatch(Fields.blurField(fieldId, fieldType, fieldData))
+    // emit user sync message
+    dispatch(emitFieldBlur(fieldId, documentId))
   }
 }
 
-export const focusField = (fieldId, fieldType, fieldData) => {
+export const focusField = (fieldId, fieldType, documentId, fieldData) => {
   return async (dispatch) => {
     dispatch(Fields.focusField(fieldId, fieldType, fieldData))
+    // emit user sync message
+    dispatch(emitFieldFocus(fieldId, documentId))
   }
 }
 
