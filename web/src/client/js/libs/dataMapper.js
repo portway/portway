@@ -22,10 +22,12 @@ import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignee
 import { fetchOrganization, fetchOrganizationBilling, fetchOrganizationSeats } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
 
-function returnNull() {
+// We need to return false from any loading status checks in these functions
+// to signal to useDataService that it should update the returned state
+export function returnNull() {
   return {
     fetchAction: () => null,
-    getLoadingStatusFromState: () => null,
+    getLoadingStatusFromState: () => false,
     getDataFromState: () => null
   }
 }
@@ -33,7 +35,7 @@ function returnNull() {
 function returnEmptyObjectForState() {
   return {
     fetchAction: () => null,
-    getLoadingStatusFromState: () => null,
+    getLoadingStatusFromState: () => false,
     getDataFromState: () => {
       return {}
     }
