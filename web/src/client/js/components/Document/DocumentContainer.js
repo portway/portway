@@ -63,17 +63,17 @@ const DocumentContainer = ({
       }
     }
 
-    const handleUserChange = (userIds) => {
+    const handleDocumentRoomUsersUpdate = (userIds) => {
       updateDocumentRoomUsers(currentDocumentIdRef.current, userIds)
     }
 
     documentSocket.on('userFieldChange', handleUserFieldChange)
     documentSocket.on('userFocusChange', updateRemoteUserFieldFocus)
-    documentSocket.on('userChange', handleUserChange)
+    documentSocket.on('documentRoomUsersUpdated', handleDocumentRoomUsersUpdate)
     return () => {
       documentSocket.off('userFieldChange', handleUserFieldChange)
       documentSocket.off('userFocusChange', updateRemoteUserFieldFocus)
-      documentSocket.off('userChange', handleUserChange)
+      documentSocket.off('documentRoomUsersUpdated', handleDocumentRoomUsersUpdate)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
