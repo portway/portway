@@ -14,11 +14,11 @@ const DocumentUsersContainer = ({ fetchUsersWithIds, usersById, usersLoadedById,
 
   // User Sync for document room join/leave
   useEffect(() => {
-    if (document) {
+    if (documentId) {
       emitJoinDocumentRoom(documentId)
     }
     return () => {
-      emitLeaveDocumentRoom()
+      emitLeaveDocumentRoom(documentId)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId])
