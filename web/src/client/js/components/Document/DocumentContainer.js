@@ -12,9 +12,7 @@ import { fetchDocument } from 'Actions/document'
 import {
   receiveRemoteFieldChange,
   updateRemoteUserFieldFocus,
-  updateDocumentRoomUsers,
-  emitJoinDocumentRoom,
-  emitLeaveDocumentRoom
+  updateDocumentRoomUsers
 } from 'Actions/userSync'
 import documentSocket from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
@@ -198,9 +196,7 @@ const mapDispatchToProps = {
   uiToggleFullScreen,
   receiveRemoteFieldChange,
   updateRemoteUserFieldFocus,
-  updateDocumentRoomUsers,
-  emitJoinDocumentRoom,
-  emitLeaveDocumentRoom
+  updateDocumentRoomUsers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
