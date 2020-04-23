@@ -17,7 +17,7 @@ const Form = ({
   onSubmit,
   submitLabel,
   submitOnRight,
-  ...props,
+  ...props
 }) => {
   const formRef = useRef()
   const [formChanged, setFormChanged] = useState(false)

@@ -62,6 +62,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
+            autoFocusElement={createdFieldId === field.id}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
@@ -71,6 +72,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
+            autoFocusElement={createdFieldId === field.id}
             onBlur={fieldBlurHandler}
             onFocus={fieldFocusHandler}
             readOnly={readOnly}
@@ -96,6 +98,7 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.DATE:
         fieldTypeComponent = (
           <FieldDateComponent
+            autoFocusElement={createdFieldId === field.id}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}

@@ -23,7 +23,8 @@ const FieldFileComponent = ({
   settingsHandler,
   settingsMode,
   updating,
-  isBeingRemotelyEdited
+  isBeingRemotelyEdited,
+  documentId
 }) => {
   const [warning, setWarning] = useState(null)
   const isReadOnly = isBeingRemotelyEdited || readOnly
@@ -50,13 +51,13 @@ const FieldFileComponent = ({
   function internalSettingsFocusHandler(fieldId, fieldType) {
     if (!isReadOnly) {
       settingsHandler(fieldId)
-      onFocus(fieldId, fieldType)
+      onFocus(fieldId, fieldType, documentId)
     }
   }
 
   function internalSettingsBlurHandler(fieldId, fieldType) {
     settingsHandler(fieldId)
-    onBlur(fieldId, fieldType)
+    onBlur(fieldId, fieldType, documentId)
   }
 
   const fileClassNames = cx({
@@ -136,7 +137,8 @@ FieldFileComponent.propTypes = {
   settingsHandler: PropTypes.func.isRequired,
   settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
-  isBeingRemotelyEdited: PropTypes.bool
+  isBeingRemotelyEdited: PropTypes.bool,
+  documentId: PropTypes.number
 }
 
 FieldFileComponent.defaultProps = {

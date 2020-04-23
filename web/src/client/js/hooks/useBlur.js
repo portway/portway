@@ -7,6 +7,7 @@ function useBlur(ref, callback) {
     const currentRef = ref.current
 
     function blurHandler() {
+      if (document.body.classList.contains('using-mouse')) return
       timeOutId = setTimeout(() => {
         callback()
       })
