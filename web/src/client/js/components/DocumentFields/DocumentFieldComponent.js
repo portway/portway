@@ -7,7 +7,6 @@ import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
-import { Popper } from 'Components/Popper/Popper'
 
 import './_DocumentField.scss'
 import './_DocumentTools.scss'
@@ -219,28 +218,27 @@ const DocumentFieldComponent = ({
             direction="vertical"
             mode="field"
           />
-          <Popper
-            align="left"
-            anchorRef={toolsRef}
-            open={showConflictPopper}
-            placement="top"
-            width="400"
-            withArrow>
-            <div className="document-field__focus-buttons">
-              <div>
-                {remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'}{' '}
+
+          {showConflictPopper &&
+          <div className="document-field__changes">
+            <div className="document-field__changes-container">
+              <div className="document-field__changes-message">
+                <span className="document-field__changes-names">
+                  {remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'}{' '}
+                </span>
                 {remoteUserChangeNames.length > 1 ? 'have' : 'has'} made changes to this field
               </div>
-              <div className="document-field__focus-button-group">
-                <button className="btn btn--white btn--small" onClick={handleManualSave}>
+              <div className="document-field__changes-options">
+                <button className="btn btn--like-a-link" onClick={handleManualSave}>
                   Overwrite their changes
                 </button>
-                <button className="btn btn--small" onClick={handleDiscard}>
+                <button className="btn btn--like-a-link" onClick={handleDiscard}>
                   Discard your work
                 </button>
               </div>
             </div>
-          </Popper>
+          </div>
+          }
         </div>
 
         <div className={fieldContainerClasses}>
