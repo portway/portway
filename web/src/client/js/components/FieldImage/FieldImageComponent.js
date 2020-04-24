@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import useIsMounted from 'Hooks/useIsMounted'
+import usePrevious from 'Hooks/usePrevious'
 
 import { MAX_FILE_SIZE } from 'Shared/constants'
 import { RemoveIcon, EditIcon } from 'Components/Icons'
@@ -52,10 +53,11 @@ const FieldImageComponent = ({
   const [imageDetails, setImageDetails] = useState({}) // image metadata
   const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
   const nameRef = useRef()
+  const previousFieldName = usePrevious(field.name)
 
   // Name
   // There was a field name change and we're not currently focused, update the uncontrolled value
-  if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField) {
+  if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField && field.name !== previousFieldName) {
     nameRef.current.value = field.name
   }
 
