@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
+import usePrevious from 'Hooks/usePrevious'
 
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
 import { Popper } from 'Components/Popper/Popper'
@@ -41,6 +42,7 @@ const DocumentFieldComponent = ({
 }) => {
   const remoteChangesRef = useRef([])
   const nameRef = useRef()
+  const previousFieldName = usePrevious(field.name)
   const toolsRef = useRef()
   const fieldRef = useRef()
 
@@ -156,10 +158,10 @@ const DocumentFieldComponent = ({
 
   // field name has been updated, set the uncontrolled value
   useEffect(() => {
-    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value) {
+    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value && field.name !== previousFieldName) {
       nameRef.current.value = field.name
     }
-  }, [field.name, isCurrentlyFocusedField])
+  }, [field.name, isCurrentlyFocusedField, previousFieldName])
 
   const dataField = DATA_FIELD_TYPES.includes(field.type)
 
