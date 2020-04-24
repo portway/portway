@@ -75,7 +75,7 @@ FormatMenuContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    focusedField: state.documentFields.focused
+    focusedField: state.ui.fields.currentFieldForFormatting
   }
 }
 
