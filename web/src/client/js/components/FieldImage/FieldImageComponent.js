@@ -53,11 +53,11 @@ const FieldImageComponent = ({
   const [imageDetails, setImageDetails] = useState({}) // image metadata
   const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
   const nameRef = useRef()
-  const previousFieldName = usePrevious(field.name)
+  const previousField = usePrevious(field)
 
   // Name
   // There was a field name change and we're not currently focused, update the uncontrolled value
-  if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField && field.name !== previousFieldName) {
+  if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField && field !== previousField) {
     nameRef.current.value = field.name
   }
 
