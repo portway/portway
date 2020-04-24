@@ -71,7 +71,7 @@ ContentMenuContainer.propTypes = {
 const mapStateToProps = (state) => {
   return {
     fields: state.documentFields.documentFieldsById[state.documents.currentDocumentId],
-    focusedField: state.documentFields.focused
+    focusedField: state.ui.fields.currentFieldForFormatting
   }
 }
 
