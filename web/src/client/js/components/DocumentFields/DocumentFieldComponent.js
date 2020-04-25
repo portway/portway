@@ -42,7 +42,7 @@ const DocumentFieldComponent = ({
 }) => {
   const remoteChangesRef = useRef([])
   const nameRef = useRef()
-  const previousFieldName = usePrevious(field.name)
+  const previousField = usePrevious(field)
   const toolsRef = useRef()
   const fieldRef = useRef()
 
@@ -85,12 +85,12 @@ const DocumentFieldComponent = ({
   }, [remoteChangesRef.current.length, singleUserEditField])
 
   useEffect(() => {
-    // Accept remote changes to field if it's not focused and the conflict popper isn't open
-    if (!isCurrentlyFocusedField && !showConflictPopper) {
+    // Accept remote changes to field if it's not focused, the conflict popper isn't open, and the field value has changed
+    if (!isCurrentlyFocusedField && !showConflictPopper && previousField !== field && !isUpdating) {
       setCurrentValue(field.value)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.id, field.value])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field, isUpdating])
 
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
@@ -158,10 +158,10 @@ const DocumentFieldComponent = ({
 
   // field name has been updated, set the uncontrolled value
   useEffect(() => {
-    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value && field.name !== previousFieldName) {
+    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value && !isUpdating && previousField !== field) {
       nameRef.current.value = field.name
     }
-  }, [field.name, isCurrentlyFocusedField, previousFieldName])
+  }, [field, isCurrentlyFocusedField, previousField, isUpdating])
 
   const dataField = DATA_FIELD_TYPES.includes(field.type)
 
