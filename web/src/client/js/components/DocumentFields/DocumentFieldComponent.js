@@ -90,7 +90,7 @@ const DocumentFieldComponent = ({
       setCurrentValue(field.value)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field, isUpdating])
+  }, [field, isUpdating, previousField])
 
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
