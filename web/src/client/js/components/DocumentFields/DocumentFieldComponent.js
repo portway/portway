@@ -198,19 +198,6 @@ const DocumentFieldComponent = ({
     [FIELD_TYPES.FILE]: 'File'
   }
 
-  // Field name handling
-  const fieldLengthFactor = 6.5
-  const fieldNameMaxLength = 50
-  const fieldMinimumWidth = 150 // this is set as a var in _DocumentField.scss as well
-  function returnInitialNameLength(length) {
-    if (length > fieldNameMaxLength) {
-      return
-    }
-    return length * fieldLengthFactor > fieldMinimumWidth
-      ? length * fieldLengthFactor
-      : fieldMinimumWidth
-  }
-
   return (
     <li className={fieldClasses} data-id={field.id} data-order={index} ref={fieldRef}>
       <div className="document-field__component">
@@ -249,13 +236,12 @@ const DocumentFieldComponent = ({
               <span className="document-field__name-label">{fieldLabels[field.type]}</span>
               <input
                 defaultValue={field.name}
-                maxLength={fieldNameMaxLength}
+                maxLength={50}
                 onKeyDown={(e) => {
                   if (e.key.toLowerCase() === 'escape') {
                     e.target.blur()
                     return
                   }
-                  e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
                 }}
                 onBlur={(e) => {
                   onBlur(field.id, field.type, field.documentId, field)
@@ -271,7 +257,6 @@ const DocumentFieldComponent = ({
                 }}
                 readOnly={shouldLockNameChange}
                 ref={nameRef}
-                style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
                 type="text"
               />
             </div>
