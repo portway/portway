@@ -42,7 +42,7 @@ const DocumentOutlineItem = ({
     [FIELD_TYPES.FILE]: <FileIcon width="24" height="24" extension={fileExtension} />,
   }
 
-  if (nameRef.current && nameRef.current.value !== field.name) {
+  if (nameRef.current && nameRef.current.value !== field.name && !isUpdating) {
     // we've had a name change come through, update the un-controlled name value
     nameRef.current.value = field.name
   }
