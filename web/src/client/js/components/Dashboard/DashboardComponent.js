@@ -31,17 +31,15 @@ const DashboardComponent = ({
 }) => {
   const [showMyProjects, toggleMyProjects] = useState(false)
   const history = useHistory()
-  const objectKeys = Object.keys(projects)
-  const hasProjects = objectKeys.length > 0
-  const { myProjects, notMyProjects } = objectKeys.reduce((cur, key) => {
-    if (projects[key].createdBy === currentUserId) {
-      cur.myProjects[key] = projects[key]
+  const hasProjects = projects.length > 0
+  const { myProjects, notMyProjects } = projects.reduce((cur, project) => {
+    if (project.createdBy === currentUserId) {
+      cur.myProjects = [...cur.myProjects, project]
     } else {
-      cur.notMyProjects[key] = projects[key]
+      cur.notMyProjects = [...cur.notMyProjects, project]
     }
     return cur
-  }, { myProjects: {}, notMyProjects: {} })
-  const notMyProjectsLength = Object.keys(notMyProjects).length
+  }, { myProjects: [], notMyProjects: [] })
 
   return (
     <div className="dashboard">
@@ -81,13 +79,13 @@ const DashboardComponent = ({
               sortBy={sortBy}
               sortMethod={sortMethod}
             />
-            {showMyProjects && notMyProjectsLength > 0 &&
+            {showMyProjects && notMyProjects.length > 0 &&
             <div className="dashboard__footer">
               <button
                 className="btn btn--like-a-link"
                 onClick={() => { toggleMyProjects(false) }}
               >
-                Hiding {notMyProjectsLength} {notMyProjectsLength > 1 ? 'projects' : 'project'}...
+                Hiding {notMyProjects.length} {notMyProjects.length > 1 ? 'projects' : 'project'}...
               </button>
             </div>
             }
@@ -106,7 +104,7 @@ const DashboardComponent = ({
 DashboardComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
   loading: PropTypes.bool,
-  projects: PropTypes.object.isRequired,
+  projects: PropTypes.array.isRequired,
   showTeams: PropTypes.bool.isRequired,
   specialProject: PropTypes.object,
   sortProjectsHandler: PropTypes.func.isRequired,

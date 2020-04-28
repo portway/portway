@@ -24,6 +24,7 @@ const initialState = {
     isSearching: false,
   },
   fields: {
+    currentFieldForFormatting: null,
     disabled: false,
     fieldsUpdating: {},
     type: -1
@@ -134,6 +135,22 @@ export const ui = (state = initialState, action) => {
         fields: {
           ...state.fields,
           disabled: true
+        }
+      }
+    }
+
+    // Focused field for formatting
+    case ActionTypes.FOCUS_FIELD: {
+      const { fieldId, fieldData, fieldType } = action
+      const currentFieldForFormatting = { ...state.fields.currentFieldForFormatting }
+      currentFieldForFormatting.id = fieldId
+      currentFieldForFormatting.type = fieldType
+      currentFieldForFormatting.data = fieldData
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          currentFieldForFormatting
         }
       }
     }

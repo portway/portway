@@ -65,7 +65,7 @@ const FieldDateComponent = ({
   }, [value])
 
   function updateTimeForDate(hour, minutes) {
-    const newTime = new Date(value)
+    const newTime = fieldDate
     newTime.setHours(hour)
     newTime.setMinutes(minutes)
     internalChangeHandler(newTime)
