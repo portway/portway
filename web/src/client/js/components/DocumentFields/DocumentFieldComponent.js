@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 
 import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
+import usePrevious from 'Hooks/usePrevious'
 
 import DocumentUsersComponent from 'Components/DocumentUsers/DocumentUsersComponent'
-import { Popper } from 'Components/Popper/Popper'
 
 import './_DocumentField.scss'
 import './_DocumentTools.scss'
@@ -41,6 +41,7 @@ const DocumentFieldComponent = ({
 }) => {
   const remoteChangesRef = useRef([])
   const nameRef = useRef()
+  const previousField = usePrevious(field)
   const toolsRef = useRef()
   const fieldRef = useRef()
 
@@ -83,12 +84,12 @@ const DocumentFieldComponent = ({
   }, [remoteChangesRef.current.length, singleUserEditField])
 
   useEffect(() => {
-    // Accept remote changes to field if it's not focused and the conflict popper isn't open
-    if (!isCurrentlyFocusedField && !showConflictPopper) {
+    // Accept remote changes to field if it's not focused, the conflict popper isn't open, and the field value has changed
+    if (!isCurrentlyFocusedField && !showConflictPopper && previousField !== field && !isUpdating) {
       setCurrentValue(field.value)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [field.id, field.value])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [field, isUpdating, previousField])
 
   function handleFieldBodyUpdate(fieldId, body) {
     // Note it is a very bad, no good idea to do anything in this callback beyond pass the change
@@ -156,10 +157,10 @@ const DocumentFieldComponent = ({
 
   // field name has been updated, set the uncontrolled value
   useEffect(() => {
-    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value) {
+    if (!isCurrentlyFocusedField && nameRef.current && field.name !== nameRef.current.value && !isUpdating && previousField !== field) {
       nameRef.current.value = field.name
     }
-  }, [field.name, isCurrentlyFocusedField])
+  }, [field, isCurrentlyFocusedField, previousField, isUpdating])
 
   const dataField = DATA_FIELD_TYPES.includes(field.type)
 
@@ -197,19 +198,6 @@ const DocumentFieldComponent = ({
     [FIELD_TYPES.FILE]: 'File'
   }
 
-  // Field name handling
-  const fieldLengthFactor = 6.5
-  const fieldNameMaxLength = 50
-  const fieldMinimumWidth = 150 // this is set as a var in _DocumentField.scss as well
-  function returnInitialNameLength(length) {
-    if (length > fieldNameMaxLength) {
-      return
-    }
-    return length * fieldLengthFactor > fieldMinimumWidth
-      ? length * fieldLengthFactor
-      : fieldMinimumWidth
-  }
-
   return (
     <li className={fieldClasses} data-id={field.id} data-order={index} ref={fieldRef}>
       <div className="document-field__component">
@@ -219,28 +207,27 @@ const DocumentFieldComponent = ({
             direction="vertical"
             mode="field"
           />
-          <Popper
-            align="left"
-            anchorRef={toolsRef}
-            open={showConflictPopper}
-            placement="top"
-            width="400"
-            withArrow>
-            <div className="document-field__focus-buttons">
-              <div>
-                {remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'}{' '}
+
+          {showConflictPopper &&
+          <div className="document-field__changes">
+            <div className="document-field__changes-container">
+              <div className="document-field__changes-message">
+                <span className="document-field__changes-names">
+                  {remoteUserChangeNames ? [...remoteUserChangeNames].join(' & ') : 'Someone'}{' '}
+                </span>
                 {remoteUserChangeNames.length > 1 ? 'have' : 'has'} made changes to this field
               </div>
-              <div className="document-field__focus-button-group">
-                <button className="btn btn--white btn--small" onClick={handleManualSave}>
+              <div className="document-field__changes-options">
+                <button className="btn btn--like-a-link" onClick={handleManualSave}>
                   Overwrite their changes
                 </button>
-                <button className="btn btn--small" onClick={handleDiscard}>
+                <button className="btn btn--like-a-link" onClick={handleDiscard}>
                   Discard your work
                 </button>
               </div>
             </div>
-          </Popper>
+          </div>
+          }
         </div>
 
         <div className={fieldContainerClasses}>
@@ -249,13 +236,12 @@ const DocumentFieldComponent = ({
               <span className="document-field__name-label">{fieldLabels[field.type]}</span>
               <input
                 defaultValue={field.name}
-                maxLength={fieldNameMaxLength}
+                maxLength={50}
                 onKeyDown={(e) => {
                   if (e.key.toLowerCase() === 'escape') {
                     e.target.blur()
                     return
                   }
-                  e.target.style.width = `${returnInitialNameLength(e.target.value.length + 1)}px`
                 }}
                 onBlur={(e) => {
                   onBlur(field.id, field.type, field.documentId, field)
@@ -271,7 +257,6 @@ const DocumentFieldComponent = ({
                 }}
                 readOnly={shouldLockNameChange}
                 ref={nameRef}
-                style={{ width: returnInitialNameLength(field.name.length) + 'px' }}
                 type="text"
               />
             </div>

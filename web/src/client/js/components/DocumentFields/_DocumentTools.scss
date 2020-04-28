@@ -3,35 +3,58 @@
  * Tools is the left column of the editor that contains the dragger
  * -------------------------------------------------------------------------- */
 .document-field__tools {
+  align-items: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
   width: 2.4rem;
   z-index: 12;
 
-  .popper {
-    margin-left: -12px;
+  .document-users {
     position: sticky;
-    top: 6.4rem !important;
-  }
-
-  .popper--with-arrow {
-    &:before { margin-left: -28px; }
-    &:after { margin-left: -27px; }
+    top: 0;
   }
 
 }
 
-.document-field__focus-buttons {
-  padding: 2rem;
+/**
+ * Document Field Changes
+ * This is the little popup message that shows up when the document has remote
+ * changes from the sync server
+ */
+.document-field__changes {
+  position: sticky;
+  top: -1rem;
 }
-
-.document-field__focus-button-group {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 2rem;
-  button {
-    margin-left: var(--icon-margin);
+.document-field__changes-container {
+  background-color: var(--color-gray-80);
+  border: thin solid var(--color-gray-90);
+  border-radius: 6px 6px;
+  box-shadow: var(--box-shadow);
+  margin-left: 2rem;
+  padding: var(--icon-margin);
+  width: 40rem;
+}
+.document-field__changes-names {
+  font-weight: 500;
+}
+.document-field__changes-message {
+  color: rgba(255, 255, 255, 85%);
+  font-size: 1.1rem;
+}
+.document-field__changes-options {
+  .btn {
+    color: var(--color-cyan);
+    font-size: 1.1rem;
+    margin-right: var(--icon-margin);
+    &:first-child {
+      color: var(--color-cyan-darker);
+    }
+    @media(hover: hover) {
+      &:hover {
+        color: var(--color-cyan-dark);
+      }
+    }
   }
 }
 
