@@ -75,6 +75,7 @@
 .document-field__name {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   padding: .8rem .8rem;
 
   @include media('>medium') {
@@ -101,9 +102,11 @@
     font-size: 1.3rem; // 13px
     font-weight: 600;
     min-height: unset;
-    min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
     outline: none;
+    overflow: hidden;
     padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     .using-mouse & {
       &:focus {
         border: thin solid transparent;
