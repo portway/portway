@@ -43,8 +43,8 @@ function ProjectsListComponent({
     ]
   }
 
-  for (let i = 0; i < Object.values(projects).length; i++) {
-    const project = Object.values(projects)[i]
+  for (let i = 0; i < projects.length; i++) {
+    const project = projects[i]
     const privateProject = project.accessLevel == null
     const projectId = Number(project.id)
     tableRows[i + 1] = [
@@ -71,7 +71,7 @@ ProjectsListComponent.propTypes = {
   deleteHandler: PropTypes.func.isRequired,
   sortProjectsHandler: PropTypes.func.isRequired,
   myProjectsOnly: PropTypes.bool.isRequired,
-  projects: PropTypes.object.isRequired,
+  projects: PropTypes.array.isRequired,
   specialProject: PropTypes.object,
   showTeams: PropTypes.bool.isRequired,
   sortBy: PropTypes.string.isRequired,
