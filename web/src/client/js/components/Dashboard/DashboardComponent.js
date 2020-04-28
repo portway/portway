@@ -33,7 +33,7 @@ const DashboardComponent = ({
   const history = useHistory()
   const hasProjects = projects.length > 0
   const { myProjects, notMyProjects } = projects.reduce((cur, project) => {
-    if (projects.createdBy === currentUserId) {
+    if (project.createdBy === currentUserId) {
       cur.myProjects = [...cur.myProjects, project]
     } else {
       cur.notMyProjects = [...cur.notMyProjects, project]
