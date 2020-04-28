@@ -236,6 +236,7 @@ const DocumentFieldComponent = ({
               <span className="document-field__name-label">{fieldLabels[field.type]}</span>
               <input
                 defaultValue={field.name}
+                maxLength={50}
                 onKeyDown={(e) => {
                   if (e.key.toLowerCase() === 'escape') {
                     e.target.blur()
