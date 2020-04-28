@@ -57,11 +57,10 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         placement="bottom"
         width="130"
       >
-        <MenuHeader><h2>Content</h2></MenuHeader>
         <Menu anchorRef={anchorRef} isActive={expanded}>
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }} ref={React.createRef()}>
-              <TextIcon width="26" height="26" /> <span className="label">Body</span>
+              <TextIcon width="26" height="26" /> <span className="label">Text</span>
             </button>
           </MenuItem>
           <MenuItem>
@@ -69,7 +68,6 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
               <ImageIcon width="26" height="26" /> <span className="label">Image</span>
             </button>
           </MenuItem>
-          <MenuDivider><h2>Data</h2></MenuDivider>
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.STRING) }} ref={React.createRef()}>
               <StringIcon width="26" height="26" /> <span className="label">String</span>
