@@ -98,7 +98,7 @@ const DocumentContainer = ({
 
   //if we're done loading things but the data never arrives, assume 404
   if (documentLoading === false && !currentDocument) {
-    return <NoDocument />
+    return null
   }
 
   // If the project doesn't exist
