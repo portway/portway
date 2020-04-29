@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldStringComponent = ({ autoFocusElement, id, type, value, documentId, onBlur, onChange, onFocus, readOnly }) => {
+const FieldStringComponent = ({
+  autoFocusElement,
+  id,
+  type,
+  value,
+  documentId,
+  onBlur,
+  onChange,
+  onFocus,
+  readOnly
+}) => {
+  const focusRef = useRef()
+  useEffect(() => {
+    if (autoFocusElement && focusRef.current) {
+      focusRef.current.focus()
+    }
+  }, [autoFocusElement])
   return (
     <input
       // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -21,6 +37,7 @@ const FieldStringComponent = ({ autoFocusElement, id, type, value, documentId, o
       }}
       placeholder="A string value..."
       readOnly={readOnly}
+      ref={focusRef}
       type="text" />
   )
 }

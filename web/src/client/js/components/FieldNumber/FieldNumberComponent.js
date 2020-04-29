@@ -1,8 +1,25 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
 
-const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onChange, onFocus, readOnly, documentId }) => {
+const FieldNumberComponent = ({
+  autoFocusElement,
+  id,
+  type,
+  value,
+  onBlur,
+  onChange,
+  onFocus,
+  readOnly,
+  documentId
+}) => {
+  const focusRef = useRef()
+  useEffect(() => {
+    if (autoFocusElement && focusRef.current) {
+      focusRef.current.focus()
+    }
+  }, [autoFocusElement])
+
   const handleChange = (e) => {
     // API will only handle 15 significant digits for number fields
     if (e.target.value.length > 15) return
@@ -33,6 +50,7 @@ const FieldNumberComponent = ({ autoFocusElement, id, type, value, onBlur, onCha
       }}
       placeholder="A number value..."
       readOnly={readOnly}
+      ref={focusRef}
       type="number" />
   )
 }
