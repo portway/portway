@@ -12,6 +12,7 @@ import perms from '../libs/middleware/reqPermissionsMiddleware'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import userSchema from './payloadSchemas/user'
+import emptySchema from './payloadSchemas/empty'
 import { SORT_METHODS } from '../constants/queryOptions'
 import avatarCoordinator from '../coordinators/avatar'
 
@@ -108,7 +109,7 @@ const usersController = function(router) {
         fileSize: MAX_AVATAR_FILE_SIZE
       }
     }).single('file'),
-    validateBody({}),
+    validateBody(emptySchema),
     conditionalUpdatePerm,
     updateUserAvatar
   )
