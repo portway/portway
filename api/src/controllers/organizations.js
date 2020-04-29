@@ -10,6 +10,7 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 import { requiredFields } from './payloadSchemas/helpers'
 import orgSchema from './payloadSchemas/organization'
+import emptySchema from './payloadSchemas/empty'
 import avatarCoordinator from '../coordinators/avatar'
 import organizationCoordinator from '../coordinators/organization'
 
@@ -69,7 +70,7 @@ const organizationsController = function(router) {
         fileSize: MAX_AVATAR_FILE_SIZE
       }
     }).single('file'),
-    validateBody(Joi.compile({})),
+    validateBody(emptySchema),
     conditionalUpdatePerm,
     updateOrganizationAvatar
   )
