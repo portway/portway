@@ -35,6 +35,8 @@ export const projectUsers = (state = initialState, action) => {
     }
     case ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE: {
       // Assignment changes, but we don't need to do anything here because we already have the user
+      const usersByProjectId = { ...state.loading.usersByProjectId, [action.projectId]: false }
+      return { ...state, loading: { ...state.loading, usersByProjectId } }
     }
     case ActionTypes.CREATE_PROJECT_ASSIGNEE: {
       const usersByProjectId = { ...state.loading.usersByProjectId, [action.projectId]: true }
