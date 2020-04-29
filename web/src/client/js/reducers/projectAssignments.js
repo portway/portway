@@ -55,7 +55,7 @@ export const projectAssignments = (state = initialState, action) => {
         ...state,
         assignmentsByProjectId: {
           ...state.assignmentsByProjectId,
-          [action.data.userId]: updatedAssignment
+          [action.data.projectId]: updatedAssignment
         },
         loading: {
           ...state.loading,
