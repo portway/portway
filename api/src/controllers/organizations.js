@@ -69,7 +69,7 @@ const organizationsController = function(router) {
         fileSize: MAX_AVATAR_FILE_SIZE
       }
     }).single('file'),
-    validateBody({}),
+    validateBody(Joi.compile({})),
     conditionalUpdatePerm,
     updateOrganizationAvatar
   )

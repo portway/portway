@@ -1,6 +1,4 @@
 import ono from 'ono'
-import Joi from '@hapi/joi'
-
 import apiErrorTypes from '../../constants/apiErrorTypes'
 import PUBLIC_MESSAGES from '../../constants/publicMessages'
 
