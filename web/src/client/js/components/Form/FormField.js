@@ -8,7 +8,6 @@ import ValidationComponent from 'Components/Validation/ValidationComponent'
 const CHECKED_FIELD_TYPES = ['checkbox', 'radio']
 
 const FormField = React.forwardRef(({
-  checked,
   disabled,
   errors,
   help,
@@ -46,8 +45,8 @@ const FormField = React.forwardRef(({
         <div className={controlClasses}>
           {type !== 'textarea' &&
             <input
-              defaultChecked={CHECKED_FIELD_TYPES.includes(type) ? checked : null}
-              defaultValue={value}
+              defaultChecked={CHECKED_FIELD_TYPES.includes(type) ? value : null}
+              defaultValue={!CHECKED_FIELD_TYPES.includes(type) ? value : null}
               disabled={disabled}
               id={id}
               name={name}
@@ -71,7 +70,6 @@ const FormField = React.forwardRef(({
 })
 
 FormField.propTypes = {
-  checked: PropTypes.bool,
   errors: PropTypes.array,
   disabled: PropTypes.bool,
   help: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
