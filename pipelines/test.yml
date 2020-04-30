@@ -103,7 +103,7 @@ steps:
     working_directory: /api
     environment:
       - BUCKET_NAME=portway-pipeline-reports
-      - CF_STORAGE_INTEGRATION='Amazon Portway Pipelines'
+      - CF_STORAGE_INTEGRATION=amazon
     when:
       steps:
         - name: run_api_tests
