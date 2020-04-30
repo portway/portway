@@ -80,7 +80,7 @@ steps:
     composition_candidates:
       api_service:
         image: ${{build_api_image}}
-        command: './wait-for.sh db-test:5432 -- ./run.sh test'
+        command: '${{CF_VOLUME_PATH}}/api/wait-for.sh db-test:5432 -- ${{CF_VOLUME_PATH}}/api/run.sh test'
         volumes:
           - '${{CF_VOLUME_NAME}}:${{CF_VOLUME_PATH}}'
         working_dir: '${{CF_VOLUME_PATH}}/api'
