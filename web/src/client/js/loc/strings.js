@@ -7,7 +7,7 @@ module.exports = {
   // Document --------------------------------------------------------------------------------------
   // Document Publish
   PUBLISH_CONFIRMATION_TITLE: 'Publish ',
-  PUBLISH_CONFIRMATION_DESCRIPTION: 'Publishing these changes will make them live in the API.',
+  // PUBLISH_CONFIRMATION_DESCRIPTION: '', // put a link in there so no more string
   PUBLISH_CONFIRMATION_LABEL: 'Yes, publish this document',
   PUBLISH_BUTTON_LABEL: 'Publish document',
   // Document Unpublish
