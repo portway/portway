@@ -24,7 +24,7 @@ const DocumentToolbarComponent = ({
   unpublishDocumentHandler,
 }) => {
   const publishDisabled = moment(document.updatedAt).isSameOrBefore(document.lastPublishedAt, 'second')
-  const publishString = document.lastPublishedAt === null ? 'document' : 'changes'
+  const publishString = document.lastPublishedAt === null ? 'to API' : 'changes'
 
   function publishButtonTitle() {
     if (document && document.publishedVersionId && document.lastPublishedAt) {

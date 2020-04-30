@@ -12,7 +12,7 @@ const result = await limiter.reserve(key, limit)
 const {token, usage, reset} = result
 */
 
-export const REQ_LIMIT = 200
+export const REQ_LIMIT = 1000 // 200 req/min per 5 user org
 const TIME_INTERVAL_MS = 60000 // 1 min
 
 const options = {
