@@ -80,7 +80,9 @@ steps:
     composition_candidates:
       api_service:
         image: ${{build_api_image}}
-        command: './wait-for.sh db-test:5432 -- ./run.sh test'
+        commands:
+          - './wait-for.sh db-test:5432 -- ./run.sh test'
+          - cp -r -f ./allure-results $CF_VOLUME_PATH/allure-results
         links:
           - db-test
         environment:
@@ -100,7 +102,7 @@ steps:
     stage: API Build and test
     title: Report API Test Results
     image: codefresh/cf-docker-test-reporting
-    working_directory: /api
+    working_directory: '${{CF_VOLUME_PATH}}/'
     environment:
       - BUCKET_NAME=portway-pipeline-reports
       - CF_STORAGE_INTEGRATION=amazon
