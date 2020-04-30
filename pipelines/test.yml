@@ -81,6 +81,9 @@ steps:
       api_service:
         image: ${{build_api_image}}
         command: './wait-for.sh db-test:5432 -- ./run.sh test'
+        volumes:
+          - '${{CF_VOLUME_NAME}}:${{CF_VOLUME_PATH}}'
+        working_dir: '${{CF_VOLUME_PATH}}'
         links:
           - db-test
         environment:
