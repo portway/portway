@@ -96,3 +96,16 @@ steps:
         - name: build_api_image
           on:
             - success
+  api_report_test_results:
+    stage: API Build and test
+    title: Report API Test Results
+    image: codefresh/cf-docker-test-reporting
+    working_directory: /api
+    environment:
+      - BUCKET_NAME=portway-pipeline-reports
+      - CF_STORAGE_INTEGRATION='Amazon Portway Pipelines'
+    when:
+      steps:
+        - name: run_api_tests
+          on:
+            - success
