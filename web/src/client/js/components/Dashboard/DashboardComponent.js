@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
 
 import {
-  MULTI_USER_PLAN_TYPES,
   ORGANIZATION_ROLE_IDS,
   ORGANIZATION_SETTINGS,
   PATH_PROJECT_CREATE
@@ -12,7 +11,6 @@ import { AddIcon } from 'Components/Icons'
 import { currentUserId } from 'Libs/currentIds'
 
 import OrgPermission from 'Components/Permission/OrgPermission'
-import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import DashboardProjectsEmptyState from './DashboardProjectsEmptyState'
 import ProjectsListComponent from 'Components/ProjectsList/ProjectsListComponent'
 import { ToggleButton } from 'Components/Buttons'
@@ -56,15 +54,13 @@ const DashboardComponent = ({
               <AddIcon width="12" height="12" />
               <span className="label">New project</span>
             </button>
-          </OrgPermission>
-          <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
             <ToggleButton
               checked={showMyProjects}
               label="Filter projects"
               onClick={(checked) => { toggleMyProjects(checked) }}
               options={['All', 'Mine only']}
             />
-          </OrgPlanPermission>
+          </OrgPermission>
         </div>
         {!loading && (hasProjects || specialProject) &&
           <>
