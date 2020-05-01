@@ -3,7 +3,7 @@ import { Fields, Notifications, Validation } from './index'
 import { fetchDocument } from './document'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
-import { emitFieldChange, emitFieldFocus, emitFieldBlur } from './userSync'
+import { emitFieldChange, emitFieldFocus, emitFieldBlur, emitJoinDocumentRoom } from './userSync'
 
 export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
@@ -92,10 +92,14 @@ export const blurField = (fieldId, fieldType, documentId, fieldData) => {
 }
 
 export const focusField = (fieldId, fieldType, documentId, fieldData) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(Fields.focusField(fieldId, fieldType, fieldData))
     // emit user sync message
     dispatch(emitFieldFocus(fieldId, documentId))
+    const { userSync: { currentDocumentRoom } } = getState()
+    if (!currentDocumentRoom) {
+      dispatch(emitJoinDocumentRoom(documentId))
+    }
   }
 }
 
