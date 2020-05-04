@@ -1,9 +1,8 @@
 import redis from '../libs/redis'
 import { extractJwtPayloadWithoutVerification } from '../libs/ioAuth'
 
-// TODO: set this to a large value, 12 hrs ?
-const USER_SOCKET_ROOM_CACHE_EXPIRATION = 60 // 5 Minutes
-const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 60 // 5 Minutes
+const USER_SOCKET_ROOM_CACHE_EXPIRATION = 60 * 60// 1 hour
+const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 60 * 5// 5 minutes
 
 export default (io) => {
   const documentsIO = io.of('/documents')
