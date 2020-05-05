@@ -44,6 +44,9 @@ async function handleEvent(event) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
       break
+    case 'customer.subscription.trial_will_end':
+      emailCoordinator.sendTrialWillEnd(customer.email)
+      break
   }
   //update cached subscription status on org, we want to do this for all current events
   await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
@@ -69,6 +72,7 @@ Supported events:
   customer.subscription.created
   customer.subscription.deleted
   customer.subscription.updated
+  customer.subscription.trial_will_end
   customer.updated
   invoice.created
   invoice.finalized
