@@ -33,7 +33,8 @@ const EMAIL_TEMPLATE_FILES = {
   [EMAIL_TEMPLATES.PAYMENT_FAILED]: 'payment-failed.html',
   [EMAIL_TEMPLATES.PAYMENT_SUCCESS]: 'payment-success.html',
   [EMAIL_TEMPLATES.SUBSCRIPTION_CANCELED]: 'subscription-canceled.html',
-  [EMAIL_TEMPLATES.TRIAL_WILL_END]: 'trial-will-end.html'
+  [EMAIL_TEMPLATES.TRIAL_WILL_END]: 'trial-will-end.html',
+  [EMAIL_TEMPLATES.TRIAL_ENDED]: 'trial-ended.html'
 }
 const EJS_TEMPLATE_FUNCTIONS = {}
 
@@ -147,6 +148,19 @@ async function sendTrialWillEnd(email) {
   })
 }
 
+async function sendTrialEnded(email) {
+  const subject = 'Your Portway trial has ended'
+  const textBody = 'Your Portway trial has ended. Add a payment method to re-activate your account.'
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.TRIAL_ENDED]({ textBody })
+
+  await sendSingleRecipientEmail({
+    address: email,
+    textBody: textBody,
+    htmlBody,
+    subject
+  })
+}
+
 export default {
   sendInvitationEmail,
   sendPasswordChangeEmail,
@@ -156,5 +170,6 @@ export default {
   sendPaymentFailed,
   sendPaymentSuccess,
   sendSubscriptionCanceled,
-  sendTrialWillEnd
+  sendTrialWillEnd,
+  sendTrialEnded
 }
