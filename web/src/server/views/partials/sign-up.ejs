@@ -17,6 +17,14 @@
       </div>
     </div>
   </div>
+  <div class="field-container field-container--row">
+    <div class="field field--checkbox">
+      <label class="label" for="tos">I agree to the <a href="https://getportway.com/terms" target="_blank" rel="noopener noreferrer">terms of service</a></label>
+      <div class="field__control">
+        <input id="tos" class="input" type="checkbox" name="tos" required>
+      </div>
+    </div>
+  </div>
   <div class="field-container field-container--with-space">
     <div class="field field--centered">
       <%
@@ -24,7 +32,7 @@
           var button = 'Create my account'
         }
       %>
-      <input type="submit" class="button" value="<%= button %>">
+      <input id="signup-button" type="submit" class="button" value="<%= button %>" disabled>
     </div>
   </div>
 </form>

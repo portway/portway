@@ -7,7 +7,7 @@ const API = new DangerAPI(process.env.API_URL)
 
 const SignUpController = function(router) {
   router.get('/', (req, res) => {
-    res.render('user/sign-up', renderBundles(req, 'Sign up', 'index', { supportLink: SUPPORT_LINK }))
+    res.render('user/sign-up', renderBundles(req, 'Sign up', 'signup', { supportLink: SUPPORT_LINK }))
   })
 
   router.get('/processing', (req, res) => {
