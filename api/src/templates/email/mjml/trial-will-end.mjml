@@ -1,0 +1,85 @@
+<mjml>
+
+  <mj-head>
+
+    <mj-font name="Domine" href="https://fonts.googleapis.com/css?family=Domine" />
+
+    <mj-attributes>
+      <mj-text color="#333333" font-family="Domine" />
+      <mj-button background-color="#6ACA65" color="#ffffff" />
+    </mj-attributes>
+
+    <mj-style>
+      h1, h2, h3 {
+        font-family: Domine;
+      	font-weight: bold;
+      }
+      h4, h5, h6 {
+      	font-weight: 300;
+      }
+      h1 {
+      	font-size: 30px;
+      	letter-spacing: .2px;
+      	line-height: 40px;
+      	margin-bottom: 14px;
+      }
+      h2 {
+      	font-size: 22px;
+      	letter-spacing: .2px;
+      	line-height: 30px;
+      	margin-bottom: 12px;
+      }
+      h3 {
+      	font-size: 19px;
+      	letter-spacing: .2px;
+      	line-height: 28px;
+      	margin-bottom: 8px;
+      }
+      h4 {
+      	font-size: 17px;
+      	letter-spacing: .2px;
+      	line-height: 25px;
+      	margin-bottom: 10px;
+      }
+      p {
+      	font-size: 17px;
+      	letter-spacing: 0.2px;
+      	line-height: 31px;
+        margin-bottom: 12px;
+      }
+      button:hover {
+      	background-color: #46B84F;
+      }
+    </mj-style>
+
+  </mj-head>
+
+  <mj-body background-color="#FFA784">
+    <mj-wrapper
+      background-color="#FFA784"
+      full-width="full-width">
+      <mj-hero background-color="#FFA784">
+        <mj-image align="center" width="75px" height="68px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.png" />
+        <mj-text align="center">
+          <h1>Your Portway trial will end in 3 days. Add a payment method to keep your account active.</h1>
+        </mj-text>
+      </mj-hero>
+    </mj-wrapper>
+    <mj-section>
+      <mj-column>
+        <mj-text align="center">
+          <p>Thank you for supporting independent software</p>
+          <p>– The Portway Team</p>
+        </mj-text>
+        <mj-spacer height="50px" />
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column>
+        <mj-text align="center" line-height="18px">
+          Need help? <a href="mailto:support@portway.app" style="color: #333;">Email support</a>
+       </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
