@@ -29,7 +29,7 @@ export const emitFieldFocus = (fieldId, documentId) => {
       return dispatch(UserSync.socketError())
     }
     dispatch(UserSync.emitFieldFocus(fieldId))
-    documentSocket.emit('fieldFocus', fieldId, documentId)
+    documentSocket.emit('fieldFocus', fieldId, String(documentId))
     dispatch(UserSync.fieldFocusEmitted(fieldId))
   }
 }

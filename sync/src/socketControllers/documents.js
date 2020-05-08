@@ -1,9 +1,10 @@
 import redis from '../libs/redis'
 import { extractJwtPayloadWithoutVerification } from '../libs/ioAuth'
+import logger from '../libs/logger'
+import { LOG_LEVELS } from '../constants'
 
-// TODO: set this to a large value, 12 hrs ?
-const USER_SOCKET_ROOM_CACHE_EXPIRATION = 60 // 5 Minutes
-const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 60 // 5 Minutes
+const USER_SOCKET_ROOM_CACHE_EXPIRATION = 60 * 60// 1 hour
+const USER_SOCKET_FOCUSED_FIELD_EXPIRATION = 60 * 5// 5 minutes
 
 export default (io) => {
   const documentsIO = io.of('/documents')
@@ -47,7 +48,10 @@ export default (io) => {
     }
 
     const joinRoom = async (documentId) => {
-      if (typeof documentId !== 'string') return
+      if (typeof documentId !== 'string') {
+        logger(LOG_LEVELS.WARNING, `joinRoom for document id ${documentId} expects a string, received ${typeof documentId}`)
+        return
+      }
 
       const currentDocumentRoomId = await redis.get(userSocketRoomNs)
       if (currentDocumentRoomId === documentId) return

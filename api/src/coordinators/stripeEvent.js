@@ -5,6 +5,7 @@ import emailCoordinator from '../coordinators/email'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 import slackIntegrator from '../integrators/slack'
+import { ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -44,6 +45,14 @@ async function handleEvent(event) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
       break
+    case 'customer.subscription.trial_will_end':
+      emailCoordinator.sendTrialWillEnd(customer.email)
+      break
+    case 'invoice.payment_failed':
+      // customer has no billing information and has 'TRIALING' status cached on their org, send a trial canceled email
+      if (!customer.sources.data.length && org.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
+        emailCoordinator.sendTrialEnded(customer.email)
+      }
   }
   //update cached subscription status on org, we want to do this for all current events
   await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(org.id)
@@ -69,6 +78,7 @@ Supported events:
   customer.subscription.created
   customer.subscription.deleted
   customer.subscription.updated
+  customer.subscription.trial_will_end
   customer.updated
   invoice.created
   invoice.finalized
