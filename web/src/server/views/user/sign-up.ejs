@@ -10,11 +10,16 @@
     <% if (typeof disableSignup !== 'undefined' && disableSignup === true) { %>
       <p>Registration is currently disabled</p>
     <% } else { %>
-      <%- include('../partials/sign-up'); %>
+      <%- include('../partials/sign-up', { termsLink: options.termsLink }); %>
     <% } %>
   </div>
 </main>
-<%- include('../partials/footer', { supportLink: options.supportLink }); %>
+<%- include('../partials/footer', {
+  privacyLink: options.privacyLink,
+  supportLink: options.supportLink,
+  termsLink: options.termsLink,
+  websiteLink: options.websiteLink,
+}); %>
 <%- include('../partials/foot'); %>
 
 

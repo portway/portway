@@ -1,24 +1,39 @@
 import { renderBundles } from '../libs/express-utilities'
 import DangerAPI from '../libs/api'
-import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS, SUPPORT_LINK } from '../../shared/constants'
+import {
+  MAX_COOKIE_AGE_MS,
+  PATH_APP,
+  PATH_PROJECTS,
+  SUPPORT_LINK,
+  URL_PRIVACY,
+  URL_TERMS,
+  URL_WEBSITE
+} from '../../shared/constants'
 import { SIGNUP_DISABLED } from '../constants'
 
 const API = new DangerAPI(process.env.API_URL)
 
+const footerLinks = {
+  privacyLink: URL_PRIVACY,
+  supportLink: SUPPORT_LINK,
+  termsLink: URL_TERMS,
+  websiteLink: URL_WEBSITE,
+}
+
 const SignUpController = function(router) {
   router.get('/', (req, res) => {
-    res.render('user/sign-up', renderBundles(req, 'Sign up', 'signup', { supportLink: SUPPORT_LINK }))
+    res.render('user/sign-up', renderBundles(req, 'Sign up', 'signup', footerLinks))
   })
 
   router.get('/processing', (req, res) => {
-    res.render('user/processing', renderBundles(req, 'Processing', 'index', { supportLink: SUPPORT_LINK }))
+    res.render('user/processing', renderBundles(req, 'Processing', 'index', footerLinks))
   })
 
   router.post('/registration', registerOrganization)
 
   router.get('/registration/complete', async (req, res) => {
     const { token } = req.query
-    res.render('user/registration', { ...renderBundles(req, 'Registration', 'registration', { supportLink: SUPPORT_LINK }), token })
+    res.render('user/registration', { ...renderBundles(req, 'Registration', 'registration', footerLinks), token })
   })
 
   router.post('/registration/complete', completeRegistration)
@@ -50,7 +65,7 @@ const registerOrganization = async (req, res) => {
     if (response.status === 409) {
       res.status(409)
       return res.render('user/sign-up', {
-        ...renderBundles(req, 'Sign up', 'index', { supportLink: SUPPORT_LINK }),
+        ...renderBundles(req, 'Sign up', 'index', footerLinks),
         flash: {
           type: 'error',
           message: 'There is already a user with this email address'
@@ -60,7 +75,7 @@ const registerOrganization = async (req, res) => {
 
     res.status(500)
     return res.render('user/sign-up', {
-      ...renderBundles(req, 'Sign up', 'index', { supportLink: SUPPORT_LINK }),
+      ...renderBundles(req, 'Sign up', 'index', footerLinks),
       flash: {
         type: 'error',
         message: 'There was an error registering your organization'
@@ -83,7 +98,7 @@ const completeRegistration = async (req, res) => {
 
   if (password !== confirmPassword) {
     return res.render('user/registration', {
-      ...renderBundles(req, 'Registration', 'registration', { supportLink: SUPPORT_LINK }),
+      ...renderBundles(req, 'Registration', 'registration', footerLinks),
       token,
       flash: {
         type: 'error',
@@ -109,7 +124,7 @@ const completeRegistration = async (req, res) => {
     }))
   } catch ({ response }) {
     return res.render('user/registration', {
-      ...renderBundles(req, 'Registration', 'registration', { supportLink: SUPPORT_LINK }),
+      ...renderBundles(req, 'Registration', 'registration', footerLinks),
       token,
       flash: {
         type: 'error',
