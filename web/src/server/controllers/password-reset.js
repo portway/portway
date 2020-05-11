@@ -1,21 +1,36 @@
 import { renderBundles } from '../libs/express-utilities'
 import DangerAPI from '../libs/api'
-import { MAX_COOKIE_AGE_MS, PATH_APP, PATH_PROJECTS, SUPPORT_LINK } from '../../shared/constants'
+import {
+  MAX_COOKIE_AGE_MS,
+  PATH_APP,
+  PATH_PROJECTS,
+  SUPPORT_LINK,
+  URL_PRIVACY,
+  URL_TERMS,
+  URL_WEBSITE
+} from '../../shared/constants'
 
 const API = new DangerAPI(process.env.API_URL)
+
+const footerLinks = {
+  privacyLink: URL_PRIVACY,
+  supportLink: SUPPORT_LINK,
+  termsLink: URL_TERMS,
+  websiteLink: URL_WEBSITE,
+}
 
 const PasswordResetController = function(router) {
   router.get('/', (req, res) => {
     res.render(
       'user/password-reset',
-      renderBundles(req, 'Reset password', 'index', { supportLink: SUPPORT_LINK })
+      renderBundles(req, 'Reset password', 'index', footerLinks)
     )
   })
 
   router.get('/complete', (req, res) => {
     const { token } = req.query
     res.render('user/complete-password-reset', {
-      ...renderBundles(req, 'Reset Password', 'passwordReset', { supportLink: SUPPORT_LINK }),
+      ...renderBundles(req, 'Reset Password', 'passwordReset', footerLinks),
       token
     })
   })
@@ -58,7 +73,7 @@ const setNewPassword = async (req, res) => {
 
   if (password !== confirmPassword) {
     return res.render('user/complete-password-reset', {
-      ...renderBundles(req, 'Reset Password', 'passwordReset', { supportLink: SUPPORT_LINK }),
+      ...renderBundles(req, 'Reset Password', 'passwordReset', footerLinks),
       token,
       flash: {
         type: 'error',
@@ -83,7 +98,7 @@ const setNewPassword = async (req, res) => {
     }))
   } catch ({ response }) {
     return res.render('user/complete-password-reset', {
-      ...renderBundles(req, 'Reset Password', 'passwordReset', { supportLink: SUPPORT_LINK }),
+      ...renderBundles(req, 'Reset Password', 'passwordReset', footerLinks),
       token,
       flash: {
         type: 'error',
