@@ -6,5 +6,10 @@
     <p>Check your email for a link to complete your registration.</p>
   </div>
 </main>
-<%- include('../partials/footer', { supportLink: options.supportLink }); %>
+<%- include('../partials/footer', {
+  privacyLink: options.privacyLink,
+  supportLink: options.supportLink,
+  termsLink: options.termsLink,
+  websiteLink: options.websiteLink,
+}); %>
 <%- include('../partials/foot'); %>

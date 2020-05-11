@@ -79,6 +79,7 @@ const LOCKED_ACCOUNT_STATUSES = [
   ORG_SUBSCRIPTION_STATUS.INCOMPLETE_EXPIRED,
   ORG_SUBSCRIPTION_STATUS.INCOMPLETE,
   ORG_SUBSCRIPTION_STATUS.PAST_DUE,
+  ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED,
   ORG_SUBSCRIPTION_STATUS.UNPAID
 ]
 
@@ -167,12 +168,13 @@ module.exports = {
   // Application
   NETWORK_STATUS: NETWORK_STATUS,
   // Documentation
-  URL_WEBSITE: 'https://getportway.com/',
-  URL_DOCUMENTATION: 'https://docs.portway.app/',
   URL_API_DOCS: 'https://docs.portway.app/api',
+  URL_DOCUMENTATION: 'https://docs.portway.app/',
   URL_GUIDES: 'https://docs.portway.app/guides',
   URL_PRIVACY: 'https://getportway.com/privacy',
+  URL_TERMS: 'https://getportway.com/terms',
   URL_TWITTER: 'https://twitter.com/portwayapp',
+  URL_WEBSITE: 'https://getportway.com/',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
