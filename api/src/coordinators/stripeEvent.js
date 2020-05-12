@@ -5,6 +5,7 @@ import emailCoordinator from '../coordinators/email'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 import slackIntegrator from '../integrators/slack'
+import { STRIPE_STATUS } from '../constants/plans'
 
 async function handleEvent(event) {
   const eventData = event.data.object
