@@ -26,7 +26,8 @@ export const getOrgSubscriptionStatusFromStripeCustomer = function(customer) {
   if (
     (subscription.status === STRIPE_STATUS.PAST_DUE ||
       subscription.status === STRIPE_STATUS.ACTIVE) &&
-    subscription.trial_end
+    subscription.trial_end &&
+    !billingSource
   ) {
     return ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED
   }
