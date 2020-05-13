@@ -28,7 +28,11 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const grayPillStatuses = [ORG_SUBSCRIPTION_STATUS.TRIALING, ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL, null]
+const grayPillStatuses = [
+  ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED,
+  ORG_SUBSCRIPTION_STATUS.TRIALING,
+  ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL,
+  null]
 
 const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionStatus }) => {
   const upgradePillClasses = cx({
