@@ -13,6 +13,7 @@ import {
   PATH_PROJECTS,
   PATH_SETTINGS,
   ORG_SUBSCRIPTION_STATUS,
+  TRIALING_STATUSES
 } from 'Shared/constants'
 
 import UserMenuContainer from 'Components/UserMenu/UserMenuContainer'
@@ -27,7 +28,11 @@ const renderBrandLogo = (logo) => {
   }
 }
 
-const grayPillStatuses = [ORG_SUBSCRIPTION_STATUS.TRIALING, ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL, null]
+const grayPillStatuses = [
+  ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED,
+  ORG_SUBSCRIPTION_STATUS.TRIALING,
+  ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL,
+  null]
 
 const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionStatus }) => {
   const upgradePillClasses = cx({
@@ -79,7 +84,7 @@ const HeaderComponent = ({ brand, isFullScreen, loading, section, subscriptionSt
         </header>
         {window.matchMedia(MOBILE_MATCH_SIZE).matches &&
         <div className="subhead">
-          {(subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING || subscriptionStatus === null) &&
+          {(TRIALING_STATUSES.includes(subscriptionStatus) || subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED) &&
           <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<b className={upgradePillClasses}>TRIAL PERIOD</b>}>
             <NavLink to={PATH_BILLING}>Upgrade your account</NavLink>
           </OrgPermission>
