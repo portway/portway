@@ -256,7 +256,7 @@ const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
   if (subscriptionStatus !== org.subscriptionStatus) {
     orgUpdateData.subscriptionStatus = subscriptionStatus
     // log subscription changes
-    logger(LOG_LEVELS.INFO, { type: 'org subscription status update', message: `The subscription status for organization ${org.name} has changed from ${org.subscriptionStatus} to ${subscriptionStatus}` })
+    logger(LOG_LEVELS.INFO, { type: 'org subscription status update', message: `The subscription status for organization ${org.name} (${org.id}) has changed from ${org.subscriptionStatus} to ${subscriptionStatus}` })
   }
 
   // The org is getting inactive status, but this could potentially happen multiple times depending on how hooks are set up
