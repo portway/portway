@@ -8,6 +8,8 @@ import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
 import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
 import slackIntegrator from '../integrators/slack'
+import logger from '../integrators/logger'
+import { LOG_LEVELS } from '../constants/logging'
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -249,7 +251,13 @@ const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
   const customer = await stripeIntegrator.getCustomer(org.stripeId)
   const subscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
 
-  const orgUpdateData = { subscriptionStatus }
+  const orgUpdateData = {}
+
+  if (subscriptionStatus !== org.subscriptionStatus) {
+    orgUpdateData.subscriptionStatus = subscriptionStatus
+    // log subscription changes
+    logger(LOG_LEVELS.INFO, { type: 'org subscription status update', message: `The subscription status for organization ${org.name} has changed from ${org.subscriptionStatus} to ${subscriptionStatus}` })
+  }
 
   // The org is getting inactive status, but this could potentially happen multiple times depending on how hooks are set up
   // so only set the canceledAt date on the org if it doesn't already exist
