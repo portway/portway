@@ -8,6 +8,7 @@ import {
   PLAN_TITLES,
   PLAN_TYPES,
   SUPPORT_EMAIL,
+  TRIAL_ENDED,
   TRIALING_STATUSES
 } from 'Shared/constants'
 
@@ -31,7 +32,7 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
           <div className="admin-notices__notice-title-content">
             <h2>Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}</h2>
             <p className="note">
-              During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}.
+              During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}. Have fun!
             </p>
           </div>
         </div>
@@ -40,10 +41,26 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
         </p>
       </div>
       }
+      {organization.subscriptionStatus === TRIAL_ENDED &&
+      <div className="admin-notices__notice">
+        <div className="admin-notices__notice-title">
+          <InfoIcon width="22" height="22" />
+          <div className="admin-notices__notice-title-content">
+            <h2>Your trial has ended</h2>
+            <p className="note">
+              Thanks for checking out Portway! We’re sad to see you go. Your account will be completely erased soon. If you change your mind you can <a href="#payment">activate your account now</a>.
+            </p>
+          </div>
+        </div>
+        <p>
+          <a href="#payment">Add your payment information below</a> to activate your account.
+        </p>
+      </div>
+      }
       {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE &&
       <div className="admin-notices__notice admin-notices__notice--danger">
         <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} /> Inactive</h2>
-        <p>We are in the process of removing your account.</p>
+        <p>Thanks for checking out Portway! We are in the process of removing your account.</p>
       </div>
       }
       {lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus) &&
