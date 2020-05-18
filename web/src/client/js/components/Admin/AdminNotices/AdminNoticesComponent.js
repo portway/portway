@@ -8,7 +8,6 @@ import {
   PLAN_TITLES,
   PLAN_TYPES,
   SUPPORT_EMAIL,
-  TRIAL_ENDED,
   TRIALING_STATUSES
 } from 'Shared/constants'
 
@@ -18,7 +17,8 @@ import './_AdminNotices.scss'
 const AdminNoticesComponent = ({ organization, subscription }) => {
   const colorDanger = getComputedStyle(document.documentElement).getPropertyValue('--color-red-dark')
   const lockedAccountStatusesMinusInactive = LOCKED_ACCOUNT_STATUSES.filter((status) => {
-    return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE
+    // Both of these are considered LOCKED, but we give different status messages in these cases
+    return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE && status !== ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED
   })
   const trialEnds = moment.unix(subscription.trialEnd)
   const trialEndsInDays = moment(trialEnds).fromNow()
@@ -41,7 +41,7 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
         </p>
       </div>
       }
-      {organization.subscriptionStatus === TRIAL_ENDED &&
+      {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED &&
       <div className="admin-notices__notice">
         <div className="admin-notices__notice-title">
           <InfoIcon width="22" height="22" />
