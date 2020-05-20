@@ -59,7 +59,6 @@ const createAccount = async function(req, res, next) {
 
 const getOrganizations = async function(req, res, next) {
   try {
-    // TODO: switch back to findAll() after testing
     const orgs = await BusinessOrganization.findAll()
     res.json({data: orgs})
   } catch (e) {
