@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import cx from 'classnames'
 
 import useBlur from 'Hooks/useBlur'
 import useClickOutside from 'Hooks/useClickOutside'
@@ -47,6 +48,13 @@ const UserMenuContainer = () => {
   useClickOutside(containerRef, collapseCallback)
   useBlur(containerRef, collapseCallback)
 
+  const userMenuButtonClasses = cx({
+    'btn': true,
+    'btn--blank': true,
+    'user-menu__button': true,
+    'user-menu__button--with-avatar': currentUser.avatar,
+  })
+
   if (!currentUser || !currentOrg) {
     return (
       <div className="user-menu">
@@ -66,7 +74,7 @@ const UserMenuContainer = () => {
             aria-expanded={expanded}
             aria-haspopup="true"
             aria-controls="user-menu"
-            className="btn btn--blank user-menu__button"
+            className={userMenuButtonClasses}
             onClick={() => setExpanded(!expanded)}
             ref={anchorRef}
             style={{ backgroundImage: `url(${currentUser.avatar || UserIcon}` }}
