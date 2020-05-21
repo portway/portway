@@ -1,0 +1,52 @@
+.flash {
+  align-items: center;
+  position: relative;
+  background-color: var(--color-gray-2);
+  border: thin solid var(--color-gray-10);
+  border-radius: 3px;
+  color: var(--color-gray-60);
+  display: flex;
+  padding: 1.6rem;
+
+  &--warning {
+    background-color: hsla(48, 88, 60, .3);
+    border: thin solid hsla(48, 88, 60, .5);
+    color: hsl(51, 97%, 30%);
+    a {
+      color: var(--color-yellow-darker);
+    }
+  }
+
+  &--success {
+    background-color: hsla(117, 49, 59, .3);
+    border: thin solid hsla(117, 49, 59, .5);
+    color: hsl(125, 45%, 30%);
+    a {
+      color: var(--color-green-darker);
+    }
+  }
+
+  &--error {
+    background-color: hsla(357, 89%, 66%, .3);
+    border: thin solid hsla(357, 89%, 66%, .5);
+    color: hsl(353, 72%, 30%);
+    a {
+      color: var(--color-red);
+    }
+  }
+
+}
+
+.flash-message {
+  flex: 1;
+  p {
+    font-size: 1.5rem;
+    margin: 1rem 0 0;
+    &:first-child {
+      margin: 0;
+    }
+    &.note {
+      font-size: 1.2rem;
+    }
+  }
+}
