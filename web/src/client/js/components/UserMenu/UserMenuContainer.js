@@ -52,7 +52,7 @@ const UserMenuContainer = () => {
     'btn': true,
     'btn--blank': true,
     'user-menu__button': true,
-    'user-menu__button--with-avatar': currentUser.avatar,
+    'user-menu__button--with-avatar': currentUser && currentUser.avatar,
   })
 
   if (!currentUser || !currentOrg) {
