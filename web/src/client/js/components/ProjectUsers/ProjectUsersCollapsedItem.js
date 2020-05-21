@@ -5,7 +5,7 @@ const ProjectUsersCollapsedItem = ({ color, user }) => {
   const firstInitial = user.name.charAt(0).toUpperCase()
   const itemStyle = {
     backgroundImage: user.avatar ? `url('${user.avatar}')` : 'none',
-    backgroundColor: color
+    backgroundColor: user.avatar ? 'transparent' : color
   }
   return (
     <li className="project-users__collapsed-item" style={itemStyle} title={user.name}>
