@@ -1,17 +1,14 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import {
-  LOCKED_ACCOUNT_STATUSES,
-  ORG_SUBSCRIPTION_STATUS,
-  PLAN_TITLES,
-  PLAN_TYPES,
-  SUPPORT_EMAIL,
-  TRIALING_STATUSES
-} from 'Shared/constants'
+import { LOCKED_ACCOUNT_STATUSES, ORG_SUBSCRIPTION_STATUS, TRIALING_STATUSES } from 'Shared/constants'
 
-import FlashComponent from 'Components/Flash/FlashComponent'
+const AccountTrialing = lazy(() => import(/* webpackChunkName: 'AccountTrialing' */ './notices/AccountTrialing'))
+const AccountTrialEnded = lazy(() => import(/* webpackChunkName: 'AccountTrialEnded' */ './notices/AccountTrialEnded'))
+const AccountLocked = lazy(() => import(/* webpackChunkName: 'AccountLocked' */ './notices/AccountLocked'))
+const AccountInactive = lazy(() => import(/* webpackChunkName: 'AccountInactive' */ './notices/AccountInactive'))
+const AccountCanceled = lazy(() => import(/* webpackChunkName: 'AccountCanceled' */ './notices/AccountCanceled'))
 
 import './_AdminNotices.scss'
 
@@ -20,91 +17,35 @@ const AdminNoticesComponent = ({ organization, subscription }) => {
     // Both of these are considered LOCKED, but we give different status messages in these cases
     return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE && status !== ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED
   })
+
   const trialEnds = moment.unix(subscription.trialEnd)
-  const trialEndsInDays = moment(trialEnds).fromNow()
+
+  function getAdminNotice() {
+    // For all active trialing accounts
+    if (TRIALING_STATUSES.includes(organization.subscriptionStatus)) {
+      return <AccountTrialing trialEndDate={trialEnds} />
+    }
+    // For all locked accounts, past due
+    if (lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus)) {
+      return <AccountLocked />
+    }
+    switch (organization.subscriptionStatus) {
+      case ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED:
+        // Trial has ended, they can still update their payment info until the account deletes
+        return <AccountTrialEnded />
+      case ORG_SUBSCRIPTION_STATUS.INACTIVE:
+        // For inactive accounts - deleting soon
+        return <AccountInactive />
+      case ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL:
+        return <AccountCanceled subscription={subscription} />
+      default:
+        return null
+    }
+  }
 
   return (
     <div className="admin-notices">
-
-      {/* For all active trialing accounts */}
-      {TRIALING_STATUSES.includes(organization.subscriptionStatus) &&
-      <FlashComponent className="admin-notices__notice">
-        <div className="admin-notices__notice-title">
-          <div className="admin-notices__notice-title-content">
-            <h2>Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}</h2>
-            <p className="note">
-              During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}. Have fun!
-            </p>
-          </div>
-        </div>
-        <p>
-          <a href="#payment">Add your payment information below</a> to activate your account or to upgrade to a {PLAN_TITLES[PLAN_TYPES.MULTI_USER]}.
-        </p>
-      </FlashComponent>
-      }
-
-      {/* For active ended trial accounts */}
-      {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED &&
-      <FlashComponent className="admin-notices__notice" type="warning">
-        <div className="admin-notices__notice-title">
-          <div className="admin-notices__notice-title-content">
-            <h2>Your trial has ended</h2>
-            <p className="note">
-              Thanks for checking out Portway! We’re sad to see you go.
-              Your account will be completely erased soon.
-              <br />If you change your mind you can <a href="#payment">activate your account now</a>.
-            </p>
-          </div>
-        </div>
-        <p>
-          <a href="#payment">Add your payment information below</a> to activate your account.
-        </p>
-      </FlashComponent>
-      }
-
-      {/* For inactive accounts - deleting soon */}
-      {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE &&
-      <FlashComponent className="admin-notices__notice" type="error">
-        <div className="admin-notices__notice-title">
-          <div className="admin-notices__notice-title-content">
-            <h2 className="danger">Inactive</h2>
-          </div>
-        </div>
-        <p>Thanks for checking out Portway! We are in the process of removing your account.</p>
-      </FlashComponent>
-      }
-
-      {/* For all locked accounts, past due */}
-      {lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus) &&
-      <FlashComponent className="admin-notices__notice" type="error">
-        <div className="admin-notices__notice-title">
-          <div className="admin-notices__notice-title-content">
-            <h2 className="danger">Past due</h2>
-            <p className="note">We cannot successfully bill you with your current payment information.</p>
-          </div>
-        </div>
-        <p>Please <a href="#payment">update your payment information below</a> to activate your account.</p>
-      </FlashComponent>
-      }
-
-      {/* When a user has canceled their account, but still has time in the billing cycle */}
-      {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL && subscription &&
-      <FlashComponent className="admin-notices__notice" type="error">
-        <div className="admin-notices__notice-title">
-          <div className="admin-notices__notice-title-content">
-            <h2 className="danger">Account canceled</h2>
-          </div>
-        </div>
-        <p>
-          Your current period ends <b>{moment.unix(subscription.cancelAt || subscription.currentPeriodEnd).format('MMMM Do, YYYY')}</b>.
-          You have access to your projects and documents until then.
-        </p>
-        <p>
-          If you need assistance, please email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
-        </p>
-      </FlashComponent>
-      }
-
+      {getAdminNotice()}
     </div>
   )
 }
