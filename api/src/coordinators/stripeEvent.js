@@ -28,6 +28,12 @@ async function handleEvent(event) {
       break
     }
     case 'customer.subscription.deleted': {
+      // if customer never had billing info, assume they're transitioning from a trial PAST_DUE status
+      // and don't send the email
+      const billingSource = customer.sources.data[0]
+      if (!billingSource) {
+        break
+      }
       // No need to await webhook
       emailCoordinator.sendSubscriptionCanceled(customer.email)
       break
