@@ -20,7 +20,7 @@ webTag: "0.12.5"
 
 web:
   port: "3000"
-  flagDisableSignup: "true"
+  flagDisableSignup: "false"
   support_form_submit_origin: "https://getportway.com"
 
 api:
