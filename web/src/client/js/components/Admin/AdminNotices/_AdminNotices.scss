@@ -1,19 +1,14 @@
 @import 'CSS/inc/_include-media.scss';
 
 .admin-notices {
+
   &__notice {
-    // border-bottom: thin solid var(--theme-border);
+    margin-bottom: 4rem;
   }
+
   &__notice-title {
     align-items: center;
     display: flex;
-    .icon {
-      display: none;
-      margin-right: .6rem;
-      @include media('>medium') {
-        display: block;
-      }
-    }
   }
 
   &__notice-title-content {
