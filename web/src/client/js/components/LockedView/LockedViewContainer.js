@@ -7,7 +7,14 @@ import LockedViewComponent from './LockedViewComponent'
 
 const LockedViewContainer = () => {
   const { data: currentUser } = useDataService(dataMapper.users.current())
-  return <LockedViewComponent userRole={currentUser.orgRoleId} />
+  const { data: currentOrg = {} } = useDataService(dataMapper.organizations.current())
+
+  return (
+    <LockedViewComponent
+      userRole={currentUser.orgRoleId}
+      organization={currentOrg}
+    />
+  )
 }
 
 export default LockedViewContainer

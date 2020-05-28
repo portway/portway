@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: portway-org-stripe-refresh-cronjob
+spec:
+  schedule: "0 1 * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: OnFailure
+          containers:
+          - name: portway-org-stripe-refresh
+            image: bonkeybong/portway_org_stripe_refresh
+            env:
+            - name: ADMIN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: admin-secrets
+                  key: admin_secret_key
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: web-config
+                  key: web.api_url
