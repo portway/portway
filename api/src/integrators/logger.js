@@ -12,7 +12,8 @@ switch (LOGGER) {
       token: LOG_TOKEN,
       region: 'us',
       console: true, // send output to console too
-      withStack: true // expands error objects with stack in logs
+      withStack: true, // expands error objects with stack in logs
+      debug: true // temporary
     })
 
     logger.on('error', (err) => {
