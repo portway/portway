@@ -18,7 +18,11 @@ spec:
         redeploy: "1"
     spec:
       imagePullSecrets:
-      - name: regcred    
+      - name: regcred
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "2"
       containers:
       - image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
         name: {{ .Values.serviceNames.api }}
