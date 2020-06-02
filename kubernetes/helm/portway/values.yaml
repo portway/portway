@@ -13,7 +13,7 @@ syncUrl: sync.dev.portway.app
 stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
 
 apiImage: bonkeybong/portway_api
-apiTag: "log-debug-5"
+apiTag: "log-debug-9"
 
 webImage: bonkeybong/portway_web
 webTag: "log-debug-5"

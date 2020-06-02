@@ -1,5 +1,5 @@
 #!/bin/sh
-#set -eo pipefail
+set -eo pipefail
 
 case $1 in
   start)
