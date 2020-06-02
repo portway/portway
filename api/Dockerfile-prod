@@ -29,9 +29,6 @@ RUN npm install --only=production
 # Use empty app image for runtime dependencies only
 FROM node:12.17.0-alpine3.11 as app
 
-WORKDIR /api
-
-COPY --from=builder /api/node_modules .
-COPY --from=builder /api/dist .
+COPY --from=builder /api .
 
 ENTRYPOINT ["/bin/sh", "./run.sh"]
