@@ -1,5 +1,5 @@
 
-FROM node:12.16.0-alpine
+FROM node:12.17.0-alpine3.11
 
 # bcrypt and alpine linux have some issues:
 # https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions#alpine-linux-based-images

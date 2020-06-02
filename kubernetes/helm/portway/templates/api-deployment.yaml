@@ -22,7 +22,7 @@ spec:
       dnsConfig:
         options:
         - name: ndots
-          value: "2"
+          value: "1"
       containers:
       - image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
         name: {{ .Values.serviceNames.api }}
