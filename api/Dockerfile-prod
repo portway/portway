@@ -29,6 +29,9 @@ RUN npm install --only=production
 # Use empty app image for runtime dependencies only
 FROM bonkeybong/node:12.18-alpine3.11.2 as app
 
+# Somehow dns resolution for rapid7 works when these are added
+RUN apk add bind-tools
+
 COPY --from=builder /api .
 
 ENV NODE_ENV production
