@@ -1,7 +1,19 @@
 import app from './app'
 import { connect, loadModels } from './db/dbConnector'
+const { exec } = require('child_process')
 
 const port = process.env.API_PORT
+
+exec('dig +trace us.data.logs.insight.rapid7.com', (err, stdout, stderr) => {
+  if (err) {
+    // node couldn't execute the command
+    return;
+  }
+
+  // the *entire* stdout and stderr (buffered)
+  console.log(`stdout: ${stdout}`);
+  console.log(`stderr: ${stderr}`);
+});
 
 
 //CONNECT TO THE DB
