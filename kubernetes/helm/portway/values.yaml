@@ -13,10 +13,10 @@ syncUrl: sync.dev.portway.app
 stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
 
 apiImage: bonkeybong/portway_api
-apiTag: "log-debug-9"
+apiTag: "sync-beta-2"
 
 webImage: bonkeybong/portway_web
-webTag: "log-debug-5"
+webTag: "sync-beta-2"
 
 web:
   port: "3000"
@@ -39,7 +39,7 @@ db:
 sync:
   port: "3004"
   image: "bonkeybong/portway_sync"
-  tag: "log-debug-5"
+  tag: "sync-beta-2"
 
 redis:
   port: "6379"
