@@ -10,11 +10,9 @@ switch (LOGGER) {
   case LOGGER_TYPES.R7_INSIGHT:
     logger = new Logger({
       token: LOG_TOKEN,
-      // region: 'us',
+      region: 'us',
       console: true, // send output to console too
-      withStack: true, // expands error objects with stack in logs
-      debug: true, // temporary
-      host: 'us.data.logs.insight.rapid7.com.'
+      withStack: true // expands error objects with stack in logs
     })
 
     logger.on('error', (err) => {
