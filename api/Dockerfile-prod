@@ -1,9 +1,9 @@
 # Use builder image to install build dependencies
-FROM bonkeybong/node:12.18-alpine3.11.2 as builder
+FROM node:12.18-alpine3.12 as builder
 
 # bcrypt and alpine linux have some issues:
 # https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions#alpine-linux-based-images
-RUN apk add --no-cache --virtual builds-deps build-base python
+# RUN apk add --no-cache --virtual builds-deps build-base python
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
@@ -27,7 +27,7 @@ ENV NODE_ENV production
 RUN npm install --only=production
 
 # Use empty app image for runtime dependencies only
-FROM bonkeybong/node:12.18-alpine3.11.2 as app
+FROM node:12.18-alpine3.12 as app
 
 # Somehow dns resolution for rapid7 works when these are added
 RUN apk add bind-tools
