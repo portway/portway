@@ -1,5 +1,6 @@
 #!/bin/sh
-set -eo pipefail
+# alpine-only option
+# set -eo pipefail
 
 case $1 in
   start)
