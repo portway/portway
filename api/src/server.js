@@ -3,7 +3,6 @@ import { connect, loadModels } from './db/dbConnector'
 
 const port = process.env.API_PORT
 
-
 //CONNECT TO THE DB
 connect({
   user: process.env.DB_USER,

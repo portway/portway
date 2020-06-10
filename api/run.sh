@@ -1,5 +1,8 @@
 #!/bin/sh
-set -eo pipefail
+# pipefail only seems to work with alpine's sh
+# set -e pipefail
+
+echo "run.sh"
 
 case $1 in
   start)
