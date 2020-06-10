@@ -1,5 +1,5 @@
 
-FROM node:12.18
+FROM node:12.18-stretch-slim
 
 # bcrypt and alpine linux have some issues:
 # https://github.com/kelektiv/node.bcrypt.js/wiki/Installation-Instructions#alpine-linux-based-images

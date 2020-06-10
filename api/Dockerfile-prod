@@ -1,5 +1,5 @@
 # Use builder image to install build dependencies
-FROM node:12.18 as builder
+FROM node:12.18-stretch-slim as builder
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
@@ -23,10 +23,10 @@ ENV NODE_ENV production
 RUN npm install --only=production
 
 # Use empty app image for runtime dependencies only
-FROM node:12.18 as app
+FROM node:12.18-stretch-slim as app
 
 COPY --from=builder /api .
 
 ENV NODE_ENV production
 
-ENTRYPOINT ["/bin/bash", "./run.sh"]
+ENTRYPOINT ["/bin/sh", "./run.sh"]

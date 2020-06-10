@@ -56,7 +56,7 @@
     "@slack/webhook": "^5.0.2",
     "aws-sdk": "^2.463.0",
     "axios": "^0.19.2",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "bignumber.js": "^8.1.1",
     "cuid": "^2.1.6",
     "debug": "^4.1.1",

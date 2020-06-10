@@ -1,5 +1,6 @@
 #!/bin/sh
-#set -e pipefail
+# pipefail only seems to work with alpine's sh
+# set -e pipefail
 
 echo "run.sh"
 
