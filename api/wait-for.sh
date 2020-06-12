@@ -31,6 +31,7 @@ wait_for() {
     if [ $result -eq 0 ] ; then
       if [ $# -gt 0 ] ; then
         echo "wait-for.sh: successfully connected"
+        sleep 2
         exec "$@"
       fi
       exit 0
