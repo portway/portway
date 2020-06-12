@@ -33,6 +33,11 @@ spec:
             configMapKeyRef:
               name: sync-config
               key: sync.port
+        - name: LOGGER
+          valueFrom:
+            configMapKeyRef:
+              name: sync-config
+              key: sync.logger
         - name: LOG_TOKEN_SYNC
           valueFrom:
             secretKeyRef:
