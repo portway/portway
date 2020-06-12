@@ -3,6 +3,8 @@
 TIMEOUT=15
 QUIET=0
 
+echo "wait for"
+
 echoerr() {
   if [ "$QUIET" -ne 1 ]; then printf "%s\n" "$*" 1>&2; fi
 }
@@ -22,11 +24,14 @@ USAGE
 wait_for() {
   for i in `seq $TIMEOUT` ; do
     nc -z "$HOST" "$PORT" > /dev/null 2>&1
+
+    echo "$HOST:$PORT"
     
     result=$?
     if [ $result -eq 0 ] ; then
       if [ $# -gt 0 ] ; then
         echo "wait-for.sh: successfully connected"
+        sleep 2
         exec "$@"
       fi
       exit 0

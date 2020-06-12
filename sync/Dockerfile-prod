@@ -1,5 +1,5 @@
 
-FROM node:12.16.0-alpine
+FROM node:12.18-stretch-slim as builder
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
@@ -18,6 +18,10 @@ RUN npm run build
 
 RUN rm -rf node_modules/
 RUN rm -rf src/
+
+FROM node:12.18-stretch-slim as app
+
+COPY --from=builder /sync .
 
 ENV NODE_ENV production
 RUN npm install --only=production

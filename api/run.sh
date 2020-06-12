@@ -1,5 +1,7 @@
 #!/bin/sh
-set -eo pipefail
+set -e
+
+echo "run.sh"
 
 case $1 in
   start)

@@ -18,7 +18,7 @@ spec:
         redeploy: "1"
     spec:
       imagePullSecrets:
-      - name: regcred    
+      - name: regcred
       containers:
       - image: {{ printf "%s:%s" .Values.apiImage .Values.apiTag }}
         name: {{ .Values.serviceNames.api }}
