@@ -37,6 +37,7 @@ items:
 - apiVersion: v1
   data:
     sync.port: {{ .Values.sync.port | quote }}
+    sync.logger: {{ .Values.sync.logger | quote }}
   kind: ConfigMap
   metadata:
     name: sync-config
