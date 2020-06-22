@@ -15,6 +15,7 @@ const DocumentsListCreateItem = ({ active, createDocumentHandler, isCreating, to
   // Select the contents of the contentEditable div (new document name)
   useEffect(() => {
     if (active && nameRef.current && !isCreating) {
+      listItemRef.current.scrollIntoView({ block: 'end' })
       nameRef.current.select()
     }
   })
