@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import { SUPPORT_EMAIL, SUPPORT_LINK, NETWORK_STATUS } from 'Shared/constants'
 import ApplicationContext from '../../contexts/ApplicationContext'
+import Logo from '../../../images/logo.svg'
+
 import './ErrorBoundary.scss'
 
 class ErrorBoundary extends React.Component {
@@ -23,8 +25,9 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.context.networkStatus === NETWORK_STATUS.OFFLINE && this.state.hasError) {
       return (
-        <main>
+        <main className="error-boundary">
           <section>
+            <img src={Logo} />
             <h1>You’re offline</h1>
             <p>
               It looks like there’s a problem with your internet connection.
@@ -35,11 +38,14 @@ class ErrorBoundary extends React.Component {
     }
     if (this.state.hasError) {
       return (
-        <section className="error-boundary">
-          <h1>Something went wrong</h1>
-          <p>Try reloading, or contact support.</p>
-          <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> <a href={SUPPORT_LINK}>{SUPPORT_LINK}</a>
-        </section>
+        <main className="error-boundary">
+          <section>
+            <img src={Logo} />
+            <h1>Something went wrong!</h1>
+            <p>This is likely our fault. Try reloading, or <a href={SUPPORT_LINK}>contact support</a>.</p>
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+          </section>
+        </main>
       )
     }
     return this.props.children
