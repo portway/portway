@@ -5,7 +5,7 @@ import cx from 'classnames'
 import useIsMounted from 'Hooks/useIsMounted'
 import usePrevious from 'Hooks/usePrevious'
 
-import { MAX_FILE_SIZE } from 'Shared/constants'
+import { MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
 import { RemoveIcon, EditIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
@@ -133,8 +133,10 @@ const FieldImageComponent = ({
     // Start the uploading
     const formData = new FormData()
     formData.append('file', file)
+    // If this is a new, empty image, set its name to the filename, but no greater
+    // than MAX_FIELD_NAME_SIZE
     if (!field.value) {
-      formData.append('name', file.name)
+      formData.append('name', file.name.substring(0, MAX_FIELD_NAME_SIZE - 1))
     }
     onChange(field.id, formData)
   }
