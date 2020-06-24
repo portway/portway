@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: portway-org-stripe-refresh-cronjob
 spec:
-  schedule: "0 1 * * *"
+  schedule: "0 8 * * *"
   concurrencyPolicy: "Forbid"
   jobTemplate:
     spec:
