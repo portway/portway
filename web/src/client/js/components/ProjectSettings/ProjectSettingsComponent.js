@@ -41,7 +41,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
           </NavLink>
         </OrgPlanPermission>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`} aria-label="API Keys">
-          <APIKeyIcon /> <span className="label">API Keys</span>
+          <APIKeyIcon /> <span className="label">API keys</span>
         </NavLink>
       </PanelNavigation>
       <PanelContent contentKey={setting} contentMap={PANEL_PATHS} />

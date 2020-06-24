@@ -1,6 +1,4 @@
 import ono from 'ono'
-import Joi from 'joi'
-
 import apiErrorTypes from '../../constants/apiErrorTypes'
 import PUBLIC_MESSAGES from '../../constants/publicMessages'
 
@@ -16,7 +14,7 @@ export function validateBody(schema, options = {}) {
 
   const mergedOptions = Object.assign(defaultOptions, joiOptions)
   return (req, res, next) => {
-    const { value, error } = Joi.validate(req.body, schema, mergedOptions)
+    const { value, error } = schema.validate(req.body, mergedOptions)
 
     if (!error) {
       req.body = value
@@ -42,7 +40,7 @@ export function validateParams(schema, options = {}) {
 
   const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { value, error } = Joi.validate(req.params, schema, mergedOptions)
+    const { value, error } = schema.validate(req.params, mergedOptions)
 
     if (!error) {
       req.params = value
@@ -63,7 +61,7 @@ export function validateQuery(schema, options = {}) {
 
   const mergedOptions = Object.assign(defaultOptions, options)
   return (req, res, next) => {
-    const { value, error } = Joi.validate(req.query, schema, mergedOptions)
+    const { value, error } = schema.validate(req.query, mergedOptions)
 
     if (!error) {
       req.query = value
@@ -71,6 +69,11 @@ export function validateQuery(schema, options = {}) {
     }
 
     const apiError = new ono({ code: 400, publicMessage: PUBLIC_MESSAGES.INVALID_QUERY }, error.message)
+
+    if (error.name === 'ValidationError') {
+      apiError.errorDetails = error.details.map((detail) => { return { message: `Query: ${detail.message}`, key: detail.context.key }})
+      apiError.errorType = apiErrorTypes.ValidationError
+    }
 
     next(apiError)
   }

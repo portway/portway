@@ -69,6 +69,13 @@ async function findAllSanitized(orgId, options) {
     ...paginationOptions
   }
 
+  if (options.ids) {
+    query.where = {
+      ...query.where,
+      id: options.ids
+    }
+  }
+
   if (options.nameSearch) {
     query.where = {
       [db.Op.and]: [
@@ -170,11 +177,12 @@ async function countAll(orgId) {
   return count
 }
 
-async function deleteAllForOrg(orgId) {
+async function deleteAllForOrg(orgId, force = false) {
   const db = getDb()
 
   return db.model(MODEL_NAME).destroy({
-    where: { orgId }
+    where: { orgId },
+    force
   })
 }
 

@@ -17,6 +17,7 @@ import { userAssignments } from './userAssignments'
 import { userProjects } from './userProjects'
 import { users } from './users'
 import { validation } from './validation'
+import { userSync } from './userSync'
 
 const rootReducer = combineReducers({
   documentFields,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   userProjects,
   users,
   validation,
+  userSync,
 })
 
 const middlewares = [thunk]

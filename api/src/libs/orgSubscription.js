@@ -20,6 +20,18 @@ export const getOrgSubscriptionStatusFromStripeCustomer = function(customer) {
     return ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE
   }
 
+  // status is past due or active (stripe status will transition from trialing -> active -> past due over the course of an hour)
+  // the user once had a trial (ie not an admin),
+  // and we have no billing source, so we know the trial has ended and they have not signed up for a plan
+  if (
+    (subscription.status === STRIPE_STATUS.PAST_DUE ||
+      subscription.status === STRIPE_STATUS.ACTIVE) &&
+    subscription.trial_end &&
+    !billingSource
+  ) {
+    return ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED
+  }
+
   switch (subscription.status) {
     case STRIPE_STATUS.ACTIVE:
       return ORG_SUBSCRIPTION_STATUS.ACTIVE

@@ -59,6 +59,11 @@ spec:
             configMapKeyRef:
               name: web-config
               key: web.flag_disable_signup
+        - name: SUPPORT_FORM_SUBMIT_ORIGIN
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.support_form_submit_origin
         - name: ZENDESK_API_TOKEN
           valueFrom:
             secretKeyRef:
@@ -69,6 +74,16 @@ spec:
             secretKeyRef:
               name: log-secrets
               key: log_token_web
+        - name: SYNC_URL
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.sync_url
+        - name: SLACK_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: slack-secrets
+              key: slack_webhook_url
         ports:
-        - containerPort: 3000
+        - containerPort: {{ .Values.web.port }}
           protocol: TCP

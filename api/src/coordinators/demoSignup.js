@@ -1,11 +1,10 @@
 // This coordinator is for creating demo accounts, aka free accounts
 import ono from 'ono'
 
-import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
-import passwordResetKey from '../libs/passwordResetKey'
 import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
+import userCoordinator from './user'
 import emailCoordinator from './email'
 import stripeIntegrator from '../integrators/stripe'
 import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT } from '../constants/plans'
@@ -31,18 +30,8 @@ async function createUsersAndOrganization(name, users) {
   const organization = await BusinessOrganization.create({ name })
 
   const orgUsers = await Promise.all(
-    users.map(async (user) => {
-      const { name, email } = user
-      const resetKey = passwordResetKey.generate()
-      const businessUser = await BusinessUser.create({
-        name,
-        email,
-        orgId: organization.id,
-        orgRoleId: user.role,
-        resetKey
-      })
-      businessUser.resetKey = resetKey
-      return businessUser
+    users.map((user) => {
+      return userCoordinator.createPendingUser(user.email, user.name, organization.id, user.role)
     })
   )
 
@@ -71,9 +60,7 @@ async function createUsersAndOrganization(name, users) {
   await Promise.all(
     orgUsers.map((user) => {
       const token = tokenIntegrator.generateAccountInviteToken(user.id, user.resetKey)
-
       const linkUrl = `${CLIENT_URL}/sign-up/registration/complete?token=${token}`
-
       return emailCoordinator.sendFreeAccountInvite(linkUrl, user.email)
     })
   )

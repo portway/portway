@@ -1,70 +1,51 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import {
-  LOCKED_ACCOUNT_STATUSES,
-  ORG_SUBSCRIPTION_STATUS,
-  PLAN_TITLES,
-  PLAN_TYPES,
-  SUPPORT_EMAIL,
-  TRIALING_STATUSES
-} from 'Shared/constants'
+import { LOCKED_ACCOUNT_STATUSES, ORG_SUBSCRIPTION_STATUS, TRIALING_STATUSES } from 'Shared/constants'
 
-import { InfoIcon } from 'Components/Icons'
+const AccountTrialing = lazy(() => import(/* webpackChunkName: 'AccountTrialing' */ './notices/AccountTrialing'))
+const AccountTrialEnded = lazy(() => import(/* webpackChunkName: 'AccountTrialEnded' */ './notices/AccountTrialEnded'))
+const AccountLocked = lazy(() => import(/* webpackChunkName: 'AccountLocked' */ './notices/AccountLocked'))
+const AccountInactive = lazy(() => import(/* webpackChunkName: 'AccountInactive' */ './notices/AccountInactive'))
+const AccountCanceled = lazy(() => import(/* webpackChunkName: 'AccountCanceled' */ './notices/AccountCanceled'))
+
 import './_AdminNotices.scss'
 
 const AdminNoticesComponent = ({ organization, subscription }) => {
-  const colorDanger = getComputedStyle(document.documentElement).getPropertyValue('--color-red-dark')
   const lockedAccountStatusesMinusInactive = LOCKED_ACCOUNT_STATUSES.filter((status) => {
-    return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE
+    // Both of these are considered LOCKED, but we give different status messages in these cases
+    return status !== ORG_SUBSCRIPTION_STATUS.INACTIVE && status !== ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED
   })
+
   const trialEnds = moment.unix(subscription.trialEnd)
-  const trialEndsInDays = moment(trialEnds).fromNow()
+
+  function getAdminNotice() {
+    // For all active trialing accounts
+    if (TRIALING_STATUSES.includes(organization.subscriptionStatus)) {
+      return <AccountTrialing trialEndDate={trialEnds} />
+    }
+    // For all locked accounts, past due
+    if (lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus)) {
+      return <AccountLocked />
+    }
+    switch (organization.subscriptionStatus) {
+      case ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED:
+        // Trial has ended, they can still update their payment info until the account deletes
+        return <AccountTrialEnded />
+      case ORG_SUBSCRIPTION_STATUS.INACTIVE:
+        // For inactive accounts - deleting soon
+        return <AccountInactive />
+      case ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL:
+        return <AccountCanceled subscription={subscription} />
+      default:
+        return null
+    }
+  }
 
   return (
     <div className="admin-notices">
-      {TRIALING_STATUSES.includes(organization.subscriptionStatus) &&
-      <div className="admin-notices__notice">
-        <div className="admin-notices__notice-title">
-          <InfoIcon width="22" height="22" />
-          <div className="admin-notices__notice-title-content">
-            <h2>Your trial ends {trialEnds && <>{trialEndsInDays}, on {moment(trialEnds).format('MMMM Do')}</>}</h2>
-            <p className="note">
-              During your trial, you are limited to a {PLAN_TITLES[PLAN_TYPES.SINGLE_USER]}.
-            </p>
-          </div>
-        </div>
-        <p>
-          <a href="#payment">Add your payment information below</a> to activate your account or to upgrade to a {PLAN_TITLES[PLAN_TYPES.MULTI_USER]}.
-        </p>
-      </div>
-      }
-      {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.INACTIVE &&
-      <div className="admin-notices__notice admin-notices__notice--danger">
-        <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} /> Inactive</h2>
-        <p>We are in the process of removing your account.</p>
-      </div>
-      }
-      {lockedAccountStatusesMinusInactive.includes(organization.subscriptionStatus) &&
-      <div className="admin-notices__notice admin-notices__notice--danger">
-        <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} /> Past due</h2>
-        <p>We cannot successfully bill you with your current payment information.</p>
-        <p>Please update your payment information below to activate your account.</p>
-      </div>
-      }
-      {organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.PENDING_CANCEL && subscription &&
-      <div className="admin-notices__notice">
-        <h2 className="admin-notices__notice-title danger"><InfoIcon width="22" height="22" fill={colorDanger} />Account canceled</h2>
-        <p>
-          Your current period ends <b>{moment.unix(subscription.cancelAt || subscription.currentPeriodEnd).format('MMMM Do, YYYY')}</b>.
-          You have access to your projects and documents until then.
-        </p>
-        <p>
-          If you need assistance, please email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
-        </p>
-      </div>
-      }
+      {getAdminNotice()}
     </div>
   )
 }

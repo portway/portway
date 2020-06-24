@@ -2,6 +2,7 @@ const middlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&time
 
 const exportedEntrypoints = {
   index: ['./src/client/css/index.scss'],
+  signup: ['./src/client/css/index.scss', './src/client/js/signup.js'],
   registration: ['./src/client/css/index.scss', './src/client/js/registration.js'],
   passwordReset: ['./src/client/css/index.scss', './src/client/js/passwordReset.js'],
   app: ['./src/client/js/index.js']

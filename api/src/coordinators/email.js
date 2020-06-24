@@ -5,7 +5,7 @@ import ejs from 'ejs'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import BusinessOrganization from '../businesstime/organization'
 import { SUPPORT_EMAIL } from '../constants/email'
-import tokenSettings from '../../src/libs/tokenSettings'
+import tokenSettings from '../libs/tokenSettings'
 
 const { CLIENT_URL } = process.env
 
@@ -21,7 +21,8 @@ const EMAIL_TEMPLATES = {
   SIGNUP_CONFIRM: 'SIGNUP_CONFIRM',
   PAYMENT_FAILED: 'PAYMENT_FAILED',
   PAYMENT_SUCCESS: 'PAYMENT_SUCCESS',
-  SUBSCRIPTION_CANCELED: 'SUBSCRIPTION_CANCELED'
+  SUBSCRIPTION_CANCELED: 'SUBSCRIPTION_CANCELED',
+  TRIAL_WILL_END: 'TRIAL_WILL_END'
 }
 const EMAIL_TEMPLATE_FILES = {
   [EMAIL_TEMPLATES.INVITE]: 'invite.html',
@@ -31,7 +32,9 @@ const EMAIL_TEMPLATE_FILES = {
   [EMAIL_TEMPLATES.SIGNUP_CONFIRM]: 'signup.html',
   [EMAIL_TEMPLATES.PAYMENT_FAILED]: 'payment-failed.html',
   [EMAIL_TEMPLATES.PAYMENT_SUCCESS]: 'payment-success.html',
-  [EMAIL_TEMPLATES.SUBSCRIPTION_CANCELED]: 'subscription-canceled.html'
+  [EMAIL_TEMPLATES.SUBSCRIPTION_CANCELED]: 'subscription-canceled.html',
+  [EMAIL_TEMPLATES.TRIAL_WILL_END]: 'trial-will-end.html',
+  [EMAIL_TEMPLATES.TRIAL_ENDED]: 'trial-ended.html'
 }
 const EJS_TEMPLATE_FUNCTIONS = {}
 
@@ -132,6 +135,32 @@ async function sendSubscriptionCanceled(email) {
   })
 }
 
+async function sendTrialWillEnd(email) {
+  const subject = 'Your Portway trial is ending soon'
+  const textBody = 'Your Portway trial will end in 3 days. Add a payment method to keep your account active.'
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.TRIAL_WILL_END]({ textBody })
+
+  await sendSingleRecipientEmail({
+    address: email,
+    textBody: textBody,
+    htmlBody,
+    subject
+  })
+}
+
+async function sendTrialEnded(email) {
+  const subject = 'Your Portway trial has ended'
+  const textBody = 'Your Portway trial has ended. Add a payment method to re-activate your account.'
+  const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.TRIAL_ENDED]({ textBody })
+
+  await sendSingleRecipientEmail({
+    address: email,
+    textBody: textBody,
+    htmlBody,
+    subject
+  })
+}
+
 export default {
   sendInvitationEmail,
   sendPasswordChangeEmail,
@@ -140,5 +169,7 @@ export default {
   sendSignupVerification,
   sendPaymentFailed,
   sendPaymentSuccess,
-  sendSubscriptionCanceled
+  sendSubscriptionCanceled,
+  sendTrialWillEnd,
+  sendTrialEnded
 }

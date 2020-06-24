@@ -21,3 +21,4 @@ steps:
       - VALUESFILE_prod=kubernetes/helm/portway/prodValues.yaml
       - VALUE_apiTag=$VERSION_TAG
       - VALUE_webTag=$VERSION_TAG
+      - VALUE_sync_tag=$VERSION_TAG

@@ -2,67 +2,26 @@
 @import 'CSS/inc/_mixins.scss';
 
 .document-field {
-  --field-edit-mode-background: hsla(0, 0%, 95%, 90%);
   --field-name-width: 150px;
   --field-data-name-color: hsla(0, 0%, 26%, .5);
   --field-data-background: var(--theme-overflow);
   --field-data-border: var(--color-gray-10);
-  --field-dragging-background: var(--color-gray-5);
   @media (prefers-color-scheme: dark) {
-    --field-edit-mode-background: hsla(0, 0%, 5%, 90%);
     --field-data-name-color: hsla(0, 0%, 100%, .2);
     --field-data-background: var(--theme-overlay-dark);
     --field-data-border: var(--theme-overlay-light);
-    --field-dragging-background: var(--theme-base);
   }
   margin-top: 2.4rem;
   max-width: 1200px;
   outline: 0;
+  transition: opacity 0.2s linear, filter 0.2s linear;
 
-  // The whole field, when it is being dragged
-  &--dragging {
-    cursor: grabbing;
-    padding: 1.8rem 0 !important;
-    -webkit-user-drag: element; // Safari hack
-    .document-field__actions {
-      visibility: hidden;
-    }
-    .document-field__container {
-      background-color: var(--field-dragging-background) !important;
-      border: none !important;
-      border-radius: var(--border-radius);
-      * { visibility: hidden; }
-    }
-    * {
-      pointer-events: none;
-    }
+  &--is-being-remotely-edited {
+    cursor: pointer;
+    filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none;
   }
-
-  // When something is dragged over the field, turn off all mouse interactions
-  &--dragged-over {
-    * {
-      pointer-events: none;
-    }
-  }
-
-  // Clone element is passed to the browser as the "drag image"
-  &--clone-element {
-    list-style: none;
-    .document-field__component {
-      padding: 0;
-    }
-    .document-field__container {
-      margin: 0;
-    }
-    .document-field__actions {
-      display: none;
-    }
-  }
-
-  // Edit mode is when the document is in edit mode, we are changing
-  // every field to an outline UI
-  // &--edit-mode {
-  // }
 
 } // document-field
 
@@ -71,9 +30,6 @@
 // get a top border so they look more like a table
 .document-field--data + .document-field--data {
   margin-top: 0;
-  &.document-field--edit-mode {
-    margin-top: 2.4rem;
-  }
   .document-field__container {
     border-top: none;
   }
@@ -88,11 +44,6 @@
 
   @include media ('>medium') {
     padding: 0 2.3rem;
-  }
-
-  .document__fields--is-dragging & {
-    overflow: hidden;
-    max-height: 100px;
   }
 
 } // document-field__component
@@ -117,17 +68,6 @@
     }
   }
 
-  // Edit mode is when the document is in edit mode, we are changing
-  // every field to an outline UI
-  .document-field--edit-mode & {
-    background-color: var(--field-edit-mode-background);
-    border-radius: var(--border-radius);
-    border: none;
-    .document-field__content {
-      display: none;
-    }
-  }
-
 } // document-field__container
 
 
@@ -135,16 +75,17 @@
 .document-field__name {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   padding: .8rem .8rem;
 
   @include media('>medium') {
     align-items: flex-start;
     border-right: thin solid var(--theme-border);
     display: flex;
-    flex: 0 0 var(--field-name-width);
     flex-direction: column;
     justify-content: center;
     padding: .7rem 1.2rem;
+    width: var(--field-name-width);
   }
 
   &-label {
@@ -161,9 +102,11 @@
     font-size: 1.3rem; // 13px
     font-weight: 600;
     min-height: unset;
-    min-width: var(--field-name-width); // change this in DocumentFieldComponent.js as well
     outline: none;
+    overflow: hidden;
     padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     .using-mouse & {
       &:focus {
         border: thin solid transparent;
@@ -182,6 +125,10 @@
   flex-direction: column;
   justify-content: center;
   position: relative;
+
+  .document-field--text & {
+    display: block;
+  }
 
   input {
     border: thin solid transparent;

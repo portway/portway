@@ -1,5 +1,6 @@
 import BusinessProject from '../businesstime/project'
 import BusinessProjectUser from '../businesstime/projectuser'
+import documentCoordinator from './document'
 import { PROJECT_ROLE_IDS } from '../constants/roles'
 
 const createProject = async (projectBody, creatorUserId, orgId) => {
@@ -16,6 +17,7 @@ const createProject = async (projectBody, creatorUserId, orgId) => {
 const deleteById = async (projectId, orgId) => {
   await BusinessProject.deleteById(projectId, orgId)
   await BusinessProjectUser.removeAllUsersFromProject(projectId, orgId)
+  await documentCoordinator.deleteAllForProject(projectId, orgId)
 }
 
 export default {

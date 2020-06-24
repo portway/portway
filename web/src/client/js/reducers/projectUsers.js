@@ -29,25 +29,6 @@ export const projectUsers = (state = initialState, action) => {
         }
       }
     }
-    case ActionTypes.INITIATE_PROJECT_ASSIGNEE_UPDATE: {
-      const usersByProjectId = { ...state.loading.usersByProjectId, [action.projectId]: true }
-      return { ...state, loading: { ...state.loading, usersByProjectId } }
-    }
-    case ActionTypes.RECEIVE_UPDATED_PROJECT_ASSIGNEE: {
-      const loadingById = { ...state.loading.usersByProjectId, [action.data.projectId]: false }
-      const updatedUsers = { ...state.usersByProjectId[action.data.projectId], [action.data.userId]: action.data.user }
-      return {
-        ...state,
-        usersByProjectId: {
-          ...state.usersByProjectId,
-          [action.data.userId]: updatedUsers
-        },
-        loading: {
-          ...state.loading,
-          usersByProjectId: loadingById
-        }
-      }
-    }
     case ActionTypes.CREATE_PROJECT_ASSIGNEE: {
       const usersByProjectId = { ...state.loading.usersByProjectId, [action.projectId]: true }
       return { ...state, loading: { ...state.loading, usersByProjectId } }

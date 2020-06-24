@@ -2,41 +2,31 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES } from 'Shared/constants'
 import DocumentFieldComponent from './DocumentFieldComponent'
 import FieldTextComponent from 'Components/FieldText/FieldTextComponent'
 import FieldNumberComponent from 'Components/FieldNumber/FieldNumberComponent'
 import FieldStringComponent from 'Components/FieldString/FieldStringComponent'
 import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
+import FieldDateComponent from 'Components/FieldDate/FieldDateComponent'
+import FieldFileComponent from 'Components/FieldFile/FieldFileComponent'
 
 const DocumentFieldsComponent = ({
   createdFieldId,
   createFieldHandler,
   disabled,
-  documentMode,
-  dragEndHandler,
-  dragEnterHandler,
-  dragLeaveHandler,
-  dragStartHandler,
-  dropHandler,
   fieldBlurHandler,
   fieldChangeHandler,
-  fieldDestroyHandler,
   fieldFocusHandler,
   fieldRenameHandler,
+  fieldDiscardHandler,
   fields,
   fieldsUpdating,
-  isDragging,
   isPublishing,
-  readOnly,
+  readOnly
 }) => {
   const [settingsForField, setSettingsForField] = useState(null)
-
-  const textFields = fields.filter((field) => {
-    return field.type === FIELD_TYPES.TEXT
-  })
-  const lastTextFieldId = textFields.length > 0 ? textFields[textFields.length - 1].id : null
-  const documentEditMode = documentMode === DOCUMENT_MODE.EDIT
+  const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
   const bigInvisibleButton = (
     <li className="document-field" key="bib">
@@ -62,12 +52,9 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.TEXT:
         fieldTypeComponent = (
           <FieldTextComponent
-            autoFocusElement={lastTextFieldId}
-            field={field}
+            autoFocusElement={hasOnlyOneTextField || createdFieldId === field.id}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -75,11 +62,9 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.NUMBER:
         fieldTypeComponent = (
           <FieldNumberComponent
-            field={field}
+            autoFocusElement={createdFieldId === field.id}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -87,11 +72,9 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.STRING:
         fieldTypeComponent = (
           <FieldStringComponent
-            field={field}
+            autoFocusElement={createdFieldId === field.id}
             onBlur={fieldBlurHandler}
-            onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
           />
         )
@@ -99,12 +82,38 @@ const DocumentFieldsComponent = ({
       case FIELD_TYPES.IMAGE:
         fieldTypeComponent = (
           <FieldImageComponent
+            autoFocusElement={createdFieldId === field.id}
+            field={field}
+            onBlur={fieldBlurHandler}
+            onFocus={fieldFocusHandler}
+            onRename={fieldRenameHandler}
+            onDiscard={fieldDiscardHandler}
+            readOnly={readOnly}
+            settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
+            settingsMode={settingsForField === field.id}
+            updating={fieldsUpdating[field.id]}
+          />
+        )
+        break
+      case FIELD_TYPES.DATE:
+        fieldTypeComponent = (
+          <FieldDateComponent
+            autoFocusElement={createdFieldId === field.id}
+            onBlur={fieldBlurHandler}
+            onChange={fieldChangeHandler}
+            onFocus={fieldFocusHandler}
+            readOnly={readOnly}
+          />
+        )
+        break
+      case FIELD_TYPES.FILE:
+        fieldTypeComponent = (
+          <FieldFileComponent
             field={field}
             onBlur={fieldBlurHandler}
             onChange={fieldChangeHandler}
             onFocus={fieldFocusHandler}
             onRename={fieldRenameHandler}
-            editMode={documentEditMode}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
             settingsMode={settingsForField === field.id}
@@ -117,22 +126,19 @@ const DocumentFieldsComponent = ({
     }
     if (field) {
       const settingsModeForField = settingsForField === field.id
+
       return (
         <DocumentFieldComponent
-          documentMode={documentMode}
-          dragEndHandler={dragEndHandler}
-          dragEnterHandler={settingsModeForField ? null : dragEnterHandler}
-          dragLeaveHandler={settingsModeForField ? null : dragLeaveHandler}
-          dragStartHandler={settingsModeForField ? null : dragStartHandler}
-          dropHandler={settingsModeForField ? null : dropHandler}
           field={field}
           index={index}
-          isDragging={isDragging}
           isNewField={createdFieldId === field.id}
           isUpdating={fieldsUpdating[field.id]}
           key={field.id}
-          onDestroy={() => { fieldDestroyHandler(field.id, field.type) }}
+          onBlur={fieldBlurHandler}
+          onFocus={fieldFocusHandler}
+          onChange={fieldChangeHandler}
           onRename={fieldRenameHandler}
+          onDiscard={fieldDiscardHandler}
           readOnly={readOnly}
           settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
           settingsMode={settingsModeForField}
@@ -150,7 +156,6 @@ const DocumentFieldsComponent = ({
       if (
         index === fields.length - 1 &&
         field.type !== FIELD_TYPES.TEXT &&
-        documentMode !== DOCUMENT_MODE.EDIT &&
         !readOnly
       ) {
         // append a big invisible button so that you can click there to continue the "body"
@@ -161,13 +166,11 @@ const DocumentFieldsComponent = ({
   }
   const fieldsClasses = cx({
     'document__fields': true,
-    'document__fields--edit-mode': documentEditMode,
-    'document__fields--is-dragging': isDragging,
     'document__fields--disabled': isPublishing || disabled
   })
   return (
     <div className={fieldsClasses}>
-      <ol>
+      <ol className="document__fields-list">
         {renderFields()}
       </ol>
     </div>
@@ -178,22 +181,15 @@ DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,
   createFieldHandler: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  documentMode: PropTypes.string.isRequired,
-  dragEndHandler: PropTypes.func.isRequired,
-  dragEnterHandler: PropTypes.func.isRequired,
-  dragLeaveHandler: PropTypes.func.isRequired,
-  dragStartHandler: PropTypes.func.isRequired,
-  dropHandler: PropTypes.func.isRequired,
   fieldBlurHandler: PropTypes.func.isRequired,
   fieldChangeHandler: PropTypes.func.isRequired,
-  fieldDestroyHandler: PropTypes.func.isRequired,
   fieldFocusHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
+  fieldDiscardHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired
 }
 
 export default DocumentFieldsComponent

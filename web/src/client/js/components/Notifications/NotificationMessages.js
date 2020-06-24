@@ -23,6 +23,8 @@ export const getNotificationTitle = function(notification) {
         return 'File too large'
       case 415:
         return 'Unsupported media type'
+      case 429:
+        return 'Too many requests'
       case 500:
         return 'Internal error...'
       default:
@@ -37,6 +39,11 @@ export const getNotificationMessage = function(notification) {
   const errorMessages = {
     403: `Sorry, you don\'t have access to ${errorMessage || 'that'}`,
     404: errorMessage ? `Sorry, we couldn\'t find ${errorMessage}` : '',
+    429: (
+      <>
+        {`There's a lot of bandwidth being used by your org right now, please refresh in a few minutes.`}
+      </>
+    ),
     500: (
       <>
         {`Something went wrong, and it\'s our fault. Try refreshing, or email`}{' '}

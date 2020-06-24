@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from '@hapi/joi'
 import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import UserCoordinator from '../coordinators/user'
 import RESOURCE_TYPES from '../constants/resourceTypes'

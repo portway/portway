@@ -15,6 +15,7 @@ export const ActionTypes = {
   REMOVE_PROJECT: 'REMOVE_PROJECT',
   REQUEST_USER_PROJECTS: 'REQUEST_USER_PROJECTS',
   RECEIVE_USER_PROJECTS: 'RECEIVE_USER_PROJECTS',
+  SORT_PROJECTS: 'SORT_PROJECTS',
   // Project Assignments
   REQUEST_PROJECT_ASSIGNEES: 'REQUEST_PROJECT_ASSIGNEES',
   RECEIVE_PROJECT_ASSIGNEES: 'RECEIVE_PROJECT_ASSIGNEES',
@@ -64,6 +65,8 @@ export const ActionTypes = {
   REMOVE_FIELD: 'REMOVE_FIELD',
   FOCUS_FIELD: 'FOCUS_FIELD',
   BLUR_FIELD: 'BLUR_FIELD',
+  SET_LAST_CREATED_FIELD_ID: 'SET_LAST_CREATED_FIELD_ID',
+  REMOVE_LAST_CREATED_FIELD_ID: 'REMOVE_LAST_CREATED_FIELD_ID',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -82,6 +85,8 @@ export const ActionTypes = {
   RECEIVE_USERS: 'RECEIVE_USERS',
   REQUEST_USER: 'REQUEST_USER',
   RECEIVE_USER: 'RECEIVE_USER',
+  REQUEST_MULTIPLE_USERS: 'REQUEST_MULTIPLE_USERS',
+  RECEIEVE_MULTIPLE_USERS: 'RECEIEVE_MULTIPLE_USERS',
   INITIATE_USER_UPDATE: 'INITIATE_USER_UPDATE',
   RECEIVE_UPDATED_USER: 'RECEIVE_UPDATED_USER',
   RECEIVE_UPDATED_USER_ROLE: 'RECEIVE_UPDATED_USER_ROLE',
@@ -120,6 +125,7 @@ export const ActionTypes = {
   RECEIVE_REMOVED_ORGANIZATION: 'RECEIVE_REMOVED_ORGANIZATION',
   REQUEST_ORGANIZATION_SEATS: 'REQUEST_ORGANIZATION_SEATS',
   RECEIVE_ORGANIZATION_SEATS: 'RECEIVE_ORGANIZATION_SEATS',
+  RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID: 'RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID',
   // UI
   UI_CANCEL_CONFIRMATION: 'UI_CANCEL_CONFIRMATION',
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
@@ -132,6 +138,21 @@ export const ActionTypes = {
   UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM',
   // Search
   SEARCH_CLEAR: 'SEARCH_CLEAR',
+  // User Sync
+  DOCUMENT_ROOM_USERS_RECEIVED: 'DOCUMENT_ROOM_USERS_RECEIVED',
+  EMIT_JOIN_DOCUMENT_ROOM: 'EMIT_JOIN_DOCUMENT_ROOM',
+  EMIT_LEAVE_DOCUMENT_ROOM: 'EMIT_LEAVE_DOCUMENT_ROOM',
+  EMIT_FIELD_FOCUS: 'EMIT_FIELD_FOCUS',
+  EMIT_FIELD_BLUR: 'EMIT_FIELD_BLUR',
+  EMIT_FIELD_CHANGE: 'EMIT_FIELD_CHANGE',
+  SOCKET_ERROR: 'SOCKET_ERROR',
+  DOCUMENT_ROOM_JOINED: 'DOCUMENT_ROOM_JOINED',
+  DOCUMENT_ROOM_LEFT: 'DOCUMENT_ROOM_LEFT',
+  FIELD_FOCUS_EMITTED: 'FIELD_FOCUS_EMITTED',
+  FIELD_BLUR_EMITTED: 'FIELD_BLUR_EMITTED',
+  FIELD_CHANGE_EMITTED: 'FIELD_CHANGE_EMITTED',
+  REMOTE_USER_FIELD_FOCUS_UPDATED: 'USER_FIELD_FOCUS_UPDATED',
+  REMOTE_FIELD_CHANGE_EVENT_RECEIVED: 'REMOTE_FIELD_CHANGE_EVENT_RECEIVED'
 }
 
 export const Route = {
@@ -151,8 +172,8 @@ export const Form = {
 }
 
 export const Projects = {
-  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS),
-  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data'),
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECTS, 'page'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECTS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_PROJECT, 'id'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_PROJECT, 'data'),
   receiveError: makeActionCreator(ActionTypes.RECEIVE_PROJECT_ERROR, 'projectId'),
@@ -163,7 +184,8 @@ export const Projects = {
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id'),
   requestForUser: makeActionCreator(ActionTypes.REQUEST_USER_PROJECTS, 'userId'),
-  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data')
+  receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data'),
+  sort: makeActionCreator(ActionTypes.SORT_PROJECTS, 'sortBy', 'sortMethod')
 }
 
 export const ProjectAssignees = {
@@ -211,8 +233,8 @@ export const Fields = {
   initiateCreate: makeActionCreator(ActionTypes.INITIATE_FIELD_CREATE, 'documentId', 'fieldType'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_FIELD, 'projectId', 'documentId', 'data'),
   initiateOrderUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_ORDER, 'documentId', 'fieldId', 'newOrder'),
-  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'fieldId'),
-  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'projectId', 'documentId', 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_FIELD_UPDATE, 'documentId', 'fieldId'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_FIELD, 'projectId', 'documentId', 'fieldId', 'data'),
   // Move & Copy
   initiateMove: makeActionCreator(ActionTypes.INITIATE_FIELD_MOVE, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
   movedField: makeActionCreator(ActionTypes.FIELD_MOVED, 'projectId', 'oldDocumentId', 'newDocumentId', 'fieldId'),
@@ -221,9 +243,14 @@ export const Fields = {
   // Remove
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_FIELD_REMOVE),
   removeOne: makeActionCreator(ActionTypes.REMOVE_FIELD, 'projectId', 'documentId', 'fieldId'),
-  // Blur / Focus
+  // Blur / Focus events
   blurField: makeActionCreator(ActionTypes.BLUR_FIELD, 'fieldId', 'fieldType', 'fieldData'),
   focusField: makeActionCreator(ActionTypes.FOCUS_FIELD, 'fieldId', 'fieldType', 'fieldData'),
+  // Created field Id
+  setLastCreatedFieldId: makeActionCreator(ActionTypes.SET_LAST_CREATED_FIELD_ID, 'fieldId'),
+  // TODO: last created field id is not currently being un-set, use this to unset it if that causes
+  // problems with focus in the future
+  // removeLastCreatedFieldId: makeActionCreator(ActionTypes.REMOVE_LAST_CREATED_FIELD_ID, 'fieldId'),
 }
 
 export const Notifications = {
@@ -236,6 +263,8 @@ export const Users = {
   receive: makeActionCreator(ActionTypes.RECEIVE_USERS, 'data', 'page', 'totalPages'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_USER, 'userId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_USER, 'data'),
+  requestMultipleUnloadedIds: makeActionCreator(ActionTypes.REQUEST_MULTIPLE_USERS, 'userIds'),
+  receiveMultipleIds: makeActionCreator(ActionTypes.RECEIEVE_MULTIPLE_USERS, 'data'),
   create: makeActionCreator(ActionTypes.INITIATE_USER_CREATE, 'userId'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_USER, 'data'),
   initiateUpdate: makeActionCreator(ActionTypes.INITIATE_USER_UPDATE, 'userId'),
@@ -280,6 +309,8 @@ export const Organizations = {
   // Remove account
   initiateOrgRemoval: makeActionCreator(ActionTypes.INITIATE_ORGANIZATION_REMOVAL),
   receiveOrgRemoval: makeActionCreator(ActionTypes.RECEIVE_REMOVED_ORGANIZATION),
+  // Special project ID
+  receiveSpecialProjectId: makeActionCreator(ActionTypes.RECEIVE_ORGANIZATION_SPECIAL_PROJECT_ID, 'orgId', 'projectId'),
 }
 
 export const UI = {
@@ -296,4 +327,21 @@ export const UI = {
 
 export const Search = {
   clearSearch: makeActionCreator(ActionTypes.SEARCH_CLEAR),
+}
+
+export const UserSync = {
+  documentRoomUsersReceived: makeActionCreator(ActionTypes.DOCUMENT_ROOM_USERS_RECEIVED, 'documentId', 'userIds'),
+  emitJoinDocumentRoom: makeActionCreator(ActionTypes.EMIT_JOIN_DOCUMENT_ROOM, 'documentId'),
+  emitLeaveDocumentRoom: makeActionCreator(ActionTypes.EMIT_LEAVE_DOCUMENT_ROOM, 'documentId'),
+  emitFieldFocus: makeActionCreator(ActionTypes.EMIT_FIELD_FOCUS, 'fieldId'),
+  emitFieldBlur: makeActionCreator(ActionTypes.EMIT_FIELD_BLUR, 'fieldId'),
+  emitFieldChange: makeActionCreator(ActionTypes.EMIT_FIELD_CHANGE, 'fieldId'),
+  socketError: makeActionCreator(ActionTypes.SOCKET_ERROR),
+  documentRoomJoined: makeActionCreator(ActionTypes.DOCUMENT_ROOM_JOINED, 'documentId'),
+  documentRoomLeft: makeActionCreator(ActionTypes.DOCUMENT_ROOM_LEFT, 'documentId'),
+  fieldFocusEmitted: makeActionCreator(ActionTypes.FIELD_FOCUS_EMITTED, 'fieldId'),
+  fieldBlurEmitted: makeActionCreator(ActionTypes.FIELD_BLUR_EMITTED, 'fieldId'),
+  fieldChangeEmitted: makeActionCreator(ActionTypes.FIELD_CHANGE_EMITTED, 'fieldId'),
+  remoteUserFieldFocusUpdated: makeActionCreator(ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED, 'userId', 'fieldId'),
+  remoteFieldChangeEventReceived: makeActionCreator(ActionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED, 'userId', 'fieldId', 'focusedFieldId')
 }

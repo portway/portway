@@ -1,0 +1,26 @@
+@import 'CSS/inc/_include-media.scss';
+
+.dashboard {
+  gap: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  @include media('>medium') {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.dashboard__toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0 3rem;
+}
+
+.dashboard__footer {
+  padding: 0 1rem;
+  .btn--like-a-link {
+    color: var(--theme-text-color);
+    font-size: 1.3rem;
+  }
+}

@@ -10,12 +10,19 @@
 
 .menu__header {
   padding: 1.4rem 1.4rem 0;
-
   &:not(:first-child) {
     border-top: thin solid var(--theme-border);
     margin-top: .7rem
   }
+}
 
+.menu__divider {
+  border-top: thin solid var(--theme-border);
+  margin-top: .7rem;
+  padding: 1.4rem 1.4rem .7rem;
+}
+
+.menu__header, .menu__divider {
   h2, h3, h4, h5, h6 {
     align-items: center;
     display: flex;

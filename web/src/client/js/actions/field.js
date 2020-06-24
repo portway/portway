@@ -1,7 +1,9 @@
 import { NOTIFICATION_RESOURCE, NOTIFICATION_TYPES, FIELD_TYPES } from 'Shared/constants'
 import { Fields, Notifications, Validation } from './index'
+import { fetchDocument } from './document'
 import { add, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { fetchImageBlob } from 'Utilities/imageUtils'
+import { emitFieldChange, emitFieldFocus, emitFieldBlur } from './userSync'
 
 export const createField = (projectId, documentId, fieldType, body) => {
   return async (dispatch) => {
@@ -19,15 +21,21 @@ export const createField = (projectId, documentId, fieldType, body) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('field', data, status)) :
+    if (validationCodes.includes(status)) {
+      dispatch(Validation.create('field', data, status))
+    } else {
       dispatch(Fields.receiveOneCreated(projectId, documentId, data))
+      dispatch(Fields.setLastCreatedFieldId(data.id))
+      return data
+    }
+    // emit user sync message
+    dispatch(emitFieldChange(data.id, documentId))
   }
 }
 
 export const updateField = (projectId, documentId, fieldId, body) => {
   return async (dispatch) => {
-    dispatch(Fields.initiateUpdate(fieldId))
+    dispatch(Fields.initiateUpdate(documentId, fieldId))
     let data
     let status
     // if we're getting FormData here, it's a file upload, pass the FormData as the body
@@ -37,19 +45,27 @@ export const updateField = (projectId, documentId, fieldId, body) => {
       ({ data, status } = await update(`v1/documents/${documentId}/fields/${fieldId}`, body))
     }
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.FIELD, status))
       return
     }
     validationCodes.includes(status) ?
       dispatch(Validation.create('field', data, status)) :
-      dispatch(Fields.receiveOneUpdated(projectId, documentId, data))
+      dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
+    // emit user sync message
+    dispatch(emitFieldChange(fieldId, documentId))
   }
 }
 
-export const updateFieldOrder = (documentId, fieldId, newOrder) => {
+export const updateFieldOrder = (documentId, fieldId, newOrder, fetch = false) => {
   return async (dispatch) => {
     dispatch(Fields.initiateOrderUpdate(documentId, fieldId, newOrder))
     await update(`v1/documents/${documentId}/fields/${fieldId}/order`, { order: newOrder })
+    if (fetch) {
+      dispatch(fetchDocument(documentId))
+    }
+    // emit user sync message
+    dispatch(emitFieldChange(fieldId, documentId))
+    return newOrder
   }
 }
 
@@ -62,20 +78,40 @@ export const removeField = (projectId, documentId, fieldId) => {
       return
     }
     dispatch(Fields.removeOne(projectId, documentId, fieldId))
+    // emit user sync message
+    dispatch(emitFieldChange(fieldId, documentId))
   }
 }
 
-export const blurField = (fieldId, fieldType, fieldData) => {
+export const blurField = (fieldId, fieldType, documentId, fieldData) => {
   return async (dispatch) => {
     dispatch(Fields.blurField(fieldId, fieldType, fieldData))
+    // emit user sync message
+    dispatch(emitFieldBlur(fieldId, documentId))
   }
 }
 
-export const focusField = (fieldId, fieldType, fieldData) => {
+export const focusField = (fieldId, fieldType, documentId, fieldData) => {
   return async (dispatch) => {
     dispatch(Fields.focusField(fieldId, fieldType, fieldData))
+    // emit user sync message
+    dispatch(emitFieldFocus(fieldId, documentId))
   }
 }
+
+export const setLastCreatedFieldId = (fieldId) => {
+  return async (dispatch) => {
+    dispatch(Fields.setLastCreatedFieldId(fieldId))
+  }
+}
+
+// TODO: last created field id is not currently being un-set, use this to unset it if that causes
+// problems with focus in the future
+// export const removeLastCreatedFieldId = (fieldId) => {
+//   return async (dispatch) => {
+//     dispatch(Fields.removeLastCreatedFieldId(fieldId))
+//   }
+// }
 
 /**
  * Creates a new field in newDocumentId using an existing field's data
@@ -104,6 +140,87 @@ export const copyField = (projectId, currentDocumentId, newDocumentId, field) =>
     dispatch(Fields.initiateCopy(projectId, currentDocumentId, newDocumentId, field.id))
     await createField(projectId, newDocumentId, field.type, body)(dispatch)
     dispatch(Fields.copiedField(projectId, currentDocumentId, newDocumentId, field.id))
+  }
+}
+
+export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropriately = (
+  documentId,
+  fieldId,
+  editor,
+  fieldWithCursorOrder,
+  newFieldName,
+  fieldType,
+  newSplitTextName,
+  socketDispatch
+) => {
+  return async (dispatch) => {
+    const currLine = editor.getCursor().line
+    const currChar = editor.getCursor().ch
+    const lastLine = editor.lastLine()
+    const lastLineContent = editor.getLine(lastLine)
+
+    let splitFieldData = null
+    let newSplitField = null
+
+    // Get the selection of the field after the current cursor pos
+    const zeroRange = { line: 0, ch: 0 }
+    const startRange = { line: currLine, ch: currChar }
+    const endRange = { line: lastLine, ch: lastLineContent.length }
+
+    // Save the text after the cursor
+    const textBeforeCursor = editor.getRange(zeroRange, startRange)
+    const textAfterCursor = editor.getRange(startRange, endRange)
+
+    // Create the new field
+    const { data: newField, status: newFieldStatus } = await add(`v1/documents/${documentId}/fields`, { name: newFieldName, type: fieldType })
+    if (globalErrorCodes.includes(newFieldStatus)) {
+      dispatch(Notifications.create(newField.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      return
+    }
+
+    if (textAfterCursor !== '') {
+      // Create the new split text field
+      splitFieldData = {
+        name: newSplitTextName,
+        type: FIELD_TYPES.TEXT,
+        value: textAfterCursor,
+      }
+      const { data: newSplitFieldData, status: newSplitFieldStatus } = await add(`v1/documents/${documentId}/fields`, splitFieldData)
+      if (globalErrorCodes.includes(newSplitFieldStatus)) {
+        dispatch(Notifications.create(newField.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+        return
+      }
+      newSplitField = newSplitFieldData
+    }
+
+    // Manually update the current textfield
+    await update(`v1/documents/${documentId}/fields/${fieldId}`, { value: textBeforeCursor })
+
+    // Re-order the two new fields
+    await update(`v1/documents/${documentId}/fields/${newField.id}/order`, { order: fieldWithCursorOrder + 1 })
+    if (textAfterCursor !== '') {
+      await update(`v1/documents/${documentId}/fields/${newSplitField.id}/order`, { order: fieldWithCursorOrder + 2 })
+    }
+
+    // Replace the text
+    // removed this and am manually calling the field update API so we don't get an onChange
+    // editor.replaceRange('', startRange, endRange)
+
+    // Save the current window position so nothing moves
+    const df = document.querySelector('.document__fields')
+    const oldHeight = df.offsetHeight
+    const oldScrollTop = df.scrollTop
+
+    // Fetch the document for a total re-render now that we have everything set up
+    dispatch(fetchDocument(documentId)).then(() => {
+      // When the document re-renders, set its scroll manually to where it was before
+      df.scrollTop = oldScrollTop + (df.offsetHeight - oldHeight)
+    })
+    dispatch(Fields.setLastCreatedFieldId(newField.id))
+
+    if (socketDispatch) {
+      socketDispatch(emitFieldChange(socketDispatch, fieldId, documentId))
+    }
   }
 }
 

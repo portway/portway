@@ -39,24 +39,39 @@ export const documentFields = (state = initialState, action) => {
         ...state.documentFieldsById,
         [documentId]: { ...documentFields, [id]: action.data }
       }
-      const lastCreatedFieldId = id
-      return { ...state, documentFieldsById, lastCreatedFieldId }
+      return { ...state, documentFieldsById }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
-      const { fieldId } = action
-      const loadingById = { ...state.loading.byId, [fieldId]: true }
-      return { ...state, loading: { ...state.loading, byId: loadingById } }
+      const { documentId, fieldId } = action
+      const byId = { ...state.loading.byId, [fieldId]: true }
+      const byDocument = { ...state.loading.byDocument, [documentId]: true }
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          byDocument,
+          byId
+        }
+      }
     }
     case ActionTypes.RECEIVE_UPDATED_FIELD: {
-      const { id, documentId } = action.data
+      const { documentId, fieldId } = action
       const documentFields = state.documentFieldsById[documentId] || {}
       const documentFieldsById = {
         ...state.documentFieldsById,
-        [documentId]: { ...documentFields, [id]: action.data }
+        [documentId]: { ...documentFields, [fieldId]: action.data }
       }
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
-      const loadingById = { ...state.loading.byId, [id]: false }
-      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
+      const byId = { ...state.loading.byId, [fieldId]: false }
+      const byDocument = { ...state.loading.byDocument, [documentId]: false }
+      return {
+        ...state,
+        documentFieldsById,
+        loading: {
+          ...state.loading,
+          byDocument,
+          byId
+        }
+      }
     }
     case ActionTypes.INITIATE_FIELD_ORDER: {
       const { documentId, fieldId, newOrder } = action
@@ -112,14 +127,21 @@ export const documentFields = (state = initialState, action) => {
       // eslint-disable-next-line no-unused-vars
       const { [fieldId]: __, ...restDocumentFields } = documentFields
       const loadingById = { ...state.loading.byId, [fieldId]: false }
-      const lastCreatedFieldId = initialState.lastCreatedFieldId
       const documentFieldsById = { ...state.documentFieldsById, [documentId]: restDocumentFields }
-      return { ...state, documentFieldsById, lastCreatedFieldId, loading: { ...state.loading, byId: loadingById } }
+      return { ...state, documentFieldsById, loading: { ...state.loading, byId: loadingById } }
     }
     // Blur field resets focus data
-    // case ActionTypes.BLUR_FIELD: {
-    //   @todo Do whatever in here for multiple user stuff
-    // }
+    case ActionTypes.BLUR_FIELD: {
+      const { fieldId } = action
+      const focused = { ...state.focused }
+      // we have a match, trying to blur the currently focused field, clear out all focus values
+      if (fieldId === focused.id) {
+        focused.id = null
+        focused.type = null
+        focused.data = null
+      }
+      return { ...state, focused }
+    }
     // Focus field tracks field ID and certain data per type of field
     // This is so we can interact with the actual field component or ref from
     // somewhere else within the app
@@ -130,6 +152,13 @@ export const documentFields = (state = initialState, action) => {
       focused.type = fieldType
       focused.data = fieldData
       return { ...state, focused }
+    }
+    // Set / Remove lastCreatedFieldId
+    case ActionTypes.SET_LAST_CREATED_FIELD_ID: {
+      return { ...state, lastCreatedFieldId: action.fieldId }
+    }
+    case ActionTypes.REMOVE_LAST_CREATED_FIELD_ID: {
+      return { ...state, lastCreatedFieldId: null }
     }
     default:
       return state

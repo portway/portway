@@ -4,17 +4,9 @@
 //
 // useDataService compatible function
 import { matchPath } from 'react-router-dom'
-import dataMapper from './dataMapper'
+import dataMapper, { returnNull } from './dataMapper'
 
 import { PATH_PROJECTS } from 'Shared/constants'
-
-function returnNull() {
-  return {
-    fetchAction: () => null,
-    getLoadingStatusFromState: () => null,
-    getDataFromState: () => null
-  }
-}
 
 /**
  * @param resourceName {String} resource name for switch statement

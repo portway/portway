@@ -3,6 +3,7 @@
   background-color: var(--theme-border-light);
   border: thin solid transparent;
   border-radius: 50% 50%;
+  cursor: pointer;
   display: inline-flex;
   height: 26px;
   justify-content: center;
@@ -16,9 +17,13 @@
         background-color: var(--theme-overlay-dark);
       }
     }
-    &:active {
+    &:active, &:focus {
       background-color: var(--theme-overlay-light);
     }
+  }
+
+  &--square {
+    border-radius: 0 0;
   }
 
   // Colors
@@ -30,11 +35,26 @@
           background-color: transparent;
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: transparent;
       }
     }
   }
+
+  &--surface {
+    background-color: var(--theme-surface);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--theme-base);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--theme-overlay-light);
+      }
+    }
+  }
+
   &--green {
     background-color: var(--color-green);
     &:not([disabled]) {
@@ -43,8 +63,53 @@
           background-color: var(--color-green-dark);
         }
       }
-      &:active {
+      &:active, &:focus {
         background-color: var(--color-green-light);
+      }
+    }
+  }
+
+  &--red {
+    background-color: var(--color-red);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-red-dark);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-red-light);
+      }
+    }
+  }
+
+  &--brand {
+    background-color: var(--color-brand-darker);
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-brand-dark);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-brand-light);
+      }
+    }
+  }
+
+  &--dark {
+    background-color: var(--color-gray-70);
+    path {
+      fill: var(--color-gray-10);
+    }
+    &:not([disabled]) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--color-gray-80);
+        }
+      }
+      &:active, &:focus {
+        background-color: var(--color-gray-60);
       }
     }
   }

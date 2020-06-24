@@ -3,41 +3,56 @@
  * Tools is the left column of the editor that contains the dragger
  * -------------------------------------------------------------------------- */
 .document-field__tools {
+  align-items: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   position: relative;
   width: 2.4rem;
-  z-index: 2;
-}
+  z-index: 12;
 
-.document-field__dragger {
-  visibility: hidden; // because Safari was clipping shit
-
-  .document-field__tools--visible & {
-    visibility: visible; // because Safari was clipping shit
+  .document-users {
+    position: sticky;
+    top: 0;
   }
 
+}
+
+/**
+ * Document Field Changes
+ * This is the little popup message that shows up when the document has remote
+ * changes from the sync server
+ */
+.document-field__changes {
+  position: sticky;
+  top: -1rem;
+}
+.document-field__changes-container {
+  background-color: var(--color-gray-80);
+  border: thin solid var(--color-gray-90);
+  border-radius: 6px 6px;
+  box-shadow: var(--box-shadow);
+  margin-left: 2rem;
+  padding: var(--icon-margin);
+  width: 40rem;
+}
+.document-field__changes-names {
+  font-weight: 500;
+}
+.document-field__changes-message {
+  color: rgba(255, 255, 255, 85%);
+  font-size: 1.1rem;
+}
+.document-field__changes-options {
   .btn {
-    margin: 0;
-    .icon {
-      border-radius: 1rem 1rem;
-      cursor: grab;
-      height: 3.2rem;
-      min-width: 1.8rem;
-      width: 1.8rem;
-
-      .document-field--dragging & {
-        cursor: grabbing;
-      }
-
+    color: var(--color-cyan);
+    font-size: 1.1rem;
+    margin-right: var(--icon-margin);
+    &:first-child {
+      color: var(--color-cyan-darker);
     }
-    @media (hover: hover) {
+    @media(hover: hover) {
       &:hover {
-        &:not([disabled]) {
-          .icon {
-            background-color: var(--button-icon-background);
-          }
-        }
+        color: var(--color-cyan-dark);
       }
     }
   }

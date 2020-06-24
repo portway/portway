@@ -4,7 +4,7 @@ import { useLocation, useParams, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
-import { PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
+import { PATH_DOCUMENT_NEW_PARAM, URL_API_DOCS } from 'Shared/constants'
 
 import { deleteDocument, publishDocument, unpublishDocument } from 'Actions/document'
 import { uiConfirm } from 'Actions/ui'
@@ -29,7 +29,7 @@ const DocumentToolbarContainer = ({
     location.pathname
   ])
 
-  if (!document) return null
+  if (!documentId || !document) return null
 
   if (isCreating && documentId === PATH_DOCUMENT_NEW_PARAM) {
     return null
@@ -38,8 +38,8 @@ const DocumentToolbarContainer = ({
   function publishDocumentHandler() {
     const message = (
       <>
-        <p><b>{strings.PUBLISH_CONFIRMATION_TITLE} “<span className="highlight">{document.name}</span>”?</b></p>
-        <p>{strings.PUBLISH_CONFIRMATION_DESCRIPTION}</p>
+        <p><b>{strings.PUBLISH_CONFIRMATION_TITLE} “{document.name}”?</b></p>
+        <p>Publishing these changes will make them live in the <a href={URL_API_DOCS} target="_blank" rel="noopener noreferrer">API</a>.</p>
       </>
     )
     const options = {

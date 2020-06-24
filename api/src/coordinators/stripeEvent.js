@@ -5,9 +5,11 @@ import emailCoordinator from '../coordinators/email'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 import slackIntegrator from '../integrators/slack'
+import { STRIPE_STATUS } from '../constants/plans'
 
 async function handleEvent(event) {
   const eventData = event.data.object
+  const previousAttributes = event.data.previous_attributes
   const stripeId = eventData.customer
   const customer = await stripeIntegrator.getCustomer(stripeId)
   const org = await BusinessOrganization.findByStripeId(stripeId)
@@ -26,6 +28,12 @@ async function handleEvent(event) {
       break
     }
     case 'customer.subscription.deleted': {
+      // if customer never had billing info, assume they're transitioning from a trial PAST_DUE status
+      // and don't send the email
+      const billingSource = customer.sources.data[0]
+      if (!billingSource) {
+        break
+      }
       // No need to await webhook
       emailCoordinator.sendSubscriptionCanceled(customer.email)
       break
@@ -43,6 +51,17 @@ async function handleEvent(event) {
     }
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
+      // customer is going from 'trialing' to 'active' and they have no card info, send the trial ended email
+      if (
+        eventData.status === STRIPE_STATUS.ACTIVE &&
+        previousAttributes.status === STRIPE_STATUS.TRIALING &&
+        !customer.sources.data.length
+      ) {
+        emailCoordinator.sendTrialEnded(customer.email)
+      }
+      break
+    case 'customer.subscription.trial_will_end':
+      emailCoordinator.sendTrialWillEnd(customer.email)
       break
   }
   //update cached subscription status on org, we want to do this for all current events
@@ -69,6 +88,7 @@ Supported events:
   customer.subscription.created
   customer.subscription.deleted
   customer.subscription.updated
+  customer.subscription.trial_will_end
   customer.updated
   invoice.created
   invoice.finalized

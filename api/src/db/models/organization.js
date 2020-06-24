@@ -14,13 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       allowUserProjectCreation: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: true
       },
       stripeId: DataTypes.STRING,
       avatar: DataTypes.STRING,
       plan: DataTypes.ENUM(Object.keys(PLANS)),
       subscriptionStatus: DataTypes.STRING,
-      canceledAt: DataTypes.DATE
+      canceledAt: DataTypes.DATE,
+      introProjectId: DataTypes.INTEGER
     },
     {
       paranoid: true

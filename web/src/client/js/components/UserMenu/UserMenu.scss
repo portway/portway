@@ -7,54 +7,113 @@
     --user-menu-button-color: var(--color-gray-30);
   }
 
-  &__button {
-    background-color: var(--user-menu-button-color);
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: 40px;
-    border: thin solid var(--color-gray-30);
-    border-radius: 50% 50%;
-    display: block;
-    height: 40px;
-    margin: auto;
-    overflow: hidden;
-    text-indent: -9000px;
-    width: 40px;
-    @include focus(var(--user-menu-button-color), var(--color-blue));
-    @media (hover: hover) {
-      &:not([disabled]):hover {
-        background-color: var(--user-menu-button-color);
-        border: thin solid var(--color-gray-60);
-      }
-    }
-    &[aria-expanded="true"] {
-      border: thin solid var(--color-blue);
-      @media (hover: hover) {
-        &:hover {
-          border-color: var(--color-blue);
-        }
-      }
-    }
-  }
-
+  // Override menu
   .menu__header {
     background-color: var(--user-menu-banner-bg);
     padding: 1rem 1.4rem;
   }
 
-  &__username {
-    display: block;
-    font-weight: 700;
+}
+
+.user-menu__button {
+  background-color: var(--user-menu-button-color);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 40px;
+  border: thin solid var(--color-gray-30);
+  border-radius: 50% 50%;
+  display: block;
+  height: 40px;
+  margin: auto;
+  overflow: hidden;
+  text-indent: -9000px;
+  width: 40px;
+
+  @include focus(var(--user-menu-button-color), var(--color-blue));
+
+  .body--network-offline & {
+    border-color: var(--color-red);
   }
-  &__organization {
-    color: var(--color-gray-30);
+
+  @media (hover: hover) {
+    &:not([disabled]):hover {
+      background-color: var(--user-menu-button-color);
+      border: thin solid var(--color-gray-60);
+      .body--network-offline & {
+        border-color: var(--color-red-darker);
+      }
+    }
   }
-  &__link {
-    background-color: transparent !important;
-    color: var(--color-blue) !important;
-    margin: 0 !important;
-    padding: 4px 0 !important;
+
+  &[aria-expanded="true"] {
+    border: thin solid var(--color-blue);
+    .body--network-offline & {
+      border-color: var(--color-red-dark);
+    }
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--color-blue);
+        .body--network-offline & {
+          border-color: var(--color-red-dark);
+        }
+      }
+    }
+  }
+
+}
+
+// When a user has an avatar set, don't show a border ever
+// It looks weird if the avatar doesn't fill the circle
+.user-menu__button--with-avatar {
+  border: thin solid transparent;
+  @include focus(var(--user-menu-button-color), transparent);
+  @media (hover: hover) {
+    &:not([disabled]):hover {
+      border: thin solid transparent;
+    }
+  }
+  &[aria-expanded="true"] {
+    border: thin solid transparent;
+    @media (hover: hover) {
+      &:hover {
+        border: thin solid transparent;
+      }
+    }
   }
 }
 
-// /images/icon/user-avatar.svg
+.user-menu__username {
+  display: block;
+  font-weight: 700;
+}
+
+.user-menu__organization {
+  color: var(--color-gray-30);
+}
+
+.user-menu__link {
+  background-color: transparent !important;
+  color: var(--color-blue) !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+}
+
+.user-menu__network-status {
+  background-color: var(--color-red);
+  border-radius: var(--border-radius);
+  color: rgba(255, 255, 255, 85%);
+  font-size: 1.1rem;
+  margin: 1rem 0 0;
+  padding: .5rem;
+}
+
+.user-menu__network-dot {
+  background: var(--color-red);
+  border: thin solid var(--theme-overflow);
+  border-radius: 50% 50%;
+  bottom: 0;
+  height: 12px;
+  left: 0;
+  position: absolute;
+  width: 12px;
+}

@@ -53,7 +53,7 @@
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.4",
     "classnames": "^2.2.6",
-    "codemirror": "^5.51.0",
+    "codemirror": "^5.53.2",
     "compression-webpack-plugin": "^3.1.0",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^1.0.0",
@@ -84,6 +84,7 @@
     "pretty-quick": "^1.10.0",
     "puppeteer": "^2.0.0",
     "react": "^16.12.0",
+    "react-datepicker": "^2.14.1",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-image-crop": "^8.3.0",
@@ -109,6 +110,7 @@
     "zxcvbn": "^4.4.2"
   },
   "dependencies": {
+    "@slack/webhook": "^5.0.2",
     "axios": "^0.18.1",
     "body-parser": "^1.18.3",
     "connect-gzip-static": "^2.1.1",
@@ -124,6 +126,7 @@
     "passport-custom": "^1.0.5",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "r7insight_node": "^2.0.0"
+    "r7insight_node": "^2.0.0",
+    "socket.io-client": "^2.3.0"
   }
 }

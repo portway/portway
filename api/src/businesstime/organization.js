@@ -19,6 +19,12 @@ async function create(body) {
   return publicFields(createdOrg)
 }
 
+
+async function findAll() {
+  const db = getDb()
+  return await db.model(MODEL_NAME).findAll({ attributes: PUBLIC_FIELDS, raw: true })
+}
+
 async function findSanitizedById(id) {
   const db = getDb()
 
@@ -60,9 +66,12 @@ async function findByStripeId(stripeId) {
   return organization.get({ plain: true })
 }
 
-async function deleteById(id) {
+async function deleteById(id, force = false) {
   const db = getDb()
-  return db.model(MODEL_NAME).destroy({ where: { id } })
+  return db.model(MODEL_NAME).destroy({
+    where: { id },
+    force
+  })
 }
 
 async function findAllCanceled() {
@@ -82,6 +91,7 @@ export default {
   create,
   findSanitizedById,
   updateById,
+  findAll,
   findById,
   findByStripeId,
   deleteById,

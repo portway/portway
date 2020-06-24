@@ -2,8 +2,15 @@ const FIELD_TYPES = {
   STRING: 1,
   TEXT: 2,
   NUMBER: 3,
-  IMAGE: 4
+  IMAGE: 4,
+  DATE: 5,
+  FILE: 6
 }
+
+// Fields that only a single user can edit at once
+const SYNC_SINGLE_USER_EDIT_FIELDS = [
+  FIELD_TYPES.DATE, FIELD_TYPES.IMAGE, FIELD_TYPES.FILE
+]
 
 const PLAN_TYPES = {
   MULTI_USER: 'MULTI_USER',
@@ -60,6 +67,7 @@ const ORG_SUBSCRIPTION_STATUS = {
   INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED',
   PAST_DUE: 'PAST_DUE',
   PENDING_CANCEL: 'PENDING_CANCEL', //NO PARALLEL STRIPE API STATUS
+  TRIAL_ENDED: 'TRIAL_ENDED',
   TRIALING: 'TRIALING',
   TRIALING_PENDING_ACTIVE: 'TRIALING_PENDING_ACTIVE', //NO PARALLEL STRIPE API STATUS
   UNPAID: 'UNPAID'
@@ -72,6 +80,7 @@ const LOCKED_ACCOUNT_STATUSES = [
   ORG_SUBSCRIPTION_STATUS.INCOMPLETE_EXPIRED,
   ORG_SUBSCRIPTION_STATUS.INCOMPLETE,
   ORG_SUBSCRIPTION_STATUS.PAST_DUE,
+  ORG_SUBSCRIPTION_STATUS.TRIAL_ENDED,
   ORG_SUBSCRIPTION_STATUS.UNPAID
 ]
 
@@ -147,30 +156,45 @@ const DOCUMENT_MODE = {
   EDIT: 'EDIT',
 }
 
+const NETWORK_STATUS = {
+  OFFLINE: 'offline',
+  ONLINE: 'online',
+}
+
 // Note: This is so we can use this webpack as well, don't convert this to ES6
 module.exports = {
   PRODUCT_NAME: 'Portway',
   PRODUCT_ID: 'portway',
   PRODUCT_LOGO: '/images/logo.svg',
+  // Application
+  NETWORK_STATUS: NETWORK_STATUS,
   // Documentation
-  URL_WEBSITE: 'https://getportway.com/',
-  URL_DOCUMENTATION: 'https://docs.portway.app/',
   URL_API_DOCS: 'https://docs.portway.app/api',
+  URL_DOCUMENTATION: 'https://docs.portway.app/',
   URL_GUIDES: 'https://docs.portway.app/guides',
+  URL_PRIVACY: 'https://getportway.com/privacy',
+  URL_TERMS: 'https://getportway.com/terms',
+  URL_TWITTER: 'https://twitter.com/portwayapp',
+  URL_WEBSITE: 'https://getportway.com/',
   // Fields
   FIELD_LABELS: {
     [FIELD_TYPES.STRING]: 'text-field-',
     [FIELD_TYPES.TEXT]: 'text-area-',
     [FIELD_TYPES.NUMBER]: 'number-',
-    [FIELD_TYPES.IMAGE]: 'image-'
+    [FIELD_TYPES.IMAGE]: 'image-',
+    [FIELD_TYPES.DATE]: 'date-',
+    [FIELD_TYPES.FILE]: 'file-'
   },
   FIELD_TYPES: FIELD_TYPES,
+  SYNC_SINGLE_USER_EDIT_FIELDS: SYNC_SINGLE_USER_EDIT_FIELDS,
   // Default text strings
-  LABEL_NEW_DOCUMENT: 'New Document',
-  MAX_COOKIE_AGE_MS: '604800000', // 7 days
+  LABEL_NEW_DOCUMENT: 'New document',
+  MAX_COOKIE_AGE_MS: 1.21e+9, // 14 days
   MAX_FILE_SIZE: 10000000,
   MAX_AVATAR_SIZE: 1024 * 1000,
   MIN_PASSWORD_LENGTH: 8,
+  // Page titles
+  TITLE_PROJECTS: 'Projects',
   // Notifications
   NOTIFICATION_TYPES: NOTIFICATION_TYPES,
   NOTIFICATION_RESOURCE: NOTIFICATION_RESOURCE,
