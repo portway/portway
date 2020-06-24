@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
+import { FIELD_TYPES, MAX_FIELD_NAME_SIZE, SYNC_SINGLE_USER_EDIT_FIELDS } from 'Shared/constants'
 import { currentUserId } from 'Libs/currentIds'
 import usePrevious from 'Hooks/usePrevious'
 
@@ -242,7 +242,7 @@ const DocumentFieldComponent = ({
               <span className="document-field__name-label">{fieldLabels[field.type]}</span>
               <input
                 defaultValue={field.name}
-                maxLength={50}
+                maxLength={MAX_FIELD_NAME_SIZE}
                 onKeyDown={(e) => {
                   if (e.key.toLowerCase() === 'escape') {
                     e.target.blur()
