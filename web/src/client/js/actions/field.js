@@ -170,6 +170,7 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
     // Save the text after the cursor
     const textBeforeCursor = editor.getRange(zeroRange, startRange)
     const textAfterCursor = editor.getRange(startRange, endRange)
+    const shouldWeSplit = textBeforeCursor !== '' && textAfterCursor !== ''
 
     // Create the new field
     const { data: newField, status: newFieldStatus } = await add(`v1/documents/${documentId}/fields`, { name: newFieldName, type: fieldType })
@@ -178,7 +179,7 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
       return
     }
 
-    if (textAfterCursor !== '') {
+    if (shouldWeSplit) {
       // Create the new split text field
       splitFieldData = {
         name: newSplitTextName,
@@ -194,17 +195,22 @@ export const createNewFieldWithTheSplitOfThePreviousFieldAndReOrderThemAppropria
     }
 
     // Manually update the current textfield
-    await update(`v1/documents/${documentId}/fields/${fieldId}`, { value: textBeforeCursor })
-
-    // Re-order the two new fields
-    await update(`v1/documents/${documentId}/fields/${newField.id}/order`, { order: fieldWithCursorOrder + 1 })
-    if (textAfterCursor !== '') {
-      await update(`v1/documents/${documentId}/fields/${newSplitField.id}/order`, { order: fieldWithCursorOrder + 2 })
+    if (shouldWeSplit) {
+      await update(`v1/documents/${documentId}/fields/${fieldId}`, { value: textBeforeCursor })
     }
 
-    // Replace the text
-    // removed this and am manually calling the field update API so we don't get an onChange
-    // editor.replaceRange('', startRange, endRange)
+    // Re-order the two new fields
+    if (textBeforeCursor === '') {
+      // We wanted to insert something before the cursor
+      await update(`v1/documents/${documentId}/fields/${newField.id}/order`, { order: fieldWithCursorOrder })
+    } else {
+      // We want to insert something after the cursor
+      await update(`v1/documents/${documentId}/fields/${newField.id}/order`, { order: fieldWithCursorOrder + 1 })
+    }
+
+    if (shouldWeSplit) {
+      await update(`v1/documents/${documentId}/fields/${newSplitField.id}/order`, { order: fieldWithCursorOrder + 2 })
+    }
 
     // Save the current window position so nothing moves
     const df = document.querySelector('.document__fields')
