@@ -1,14 +1,16 @@
 import BusinessDocument from '../businesstime/document'
+import documentToMd from '../libs/documentToMd'
+import fs from 'fs'
 
 const getProjectExportData = async function(projectId, orgId) {
-  console.log(projectId)
   const documents = await BusinessDocument.findAllForProject(projectId, orgId)
   
   const fullDocuments = await Promise.all(documents.map((document) => {
     return BusinessDocument.findByIdWithFields(document.id, orgId)
   }))
 
-  console.log(fullDocuments)
+  const mdDocs = fullDocuments.map(documentToMd)
+  await fs.promises.writeFile('./temp.md', mdDocs[0])
 }
 
 export default {
