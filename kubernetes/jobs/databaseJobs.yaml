@@ -17,7 +17,7 @@ spec:
       containers:
       - name: portway-db
         image: "bonkeybong/portway_db_jobs:1.0.0"
-        args: ["migrate"]
+        args: ["documentSlugs"]
         env:
         - name: DB_HOST
           valueFrom:
