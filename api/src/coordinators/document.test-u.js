@@ -2,15 +2,37 @@ import documentCoordinator from './document'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
+import { slugify } from '../libs/utils'
 
 jest.mock('../businesstime/document')
 jest.mock('../businesstime/field')
 jest.mock('../businesstime/documentversion')
+jest.mock('../libs/utils')
 
 describe('documentCoordinator', () => {
   const docId = 12
   const projectId = 42
   const orgId = 3
+
+  describe('#addProjectDocument', () => {
+    const docBody = {
+      name: 'test doc'
+    }
+    
+    beforeAll(async () => {
+      await documentCoordinator.addProjectDocument(projectId, docBody)
+    })
+
+    it('should call slugify', () => {
+      expect(slugify.mock.calls.length).toBe(1)
+      expect(slugify.mock.calls[0][0]).toEqual(docBody.name)
+    })
+
+    it('should call BusinessDocument.createForProject', () => {
+      expect(BusinessDocument.createForProject.mock.calls.length).toBe(1)
+      expect(BusinessDocument.createForProject.mock.calls[0][0]).toEqual(projectId)
+    })
+  })
 
   describe('#deleteDocument', () => {
     beforeAll(async () => {

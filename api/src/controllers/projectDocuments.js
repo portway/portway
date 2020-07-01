@@ -42,6 +42,27 @@ const projectDocumentsController = function(router) {
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectDocument)
 }
 
+const addProjectDocument = async (req, res, next) => {
+  const { body } = req
+  const { projectId } = req.params
+  const { orgId } = req.requestorInfo
+  // Overwrite orgId even if they passed anything in
+  body.orgId = orgId
+
+  try {
+    const document = await documentCoordinator.addProjectDocument(projectId, body)
+    res.status(201).json({ data: document })
+    auditLog({
+      userId: req.requestorInfo.requestorId,
+      primaryModel: RESOURCE_TYPES.DOCUMENT,
+      primaryId: document.id,
+      action: auditActions.ADDED_PRIMARY
+    })
+  } catch (e) {
+    next(e)
+  }
+}
+
 const getProjectDocuments = async function(req, res, next) {
   const { projectId } = req.params
   const { orgId } = req.requestorInfo
@@ -75,22 +96,6 @@ const getProjectDocument = async function(req, res, next) {
     const document = await BusinessDocument[lookup](id, projectId, orgId)
     if (!document) throw ono({ code: 404 }, `No document with id ${id}`)
     res.json({ data: document })
-  } catch (e) {
-    next(e)
-  }
-}
-
-const addProjectDocument = async function(req, res, next) {
-  const { body } = req
-  const { projectId } = req.params
-  const { orgId } = req.requestorInfo
-  // Overwrite orgId even if they passed anything in
-  body.orgId = orgId
-
-  try {
-    const document = await BusinessDocument.createForProject(projectId, body)
-    res.status(201).json({ data: document })
-    auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: document.id, action: auditActions.ADDED_PRIMARY })
   } catch (e) {
     next(e)
   }
