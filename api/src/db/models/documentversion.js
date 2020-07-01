@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     versionNumber: DataTypes.INTEGER,
     documentId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    slug: DateTypes.STRING
   }, {
     paranoid: true,
     updatedAt: false
