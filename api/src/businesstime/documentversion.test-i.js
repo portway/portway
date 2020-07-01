@@ -47,7 +47,7 @@ describe('BusinessDocumentVersion', () => {
     describe('version increment', () => {
       let nextVersion
       beforeAll(async () => {
-        nextVersion = await BusinessDocumentVersion.createVersion(factoryDocument.id, factoryDocument.name, factoryDocument.orgId)
+        nextVersion = await BusinessDocumentVersion.createVersion(factoryDocument.id, factoryDocument.name, factoryDocument.slug, factoryDocument.orgId)
       })
 
       it('should increment version by 1', () => {
