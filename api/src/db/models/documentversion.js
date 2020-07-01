@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     documentId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
     name: DataTypes.STRING,
-    slug: DateTypes.STRING
+    slug: DataTypes.STRING
   }, {
     paranoid: true,
     updatedAt: false
