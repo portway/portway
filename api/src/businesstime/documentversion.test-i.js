@@ -17,7 +17,7 @@ describe('BusinessDocumentVersion', () => {
   describe('#createVersion', () => {
     let documentVersion
     beforeAll(async () => {
-      documentVersion = await BusinessDocumentVersion.createVersion(factoryDocument.id, factoryDocument.name, factoryDocument.orgId)
+      documentVersion = await BusinessDocumentVersion.createVersion(factoryDocument.id, factoryDocument.name, factoryDocument.slug, factoryDocument.orgId)
     })
 
     it('should belong to the document', () => {
@@ -38,6 +38,10 @@ describe('BusinessDocumentVersion', () => {
 
     it('should get the passed in name', () => {
       expect(documentVersion.name).toBe(factoryDocument.name)
+    })
+
+    it('should get the passed in slug', () => {
+      expect(documentVersion.slug).toBe(factoryDocument.slug)
     })
 
     describe('version increment', () => {
