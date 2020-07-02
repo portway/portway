@@ -10,7 +10,7 @@ const documentToMd = function(document) {
 const getDocumentFrontmatter = function(document) {
   const fieldFrontmatter = document.fields.reduce((cur, field) => {
     if (field.type === FIELD_TYPES.TEXT) return cur
-    return cur + `${field.name}: ${getFieldValueByType(field, document.id)}\n`
+    return cur + `${field.name}: ${getFieldValueByType(field)}\n`
   }, '')
 
   return `---\ntitle: ${document.name}` +
@@ -28,13 +28,13 @@ const getDocumentContent = function(document) {
   }, '')
 }
 
-const getFieldValueByType = function(field, documentId) {
+const getFieldValueByType = function(field) {
   switch (field.type) {
     case FIELD_TYPES.IMAGE:
     case FIELD_TYPES.FILE:
       const parsedUrl = url.parse(field.value)
       const filename = parsedUrl.path.split('/')[4]
-      return `./${documentId}/${filename}`
+      return `./assets/${filename}`
     case FIELD_TYPES.DATE:
       return field.value.toISOString()
     default:
