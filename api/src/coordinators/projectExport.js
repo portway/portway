@@ -32,8 +32,6 @@ const getProjectExportData = async function(projectId, orgId) {
     return fs.promises.writeFile(path.resolve(directoryPath, `${key}.md`), mdDocs[key])
   }))
 
-  let files = []
-
   // fetch any assets and add them to the assets sub-directory
   await Promise.all(fullDocuments.map((doc) => {
     return Promise.all(doc.fields.map(async (field) => {
@@ -42,15 +40,15 @@ const getProjectExportData = async function(projectId, orgId) {
         const filename = splitFileUrl[splitFileUrl.length - 1]
         const resp = await axios({ url: field.value, responseType: 'stream', method: 'get' })
         const fullFilePath = `${directoryPath}/assets/${filename}`
-        files = [...files, fullFilePath]
         const writeStream = fs.createWriteStream(fullFilePath)
         return promisifyStreamPipe(resp.data, writeStream)
       }
     }))
   }))
 
-  const zip = await zipIntegrator.compress(files, `${Date.now()}`, true)
+  const zip = await zipIntegrator.compressDirectory(directoryPath, `${Date.now()}`, true)
   // zip it all up
+  console.log('zip it up and zip it out')
 }
 
 export default {

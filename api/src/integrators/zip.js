@@ -1,6 +1,6 @@
 import path from 'path'
 import rimraf from 'rimraf'
-import JSZip from 'jszip'
+import yazl from 'yazl'
 import fs from 'fs'
 
 const ZIP_OUTPUT_FOLDER = './uploads'
@@ -11,18 +11,19 @@ const ZIP_OUTPUT_FOLDER = './uploads'
  * @param {String} zipName what to name the zip file
  * @param {Boolean} deleteFiles pass true to delete the files after zipping
  */
-const compress = async function(outputFiles, zipName, deleteFiles) {
-  if (outputFiles.length < 1) {
+const compressDirectory = async function(directoryPath, zipName, deleteFiles) {
+  const files = (await getRecursiveDirectoryFiles(directoryPath)).map(file => file.replace(`${directoryPath}/`, ''))
+
+  if (files.length < 1) {
     return // Probably error condition
   }
 
   // Assumes all output files are in the same directory
-  const dir = path.dirname(outputFiles[0])
   const zipPath = path.join(ZIP_OUTPUT_FOLDER, `${zipName}.zip`)
-  await zipDir(dir, zipPath, zipName)
+  await zipFiles(files, directoryPath, zipPath)
 
   if (deleteFiles) {
-    rimraf(dir, (err) => {
+    rimraf(directoryPath, (err) => {
       if (err) {
         console.error(err)
       }
@@ -40,50 +41,33 @@ const compress = async function(outputFiles, zipName, deleteFiles) {
  * Returns a promise that fulfills when zip is written
  */
 
-const zipDir = function(inputDirPath, outputFilePath, zipName) {
+const zipFiles = function(files, fileBasePath, zipOutputPath) {
   return new Promise(async (resolve, reject) => {
-    const zip = new JSZip()
+    const zipfile = new yazl.ZipFile()
 
-    const files = await fs.promises.readdir(inputDirPath)
-    console.log(files)
+    files.map((file) => {
+      zipfile.addFile(path.resolve(fileBasePath, file), file)
+    })
 
-    Promise.all(files.map(async (file) => {
-      const realPath = path.join(inputDirPath, file)
-      const stat = await fs.promises.stat(realPath)
-      if (stat.isFile()) {
-        const fileStream = fs.createReadStream(realPath)
-        return zip.file(file, fileStream)
-      }
-      // zip.folder(file)
-    }))
-
-    console.log(zip)
-
-    zip
-      .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
-      .pipe(fs.createWriteStream(path.resolve(ZIP_OUTPUT_FOLDER, `${zipName}.zip`)))
-      .on('finish', () => {
-        console.log("zip file written.")
-        resolve()
-      })
-      .on('error', reject)
+    zipfile.end()
 
     // Stream zip to output path
-  })
-}
-
-const streamDataToFile = function(content, outputFilePath) {
-  return new Promise((resolve, reject) => {
-    const zipStream = content.pipe(fs.createWriteStream(outputFilePath))
+    const zipStream = zipfile.outputStream.pipe(fs.createWriteStream(zipOutputPath))
 
     zipStream.on('close', resolve)
     zipStream.on('error', reject)
   })
 }
 
-module.exports = zipDir
-
+const getRecursiveDirectoryFiles = async function(dir) {
+  const entries = await fs.promises.readdir(dir, { withFileTypes: true })
+  const files = await Promise.all(entries.map((entry) => {
+    const entryPath = path.resolve(dir, entry.name)
+    return entry.isDirectory() ? getRecursiveDirectoryFiles(entryPath) : entryPath
+  }))
+  return Array.prototype.concat(...files)
+}
 
 module.exports = {
-  compress
+  compressDirectory
 }
