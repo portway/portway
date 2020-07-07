@@ -11,7 +11,7 @@ const getProjectExportData = async function(projectId, orgId) {
   const directoryPath = path.resolve(__dirname, `../../uploads/${projectId}-${Date.now()}`)
 
   const documents = await BusinessDocument.findAllForProject(projectId, orgId)
-  
+
   // fetch all the docs with populated fields -- currently getting all draft docs
   const fullDocuments = await Promise.all(documents.map((document) => {
     return BusinessDocument.findByIdWithFields(document.id, orgId)
@@ -46,9 +46,7 @@ const getProjectExportData = async function(projectId, orgId) {
     }))
   }))
 
-  const zip = await zipIntegrator.compressDirectory(directoryPath, `${Date.now()}`, true)
-  // zip it all up
-  console.log('zip it up and zip it out')
+  await zipIntegrator.compressDirectory(directoryPath, `${Date.now()}`, true)
 }
 
 export default {

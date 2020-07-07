@@ -22,36 +22,12 @@ const getProjectExport = async function(req, res, next) {
   const { orgId } = req.requestorInfo
 
   try {
-    const exportData = await projectExportCoordinator.getProjectExportData(projectId, orgId)
+    await projectExportCoordinator.getProjectExportData(projectId, orgId)
 
     res.set('Content-Type', 'application/zip')
-
   } catch (e) {
     next(e)
   }
 }
 
 export default projectExportController
-
-
-// const getBlobFile = async function (req, res) {
-//   try {
-//     res.set('Content-Type', 'application/zip')
-//     await blob.getBlob(req.params.id, res)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(err.statusCode || 500).send({ error: 'Unable to get export file' })
-//   }
-//   blob.deleteBlob(req.params.id)
-// }
-
-// const pollExportJob = async function (req, res) {
-//   try {
-//     const status = await exportIntegrator.pollJobCompletion(req.params.exportJobId)
-//     status.url = `/api/files/${status.blobName}`
-//     res.status(200).send(status)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(err.statusCode || 500).send({ error: 'Error polling job id' })
-//   }
-// }
