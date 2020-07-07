@@ -13,15 +13,6 @@ export const uniqueVals = (inputArray) => {
   }, [])
 }
 
-export const promisifyStreamPipe = (readStream, writeStream) => {
-  return new Promise((resolve, reject) => {
-    readStream.on('error', reject)
-    writeStream.on('error', reject)
-    writeStream.on('finish', resolve)
-    readStream.pipe(writeStream)
-  })
-}
-
 // This is really just a helper function to make calls
 // to any lib that's hard to mock in tests. It puts the
 // call in a separate file and lets you get on with testing

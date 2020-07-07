@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
 import { FIELD_TYPES } from '../constants/fieldTypes'
-import { promisifyStreamPipe } from '../libs/utils'
+import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import zipIntegrator from '../integrators/zip'
 
 const getProjectExportData = async function(projectId, orgId) {
