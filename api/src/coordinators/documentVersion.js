@@ -12,7 +12,7 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
   if (!doc) {
     throw ono({ code: 404 }, `Document ${documentId} not found, cannot publish`)
   }
-  const docVersion = await BusinessDocumentVersion.createVersion(doc.id, doc.name, orgId)
+  const docVersion = await BusinessDocumentVersion.createVersion(doc.id, doc.name, doc.slug, orgId)
   const fields = await BusinessField.findAllForDocument(doc.id, orgId)
   await Promise.all(fields.map(async (field) => {
     const value = await createVersionedFieldValue(field)

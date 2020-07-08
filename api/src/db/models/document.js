@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Document = sequelize.define('Document', {
     name: DataTypes.STRING,
+    slug: DataTypes.STRING,
     publishedVersionId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
     projectId: DataTypes.INTEGER,
