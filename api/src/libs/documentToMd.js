@@ -1,5 +1,5 @@
-import { FIELD_TYPES, FIELD_TYPE_MODELS } from "../constants/fieldTypes"
-import url from "url"
+import { FIELD_TYPES } from '../constants/fieldTypes'
+import url from 'url'
 
 const documentToMd = function(document) {
   const frontMatter = getDocumentFrontmatter(document)
@@ -36,7 +36,7 @@ const getFieldValueByType = function(field) {
       const filename = parsedUrl.path.split('/')[4]
       return `./assets/${filename}`
     case FIELD_TYPES.DATE:
-      return field.value.toISOString()
+      return field.value && field.value.toISOString()
     default:
       return field.value
   }

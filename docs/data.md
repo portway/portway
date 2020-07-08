@@ -1,4 +1,6 @@
 ## Seed Data
+**7/20 Update:**
+Seed data does not integrate with Stripe and other services and is not recommended for using and running the app!
 
 Seed data is found in the `api/src/db/seeders` data and should be generated with sequelize
 
@@ -20,8 +22,6 @@ make sequelize db:seed:all
 
 Or for JJ or Jay only: `make sequelize db:migrate:undo:all && make sequelize db:migrate && make sequelize db:seed:all`
 
-NO DIRKS
-
 _Note:_ containers _must_ be running to use `make sequelize` commands!
 
 ## Sequelize
@@ -33,3 +33,8 @@ The Makefile is setup to execute any sequelize commands in the running API conta
 `make cleardev`
 OR
 `make rebuilddev`
+
+## Create a database dump
+Start the app: `make start`
+In a separate shell, run the following to create a dump:
+> docker exec -t portway_db_1 pg_dumpall -c -U bonkey > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
