@@ -1,6 +1,12 @@
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
+import { slugify } from '../libs/utils'
+
+const addProjectDocument = async (projectId, body) => {
+  body.slug = slugify(body.name)
+  return await BusinessDocument.createForProject(projectId, body)
+}
 
 // Removes a document and all associated resources
 const deleteDocument = async (docId, projectId, orgId) => {
@@ -20,6 +26,7 @@ const deleteAllForProject = async (projectId, orgId) => {
 }
 
 const documentCoordinator = {
+  addProjectDocument,
   deleteDocument,
   deleteAllForProject
 }
