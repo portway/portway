@@ -19,7 +19,7 @@ const getProjectExportData = async function(projectId, orgId) {
 
   // create the markdown for each doc
   const mdDocs = fullDocuments.reduce((cur, doc) => {
-    return { ...cur, [doc.id]: documentToMd(doc)}
+    return { ...cur, [doc.slug || doc.id]: documentToMd(doc) }
   }, {})
 
   // create the temporary project export directory
