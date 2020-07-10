@@ -1,8 +1,18 @@
 import Joi from '@hapi/joi'
-import ono from 'ono'
-import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
+import { validateParams } from '../libs/middleware/payloadValidation'
 import projectExportCoordinator from '../coordinators/projectExport'
-import crudPerms from '../libs/middleware/reqCrudPerms'
+import perms from '../libs/middleware/reqPermissionsMiddleware'
+import RESOURCE_TYPES from '../constants/resourceTypes'
+import ACTIONS from '../constants/actions'
+
+const exportPerm = (req, res, next) => {
+  return perms((req) => {
+    return {
+      resourceType: RESOURCE_TYPES.PROJECT,
+      action: ACTIONS.EXPORT
+    }
+  })(req, res, next)
+}
 
 const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
@@ -13,6 +23,7 @@ const projectExportController = function(router) {
   router.get(
     '/',
     validateParams(paramSchema),
+    exportPerm,
     getProjectExport
   )
 }
