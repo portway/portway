@@ -6,9 +6,13 @@ import axios from 'axios'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import zipIntegrator from '../integrators/zip'
+import { generateId } from '../integrators/uniqueId'
+
+const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY
 
 const getProjectExportData = async function(projectId, orgId) {
-  const directoryPath = path.resolve(__dirname, `../../uploads/${projectId}-${Date.now()}`)
+  const uniqueId = generateId()
+  const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
   const documents = await BusinessDocument.findAllForProject(projectId, orgId)
 
@@ -46,7 +50,7 @@ const getProjectExportData = async function(projectId, orgId) {
     }))
   }))
 
-  await zipIntegrator.compressDirectory(directoryPath, `${Date.now()}`, true)
+  await zipIntegrator.compressDirectory(directoryPath, uniqueId, true, EXPORT_TEMP_DIRECTORY)
 }
 
 export default {

@@ -3,15 +3,13 @@ import rimraf from 'rimraf'
 import yazl from 'yazl'
 import fs from 'fs'
 
-const ZIP_OUTPUT_FOLDER = './uploads'
-
 /**
  *
  * @param {Array[String]} outputFiles array of paths to zip
  * @param {String} zipName what to name the zip file
  * @param {Boolean} deleteFiles pass true to delete the files after zipping
  */
-const compressDirectory = async function(directoryPath, zipName, deleteFiles) {
+const compressDirectory = async function(directoryPath, zipName, deleteFiles, outputPath) {
   const files = (await getRecursiveDirectoryFiles(directoryPath)).map(file => file.replace(`${directoryPath}/`, ''))
 
   if (files.length < 1) {
@@ -19,7 +17,7 @@ const compressDirectory = async function(directoryPath, zipName, deleteFiles) {
   }
 
   // Assumes all output files are in the same directory
-  const zipPath = path.join(ZIP_OUTPUT_FOLDER, `${zipName}.zip`)
+  const zipPath = path.join(outputPath, `${zipName}.zip`)
   await zipFiles(files, directoryPath, zipPath)
 
   if (deleteFiles) {
