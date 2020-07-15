@@ -5,6 +5,7 @@ import thunk from 'redux-thunk'
 import { documentFields } from './documentFields'
 import { documents } from './documents'
 import { forms } from './forms'
+import { modal } from './modal'
 import { notifications } from './notifications'
 import { organizations } from './organizations'
 import { projectAssignments } from './projectAssignments'
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   documentFields,
   documents,
   forms,
+  modal,
   notifications,
   organizations,
   projectAssignments,

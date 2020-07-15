@@ -28,6 +28,7 @@ import LoadingComponent from 'Components/Loading/LoadingComponent'
 
 import ConfirmationContainer from 'Components/Confirmation/ConfirmationContainer'
 import NotificationsContainer from 'Components/Notifications/NotificationsContainer'
+import ModalContainer from 'Components/Modal/ModalContainer'
 import FourZeroFour from 'Components/Pages/FourZeroFour'
 
 const LockedViewContainer = lazy(() => import(/* webpackChunkName: 'LockedViewContainer' */ 'Components/LockedView/LockedViewContainer'))
@@ -51,6 +52,7 @@ const Index = () => {
           <ErrorBoundaryComponent>
             <ConfirmationContainer />
             <NotificationsContainer />
+            <ModalContainer />
             <HeaderContainer />
             <Suspense fallback={<LoadingComponent />}>
               {currentOrg &&

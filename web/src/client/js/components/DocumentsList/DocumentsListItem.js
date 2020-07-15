@@ -20,6 +20,7 @@ const DocumentsListItem = ({
   fieldCopyHandler,
   fieldMoveHandler,
   removeDocumentHandler,
+  showDocumentInfoHandler,
   unpublishDocumentHandler,
 }) => {
   const [draggedOver, setDraggedOver] = useState(false)
@@ -127,6 +128,17 @@ const DocumentsListItem = ({
               open={expanded}
             >
               <Menu anchorRef={anchorRef}>
+                <MenuItem>
+                  <button
+                    className="btn btn--blank"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      showDocumentInfoHandler(document.id)
+                    }}
+                  >
+                    Document info
+                  </button>
+                </MenuItem>
                 <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
                   <button
                     className="btn btn--blank"
@@ -165,6 +177,7 @@ DocumentsListItem.propTypes = {
   document: PropTypes.object.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
+  showDocumentInfoHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,
 }

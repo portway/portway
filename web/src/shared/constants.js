@@ -131,6 +131,10 @@ const NOTIFICATION_TYPES = {
   WARNING: 'warning'
 }
 
+const MODAL_TYPES = {
+  DOCUMENT_INFO: 'DOCUMENT_INFO'
+}
+
 const NOTIFICATION_RESOURCE = {
   DOCUMENT: 'DOCUMENT',
   DOCUMENTS: 'DOCUMENTS',
@@ -194,6 +198,8 @@ module.exports = {
   MAX_FILE_SIZE: 10000000,
   MAX_AVATAR_SIZE: 1024 * 1000,
   MIN_PASSWORD_LENGTH: 8,
+  // Modals
+  MODAL_TYPES: MODAL_TYPES,
   // Page titles
   TITLE_PROJECTS: 'Projects',
   // Notifications

@@ -34,6 +34,7 @@ const DocumentsListComponent = ({
   readOnly,
   removeDocumentHandler,
   searchDocumentsHandler,
+  showDocumentInfoHandler,
   unpublishDocumentHandler,
 }) => {
   const isLoading = loading && documents.length === 0
@@ -165,6 +166,7 @@ const DocumentsListComponent = ({
                 fieldMoveHandler={fieldMoveHandler}
                 key={`d-${doc.id}-${index}`}
                 removeDocumentHandler={removeDocumentHandler}
+                showDocumentInfoHandler={showDocumentInfoHandler}
                 unpublishDocumentHandler={unpublishDocumentHandler}
               />
             )
@@ -194,6 +196,7 @@ DocumentsListComponent.propTypes = {
   readOnly: PropTypes.bool,
   removeDocumentHandler: PropTypes.func.isRequired,
   searchDocumentsHandler: PropTypes.func.isRequired,
+  showDocumentInfoHandler: PropTypes.func.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 

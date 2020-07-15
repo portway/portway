@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 import * as strings from 'Loc/strings'
 import {
+  MODAL_TYPES,
   PATH_DOCUMENT_NEW,
   PATH_DOCUMENT_NEW_PARAM,
   PATH_PROJECT,
@@ -19,6 +20,7 @@ import { createDocument, deleteDocument, unpublishDocument } from 'Actions/docum
 import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
+import { showModal } from 'Actions/modal'
 import DocumentsListComponent from './DocumentsListComponent'
 
 const DocumentsListContainer = ({
@@ -34,6 +36,7 @@ const DocumentsListContainer = ({
   searchDocuments,
   searchResults,
   searchTerm,
+  showModal,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
@@ -104,6 +107,10 @@ const DocumentsListContainer = ({
     if (oldDocumentId === newDocumentId) return
     const field = documentFields[oldDocumentId][fieldId]
     copyField(projectId, oldDocumentId, newDocumentId, field)
+  }
+
+  function showDocumentInfoHandler(documentId) {
+    showModal(MODAL_TYPES.DOCUMENT_INFO, { documentId: documentId })
   }
 
   function unpublishDocumentHandler(document) {
@@ -181,6 +188,7 @@ const DocumentsListContainer = ({
       loading={loading || assignmentsLoading}
       readOnly={readOnly}
       removeDocumentHandler={removeDocumentHandler}
+      showDocumentInfoHandler={showDocumentInfoHandler}
       searchDocumentsHandler={searchDocumentsHandler}
       unpublishDocumentHandler={unpublishDocumentHandler}
     />
@@ -200,6 +208,7 @@ DocumentsListContainer.propTypes = {
   searchDocuments: PropTypes.func.isRequired,
   searchResults: PropTypes.object,
   searchTerm: PropTypes.string,
+  showModal: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
   unpublishDocument: PropTypes.func.isRequired,
@@ -223,6 +232,7 @@ const mapDispatchToProps = {
   deleteDocument,
   moveField,
   searchDocuments,
+  showModal,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,

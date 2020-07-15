@@ -67,6 +67,9 @@ export const ActionTypes = {
   BLUR_FIELD: 'BLUR_FIELD',
   SET_LAST_CREATED_FIELD_ID: 'SET_LAST_CREATED_FIELD_ID',
   REMOVE_LAST_CREATED_FIELD_ID: 'REMOVE_LAST_CREATED_FIELD_ID',
+  // Modals
+  MODAL_SHOW: 'MODAL_SHOW',
+  MODAL_HIDE: 'MODAL_HIDE',
   // Notifications
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DISMISS_NOTIFICATION: 'DISMISS_NOTIFICATION',
@@ -256,6 +259,11 @@ export const Fields = {
 export const Notifications = {
   create: makeActionCreator(ActionTypes.CREATE_NOTIFICATION, 'message', 'noticeType', 'resource', 'code'),
   dismiss: makeActionCreator(ActionTypes.DISMISS_NOTIFICATION, 'noticeId'),
+}
+
+export const Modal = {
+  show: makeActionCreator(ActionTypes.MODAL_SHOW, 'modalType', 'modalProps'),
+  hide: makeActionCreator(ActionTypes.MODAL_HIDE, 'noticeId'),
 }
 
 export const Users = {

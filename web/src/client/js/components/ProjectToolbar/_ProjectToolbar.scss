@@ -10,7 +10,7 @@
   height: 50px;
   padding: 0 calc(var(--gutter-width) / 4);
   width: 100%;
-  z-index: 100;
+  z-index: 10;
 
   @include media('>medium') {
     width: calc(var(--gutter-width) + 300px);
