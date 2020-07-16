@@ -7,7 +7,7 @@ import projectExportCoordinator from './coordinators/projectExport'
 const redisUrl = new url.URL(process.env.REDIS_URL)
 
 export default function() {
-  const queue = Queue(QUEUES.PROJECT_EXPORT, {
+  const queue = new Queue(QUEUES.PROJECT_EXPORT, {
     redis: {
       host: redisUrl.host,
       port: redisUrl.port
