@@ -1,21 +1,28 @@
 import axios from 'axios'
+import url from 'url'
 
 const API_URL = process.env.API_URL
+const baseURL = (new url.URL('api/v1', API_URL)).href
 
-const fetchProjectDocuments = async function(projectId) {
-  const documents = await fetch(API_URL + `projects/${projectId}/documents?draft=true`)
+const fetchProjectDocuments = async function(projectId, token) {
+  const documents = await fetch(`projects/${projectId}/documents?draft=true`, token)
   return documents
 }
 
-const fetchFullDocument = async function(documentId) {
-  const document = await fetch(API_URL + `documents/${documentId}?draft=true`)
+const fetchFullDocument = async function(documentId, token) {
+  const document = await fetch(`documents/${documentId}?draft=true`, token)
   return document
 }
 
-const fetch = async function(url) {
+const fetch = async function(url, token) {
   let data
   try {
-    data = (await axios.get(url)).data
+    data = (await axios.get(url, {
+      baseURL,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })).data
   } catch (err) {
     const customError = new Error()
     if (err.response) {

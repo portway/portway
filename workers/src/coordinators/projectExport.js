@@ -4,23 +4,20 @@ import axios from 'axios'
 import promisifyStreamPipe from '../libs/utils'
 import documentToMd from '../libs/documentToMd'
 import zipIntegrator from '../integrators/zip'
-import {
-  fetchProjectDocuments,
-  fetchFullDocument
-} from '../integrators/portwayAPI'
+import portwayAPI from '../integrators/portwayAPI'
 import FIELD_TYPES from '../constants/fieldTypes'
 
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY
 
-const getProjectExportData = async function (projectId, orgId) {
+const getProjectExportData = async function (projectId, token) {
   const uniqueId = `${projectId}-${Date.now()}`
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
-  const documents = await fetchProjectDocuments(projectId)
+  const documents = await portwayAPI.fetchProjectDocuments(projectId, token)
 
   // fetch all the docs with populated fields -- currently getting all draft docs
   const fullDocuments = await Promise.all(documents.map((document) => {
-    return fetchFullDocument(document.id)
+    return portwayAPI.fetchFullDocument(document.id, token)
   }))
 
   // create the markdown for each doc
