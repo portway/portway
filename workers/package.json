@@ -1,5 +1,5 @@
 {
-  "name": "@portway/workerqueue",
+  "name": "@portway/workers",
   "version": "1.0.0",
   "description": "Worker queue for offloading portway tasks",
   "scripts": {
@@ -15,5 +15,11 @@
     "bee-queue": "^1.2.3",
     "rimraf": "^3.0.2",
     "yazl": "^2.5.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4"
   }
 }
