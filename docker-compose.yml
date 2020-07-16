@@ -58,6 +58,23 @@ services:
       - redis
     container_name: portway-sync
 
+  workers:
+    build:
+      context: ./workers
+    volumes:
+      - ./workers:/workers
+      - /workers/node_modules
+    working_dir: /workers
+    entrypoint: /bin/sh
+    command: ./wait-for.sh redis:6379 -- ./run.sh devstart
+    env_file:
+      - ./workers/.env
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - redis
+    container_name: portway-worker
+
   db:
     image: postgres:11.2-alpine
     restart: always
