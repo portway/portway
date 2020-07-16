@@ -1,24 +1,26 @@
-import BusinessDocument from '../businesstime/document'
-import documentToMd from '../libs/documentToMd'
 import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
-import promisifyStreamPipe from '../libs/promisifyStreamPipe'
+import promisifyStreamPipe from '../libs/utils'
+import documentToMd from '../libs/documentToMd'
 import zipIntegrator from '../integrators/zip'
-import { generateId } from '../integrators/uniqueId'
+import {
+  fetchProjectDocuments,
+  fetchFullDocument
+} from '../integrators/portwayAPI'
 import FIELD_TYPES from '../constants/fieldTypes'
 
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY
 
 const getProjectExportData = async function (projectId, orgId) {
-  const uniqueId = generateId()
+  const uniqueId = `${projectId}-${Date.now()}`
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
-  const documents = await BusinessDocument.findAllForProject(projectId, orgId)
+  const documents = await fetchProjectDocuments(projectId)
 
   // fetch all the docs with populated fields -- currently getting all draft docs
   const fullDocuments = await Promise.all(documents.map((document) => {
-    return BusinessDocument.findByIdWithFields(document.id, orgId)
+    return fetchFullDocument(document.id)
   }))
 
   // create the markdown for each doc

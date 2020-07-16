@@ -3,12 +3,12 @@ import axios from 'axios'
 const API_URL = process.env.API_URL
 
 const fetchProjectDocuments = async function(projectId) {
-  const documents = await fetch(path.resolve(API_URL, `projects/${projectId}/documents?draft=true`))
+  const documents = await fetch(API_URL + `projects/${projectId}/documents?draft=true`)
   return documents
 }
 
 const fetchFullDocument = async function(documentId) {
-  const document = await fetch(path.resolve(API_URL), `documents/${documentId}?draft=true`)
+  const document = await fetch(API_URL + `documents/${documentId}?draft=true`)
   return document
 }
 

@@ -1,5 +1,6 @@
-import FIELD_TYPES from '../constants/fieldTypes'
 import url from 'url'
+
+import FIELD_TYPES from '../constants/fieldTypes'
 
 const documentToMd = function (document) {
   const frontMatter = getDocumentFrontmatter(document)

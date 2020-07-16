@@ -1,7 +1,8 @@
 import path from 'path'
+import fs from 'fs'
+
 import rimraf from 'rimraf'
 import yazl from 'yazl'
-import fs from 'fs'
 
 /**
  *
