@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Worker queue for offloading portway tasks",
   "scripts": {
-    "serve": "NODE_ENV=development nodemon --exec npx babel-node --require dotenv/config -- src/server.js",
+    "serve": "NODE_ENV=development npx nodemon --exec npx babel-node --require dotenv/config -- src/server.js",
     "build": "NODE_ENV=production babel ./src -d dist/ --copy-files",
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node"

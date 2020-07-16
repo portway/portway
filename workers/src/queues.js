@@ -9,7 +9,7 @@ const redisUrl = new url.URL(process.env.REDIS_URL)
 export default function() {
   const queue = new Queue(QUEUES.PROJECT_EXPORT, {
     redis: {
-      host: redisUrl.host,
+      host: redisUrl.hostname,
       port: redisUrl.port
     }
   })
