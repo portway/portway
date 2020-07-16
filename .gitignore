@@ -3,6 +3,7 @@
 web/dist
 api/dist
 sync/dist
+workers/dist
 
 # Logs
 logs
