@@ -36,8 +36,6 @@ const getFieldValueByType = function (field) {
       const parsedUrl = url.parse(field.value)
       const filename = parsedUrl.path.split('/')[4]
       return `./assets/${filename}`
-    case FIELD_TYPES.DATE:
-      return field.value && field.value.toISOString()
     default:
       return field.value
   }

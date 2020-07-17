@@ -16,9 +16,14 @@ export default function() {
 
   queue.on('ready', function () {
     queue.process(async (job, done) => {
-      console.log('processing job ' + job.id);
-      const url = await projectExportCoordinator.getProjectExportData(job.data.projectId, job.data.token)
-      done(null, url)
+      try {
+        console.log('processing job ' + job.id);
+        const url = await projectExportCoordinator.getProjectExportData(job.data.projectId, job.data.token)
+        done(null, url)
+      } catch (e) {
+        console.error(e)
+        done(e)
+      }
     });
 
     console.info(`processing jobs in queue ${QUEUES.PROJECT_EXPORT}`);
