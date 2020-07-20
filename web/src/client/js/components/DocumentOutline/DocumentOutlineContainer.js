@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
 import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
+import currentResource from 'Libs/currentResource'
 
 import { uiConfirm, uiToggleDocumentMode } from 'Actions/ui'
+import { updateDocument } from 'Actions/document'
 import { removeField, updateField, updateFieldOrder } from 'Actions/field'
 
 import DocumentOutlineComponent from './DocumentOutlineComponent'
@@ -19,13 +21,20 @@ const DocumentOutlineContainer = ({
   removeField,
   uiConfirm,
   uiToggleDocumentMode,
+  updateDocument,
   updateField,
   updateFieldOrder
 }) => {
   const { projectId, documentId } = useParams()
+  const location = useLocation()
+
   const [orderedFields, setOrderedFields] = useState([])
   const [dropped, setDropped] = useState(false)
   const draggingElement = useRef(null)
+
+  const { data: currentDocument } = useDataService(currentResource('document', location.pathname), [
+    location.pathname
+  ])
   const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
 
   // Convert fields object to a sorted array for rendering
@@ -38,6 +47,8 @@ const DocumentOutlineContainer = ({
     })
     setOrderedFields(fieldMap)
   }, [fields])
+
+  if (!currentDocument) return null
 
   const notReadOnlyModeButDontDoDragEvents = documentMode === DOCUMENT_MODE.NORMAL
 
@@ -172,6 +183,13 @@ const DocumentOutlineContainer = ({
     updateField(projectId, documentId, fieldId, { name: value })
   })
 
+  const debouncedSlugChangeHandler = debounce(1000, (value) => {
+    if (value === '') return
+    updateDocument(projectId, documentId, {
+      slug: value
+    })
+  })
+
   function toggleDocumentMode(e) {
     const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
     uiToggleDocumentMode(mode)
@@ -179,6 +197,8 @@ const DocumentOutlineContainer = ({
 
   return (
     <DocumentOutlineComponent
+      currentDocument={currentDocument}
+      documentSlugHandler={debouncedSlugChangeHandler}
       dragEndHandler={dragEndHandler}
       dragEnterHandler={dragEnterHandler}
       dragLeaveHandler={dragLeaveHandler}
@@ -199,6 +219,7 @@ DocumentOutlineContainer.propTypes = {
   removeField: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   uiToggleDocumentMode: PropTypes.func.isRequired,
+  updateDocument: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
 }
@@ -214,6 +235,7 @@ const mapDisatchToProps = {
   removeField,
   uiConfirm,
   uiToggleDocumentMode,
+  updateDocument,
   updateField,
   updateFieldOrder,
 }

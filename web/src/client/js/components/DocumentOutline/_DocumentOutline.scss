@@ -31,7 +31,7 @@
 .document-outline__toggle {
   position: absolute;
   right: 1rem;
-  top: 2rem;
+  top: 1.6rem;
 }
 
 .document-outline__header {
@@ -51,6 +51,23 @@
   margin-top: 0;
 }
 
+// Panel
+.document-outline__panel {
+  font-size: 1.2rem;
+  padding: 1rem 1rem 1rem 2rem;
+}
+
+.document-outline__panel-item {
+  align-items: center;
+  display: flex;
+}
+
+.document-outline__label {
+  font-size: 1.2rem;
+  padding-right: 1.6rem;
+}
+
+// Outline
 .document-outline__list {
   flex: 1;
   list-style: none;
@@ -59,58 +76,74 @@
   padding: 1rem 1rem 1rem .5rem;
 }
 
-  .document-outline__list-item {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.6rem;
-    &--dragging {
-      background-color: var(--color-gray-50);
-      border-radius: var(--border-radius);
-      cursor: grabbing;
-      * {
-        visibility: hidden;
-        pointer-events: none;
-      }
-    }
-  }
-
-  .document-outline__clone-element {
-    background-color: var(--theme-surface);
+.document-outline__list-item {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+  &--dragging {
+    background-color: var(--color-gray-50);
     border-radius: var(--border-radius);
-    .document-outline__actions {
-      display: none;
+    cursor: grabbing;
+    * {
+      visibility: hidden;
+      pointer-events: none;
     }
   }
+}
 
-  .document-outline__dragger {
-    cursor: grab;
-    width: 3rem;
+.document-outline__clone-element {
+  background-color: var(--theme-surface);
+  border-radius: var(--border-radius);
+  .document-outline__actions {
+    display: none;
   }
+}
 
-  .document-outline__icon  {
-    height: 2.4rem;
-    margin-right: var(--icon-margin);
-    overflow: hidden;
-  }
+.document-outline__dragger {
+  cursor: grab;
+  width: 3rem;
+}
 
-  .document-outline__name {
-    flex: 1;
-    padding-right: var(--icon-margin);
-    input {
-      border: thin solid transparent;
-      font-size: 1.3rem;
-      padding: 0;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      .using-mouse & {
-        &:focus {
-          border: thin solid transparent;
-          box-shadow: none;
-        }
+.document-outline__icon  {
+  height: 2.4rem;
+  margin-right: var(--icon-margin);
+  overflow: hidden;
+}
+
+.document-outline__name {
+  flex: 1;
+  padding-right: var(--icon-margin);
+  input {
+    border: thin solid transparent;
+    font-size: 1.3rem;
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    .using-mouse & {
+      &:focus {
+        border: thin solid transparent;
+        box-shadow: none;
       }
     }
   }
+}
+
+.document-outline__input[type="text"] {
+  border: thin solid transparent;
+  flex: 1;
+  font-size: 1.2rem;
+  min-height: auto;
+  padding: .6rem 0;
+  text-decoration: underline;
+  .using-mouse & {
+    &:focus {
+      border: thin solid transparent;
+      box-shadow: none;
+      text-decoration: none;
+    }
+  }
+}
 
 .document-outline__button {
   background-color: var(--theme-surface);
