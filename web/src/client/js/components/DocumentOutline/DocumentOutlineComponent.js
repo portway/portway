@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
 
-import { slugify } from 'Utilities/slugify'
 import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { RemoveIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
