@@ -56,6 +56,7 @@ const DocumentOutlineComponent = ({
             className="document-outline__input"
             defaultValue={currentDocument.slug}
             id="do-label"
+            maxLength={140}
             onChange={(e) => {
               if (e.target.value.match(/^[a-z0-9-]+$/) === null) {
                 e.target.setCustomValidity('Please use lowercase letters, numbers, and hyphens only')
