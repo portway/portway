@@ -48,7 +48,6 @@ const DocumentOutlineComponent = ({
       <div className="document-outline__panel">
         <div className="document-outline__panel-text">
           <p className="note">Use the document label in your URLs. Changing this may affect any existing applications.</p>
-          <p className="note">Example: <i>{currentDocument && slugify(currentDocument.name)}</i></p>
         </div>
         <div className="document-outline__panel-item">
           <label className="document-outline__label" htmlFor="do-label">
