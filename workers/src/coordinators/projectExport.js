@@ -6,6 +6,7 @@ import documentToMd from '../libs/documentToMd'
 import zipIntegrator from '../integrators/zip'
 import portwayAPI from '../integrators/portwayAPI'
 import FIELD_TYPES from '../constants/fieldTypes'
+import { uploadExportZip } from '../integrators/s3'
 
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY
 
@@ -57,7 +58,10 @@ const getProjectExportData = async function (projectId, token) {
     }))
   }))
 
-  await zipIntegrator.compressDirectory(directoryPath, uniqueId, true, EXPORT_TEMP_DIRECTORY)
+  const zipFileLocation = await zipIntegrator.compressDirectory(directoryPath, uniqueId, true, EXPORT_TEMP_DIRECTORY)
+
+  const s3Location = await uploadExportZip(zipFileLocation, uniqueId)
+  return s3Location
 }
 
 export default {

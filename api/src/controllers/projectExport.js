@@ -37,7 +37,8 @@ const getProjectExport = async function(req, res, next) {
 
   try {
     const url = await jobQueue.runProjectExport(projectId, getTokenFromReq(req))
-    res.json({url})
+    console.log(url)
+    res.json({ url })
   } catch (e) {
     next(e)
   }

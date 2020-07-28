@@ -11,8 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.721.0",
     "axios": "^0.19.2",
     "bee-queue": "^1.2.3",
+    "ono": "^7.1.3",
     "rimraf": "^3.0.2",
     "yazl": "^2.5.1"
   },

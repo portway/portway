@@ -21,7 +21,8 @@ const runProjectExport = async (projectId, token) => {
     })
 
     job.on('succeeded', (result) => {
-      console.log('completed job ' + job.id);
+      console.log(result, 'result')
+      console.log('completed job ' + job.id)
       resolve(result)
     })
 
