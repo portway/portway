@@ -11,18 +11,10 @@ import { uploadExportZip } from '../integrators/s3'
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY
 
 const getProjectExportData = async function (projectId, token) {
-  console.info('getProjectExportData', projectId)
-
   const uniqueId = `${projectId}-${Date.now()}`
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
-  // console.info('fetching docs')
-
   const documents = (await portwayAPI.fetchProjectDocuments(projectId, token)).data
-
-  // console.info('received docs:')
-
-  // console.info(JSON.stringify(documents, null, 2))
 
   // fetch all the docs with populated fields -- currently getting all draft docs
   const fullDocuments = await Promise.all(documents.map(async (document) => {

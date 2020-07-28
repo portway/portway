@@ -1,11 +1,12 @@
 // Integrates with bee-queue to interact with workers service
 import url from 'url'
 import Queue from 'bee-queue'
+import { QUEUE_NAMES } from '../constants/queue'
 
 const redisUrl = new url.URL(process.env.REDIS_URL)
 
 // TODO: move to constants for queue name
-const exportQueue = new Queue('PROJECT_EXPORT', {
+const exportQueue = new Queue(QUEUE_NAMES.PROJECT_EXPORT, {
   isWorker: false,
   redis: {
     host: redisUrl.hostname,
@@ -21,8 +22,6 @@ const runProjectExport = async (projectId, token) => {
     })
 
     job.on('succeeded', (result) => {
-      console.log(result, 'result')
-      console.log('completed job ' + job.id)
       resolve(result)
     })
 
@@ -32,7 +31,6 @@ const runProjectExport = async (projectId, token) => {
       if (err) {
         reject(err)
       }
-      console.log('queued job ' + job.id);
     })
   })
 }
