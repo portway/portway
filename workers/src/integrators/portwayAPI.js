@@ -44,7 +44,7 @@ const fetch = async function(url, token) {
   return data
 }
 
-module.exports = {
+export default {
   fetchProjectDocuments,
   fetchFullDocument
 }

@@ -1,4 +1,3 @@
-
 export const promisifyStreamPipe = (readStream, writeStream) => {
   return new Promise((resolve, reject) => {
     readStream.on('error', reject)
