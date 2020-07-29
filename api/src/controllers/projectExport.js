@@ -1,11 +1,15 @@
 import Joi from '@hapi/joi'
 import { validateParams } from '../libs/middleware/payloadValidation'
-import projectExportCoordinator from '../coordinators/projectExport'
+import { ExtractJwt } from 'passport-jwt'
+import jobQueue from '../integrators/jobQueue'
 import perms from '../libs/middleware/reqPermissionsMiddleware'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 
+const getTokenFromReq = ExtractJwt.fromAuthHeaderAsBearerToken()
+
 const exportPerm = (req, res, next) => {
+  // TODO: validate we don't need project id in here?
   return perms((req) => {
     return {
       resourceType: RESOURCE_TYPES.PROJECT,
@@ -30,12 +34,10 @@ const projectExportController = function(router) {
 
 const getProjectExport = async function(req, res, next) {
   const { projectId } = req.params
-  const { orgId } = req.requestorInfo
 
   try {
-    await projectExportCoordinator.getProjectExportData(projectId, orgId)
-
-    res.set('Content-Type', 'application/zip')
+    const url = await jobQueue.runProjectExport(projectId, getTokenFromReq(req))
+    res.json({ url })
   } catch (e) {
     next(e)
   }
