@@ -4,6 +4,7 @@ stages:
   - Setup Repo
   - Web Build and Test
   - API Build and test
+  - Worker Build and Test
 steps:
   main_clone:
     title: Cloning main repository...
