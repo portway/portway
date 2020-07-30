@@ -8,7 +8,7 @@ import portwayAPI from '../integrators/portwayAPI'
 import FIELD_TYPES from '../constants/fieldTypes'
 import { uploadExportZip } from '../integrators/s3'
 
-const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY
+const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY || 'temp/'
 
 const getProjectExportData = async function (projectId, token) {
   const uniqueId = `${projectId}-${Date.now()}`

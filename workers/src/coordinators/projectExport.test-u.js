@@ -1,18 +1,20 @@
 import projectExportCoordinator from './projectExport'
 import zipIntegrator from '../integrators/zip'
-import BusinessDocument from '../businesstime/document'
-import { FIELD_TYPES } from '../constants/fieldTypes'
+import FIELD_TYPES from '../constants/fieldTypes'
 import documentToMd from '../libs/documentToMd'
+import portwayAPI from '../integrators/portwayAPI'
 import fs from 'fs'
 import axios from 'axios'
-import promisifyStreamPipe from '../libs/promisifyStreamPipe'
+import { promisifyStreamPipe } from '../libs/utils'
+import { uploadExportZip } from '../integrators/s3'
 
-jest.mock('../businesstime/document')
 jest.mock('../integrators/zip')
 jest.mock('../libs/documentToMd')
 jest.mock('fs')
 jest.mock('axios')
-jest.mock('../libs/promisifyStreamPipe')
+jest.mock('../libs/utils')
+jest.mock('../integrators/portwayAPI')
+jest.mock('../integrators/s3')
 
 describe('projectExportCoordinator', () => {
   describe('#getProjectExportData', () => {
@@ -20,30 +22,29 @@ describe('projectExportCoordinator', () => {
     const projectId = 3113
     const doc1Id = 4254
     const doc2Id = 4255
+    const fileUrl = 'not-a-real-file-url'
+    let result
 
     beforeAll(async () => {
-      BusinessDocument.findAllForProject.mockReturnValueOnce([{ id: doc1Id }, { id: doc2Id }])
-      BusinessDocument.findByIdWithFields.mockReturnValueOnce(
+      portwayAPI.fetchProjectDocuments.mockReturnValueOnce({ data: [{ id: doc1Id }, { id: doc2Id }] })
+      portwayAPI.fetchFullDocument.mockReturnValueOnce({
+        data:
         { id: doc1Id, fields: [{ name: 'one', type: FIELD_TYPES.TEXT, value: '##Header\n- 1\n- 2\n- 3\n- 4' }, { name: 'two', type: FIELD_TYPES.IMAGE, value: 'not-a-real-image-url' }] }
-      )
-      BusinessDocument.findByIdWithFields.mockReturnValueOnce(
+      })
+      portwayAPI.fetchFullDocument.mockReturnValueOnce({
+        data: 
         { id: doc2Id, fields: [{ name: 'one', type: FIELD_TYPES.TEXT, value: '##Header\n- 1\n- 2\n- 3\n- 4' }, { name: 'two', type: FIELD_TYPES.FILE, value: 'not-a-real-file-url' }] }
-      )
-      axios.mockReturnValue(() => { return { data: null }})
-      promisifyStreamPipe.mockReturnValue(() => { return null })
-      await projectExportCoordinator.getProjectExportData(projectId, orgId)
+      })
+      axios.mockReturnValue({ data: null })
+      promisifyStreamPipe.mockReturnValue(null)
+      uploadExportZip.mockReturnValue(fileUrl)
+      result = await projectExportCoordinator.getProjectExportData(projectId, orgId)
     })
 
-    it('should call BusinessDocument.findAllForProject', () => {
-      expect(BusinessDocument.findAllForProject.mock.calls.length).toBe(1)
-      expect(BusinessDocument.findAllForProject.mock.calls[0][0]).toEqual(projectId)
-      expect(BusinessDocument.findAllForProject.mock.calls[0][1]).toEqual(orgId)
-    })
-
-    it('should call BusinessDocument.findAllForProject', () => {
-      expect(BusinessDocument.findAllForProject.mock.calls.length).toBe(1)
-      expect(BusinessDocument.findAllForProject.mock.calls[0][0]).toEqual(projectId)
-      expect(BusinessDocument.findAllForProject.mock.calls[0][1]).toEqual(orgId)
+    it('should call portwayAPI.fetchProjectDocuments', () => {
+      expect(portwayAPI.fetchProjectDocuments.mock.calls.length).toBe(1)
+      expect(portwayAPI.fetchProjectDocuments.mock.calls[0][0]).toEqual(projectId)
+      expect(portwayAPI.fetchProjectDocuments.mock.calls[0][1]).toEqual(orgId)
     })
 
     it('should call documentToMd for each document', () => {
@@ -64,6 +65,14 @@ describe('projectExportCoordinator', () => {
 
     it('should call zipIntegrator.compressDirectory once', () => {
       expect(zipIntegrator.compressDirectory.mock.calls.length).toBe(1)
+    })
+
+    it('should call uploadExportZip once', () => {
+      expect(uploadExportZip.mock.calls.length).toBe(1)
+    })
+
+    it('should return the s3 file url', () => {
+      expect(result).toBe(fileUrl)
     })
   })
 })
