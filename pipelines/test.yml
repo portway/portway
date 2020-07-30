@@ -75,6 +75,18 @@ steps:
         - name: build_web_image
           on:
             - success
+  run_worker_tests:
+    stage: Worker Build and Test
+    image: ${{build_worker_image}}
+    title: Running Worker Tests
+    working_directory: /workers/
+    cmd:
+      - test
+    when:
+      steps:
+        - name: build_worker_image
+          on:
+            - success
   run_api_tests:
     stage: API Build and test
     title: Running API Tests
@@ -90,18 +102,6 @@ steps:
             POSTGRES_DB: test
             POSTGRES_USER: bonkey
             POSTGRES_PASSWORD: bong
-    run_worker_tests:
-    stage: Worker Build and Test
-    image: ${{build_web_image}}
-    title: Running Worker Tests
-    working_directory: /workers/
-    cmd:
-      - test
-    when:
-      steps:
-        - name: build_web_image
-          on:
-            - success
     composition_candidates:
       api_service:
         image: ${{build_api_image}}
