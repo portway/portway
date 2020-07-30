@@ -5,7 +5,8 @@ import documentToMd from '../libs/documentToMd'
 import portwayAPI from '../integrators/portwayAPI'
 import fs from 'fs'
 import axios from 'axios'
-import utils from '../libs/utils'
+import { promisifyStreamPipe } from '../libs/utils'
+import { uploadExportZip } from '../integrators/s3'
 
 jest.mock('../integrators/zip')
 jest.mock('../libs/documentToMd')
@@ -13,6 +14,7 @@ jest.mock('fs')
 jest.mock('axios')
 jest.mock('../libs/utils')
 jest.mock('../integrators/portwayAPI')
+jest.mock('../integrators/s3')
 
 describe('projectExportCoordinator', () => {
   describe('#getProjectExportData', () => {
@@ -20,18 +22,23 @@ describe('projectExportCoordinator', () => {
     const projectId = 3113
     const doc1Id = 4254
     const doc2Id = 4255
+    const fileUrl = 'not-a-real-file-url'
+    let result
 
     beforeAll(async () => {
       portwayAPI.fetchProjectDocuments.mockReturnValueOnce({ data: [{ id: doc1Id }, { id: doc2Id }] })
-      portwayAPI.fetchFullDocument.mockReturnValueOnce(
+      portwayAPI.fetchFullDocument.mockReturnValueOnce({
+        data:
         { id: doc1Id, fields: [{ name: 'one', type: FIELD_TYPES.TEXT, value: '##Header\n- 1\n- 2\n- 3\n- 4' }, { name: 'two', type: FIELD_TYPES.IMAGE, value: 'not-a-real-image-url' }] }
-      )
-      portwayAPI.fetchFullDocument.mockReturnValueOnce(
+      })
+      portwayAPI.fetchFullDocument.mockReturnValueOnce({
+        data: 
         { id: doc2Id, fields: [{ name: 'one', type: FIELD_TYPES.TEXT, value: '##Header\n- 1\n- 2\n- 3\n- 4' }, { name: 'two', type: FIELD_TYPES.FILE, value: 'not-a-real-file-url' }] }
-      )
-      axios.mockReturnValue(() => { return { data: null }})
-      utils.promisifyStreamPipe.mockReturnValue(() => { return null })
-      await projectExportCoordinator.getProjectExportData(projectId, orgId)
+      })
+      axios.mockReturnValue({ data: null })
+      promisifyStreamPipe.mockReturnValue(null)
+      uploadExportZip.mockReturnValue(fileUrl)
+      result = await projectExportCoordinator.getProjectExportData(projectId, orgId)
     })
 
     it('should call portwayAPI.fetchProjectDocuments', () => {
@@ -58,6 +65,14 @@ describe('projectExportCoordinator', () => {
 
     it('should call zipIntegrator.compressDirectory once', () => {
       expect(zipIntegrator.compressDirectory.mock.calls.length).toBe(1)
+    })
+
+    it('should call uploadExportZip once', () => {
+      expect(uploadExportZip.mock.calls.length).toBe(1)
+    })
+
+    it('should return the s3 file url', () => {
+      expect(result).toBe(fileUrl)
     })
   })
 })

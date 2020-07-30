@@ -15,7 +15,7 @@ const getProjectExportData = async function (projectId, token) {
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
   const documents = (await portwayAPI.fetchProjectDocuments(projectId, token)).data
-  console.log(documents)
+
   // fetch all the docs with populated fields -- currently getting all draft docs
   const fullDocuments = await Promise.all(documents.map(async (document) => {
     return (await portwayAPI.fetchFullDocument(document.id, token)).data

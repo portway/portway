@@ -1,4 +1,1 @@
-export default {
-  promisifyStreamPipe: jest.fn(),
-  documentToMd: jest.fn()
-}
+export const promisifyStreamPipe = jest.fn()
