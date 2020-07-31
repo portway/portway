@@ -1,8 +1,9 @@
 import url from 'url'
-
 import Queue from 'bee-queue'
 import { QUEUES } from './constants/queues'
 import projectExportCoordinator from './coordinators/projectExport'
+import logger from './libs/logger'
+import LOG_LEVELS from './constants/logLevels'
 
 const redisUrl = new url.URL(process.env.REDIS_URL)
 
@@ -16,11 +17,10 @@ export default function() {
 
   queue.on('ready', function () {
     queue.process(async (job) => {
-      console.log('processing job ' + job.id);
+      logger(LOG_LEVELS.INFO, `processing job ${job.id}`)
       const url = await projectExportCoordinator.getProjectExportData(job.data.projectId, job.data.token)
       return url
     })
-
-    console.info(`processing jobs in queue ${QUEUES.PROJECT_EXPORT}`);
+    logger(LOG_LEVELS.INFO, `processing jobs in queue ${QUEUES.PROJECT_EXPORT}`)
   });
 }
