@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useLocation, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
@@ -8,11 +8,11 @@ import { PRODUCT_NAME } from 'Shared/constants'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import dataMapper from 'Libs/dataMapper'
-import { exportProject } from 'Actions/project'
+import { exportProject, clearProjectExportUrl } from 'Actions/project'
 
 import ProjectSettingsExportComponent from './ProjectSettingsExportComponent'
 
-const ProjectSettingsExportContainer = ({ exportProject, exportsLoading, exportUrls }) => {
+const ProjectSettingsExportContainer = ({ exportProject, clearProjectExportUrl, exportsLoading, exportUrls }) => {
   const { projectId } = useParams()
   const location = useLocation()
   const { data: project } = useDataService(currentResource('project', location.pathname), [
@@ -24,6 +24,13 @@ const ProjectSettingsExportContainer = ({ exportProject, exportsLoading, exportU
   const handleExport = () => {
     exportProject(projectId)
   }
+
+  // need to clear out the export url if navigating away from this component
+  useEffect(() => {
+    return () => {
+      clearProjectExportUrl(projectId)
+    }
+  }, [])
 
   return (
     <>
@@ -43,7 +50,8 @@ const ProjectSettingsExportContainer = ({ exportProject, exportsLoading, exportU
 }
 
 ProjectSettingsExportContainer.propTypes = {
-  exportProject: PropTypes.func.isRequired
+  exportProject: PropTypes.func.isRequired,
+  clearProjectExportUrl: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -53,6 +61,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { exportProject }
+const mapDispatchToProps = {
+  exportProject,
+  clearProjectExportUrl
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectSettingsExportContainer)

@@ -117,11 +117,16 @@ export const projects = (state = initialState, action) => {
       }
     }
     case ActionTypes.COMPLETE_PROJECT_EXPORT: {
-      console.log(action)
       return {
         ...state,
         loading: { ...state.loading, exportById: { [action.projectId]: false } },
         exportUrlsById: { ...state.exportUrlsById, [action.projectId]: action.data.url }
+      }
+    }
+    case ActionTypes.CLEAR_PROJECT_EXPORT_URL: {
+      return {
+        ...state,
+        exportUrlsById: { ...state.exportUrlsById, [action.projectId]: null }
       }
     }
     default:

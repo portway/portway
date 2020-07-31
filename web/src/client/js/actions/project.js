@@ -105,6 +105,12 @@ export const exportProject = (projectId) => {
   }
 }
 
+export const clearProjectExportUrl = (projectId) => {
+  return (dispatch) => {
+    return dispatch(Projects.clearExportUrl(projectId))
+  }
+}
+
 /**
  * Project assignments
  */
