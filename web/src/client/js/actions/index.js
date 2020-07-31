@@ -16,6 +16,8 @@ export const ActionTypes = {
   REQUEST_USER_PROJECTS: 'REQUEST_USER_PROJECTS',
   RECEIVE_USER_PROJECTS: 'RECEIVE_USER_PROJECTS',
   SORT_PROJECTS: 'SORT_PROJECTS',
+  INITIATE_PROJECT_EXPORT: 'INITIATE_PROJECT_EXPORT',
+  COMPLETE_PROJECT_EXPORT: 'COMPLETE_PROJECT_EXPORT',
   // Project Assignments
   REQUEST_PROJECT_ASSIGNEES: 'REQUEST_PROJECT_ASSIGNEES',
   RECEIVE_PROJECT_ASSIGNEES: 'RECEIVE_PROJECT_ASSIGNEES',
@@ -185,7 +187,9 @@ export const Projects = {
   removeOne: makeActionCreator(ActionTypes.REMOVE_PROJECT, 'id'),
   requestForUser: makeActionCreator(ActionTypes.REQUEST_USER_PROJECTS, 'userId'),
   receiveForUser: makeActionCreator(ActionTypes.RECEIVE_USER_PROJECTS, 'userId', 'data'),
-  sort: makeActionCreator(ActionTypes.SORT_PROJECTS, 'sortBy', 'sortMethod')
+  sort: makeActionCreator(ActionTypes.SORT_PROJECTS, 'sortBy', 'sortMethod'),
+  initiateExport: makeActionCreator(ActionTypes.INITIATE_PROJECT_EXPORT, 'projectId'),
+  completeExport: makeActionCreator(ActionTypes.COMPLETE_PROJECT_EXPORT, 'projectId', 'data')
 }
 
 export const ProjectAssignees = {

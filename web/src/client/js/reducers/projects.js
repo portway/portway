@@ -9,8 +9,10 @@ const initialState = {
   totalPages: null,
   loading: {
     byPage: {},
-    byId: {}
-  }
+    byId: {},
+    exportById: {}
+  },
+  exportUrlsById: {}
 }
 
 export const projects = (state = initialState, action) => {
@@ -107,6 +109,20 @@ export const projects = (state = initialState, action) => {
         }
       }
       return state
+    }
+    case ActionTypes.INITIATE_PROJECT_EXPORT: {
+      return {
+        ...state,
+       loading: { ...state.loading, exportById: { [action.projectId]: true } }
+      }
+    }
+    case ActionTypes.COMPLETE_PROJECT_EXPORT: {
+      console.log(action)
+      return {
+        ...state,
+        loading: { ...state.loading, exportById: { [action.projectId]: false } },
+        exportUrlsById: { ...state.exportUrlsById, [action.projectId]: action.data.url }
+      }
     }
     default:
       return state
