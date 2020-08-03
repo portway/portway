@@ -43,8 +43,7 @@ export const ORGANIZATION_ROLES = {
       [actions.LIST]: true,
       [actions.READ]: true,
       [actions.CREATE]: true,
-      [actions.LIST_MY]: true,
-      [actions.EXPORT]: true
+      [actions.LIST_MY]: true
     },
     [resourceTypes.PROJECT_USER]: {
       [actions.UPDATE]: true,
@@ -145,7 +144,10 @@ export const PROJECT_ROLES = {
       [actions.CREATE]: true,
       [actions.DELETE]: true,
       [actions.UPDATE]: true
-    }
+    },
+    [resourceTypes.PROJECT_EXPORT]: {
+      [actions.READ]: true
+    },
   },
   [PROJECT_ROLE_IDS.CONTRIBUTOR]: {
     [resourceTypes.PROJECT]: {

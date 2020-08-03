@@ -2,21 +2,15 @@ import Joi from '@hapi/joi'
 import { validateParams } from '../libs/middleware/payloadValidation'
 import { ExtractJwt } from 'passport-jwt'
 import jobQueue from '../integrators/jobQueue'
-import perms from '../libs/middleware/reqPermissionsMiddleware'
 import RESOURCE_TYPES from '../constants/resourceTypes'
-import ACTIONS from '../constants/actions'
+import crudPerms from '../libs/middleware/reqCrudPerms'
 
 const getTokenFromReq = ExtractJwt.fromAuthHeaderAsBearerToken()
 
-const exportPerm = (req, res, next) => {
-  // TODO: validate we don't need project id in here?
-  return perms((req) => {
-    return {
-      resourceType: RESOURCE_TYPES.PROJECT,
-      action: ACTIONS.EXPORT
-    }
-  })(req, res, next)
-}
+const { readPerm } = crudPerms(
+  RESOURCE_TYPES.PROJECT_EXPORT,
+  (req) => { return { projectId: req.params.projectId } }
+)
 
 const paramSchema = Joi.compile({
   projectId: Joi.number().required(),
@@ -27,7 +21,7 @@ const projectExportController = function(router) {
   router.get(
     '/',
     validateParams(paramSchema),
-    exportPerm,
+    readPerm,
     getProjectExport
   )
 }
