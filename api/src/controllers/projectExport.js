@@ -23,7 +23,7 @@ const paramSchema = Joi.compile({
 })
 
 const projectExportController = function(router) {
-  // all routes are nested at projects/:projectId/documents and receive req.params.projectId
+  // all routes are nested at projects/:projectId/export and receive req.params.projectId
   router.get(
     '/',
     validateParams(paramSchema),
@@ -37,7 +37,7 @@ const getProjectExport = async function(req, res, next) {
 
   try {
     const url = await jobQueue.runProjectExport(projectId, getTokenFromReq(req))
-    res.json({ url })
+    res.json({ data: { url } })
   } catch (e) {
     next(e)
   }
