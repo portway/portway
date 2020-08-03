@@ -3,7 +3,7 @@ import Queue from 'bee-queue'
 import { QUEUES } from './constants/queues'
 import projectExportCoordinator from './coordinators/projectExport'
 import logger from './libs/logger'
-import LOG_LEVELS from './constants/logLevels'
+import { LOG_LEVELS } from './constants/logging'
 
 const redisUrl = new url.URL(process.env.REDIS_URL)
 

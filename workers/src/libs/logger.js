@@ -1,5 +1,5 @@
 import Logger from 'r7insight_node'
-import { LOGGER, LOG_TOKEN_SYNC, LOG_LEVELS, DEFAULT_LOG_LEVEL, LOGGER_TYPES } from '../constants'
+import { LOGGER, LOG_TOKEN_WORKERS, LOG_LEVELS, DEFAULT_LOG_LEVEL, LOGGER_TYPES } from '../constants/logging'
 import { processId } from './uniqueId'
 
 const VALID_LOG_LEVEL_VALUES = Object.values(LOG_LEVELS)
@@ -9,7 +9,7 @@ let logger
 switch (LOGGER) {
   case LOGGER_TYPES.R7_INSIGHT:
     logger = new Logger({
-      token: LOG_TOKEN_SYNC,
+      token: LOG_TOKEN_WORKERS,
       region: 'us',
       console: true, // send output to console too
       withStack: true // expands error objects with stack in logs
