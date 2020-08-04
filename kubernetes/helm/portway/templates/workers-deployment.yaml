@@ -38,6 +38,11 @@ spec:
             secretKeyRef:
               name: workers-secrets
               key: log_token_workers
+        - name: EXPORT_TEMP_DIRECTORY
+          valueFrom:
+            configMapKeyRef:
+              name: workers-config
+              key: workers.exportTempDirectory
         ports:
         - containerPort: {{ .Values.workers.port }}
           protocol: TCP
