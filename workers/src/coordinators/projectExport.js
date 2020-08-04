@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
+import moment from 'moment'
 import { promisifyStreamPipe } from '../libs/utils'
 import documentToMd from '../libs/documentToMd'
 import zipIntegrator from '../integrators/zip'
@@ -11,7 +12,8 @@ import { uploadExportZip } from '../integrators/s3'
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY || 'temp/'
 
 const getProjectExportData = async function (projectId, token) {
-  const uniqueId = `${projectId}-${Date.now()}`
+  const d = moment().format('YYYY-MMM-DD-hh-mm-ss')
+  const uniqueId = `${d}-${projectId}` // @todo change projectId to project.slug
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
   const documents = (await portwayAPI.fetchProjectDocuments(projectId, token)).data

@@ -30,7 +30,7 @@ const ProjectSettingsExportContainer = ({ exportProject, clearProjectExportUrl, 
     return () => {
       clearProjectExportUrl(projectId)
     }
-  }, [])
+  }, [clearProjectExportUrl, projectId])
 
   return (
     <>
@@ -50,8 +50,10 @@ const ProjectSettingsExportContainer = ({ exportProject, clearProjectExportUrl, 
 }
 
 ProjectSettingsExportContainer.propTypes = {
+  clearProjectExportUrl: PropTypes.func.isRequired,
   exportProject: PropTypes.func.isRequired,
-  clearProjectExportUrl: PropTypes.func.isRequired
+  exportsLoading: PropTypes.object,
+  exportUrls: PropTypes.object,
 }
 
 const mapStateToProps = (state) => {
