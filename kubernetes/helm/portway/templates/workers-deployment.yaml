@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workers-deployment
+  labels:
+    app: {{ .Values.serviceNames.workers }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceNames.workers }}
+  template:
+    metadata:
+      labels:
+        run: {{ .Values.serviceNames.workers }}
+        app: {{ .Values.serviceNames.workers }}
+    spec:
+      imagePullSecrets:
+      - name: regcred    
+      containers:
+      - image: {{ printf "%s:%s" .Values.workers.image .Values.workers.tag }}
+        name: {{ .Values.serviceNames.workers }}
+        args: [ "start"  ]     
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.redis-url
+        - name: LOGGER
+          valueFrom:
+            configMapKeyRef:
+              name: workers-config
+              key: workers.logger
+        - name: LOG_TOKEN_WORKERS
+          valueFrom:
+            secretKeyRef:
+              name: workers-secrets
+              key: log_token_workers
+        ports:
+        - containerPort: {{ .Values.workers.port }}
+          protocol: TCP
