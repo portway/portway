@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { NavLink, Redirect } from 'react-router-dom'
 
 import { MULTI_USER_PLAN_TYPES, PATH_PROJECT } from 'Shared/constants'
-import { InfoIcon, APIKeyIcon, TeamsIcon } from 'Components/Icons'
+import { APIKeyIcon, ExportIcon, InfoIcon, TeamsIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
@@ -46,7 +46,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
           <APIKeyIcon /> <span className="label">API keys</span>
         </NavLink>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.EXPORT}`} aria-label="Export your project">
-          <APIKeyIcon /> <span className="label">Export</span>
+          <ExportIcon /> <span className="label">Export</span>
         </NavLink>
       </PanelNavigation>
       <PanelContent contentKey={setting} contentMap={PANEL_PATHS} />
