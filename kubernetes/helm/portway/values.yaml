@@ -46,8 +46,9 @@ redis:
   port: "6379"
 
 workers:
+  port: "3005"
   image: "bonkeybong/portway_workers"
-  tag: "latest"
+  tag: "export-beta-1"
   logger: "r7insight"
   exportTempDirectory: "temp/"
 
