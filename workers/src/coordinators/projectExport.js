@@ -12,8 +12,13 @@ import { uploadExportZip } from '../integrators/s3'
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY || 'temp/'
 
 const getProjectExportData = async function (projectId, token) {
-  const d = moment().format('YYYY-MMM-DD-hh-mm-ss')
-  const uniqueId = `${d}-${projectId}` // @todo change projectId to project.slug
+  const project = (await portwayAPI.fetchProject(projectId, token)).data
+
+  // Temporary slugification
+  const name = project.name.toLowerCase().replace(/\s+/g, '_').replace(/\W/g, '')
+
+  const d = moment().format('YYYY-MM-DD_ss')
+  const uniqueId = `${name}_${d}_${projectId}`
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
   const documents = (await portwayAPI.fetchProjectDocuments(projectId, token)).data
