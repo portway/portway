@@ -47,6 +47,7 @@ const getProjectExportData = async function (projectId, token) {
   await Promise.all(fullDocuments.map((doc) => {
     return Promise.all(doc.fields.map(async (field) => {
       if (field.type === FIELD_TYPES.IMAGE || field.type === FIELD_TYPES.FILE) {
+        if (!field.value) return // Case where field was added but no file/image uploaded
         const splitFileUrl = field.value.split('/')
         const filename = splitFileUrl[splitFileUrl.length - 1]
         const resp = await axios({ url: field.value, responseType: 'stream', method: 'get' })

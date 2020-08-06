@@ -33,6 +33,7 @@ const getFieldValueByType = function (field) {
   switch (field.type) {
     case FIELD_TYPES.IMAGE:
     case FIELD_TYPES.FILE:
+      if (!field.value) return field.value
       const parsedUrl = url.parse(field.value)
       const filename = parsedUrl.path.split('/')[4]
       return `./assets/${filename}`
