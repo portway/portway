@@ -42,4 +42,12 @@ items:
   metadata:
     name: sync-config
     namespace: default
+- apiVersion: v1
+  data:
+    workers.exportTempDirectory: {{ .Values.workers.exportTempDirectory | quote }}
+    workers.logger: {{ .Values.workers.logger | quote }}
+  kind: ConfigMap
+  metadata:
+    name: workers-config
+    namespace: default
 kind: List
