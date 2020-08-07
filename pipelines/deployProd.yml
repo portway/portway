@@ -22,3 +22,4 @@ steps:
       - VALUE_apiTag=$VERSION_TAG
       - VALUE_webTag=$VERSION_TAG
       - VALUE_sync_tag=$VERSION_TAG
+      - VALUE_workers_tag=$VERSION_TAG
