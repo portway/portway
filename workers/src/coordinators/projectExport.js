@@ -12,8 +12,13 @@ import { uploadExportZip } from '../integrators/s3'
 const EXPORT_TEMP_DIRECTORY = process.env.EXPORT_TEMP_DIRECTORY || 'temp/'
 
 const getProjectExportData = async function (projectId, token) {
-  const d = moment().format('YYYY-MMM-DD-hh-mm-ss')
-  const uniqueId = `${d}-${projectId}` // @todo change projectId to project.slug
+  const project = (await portwayAPI.fetchProject(projectId, token)).data
+
+  // Temporary slugification
+  const name = project.name.toLowerCase().replace(/\s+/g, '_').replace(/\W/g, '')
+
+  const d = moment().format('YYYY-MM-DD_ss')
+  const uniqueId = `${name}_${d}_${projectId}`
   const directoryPath = path.resolve(EXPORT_TEMP_DIRECTORY, uniqueId)
 
   const documents = (await portwayAPI.fetchProjectDocuments(projectId, token)).data
@@ -42,6 +47,7 @@ const getProjectExportData = async function (projectId, token) {
   await Promise.all(fullDocuments.map((doc) => {
     return Promise.all(doc.fields.map(async (field) => {
       if (field.type === FIELD_TYPES.IMAGE || field.type === FIELD_TYPES.FILE) {
+        if (!field.value) return // Case where field was added but no file/image uploaded
         const splitFileUrl = field.value.split('/')
         const filename = splitFileUrl[splitFileUrl.length - 1]
         const resp = await axios({ url: field.value, responseType: 'stream', method: 'get' })

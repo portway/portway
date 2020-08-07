@@ -26,6 +26,7 @@ describe('projectExportCoordinator', () => {
     let result
 
     beforeAll(async () => {
+      portwayAPI.fetchProject.mockReturnValueOnce({ data: { name: 'A Portway Project *(@#@' } })
       portwayAPI.fetchProjectDocuments.mockReturnValueOnce({ data: [{ id: doc1Id }, { id: doc2Id }] })
       portwayAPI.fetchFullDocument.mockReturnValueOnce({
         data:

@@ -4,6 +4,11 @@ import url from 'url'
 const API_URL = process.env.API_URL
 const baseURL = (new url.URL('api/v1', API_URL)).href
 
+const fetchProject = async function(projectId, token) {
+  const project = await fetch(`projects/${projectId}`, token)
+  return project
+}
+
 const fetchProjectDocuments = async function(projectId, token) {
   const documents = await fetch(`projects/${projectId}/documents?draft=true`, token)
   return documents
@@ -45,6 +50,7 @@ const fetch = async function(url, token) {
 }
 
 export default {
+  fetchProject,
   fetchProjectDocuments,
   fetchFullDocument
 }

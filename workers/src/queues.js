@@ -15,6 +15,11 @@ export default function() {
     }
   })
 
+  queue.on('failed', (job, err) => {
+    logger(LOG_LEVELS.ERROR, `failed job ${job.id}`)
+    logger(LOG_LEVELS.ERROR, err)
+  })
+
   queue.on('ready', function () {
     queue.process(async (job) => {
       logger(LOG_LEVELS.INFO, `processing job ${job.id}`)
