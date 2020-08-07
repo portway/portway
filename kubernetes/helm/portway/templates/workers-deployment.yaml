@@ -1,0 +1,73 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workers-deployment
+  labels:
+    app: {{ .Values.serviceNames.workers }}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Values.serviceNames.workers }}
+  template:
+    metadata:
+      labels:
+        run: {{ .Values.serviceNames.workers }}
+        app: {{ .Values.serviceNames.workers }}
+    spec:
+      imagePullSecrets:
+      - name: regcred    
+      containers:
+      - image: {{ printf "%s:%s" .Values.workers.image .Values.workers.tag }}
+        name: {{ .Values.serviceNames.workers }}
+        args: [ "start"  ]     
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.api_url
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.redis-url
+        - name: LOGGER
+          valueFrom:
+            configMapKeyRef:
+              name: workers-config
+              key: workers.logger
+        - name: LOG_TOKEN_WORKERS
+          valueFrom:
+            secretKeyRef:
+              name: workers-secrets
+              key: log_token_workers
+        - name: EXPORT_TEMP_DIRECTORY
+          valueFrom:
+            configMapKeyRef:
+              name: workers-config
+              key: workers.exportTempDirectory
+        - name: AWS_SES_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.aws-ses-region
+        - name: S3_CONTENT_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.s3-content-bucket
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-secrets
+              key: access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-secrets
+              key: secret_access_key
+        ports:
+        - containerPort: {{ .Values.workers.port }}
+          protocol: TCP

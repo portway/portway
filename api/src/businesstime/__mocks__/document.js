@@ -12,5 +12,6 @@ export default {
   findAllForProject: jest.fn(),
   findParentProjectByDocumentId: jest.fn(() => getGenericMockDocumentData()),
   deleteByIdForProject: jest.fn(),
-  deleteAllForOrg: jest.fn()
+  deleteAllForOrg: jest.fn(),
+  findByIdWithFields: jest.fn()
 }

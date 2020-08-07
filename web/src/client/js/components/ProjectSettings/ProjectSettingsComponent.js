@@ -3,19 +3,20 @@ import PropTypes from 'prop-types'
 import { NavLink, Redirect } from 'react-router-dom'
 
 import { MULTI_USER_PLAN_TYPES, PATH_PROJECT } from 'Shared/constants'
-import { InfoIcon, APIKeyIcon, TeamsIcon } from 'Components/Icons'
+import { APIKeyIcon, ExportIcon, InfoIcon, TeamsIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
 import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
+import ProjectSettingsExportContainer from './ProjectSettingsExport/ProjectSettingsExportContainer'
 
 const ProjectSettingsTeamsContainer = lazy(() => import(/* webpackChunkName: 'ProjectSettingsTeamsContainer' */ './ProjectSettingsTeams/ProjectSettingsTeamsContainer'))
 
 const SETTINGS_PATHS = {
+  EXPORT: 'export',
   INFO: 'info',
+  KEYS: 'keys',
   TEAMS: 'teams',
-  ENDPOINTS: 'endpoints',
-  KEYS: 'keys'
 }
 
 const ProjectSettingsComponent = ({ projectId, setting }) => {
@@ -26,6 +27,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
     [SETTINGS_PATHS.INFO]: <ProjectSettingsInfoContainer />,
     [SETTINGS_PATHS.TEAMS]: <ProjectSettingsTeamsContainer />,
     [SETTINGS_PATHS.KEYS]: <ProjectSettingsTokensContainer />,
+    [SETTINGS_PATHS.EXPORT]: <ProjectSettingsExportContainer />,
     default: <Redirect to={`${settingsSectionPath}/info`} />
   }
 
@@ -42,6 +44,9 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
         </OrgPlanPermission>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`} aria-label="API Keys">
           <APIKeyIcon /> <span className="label">API keys</span>
+        </NavLink>
+        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.EXPORT}`} aria-label="Export your project">
+          <ExportIcon /> <span className="label">Export</span>
         </NavLink>
       </PanelNavigation>
       <PanelContent contentKey={setting} contentMap={PANEL_PATHS} />

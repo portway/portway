@@ -45,9 +45,17 @@ sync:
 redis:
   port: "6379"
 
+workers:
+  port: "3005"
+  image: "bonkeybong/portway_workers"
+  tag: "export-beta-1"
+  logger: "r7insight"
+  exportTempDirectory: "temp/"
+
 serviceNames:
   api: api
   web: web
   db: db
   redis: redis
   sync: sync
+  workers: workers
