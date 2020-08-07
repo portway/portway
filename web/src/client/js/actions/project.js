@@ -93,6 +93,24 @@ export const removeProject = (projectId, history) => {
   }
 }
 
+export const exportProject = (projectId) => {
+  return async (dispatch) => {
+    dispatch(Projects.initiateExport(projectId))
+    const { data, status } = await fetch(`v1/projects/${projectId}/export`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.PROJECT, status))
+      return
+    }
+    dispatch(Projects.completeExport(projectId, data))
+  }
+}
+
+export const clearProjectExportUrl = (projectId) => {
+  return (dispatch) => {
+    return dispatch(Projects.clearExportUrl(projectId))
+  }
+}
+
 /**
  * Project assignments
  */
