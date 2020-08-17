@@ -7,6 +7,8 @@ export const emitJoinDocumentRoom = (documentId) => {
       return UserSync.socketError()
     }
     dispatch(UserSync.emitJoinDocumentRoom(documentId))
+    console.log('emitting joinRoom for ' + documentId)
+    console.log(typeof documentId)
     documentSocket.emit('joinRoom', documentId)
     dispatch(UserSync.documentRoomJoined(documentId))
   }
@@ -40,7 +42,7 @@ export const emitFieldBlur = (fieldId, documentId) => {
       return dispatch(UserSync.socketError())
     }
     dispatch(UserSync.emitFieldBlur(fieldId))
-    documentSocket.emit('fieldFocus', null, documentId)
+    documentSocket.emit('fieldFocus', null, String(documentId))
     dispatch(UserSync.fieldBlurEmitted(fieldId))
   }
 }
