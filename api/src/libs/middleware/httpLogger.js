@@ -33,6 +33,9 @@ const endFuncs = {
   user_id: (req) => {
     return req.user ? req.user.id : null
   },
+  org_id: (req) => {
+    return req.user ? req.user.orgId : null
+  },
   user_agent: req => req.headers['user-agent'],
   res_size: (req, res) => {
     return res.getHeader('content-length')
