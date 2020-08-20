@@ -14,10 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     Webhook.hasMany(models.WebhookDelivery, {
       foreignKey: 'webhookId'
     })
-
-    // Project.hasMany(models.ProjectUser, {
-    //   foreignKey: 'projectId'
-    // })
   };
   return Webhook;
 }
