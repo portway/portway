@@ -74,56 +74,66 @@ describe('BusinessWebhook', () => {
 
     describe('#findAllByProjectId', () => {
       let webhooks
-      let count
 
       beforeAll(async () => {
-        ({ webhooks, count } = await BusinessWebhook.findAllByProjectId(constants.ORG_ID))
+        webhooks = await BusinessWebhook.findAllByProjectId(projectId1, constants.ORG_ID)
       })
 
-      it('should return all paged projects in org', () => {
-        expect(projects.length).toEqual(3)
+      it('should return all webhooks in project', () => {
+        expect(webhooks.length).toEqual(5)
       })
 
       it('should return projects as POJOs', () => {
-        for (const project of projects) {
-          expect(project.password).toBe(undefined)
-          expect(project.constructor).toBe(Object)
-          expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+        for (const webhook of webhooks) {
+          expect(webhook.constructor).toBe(Object)
+          expect(Object.keys(webhook)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
         }
-      })
-
-      it('should return a project count', () => {
-        expect(count).toEqual(5)
       })
     })
 
     describe('#findById', () => {
-      let targetProjectId
-      let project
+      let webhook
+      let webhookId
 
-      describe('when the target project has the passed in orgId', () => {
+      describe('when the target webhook has the passed in orgId', () => {
         beforeAll(async () => {
-          targetProjectId = factoryProjects[0].get('id')
-          project = await BusinessProject.findById(targetProjectId, constants.ORG_ID)
+          webhookId = factoryWebhooks[0].id
+          webhook = await BusinessWebhook.findById(webhookId, constants.ORG_ID)
         })
 
-        it('should return a project as POJO', () => {
-          expect(project.id).toBe(targetProjectId)
-          expect(project.constructor).toBe(Object)
-          expect(Object.keys(project)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
+        it('should return a webhook as a POJO', () => {
+          expect(webhook.id).toBe(webhookId)
+          expect(webhook.constructor).toBe(Object)
+          expect(Object.keys(webhook)).toEqual(expect.arrayContaining(PUBLIC_FIELDS))
         })
       })
 
-      describe('when the target project does not have the passed in orgId', () => {
+      describe('when the target webhook does not have the passed in orgId', () => {
         beforeAll(async () => {
-          targetProjectId = factoryProjects[0].get('id')
-          project = await BusinessProject.findById(targetProjectId, constants.ORG_ID_2)
+          webhook = await BusinessWebhook.findById(webhookId, constants.ORG_ID_2)
         })
 
         it('should return null', () => {
-          expect(project).toBe(null)
+          expect(webhook).toBe(null)
         })
       })
+    })
+  })
+
+  describe('#deleteById', () => {
+    let factoryWebhook
+
+    beforeAll(async () => {
+      const factoryWebhooks = await WebhookFactory.createMany(1)
+      factoryWebhook = factoryWebhooks[0]
+    })
+
+    it('should not throw an error if the target webhook is found', async () => {
+      await expect(BusinessWebhook.deleteById(factoryWebhook.id, factoryWebhook.orgId)).resolves.toEqual(undefined)
+    })
+
+    it('should throw an error if the target webhook is not found', async () => {
+      await expect(BusinessWebhook.deleteById(0)).rejects.toThrow()
     })
   })
 
