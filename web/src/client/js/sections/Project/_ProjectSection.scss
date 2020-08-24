@@ -21,6 +21,7 @@
 .project__documents-list-container {
   display: flex;
   flex-direction: column;
+  flex: 1;
   overflow: hidden;
   position: relative;
   transform: translate3d(0, 0, 0);
@@ -39,6 +40,7 @@
 
   @include media('>medium') {
     border-right: thin solid var(--theme-border);
+    flex: 0 1 auto;
     transform: translate3d(0, 0, 0);
     width: calc(var(--gutter-width) + 300px);
   }
@@ -54,7 +56,7 @@
   background-color: var(--theme-surface);
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 0;
   overflow: hidden;
   position: relative;
   transform: translate3d(0, 20px, 0);
@@ -72,6 +74,7 @@
   }
 
   &--document-only {
+    flex: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
     visibility: visible;
@@ -83,6 +86,7 @@
   }
 
   @include media('>medium') {
+    flex: 1;
     padding-bottom: 0;
     transform: translate3d(0, 0, 0);
     width: auto;

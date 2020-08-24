@@ -30,6 +30,7 @@ const DocumentOutlineItem = ({
 }) => {
   const [dragEnabled, setDragEnabled] = useState(true)
   const listItemRef = useRef()
+  const documentFieldRef = useRef()
   const nameRef = useRef()
 
   const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
@@ -50,9 +51,17 @@ const DocumentOutlineItem = ({
   function focusDocumentFieldHandler(e) {
     if (listItemRef.current) {
       const docEl = document.querySelector('.document')
-      const documentField = docEl.querySelector(`.document-field[data-id="${listItemRef.current.dataset.id}"]`)
-      documentField.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      documentFieldRef.current = docEl.querySelector(`.document-field[data-id="${listItemRef.current.dataset.id}"]`)
+      documentFieldRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      documentFieldRef.current.classList.add('highlight')
     }
+  }
+
+  function blurHandler(e) {
+    e.stopPropagation()
+    documentFieldRef.current.classList.remove('highlight')
+    documentFieldRef.current = null
+    setDragEnabled(true)
   }
 
   function disableDragHandler(e) {
@@ -87,7 +96,7 @@ const DocumentOutlineItem = ({
       <div className="document-outline__name">
         <input
           defaultValue={field.name}
-          onBlur={enableDragHandler}
+          onBlur={blurHandler}
           onKeyDown={(e) => {
             if (e.key.toLowerCase() === 'escape') {
               e.target.blur()

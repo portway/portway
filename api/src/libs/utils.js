@@ -13,15 +13,6 @@ export const uniqueVals = (inputArray) => {
   }, [])
 }
 
-export const promisifyStreamPipe = (readStream, writeStream) => {
-  return new Promise((resolve, reject) => {
-    readStream.on('error', reject)
-    writeStream.on('error', reject)
-    writeStream.on('finish', resolve)
-    readStream.pipe(writeStream)
-  })
-}
-
 // Turns a string into a url-safe slug
 export const slugify = (string) => {
   if (typeof string !== 'string') {

@@ -54,6 +54,8 @@ async function handleEvent(event) {
       // customer is going from 'trialing' to 'active' and they have no card info, send the trial ended email
       if (
         eventData.status === STRIPE_STATUS.ACTIVE &&
+        // previousAttributes will not be defined for a demoAccount
+        previousAttributes &&
         previousAttributes.status === STRIPE_STATUS.TRIALING &&
         !customer.sources.data.length
       ) {

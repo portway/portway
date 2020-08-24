@@ -4,6 +4,7 @@ stages:
   - Setup Repo
   - Web Build and Test
   - API Build and test
+  - Worker Build and Test
 steps:
   main_clone:
     title: Cloning main repository...
@@ -50,6 +51,19 @@ steps:
         - name: hide_dockerignore
           on:
             - success
+  build_worker_image:
+    stage: Worker Build and Test
+    title: Building Worker Docker Image
+    type: build
+    image_name: bonkeybong/portway_workers
+    working_directory: ./workers/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
   run_web_tests:
     stage: Web Build and Test
     image: ${{build_web_image}}
@@ -60,6 +74,18 @@ steps:
     when:
       steps:
         - name: build_web_image
+          on:
+            - success
+  run_worker_tests:
+    stage: Worker Build and Test
+    image: ${{build_worker_image}}
+    title: Running Worker Tests
+    working_directory: /workers/
+    cmd:
+      - test
+    when:
+      steps:
+        - name: build_worker_image
           on:
             - success
   run_api_tests:

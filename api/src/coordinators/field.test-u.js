@@ -2,7 +2,8 @@ import fieldCoordinator from './field'
 import assetCoordinator from './assets'
 import BusinessField from '../businesstime/field'
 import { processMarkdownSync } from './markdown'
-import { promisifyStreamPipe, callFuncWithArgs } from '../libs/utils'
+import { callFuncWithArgs } from '../libs/utils'
+import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import axios from 'axios'
 
 jest.mock('axios')
@@ -10,6 +11,7 @@ jest.mock('../businesstime/field')
 jest.mock('./assets')
 jest.mock('./markdown')
 jest.mock('../libs/utils')
+jest.mock('../libs/promisifyStreamPipe')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
@@ -152,7 +154,7 @@ describe('fieldCoordinator', () => {
       await fieldCoordinator.addImageFieldFromUrlToDocument(docId, body, url)
     })
 
-    it('should call utils.promisifyStreamPipe', () => {
+    it('should call promisifyStreamPipe', () => {
       expect(promisifyStreamPipe.mock.calls.length).toBe(1)
     })
 

@@ -20,7 +20,8 @@ const V1_CONTROLLERS = {
       childRoutes: {
         '/:projectId/assignments': { fileName: 'projectUsers' },
         '/:projectId/documents': { fileName: 'projectDocuments' },
-        '/:projectId/tokens': { fileName: 'projectTokens' }
+        '/:projectId/tokens': { fileName: 'projectTokens' },
+        '/:projectId/export': { fileName: 'projectExport'}
       }
     },
     '/documents': {
