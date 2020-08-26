@@ -150,6 +150,26 @@ describe('BusinessField', () => {
           })
         })
       })
+
+      describe('with a null value', () => {
+        let defaultDate
+        let startTimeUTC
+
+        beforeAll(async () => {
+          startTimeUTC = (new Date()).getTime()
+          defaultDate = await BusinessField.createForDocument(factoryDocument.id, {
+            ...fieldBody,
+            type: FIELD_TYPES.DATE,
+            value: null
+          })
+        })
+
+        it ('should default to the current date', () => {
+          const createdDateUTC = (new Date(defaultDate.value)).getTime()
+          // Time difference should be less than 750 ms
+          expect(Math.abs(createdDateUTC - startTimeUTC)).toBeLessThan(750)
+        })
+      })
     })
   })
 
