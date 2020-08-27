@@ -19,6 +19,7 @@ const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
 )
 
 const paramSchema = Joi.compile({
+  projectId: Joi.number().required(),
   id: Joi.number()
 })
 
@@ -36,12 +37,12 @@ const webhooksController = function (router) {
     createPerm,
     addWebhook
   )
-  router.get('/', validateQuery(querySchema), listPerm, getProjectWebhooks)
+  router.get('/', listPerm, getProjectWebhooks)
   router.get('/:id', validateParams(paramSchema), readPerm, getWebhook)
   router.put(
     '/:id',
     validateParams(paramSchema),
-    validateBody(projectSchema, { includeDetails: true }),
+    validateBody(webhookSchema, { includeDetails: true }),
     updatePerm,
     updateWebhook
   )
@@ -49,12 +50,9 @@ const webhooksController = function (router) {
 }
 
 const getProjectWebhooks = async function (req, res, next) {
-  const { page = 1, perPage = 50, sortBy, sortMethod } = req.query
-  const options = { page, perPage, sortBy, sortMethod }
-
   try {
-    const { projects, count } = await BusinessProject.findAll(req.requestorInfo.orgId, options)
-    res.json({ data: projects, page, perPage, total: count, totalPages: Math.ceil(count / perPage) })
+    const webhooks = await BusinessWebhook.findAllByProjectId(req.params.projectId, req.requestorInfo.orgId)
+    res.json({ data: webhooks })
   } catch (e) {
     next(e)
   }
@@ -75,6 +73,9 @@ const getWebhook = async function (req, res, next) {
 const addWebhook = async function (req, res, next) {
   const { body } = req
   body.orgId = req.requestorInfo.orgId
+  // overwrite any id they pass in with actual projectId from params, since param id is used for
+  // access validation
+  body.projectId = req.params.projectId
 
   try {
     const webhook = await BusinessWebhook.create(body)
@@ -92,6 +93,7 @@ const updateWebhook = async function (req, res, next) {
   body.orgId = req.requestorInfo.orgId
 
   try {
+    console.log(JSON.stringify(body, null, 2))
     const webhook = await BusinessWebhook.updateById(id, body, req.requestorInfo.orgId)
     res.status(200).json({ data: webhook })
     auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.WEBHOOK, primaryId: webhook.id, action: auditActions.UPDATED_PRIMARY })

@@ -3,8 +3,13 @@ module.exports = (sequelize, DataTypes) => {
     projectId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
     url: DataTypes.STRING,
-    active: DataTypes.BOOLEAN
-  }, {})
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+    }
+  }, {
+    paranoid: true
+  })
 
   Webhook.associate = function(models) {
     Webhook.belongsTo(models.Project, {
