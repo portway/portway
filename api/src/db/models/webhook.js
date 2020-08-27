@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     Webhook.hasMany(models.WebhookDelivery, {
-      foreignKey: 'webhookId'
+      foreignKey: 'webhookId',
+      onDelete: 'CASCADE'
     })
   };
   return Webhook;

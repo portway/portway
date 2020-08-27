@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     orgId: DataTypes.INTEGER,
     resultCode: DataTypes.STRING
   }, {
+    // No paranoid, if parent webhook is deleted, all delivery records are deleted immediately
     updatedAt: false
   })
   WebhookDelivery.associate = function(models) {

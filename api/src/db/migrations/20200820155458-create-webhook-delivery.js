@@ -8,10 +8,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       webhookId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Webhooks',
+          key: 'id'
+        }
       },
       orgId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       resultCode: {
         type: Sequelize.STRING

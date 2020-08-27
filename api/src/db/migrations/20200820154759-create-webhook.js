@@ -9,10 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       projectId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Projects',
+          key: 'id'
+        }
       },
       orgId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Organizations',
+          key: 'id'
+        }
       },
       url: {
         type: Sequelize.STRING
