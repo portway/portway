@@ -77,7 +77,7 @@
     "pg-hstore": "^2.3.2",
     "r7insight_node": "^1.8.3",
     "rimraf": "^3.0.2",
-    "sequelize": "^4.44.4",
+    "sequelize": "^5.15.1",
     "sequelize-cli": "^5.5.0",
     "sliding-window-rate-limiter": "^4.1.1",
     "stripe": "^6.23.1",
