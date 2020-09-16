@@ -28,15 +28,15 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
       })
     return BusinessField.createForDocument(doc.id, newField)
   }))
-  const doc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
+  const updatedDoc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
     publishedVersionId: docVersion.id,
     lastPublishedAt: new Date()
   })
 
   // Don't wait for it, does its own error handling
-  webhookCoordinator.sendPublishWebhook(doc.id, orgId)
+  webhookCoordinator.sendPublishWebhook(updatedDoc.id, orgId)
 
-  return doc
+  return updatedDoc
 }
 
 const unpublishDocument = async function(documentId, projectId, orgId) {
@@ -45,14 +45,15 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
     throw ono({ code: 404 }, `Document ${documentId} not found, cannot unpublish`)
   }
 
-  const doc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
+  const updatedDoc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
     publishedVersionId: null,
     lastPublishedAt: null
   })
 
-  // TODO: webhook it up
+  // Don't wait for it, does its own error handling
+  webhookCoordinator.sendUnpublishWebhook(updatedDoc.id, orgId)
 
-  return doc
+  return updatedDoc
 }
 
 // HELPERS
