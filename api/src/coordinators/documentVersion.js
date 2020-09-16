@@ -4,6 +4,7 @@ import BusinessDocumentVersion from '../businesstime/documentversion'
 import ono from 'ono'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import { copyContent, convertCDNUrlToS3Key } from '../integrators/s3'
+import webhookCoordinator from './webhook'
 
 // EXPORTS
 
@@ -27,10 +28,15 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
       })
     return BusinessField.createForDocument(doc.id, newField)
   }))
-  return await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
+  const doc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
     publishedVersionId: docVersion.id,
     lastPublishedAt: new Date()
   })
+
+  // Don't wait for it, does its own error handling
+  webhookCoordinator.sendPublishWebhook(doc.id, orgId)
+
+  return doc
 }
 
 const unpublishDocument = async function(documentId, projectId, orgId) {
@@ -39,10 +45,14 @@ const unpublishDocument = async function(documentId, projectId, orgId) {
     throw ono({ code: 404 }, `Document ${documentId} not found, cannot unpublish`)
   }
 
-  return await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
+  const doc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
     publishedVersionId: null,
     lastPublishedAt: null
   })
+
+  // TODO: webhook it up
+
+  return doc
 }
 
 // HELPERS
