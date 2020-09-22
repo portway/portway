@@ -4,7 +4,6 @@ import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
-// import { getPaginationOptions, getSortOptions } from '../libs/queryFilters'
 
 export const MODEL_NAME = 'Webhook'
 

@@ -1,15 +1,13 @@
 import ono from 'ono'
 import Joi from '@hapi/joi'
 
-import { validateBody, validateParams, validateQuery } from '../libs/middleware/payloadValidation'
+import { validateBody, validateParams } from '../libs/middleware/payloadValidation'
 import BusinessWebhook from '../businesstime/webhook'
-// import BusinessOrganization from '../businesstime/organization'
 import crudPerms from '../libs/middleware/reqCrudPerms'
 import RESOURCE_TYPES from '../constants/resourceTypes'
 import { requiredFields } from './payloadSchemas/helpers'
 import webhookSchema from './payloadSchemas/webhook'
 import auditLog, { auditActions } from '../integrators/audit'
-// import { SORT_METHODS } from '../constants/queryOptions'
 
 const { listPerm, readPerm, createPerm, deletePerm, updatePerm } = crudPerms(
   RESOURCE_TYPES.WEBHOOK,
