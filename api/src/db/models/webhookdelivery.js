@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const WebhookDelivery = sequelize.define('WebhookDelivery', {
     webhookId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
-    resultCode: DataTypes.NUMBER
+    resultCode: DataTypes.INTEGER
   }, {
     // No paranoid, if parent webhook is deleted, all delivery records are deleted immediately
     updatedAt: false
