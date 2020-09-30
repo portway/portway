@@ -28,7 +28,7 @@ const paramSchema = Joi.compile({
 //   sortMethod: Joi.string().valid(SORT_METHODS.ASCENDING, SORT_METHODS.DESCENDING)
 // })
 
-const webhooksController = function (router) {
+const webhooksController = function(router) {
   router.post(
     '/',
     validateBody(requiredFields(RESOURCE_TYPES.WEBHOOK, 'url'), { includeDetails: true }),
@@ -47,7 +47,7 @@ const webhooksController = function (router) {
   router.delete('/:id', validateParams(paramSchema), deletePerm, deleteWebhook)
 }
 
-const getProjectWebhooks = async function (req, res, next) {
+const getProjectWebhooks = async function(req, res, next) {
   try {
     const webhooks = await BusinessWebhook.findAllByProjectId(req.params.projectId, req.requestorInfo.orgId)
     res.json({ data: webhooks })
@@ -56,7 +56,7 @@ const getProjectWebhooks = async function (req, res, next) {
   }
 }
 
-const getWebhook = async function (req, res, next) {
+const getWebhook = async function(req, res, next) {
   const { id } = req.params
 
   try {
@@ -68,7 +68,7 @@ const getWebhook = async function (req, res, next) {
   }
 }
 
-const addWebhook = async function (req, res, next) {
+const addWebhook = async function(req, res, next) {
   const { body } = req
   body.orgId = req.requestorInfo.orgId
   // overwrite any id they pass in with actual projectId from params, since param id is used for
@@ -84,14 +84,13 @@ const addWebhook = async function (req, res, next) {
   }
 }
 
-const updateWebhook = async function (req, res, next) {
+const updateWebhook = async function(req, res, next) {
   const { id } = req.params
   const { body } = req
 
   body.orgId = req.requestorInfo.orgId
 
   try {
-    console.log(JSON.stringify(body, null, 2))
     const webhook = await BusinessWebhook.updateById(id, body, req.requestorInfo.orgId)
     res.status(200).json({ data: webhook })
     auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.WEBHOOK, primaryId: webhook.id, action: auditActions.UPDATED_PRIMARY })
@@ -100,7 +99,7 @@ const updateWebhook = async function (req, res, next) {
   }
 }
 
-const deleteWebhook = async function (req, res, next) {
+const deleteWebhook = async function(req, res, next) {
   const { id } = req.params
 
   try {

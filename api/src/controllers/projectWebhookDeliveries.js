@@ -22,11 +22,11 @@ const querySchema = Joi.compile({
   perPage: Joi.number().max(50)
 })
 
-const webhookDeliveriesController = function (router) {
+const webhookDeliveriesController = function(router) {
   router.get('/', listPerm, validateQuery(querySchema), validateParams(paramSchema), getWebhookDeliveries)
 }
 
-const getWebhookDeliveries = async function (req, res, next) {
+const getWebhookDeliveries = async function(req, res, next) {
   try {
     const { page = 1, perPage = 50 } = req.query
     const options = { page, perPage }
@@ -37,12 +37,12 @@ const getWebhookDeliveries = async function (req, res, next) {
       req.requestorInfo.orgId
     )
 
-    res.json({ 
+    res.json({
       data: webhookDeliveries,
       page,
       perPage,
       total: count,
-      totalPages: Math.ceil(count / perPage) 
+      totalPages: Math.ceil(count / perPage)
     })
   } catch (e) {
     next(e)

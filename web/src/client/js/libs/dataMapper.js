@@ -18,7 +18,14 @@
  */
 import { fetchDocuments, fetchDocument } from 'Actions/document'
 import { fetchUser, fetchUsers, fetchUserProjectAssignments, searchByName } from 'Actions/user'
-import { fetchProject, fetchProjects, fetchProjectsForUser, fetchProjectAssignees, fetchProjectTokens } from 'Actions/project'
+import {
+  fetchProject,
+  fetchProjectAssignees,
+  fetchProjects,
+  fetchProjectsForUser,
+  fetchProjectTokens
+} from 'Actions/project'
+import { fetchWebhookDeliveries, fetchProjectWebhooksWithLatestDeliveries } from 'Actions/webhooks'
 import { fetchOrganization, fetchOrganizationBilling, fetchOrganizationSeats } from 'Actions/organization'
 import { currentUserId, currentOrgId } from './currentIds'
 
@@ -144,6 +151,31 @@ export default {
         },
         getDataFromState: (state) => {
           return state.projectAssignments.assignmentsByProjectId[projectId]
+        }
+      }
+    },
+    webhooks: function(projectId) {
+      if (!projectId || isNaN(projectId)) return returnNull()
+      return {
+        fetchAction: fetchProjectWebhooksWithLatestDeliveries(projectId),
+        getLoadingStatusFromState: (state) => {
+          return state.projectWebhooks.loading.webhooksByProjectId[projectId]
+        },
+        getDataFromState: (state) => {
+          return state.projectWebhooks.webhooksByProjectId[projectId]
+        }
+      }
+    },
+    webhookDeliveries: function(projectId, webhookId) {
+      if (!webhookId || isNaN(webhookId)) return returnNull()
+      return {
+        fetchAction: fetchWebhookDeliveries(projectId, webhookId),
+        getLoadingStatusFromState: (state) => {
+          return state.projectWebhooks.loading.deliveriesByWebhookId[webhookId]
+        },
+        getDataFromState: (state) => {
+          return state.projectWebhooks.deliveriesByProjectId[projectId] &&
+            state.projectWebhooks.deliveriesByProjectId[projectId][webhookId]
         }
       }
     },
