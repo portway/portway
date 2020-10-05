@@ -13,6 +13,7 @@ const Form = ({
   disabled,
   dispatch,
   forms,
+  inline,
   name,
   onSubmit,
   submitLabel,
@@ -61,18 +62,24 @@ const Form = ({
 
   const buttonDisabledWhen = !formChanged || submitting || succeeded
 
+  const formClasses = cx({
+    'form': true,
+    'form--inline': inline,
+  })
+
   const submitClasses = cx({
     'btn': true,
     'btn--disabled': buttonDisabledWhen,
   })
   const buttonGroupClasses = cx({
     'btn-group': true,
+    'btn-group--inline': inline,
     'btn-group--right-aligned': submitOnRight
   })
 
   return (
     <form
-      className="form"
+      className={formClasses}
       name={name}
       onChange={debouncedChangeHandler}
       onSubmit={submitHandler}
@@ -102,6 +109,7 @@ Form.propTypes = {
   dispatch: PropTypes.func,
   disabled: PropTypes.bool,
   forms: PropTypes.object,
+  inline: PropTypes.bool,
   name: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   submitLabel: PropTypes.string,
