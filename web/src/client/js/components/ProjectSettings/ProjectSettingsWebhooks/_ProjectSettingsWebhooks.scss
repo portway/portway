@@ -49,22 +49,25 @@
 .webhooks-list__label {
   color: var(--color-gray-30);
   font-size: 1.2rem;
+  font-weight: 300;
   padding-right: var(--icon-margin);
 }
 
 .webhooks-list__value {
   font-family: monospace;
+  font-weight: 300;
 }
 
 .webhooks-list__status {
   font-size: 1.2rem;
 
-  &--success {
-    color: var(--color-green);
-  }
+  // &--success {
+  //   color: var(--color-green);
+  // }
 
   &--failed {
     color: var(--color-red);
+    font-weight: 500;
   }
 }
 

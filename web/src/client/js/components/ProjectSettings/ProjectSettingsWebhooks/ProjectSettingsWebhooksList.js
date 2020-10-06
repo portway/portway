@@ -13,6 +13,8 @@ const ProjectSettingsWebhooksList = ({
   deliveries,
   deliveriesLoading,
   recentDeliveries,
+  removeHandler,
+  updateHandler,
   selectedHookId,
   webhooks,
   projectId
@@ -49,8 +51,18 @@ const ProjectSettingsWebhooksList = ({
 
         const statusLabel = cx({
           'n/a': !recentDeliveries[webhook.id],
-          'success': recentDeliveries[webhook.id] && recentDeliveries[webhook.id].resultCode < 300,
+          'succeeded': recentDeliveries[webhook.id] && recentDeliveries[webhook.id].resultCode < 300,
           'failed': recentDeliveries[webhook.id] && recentDeliveries[webhook.id].resultCode > 300,
+        })
+
+        const toggleButtonClasses = cx({
+          'btn btn--small btn--white': webhook.active,
+          'btn btn--small': !webhook.active,
+        })
+
+        const toggleButtonLabels = cx({
+          'Disable webhook': webhook.active,
+          'Enable webhook': !webhook.active,
         })
 
         return (
@@ -65,8 +77,7 @@ const ProjectSettingsWebhooksList = ({
                   <span className="webhooks-list__value">{webhook.url}</span>
                 </div>
                 <div>
-                  <span className="webhooks-list__label">Latest attempt</span>
-                  <span className={statusClasses}>{statusLabel}</span>
+                  <span className="webhooks-list__label">Latest delivery attempt <span className={statusClasses}>{statusLabel}</span></span>
                 </div>
               </span>
               <span className="webhooks-list__created">
@@ -89,10 +100,16 @@ const ProjectSettingsWebhooksList = ({
                 }
               </pre>
               <div className="webhooks-list__options">
-                <button className="btn btn--small btn--white">
-                  <span className="label">Disable webhook</span>
+                <button
+                  className={toggleButtonClasses}
+                  onClick={() => updateHandler(webhook.id, { active: !webhook.active })}
+                >
+                  <span className="label">{toggleButtonLabels}</span>
                 </button>
-                <button className="btn btn--small btn--blank btn--with-circular-icon">
+                <button
+                  className="btn btn--small btn--blank btn--with-circular-icon"
+                  onClick={() => removeHandler(webhook.id)}
+                >
                   <TrashIcon />
                   <span className="label danger">Delete</span>
                 </button>
@@ -111,6 +128,8 @@ ProjectSettingsWebhooksList.propTypes = {
   deliveriesLoading: PropTypes.bool,
   projectId: PropTypes.number.isRequired,
   recentDeliveries: PropTypes.object,
+  removeHandler: PropTypes.func.isRequired,
+  updateHandler: PropTypes.func.isRequired,
   selectedHookId: PropTypes.number,
   webhooks: PropTypes.array,
 }

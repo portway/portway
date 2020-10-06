@@ -48,8 +48,8 @@ export const projectWebhooks = (state = initialState, action) => {
     case ActionTypes.RECEIVE_CREATED_PROJECT_WEBHOOK: {
       const { projectId } = action.data
       const loadingById = { ...state.webhooksByProjectId, [projectId]: false }
-      const projectToken = { ...state.webhooksByProjectId[projectId], [action.data.id]: action.data }
-      const webhooksByProjectId = { ...state.webhooksByProjectId, [projectId]: projectToken }
+      const projectWebhook = { ...state.webhooksByProjectId[projectId], [action.data.id]: action.data }
+      const webhooksByProjectId = { ...state.webhooksByProjectId, [projectId]: projectWebhook }
       return {
         ...state,
         webhooksByProjectId,
@@ -59,6 +59,44 @@ export const projectWebhooks = (state = initialState, action) => {
         }
       }
     }
+    case ActionTypes.INITIATE_PROJECT_WEBHOOK_UPDATE: {
+      const { projectId } = action
+      const webhooksByProjectId = { ...state.loading.webhooksByProjectId, [projectId]: true }
+      return { ...state, loading: { ...state.loading, webhooksByProjectId: webhooksByProjectId } }
+    }
+    case ActionTypes.RECEIVE_UPDATED_PROJECT_WEBHOOK: {
+      const { projectId, webhookId } = action
+      const loadingById = { ...state.webhooksByProjectId, [projectId]: false }
+      const projectWebhook = { ...state.webhooksByProjectId[projectId], [webhookId]: action.data }
+      const webhooksByProjectId = { ...state.webhooksByProjectId, [projectId]: projectWebhook }
+      return {
+        ...state,
+        webhooksByProjectId,
+        loading: {
+          ...state.loading,
+          webhooksByProjectId: loadingById
+        }
+      }
+    }
+    case ActionTypes.INITIATE_PROJECT_WEBHOOK_REMOVE: {
+      const webhooksByProjectId = { ...state.webhooksByProjectId, [action.projectId]: true }
+      return { ...state, loading: { ...state.loading, webhooksByProjectId } }
+    }
+    case ActionTypes.REMOVE_PROJECT_WEBHOOK: {
+      const loadingById = { ...state.webhooksByProjectId, [action.projectId]: false }
+      // eslint-disable-next-line no-unused-vars, no-undef
+      const { [action.webhookId]: ___, ...restProjectWebhooks } = state.webhooksByProjectId[action.projectId]
+      const webhooksByProjectId = { ...state.webhooksByProjectId, [action.projectId]: restProjectWebhooks }
+      return {
+        ...state,
+        webhooksByProjectId,
+        loading: {
+          ...state.loading,
+          webhooksByProjectId: loadingById
+        }
+      }
+    }
+
     // Webhook Deliveries
     case ActionTypes.REQUEST_WEBHOOK_DELIVERIES: {
       const deliveriesByWebhookId = { ...state.loading.deliveriesByWebhookId, [action.webhookId]: true }
