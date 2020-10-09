@@ -6,6 +6,11 @@
   list-style: none;
   margin: 0;
   padding: 0;
+
+  .toggle-button [role="switch"][aria-checked="true"] :last-child {
+    background-color: var(--color-green);
+  }
+
 }
 
 .webhooks-list__item {
@@ -23,6 +28,9 @@
 
 .webhooks-list__item--active {
   background-color: var(--theme-overflow);
+  // border: thin solid var(--theme-border);
+  box-shadow: var(--box-shadow);
+  transform: scale(1.01);
 
   .icon-caret {
     transform: rotate(180deg);
@@ -98,14 +106,18 @@
 .webhooks-list__deliveries {
   font-size: 1.2rem;
   overflow-y: auto;
+  margin: 0;
   max-height: 300px;
   min-height: 125px;
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 .webhooks-list__options {
   display: flex;
   justify-content: space-between;
-  padding: 0 2rem 2rem;
+  padding: 2rem;
 }
 
 .webhooks-list__delivery-code {

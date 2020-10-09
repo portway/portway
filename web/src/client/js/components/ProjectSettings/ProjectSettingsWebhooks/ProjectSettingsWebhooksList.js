@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import { PATH_PROJECT } from 'Shared/constants'
 import { CaretIcon, TrashIcon } from 'Components/Icons'
+import { ToggleButton } from 'Components/Buttons'
 
 import ProjectSettingsDeliveries from './ProjectSettingsDeliveries'
 
@@ -100,12 +101,12 @@ const ProjectSettingsWebhooksList = ({
                 }
               </pre>
               <div className="webhooks-list__options">
-                <button
-                  className={toggleButtonClasses}
+                <ToggleButton
+                  checked={webhook.active}
+                  label="Webhook"
                   onClick={() => updateHandler(webhook.id, { active: !webhook.active })}
-                >
-                  <span className="label">{toggleButtonLabels}</span>
-                </button>
+                  options={['Off', 'On']}
+                />
                 <button
                   className="btn btn--small btn--blank btn--with-circular-icon"
                   onClick={() => removeHandler(webhook.id)}
