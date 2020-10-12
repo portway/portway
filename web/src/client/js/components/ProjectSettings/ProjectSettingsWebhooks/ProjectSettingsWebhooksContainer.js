@@ -9,11 +9,16 @@ import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import dataMapper from 'Libs/dataMapper'
 
-import { createProjectWebhook } from 'Actions/webhooks'
+import { createProjectWebhook, removeProjectWebhook, updateProjectWebhook } from 'Actions/webhooks'
 
 import ProjectSettingsWebhooksComponent from './ProjectSettingsWebhooksComponent'
 
-const ProjectSettingsWebhooksContainer = ({ createProjectWebhook, recentDeliveries }) => {
+const ProjectSettingsWebhooksContainer = ({
+  createProjectWebhook,
+  recentDeliveries,
+  removeProjectWebhook,
+  updateProjectWebhook
+}) => {
   const { projectId, settingId } = useParams() // settingId is the webhookId here
   const location = useLocation()
   const formId = 'webhook-form'
@@ -45,6 +50,14 @@ const ProjectSettingsWebhooksContainer = ({ createProjectWebhook, recentDeliveri
     })
   }
 
+  function webhookRemoveHandler(webhookId) {
+    removeProjectWebhook(projectId, webhookId)
+  }
+
+  function webhookUpdateHandler(webhookId, body) {
+    updateProjectWebhook(projectId, webhookId, body)
+  }
+
   return (
     <>
       <Helmet>
@@ -57,6 +70,8 @@ const ProjectSettingsWebhooksContainer = ({ createProjectWebhook, recentDeliveri
         formId={formId}
         project={project}
         recentDeliveries={recentDeliveries[projectId]}
+        removeHandler={webhookRemoveHandler}
+        updateHandler={webhookUpdateHandler}
         selectedHookId={Number(settingId)}
         webhooks={webhooksArray}
         webhooksLoading={webhooksLoading}
@@ -68,6 +83,8 @@ const ProjectSettingsWebhooksContainer = ({ createProjectWebhook, recentDeliveri
 ProjectSettingsWebhooksContainer.propTypes = {
   createProjectWebhook: PropTypes.func.isRequired,
   recentDeliveries: PropTypes.object,
+  removeProjectWebhook: PropTypes.func.isRequired,
+  updateProjectWebhook: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -76,6 +93,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = { createProjectWebhook }
+const mapDispatchToProps = { createProjectWebhook, removeProjectWebhook, updateProjectWebhook }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectSettingsWebhooksContainer)

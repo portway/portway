@@ -17,6 +17,8 @@ const ProjectSettingsWebhooksComponent = ({
   formId,
   project,
   recentDeliveries,
+  removeHandler,
+  updateHandler,
   selectedHookId,
   webhooks,
   webhooksLoading
@@ -53,6 +55,8 @@ const ProjectSettingsWebhooksComponent = ({
             deliveries={deliveries}
             deliveriesLoading={deliveriesLoading}
             recentDeliveries={recentDeliveries}
+            removeHandler={removeHandler}
+            updateHandler={updateHandler}
             selectedHookId={selectedHookId}
             webhooks={webhooks}
           />
@@ -73,6 +77,8 @@ ProjectSettingsWebhooksComponent.propTypes = {
   formId: PropTypes.string.isRequired,
   project: PropTypes.object.isRequired,
   recentDeliveries: PropTypes.object,
+  removeHandler: PropTypes.func.isRequired,
+  updateHandler: PropTypes.func.isRequired,
   selectedHookId: PropTypes.number,
   webhooks: PropTypes.array,
   webhooksLoading: PropTypes.bool,
