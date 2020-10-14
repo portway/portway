@@ -9,11 +9,13 @@ import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectSettingsInfoContainer from './ProjectSettingsInfo/ProjectSettingsInfoContainer'
 import ProjectSettingsTokensContainer from './ProjectSettingsTokens/ProjectSettingsTokensContainer'
 import ProjectSettingsExportContainer from './ProjectSettingsExport/ProjectSettingsExportContainer'
+import ProjectSettingsWebhooksContainer from './ProjectSettingsWebhooks/ProjectSettingsWebhooksContainer'
 
 const ProjectSettingsTeamsContainer = lazy(() => import(/* webpackChunkName: 'ProjectSettingsTeamsContainer' */ './ProjectSettingsTeams/ProjectSettingsTeamsContainer'))
 
 const SETTINGS_PATHS = {
   EXPORT: 'export',
+  WEBHOOKS: 'webhooks',
   INFO: 'info',
   KEYS: 'keys',
   TEAMS: 'teams',
@@ -27,6 +29,7 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
     [SETTINGS_PATHS.INFO]: <ProjectSettingsInfoContainer />,
     [SETTINGS_PATHS.TEAMS]: <ProjectSettingsTeamsContainer />,
     [SETTINGS_PATHS.KEYS]: <ProjectSettingsTokensContainer />,
+    [SETTINGS_PATHS.WEBHOOKS]: <ProjectSettingsWebhooksContainer />,
     [SETTINGS_PATHS.EXPORT]: <ProjectSettingsExportContainer />,
     default: <Redirect to={`${settingsSectionPath}/info`} />
   }
@@ -44,6 +47,9 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
         </OrgPlanPermission>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.KEYS}`} aria-label="API Keys">
           <APIKeyIcon /> <span className="label">API keys</span>
+        </NavLink>
+        <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.WEBHOOKS}`} aria-label="Webhooks">
+          <APIKeyIcon /> <span className="label">Webhooks</span>
         </NavLink>
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.EXPORT}`} aria-label="Export your project">
           <ExportIcon /> <span className="label">Export</span>

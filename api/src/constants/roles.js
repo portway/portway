@@ -148,6 +148,13 @@ export const PROJECT_ROLES = {
     [resourceTypes.PROJECT_EXPORT]: {
       [actions.READ]: true
     },
+    [resourceTypes.WEBHOOK]: {
+      [actions.READ]: true,
+      [actions.LIST]: true,
+      [actions.CREATE]: true,
+      [actions.DELETE]: true,
+      [actions.UPDATE]: true
+    },
   },
   [PROJECT_ROLE_IDS.CONTRIBUTOR]: {
     [resourceTypes.PROJECT]: {
