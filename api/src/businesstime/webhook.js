@@ -4,6 +4,7 @@ import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import { getSortOptions } from '../libs/queryFilters'
 
 export const MODEL_NAME = 'Webhook'
 
@@ -21,9 +22,12 @@ async function create(body) {
 
 async function findById(id, orgId) {
   const db = getDb()
+  const sortOptions = getSortOptions()
+
   return await db.model(MODEL_NAME).findOne({
     attributes: PUBLIC_FIELDS,
     where: { id, orgId },
+    ...sortOptions,
     raw: true
   })
 }

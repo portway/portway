@@ -40,6 +40,10 @@ export const ActionTypes = {
   RECEIVE_PROJECT_WEBHOOKS: 'RECEIVE_PROJECT_WEBHOOKS',
   CREATE_PROJECT_WEBHOOK: 'CREATE_PROJECT_WEBHOOK',
   RECEIVE_CREATED_PROJECT_WEBHOOK: 'RECEIVE_CREATED_PROJECT_WEBHOOK',
+  INITIATE_PROJECT_WEBHOOK_UPDATE: 'INITIATE_PROJECT_WEBHOOK_UPDATE',
+  RECEIVE_UPDATED_PROJECT_WEBHOOK: 'RECEIVE_UPDATED_PROJECT_WEBHOOK',
+  INITIATE_PROJECT_WEBHOOK_REMOVE: 'INITIATE_PROJECT_WEBHOOK_REMOVE',
+  REMOVE_PROJECT_WEBHOOK: 'REMOVE_PROJECT_WEBHOOK',
   // Webhook Deliveries
   REQUEST_WEBHOOK_DELIVERIES: 'REQUEST_WEBHOOK_DELIVERIES',
   RECEIVE_WEBHOOK_DELIVERIES: 'RECEIVE_WEBHOOK_DELIVERIES',
@@ -228,6 +232,10 @@ export const ProjectWebhooks = {
   receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_WEBHOOKS, 'projectId', 'data', 'deliveries'),
   create: makeActionCreator(ActionTypes.CREATE_PROJECT_WEBHOOK, 'projectId'),
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_WEBHOOK, 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_WEBHOOK_UPDATE, 'projectId', 'webhookId'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT_WEBHOOK, 'projectId', 'webhookId', 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_WEBHOOK_REMOVE, 'projectId', 'webhookId'),
+  removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_WEBHOOK, 'projectId', 'webhookId'),
 }
 
 export const WebhookDeliveries = {

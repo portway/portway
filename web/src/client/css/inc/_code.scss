@@ -17,6 +17,14 @@ pre {
   tab-size: 2;
   white-space: pre;
   word-spacing: normal;
+
+  &::-webkit-scrollbar {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   .code {
     word-wrap: break-word;
     // Command is Bash command

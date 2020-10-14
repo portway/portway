@@ -29,7 +29,7 @@ const ProjectSettingsCreateWebhook = ({ errors, formId, submitHandler }) => {
         onChange={(e) => {
           setURL(e.target.value)
         }}
-        placeholder="https://path/to/endpoint"
+        placeholder="https://example.com/endpoint"
         required
       />
     </Form>
