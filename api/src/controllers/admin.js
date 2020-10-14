@@ -47,6 +47,16 @@ const adminController = function(router) {
     adminAuth,
     getCanceledOrgs
   )
+
+  router.get('/webhookdeliveries',
+    adminAuth,
+    getWebhookDeliveries
+  )
+
+  router.delete('/webhookdeliveries/:id',
+    adminAuth,
+    deleteWebhookDelivery
+  )
 }
 
 const createAccount = async function(req, res, next) {

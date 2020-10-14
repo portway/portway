@@ -1,4 +1,5 @@
 import ono from 'ono'
+import { Op } from 'sequelize'
 
 import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
@@ -30,6 +31,16 @@ async function findAllByWebhookId(webhookId, options, orgId) {
   })
 
   return { webhookDeliveries: result.rows.map(publicFields), count: result.count }
+}
+
+async function findAllOlderThanThirtyDays(options) {
+  const db = getDb()
+  const paginationOptions = getPaginationOptions(options.page, options.perPage)
+
+  const result = await db.model(MODEL_NAME).findAndCountAll({
+    where: { webhookId, orgId },
+    ...paginationOptions
+  })
 }
 
 // async function deleteById(id, orgId) {
