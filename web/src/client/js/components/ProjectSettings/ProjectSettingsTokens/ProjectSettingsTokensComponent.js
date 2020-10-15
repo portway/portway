@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import {
-  URL_DOCUMENTATION,
   PATH_PROJECT,
+  PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES,
-  PROJECT_ROLE_IDS
+  URL_API_DOCS
 } from 'Shared/constants'
 import { ArrowIcon } from 'Components/Icons'
 import ClipboardComponent from 'Components/Clipboard/ClipboardComponent'
@@ -76,7 +76,7 @@ const ProjectSettingsTokensComponent = ({
           with a <u>{PROJECT_ROLE_NAMES[PROJECT_ROLE_IDS.READER]}</u> key to receive an error.
         </p>
 
-        <p>Looking for the full API? Check out our <a href={URL_DOCUMENTATION} target="_blank" rel="noopener noreferrer">documentation</a>.</p>
+        <p>Looking for the full API? Check out our <a href={URL_API_DOCS} target="_blank" rel="noopener noreferrer">API documentation</a>.</p>
         <dl className="project-settings__endpoints">
           <dt className="project-settings__endpoint-name">
             <span className="project-settings__endpoint-method pill pill--green">GET</span>

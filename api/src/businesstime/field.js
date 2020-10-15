@@ -43,7 +43,7 @@ async function createForDocument(documentId, body) {
   const createdField = await document.createField(createFieldBody)
 
   const fieldValue = await createdField.addFieldValue({
-    value: body.value,
+    value: getDefaultFieldValueByType(body.value, body.type),
     structuredValue: body.structuredValue,
     orgId
   })
@@ -289,6 +289,17 @@ function validateNumberPrecision(value) {
     const message = `number value exceeds maximum of ${MAX_NUMBER_PRECISION} significant digits`
     throw ono({ code: 400, message, errorType: apiErrorTypes.ValidationError }, message)
   }
+}
+
+function getDefaultFieldValueByType(value, type) {
+  switch(type) {
+    case FIELD_TYPES.DATE:
+      if (!value) {
+        return (new Date()).toISOString() 
+      }
+  }
+
+  return value
 }
 
 async function normalizeFieldOrderAndGetCount(documentId, orgId) {
