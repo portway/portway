@@ -9,8 +9,7 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
-import { uiConfirm, uiToggleDocumentMode } from 'Actions/ui'
-import { updateDocument } from 'Actions/document'
+import { uiConfirm } from 'Actions/ui'
 import { removeField, updateField, updateFieldOrder } from 'Actions/field'
 
 import DocumentOutlineComponent from './DocumentOutlineComponent'
@@ -20,8 +19,6 @@ const DocumentOutlineContainer = ({
   fieldsUpdating,
   removeField,
   uiConfirm,
-  uiToggleDocumentMode,
-  updateDocument,
   updateField,
   updateFieldOrder
 }) => {
@@ -183,22 +180,8 @@ const DocumentOutlineContainer = ({
     updateField(projectId, documentId, fieldId, { name: value })
   })
 
-  const debouncedSlugChangeHandler = debounce(1000, (value) => {
-    if (value === '') return
-    updateDocument(projectId, documentId, {
-      slug: value
-    })
-  })
-
-  function toggleDocumentMode(e) {
-    const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
-    uiToggleDocumentMode(mode)
-  }
-
   return (
     <DocumentOutlineComponent
-      currentDocument={currentDocument}
-      documentSlugHandler={debouncedSlugChangeHandler}
       dragEndHandler={dragEndHandler}
       dragEnterHandler={dragEnterHandler}
       dragLeaveHandler={dragLeaveHandler}
@@ -208,7 +191,6 @@ const DocumentOutlineContainer = ({
       fieldsUpdating={fieldsUpdating}
       fieldDestroyHandler={fieldDestroyHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
-      toggleDocumentModeHandler={toggleDocumentMode}
     />
   )
 }
@@ -218,8 +200,6 @@ DocumentOutlineContainer.propTypes = {
   fieldsUpdating: PropTypes.object,
   removeField: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
-  uiToggleDocumentMode: PropTypes.func.isRequired,
-  updateDocument: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
 }
@@ -234,8 +214,6 @@ const mapStateToProps = (state) => {
 const mapDisatchToProps = {
   removeField,
   uiConfirm,
-  uiToggleDocumentMode,
-  updateDocument,
   updateField,
   updateFieldOrder,
 }
