@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: portway-org-stripe-refresh-cronjob
+  name: portway-webhook-delivery-cleanup-cronjob
 spec:
   schedule: "0 9 * * *"
   concurrencyPolicy: "Forbid"
