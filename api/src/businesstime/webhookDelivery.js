@@ -1,4 +1,5 @@
 import ono from 'ono'
+import { Op } from 'sequelize'
 
 import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
@@ -34,14 +35,38 @@ async function findAllByWebhookId(webhookId, options, orgId) {
   return { webhookDeliveries: result.rows.map(publicFields), count: result.count }
 }
 
-// async function deleteById(id, orgId) {
-//   const db = getDb()
-//   const webhook = await db.model(MODEL_NAME).findOne({ where: { id, orgId } })
+async function findAllOlderThanThirtyDays(options) {
+  const db = getDb()
+  const paginationOptions = getPaginationOptions(options.page, options.perPage)
+  const sortOptions = getSortOptions()
+  // jesus javascript
+  const date = new Date(new Date().setDate(new Date().getDate() - 30))
 
-//   if (!webhook) throw ono({ code: 404 }, `Cannot delete, webhook not found with id: ${id}`)
+  const result = await db.model(MODEL_NAME).findAndCountAll({
+    where: {
+      createdAt: {
+        [Op.lte]: date
+      }
+    },
+    ...paginationOptions,
+    ...sortOptions
+  })
 
-//   await webhook.destroy()
-// }
+  return {
+    webhookDeliveries: result.rows.map(publicFields),
+    count: result.count
+  }
+}
+
+// Do not invoke from user-facing endpoints as org id is not required!
+async function deleteById(id) {
+  const db = getDb()
+  const webhookDelivery = await db.model(MODEL_NAME).findOne({ where: { id } })
+
+  if (!webhookDelivery) throw ono({ code: 404 }, `Cannot delete, webhookDelivery delivery not found with id: ${id}`)
+
+  await webhookDelivery.destroy()
+}
 
 // TODO: need to test if this is needed: probably just delete the webhook and the cascade
 // constraint will delete all these
@@ -65,6 +90,8 @@ async function deleteAllForOrg(orgId, force = false) {
 export default {
   create,
   findAllByWebhookId,
+  findAllOlderThanThirtyDays,
+  deleteById,
   deleteByWebhookId,
   deleteAllForOrg
 }
