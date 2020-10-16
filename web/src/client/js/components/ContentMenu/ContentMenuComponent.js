@@ -16,7 +16,7 @@ import {
 } from 'Components/Icons'
 import { FIELD_TYPES } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuDivider, MenuHeader, MenuItem } from 'Components/Menu'
+import { Menu, MenuItem } from 'Components/Menu'
 
 const ContentMenuComponent = ({ createFieldHandler }) => {
   const [expanded, setExpanded] = useState(false)

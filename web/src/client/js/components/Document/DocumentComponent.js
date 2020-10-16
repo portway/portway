@@ -14,12 +14,12 @@ import {
   PROJECT_ROLE_IDS
 } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
-import { ArrowIcon, ExpandIcon, SettingsIcon } from 'Components/Icons'
+import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
-import DocumentOutlineContainer from 'Components/DocumentOutline/DocumentOutlineContainer'
+import DocumentPanelContainer from 'Components/DocumentPanel/DocumentPanelContainer'
 import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContainer'
 
 import './_Document.scss'
@@ -74,6 +74,8 @@ const DocumentComponent = ({
     'document__users-list--without-settings': documentReadOnlyMode
   })
 
+  const panelButtonColor = documentMode === DOCUMENT_MODE.NORMAL ? 'transparent' : ''
+
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
   })
@@ -82,7 +84,7 @@ const DocumentComponent = ({
     <div className="document" key={docKey} ref={documentRef}>
       <ValidationContainer resource="document" value="name" />
       {documentMode === DOCUMENT_MODE.EDIT &&
-      <DocumentOutlineContainer />
+      <DocumentPanelContainer />
       }
       <header className="document__header">
         {mobileView &&
@@ -135,20 +137,9 @@ const DocumentComponent = ({
         </OrgPlanPermission>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <div className="document__toggle-container">
-            {documentMode === DOCUMENT_MODE.NORMAL &&
-            <IconButton color="transparent" onClick={toggleDocumentMode} title="Re-order or remove fields">
-              <SettingsIcon />
+            <IconButton color={panelButtonColor} onClick={toggleDocumentMode} title="Toggle the document panel">
+              <PanelIcon />
             </IconButton>
-            }
-            {documentMode === DOCUMENT_MODE.EDIT &&
-            <button
-              className="btn btn--small"
-              onClick={toggleDocumentMode}
-              name="documentSettings"
-              title="Exit outline mode">
-              Done
-            </button>
-            }
           </div>
         </ProjectPermission>
       </header>
