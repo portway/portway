@@ -83,7 +83,7 @@
       <mj-column>
         <mj-image width="80px" src="https://www.portwaycontent.com/portway-marketing-assets/app-emails/notepad.png" />
         <mj-text align="center" color="#ffffff" font-size="14px" line-height="16px">
-          Portway is a simple, powerful notes app
+          Portway is a simple, powerful writing app
         </mj-text>
       </mj-column>
       <mj-column>
