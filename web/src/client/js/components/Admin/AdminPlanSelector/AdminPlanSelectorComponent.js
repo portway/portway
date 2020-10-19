@@ -89,7 +89,7 @@ const AdminPlanSelectorComponent = ({
                   <div className="admin-plans-selector__description">
                     <p>
                     Enjoy unlimited projects and documents all to yourself. This plan is perfect
-                    for someone needing a notes app with a powerful API for querying.
+                    for someone needing a writing app with a powerful API for querying.
                     </p>
                     <ul>
                       <li>

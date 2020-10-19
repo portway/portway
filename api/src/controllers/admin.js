@@ -13,8 +13,11 @@ const adminController = function(router) {
   /**
    * Sample Payload
    *
+  Headers:
+  "Authorization": "Admin [Admin key]"
+
+  Body:
   {
-    "adminKey": "****",
     "name": "Org Name",
     "users": [
       {

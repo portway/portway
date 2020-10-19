@@ -38,9 +38,9 @@ const AdminCancelAccountContainer = ({ deleteOrganization, uiConfirm }) => {
 
   const paidCustomerMessage = (
     <>
-      <p className="danger">Delete your account entirely?</p>
+      <p className="danger">Delete your account?</p>
       <ul>
-        <li>You will be able to log in for the next <b>{remainingDays} days</b> to undo this account.</li>
+        <li>You will be able to log in for the next <b>{remainingDays} days.</b></li>
         <li>After <b>{remainingDays} days</b>, your account and all users associated with it will be removed.</li>
         <li>After <b>{remainingDays} days</b>, all of your projects and documents will be removed.</li>
       </ul>

@@ -40,7 +40,7 @@ export const emitFieldBlur = (fieldId, documentId) => {
       return dispatch(UserSync.socketError())
     }
     dispatch(UserSync.emitFieldBlur(fieldId))
-    documentSocket.emit('fieldFocus', null, documentId)
+    documentSocket.emit('fieldFocus', null, String(documentId))
     dispatch(UserSync.fieldBlurEmitted(fieldId))
   }
 }
