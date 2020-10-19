@@ -121,7 +121,8 @@ export const documents = (state = initialState, action) => {
       const updatedDoc = {
         ...listDoc,
         name: action.data.name,
-        updatedAt: action.data.updatedAt
+        updatedAt: action.data.updatedAt,
+        slug: action.data.slug,
       }
       const project = { ...state.projectDocumentsById[action.data.projectId], [action.data.id]: updatedDoc }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.data.projectId]: project }
