@@ -95,6 +95,34 @@ function parseTokens(tokens) {
       parsedTokens.push(parsedToken)
     }
 
+    // hr type
+    if (token.type === 'hr') {
+      parsedToken.type = 'tag'
+      parsedToken.tag = 'hr'
+      parsedTokens.push(parsedToken)
+    }
+
+    // Code blocks
+    if (token.type === 'fence' && token.tag === 'code') {
+      parsedToken.type = 'tag'
+      parsedToken.tag = 'code'
+      parsedToken.children = [{
+        type: 'text',
+        data: token.content
+      }]
+      parsedTokens.push(parsedToken)
+    }
+
+    if (token.type === 'code_inline' && token.tag === 'code') {
+      parsedToken.type = 'tag'
+      parsedToken.tag = 'inline_code'
+      parsedToken.children = [{
+        type: 'text',
+        data: token.content
+      }]
+      parsedTokens.push(parsedToken)
+    }
+
     // Step 4) Ignore it, if it hasn't matched any of the above conditions
   }
 
