@@ -56,19 +56,9 @@ const ProjectSettingsWebhooksList = ({
           'failed': recentDeliveries[webhook.id] && recentDeliveries[webhook.id].resultCode > 300,
         })
 
-        const toggleButtonClasses = cx({
-          'btn btn--small btn--white': webhook.active,
-          'btn btn--small': !webhook.active,
-        })
-
-        const toggleButtonLabels = cx({
-          'Disable webhook': webhook.active,
-          'Enable webhook': !webhook.active,
-        })
-
         return (
           <li className={listClasses} key={webhook.id}>
-            <Link to={webhookLink} className="webhooks-list__button">
+            <Link to={webhookLink} className="webhooks-list__button" draggable={false}>
               <span className="webhooks-list__status">
                 <span className={pillClasses}>{pillLabel}</span>
               </span>
