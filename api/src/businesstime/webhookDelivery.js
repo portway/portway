@@ -6,6 +6,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import { getPaginationOptions, getSortOptions } from '../libs/queryFilters'
+import { SORT_METHODS } from '../constants/queryOptions'
 
 export const MODEL_NAME = 'WebhookDelivery'
 
@@ -24,7 +25,7 @@ async function create(body) {
 async function findAllByWebhookId(webhookId, options, orgId) {
   const db = getDb()
   const paginationOptions = getPaginationOptions(options.page, options.perPage)
-  const sortOptions = getSortOptions()
+  const sortOptions = getSortOptions('createdAt', SORT_METHODS.DESCENDING)
 
   const result = await db.model(MODEL_NAME).findAndCountAll({
     where: { webhookId, orgId },
