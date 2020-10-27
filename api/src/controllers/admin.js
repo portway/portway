@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import adminAuth from '../libs/auth/adminAuth'
 import demoSignupCoordinator from '../coordinators/demoSignup'
 import BusinessOrganization from '../businesstime/organization'
+import BusinessWebhookDelivery from '../businesstime/webhookDelivery'
 import organizationCoordinator from '../coordinators/organization'
 import billingCoordinator from '../coordinators/billing'
 
@@ -46,6 +47,16 @@ const adminController = function(router) {
   router.get('/organizations/canceled',
     adminAuth,
     getCanceledOrgs
+  )
+
+  router.get('/webhookdeliveries',
+    adminAuth,
+    getWebhookDeliveries
+  )
+
+  router.delete('/webhookdeliveries/:id',
+    adminAuth,
+    deleteWebhookDelivery
   )
 }
 
@@ -94,6 +105,33 @@ const deleteCanceledOrg = async function(req, res, next) {
     await organizationCoordinator.deleteCanceledOrg(id)
     res.status(204).send()
   } catch (e) {
+    next(e)
+  }
+}
+
+const getWebhookDeliveries = async function(req, res, next) {
+  const { page = 1, perPage = 50 } = req.query
+
+  try {
+    const result = await BusinessWebhookDelivery.findAllOlderThanThirtyDays({ page, perPage })
+
+    res.json({
+      data: result.webhookDeliveries,
+      page,
+      perPage,
+      total: result.count,
+      totalPages: Math.ceil(result.count / perPage)
+    })
+  } catch(e) {
+    next(e)
+  }
+}
+
+const deleteWebhookDelivery = async function(req, res, next) {
+  try {
+    await BusinessWebhookDelivery.deleteById(req.params.id)
+    res.status(204).send()
+  } catch(e) {
     next(e)
   }
 }

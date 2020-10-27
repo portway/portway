@@ -9,6 +9,7 @@ import { notifications } from './notifications'
 import { organizations } from './organizations'
 import { projectAssignments } from './projectAssignments'
 import { projects } from './projects'
+import { projectWebhooks } from './projectWebhooks'
 import { projectTokens } from './projectTokens'
 import { projectUsers } from './projectUsers'
 import { search } from './search'
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   organizations,
   projectAssignments,
   projects,
+  projectWebhooks,
   projectTokens,
   projectUsers,
   search,

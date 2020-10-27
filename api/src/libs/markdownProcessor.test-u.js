@@ -124,6 +124,63 @@ describe('markdownProcessor', () => {
     })
   })
 
+  describe('with an hr', () => {
+    let tokens
+    const TEST_MD = 'digit\n\n---\n\npig'
+
+    beforeAll(() => {
+      const mdTokens = md.parse(TEST_MD, {})
+      tokens = processTokens(mdTokens)
+    })
+
+    it('should have an hr', () => {
+      const hrToken = tokens[1]
+      expect(hrToken.type).toBe('tag')
+      expect(hrToken.tag).toBe('hr')
+    })
+  })
+
+  describe('with a codeblock', () => {
+    let tokens
+    const TEST_MD = '```\nvar that = this;\n```'
+
+    beforeAll(() => {
+      const mdTokens = md.parse(TEST_MD, {})
+      tokens = processTokens(mdTokens)
+    })
+
+    it('should have a code tag', () => {
+      const codeToken = tokens[0]
+      expect(codeToken.type).toBe('tag')
+      expect(codeToken.tag).toBe('code')
+      expect(codeToken.children.length).toEqual(1)
+    })
+
+    it('should have a text child', () => {
+      const codeText = tokens[0].children[0]
+      expect(codeText.type).toBe('text')
+      expect(codeText.data).toBe('var that = this;\n')
+    })
+  })
+
+  describe('with inline code', () => {
+    let tokens
+    const TEST_MD = '```\nvar that = this;\n```\n\nwhat about `inline code`?\n'
+
+    beforeAll(() => {
+      const mdTokens = md.parse(TEST_MD, {})
+      tokens = processTokens(mdTokens)
+    })
+
+    it('should have an inline code', () => {
+      const inlineTag = tokens[1].children[1]
+      expect(inlineTag.type).toBe('tag')
+      expect(inlineTag.tag).toBe('inline_code')
+      expect(inlineTag.children.length).toBe(1)
+      expect(inlineTag.children[0].data).toBe('inline code')
+    })
+  })
+
   describe('with a complex markdown document', () => {
     let tokens
     const TEST_MD = 'Blah _blah_ \n **blah**\n \n ## also what about\n * list item 1\n * lists **item 2**\n * lists _item 3_\n\t * sub item\n\t * sub item 2\n\n1. number\n2. list\n\t3. with a sub [link](example.com)\n4. 123'

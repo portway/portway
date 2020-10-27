@@ -75,6 +75,7 @@ const DocumentComponent = ({
   })
 
   const panelButtonColor = documentMode === DOCUMENT_MODE.NORMAL ? 'transparent' : ''
+  const panelIconFill = documentMode === DOCUMENT_MODE.NORMAL ? 'var(--theme-icon-color)' : 'var(--color-blue)'
 
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
@@ -138,7 +139,7 @@ const DocumentComponent = ({
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <div className="document__toggle-container">
             <IconButton color={panelButtonColor} onClick={toggleDocumentMode} title="Toggle the document panel">
-              <PanelIcon />
+              <PanelIcon fill={panelIconFill} />
             </IconButton>
           </div>
         </ProjectPermission>
