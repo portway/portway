@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       const model = models[modelName]
       Field.hasOne(model, {
         foreignKey: 'fieldId',
-        onDelete: 'cascade'
+        onDelete: 'CASCADE'
       })
     })
   }

@@ -8,6 +8,7 @@ import * as field from './field'
 import * as document from './document'
 import * as fieldOrder from './fieldOrder'
 import * as organization from './organization'
+import * as webhook from './webhook'
 
 const resourceToSchema = {
   [RESOURCE_TYPES.USER]: user,
@@ -17,7 +18,8 @@ const resourceToSchema = {
   [RESOURCE_TYPES.PROJECT]: project,
   [RESOURCE_TYPES.PROJECT_TOKEN]: projectToken,
   [RESOURCE_TYPES.FIELD_ORDER]: fieldOrder,
-  [RESOURCE_TYPES.ORGANIZATION]: organization
+  [RESOURCE_TYPES.ORGANIZATION]: organization,
+  [RESOURCE_TYPES.WEBHOOK]: webhook
 }
 
 /**

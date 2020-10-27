@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: portway-webhook-delivery-cleanup-cronjob
+spec:
+  schedule: "0 9 * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: OnFailure
+          containers:
+          - name: portway-webhook-delivery-cleanup
+            image: bonkeybong/portway_webhook_delivery_cleanup
+            env:
+            - name: ADMIN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: admin-secrets
+                  key: admin_secret_key
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: web-config
+                  key: web.api_url

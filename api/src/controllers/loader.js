@@ -21,7 +21,13 @@ const V1_CONTROLLERS = {
         '/:projectId/assignments': { fileName: 'projectUsers' },
         '/:projectId/documents': { fileName: 'projectDocuments' },
         '/:projectId/tokens': { fileName: 'projectTokens' },
-        '/:projectId/export': { fileName: 'projectExport'}
+        '/:projectId/export': { fileName: 'projectExport' },
+        '/:projectId/webhooks': {
+          fileName: 'projectWebhooks',
+          childRoutes: {
+            '/:webhookId/deliveries': { fileName: 'projectWebhookDeliveries' }
+          }
+        }
       }
     },
     '/documents': {

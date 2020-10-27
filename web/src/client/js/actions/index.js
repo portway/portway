@@ -35,6 +35,18 @@ export const ActionTypes = {
   RECEIVE_CREATED_PROJECT_TOKEN: 'RECEIVE_CREATED_PROJECT_TOKEN',
   INITIATE_PROJECT_TOKEN_REMOVE: 'INITIATE_PROJECT_TOKEN_REMOVE',
   REMOVE_PROJECT_TOKEN: 'REMOVE_PROJECT_TOKEN',
+  // Project Webhooks
+  REQUEST_PROJECT_WEBHOOKS: 'REQUEST_PROJECT_WEBHOOKS',
+  RECEIVE_PROJECT_WEBHOOKS: 'RECEIVE_PROJECT_WEBHOOKS',
+  CREATE_PROJECT_WEBHOOK: 'CREATE_PROJECT_WEBHOOK',
+  RECEIVE_CREATED_PROJECT_WEBHOOK: 'RECEIVE_CREATED_PROJECT_WEBHOOK',
+  INITIATE_PROJECT_WEBHOOK_UPDATE: 'INITIATE_PROJECT_WEBHOOK_UPDATE',
+  RECEIVE_UPDATED_PROJECT_WEBHOOK: 'RECEIVE_UPDATED_PROJECT_WEBHOOK',
+  INITIATE_PROJECT_WEBHOOK_REMOVE: 'INITIATE_PROJECT_WEBHOOK_REMOVE',
+  REMOVE_PROJECT_WEBHOOK: 'REMOVE_PROJECT_WEBHOOK',
+  // Webhook Deliveries
+  REQUEST_WEBHOOK_DELIVERIES: 'REQUEST_WEBHOOK_DELIVERIES',
+  RECEIVE_WEBHOOK_DELIVERIES: 'RECEIVE_WEBHOOK_DELIVERIES',
   // Documents
   REQUEST_DOCUMENTS: 'REQUEST_DOCUMENTS',
   RECEIVE_DOCUMENTS: 'RECEIVE_DOCUMENTS',
@@ -134,6 +146,7 @@ export const ActionTypes = {
   UI_COMPLETE_CONFIRMATION: 'UI_COMPLETE_CONFIRMATION',
   UI_CREATE_TOKEN_MODE: 'UI_CREATE_TOKEN_MODE',
   UI_CREATE_USER_MODE: 'UI_CREATE_USER_MODE',
+  UI_CREATE_WEBHOOK_MODE: 'UI_CREATE_WEBHOOK_MODE',
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
   UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
@@ -212,6 +225,22 @@ export const ProjectTokens = {
   receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_TOKEN, 'data'),
   initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_TOKEN_REMOVE, 'projectId', 'tokenId'),
   removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_TOKEN, 'projectId', 'tokenId'),
+}
+
+export const ProjectWebhooks = {
+  request: makeActionCreator(ActionTypes.REQUEST_PROJECT_WEBHOOKS, 'projectId'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_PROJECT_WEBHOOKS, 'projectId', 'data', 'deliveries'),
+  create: makeActionCreator(ActionTypes.CREATE_PROJECT_WEBHOOK, 'projectId'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_PROJECT_WEBHOOK, 'data'),
+  initiateUpdate: makeActionCreator(ActionTypes.INITIATE_PROJECT_WEBHOOK_UPDATE, 'projectId', 'webhookId'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_PROJECT_WEBHOOK, 'projectId', 'webhookId', 'data'),
+  initiateRemove: makeActionCreator(ActionTypes.INITIATE_PROJECT_WEBHOOK_REMOVE, 'projectId', 'webhookId'),
+  removedOne: makeActionCreator(ActionTypes.REMOVE_PROJECT_WEBHOOK, 'projectId', 'webhookId'),
+}
+
+export const WebhookDeliveries = {
+  request: makeActionCreator(ActionTypes.REQUEST_WEBHOOK_DELIVERIES, 'projectId', 'webhookId'),
+  receive: makeActionCreator(ActionTypes.RECEIVE_WEBHOOK_DELIVERIES, 'projectId', 'webhookId', 'data'),
 }
 
 export const Documents = {
@@ -323,6 +352,7 @@ export const UI = {
   cancelConfirm: makeActionCreator(ActionTypes.UI_CANCEL_CONFIRMATION),
   completeConfirm: makeActionCreator(ActionTypes.UI_COMPLETE_CONFIRMATION),
   createTokenMode: makeActionCreator(ActionTypes.UI_CREATE_TOKEN_MODE, 'value'),
+  createWebhookMode: makeActionCreator(ActionTypes.UI_CREATE_WEBHOOK_MODE, 'value'),
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'options'),
