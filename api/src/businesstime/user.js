@@ -1,7 +1,7 @@
 import ono from 'ono'
 
 import { getDb } from '../db/dbConnector'
-import { UniqueConstraintError } from 'sequelize'
+import { UniqueConstraintError, Op } from 'sequelize'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
@@ -105,6 +105,27 @@ async function findSanitizedById(id, orgId) {
   return publicFields(user)
 }
 
+async function findAllUnverifiedOwners() {
+  const db = getDb()
+  const twoWeeksAgo = new Date(Date.now() - 12096e5) // 2 weeks in ms
+  const users = await db.model(MODEL_NAME).findAll({
+    where: {
+      resetKey: {
+        [Op.not]: null
+      },
+      password: {
+        [Op.is]: null
+      },
+      orgRoleId: ORGANIZATION_ROLE_IDS.OWNER,
+      createdAt: {
+        [Op.lte]: twoWeeksAgo
+      }
+    }
+  })
+
+  return users
+}
+
 async function updateByEmail(email, body) {
   const db = getDb()
   const user = await db.model(MODEL_NAME).findOne({ where: { email } })
@@ -193,6 +214,7 @@ export default {
   findById,
   findAllSanitized,
   findSanitizedById,
+  findAllUnverifiedOwners,
   updateByEmail,
   updateById,
   updateOrgRole,
