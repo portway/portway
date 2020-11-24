@@ -26,7 +26,11 @@ const SharedConfig = {
       {
         from: path.resolve(__dirname, '../src/client/manifest.json'),
         to: 'manifest.json'
-      }
+      },
+      {
+        from: path.resolve(__dirname, '../src/server/.well-known'),
+        to: '.well-known'
+      },
     ]),
     new SWPrecacheWebpackPlugin({
       cacheId: Constants.PRODUCT_ID,
