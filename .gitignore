@@ -16,6 +16,7 @@ yarn-error.log*
 
 # Build data
 .vscode
+.nova
 stats.json
 
 # Runtime data
