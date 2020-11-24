@@ -1,0 +1,15 @@
+{
+	  "applinks": {
+		  "details": [
+			   {
+				 "appIDs": ["Y254DPS4AY.com.bonkeybong.portway"],
+				 "components": [
+				   {
+					  "/": "/d/*",
+					  "comment": "Matches any URL whose path starts with /d/"
+				   }
+				 ]
+			   }
+		   ]
+	   }
+	}
