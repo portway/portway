@@ -61,15 +61,19 @@
       <mj-hero background-color="#FFA784">
         <mj-image align="center" width="75px" height="68px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.png" />
         <mj-text align="center">
-          <h1>Your Portway trial will end in 3 days. Add a payment method to keep your account active.</h1>
+          <h1>Your Portway trial will end in 3 days.</h1>
+          <p>Add a payment method to keep your account active.</p>
         </mj-text>
+        <mj-button href="<%= linkUrl %>">Add a payment method</mj-button>
       </mj-hero>
     </mj-wrapper>
     <mj-section>
       <mj-column>
         <mj-text align="center">
-          <p>Thank you for supporting independent software</p>
-          <p>– The Portway Team</p>
+          <p>
+            <small>Thank you for supporting independent software</small><br />
+            <small>– The Portway Team</small>
+          </p>
         </mj-text>
         <mj-spacer height="50px" />
       </mj-column>
