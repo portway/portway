@@ -348,6 +348,20 @@ async function deleteAllForOrg(orgId, force = false) {
   })
 }
 
+// The field coordinator deletes any assets when the field is deleted
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   createForDocument,
   updateByIdForDocument,
@@ -357,5 +371,6 @@ export default {
   deleteByIdForDocument,
   deleteAllForDocument,
   updateOrderById,
-  deleteAllForOrg
+  deleteAllForOrg,
+  deleteAllSoftDeletedBefore
 }
