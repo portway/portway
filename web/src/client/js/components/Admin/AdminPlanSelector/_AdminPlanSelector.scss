@@ -136,6 +136,10 @@
     padding: 1rem 2rem;
     width: 100%;
 
+    &--safari-fix {
+      width: 400%;
+    }
+
     [aria-checked="true"] & {
       background-color: var(--color-green);
     }

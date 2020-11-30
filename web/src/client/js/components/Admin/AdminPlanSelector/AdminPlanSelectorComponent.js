@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
+import { getBrowser } from 'Utilities/browserUtils'
+
 import {
   FREE_PLAN_TYPES,
   LOCKED_ACCOUNT_STATUSES,
@@ -49,6 +51,12 @@ const AdminPlanSelectorComponent = ({
   const adminPlanClasses = cx({
     'admin-plans-selector': true,
     'admin-plans-selector--disabled': lockedSubscription
+  })
+
+  const isSafari13 = getBrowser().name === 'Safari' && Number(getBrowser().version) < 14
+  const adminPriceClasses = cx({
+    'admin-plans-selector__price': true,
+    'admin-plans-selector__price--safari-fix': isSafari13
   })
 
   return (
@@ -149,7 +157,7 @@ const AdminPlanSelectorComponent = ({
                     </ul>
                   </div>
                 </div>
-                <span className="admin-plans-selector__price">
+                <span className={adminPriceClasses}>
                 $50/mo {organizationPlan === PLAN_TYPES.MULTI_USER && <>(Your plan)</>}
                 </span>
               </button>
