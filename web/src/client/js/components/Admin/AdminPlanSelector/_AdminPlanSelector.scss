@@ -134,7 +134,11 @@
     font-weight: 700;
     margin: 2rem 0 0 0;
     padding: 1rem 2rem;
-    width: 400%; // Safari bug
+    width: 100%;
+
+    &--safari-fix {
+      width: 400%;
+    }
 
     [aria-checked="true"] & {
       background-color: var(--color-green);
