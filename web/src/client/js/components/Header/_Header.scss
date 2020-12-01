@@ -2,8 +2,9 @@
 @import 'CSS/inc/_include-media.scss';
 
 .masthead {
-  border-top: var(--ribbon-height) solid var(--color-brand);
-  height: calc(var(--header-height) + var(--ribbon-height));
+  // border-top: var(--ribbon-height) solid var(--color-brand);
+  // height: calc(var(--header-height) + var(--ribbon-height));
+  height: var(--header-height);
   // position: sticky;
   // top: 0;
   z-index: 3;

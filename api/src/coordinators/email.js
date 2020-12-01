@@ -98,10 +98,12 @@ async function sendPaymentFailed(email) {
   const subject = '[Portway] Payment failed'
   const textBody = 'Your payment for Portway has failed to process. We’ll try a few times over the next week. After that, your account will be deactivated.'
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PAYMENT_FAILED]({ textBody })
+  const linkUrl = `${CLIENT_URL}/d/admin/billing`
 
   await sendSingleRecipientEmail({
     address: email,
     textBody: textBody,
+    linkUrl: linkUrl,
     htmlBody,
     subject
   })
@@ -138,11 +140,14 @@ async function sendSubscriptionCanceled(email) {
 async function sendTrialWillEnd(email) {
   const subject = 'Your Portway trial is ending soon'
   const textBody = 'Your Portway trial will end in 3 days. Add a payment method to keep your account active.'
+
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.TRIAL_WILL_END]({ textBody })
+  const linkUrl = `${CLIENT_URL}/d/admin/billing`
 
   await sendSingleRecipientEmail({
     address: email,
     textBody: textBody,
+    linkUrl, linkUrl,
     htmlBody,
     subject
   })
@@ -151,11 +156,14 @@ async function sendTrialWillEnd(email) {
 async function sendTrialEnded(email) {
   const subject = 'Your Portway trial has ended'
   const textBody = 'Your Portway trial has ended. Add a payment method to re-activate your account.'
+
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.TRIAL_ENDED]({ textBody })
+  const linkUrl = `${CLIENT_URL}/d/admin/billing`
 
   await sendSingleRecipientEmail({
     address: email,
     textBody: textBody,
+    linkUrl, linkUrl,
     htmlBody,
     subject
   })

@@ -13,12 +13,37 @@ import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const gray10 = getComputedStyle(document.documentElement).getPropertyValue('--color-gray-10')
 
-const elementStyles = {
+const lightModeStyles = {
   base: {
+    color: '#333333',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
     fontSize: '15px',
     '::placeholder': {
       color: '#999999'
+    }
+  },
+  focus: {
+    border: `thin solid #6074D6`
+  },
+  complete: {},
+  invalid: {
+    color: '#F55961',
+    ':focus': {
+      color: '#FBBCBF'
+    },
+    '::placeholder': {
+      color: '#FBBCBF'
+    }
+  }
+}
+
+const darkModeStyles = {
+  base: {
+    color: '#ffffff',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+    fontSize: '15px',
+    '::placeholder': {
+      color: '#666666'
     }
   },
   focus: {
@@ -55,10 +80,35 @@ class StripeComponent extends React.Component {
   constructor(props) {
     super(props)
     this.formRef = React.createRef()
+    this.cardRef = React.createRef()
     this.state = {
+      stripeStyles: window.matchMedia('(prefers-color-scheme: dark)').matches ? lightModeStyles : darkModeStyles,
       hasError: false,
       errorObject: null,
       countryValue: null,
+    }
+  }
+
+  colorSchemeChangeHandler(event) {
+    if (event.matches) {
+      this.setState({ stripeStyles: darkModeStyles })
+    } else {
+      this.setState({ stripeStyles: lightModeStyles })
+    }
+  }
+
+  componentDidMount() {
+    if (window.matchMedia) {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        this.setState({ stripeStyles: darkModeStyles })
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.colorSchemeChangeHandler.bind(this), { passive: false })
+    }
+  }
+
+  componentWillUnmount() {
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.colorSchemeChangeHandler.bind(this), { passive: false })
     }
   }
 
@@ -78,7 +128,7 @@ class StripeComponent extends React.Component {
             <div className="field__control field__control--card">
               <CardNumberElement
                 id="card-number"
-                style={elementStyles}
+                style={this.state.stripeStyles}
                 classes={elementClasses}
                 onReady={(el) => {
                   el.focus()
@@ -92,7 +142,7 @@ class StripeComponent extends React.Component {
             <div className="field__control field__control--expiry">
               <CardExpiryElement
                 id="card-expiry"
-                style={elementStyles}
+                style={this.state.stripeStyles}
                 classes={elementClasses} />
             </div>
           </div>
@@ -101,7 +151,7 @@ class StripeComponent extends React.Component {
               CVC
             </label>
             <div className="field__control field__control--cvc">
-              <CardCVCElement id="card-cvc" style={elementStyles} classes={elementClasses} />
+              <CardCVCElement id="card-cvc" style={this.state.stripeStyles} classes={elementClasses} />
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ api/dist
 sync/dist
 workers/dist
 
+
 workers/temp
 
 # Logs
@@ -15,7 +16,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build data
+.nova
 .vscode
+.nova
 stats.json
 
 # Runtime data
