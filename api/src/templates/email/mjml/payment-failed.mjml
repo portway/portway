@@ -70,6 +70,7 @@
         <mj-text align="center">
           <p><%= textBody %></p>
         </mj-text>
+        <mj-button href="<%= linkUrl %>">Fix my payment information</mj-button>
         <mj-spacer height="50px" />
       </mj-column>
     </mj-section>

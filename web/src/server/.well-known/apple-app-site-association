@@ -1,15 +1,20 @@
 {
-	  "applinks": {
-		  "details": [
-			   {
-				 "appIDs": ["Y254DPS4AY.com.bonkeybong.portway"],
-				 "components": [
-				   {
-					  "/": "/d/*",
-					  "comment": "Matches any URL whose path starts with /d/"
-				   }
-				 ]
-			   }
-		   ]
-	   }
-	}
+  "applinks": {
+    "apps": [],
+    "details": [
+        {
+        "appIDs": [
+          "Y254DPS4AY.com.bonkeybong.portway",
+          "Y254DPS4AY.com.bonkeybong.portway.dev",
+          "Y254DPS4AY.com.bonkeybong.portway.staging"
+        ],
+        "components": [
+          {
+          "/": "/d/*",
+          "comment": "Matches any URL whose path starts with /d/"
+          }
+        ]
+        }
+      ]
+    }
+}

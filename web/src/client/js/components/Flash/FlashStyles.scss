@@ -1,8 +1,16 @@
 .flash {
+  --flash-background-color: var(--color-gray-2);
+  --flash-border-color: var(--color-gray-10);
+  
+  @media (prefers-color-scheme: dark) {
+    --flash-background-color: var(--color-gray-90);
+    --flash-border-color: var(--color-gray-80);
+  }
+  
   align-items: center;
   position: relative;
-  background-color: var(--color-gray-2);
-  border: thin solid var(--color-gray-10);
+  background-color: var(--flash-background-color);
+  border: thin solid var(--flash-border-color);
   border-radius: 3px;
   color: var(--color-gray-60);
   display: flex;

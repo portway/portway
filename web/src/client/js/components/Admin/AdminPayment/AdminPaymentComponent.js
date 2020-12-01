@@ -73,8 +73,10 @@ const AdminPaymentComponent = ({
 
   if (orgBilling && orgBilling.source) {
     const cost = orgBilling.subscription && toCurrencyString(getTotalCost(orgBilling.subscription))
-    const expDateCalc = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
-    const expDate = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`)
+    // Using the YYYY-M-D format because expYear and expMonth may be single or double digit from the API
+    // and Moment needs to have a valid format for display
+    const expDateCalc = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`, 'YYYY-M-D')
+    const expDate = moment(`${orgBilling.source.expYear}-${orgBilling.source.expMonth}-01`, 'YYYY-M-D')
     const expiringSoon = moment() > expDateCalc.add(1, 'months')
     const nextBillingDate = moment.unix(orgBilling.subscription.currentPeriodEnd)
 
