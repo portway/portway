@@ -13,10 +13,10 @@ syncUrl: sync.dev.portway.app
 stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
 
 apiImage: bonkeybong/portway_api
-apiTag: "sync-beta-2"
+apiTag: "1.4.0"
 
 webImage: bonkeybong/portway_web
-webTag: "sync-beta-2"
+webTag: "1.4.0"
 
 web:
   port: "3000"
@@ -39,7 +39,7 @@ db:
 sync:
   port: "3004"
   image: "bonkeybong/portway_sync"
-  tag: "sync-beta-2"
+  tag: "1.4.0"
   logger: "r7insight"
 
 redis:
@@ -48,7 +48,7 @@ redis:
 workers:
   port: "3005"
   image: "bonkeybong/portway_workers"
-  tag: "export-beta-1"
+  tag: "1.4.0"
   logger: "r7insight"
   exportTempDirectory: "temp/"
 
