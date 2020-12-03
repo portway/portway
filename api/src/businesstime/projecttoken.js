@@ -1,5 +1,6 @@
 import { getDb } from '../db/dbConnector'
 import ono from 'ono'
+import { Op } from 'sequelize'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'

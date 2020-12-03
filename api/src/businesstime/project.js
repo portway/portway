@@ -1,4 +1,5 @@
 import ono from 'ono'
+import { Op } from 'sequelize'
 
 import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
