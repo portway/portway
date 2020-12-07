@@ -147,7 +147,7 @@ async function sendTrialWillEnd(email) {
   await sendSingleRecipientEmail({
     address: email,
     textBody: textBody,
-    linkUrl, linkUrl,
+    linkUrl,
     htmlBody,
     subject
   })
