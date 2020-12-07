@@ -19,7 +19,7 @@ const deleteDocument = async (docId, projectId, orgId) => {
 }
 
 const deleteAllForProject = async (projectId, orgId) => {
-  const docs = await BusinessDocument.findAllForProject(projectId)
+  const docs = await BusinessDocument.findAllForProject(projectId, orgId)
   await Promise.all(docs.map((doc) => {
     return documentCoordinator.deleteDocument(doc.id, projectId, orgId)
   }))
