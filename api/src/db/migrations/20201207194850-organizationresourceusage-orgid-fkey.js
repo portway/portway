@@ -5,15 +5,15 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       await queryInterface.removeConstraint(
-        'WebhookDeliveries',
-        'WebhookDeliveries_webhookId_fkey',
+        'OrganizationResourceUsages',
+        'OrganizationResourceUsages_orgId_fkey',
         { transaction }
       );
-      await queryInterface.addConstraint('WebhookDeliveries', ['webhookId'], {
+      await queryInterface.addConstraint('OrganizationResourceUsages', ['orgId'], {
         type: 'foreign key',
-        name: 'WebhookDeliveries_webhookId_fkey',
+        name: 'OrganizationResourceUsages_orgId_fkey',
         references: {
-          table: 'Webhooks',
+          table: 'Organizations',
           field: 'id',
         },
         onDelete: 'CASCADE',
@@ -31,15 +31,15 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.removeConstraint(
-        'WebhookDeliveries',
-        'WebhookDeliveries_webhookId_fkey',
+        'OrganizationResourceUsages',
+        'OrganizationResourceUsages_orgId_fkey',
         { transaction }
       );
-      await queryInterface.addConstraint('WebhookDeliveries', ['webhookId'], {
+      await queryInterface.addConstraint('OrganizationResourceUsages', ['orgId'], {
         type: 'foreign key',
-        name: 'WebhookDeliveries_webhookId_fkey',
+        name: 'OrganizationResourceUsages_orgId_fkey',
         references: {
-          table: 'Webhooks',
+          table: 'Organizations',
           field: 'id',
         },
         transaction

@@ -5,15 +5,15 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       await queryInterface.removeConstraint(
-        'WebhookDeliveries',
-        'WebhookDeliveries_webhookId_fkey',
+        'ProjectTokens',
+        'ProjectTokens_projectId_fkey',
         { transaction }
       );
-      await queryInterface.addConstraint('WebhookDeliveries', ['webhookId'], {
+      await queryInterface.addConstraint('ProjectTokens', ['projectId'], {
         type: 'foreign key',
-        name: 'WebhookDeliveries_webhookId_fkey',
+        name: 'ProjectTokens_projectId_fkey',
         references: {
-          table: 'Webhooks',
+          table: 'Projects',
           field: 'id',
         },
         onDelete: 'CASCADE',
@@ -31,15 +31,15 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.removeConstraint(
-        'WebhookDeliveries',
-        'WebhookDeliveries_webhookId_fkey',
+        'ProjectTokens',
+        'ProjectTokens_projectId_fkey',
         { transaction }
       );
-      await queryInterface.addConstraint('WebhookDeliveries', ['webhookId'], {
+      await queryInterface.addConstraint('ProjectTokens', ['projectId'], {
         type: 'foreign key',
-        name: 'WebhookDeliveries_webhookId_fkey',
+        name: 'ProjectTokens_projectId_fkey',
         references: {
-          table: 'Webhooks',
+          table: 'Projects',
           field: 'id',
         },
         transaction
