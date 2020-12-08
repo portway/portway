@@ -310,7 +310,7 @@ describe('BusinessField', () => {
       })
     })
 
-    describe('#findAllForDocument', () => {
+    describe('#findAllDraftForDocument', () => {
       let fields
 
       beforeAll(async () => {
@@ -318,7 +318,10 @@ describe('BusinessField', () => {
           documentId: documentForFields.id
         })
 
-        fields = await BusinessField.findAllForDocument(documentForFields.id, documentForFields.orgId)
+        fields = await BusinessField.findAllDraftForDocument(
+          documentForFields.id,
+          documentForFields.orgId
+        )
       })
 
       it('should return all fields from passed in document and org', () => {
