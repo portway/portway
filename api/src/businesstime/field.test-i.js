@@ -427,6 +427,13 @@ describe('BusinessField', () => {
           BusinessField.deleteByIdForDocument(publishedField.id, documentToDelete.id, constants.ORG_ID)
         ).rejects.toEqual(expect.objectContaining({ code: 403 }))
       })
+
+      it('should delete when the deletePublished flag is set', () => {
+        // Jest will throw error if this doesn't resolve
+        return BusinessField.deleteByIdForDocument(
+          publishedField.id, documentToDelete.id, constants.ORG_ID, { deletePublished: true }
+        )
+      })
     })
 
 

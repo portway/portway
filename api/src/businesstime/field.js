@@ -161,7 +161,7 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
  *   deletePublished: true // ignores published status of field
  * }
  */
-async function deleteByIdForDocument(id, documentId, orgId, options) {
+async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
   const db = getDb()
 
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -174,7 +174,7 @@ async function deleteByIdForDocument(id, documentId, orgId, options) {
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
-  if (field.versionId && !options.deletePublished === true) {
+  if (field.versionId && options.deletePublished !== true) {
     throw ono({ code: 403 }, `Field ${id} is published, cannot delete`)
   }
 
