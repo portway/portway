@@ -186,6 +186,8 @@ async function deleteByIdForDocument(id, documentId, orgId, options) {
   await normalizeFieldOrderAndGetCount(documentId, orgId)
 }
 
+// Note: this will _not_ clean up assets and other field artifacts, it only removes
+// the database fields. Use accordingly.
 async function deleteAllForDocument(documentId, orgId) {
   const db = getDb()
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
