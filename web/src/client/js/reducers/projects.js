@@ -1,5 +1,6 @@
 import { ActionTypes } from '../actions'
 import { QUERY_PARAMS } from 'Shared/constants'
+import moment from 'moment'
 
 const initialState = {
   sortBy: 'createdAt',
@@ -98,7 +99,7 @@ export const projects = (state = initialState, action) => {
       return { ...state, projectsById, projectIdsByPage }
     }
     case ActionTypes.SORT_PROJECTS: {
-      if (action.sortBy !== state.sortBy || action.sortMethod !== state.sortMethod) {
+      if (true) {
         return {
           ...state,
           projectIdsByPage: {},
@@ -127,6 +128,23 @@ export const projects = (state = initialState, action) => {
       return {
         ...state,
         exportUrlsById: { ...state.exportUrlsById, [action.projectId]: null }
+      }
+    }
+    // When fields are added/updated/removed, adjust updatedAt on the parent project
+    // accordingly, only client-side... next request for document will get the
+    // right date
+    case ActionTypes.RECEIVE_CREATED_FIELD:
+    case ActionTypes.RECEIVE_UPDATED_FIELD:
+    case ActionTypes.REMOVE_FIELD: 
+    case ActionTypes.RECEIVE_CREATED_DOCUMENT:
+    case ActionTypes.RECEIVE_UPDATED_DOCUMENT:
+    case ActionTypes.REMOVE_DOCUMENT: {
+      const projectToUpdate = { ...state.projectsById[action.projectId] }
+      projectToUpdate.updatedAt = moment().toISOString()
+      const projectsById = { ...state.projectsById, [action.projectId]: projectToUpdate }
+      return {
+        ...state,
+        projectsById
       }
     }
     default:
