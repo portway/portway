@@ -99,15 +99,13 @@ export const projects = (state = initialState, action) => {
       return { ...state, projectsById, projectIdsByPage }
     }
     case ActionTypes.SORT_PROJECTS: {
-      if (true) {
-        return {
-          ...state,
-          projectIdsByPage: {},
-          totalPages: null,
-          sortBy: action.sortBy,
-          sortMethod: action.sortMethod,
-          loading: { ...state.loading, byPage: {} }
-        }
+      return {
+        ...state,
+        projectIdsByPage: {},
+        totalPages: null,
+        sortBy: action.sortBy,
+        sortMethod: action.sortMethod,
+        loading: { ...state.loading, byPage: {} }
       }
       return state
     }
