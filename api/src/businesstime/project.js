@@ -1,4 +1,5 @@
 import ono from 'ono'
+import { Op } from 'sequelize'
 
 import { getDb } from '../db/dbConnector'
 import resourceTypes from '../constants/resourceTypes'
@@ -97,6 +98,19 @@ async function deleteAllForOrg(orgId, force = false) {
   })
 }
 
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   create,
   findById,
@@ -104,5 +118,6 @@ export default {
   updateById,
   deleteById,
   findAllForUser,
-  deleteAllForOrg
+  deleteAllForOrg,
+  deleteAllSoftDeletedBefore
 }

@@ -82,7 +82,7 @@ class StripeComponent extends React.Component {
     this.formRef = React.createRef()
     this.cardRef = React.createRef()
     this.state = {
-      stripeStyles: window.matchMedia('(prefers-color-scheme: dark)').matches ? lightModeStyles : darkModeStyles,
+      stripeStyles: window.matchMedia('(prefers-color-scheme: dark)').matches ? darkModeStyles : lightModeStyles,
       hasError: false,
       errorObject: null,
       countryValue: null,

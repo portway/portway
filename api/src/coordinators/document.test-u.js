@@ -1,9 +1,11 @@
 import documentCoordinator from './document'
+import fieldCoordinator from './field'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
 import { slugify } from '../libs/utils'
 
+jest.mock('./field')
 jest.mock('../businesstime/document')
 jest.mock('../businesstime/field')
 jest.mock('../businesstime/documentversion')
@@ -36,13 +38,20 @@ describe('documentCoordinator', () => {
 
   describe('#deleteDocument', () => {
     beforeAll(async () => {
+      BusinessField.findAllForDocument.mockReturnValueOnce([{id: 23}])
       await documentCoordinator.deleteDocument(docId, projectId, orgId)
     })
 
-    it('should call BusinessField.deleteAllForDocument', () => {
-      expect(BusinessField.deleteAllForDocument.mock.calls.length).toBe(1)
-      expect(BusinessField.deleteAllForDocument.mock.calls[0][0]).toEqual(docId)
-      expect(BusinessField.deleteAllForDocument.mock.calls[0][1]).toEqual(orgId)
+    it('should call BusinessField.findAllForDocument', () => {
+      expect(BusinessField.findAllForDocument.mock.calls.length).toBe(1)
+      expect(BusinessField.findAllForDocument.mock.calls[0][0]).toEqual(docId)
+      expect(BusinessField.findAllForDocument.mock.calls[0][1]).toEqual(orgId)
+    })
+
+    it('should call fieldCoordinator.removeDocumentField', () => {
+      expect(fieldCoordinator.removeDocumentField.mock.calls.length).toBe(1)
+      expect(fieldCoordinator.removeDocumentField.mock.calls[0][1]).toEqual(docId)
+      expect(fieldCoordinator.removeDocumentField.mock.calls[0][2]).toEqual(orgId)
     })
 
     it('should call BusinessDocumentVersion.deleteAllForDocument', () => {
@@ -68,6 +77,7 @@ describe('documentCoordinator', () => {
         { id: docId1 },
         { id: docId2 }
       ])
+      BusinessField.findAllForDocument.mockReturnValue([{ id: 23 }])
 
       await documentCoordinator.deleteAllForProject(projectId)
     })
@@ -84,6 +94,7 @@ describe('documentCoordinator', () => {
     })
 
     afterAll(() => {
+      BusinessField.findAllForDocument.mockReset()
       documentCoordinator.deleteDocument.mockRestore()
     })
   })

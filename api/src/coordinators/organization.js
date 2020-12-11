@@ -7,6 +7,7 @@ import BusinessProjectToken from '../businesstime/projecttoken'
 import BusinessUser from '../businesstime/user'
 import BusinessProjectUser from '../businesstime/projectuser'
 import BusinessResourceUsage from '../businesstime/resourceusage'
+import BusinessWebhook from '../businesstime/webhook'
 import stripeIntegrator from '../integrators/stripe'
 import { deleteOrgDirectory } from '../integrators/s3'
 import ono from 'ono'
@@ -37,6 +38,8 @@ const removeAllOrgData = async function(orgId) {
   await BusinessDocument.deleteAllForOrg(orgId, true)
   // remove project tokens
   await BusinessProjectToken.deleteAllForOrg(orgId, true)
+  // Remove project webhooks and webhook deliveries
+  await BusinessWebhook.deleteAllForOrg(orgId, true)
   // remove project users
   await BusinessProjectUser.deleteAllForOrg(orgId, true)
   // remove projects
