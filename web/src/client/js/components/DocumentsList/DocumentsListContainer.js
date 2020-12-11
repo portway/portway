@@ -114,7 +114,7 @@ const DocumentsListContainer = ({
       </>
     )
     const options = {
-      confirmedAction: () => { unpublishDocument(document.id) },
+      confirmedAction: () => { unpublishDocument(document.id, projectId) },
       confirmedLabel: strings.UNPUBLISH_CONFIRMATION_LABEL,
       theme: 'danger'
     }
