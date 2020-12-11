@@ -36,7 +36,7 @@ const AdminBillingComponent = ({ organization }) => {
         <hr />
       </OrgPlanPermission>
       {/* null is a special case for seed org */}
-      <OrgPlanPermission acceptedPlans={[null, PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER]}>
+      <OrgPlanPermission acceptedPlans={[null, PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER, PLAN_TYPES.PER_USER]}>
         <section id="payment" className={sectionClasses}>
           <h2>Payment information</h2>
           <AdminPaymentContainer />

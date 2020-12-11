@@ -158,6 +158,12 @@ const updatePlanSeats = async function(seats, orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
+  // make sure user is a free multi-user, or active before allowing them to add seats
+  if (currentPlanId !== PLANS.MULTI_USER_FREE && currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
+    const publicMessage = 'Cannot add seats on a trial plan'
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
+  }
+
   //nothing is changing, return success and move on without updating stripe
   if (seats === currentSeats) {
     return currentSeats
