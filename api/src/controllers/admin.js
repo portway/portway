@@ -164,7 +164,8 @@ const deleteUnverifiedOrgs = async function(req, res, next) {
 
 const deleteStaleResources = async function(req, res, next) {
   try {
-    deleteSoftDeletedResources()
+    await deleteSoftDeletedResources()
+    res.status(204).send()
   } catch(e) {
     next(e)
   }
