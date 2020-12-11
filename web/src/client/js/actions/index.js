@@ -252,14 +252,14 @@ export const Documents = {
   receiveListError: makeActionCreator(ActionTypes.RECEIVE_DOCUMENTS_ERROR, 'projectId'),
   receiveOne: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT, 'data'),
   receiveError: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_ERROR, 'documentId'),
-  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'data'),
-  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'data'),
-  receivePublishedVersion: makeActionCreator(ActionTypes.RECEIVE_PUBLISHED_DOCUMENT, 'data'),
+  receiveOneCreated: makeActionCreator(ActionTypes.RECEIVE_CREATED_DOCUMENT, 'projectId', 'data'),
+  receiveOneUpdated: makeActionCreator(ActionTypes.RECEIVE_UPDATED_DOCUMENT, 'projectId', 'data'),
+  receivePublishedVersion: makeActionCreator(ActionTypes.RECEIVE_PUBLISHED_DOCUMENT, 'projectId', 'data'),
   requestList: makeActionCreator(ActionTypes.REQUEST_DOCUMENTS, 'projectId'),
   requestOne: makeActionCreator(ActionTypes.REQUEST_DOCUMENT, 'documentId'),
   update: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UPDATE, 'projectId', 'documentId', 'data'),
   unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
-  receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'data'),
+  receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'projectId', 'data'),
   initiateSearch: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_SEARCH, 'value'),
   receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data')
 }

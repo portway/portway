@@ -44,7 +44,7 @@ const DocumentToolbarContainer = ({
     )
     const options = {
       confirmedLabel: strings.PUBLISH_CONFIRMATION_LABEL,
-      confirmedAction: () => { publishDocument(document.id) }
+      confirmedAction: () => { publishDocument(document.id, projectId) }
     }
     uiConfirm({ message, options })
   }
@@ -70,7 +70,7 @@ const DocumentToolbarContainer = ({
     )
     const options = {
       confirmedLabel: strings.UNPUBLISH_CONFIRMATION_LABEL,
-      confirmedAction: () => { unpublishDocument(document.id) },
+      confirmedAction: () => { unpublishDocument(document.id, projectId) },
       theme: 'danger'
     }
     uiConfirm({ message, options })

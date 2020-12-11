@@ -5,7 +5,7 @@ import { Op } from 'sequelize'
 import { getDb } from '../db/dbConnector'
 import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
 import apiErrorTypes from '../constants/apiErrorTypes'
-import resourceTypes from '../constants/resourceTypes'
+import resourceTypes, { PROJECT_RESOURCE_TYPES } from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 
@@ -52,6 +52,9 @@ async function createForDocument(documentId, body) {
 
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
+
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
 
   return await findByIdForDocument(createdField.id, documentId, orgId)
 }
@@ -147,6 +150,9 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
 
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+
   return await findByIdForDocument(field.id, documentId, orgId)
 }
 
@@ -182,6 +188,9 @@ async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
 
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
+
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
 
   await normalizeFieldOrderAndGetCount(documentId, orgId)
 }
@@ -277,6 +286,9 @@ async function updateOrderById(id, documentId, orgId, newPosition) {
 
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
+
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
 }
 
 export function getFieldValueInclude(db) {
@@ -322,7 +334,7 @@ function validateNumberPrecision(value) {
 }
 
 function getDefaultFieldValueByType(value, type) {
-  switch(type) {
+  switch (type) {
     case FIELD_TYPES.DATE:
       if (!value) {
         return (new Date()).toISOString() 

@@ -167,7 +167,7 @@
     } // new
   }
   &__button {
-    align-items: flex-start;
+    align-items: center;
     flex-direction: row;
     padding: calc(var(--gutter-width) / 5) calc(var(--gutter-width) / 4);
     white-space: normal;
@@ -205,6 +205,11 @@
     .active & {
       color: var(--theme-header-color);
     }
+    
+    &--unpublished {
+      font-style: italic;
+      opacity: 0.8;
+    }
   }
   &__date {
     align-items: center;
@@ -221,6 +226,14 @@
         fill: var(--color-gray-40);
       }
     }
+  }
+  &__unpublished-label {
+    // color: var(--color-blue);
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.6;
+    padding: 0 var(--icon-margin);
+    text-transform: uppercase;
   }
 
   // When we're creating a new document, override the active styling

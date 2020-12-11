@@ -54,14 +54,14 @@ export const createDocument = (projectId, history, body, options = {}) => {
       createField(projectId, data.id, FIELD_TYPES.TEXT, createFieldBody)
     )
 
-    dispatch(Documents.receiveOneCreated(data))
+    dispatch(Documents.receiveOneCreated(projectId, data))
     if (!preventRedirect) {
       history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
     }
   }
 }
 
-export const publishDocument = (documentId) => {
+export const publishDocument = (documentId, projectId) => {
   return async (dispatch) => {
     dispatch(Documents.publish(documentId))
     const { data, status } = await add(`v1/documents/${documentId}/publish`)
@@ -69,7 +69,7 @@ export const publishDocument = (documentId) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    dispatch(Documents.receivePublishedVersion(data))
+    dispatch(Documents.receivePublishedVersion(projectId, data))
   }
 }
 
@@ -83,11 +83,11 @@ export const updateDocument = (projectId, documentId, body) => {
     }
     validationCodes.includes(status) ?
       dispatch(Validation.create('document', data, status)) :
-      dispatch(Documents.receiveOneUpdated(data))
+      dispatch(Documents.receiveOneUpdated(projectId, data))
   }
 }
 
-export const unpublishDocument = (documentId) => {
+export const unpublishDocument = (documentId, projectId) => {
   return async (dispatch) => {
     dispatch(Documents.unpublish(documentId))
     const { data, status } = await add(`v1/documents/${documentId}/unpublish`)
@@ -95,7 +95,7 @@ export const unpublishDocument = (documentId) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
       return
     }
-    dispatch(Documents.receiveUnpublishedVersion(data))
+    dispatch(Documents.receiveUnpublishedVersion(projectId, data))
   }
 }
 
