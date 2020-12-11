@@ -13,7 +13,7 @@ import slackIntegrator from '../integrators/slack'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 
-const { CLIENT_URL } = process.env
+const { CLIENT_URL, STRIPE_PER_USER_PLAN_ID } = process.env
 
 async function createUserAndOrganization(name, email) {
   const existingUser = await BusinessUser.findByEmail(email)
@@ -44,10 +44,10 @@ async function createUserAndOrganization(name, email) {
   } catch (e) {
     logger(LOG_LEVELS.ERROR, e)
   }
-
+  console.log(STRIPE_PER_USER_PLAN_ID)
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
-    planId: PLANS.SINGLE_USER,
+    planId: STRIPE_PER_USER_PLAN_ID,
     trialPeriodDays: TRIAL_PERIOD_DAYS,
     orgId: organization.id
   })

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
+import { PLAN_TYPES, ORG_SUBSCRIPTION_STATUS, MULTI_USER_PLAN_TYPES } from 'Shared/constants'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import AdminNoticesContainer from 'Components/Admin/AdminNotices/AdminNoticesContainer'
 import AdminPlanSelectorContainer from 'Components/Admin/AdminPlanSelector/AdminPlanSelectorContainer'
@@ -28,7 +28,7 @@ const AdminBillingComponent = ({ organization }) => {
         <AdminPlanSelectorContainer />
       </section>
       <hr />
-      <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
         <section id="seats" className={sectionClasses}>
           <h2>Manage seats</h2>
           <AdminSeatsContainer />

@@ -10,6 +10,17 @@ import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscript
 import slackIntegrator from '../integrators/slack'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
+import { EnvironmentCredentials } from 'aws-sdk'
+
+const { STRIPE_PER_USER_PLAN_ID } = process.env
+
+const PLAN_ID_MAP = {
+  [STRIPE_PER_USER_PLAN_ID]: 'PER_USER',
+  SINGLE_USER: 'SINGLE_USER',
+  MULTI_USER: 'MULTI_USER',
+  SINGLE_USER_FREE: 'SINGLE_USER_FREE',
+  MULTI_USER_FREE: 'MULTI_USER_FREE'
+}
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -35,7 +46,7 @@ const formatBilling = (customer, userCount) => {
 
   const subscription = {
     status: null,
-    planId: null,
+    plan: null,
     billingCycleAnchor: null,
     cancelAt: null,
     currentPeriodEnd: null,
@@ -49,7 +60,6 @@ const formatBilling = (customer, userCount) => {
 
   if (billingSubscription) {
     subscription.status = billingSubscription.status
-    subscription.planId = billingSubscription.plan.id
     subscription.billingCycleAnchor = billingSubscription.billing_cycle_anchor
     subscription.cancelAt = billingSubscription.cancel_at
     subscription.currentPeriodEnd = billingSubscription.current_period_end
@@ -58,11 +68,20 @@ const formatBilling = (customer, userCount) => {
     subscription.usedSeats = userCount
 
     if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
+      subscription.plan = PLANS.SINGLE_USER
       subscription.flatCost = billingSubscription.plan.amount
       subscription.includedSeats = 1
     }
 
     if (billingSubscription.plan.id === PLANS.MULTI_USER) {
+      subscription.plan = PLANS.MULTI_USER
+      subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
+      subscription.includedSeats = billingSubscription.plan.tiers[0].up_to
+      subscription.additionalSeatCost = billingSubscription.plan.tiers[1].unit_amount
+    }
+
+    if (billingSubscription.plan.id === STRIPE_PER_USER_PLAN_ID) {
+      subscription.plan = PLANS.PER_USER
       subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
       subscription.includedSeats = billingSubscription.plan.tiers[0].up_to
       subscription.additionalSeatCost = billingSubscription.plan.tiers[1].unit_amount
@@ -174,7 +193,7 @@ const updateOrgBilling = async function(token, orgId) {
 
   if (!currentSubscription) {
     // Somehow the user doesn't have a subscription yet, they now have billing info saved, give them a single user one
-    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: PLANS.SINGLE_USER, orgId })
+    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: STRIPE_PER_USER_PLAN_ID, orgId })
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
     const currentPlan = currentSubscription.plan.id
@@ -272,7 +291,7 @@ const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
 
   // if the customer is subscribed to a plan, go ahead and update it to the current value
   if (plan) {
-    orgUpdateData.plan = plan
+    orgUpdateData.plan = PLAN_ID_MAP[plan]
   }
 
   await BusinessOrganization.updateById(orgId, orgUpdateData)
