@@ -1,3 +1,5 @@
+
+import FieldCoordinator from './field'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
@@ -11,7 +13,10 @@ const addProjectDocument = async (projectId, body) => {
 // Removes a document and all associated resources
 const deleteDocument = async (docId, projectId, orgId) => {
   // Delete document fields
-  await BusinessField.deleteAllForDocument(docId, orgId)
+  const fields = await BusinessField.findAllForDocument(docId, orgId)
+  for (const field of fields) {
+    await FieldCoordinator.removeDocumentField(field.id, docId, orgId, { deletePublished: true })
+  }
   // Delete document versions
   await BusinessDocumentVersion.deleteAllForDocument(docId, orgId)
   // Delete document
@@ -19,7 +24,7 @@ const deleteDocument = async (docId, projectId, orgId) => {
 }
 
 const deleteAllForProject = async (projectId, orgId) => {
-  const docs = await BusinessDocument.findAllForProject(projectId)
+  const docs = await BusinessDocument.findAllForProject(projectId, orgId)
   await Promise.all(docs.map((doc) => {
     return documentCoordinator.deleteDocument(doc.id, projectId, orgId)
   }))

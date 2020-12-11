@@ -10,6 +10,7 @@ import BusinessUser from '../businesstime/user'
 import BusinessWebhookDelivery from '../businesstime/webhookDelivery'
 import organizationCoordinator from '../coordinators/organization'
 import billingCoordinator from '../coordinators/billing'
+import { deleteSoftDeletedResources } from '../coordinators/resources'
 
 const adminController = function(router) {
   /**
@@ -63,6 +64,11 @@ const adminController = function(router) {
   router.delete('/unverifiedOrgs',
     adminAuth,
     deleteUnverifiedOrgs
+  )
+
+  router.delete('/softdeletedresources',
+    adminAuth,
+    deleteStaleResources
   )
 }
 
@@ -151,6 +157,15 @@ const deleteUnverifiedOrgs = async function(req, res, next) {
       removedOrgsCount += 1
     }
     res.status(200).send({ data: { removedOrgsCount } })
+  } catch(e) {
+    next(e)
+  }
+}
+
+const deleteStaleResources = async function(req, res, next) {
+  try {
+    await deleteSoftDeletedResources()
+    res.status(204).send()
   } catch(e) {
     next(e)
   }

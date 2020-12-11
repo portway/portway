@@ -81,7 +81,23 @@ async function findAllPublishedForDocument(documentId, orgId) {
   return fields.map(publicFields)
 }
 
+// Returns draft and published fields
 async function findAllForDocument(documentId, orgId) {
+  const db = getDb()
+  const include = getFieldValueInclude(db)
+  const fields = await db.model(MODEL_NAME).findAll({
+    where: {
+      documentId,
+      orgId
+    },
+    include
+  })
+
+  return fields.map(publicFields)
+}
+
+// Returns only draft fields
+async function findAllDraftForDocument(documentId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
@@ -97,7 +113,6 @@ async function findAllForDocument(documentId, orgId) {
 
   return fields.map(publicFields)
 }
-
 
 async function findByIdForDocument(id, documentId, orgId) {
   const db = getDb()
@@ -141,7 +156,18 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   return await findByIdForDocument(field.id, documentId, orgId)
 }
 
-async function deleteByIdForDocument(id, documentId, orgId) {
+/**
+ * 
+ * @param {Number} id 
+ * @param {Number} documentId
+ * @param {Number} orgId
+ * @param {Object} options
+ * 
+ * options = {
+ *   deletePublished: true // ignores published status of field
+ * }
+ */
+async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
   const db = getDb()
 
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -154,7 +180,9 @@ async function deleteByIdForDocument(id, documentId, orgId) {
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
-  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot delete`)
+  if (field.versionId && options.deletePublished !== true) {
+    throw ono({ code: 403 }, `Field ${id} is published, cannot delete`)
+  }
 
   await field.destroy()
 
@@ -167,6 +195,8 @@ async function deleteByIdForDocument(id, documentId, orgId) {
   await normalizeFieldOrderAndGetCount(documentId, orgId)
 }
 
+// Note: this will _not_ clean up assets and other field artifacts, it only removes
+// the database fields. Use accordingly.
 async function deleteAllForDocument(documentId, orgId) {
   const db = getDb()
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -360,14 +390,30 @@ async function deleteAllForOrg(orgId, force = false) {
   })
 }
 
+// The field coordinator deletes any assets when the field is deleted
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   createForDocument,
   updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
+  findAllDraftForDocument,
   findAllPublishedForDocument,
   deleteByIdForDocument,
   deleteAllForDocument,
   updateOrderById,
-  deleteAllForOrg
+  deleteAllForOrg,
+  deleteAllSoftDeletedBefore
 }

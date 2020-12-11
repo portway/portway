@@ -310,7 +310,7 @@ describe('BusinessField', () => {
       })
     })
 
-    describe('#findAllForDocument', () => {
+    describe('#findAllDraftForDocument', () => {
       let fields
 
       beforeAll(async () => {
@@ -318,7 +318,10 @@ describe('BusinessField', () => {
           documentId: documentForFields.id
         })
 
-        fields = await BusinessField.findAllForDocument(documentForFields.id, documentForFields.orgId)
+        fields = await BusinessField.findAllDraftForDocument(
+          documentForFields.id,
+          documentForFields.orgId
+        )
       })
 
       it('should return all fields from passed in document and org', () => {
@@ -423,6 +426,13 @@ describe('BusinessField', () => {
         await expect(
           BusinessField.deleteByIdForDocument(publishedField.id, documentToDelete.id, constants.ORG_ID)
         ).rejects.toEqual(expect.objectContaining({ code: 403 }))
+      })
+
+      it('should delete when the deletePublished flag is set', () => {
+        // Jest will throw error if this doesn't resolve
+        return BusinessField.deleteByIdForDocument(
+          publishedField.id, documentToDelete.id, constants.ORG_ID, { deletePublished: true }
+        )
       })
     })
 

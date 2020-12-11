@@ -87,6 +87,19 @@ async function findAllCanceled() {
   return orgs
 }
 
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   create,
   findSanitizedById,
@@ -95,5 +108,6 @@ export default {
   findById,
   findByStripeId,
   deleteById,
-  findAllCanceled
+  findAllCanceled,
+  deleteAllSoftDeletedBefore
 }

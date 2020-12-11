@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: portway-delete-softdeleted-resources-cronjob
+spec:
+  schedule: "0 11 * * *"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+          - name: regcred
+          restartPolicy: OnFailure
+          containers:
+          - name: portway-delete-softdeleted-resources
+            image: bonkeybong/portway_delete_resources
+            env:
+            - name: ADMIN_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: admin-secrets
+                  key: admin_secret_key
+            - name: API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: web-config
+                  key: web.api_url
