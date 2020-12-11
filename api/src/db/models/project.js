@@ -24,5 +24,11 @@ export default function(sequelize, DataTypes) {
       foreignKey: 'projectId'
     })
   }
+
+  Project.prototype.markUpdated = function(valueBody) {
+    this.setDataValue('updatedAt', Date.now())
+    return this.save()
+  }
+
   return Project
 }

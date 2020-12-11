@@ -6,9 +6,11 @@ import bodyParser from 'body-parser'
 import adminAuth from '../libs/auth/adminAuth'
 import demoSignupCoordinator from '../coordinators/demoSignup'
 import BusinessOrganization from '../businesstime/organization'
+import BusinessUser from '../businesstime/user'
 import BusinessWebhookDelivery from '../businesstime/webhookDelivery'
 import organizationCoordinator from '../coordinators/organization'
 import billingCoordinator from '../coordinators/billing'
+import { deleteSoftDeletedResources } from '../coordinators/resources'
 
 const adminController = function(router) {
   /**
@@ -57,6 +59,16 @@ const adminController = function(router) {
   router.delete('/webhookdeliveries/:id',
     adminAuth,
     deleteWebhookDelivery
+  )
+
+  router.delete('/unverifiedOrgs',
+    adminAuth,
+    deleteUnverifiedOrgs
+  )
+
+  router.delete('/softdeletedresources',
+    adminAuth,
+    deleteStaleResources
   )
 }
 
@@ -130,6 +142,29 @@ const getWebhookDeliveries = async function(req, res, next) {
 const deleteWebhookDelivery = async function(req, res, next) {
   try {
     await BusinessWebhookDelivery.deleteById(req.params.id)
+    res.status(204).send()
+  } catch(e) {
+    next(e)
+  }
+}
+
+const deleteUnverifiedOrgs = async function(req, res, next) {
+  try {
+    const unverifiedUsers = await BusinessUser.findAllUnverifiedOwners()
+    let removedOrgsCount = 0
+    for (const user of unverifiedUsers) {
+      await organizationCoordinator.removeAllOrgData(user.orgId)
+      removedOrgsCount += 1
+    }
+    res.status(200).send({ data: { removedOrgsCount } })
+  } catch(e) {
+    next(e)
+  }
+}
+
+const deleteStaleResources = async function(req, res, next) {
+  try {
+    await deleteSoftDeletedResources()
     res.status(204).send()
   } catch(e) {
     next(e)

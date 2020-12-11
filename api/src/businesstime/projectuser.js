@@ -1,4 +1,5 @@
 import { getDb } from '../db/dbConnector'
+import { Op } from 'sequelize'
 import ono from 'ono'
 import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
@@ -165,6 +166,19 @@ async function deleteAllForOrg(orgId, force = false) {
   })
 }
 
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   create,
   addUserIdToProject,
@@ -176,5 +190,6 @@ export default {
   updateProjectUserById,
   findAllProjectAssignmentsForUser,
   removeAllProjectAssignmentsForUser,
-  deleteAllForOrg
+  deleteAllForOrg,
+  deleteAllSoftDeletedBefore
 }

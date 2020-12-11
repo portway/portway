@@ -82,6 +82,13 @@ const DocumentsListItem = ({
     'documents-list__item': true,
     'documents-list__item--active': draggedOver
   })
+  
+  const hasUnpublishedChanges = document.lastPublishedAt ? moment(document.updatedAt).isAfter(document.lastPublishedAt, 'second') : true
+  
+  const documentNameClasses = cx({
+    'documents-list__name': true,
+    'documents-list__name--unpublished': hasUnpublishedChanges
+  })
 
   return (
     <li
@@ -97,11 +104,14 @@ const DocumentsListItem = ({
         onClick={(e) => { if (disable) { e.preventDefault() } }}
       >
         <div className="documents-list__name-container">
-          <span className="documents-list__name">{ document.name }</span>
-          <time className="documents-list__date" dateTime={document.updatedAt}>
-            <TimeIcon width="13" height="13" />
-            <span>{moment(document.updatedAt).fromNow()}</span>
-          </time>
+          <span className={documentNameClasses}>{ document.name }</span>
+            <time className="documents-list__date" dateTime={document.updatedAt}>
+              <TimeIcon width="13" height="13" />
+              <span>{moment(document.updatedAt).fromNow()}</span>
+              {hasUnpublishedChanges &&
+                <span className="documents-list__unpublished-label" title="This document has unpublished changes">Unpublished</span>
+              }
+            </time> 
         </div>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <PopperGroup anchorRef={containerRef}>

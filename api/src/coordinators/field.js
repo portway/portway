@@ -63,9 +63,14 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   return BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 }
 
-const removeDocumentField = async function(fieldId, documentId, orgId) {
+/*
+ * options = {
+ *   deletePublished: true // ignores published status of field when deleting field
+ * }
+ */
+const removeDocumentField = async function(fieldId, documentId, orgId, options) {
   const field = await BusinessField.findByIdForDocument(fieldId, documentId, orgId)
-  await BusinessField.deleteByIdForDocument(fieldId, documentId, orgId)
+  await BusinessField.deleteByIdForDocument(fieldId, documentId, orgId, options)
   // async, but don't wait for it
   cleanupFieldByType(field, orgId)
 }

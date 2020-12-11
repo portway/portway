@@ -24,6 +24,11 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
     sortProjects(sortBy, sortMethod)
   }, [sortBy, sortMethod, sortProjects])
 
+  // do an initial sort
+  useEffect(() => {
+    sortProjects(sortBy, sortMethod)
+  }, [])
+
   const { data: { projects }, loading } = useDataService(dataMapper.projects.list(page, sortBy, sortMethod), [sortBy, sortMethod])
   const { data: organization } = useDataService(dataMapper.organizations.current())
   const history = useHistory()

@@ -25,6 +25,10 @@ async function createForProject(projectId, body) {
   }
 
   const createdDocument = await db.model(MODEL_NAME).create({ ...body, projectId })
+
+  // set updatedAt on the parent project, no need to wait for it
+  project.markUpdated()
+
   return publicFields(createdDocument)
 }
 
@@ -122,6 +126,10 @@ async function updateByIdForProject(id, projectId, orgId, body) {
   if (!document) throw ono({ code: 404 }, `Cannot update, document not found with id: ${id}`)
 
   const updatedDocument = await document.update(body)
+
+  // set updatedAt on the parent project, no need to wait for it
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+
   return publicFields(updatedDocument)
 }
 
@@ -132,6 +140,9 @@ async function deleteByIdForProject(id, projectId, orgId) {
   if (!document) throw ono({ code: 404 }, `Cannot delete, document not found with id: ${id}`)
 
   await document.destroy()
+
+  // set updatedAt on the parent project, no need to wait for it
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
 }
 
 async function findParentProjectByDocumentId(id, orgId) {
@@ -233,6 +244,19 @@ async function deleteAllForOrg(orgId, force = false) {
   })
 }
 
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   createForProject,
   updateByIdForProject,
@@ -245,5 +269,6 @@ export default {
   findByIdWithPublishedFields,
   findByIdWithFields,
   findById,
-  deleteAllForOrg
+  deleteAllForOrg,
+  deleteAllSoftDeletedBefore
 }

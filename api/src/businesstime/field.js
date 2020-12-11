@@ -5,7 +5,7 @@ import { Op } from 'sequelize'
 import { getDb } from '../db/dbConnector'
 import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
 import apiErrorTypes from '../constants/apiErrorTypes'
-import resourceTypes from '../constants/resourceTypes'
+import resourceTypes, { PROJECT_RESOURCE_TYPES } from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 
@@ -53,6 +53,9 @@ async function createForDocument(documentId, body) {
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
 
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+
   return await findByIdForDocument(createdField.id, documentId, orgId)
 }
 
@@ -78,7 +81,23 @@ async function findAllPublishedForDocument(documentId, orgId) {
   return fields.map(publicFields)
 }
 
+// Returns draft and published fields
 async function findAllForDocument(documentId, orgId) {
+  const db = getDb()
+  const include = getFieldValueInclude(db)
+  const fields = await db.model(MODEL_NAME).findAll({
+    where: {
+      documentId,
+      orgId
+    },
+    include
+  })
+
+  return fields.map(publicFields)
+}
+
+// Returns only draft fields
+async function findAllDraftForDocument(documentId, orgId) {
   const db = getDb()
   const include = getFieldValueInclude(db)
 
@@ -94,7 +113,6 @@ async function findAllForDocument(documentId, orgId) {
 
   return fields.map(publicFields)
 }
-
 
 async function findByIdForDocument(id, documentId, orgId) {
   const db = getDb()
@@ -132,10 +150,24 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
 
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+
   return await findByIdForDocument(field.id, documentId, orgId)
 }
 
-async function deleteByIdForDocument(id, documentId, orgId) {
+/**
+ * 
+ * @param {Number} id 
+ * @param {Number} documentId
+ * @param {Number} orgId
+ * @param {Object} options
+ * 
+ * options = {
+ *   deletePublished: true // ignores published status of field
+ * }
+ */
+async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
   const db = getDb()
 
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -148,16 +180,23 @@ async function deleteByIdForDocument(id, documentId, orgId) {
 
   if (!field) throw ono({ code: 404 }, `Cannot delete, field not found with id: ${id}`)
 
-  if (field.versionId) throw ono({ code: 403 }, `Field ${id} is published, cannot delete`)
+  if (field.versionId && options.deletePublished !== true) {
+    throw ono({ code: 403 }, `Field ${id} is published, cannot delete`)
+  }
 
   await field.destroy()
 
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
 
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+
   await normalizeFieldOrderAndGetCount(documentId, orgId)
 }
 
+// Note: this will _not_ clean up assets and other field artifacts, it only removes
+// the database fields. Use accordingly.
 async function deleteAllForDocument(documentId, orgId) {
   const db = getDb()
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -247,6 +286,9 @@ async function updateOrderById(id, documentId, orgId, newPosition) {
 
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
+
+  // another async chain we don't need to wait for, updatedAt gets set all the way up
+  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
 }
 
 export function getFieldValueInclude(db) {
@@ -292,7 +334,7 @@ function validateNumberPrecision(value) {
 }
 
 function getDefaultFieldValueByType(value, type) {
-  switch(type) {
+  switch (type) {
     case FIELD_TYPES.DATE:
       if (!value) {
         return (new Date()).toISOString() 
@@ -348,14 +390,30 @@ async function deleteAllForOrg(orgId, force = false) {
   })
 }
 
+// The field coordinator deletes any assets when the field is deleted
+async function deleteAllSoftDeletedBefore(timestamp) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: {
+      deletedAt: {
+        [Op.lte]: timestamp
+      }
+    },
+    force: true
+  })
+}
+
 export default {
   createForDocument,
   updateByIdForDocument,
   findByIdForDocument,
   findAllForDocument,
+  findAllDraftForDocument,
   findAllPublishedForDocument,
   deleteByIdForDocument,
   deleteAllForDocument,
   updateOrderById,
-  deleteAllForOrg
+  deleteAllForOrg,
+  deleteAllSoftDeletedBefore
 }
