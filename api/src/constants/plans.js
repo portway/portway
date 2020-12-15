@@ -1,3 +1,5 @@
+const { STRIPE_PER_USER_PLAN_ID } = process.env
+
 // These plan values _must_ match the Stripe subscription plans
 // and need to be updated in the client constants plans!
 export const PLANS = {
@@ -45,3 +47,26 @@ export const ORG_SUBSCRIPTION_STATUS = {
   TRIALING_PENDING_ACTIVE: 'TRIALING_PENDING_ACTIVE', //NO PARALLEL STRIPE API STATUS
   UNPAID: 'UNPAID'
 }
+
+export const PLAN_ID_MAP = {
+  [STRIPE_PER_USER_PLAN_ID]: 'PER_USER',
+  SINGLE_USER: 'SINGLE_USER',
+  SINGLE_USER_FREE: 'SINGLE_USER_FREE',
+  MULTI_USER: 'MULTI_USER',
+  MULTI_USER_FREE: 'MULTI_USER_FREE'
+}
+
+export const MULTI_USER_PLANS = [
+  PLANS.PER_USER,
+  PLANS.MULTI_USER,
+  PLANS.MULTI_USER_FREE
+]
+
+export const SINGLE_USER_PLANS = [
+  PLANS.SINGLE_USER,
+  PLANS.SINGLE_USER_FREE
+]
+
+export const SUBSCRIBABLE_PLANS = [
+  PLANS.PER_USER
+]

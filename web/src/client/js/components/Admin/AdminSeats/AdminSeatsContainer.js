@@ -29,6 +29,7 @@ const AdminSeatsContainer = ({ currentOrgId, errors, orgBilling, updateOrganizat
         totalSeats={orgBilling ? orgBilling.subscription.totalSeats : 0}
         updateOrganizationSeats={adminSeatAdjustmentHandler}
         usedSeats={orgBilling ? orgBilling.subscription.usedSeats : 0}
+        plan={orgBilling.plan}
       />
     </OrgPermission>
   )

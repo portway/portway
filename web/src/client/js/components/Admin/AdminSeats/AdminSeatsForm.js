@@ -8,6 +8,8 @@ import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
 import PopoverComponent from 'Components/Popover/PopoverComponent'
 
+import { PLAN_TYPES } from 'Shared/constants'
+
 import './_AdminSeatsForm.scss'
 
 const AdminSeatsForm = ({
@@ -20,6 +22,7 @@ const AdminSeatsForm = ({
   totalSeats,
   updateOrganizationSeats,
   usedSeats,
+  plan,
 }) => {
   const [newTotalSeats, setNewTotalSeats] = useState(totalSeats)
   const [validationError, setValidationError] = useState()
@@ -101,7 +104,10 @@ const AdminSeatsForm = ({
           <h3 className="admin-seats-form__title">Plan change summary</h3>
           <ul className="admin-seats-form__summary-list">
             <li className="admin-seats-form__summary-item">
-              Multi-user plan&nbsp;<b>w/ {includedSeats} users</b> <span className="admin-seats-form__summary-price">{flatCost}</span>
+              {plan === PLAN_TYPES.MULTI_USER ?
+                <>Multi-user plan&nbsp;<b>w/ {includedSeats} users</b></>:
+                <>Plan w/ 1 user</>}
+              <span className="admin-seats-form__summary-price">{flatCost}</span> 
             </li>
             <li className="admin-seats-form__summary-item">
               Additional seats:&nbsp;<b>{getAdditionalSeatCount()}</b> <span className="admin-seats-form__summary-price">{getAdditionalSeatsCost()}</span>

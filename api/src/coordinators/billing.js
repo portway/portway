@@ -5,7 +5,15 @@ import BusinessOrganization from '../businesstime/organization'
 import BusinessUser from '../businesstime/user'
 import { pick } from '../libs/utils'
 import { BILLING_PUBLIC_FIELDS } from '../constants/billingPublicFields'
-import { PLANS, MULTI_USER_DEFAULT_SEAT_COUNT, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+import {
+  PLANS,
+  STRIPE_STATUS,
+  ORG_SUBSCRIPTION_STATUS,
+  PLAN_ID_MAP,
+  MULTI_USER_PLANS,
+  SINGLE_USER_PLANS,
+  SUBSCRIBABLE_PLANS
+} from '../constants/plans'
 import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscription'
 import slackIntegrator from '../integrators/slack'
 import logger from '../integrators/logger'
@@ -13,14 +21,6 @@ import { LOG_LEVELS } from '../constants/logging'
 import { EnvironmentCredentials } from 'aws-sdk'
 
 const { STRIPE_PER_USER_PLAN_ID } = process.env
-
-const PLAN_ID_MAP = {
-  [STRIPE_PER_USER_PLAN_ID]: 'PER_USER',
-  SINGLE_USER: 'SINGLE_USER',
-  MULTI_USER: 'MULTI_USER',
-  SINGLE_USER_FREE: 'SINGLE_USER_FREE',
-  MULTI_USER_FREE: 'MULTI_USER_FREE'
-}
 
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
@@ -73,12 +73,12 @@ const formatBilling = (customer, userCount) => {
       subscription.includedSeats = 1
     }
 
-    if (billingSubscription.plan.id === PLANS.MULTI_USER) {
-      subscription.plan = PLANS.MULTI_USER
-      subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
-      subscription.includedSeats = billingSubscription.plan.tiers[0].up_to
-      subscription.additionalSeatCost = billingSubscription.plan.tiers[1].unit_amount
-    }
+    // if (billingSubscription.plan.id === PLANS.MULTI_USER) {
+    //   subscription.plan = PLANS.MULTI_USER
+    //   subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
+    //   subscription.includedSeats = billingSubscription.plan.tiers[0].up_to
+    //   subscription.additionalSeatCost = billingSubscription.plan.tiers[1].unit_amount
+    // }
 
     if (billingSubscription.plan.id === STRIPE_PER_USER_PLAN_ID) {
       subscription.plan = PLANS.PER_USER
@@ -93,6 +93,10 @@ const formatBilling = (customer, userCount) => {
 
 const subscribeOrgToPlan = async function(planId, orgId) {
   let seats
+
+  if (!SUBSCRIBABLE_PLANS.includes(planId)) {
+    ono({ code: 409, publicMessage: 'This plan is no longer active' }, `Cannot subscribe org: ${orgId} to plan, ${planId} is not subscribable`)
+  }
 
   const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
 
@@ -111,7 +115,7 @@ const subscribeOrgToPlan = async function(planId, orgId) {
   const subscriptionId = currentSubscription && currentSubscription.id
   const currentPlanId = currentSubscription && currentSubscription.plan.id
 
-  if (planId === PLANS.SINGLE_USER && currentPlanId === PLANS.MULTI_USER) {
+  if (SINGLE_USER_PLANS.includes(planId) && MULTI_USER_PLANS.includes(currentPlanId)) {
     const message = 'Cannot downgrade from multi user to single user plan'
     throw ono({ code: 409, publicMessage: message, errorDetails: [{ key: 'plan', message }] }, message)
   }
@@ -121,9 +125,10 @@ const subscribeOrgToPlan = async function(planId, orgId) {
     return
   }
 
-  if (planId === PLANS.MULTI_USER) {
-    seats = MULTI_USER_DEFAULT_SEAT_COUNT
-  }
+  // TODO: delete, no longer allowing subscription to multi user plans
+  // if (planId === PLANS.MULTI_USER) {
+  //   seats = MULTI_USER_DEFAULT_SEAT_COUNT
+  // }
 
   await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId, seats, subscriptionId, orgId })
 }
@@ -151,16 +156,21 @@ const updatePlanSeats = async function(seats, orgId) {
 
   const subscriptionId = currentSubscription.id
   const currentSeats = currentSubscription.items.data[0].quantity
-  const currentPlanId = currentSubscription.plan.id
+  const currentPlanId = PLAN_ID_MAP[currentSubscription.plan.id]
+  const orgSubscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
 
-  if (currentPlanId === PLANS.SINGLE_USER) {
+  if (!MULTI_USER_PLANS.includes(currentPlanId)) {
     const publicMessage = 'Cannot set seats on a single user plan'
     throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
-  // make sure user is a free multi-user, or active before allowing them to add seats
-  if (currentPlanId !== PLANS.MULTI_USER_FREE && currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
+  if (orgSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
     const publicMessage = 'Cannot add seats on a trial plan'
+    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
+  }
+
+  if (currentPlanId === PLANS.MULTI_USER_FREE) {
+    const publicMessage = 'Cannot add seats on a free plan'
     throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
@@ -176,7 +186,15 @@ const updatePlanSeats = async function(seats, orgId) {
     throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
   }
 
-  const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId })
+  // default to false for ending the trial
+  let endTrial = false
+
+  //they're on a per user plan, but might be trialing, if they're upgrading to more than 1 user, go ahead and end the trial
+  if (currentPlanId === PLANS.PER_USER && seats > 1) {
+    endTrial = true
+  }
+
+  const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId, endTrial })
 
   return subscription.items.data[0].quantity
 }
@@ -227,9 +245,7 @@ const getOrgBilling = async function(orgId) {
   return formatBilling(customer, userCount)
 }
 
-const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId }) {
-  const endTrial = planId === PLANS.MULTI_USER
-
+const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId, endTrial = false }) {
   const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial })
 
   await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)

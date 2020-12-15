@@ -44,7 +44,7 @@ async function createUserAndOrganization(name, email) {
   } catch (e) {
     logger(LOG_LEVELS.ERROR, e)
   }
-  console.log(STRIPE_PER_USER_PLAN_ID)
+
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
     planId: STRIPE_PER_USER_PLAN_ID,

@@ -13,6 +13,7 @@ const AdminSeatsComponent = ({
   totalSeats,
   updateOrganizationSeats,
   usedSeats,
+  plan
 }) => {
   const [manageMode, setManageMode] = useState(false)
   useEffect(() => {
@@ -53,6 +54,7 @@ const AdminSeatsComponent = ({
           totalSeats={totalSeats}
           updateOrganizationSeats={updateOrganizationSeats}
           usedSeats={usedSeats}
+          plan={plan}
         />
       }
     </div>
