@@ -7,6 +7,7 @@ import { ORGANIZATION_ROLE_IDS } from 'Shared/constants'
 import { updateOrganizationSeats } from 'Actions/organization'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminSeatsComponent from './AdminSeatsComponent'
+import { ADDITIONAL_SEAT_COST } from 'Shared/constants'
 
 const AdminSeatsContainer = ({ currentOrgId, errors, orgBilling, updateOrganizationSeats }) => {
   if (!orgBilling) return null
@@ -17,11 +18,11 @@ const AdminSeatsContainer = ({ currentOrgId, errors, orgBilling, updateOrganizat
     const newSeatNumber = Number(value)
     updateOrganizationSeats(formId, currentOrgId, { seats: newSeatNumber })
   }
-
+  // TODO: pull additional seat cost from orgBilling.subscription.additionalSeatCost  when we no longer have users on SINGLE_USER or SINGLE_USER trialing plans
   return (
     <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
       <AdminSeatsComponent
-        additionalSeatCost={orgBilling ? orgBilling.subscription.additionalSeatCost / 100 : 0}
+        additionalSeatCost={ADDITIONAL_SEAT_COST / 100 }
         errors={errors}
         flatCost={orgBilling ? orgBilling.subscription.flatCost / 100 : 0}
         formId={formId}

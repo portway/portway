@@ -237,6 +237,8 @@ module.exports = {
   MULTI_USER_PLAN_TYPES: MULTI_USER_PLAN_TYPES,
   PRICING: PRICING,
   TRIALING_STATUSES,
+  // TODO: remove when we are pulling from stripe data again
+  ADDITIONAL_SEAT_COST: 1000,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support

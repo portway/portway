@@ -24,17 +24,12 @@ const AdminBillingComponent = ({ organization }) => {
   return (
     <>
       <AdminNoticesContainer />
-      <section id="plans" className={`section--plans${sectionClasses}`}>
-        <AdminPlanSelectorContainer />
-      </section>
       <hr />
-      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
         <section id="seats" className={sectionClasses}>
           <h2>Manage seats</h2>
           <AdminSeatsContainer />
         </section>
-        <hr />
-      </OrgPlanPermission>
+      <hr />
       {/* null is a special case for seed org */}
       <OrgPlanPermission acceptedPlans={[null, PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER, PLAN_TYPES.PER_USER]}>
         <section id="payment" className={sectionClasses}>
