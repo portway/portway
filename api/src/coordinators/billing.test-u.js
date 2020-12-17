@@ -2,7 +2,7 @@ import billingCoordinator from './billing'
 import stripeIntegrator from '../integrators/stripe'
 import BusinessOrganization from '../businesstime/organization'
 import BusinessUser from '../businesstime/user'
-import { PLANS, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+import { PLANS, STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS, PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP } from '../constants/plans'
 import * as orgSubscription from '../libs/orgSubscription'
 
 jest.mock('../integrators/stripe')
@@ -22,7 +22,7 @@ describe('billing coordinator', () => {
     const customerId = 'not-a-real-customer-id'
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
-    const planId = PLANS.SINGLE_USER
+    const planId = PLANS.PER_USER
     const mockCurrentSeatCount = 1
     let resolvedValue
     const mockSubscription = {
@@ -44,7 +44,7 @@ describe('billing coordinator', () => {
           ]
         }
       })
-      resolvedValue = await billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
+      resolvedValue = await billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId)
     })
 
     it('should call BusinessOrganization.findById with the passed in org id', () => {
@@ -64,7 +64,7 @@ describe('billing coordinator', () => {
     describe('when there is no stripeId on the org', () => {
       it('should throw an error with status code 409 ', async () => {
         BusinessOrganization.findById.mockClear()
-        await expect(billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId ))
+        await expect(billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId ))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
@@ -73,18 +73,18 @@ describe('billing coordinator', () => {
       it('should throw an error with status code 409 ', async () => {
         BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockImplementationOnce(() => {})
-        await expect(billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId))
+        await expect(billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
 
-    describe('when trying to change plans from multi user to single user', () => {
+    describe('when trying to change plans from per user to single user', () => {
       it('should throw an error', async () => {
         BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockReturnValueOnce({
           id: customerId,
           subscriptions: {
-            data: [{ ...mockSubscription, plan: { id: PLANS.MULTI_USER } }]
+            data: [{ ...mockSubscription, plan: { id: PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.PER_USER] } }]
           }
         })
         await expect(
@@ -103,13 +103,13 @@ describe('billing coordinator', () => {
             data: [
               {
                 ...mockSubscription,
-                plan: { id: PLANS.MULTI_USER },
+                plan: { id: PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.PER_USER] },
                 items: { data: [{ quantity: 7 }] }
               }
             ]
           }
         })
-        await billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
+        await billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId)
         expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(0)
       })
     })
@@ -119,7 +119,7 @@ describe('billing coordinator', () => {
     const customerId = 'not-a-real-customer-id'
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
-    const planId = PLANS.MULTI_USER
+    const planId = PLANS.PER_USER
     const mockCurrentSeatCount = 1
     const newSeatCount = 6
     let resolvedValue
@@ -161,10 +161,11 @@ describe('billing coordinator', () => {
       expect(BusinessUser.countAll.mock.calls[0][0]).toBe(orgId)
     })
 
-    it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, and orgId', () => {
+    it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, the PER_USER planId, and orgId', () => {
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual({
         orgId,
+        planId: PLANS.PER_USER,
         customerId,
         seats: newSeatCount,
         subscriptionId
@@ -179,7 +180,7 @@ describe('billing coordinator', () => {
       it('should throw an error with status code 409 ', async () => {
         BusinessOrganization.findById.mockClear()
         await expect(
-          billingCoordinator.subscribeOrgToPlan(PLANS.MULTI_USER, orgId)
+          billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId)
         ).rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
@@ -454,7 +455,7 @@ describe('billing coordinator', () => {
 
   describe('#createOrUpdateOrgSubscription', () => {
     const customerId = 'not-a-real-customer-id'
-    const planId = PLANS.MULTI_USER
+    const planId = PLANS.PER_USER
     const trialPeriodDays = 10
     const seats = 7
     const subscriptionId = 'not-a-real-subscription-id'
@@ -466,7 +467,7 @@ describe('billing coordinator', () => {
       resolvedValue = await createOrUpdateOrgSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId })
     })
 
-    it('should call stripeIntegrator.createOrUpdateSubscription with the passed in data and endTrial: true for the MULTI_USER plan', async () => {
+    it('should call stripeIntegrator.createOrUpdateSubscription with the passed in data and endTrial: true for the PER_USER plan', async () => {
       expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
       expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true }))
     })

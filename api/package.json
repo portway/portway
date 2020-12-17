@@ -8,8 +8,8 @@
     "start": "NODE_ENV=production node ./dist/server.js",
     "babel-node": "babel-node",
     "test": "npm run test-u && npm run test-i",
-    "test-i": "jest 'src/.*\\.test-(i)\\.js$' -i",
-    "test-u": "jest 'src/.*\\.test-(u)\\.js$'",
+    "test-i": "jest --config ./config/jest.config.js' 'src/.*\\.test-(i)\\.js$' -i",
+    "test-u": "jest --config './config/jest.config.js' 'src/.*\\.test-(u)\\.js$'",
     "lint": "eslint src",
     "migrate": "sequelize db:migrate",
     "compile-email": "mjml ./src/templates/email/mjml/*.mjml -o ./src/templates/email/ejs/"
@@ -83,10 +83,5 @@
     "stripe": "^6.23.1",
     "uuid": "^3.3.2",
     "yazl": "^2.5.1"
-  },
-  "jest": {
-    "testRegex": "src/.*\\.test-(u|a|i)\\.js$",
-    "verbose": true,
-    "testEnvironment": "node"
   }
 }

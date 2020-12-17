@@ -1,3 +1,5 @@
+import { reverseObject } from '../libs/utils'
+
 const { STRIPE_PER_USER_PLAN_ID } = process.env
 
 // These plan values _must_ match the Stripe subscription plans
@@ -18,7 +20,8 @@ export const PLAN_ASSET_STORAGE_BYTES = {
   [PLANS.SINGLE_USER]: 1e10,
   [PLANS.SINGLE_USER_FREE]: 1e10,
   [PLANS.MULTI_USER]: 1e10,
-  [PLANS.MULTI_USER_FREE]: 1e10
+  [PLANS.MULTI_USER_FREE]: 1e10,
+  [PLANS.PER_USER]: 1e10
 }
 
 // These come directly from stripe on subscription.status
@@ -48,13 +51,15 @@ export const ORG_SUBSCRIPTION_STATUS = {
   UNPAID: 'UNPAID'
 }
 
-export const PLAN_ID_MAP = {
+export const STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP = {
   [STRIPE_PER_USER_PLAN_ID]: 'PER_USER',
   SINGLE_USER: 'SINGLE_USER',
   SINGLE_USER_FREE: 'SINGLE_USER_FREE',
   MULTI_USER: 'MULTI_USER',
   MULTI_USER_FREE: 'MULTI_USER_FREE'
 }
+
+export const PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP = reverseObject(STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP)
 
 export const MULTI_USER_PLANS = [
   PLANS.PER_USER,

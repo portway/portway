@@ -9,7 +9,8 @@ import {
   PLANS,
   STRIPE_STATUS,
   ORG_SUBSCRIPTION_STATUS,
-  PLAN_ID_MAP,
+  STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP,
+  PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP,
   MULTI_USER_PLANS,
   SINGLE_USER_PLANS,
   SUBSCRIBABLE_PLANS
@@ -18,7 +19,6 @@ import { getOrgSubscriptionStatusFromStripeCustomer } from '../libs/orgSubscript
 import slackIntegrator from '../integrators/slack'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
-import { EnvironmentCredentials } from 'aws-sdk'
 
 const { STRIPE_PER_USER_PLAN_ID } = process.env
 
@@ -43,6 +43,7 @@ const formatBilling = (customer, userCount) => {
   }
 
   const billingSubscription = customer.subscriptions.data[0]
+  const portwayPlanId = STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[billingSubscription.plan.id]
 
   const subscription = {
     status: null,
@@ -67,7 +68,7 @@ const formatBilling = (customer, userCount) => {
     subscription.totalSeats = billingSubscription.items.data[0].quantity
     subscription.usedSeats = userCount
 
-    if (billingSubscription.plan.id === PLANS.SINGLE_USER) {
+    if (portwayPlanId === PLANS.SINGLE_USER) {
       subscription.plan = PLANS.SINGLE_USER
       subscription.flatCost = billingSubscription.plan.amount
       subscription.includedSeats = 1
@@ -80,7 +81,7 @@ const formatBilling = (customer, userCount) => {
     //   subscription.additionalSeatCost = billingSubscription.plan.tiers[1].unit_amount
     // }
 
-    if (billingSubscription.plan.id === STRIPE_PER_USER_PLAN_ID) {
+    if (portwayPlanId === PLANS.PER_USER) {
       subscription.plan = PLANS.PER_USER
       subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
       subscription.includedSeats = billingSubscription.plan.tiers[0].up_to
@@ -95,7 +96,7 @@ const subscribeOrgToPlan = async function(planId, orgId) {
   let seats
 
   if (!SUBSCRIBABLE_PLANS.includes(planId)) {
-    ono({ code: 409, publicMessage: 'This plan is no longer active' }, `Cannot subscribe org: ${orgId} to plan, ${planId} is not subscribable`)
+    throw ono({ code: 409, publicMessage: 'This plan is no longer active' }, `Cannot subscribe org: ${orgId} to plan, ${planId} is not subscribable`)
   }
 
   const billingError = ono({ code: 409, publicMessage: 'No billing information for organization' }, `Cannot subscribe to plan, organization: ${orgId} does not have saved billing information`)
@@ -113,7 +114,8 @@ const subscribeOrgToPlan = async function(planId, orgId) {
 
   const currentSubscription = customer.subscriptions.data[0]
   const subscriptionId = currentSubscription && currentSubscription.id
-  const currentPlanId = currentSubscription && currentSubscription.plan.id
+  // this is coming back as an environment dependent stripe plan id, convert to portway plan type
+  const currentPlanId = currentSubscription && STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[currentSubscription.plan.id]
 
   if (SINGLE_USER_PLANS.includes(planId) && MULTI_USER_PLANS.includes(currentPlanId)) {
     const message = 'Cannot downgrade from multi user to single user plan'
@@ -121,6 +123,9 @@ const subscribeOrgToPlan = async function(planId, orgId) {
   }
 
   //nothing is changing, return success and move on without updating stripe
+  console.log("HEHEHEHEHEHEHHEHEHEHEHEHE")
+  console.log(planId, currentPlanId)
+  console.log(currentSubscription)
   if (planId === currentPlanId) {
     return
   }
@@ -156,13 +161,8 @@ const updatePlanSeats = async function(seats, orgId) {
 
   const subscriptionId = currentSubscription.id
   const currentSeats = currentSubscription.items.data[0].quantity
-  const currentPlanId = PLAN_ID_MAP[currentSubscription.plan.id]
+  const currentPlanId = STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[currentSubscription.plan.id]
   const orgSubscriptionStatus = getOrgSubscriptionStatusFromStripeCustomer(customer)
-
-  if (!MULTI_USER_PLANS.includes(currentPlanId)) {
-    const publicMessage = 'Cannot set seats on a single user plan'
-    throw ono({ code: 409, errorDetails: [{ key: 'seats', message: publicMessage }] }, publicMessage)
-  }
 
   if (orgSubscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
     const publicMessage = 'Cannot add seats on a trial plan'
@@ -189,12 +189,20 @@ const updatePlanSeats = async function(seats, orgId) {
   // default to false for ending the trial
   let endTrial = false
 
-  //they're on a per user plan, but might be trialing, if they're upgrading to more than 1 user, go ahead and end the trial
-  if (currentPlanId === PLANS.PER_USER && seats > 1) {
+  // they're on a per user or single user plan (the only two plans they could possibly have for a trial)
+  // but might be trialing, if they're upgrading to more than 1 user,
+  // go ahead and end the trial
+  if (
+    (currentPlanId === PLANS.PER_USER || currentPlanId === PLANS.SINGLE_USER)
+    && seats > 1) {
     endTrial = true
   }
 
-  const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, seats, subscriptionId, orgId, endTrial })
+  // everyone gets on the per user plan as soon as they add another user
+  // TODO: remove when we no longer have any SINGLE_USER plan users
+  const plan = STRIPE_PER_USER_PLAN_ID
+
+  const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ planId: plan, customerId: customer.id, seats, subscriptionId, orgId, endTrial })
 
   return subscription.items.data[0].quantity
 }
@@ -220,7 +228,7 @@ const updateOrgBilling = async function(token, orgId) {
     await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: STRIPE_PER_USER_PLAN_ID, orgId })
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
-    const currentPlan = currentSubscription.plan.id
+    const currentPlan = STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[currentSubscription.plan.id]
     await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: currentPlan, subscriptionId: currentSubscription.id, orgId })
   }
 
@@ -246,7 +254,9 @@ const getOrgBilling = async function(orgId) {
 }
 
 const createOrUpdateOrgSubscription = async function({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId, endTrial = false }) {
-  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial })
+  const stripePlanId = PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[planId]
+
+  const updatedSubscription = await stripeIntegrator.createOrUpdateSubscription({ customerId, planId: stripePlanId, trialPeriodDays, seats, subscriptionId, endTrial })
 
   await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(orgId)
 
@@ -309,11 +319,13 @@ const fetchCustomerAndSetSubscriptionDataOnOrg = async function(orgId) {
     slackIntegrator.sendNotification(`Organization: ${org.name} has canceled their Portway account`)
   }
 
-  const plan = customer.subscriptions.data[0] && customer.subscriptions.data[0].plan.id
+  const subscription = customer.subscriptions.data[0]
+  const plan = subscription && subscription.plan.id
 
   // if the customer is subscribed to a plan, go ahead and update it to the current value
+  // we want the publicly visible portway plan string here, not the plan id from stripe
   if (plan) {
-    orgUpdateData.plan = PLAN_ID_MAP[plan]
+    orgUpdateData.plan = STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[plan]
   }
 
   await BusinessOrganization.updateById(orgId, orgUpdateData)
