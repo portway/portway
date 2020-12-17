@@ -161,14 +161,15 @@ describe('billing coordinator', () => {
       expect(BusinessUser.countAll.mock.calls[0][0]).toBe(orgId)
     })
 
-    it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, the PER_USER planId, and orgId', () => {
+    it('should call billingCoordinator.createOrUpdateOrgSubscription with customerId, new seat count, subscription id, the PER_USER planId, endTrial, and orgId', () => {
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual({
         orgId,
         planId: PLANS.PER_USER,
         customerId,
         seats: newSeatCount,
-        subscriptionId
+        subscriptionId,
+        endTrial: true
       })
     })
 

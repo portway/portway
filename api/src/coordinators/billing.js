@@ -20,8 +20,6 @@ import slackIntegrator from '../integrators/slack'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 
-const { STRIPE_PER_USER_PLAN_ID } = process.env
-
 const formatBilling = (customer, userCount) => {
   const publicBillingFields = pick(customer, BILLING_PUBLIC_FIELDS)
   const billingSource = customer.sources.data[0]
@@ -123,9 +121,6 @@ const subscribeOrgToPlan = async function(planId, orgId) {
   }
 
   //nothing is changing, return success and move on without updating stripe
-  console.log("HEHEHEHEHEHEHHEHEHEHEHEHE")
-  console.log(planId, currentPlanId)
-  console.log(currentSubscription)
   if (planId === currentPlanId) {
     return
   }
@@ -200,7 +195,7 @@ const updatePlanSeats = async function(seats, orgId) {
 
   // everyone gets on the per user plan as soon as they add another user
   // TODO: remove when we no longer have any SINGLE_USER plan users
-  const plan = STRIPE_PER_USER_PLAN_ID
+  const plan = PLANS.PER_USER
 
   const subscription = await billingCoordinator.createOrUpdateOrgSubscription({ planId: plan, customerId: customer.id, seats, subscriptionId, orgId, endTrial })
 
