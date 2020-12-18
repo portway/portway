@@ -137,6 +137,7 @@ const updatePlanSeats = async function(seats, orgId) {
   const billingError = ono({ code: 409, errorDetails: [{ key: 'seats', message: 'No billing information for organization' }] }, `Cannot update plan seats, organization: ${orgId} does not have saved billing information`)
 
   const org = await BusinessOrganization.findById(orgId)
+
   if (!org.stripeId) {
     throw billingError
   }
@@ -219,8 +220,8 @@ const updateOrgBilling = async function(token, orgId) {
   const currentSubscription = customer.subscriptions.data[0]
 
   if (!currentSubscription) {
-    // Somehow the user doesn't have a subscription yet, they now have billing info saved, give them a single user one
-    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: STRIPE_PER_USER_PLAN_ID, orgId })
+    // Somehow the user doesn't have a subscription yet, they now have billing info saved, give them a per user one
+    await billingCoordinator.createOrUpdateOrgSubscription({ customerId: customer.id, planId: PLANS.PER_USER, orgId })
   } else if (currentSubscription.status !== STRIPE_STATUS.ACTIVE) {
     // User is trialing, or has a payment issue, re-subscribe them to their current plan
     const currentPlan = STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[currentSubscription.plan.id]

@@ -22,7 +22,7 @@ describe('billing coordinator', () => {
     const customerId = 'not-a-real-customer-id'
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
-    const planId = PLANS.PER_USER
+    const planId = PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.PER_USER]
     const mockCurrentSeatCount = 1
     let resolvedValue
     const mockSubscription = {
@@ -64,6 +64,7 @@ describe('billing coordinator', () => {
     describe('when there is no stripeId on the org', () => {
       it('should throw an error with status code 409 ', async () => {
         BusinessOrganization.findById.mockClear()
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId: null })
         await expect(billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId ))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
@@ -78,15 +79,8 @@ describe('billing coordinator', () => {
       })
     })
 
-    describe('when trying to change plans from per user to single user', () => {
+    describe('when trying to subscribe to an unsubscribable plan', () => {
       it('should throw an error', async () => {
-        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
-        stripeIntegrator.getCustomer.mockReturnValueOnce({
-          id: customerId,
-          subscriptions: {
-            data: [{ ...mockSubscription, plan: { id: PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.PER_USER] } }]
-          }
-        })
         await expect(
           billingCoordinator.subscribeOrgToPlan(PLANS.SINGLE_USER, orgId)
         ).rejects.toEqual(expect.objectContaining({ code: 409 }))
@@ -119,7 +113,7 @@ describe('billing coordinator', () => {
     const customerId = 'not-a-real-customer-id'
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
-    const planId = PLANS.PER_USER
+    const planId = PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.PER_USER]
     const mockCurrentSeatCount = 1
     const newSeatCount = 6
     let resolvedValue
@@ -178,11 +172,10 @@ describe('billing coordinator', () => {
     })
 
     describe('when there is no stripeId on the org', () => {
-      it('should throw an error with status code 409 ', async () => {
-        BusinessOrganization.findById.mockClear()
-        await expect(
-          billingCoordinator.subscribeOrgToPlan(PLANS.PER_USER, orgId)
-        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
+      it('should throw an error with status code 409', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId: null })
+        await expect(billingCoordinator.updatePlanSeats(newSeatCount, orgId))
+          .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
     })
 
@@ -190,27 +183,6 @@ describe('billing coordinator', () => {
       it('should throw an error with status code 409 ', async () => {
         BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockImplementationOnce(() => {})
-        await expect(
-          billingCoordinator.updatePlanSeats(newSeatCount, orgId)
-        ).rejects.toEqual(expect.objectContaining({ code: 409 }))
-      })
-    })
-
-    describe('when trying to change seat count on a single user plan', () => {
-      it('should throw an error with status code 409 ', async () => {
-        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
-        stripeIntegrator.getCustomer.mockReturnValueOnce({
-          id: customerId,
-          subscriptions: {
-            data: [
-              {
-                id: subscriptionId,
-                plan: { id: PLANS.SINGLE_USER },
-                items: { data: [{ quantity: 1 }] }
-              }
-            ]
-          }
-        })
         await expect(billingCoordinator.updatePlanSeats(newSeatCount, orgId))
           .rejects.toEqual(expect.objectContaining({ code: 409 }))
       })
@@ -249,6 +221,7 @@ describe('billing coordinator', () => {
 
     describe('when the org has a stripeId', () => {
       it('should call stripeIntegrator.updateCustomer with the stripe ID and the passed in token', async () => {
+        stripeIntegrator.updateCustomer.mockClear()
         const stripeId = '1234abcd'
         BusinessOrganization.findById.mockImplementationOnce(() => {
           return { stripeId }
@@ -292,23 +265,24 @@ describe('billing coordinator', () => {
         await billingCoordinator.updateOrgBilling(token, orgId)
       })
 
-      it('should call billingCoordinator.createOrUpdateOrgSubscription with the customerId, orgId, and SINGLE_USER planId', () => {
+      it('should call billingCoordinator.createOrUpdateOrgSubscription with the customerId, orgId, and PER_USER planId', () => {
         expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
         expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({
           customerId,
           orgId,
-          planId: PLANS.SINGLE_USER
+          planId: PLANS.PER_USER
         }))
       })
     })
 
     describe('when the org has a subscription, but it is not active', () => {
       const customerId = 'not-a-real-customer-id'
-      const currentPlanId = 'not-a-real-plan-id'
+      const currentPlanId = PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.PER_USER]
+      const subscriptionId = 'not-a-real-subscription-id'
 
       beforeAll(async () => {
         billingCoordinator.createOrUpdateOrgSubscription.mockClear()
-        stripeIntegrator.createCustomer.mockReturnValueOnce({ id: customerId, subscriptions: { data: [{ plan: { id: currentPlanId } }] } })
+        stripeIntegrator.createCustomer.mockReturnValueOnce({ id: customerId, subscriptions: { data: [{ id: subscriptionId, plan: { id: currentPlanId } }] } })
         await billingCoordinator.updateOrgBilling(token, orgId)
       })
 
@@ -317,7 +291,8 @@ describe('billing coordinator', () => {
         expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({
           customerId,
           orgId,
-          planId: currentPlanId
+          planId: PLANS.PER_USER,
+          subscriptionId
         }))
       })
     })
@@ -367,7 +342,7 @@ describe('billing coordinator', () => {
     const customerId = 'not-a-real-customer-id'
     const stripeId = '1234abcd'
     const subscriptionId = 'not-a-real-subscription-id'
-    const planId = PLANS.SINGLE_USER
+    const planId = PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.SINGLE_USER]
     const mockCurrentSeatCount = 1
     let resolvedValue
     const mockSubscription = {
@@ -386,9 +361,10 @@ describe('billing coordinator', () => {
     beforeAll(async () => {
       BusinessOrganization.findById.mockClear()
       BusinessOrganization.updateById.mockClear()
-      BusinessOrganization.findById.mockReturnValue({ stripeId })
+      BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
       stripeIntegrator.getCustomer.mockClear()
-      stripeIntegrator.getCustomer.mockReturnValue(mockCustomer)
+      stripeIntegrator.getCustomer.mockReturnValueOnce(mockCustomer)
+      orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mockClear()
       resolvedValue = await billingCoordinator.cancelAccount(orgId)
     })
 
@@ -407,7 +383,7 @@ describe('billing coordinator', () => {
       expect(stripeIntegrator.cancelSubscriptionAtPeriodEnd.mock.calls[0][0]).toBe(mockSubscription.id)
     })
 
-    it('should call getOrgSubscriptionStatusFromStripeCustomer with the customer', async () => {
+    it('should call getOrgSubscriptionStatusFromStripeCustomer with the customer', () => {
       expect(orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mock.calls.length).toBe(1)
       expect(orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mock.calls[0][0]).toBe(mockCustomer)
     })
@@ -445,6 +421,7 @@ describe('billing coordinator', () => {
       }
 
       it('should call stripeIntegrator.cancelSubscription with the current subscription id', async () => {
+        BusinessOrganization.findById.mockReturnValueOnce({ stripeId })
         stripeIntegrator.getCustomer.mockReturnValueOnce({ subscriptions: { data: [mockSubscription] } })
         orgSubscription.getOrgSubscriptionStatusFromStripeCustomer.mockReturnValueOnce(ORG_SUBSCRIPTION_STATUS.TRIALING)
         await billingCoordinator.cancelAccount(orgId)
@@ -456,21 +433,22 @@ describe('billing coordinator', () => {
 
   describe('#createOrUpdateOrgSubscription', () => {
     const customerId = 'not-a-real-customer-id'
-    const planId = PLANS.PER_USER
+    const portwayPlanId = PLANS.PER_USER
     const trialPeriodDays = 10
     const seats = 7
     const subscriptionId = 'not-a-real-subscription-id'
     const orgId = 999
+    const endTrial = true
     let resolvedValue
 
     beforeAll(async () => {
       billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg.mockClear()
-      resolvedValue = await createOrUpdateOrgSubscription({ customerId, planId, trialPeriodDays, seats, subscriptionId, orgId })
+      resolvedValue = await createOrUpdateOrgSubscription({ customerId, planId: portwayPlanId, trialPeriodDays, seats, subscriptionId, orgId, endTrial })
     })
 
-    it('should call stripeIntegrator.createOrUpdateSubscription with the passed in data and endTrial: true for the PER_USER plan', async () => {
+    it('should call stripeIntegrator.createOrUpdateSubscription with the passed in data and the corresponding stripe plan id', async () => {
       expect(stripeIntegrator.createOrUpdateSubscription.mock.calls.length).toBe(1)
-      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({ customerId, planId, trialPeriodDays, seats, subscriptionId, endTrial: true }))
+      expect(stripeIntegrator.createOrUpdateSubscription.mock.calls[0][0]).toEqual(expect.objectContaining({ customerId, planId: PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[portwayPlanId], trialPeriodDays, seats, subscriptionId, endTrial }))
     })
 
     it('should call billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg with the passed in org id', () => {
@@ -488,7 +466,7 @@ describe('billing coordinator', () => {
     const stripeId = 'not-a-real-stripe-id'
     const customerId = 'not-a-real-customerId'
     const subscriptionId = 'not-a-real-subscription-id'
-    const planId = PLANS.SINGLE_USER
+    const planId = PORTWAY_PLAN_TO_STRIPE_PLAN_ID_MAP[PLANS.SINGLE_USER]
     const mockCurrentSeatCount = 1
     const subscriptionStatus = STRIPE_STATUS.ACTIVE
     let resolvedValue
