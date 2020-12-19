@@ -94,6 +94,12 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.redis-url
+        - name: STRIPE_PER_USER_PLAN_ID
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.stripe-per-user-plan-id
+              optional: true
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
