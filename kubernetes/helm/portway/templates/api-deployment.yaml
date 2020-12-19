@@ -99,6 +99,7 @@ spec:
             configMapKeyRef:
               name: api-config
               key: api.stripe-per-user-plan-id
+              optional: true
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
