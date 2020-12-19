@@ -17,6 +17,7 @@ items:
     api.logger: {{ .Values.api.logger | quote }}
     api.redis-url: {{ printf "redis://%s-redis-service:%s" .Release.Name .Values.redis.port }}
     api.slack-webhook-url: {{ .Values.slackWebhookUrl | quote }}
+    api.stripe-per-user-plan-id: {{ .Values.stripePerUserPlanId | quote }}
   kind: ConfigMap
   metadata:
     name: api-config
