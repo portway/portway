@@ -51,6 +51,7 @@ Make sure people know they need to update their local .env with the new value!
 **REDIS_URL**: The url to the redis instance. Optionally used for rate-limiting. Uses in-memory store if not set
 **SLACK_WEBHOOK_URL**: The url to use with the slack webhook api, for posting notifications to the portway-support slack channel  
 **PORTWAY_INTRO_PROJECT_READ_KEY**: A Portway API key for the intro project. Needs read permissions. Project is copied to new users org to introduce them to Portway.
+**STRIPE_PER_USER_PLAN_ID**: The stripe-generated price/plan id for the per-user plan
 
 # Web Environment Variables
 **STRIPE_PUBLISHABLE_KEY**: The publishable key from Stripe. Used to manage subscriptions and collect payment info.  
