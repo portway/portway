@@ -1,4 +1,5 @@
 import { ActionTypes } from '../actions'
+import moment from 'moment'
 
 const initialState = {
   currentDocumentId: null,
@@ -192,7 +193,7 @@ export const documents = (state = initialState, action) => {
     case ActionTypes.RECEIVE_UPDATED_FIELD:
     case ActionTypes.REMOVE_FIELD: {
       const documentToUpdate = { ...state.projectDocumentsById[action.projectId][action.documentId] }
-      documentToUpdate.updatedAt = Date.now()
+      documentToUpdate.updatedAt = moment().toISOString()
       const project = { ...state.projectDocumentsById[action.projectId], [action.documentId]: documentToUpdate }
       const projectDocumentsById = { ...state.projectDocumentsById, [action.projectId]: project }
       return {
