@@ -72,6 +72,7 @@ const formatBilling = (customer, userCount) => {
       subscription.includedSeats = 1
     }
 
+    // TODO: delete, after we verify no one is on MULTI_USER plan
     // if (billingSubscription.plan.id === PLANS.MULTI_USER) {
     //   subscription.plan = PLANS.MULTI_USER
     //   subscription.flatCost = billingSubscription.plan.tiers[0].flat_amount
