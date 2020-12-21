@@ -10,7 +10,7 @@ const OrgPlanPermission = ({ children, elseRender, acceptedPlans = [] }) => {
   if (orgLoading || orgLoading == null) {
     return <>{null}</>
   }
-console.log(organization.plan)
+
   if (organization && acceptedPlans.includes(organization.plan)) {
     return (
       <>
