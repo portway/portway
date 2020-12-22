@@ -11,7 +11,7 @@ docsUrl: docs.dev.portway.app
 syncUrl: sync.dev.portway.app
 
 stripePublishableKey: "pk_test_1pwhBFZzMbjvUlsgn2EjsfWP"
-stripePerUserPlanId: "price_1HxKwEHlP3LXsG3t8mTp4Lep"
+stripePerUserPlanId: "PER_USER"
 
 apiImage: bonkeybong/portway_api
 apiTag: "1.4.0"
