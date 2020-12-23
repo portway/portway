@@ -8,7 +8,8 @@ import {
   PATH_ADMIN,
   PATH_PROJECTS,
   PRODUCT_NAME,
-  MULTI_USER_PLAN_TYPES
+  MULTI_USER_PLAN_TYPES,
+  ORG_SUBSCRIPTION_STATUS
 } from 'Shared/constants'
 import { TeamsIcon, OrganizationIcon, BillingIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
@@ -36,7 +37,7 @@ const AdminDashboardComponent = ({ organization, section }) => {
     [ADMIN_PATHS.USERS]: <AdminUsersContainer />,
     [ADMIN_PATHS.BILLING]: <AdminBillingContainer />,
     [ADMIN_PATHS.ORGANIZATION]: <AdminOrganizationContainer />,
-    default: MULTI_USER_PLAN_TYPES.includes(organization.plan) ? (
+    default: MULTI_USER_PLAN_TYPES.includes(organization.plan) && organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.ACTIVE ? (
       <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} />
     ) : (
       <Redirect to={`${PATH_ADMIN}/${ADMIN_PATHS.ORGANIZATION}`} />
@@ -60,7 +61,7 @@ const AdminDashboardComponent = ({ organization, section }) => {
       <main>
         <Panel>
           <PanelNavigation>
-            <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+            <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} aria-label="Users" isActive={isSubSection}>
                 <TeamsIcon width="22" height="22" /> <span className="label">Users</span>
               </NavLink>

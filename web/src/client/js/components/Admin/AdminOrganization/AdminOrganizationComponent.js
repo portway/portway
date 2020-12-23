@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { MULTI_USER_PLAN_TYPES } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import Form from 'Components/Form/Form'
 import FormField from 'Components/Form/FormField'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
@@ -38,7 +38,7 @@ const AdminOrganizationComponent = ({ errors, formId, organization, submitHandle
           required
           value={organization.name}
         />
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
           <FormField
             errors={errors.privacy}
             help={helpText}
