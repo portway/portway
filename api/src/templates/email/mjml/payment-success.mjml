@@ -61,7 +61,8 @@
       <mj-hero background-color="#FFA784">
         <mj-image align="center" width="75px" height="68px" src="https://www.portwaycontent.com/portway-marketing-assets/logo.png" />
         <mj-text align="center">
-          <h1>Payment Success</h1>
+          <h1>Payment Successful</h1>
+          <p>You've been charged <%= paymentAmount %></p>
         </mj-text>
       </mj-hero>
     </mj-wrapper>
