@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
-const OrgPermission = ({ children, elseRender, acceptedRoleIds = [], acceptedSettings = [], acceptedSubscriptionStatuses = [] }) => {
+const OrgPermission = ({ children, elseRender, acceptedRoleIds = [], acceptedSettings = [] }) => {
   const { data: currentUser, loading: userLoading } = useDataService(dataMapper.users.current())
   const { data: organization, loading: orgLoading } = useDataService(dataMapper.organizations.current())
 
@@ -25,14 +25,6 @@ const OrgPermission = ({ children, elseRender, acceptedRoleIds = [], acceptedSet
   }
 
   if (organization && acceptedSettings.some(flag => organization[flag])) {
-    return (
-      <>
-        {children}
-      </>
-    )
-  }
-
-  if (organization && acceptedSubscriptionStatuses.includes(organization.subscriptionStatus)) {
     return (
       <>
         {children}

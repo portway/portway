@@ -4,6 +4,7 @@ import cx from 'classnames'
 
 import { PLAN_TYPES, ORG_SUBSCRIPTION_STATUS, MULTI_USER_PLAN_TYPES } from 'Shared/constants'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
+import OrgPermission from 'Components/Permission/OrgPermission'
 import AdminNoticesContainer from 'Components/Admin/AdminNotices/AdminNoticesContainer'
 import AdminPlanSelectorContainer from 'Components/Admin/AdminPlanSelector/AdminPlanSelectorContainer'
 import AdminSeatsContainer from 'Components/Admin/AdminSeats/AdminSeatsContainer'
@@ -24,13 +25,13 @@ const AdminBillingComponent = ({ organization }) => {
   return (
     <>  
       <AdminNoticesContainer />
-      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}>
-      <hr />   
-        <section id="seats" className={sectionClasses}>
-          <h2>Manage seats</h2>
-          <AdminSeatsContainer />
-        </section>
-      <hr />
+      <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER, PLAN_TYPES.PER_USER, PLAN_TYPES.SINGLE_USER]} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}>
+        <hr />   
+          <section id="seats" className={sectionClasses}>
+            <h2>Manage seats</h2>
+            <AdminSeatsContainer />
+          </section>
+        <hr />
       </OrgPlanPermission>
       {/* null is a special case for seed org */}
       <OrgPlanPermission acceptedPlans={[null, PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER, PLAN_TYPES.PER_USER]}>
