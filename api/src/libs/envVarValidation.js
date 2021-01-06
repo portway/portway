@@ -35,4 +35,9 @@ module.exports = () => {
   if (!adminSecretKey || !typeof (adminSecretKey) === 'string' || adminSecretKey.length < 10) {
     throw new Error('ADMIN_SECRET_KEY: must be a string 10+ characters')
   }
+
+  const perUserPlanId = process.env.STRIPE_PER_USER_PLAN_ID
+  if (!perUserPlanId) {
+    throw new Error('STRIPE_PER_USER_PLAN_ID must be a valid stripe plan id')
+  }
 }
