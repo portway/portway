@@ -84,6 +84,12 @@ spec:
             secretKeyRef:
               name: slack-secrets
               key: slack_webhook_url
+        - name: MAILCHIMP_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mailchimp-secrets
+              key: mailchimp_secret_key
+              optional: true
         ports:
         - containerPort: {{ .Values.web.port }}
           protocol: TCP
