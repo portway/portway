@@ -10,7 +10,7 @@ const MailingListController = function (router) {
 
     // If we're getting hit from the external website, do a redirect
     if (req.get('origin') === SUPPORT_FORM_SUBMIT_ORIGIN) {
-      const base = process.env.MAILINGLIST_FORM_SUBMIT_ORIGIN
+      const base = SUPPORT_FORM_SUBMIT_ORIGIN
       const path = 'mailinglist?received=true'
       const url = new URL(path, base)
       res.redirect(url.toString())
