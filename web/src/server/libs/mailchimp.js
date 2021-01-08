@@ -21,7 +21,6 @@ const joinList = async (email) => {
       }
     })
   } catch (err) {
-    console.log(err)
     logger(LOG_LEVELS.INFO, { type: 'mailchimp', message: `There was an error adding user with email: ${email} to the list` })
   }
 }
