@@ -6,7 +6,9 @@ import moment from 'moment'
 import {
   MULTI_USER_PLAN_TYPES,
   PATH_PROJECT,
-  URL_DOCUMENTATION
+  URL_DOCUMENTATION,
+  ORG_SUBSCRIPTION_STATUS
+
 } from 'Shared/constants'
 import { RemoveIcon, UnlockIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
@@ -35,7 +37,7 @@ const SpecialProjectDescription = ({ project }) => {
             delete it, or do anything else you can think of with the<> </>
             <a href={URL_DOCUMENTATION} target="_blank" rel="noopener noreferrer">Portway API</a>.
           </div>
-          <OrgPlanPermission acceptedPlans={[MULTI_USER_PLAN_TYPES]}>
+          <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
             <div className="special-project__multi-plan">
               <UnlockIcon fill="#ffffff" />
               <span className="label">Everyone in your organization can edit this project</span>

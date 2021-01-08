@@ -3,7 +3,7 @@ import React, { lazy, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, PROJECT_ROLE_IDS, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import { ProjectIcon, SettingsIcon, TrashIcon, UnlockIcon } from 'Components/Icons'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
@@ -32,7 +32,7 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
             }
           </div>
         </div>
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
           {!privateProject &&
             <div
               aria-label="Organization access"
@@ -45,7 +45,7 @@ const ProjectsListItem = ({ projectId, project, handleDelete }) => {
         </OrgPlanPermission>
       </Link>
       <div className="project-list__team">
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
           {privateProject && <ProjectUsersContainer collapsed={true} projectId={projectId} />}
         </OrgPlanPermission>
       </div>

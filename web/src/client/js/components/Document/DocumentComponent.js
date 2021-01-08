@@ -11,7 +11,8 @@ import {
   MOBILE_MATCH_SIZE,
   MULTI_USER_PLAN_TYPES,
   PATH_PROJECT,
-  PROJECT_ROLE_IDS
+  PROJECT_ROLE_IDS,
+  ORG_SUBSCRIPTION_STATUS
 } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
@@ -131,7 +132,7 @@ const DocumentComponent = ({
             readOnly={documentReadOnlyMode}
             ref={titleRef} />
         </div>
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
           <div className={documentUsersClasses}>
             <DocumentUsersContainer />
           </div>
