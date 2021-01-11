@@ -4,8 +4,9 @@ import { debounce } from 'lodash'
 import { Link } from 'react-router-dom'
 const Select = lazy(() => import('react-select'))
 
-import { PATH_USERS, PATH_PROJECT, PROJECT_ROLE_IDS, ORGANIZATION_ROLE_IDS } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, ORGANIZATION_ROLE_IDS, ORG_SUBSCRIPTION_STATUS, PATH_USERS, PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import { AddIcon, ArrowIcon } from 'Components/Icons'
+import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import ProjectRolesDropdown from 'Components/RolesDropdowns/ProjectRolesDropdown'
 import ProjectTeamList from './ProjectTeamList'
@@ -101,12 +102,17 @@ const ProjectSettingsTeamsComponent = ({
           </div>
         </div>
         <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.ADMIN, ORGANIZATION_ROLE_IDS.OWNER]}>
-          {showAddUsersMessage &&
-          <p className="project-settings__users-warning note">
-            It looks like you haven’t added users to your organization yet. Once you <Link to={PATH_USERS}>add users</Link>,
-            you can assign them to project teams.
-          </p>
-          }
+          <OrgPlanPermission
+            acceptedPlans={MULTI_USER_PLAN_TYPES}
+            acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}
+          >
+            {showAddUsersMessage &&
+            <p className="project-settings__users-warning note">
+              It looks like you haven’t added users to your organization yet. Once you <Link to={PATH_USERS}>add users</Link>,
+              you can assign them to project teams.
+            </p>
+            }
+          </OrgPlanPermission>
         </OrgPermission>
         <ValidationContainer resource="project" value="userId" />
       </section>

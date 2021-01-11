@@ -61,7 +61,10 @@ const AdminDashboardComponent = ({ organization, section }) => {
       <main>
         <Panel>
           <PanelNavigation>
-            <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
+            <OrgPlanPermission
+              acceptedPlans={MULTI_USER_PLAN_TYPES}
+              acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}
+            >
               <NavLink to={`${PATH_ADMIN}/${ADMIN_PATHS.USERS}`} aria-label="Users" isActive={isSubSection}>
                 <TeamsIcon width="22" height="22" /> <span className="label">Users</span>
               </NavLink>
