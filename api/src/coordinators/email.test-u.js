@@ -126,15 +126,18 @@ describe('emailCoordinator', () => {
 
   describe('#sendPaymentSuccess', () => {
     const email = 'hello@portway.com'
+    const amount = '2000'
 
     beforeAll(async () => {
       sendSingleRecipientEmail.mockClear()
-      await emailCoordinator.sendPaymentSuccess(email)
+      await emailCoordinator.sendPaymentSuccess(email, amount)
     })
 
     it('should call emailIntegrator.sendPaymentSuccess', () => {
       expect(sendSingleRecipientEmail.mock.calls.length).toBe(1)
       expect(sendSingleRecipientEmail.mock.calls[0][0].address).toBe(email)
+      expect(sendSingleRecipientEmail.mock.calls[0][0].htmlBody).toMatch(/20.00/)
+      expect(sendSingleRecipientEmail.mock.calls[0][0].textBody).toMatch(/20.00/)
     })
   })
 
