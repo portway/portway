@@ -103,7 +103,7 @@ const AdminUsersContainer = ({
   return (
     <OrgPlanPermission
       acceptedPlans={MULTI_USER_PLAN_TYPES}
-      acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}
+      acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}
       elseRender={<Redirect to={PATH_ORGANIZATION} />}>
       <Helmet>
         <title>Admin: Users – {PRODUCT_NAME}</title>
