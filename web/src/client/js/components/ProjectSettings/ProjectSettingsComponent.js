@@ -40,7 +40,10 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`} aria-label="Info">
           <InfoIcon /> <span className="label">Info</span>
         </NavLink>
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
+        <OrgPlanPermission
+          acceptedPlans={MULTI_USER_PLAN_TYPES}
+          acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}
+        >
           <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`} aria-label="Teams">
             <TeamsIcon /> <span className="label">Team</span>
           </NavLink>

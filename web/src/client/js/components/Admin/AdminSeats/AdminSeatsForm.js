@@ -105,9 +105,10 @@ const AdminSeatsForm = ({
           <ul className="admin-seats-form__summary-list">
             <li className="admin-seats-form__summary-item">
               {plan === PLAN_TYPES.MULTI_USER ?
+                // eslint-disable-next-line space-infix-ops
                 <>Multi-user plan&nbsp;<b>w/ {includedSeats} users</b></>:
                 <>Plan w/ 1 user</>}
-              <span className="admin-seats-form__summary-price">{flatCost}</span> 
+              <span className="admin-seats-form__summary-price">{flatCost}</span>
             </li>
             <li className="admin-seats-form__summary-item">
               Additional seats:&nbsp;<b>{getAdditionalSeatCount()}</b> <span className="admin-seats-form__summary-price">{getAdditionalSeatsCost()}</span>
@@ -129,6 +130,7 @@ AdminSeatsForm.propTypes = {
   flatCost: PropTypes.number.isRequired,
   formId: PropTypes.string.isRequired,
   includedSeats: PropTypes.number.isRequired,
+  plan: PropTypes.string,
   totalSeats: PropTypes.number.isRequired,
   updateOrganizationSeats: PropTypes.func.isRequired,
   usedSeats: PropTypes.number.isRequired,
