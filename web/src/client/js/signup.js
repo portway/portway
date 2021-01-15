@@ -3,7 +3,9 @@
     const signupBtn = document.querySelector('#signup-button')
     const tosCheckbox = document.querySelector('#tos')
 
-    signupBtn.setAttribute('disabled', true)
+    if (!tosCheckbox.checked) {
+      signupBtn.setAttribute('disabled', true)
+    }
 
     tosCheckbox.addEventListener('click', (e) => {
       if (e.target.checked) {
