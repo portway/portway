@@ -148,6 +148,7 @@ export const updateOrganizationSeats = (formId, orgId, body) => {
     }
     dispatch(Organizations.receiveUpdatedSeats(orgId, body.seats))
     dispatch(fetchOrganization(orgId))
+    dispatch(fetchOrganizationBilling(orgId))
     dispatch(formSucceededAction(formId))
   }
 }
