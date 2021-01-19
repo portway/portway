@@ -1,7 +1,7 @@
 import addRequest from '../libs/zendesk'
 import slack from '../libs/slack'
 
-{ SUPPORT_FORM_SUBMIT_ORIGIN } = process.env
+const { SUPPORT_FORM_SUBMIT_ORIGIN } = process.env
 
 const SupportController = function(router) {
   router.post('/', async (req, res) => {

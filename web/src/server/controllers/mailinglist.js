@@ -10,10 +10,9 @@ const MailingListController = function (router) {
 
     // If we're getting hit from the external website, do a redirect
     if (req.get('origin') === SUPPORT_FORM_SUBMIT_ORIGIN) {
-      const base = SUPPORT_FORM_SUBMIT_ORIGIN
-      const path = 'mailinglist?received=true'
-      const url = new URL(path, base)
-      res.redirect(url.toString())
+      const referrer = req.get('Referrer')
+      const url = `${referrer}?received=true`
+      res.redirect(url)
     } else {
       // otherwise respond for xhr since we can't stop redirects
       res.send()
