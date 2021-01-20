@@ -47,7 +47,7 @@ async function createUserAndOrganization(name, email) {
 
   await billingCoordinator.createOrUpdateOrgSubscription({
     customerId: customer.id,
-    planId: PLANS.SINGLE_USER,
+    planId: PLANS.PER_USER,
     trialPeriodDays: TRIAL_PERIOD_DAYS,
     orgId: organization.id
   })

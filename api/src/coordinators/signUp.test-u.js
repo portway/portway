@@ -68,7 +68,7 @@ describe('signUp coordinator', () => {
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls.length).toBe(1)
       expect(billingCoordinator.createOrUpdateOrgSubscription.mock.calls[0][0]).toEqual({
         customerId,
-        planId: PLANS.SINGLE_USER,
+        planId: PLANS.PER_USER,
         trialPeriodDays: TRIAL_PERIOD_DAYS,
         orgId: mockOrgId
       })

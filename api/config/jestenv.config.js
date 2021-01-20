@@ -1,0 +1,1 @@
+process.env.STRIPE_PER_USER_PLAN_ID = 'not-a-real-stripe-per-user-plan-id'

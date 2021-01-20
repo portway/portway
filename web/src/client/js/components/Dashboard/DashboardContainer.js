@@ -7,7 +7,7 @@ import dataMapper from 'Libs/dataMapper'
 import useDataService from 'Hooks/useDataService'
 
 import * as strings from 'Loc/strings'
-import { MULTI_USER_PLAN_TYPES } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import { currentOrgId } from 'Libs/currentIds'
 import { uiConfirm } from 'Actions/ui'
 import { removeProject, sortProjects } from 'Actions/project'
@@ -32,7 +32,7 @@ const DashboardContainer = ({ organizationData, removeProject, uiConfirm, sortPr
   const { data: { projects }, loading } = useDataService(dataMapper.projects.list(page, sortBy, sortMethod), [sortBy, sortMethod])
   const { data: organization } = useDataService(dataMapper.organizations.current())
   const history = useHistory()
-  const showTeams = MULTI_USER_PLAN_TYPES.includes(organization.plan)
+  const showTeams = MULTI_USER_PLAN_TYPES.includes(organization.plan) && organization.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.ACTIVE
 
   // Special project
   const specialProjectId = organizationData[currentOrgId].specialProjectId

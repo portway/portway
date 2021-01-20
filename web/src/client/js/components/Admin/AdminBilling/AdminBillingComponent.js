@@ -5,7 +5,6 @@ import cx from 'classnames'
 import { PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import AdminNoticesContainer from 'Components/Admin/AdminNotices/AdminNoticesContainer'
-import AdminPlanSelectorContainer from 'Components/Admin/AdminPlanSelector/AdminPlanSelectorContainer'
 import AdminSeatsContainer from 'Components/Admin/AdminSeats/AdminSeatsContainer'
 import AdminPaymentContainer from 'Components/Admin/AdminPayment/AdminPaymentContainer'
 import AdminCancelAccountContainer from 'Components/Admin/AdminCancelAccount/AdminCancelAccountContainer'
@@ -24,11 +23,7 @@ const AdminBillingComponent = ({ organization }) => {
   return (
     <>
       <AdminNoticesContainer />
-      <section id="plans" className={`section--plans${sectionClasses}`}>
-        <AdminPlanSelectorContainer />
-      </section>
-      <hr />
-      <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER]}>
+      <OrgPlanPermission acceptedPlans={[PLAN_TYPES.MULTI_USER, PLAN_TYPES.PER_USER, PLAN_TYPES.SINGLE_USER]} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}>
         <section id="seats" className={sectionClasses}>
           <h2>Manage seats</h2>
           <AdminSeatsContainer />
@@ -36,7 +31,7 @@ const AdminBillingComponent = ({ organization }) => {
         <hr />
       </OrgPlanPermission>
       {/* null is a special case for seed org */}
-      <OrgPlanPermission acceptedPlans={[null, PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER]}>
+      <OrgPlanPermission acceptedPlans={[null, PLAN_TYPES.SINGLE_USER, PLAN_TYPES.MULTI_USER, PLAN_TYPES.PER_USER]}>
         <section id="payment" className={sectionClasses}>
           <h2>Payment information</h2>
           <AdminPaymentContainer />

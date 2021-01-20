@@ -194,6 +194,7 @@ class StripeComponent extends React.Component {
                 name="state"
                 placeholder="OR"
                 required
+                style={{ textTransform: 'uppercase' }}
                 type="text"
               />
             </div>

@@ -2,7 +2,7 @@ import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink, Redirect } from 'react-router-dom'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import { APIKeyIcon, ExportIcon, InfoIcon, TeamsIcon, WebhookIcon } from 'Components/Icons'
 import { Panel, PanelNavigation, PanelContent } from 'Components/Panel'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
@@ -40,7 +40,10 @@ const ProjectSettingsComponent = ({ projectId, setting }) => {
         <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.INFO}`} aria-label="Info">
           <InfoIcon /> <span className="label">Info</span>
         </NavLink>
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+        <OrgPlanPermission
+          acceptedPlans={MULTI_USER_PLAN_TYPES}
+          acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE, ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE]}
+        >
           <NavLink to={`${settingsSectionPath}/${SETTINGS_PATHS.TEAMS}`} aria-label="Teams">
             <TeamsIcon /> <span className="label">Team</span>
           </NavLink>
