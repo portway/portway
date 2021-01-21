@@ -63,6 +63,7 @@ async function handleEvent(event) {
       }
       break
     case 'customer.subscription.trial_will_end':
+      // only send to users currently trialing
       if (org.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
         emailCoordinator.sendTrialWillEnd(customer.email)
       }
