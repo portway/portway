@@ -115,7 +115,9 @@ const AdminUsersComponent = ({
           <h2>User management</h2>
           {seats && seats.usedSeats === seats.totalSeats &&
           <p className="admin-users__seats-warning">
-            You have filled all of your <b>{seats.totalSeats}</b> seats.<br />
+            {seats.totalSeats > 1 &&
+            <>You have filled all of your <b>{seats.totalSeats}</b> seats.<br /></>
+            }
             <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]}>
               <Link to={PATH_BILLING}>Add some seats</Link> if you’d like to add more users.
             </OrgPermission>

@@ -65,7 +65,7 @@ const registerOrganization = async (req, res) => {
     if (response.status === 409) {
       res.status(409)
       return res.render('user/sign-up', {
-        ...renderBundles(req, 'Sign up', 'index', footerLinks),
+        ...renderBundles(req, 'Sign up', 'signup', footerLinks),
         flash: {
           type: 'error',
           message: 'There is already a user with this email address'
@@ -75,7 +75,7 @@ const registerOrganization = async (req, res) => {
 
     res.status(500)
     return res.render('user/sign-up', {
-      ...renderBundles(req, 'Sign up', 'index', footerLinks),
+      ...renderBundles(req, 'Sign up', 'signup', footerLinks),
       flash: {
         type: 'error',
         message: 'There was an error registering your organization'

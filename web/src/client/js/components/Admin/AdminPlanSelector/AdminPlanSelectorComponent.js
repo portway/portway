@@ -61,9 +61,9 @@ const AdminPlanSelectorComponent = ({
 
   return (
     <div className={adminPlanClasses}>
-      <h2 id="rg1-label">
+      {/* <h2 id="rg1-label">
         Your plan: <span className="admin-plans-selector__title">{planTitle}</span>
-      </h2>
+      </h2> */}
       {organizationPlan === PLAN_TYPES.MULTI_USER && (
         <p className="small">
         At the moment we cannot downgrade <span className="lowercase">{PLAN_TITLES[PLAN_TYPES.MULTI_USER]}s</span>.

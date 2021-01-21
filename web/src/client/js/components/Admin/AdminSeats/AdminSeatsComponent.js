@@ -13,6 +13,7 @@ const AdminSeatsComponent = ({
   totalSeats,
   updateOrganizationSeats,
   usedSeats,
+  plan
 }) => {
   const [manageMode, setManageMode] = useState(false)
   useEffect(() => {
@@ -29,9 +30,9 @@ const AdminSeatsComponent = ({
           <meter
             className="admin-seats__status__meter"
             high={totalSeats / 1.05}
-            low={totalSeats * .5}
+            low={totalSeats > 1 ? totalSeats * .5 : 1}
             max={totalSeats}
-            min="1"
+            min="0"
             optimum={totalSeats}
             value={usedSeats}
           >
@@ -53,6 +54,7 @@ const AdminSeatsComponent = ({
           totalSeats={totalSeats}
           updateOrganizationSeats={updateOrganizationSeats}
           usedSeats={usedSeats}
+          plan={plan}
         />
       }
     </div>
@@ -65,6 +67,7 @@ AdminSeatsComponent.propTypes = {
   flatCost: PropTypes.number,
   formId: PropTypes.string,
   includedSeats: PropTypes.number,
+  plan: PropTypes.string,
   totalSeats: PropTypes.number,
   updateOrganizationSeats: PropTypes.func,
   usedSeats: PropTypes.number,

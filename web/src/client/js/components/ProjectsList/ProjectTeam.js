@@ -1,7 +1,7 @@
 import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
 
-import { MULTI_USER_PLAN_TYPES } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 
 // Lazy loading because not all users have access to this
@@ -10,7 +10,7 @@ const ProjectUsersContainer = lazy(() => import(/* webpackChunkName: 'ProjectUse
 const ProjectTeam = ({ projectId, show }) => {
   return (
     <div className="project-list__team">
-      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
         {show && <ProjectUsersContainer collapsed={true} projectId={projectId} />}
       </OrgPlanPermission>
     </div>

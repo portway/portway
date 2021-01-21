@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
-import { MULTI_USER_PLAN_TYPES, PATH_PROJECT } from 'Shared/constants'
+import { MULTI_USER_PLAN_TYPES, PATH_PROJECT, ORG_SUBSCRIPTION_STATUS } from 'Shared/constants'
 import { ProjectIcon, UnlockIcon } from 'Components/Icons'
 
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
@@ -42,7 +42,7 @@ const ProjectLink = ({ project, special }) => {
             }
           </div>
         </div>
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES}>
+        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
           {!privateProject &&
             <div
               aria-label="Organization access"
