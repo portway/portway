@@ -16,7 +16,8 @@ const PLAN_TYPES = {
   MULTI_USER: 'MULTI_USER',
   SINGLE_USER: 'SINGLE_USER',
   MULTI_USER_FREE: 'MULTI_USER_FREE',
-  SINGLE_USER_FREE: 'SINGLE_USER_FREE'
+  SINGLE_USER_FREE: 'SINGLE_USER_FREE',
+  PER_USER: 'PER_USER'
 }
 
 // Numbers are in gigabytes
@@ -33,6 +34,9 @@ const PLAN_LIMITS = {
   [PLAN_TYPES.MULTI_USER_FREE]: {
     storage: 10
   },
+  [PLAN_TYPES.PERUSER]: {
+    storage: 10
+  }
 }
 
 const FREE_PLAN_TYPES = [
@@ -42,7 +46,8 @@ const FREE_PLAN_TYPES = [
 
 const MULTI_USER_PLAN_TYPES = [
   PLAN_TYPES.MULTI_USER,
-  PLAN_TYPES.MULTI_USER_FREE
+  PLAN_TYPES.MULTI_USER_FREE,
+  PLAN_TYPES.PER_USER
 ]
 
 const PLAN_TITLES = {
@@ -232,6 +237,8 @@ module.exports = {
   MULTI_USER_PLAN_TYPES: MULTI_USER_PLAN_TYPES,
   PRICING: PRICING,
   TRIALING_STATUSES,
+  // TODO: remove when we are pulling from stripe data again
+  ADDITIONAL_SEAT_COST: 1000,
   // Query params
   QUERY_PARAMS: QUERY_PARAMS,
   // Support

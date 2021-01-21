@@ -8,7 +8,7 @@ import RESOURCE_TYPES from '../constants/resourceTypes'
 import ACTIONS from '../constants/actions'
 
 const bodySchema = Joi.compile({
-  seats: Joi.number().min(5).required()
+  seats: Joi.number().min(1).required()
 })
 
 const paramSchema = Joi.compile({

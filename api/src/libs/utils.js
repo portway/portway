@@ -32,7 +32,6 @@ export const slugify = (string) => {
     .replace(/\-\-+/g, '-') // Replace multiple - with single -
     .replace(/^-+/, '') // Trim - from start of text
     .replace(/-+$/, '') // Trim - from end of text
-
 }
 
 // This is really just a helper function to make calls
@@ -40,4 +39,14 @@ export const slugify = (string) => {
 // call in a separate file and lets you get on with testing
 export const callFuncWithArgs = (func, ...args) => {
   return func(...args)
+}
+
+// returns a reverse mapping of an object,
+// can't use with objects with multiples of the same value since you'll only get one back
+export const reverseObject = (obj) => {
+  const ret = {}
+  Object.keys(obj).forEach((key) => {
+    ret[obj[key]] = key
+  })
+  return ret
 }

@@ -1,4 +1,5 @@
-import { STRIPE_STATUS, PLANS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
+import { STRIPE_STATUS, PLANS, ORG_SUBSCRIPTION_STATUS, PLAN_ID_MAP } from '../constants/plans'
+const { STRIPE_PER_USER_PLAN_ID } = process.env
 
 export const getOrgSubscriptionStatusFromStripeCustomer = function(customer) {
   const subscription = customer.subscriptions.data[0]
@@ -15,7 +16,7 @@ export const getOrgSubscriptionStatusFromStripeCustomer = function(customer) {
 
   // special case where org still has trial time left, but has already entered billing info to subscribe when trial ends
   if (subscription.status === STRIPE_STATUS.TRIALING
-      && subscription.plan.id === PLANS.SINGLE_USER
+      && (subscription.plan.id === PLANS.SINGLE_USER || subscription.plan.id === STRIPE_PER_USER_PLAN_ID)
       && billingSource) {
     return ORG_SUBSCRIPTION_STATUS.TRIALING_PENDING_ACTIVE
   }
