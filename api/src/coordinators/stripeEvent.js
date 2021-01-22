@@ -5,7 +5,7 @@ import emailCoordinator from '../coordinators/email'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 import slackIntegrator from '../integrators/slack'
-import { STRIPE_STATUS } from '../constants/plans'
+import { STRIPE_STATUS, ORG_SUBSCRIPTION_STATUS } from '../constants/plans'
 
 async function handleEvent(event) {
   const eventData = event.data.object
@@ -63,7 +63,10 @@ async function handleEvent(event) {
       }
       break
     case 'customer.subscription.trial_will_end':
-      emailCoordinator.sendTrialWillEnd(customer.email)
+      // only send to users currently trialing
+      if (org.subscriptionStatus === ORG_SUBSCRIPTION_STATUS.TRIALING) {
+        emailCoordinator.sendTrialWillEnd(customer.email)
+      }
       break
   }
   //update cached subscription status on org, we want to do this for all current events
