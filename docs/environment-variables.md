@@ -5,6 +5,7 @@ When adding or changing an environment variable:
 1. Update the 1password .env file
 1. Update the kubernetes configuration yaml files
 1. Let the team know they need to update their .env file(s) for local development
+1. Update the `docs/infrastructure/kube-secrets-setup.md` file if the new env var is a secret
 
 ## Update the example.env file
 In the repo, make sure the `example.env` file for the service or services using the environment
@@ -24,6 +25,11 @@ process for setting secrets yet, so be sure to check with the team on how to do 
 
 ## Communicate the update to the team
 Make sure people know they need to update their local .env with the new value!
+
+## Updates kube-secrets-setup
+In order to ensure we can create new environments, if the new environment variable is considered a
+secret, instructions for adding that secret to kubernetes should be added to the kube-secrets-setup.md
+file, found in this repo in docs/infrastructure.
 
 # API Environment Variables
 **API_PORT**: port number the API will run on  
@@ -66,4 +72,5 @@ Make sure people know they need to update their local .env with the new value!
 # Shared Environment Variables
 **JWT_SECRET**: A secret string used to sign and verify JSON Web Tokens used for app authentication  
 **LOGGER**: The logger the app should use. Valid values defined in `constants/logging.js`  
+**MAILCHIMP_SECRET_KEY**: The Mailchimp secret key that allows Portway to sign up users to an email newsletter  
 
