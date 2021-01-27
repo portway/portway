@@ -21,6 +21,9 @@ export const DEFAULT_LOG_LEVEL = LOG_LEVELS.INFO
 
 export const LOGGER = process.env.LOGGER || LOGGER_TYPES.CONSOLE
 
+export const MAILCHIMP_API_URL = 'https://us19.api.mailchimp.com'
+export const MAILCHIMP_LIST_ID = 'c1174861df'
+
 console.info(`Logger: ${LOGGER}`)
 
 
