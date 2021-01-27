@@ -61,7 +61,7 @@ export default (io) => {
         await leaveRoom(currentDocumentRoomId)
       }
 
-      socket.join(documentId)
+      socket.join(`docRoom:${documentId}`)
       // add user to document room Set
       const docRoomNs = getDocRoomNs(documentId, orgId)
       await redis.sadd(docRoomNs, userSocketNs)
