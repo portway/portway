@@ -1,3 +1,5 @@
+@import 'CSS/inc/_include-media.scss';
+
 /**
  * Document Field Tools
  * Tools is the left column of the editor that contains the dragger
@@ -6,6 +8,7 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  min-width: 2.4rem;
   position: relative;
   width: 2.4rem;
   z-index: 12;
@@ -33,7 +36,10 @@
   box-shadow: var(--box-shadow);
   margin-left: 2rem;
   padding: var(--icon-margin);
-  width: 40rem;
+  width: 30rem;
+  @include media('>medium') {
+    width: 40rem;
+  }
 }
 .document-field__changes-names {
   font-weight: 500;
