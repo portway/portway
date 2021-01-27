@@ -187,10 +187,6 @@ const DocumentFieldComponent = ({
     'document-field__tools': true
   })
 
-  const fieldActionClasses = cx({
-    'document-field__actions': true
-  })
-
   const fieldContainerClasses = cx({
     'document-field__container': true
   })
@@ -281,7 +277,6 @@ const DocumentFieldComponent = ({
           </div>
         </div>
 
-        <div className={fieldActionClasses} />
       </div>
     </li>
   )
