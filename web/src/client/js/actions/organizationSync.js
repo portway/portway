@@ -1,7 +1,7 @@
 import organizationSocket from '../sockets/SocketProvider'
 import { OrganizationSync } from './index'
 
-export const emitCreateDocument = (projectId) => {
+export const emitDocumentCreated = (projectId) => {
   return async (dispatch) => {
     if (!organizationSocket.connected) {
       return OrganizationSync.socketError()
