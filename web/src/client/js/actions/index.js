@@ -151,7 +151,6 @@ export const ActionTypes = {
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
   UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
-  UI_TOGGLE_STRIPE_FORM: 'UI_TOGGLE_STRIPE_FORM',
   // Search
   SEARCH_CLEAR: 'SEARCH_CLEAR',
   // User Sync
@@ -358,7 +357,6 @@ export const UI = {
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'options'),
   toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
-  toggleStripeForm: makeActionCreator(ActionTypes.UI_TOGGLE_STRIPE_FORM, 'value'),
 }
 
 export const Search = {

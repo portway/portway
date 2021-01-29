@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
-import { Elements, StripeProvider } from 'react-stripe-elements'
+import { Redirect, useHistory } from 'react-router-dom'
+
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
 
 import Store from '../../../reducers'
 import { updateOrganizationBilling } from 'Actions/organization'
@@ -11,77 +13,31 @@ import { currentOrgId } from 'Libs/currentIds'
 import OrgPermission from 'Components/Permission/OrgPermission'
 import StripeComponent from './StripeComponent'
 
-class StripeContainer extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: true,
-      isTrusted: false,
-      stripeKey: STRIPE_PUBLISHABLE_KEY,
-      stripe: null
-    }
-    // Load stripe library dynamically
-    if (!window.Stripe) {
-      this.insertStripe()
-    }
+// STRIPE_PUBLISHABLE_KEY is defined inline in the HTML
+// eslint-disable-next-line no-undef
+const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
+
+const StripeContainer = ({ isSubmitting }) => {
+  const history = useHistory()
+
+  function updateBillingHandler(token) {
+    Store.dispatch(updateOrganizationBilling(currentOrgId, history, { token: token.id }))
   }
 
-  componentDidMount() {
-    if (window.Stripe) {
-      this.setState({
-        stripe: window.Stripe(this.state.stripeKey)
-      })
-    }
-  }
-
-  insertStripe() {
-    const stripeScript = document.createElement('script')
-    stripeScript.src = 'https://js.stripe.com/v3/'
-    stripeScript.async = true
-    stripeScript.onerror = this.stripeErrorHandler.bind(this)
-    stripeScript.onload = this.stripeLoadedHandler.bind(this)
-    document.body.appendChild(stripeScript)
-  }
-
-  render() {
-    return (
-      <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
-        <StripeProvider stripe={this.state.stripe}>
-          <Elements>
-            <StripeComponent
-              cancelHandler={this.props.cancelHandler}
-              isSubmitting={this.props.isSubmitting}
-              orgId={currentOrgId}
-              updateBillingHandler={this.updateBillingHandler}
-            />
-          </Elements>
-        </StripeProvider>
-      </OrgPermission>
-    )
-  }
-
-  updateBillingHandler(token) {
-    Store.dispatch(updateOrganizationBilling(currentOrgId, { token: token.id }))
-  }
-
-  stripeLoadedHandler(data) {
-    // If we've loaded Stripe successfully, render the component
-    this.setState({
-      loading: false,
-      isTrusted: data.isTrusted,
-      stripe: window.Stripe(this.state.stripeKey)
-    })
-  }
-
-  stripeErrorHandler(err) {
-    if (err) {
-      throw new URIError('Error loading Stripe.')
-    }
-  }
+  return (
+    <OrgPermission acceptedRoleIds={[ORGANIZATION_ROLE_IDS.OWNER]} elseRender={<Redirect to={PATH_PROJECTS} />}>
+      <Elements stripe={stripePromise}>
+        <StripeComponent
+          isSubmitting={isSubmitting}
+          orgId={currentOrgId}
+          updateBillingHandler={updateBillingHandler}
+        />
+      </Elements>
+    </OrgPermission>
+  )
 }
 
 StripeContainer.propTypes = {
-  cancelHandler: PropTypes.func,
   isSubmitting: PropTypes.bool
 }
 

@@ -354,16 +354,6 @@ export const ui = (state = initialState, action) => {
         }
       }
     }
-    // Toggle the Stripe form open and closed
-    case ActionTypes.UI_TOGGLE_STRIPE_FORM: {
-      return {
-        ...state,
-        billing: {
-          ...state.billing,
-          isStripeOpen: action.value
-        }
-      }
-    }
 
     default:
       return { ...state }

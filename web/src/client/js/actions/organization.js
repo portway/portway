@@ -1,7 +1,7 @@
 import { Organizations, Notifications, Validation } from './index'
 import { formSubmitAction, formSucceededAction, formFailedAction } from './form'
 import { add, fetch, update, globalErrorCodes, validationCodes } from '../api'
-import { NOTIFICATION_TYPES, NOTIFICATION_RESOURCE } from 'Shared/constants'
+import { NOTIFICATION_TYPES, NOTIFICATION_RESOURCE, PATH_BILLING } from 'Shared/constants'
 
 export const fetchOrganization = (orgId) => {
   return async (dispatch) => {
@@ -90,7 +90,7 @@ export const fetchOrganizationBilling = (orgId) => {
   }
 }
 
-export const updateOrganizationBilling = (orgId, body) => {
+export const updateOrganizationBilling = (orgId, history, body) => {
   return async (dispatch) => {
     dispatch(Organizations.initiateBillingUpdate(orgId))
     const { data, status } = await update(`v1/organizations/${orgId}/billing`, body)
@@ -105,6 +105,7 @@ export const updateOrganizationBilling = (orgId, body) => {
     }
     dispatch(Organizations.receiveUpdatedBilling(orgId, data))
     dispatch(fetchOrganization(orgId))
+    history.push({ pathname: PATH_BILLING })
   }
 }
 
