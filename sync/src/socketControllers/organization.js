@@ -12,12 +12,14 @@ export default (io) => {
   organizationIO.on('connection', (socket) => {
     // Payload is already verified against the secret in middleware auth step for all routes
     // just get the decodable info from the jwt
-    const { orgId, userId } = extractJwtPayloadWithoutVerification(socket.handshake.query.token)
+    const { orgId } = extractJwtPayloadWithoutVerification(socket.handshake.query.token)
 
-    joinRoom(orgId)
-    // Document Room
+    const orgRoomNs = `orgRoom:${orgId}`
+
+    socket.join(orgRoomNs)
+
     socket.on('documentCreated', async (projectId) => {
-      await socket.emit('documentCreated', projectId)
+      await socket.to(orgRoomNs).emit('orgDocumentCreated', projectId)
     })
   })
 }

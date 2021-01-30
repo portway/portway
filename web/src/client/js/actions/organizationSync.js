@@ -1,4 +1,4 @@
-import organizationSocket from '../sockets/SocketProvider'
+import { organizationSocket } from '../sockets/SocketProvider'
 import { OrganizationSync } from './index'
 
 export const emitDocumentCreated = (projectId) => {
@@ -6,13 +6,13 @@ export const emitDocumentCreated = (projectId) => {
     if (!organizationSocket.connected) {
       return OrganizationSync.socketError()
     }
-    organizationSocket.emit('documentCreated', documentId)
+    organizationSocket.emit('documentCreated', projectId)
     dispatch(OrganizationSync.documentCreatedEventEmitted(projectId))
   }
 }
 
 export const receiveDocumentCreatedEvent = (projectId) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(OrganizationSync.documentCreatedEventReceived(projectId))
   }
 }

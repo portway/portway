@@ -14,7 +14,7 @@ import {
   updateRemoteUserFieldFocus,
   updateDocumentRoomUsers
 } from 'Actions/userSync'
-import documentSocket from '../../sockets/SocketProvider'
+import { documentSocket } from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
@@ -37,6 +37,7 @@ const DocumentContainer = ({
   updateDocumentRoomUsers,
   updateRemoteUserFieldFocus
 }) => {
+  console.log('rerender')
   const location = useLocation()
   const params = useParams()
   const currentDocumentIdRef = useRef()
@@ -170,7 +171,6 @@ DocumentContainer.propTypes = {
   createMode: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
   fetchDocument: PropTypes.func.isRequired,
-  fields: PropTypes.object,
   isFullScreen: PropTypes.bool.isRequired,
   uiToggleDocumentMode: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,

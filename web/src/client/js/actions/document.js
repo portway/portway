@@ -1,5 +1,5 @@
 import { FIELD_TYPES, PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } from 'Shared/constants'
-import { Documents, Validation, Notifications, OrganizationSync } from './index'
+import { Documents, Validation, Notifications } from './index'
 import { createField } from './field'
 import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
 import { emitDocumentCreated } from './OrganizationSync'
@@ -59,7 +59,8 @@ export const createDocument = (projectId, history, body, options = {}) => {
     if (!preventRedirect) {
       history.push({ pathname: `${PATH_PROJECT}/${projectId}/document/${data.id}` })
     }
-    emitDocumentCreated(projectId)
+
+    dispatch(emitDocumentCreated(projectId))
   }
 }
 
