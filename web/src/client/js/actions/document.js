@@ -2,7 +2,7 @@ import { FIELD_TYPES, PATH_PROJECT, NOTIFICATION_RESOURCE, NOTIFICATION_TYPES } 
 import { Documents, Validation, Notifications } from './index'
 import { createField } from './field'
 import { add, fetch, update, remove, globalErrorCodes, validationCodes } from '../api'
-import { emitDocumentCreated } from './OrganizationSync'
+import { emitDocumentCreated } from './organizationSync'
 
 export const fetchDocuments = (projectId) => {
   return async (dispatch) => {

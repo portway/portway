@@ -387,5 +387,6 @@ export const UserSync = {
 
 export const OrganizationSync = {
   documentCreatedEventEmitted: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_EMITTED, 'projectId'),
-  documentCreatedEventReceived: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_RECEIVED, 'projectId')
+  documentCreatedEventReceived: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_RECEIVED, 'projectId'),
+  socketError: makeActionCreator(ActionTypes.SOCKET_ERROR)
 }
