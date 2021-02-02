@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useRouteMatch, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cx from 'classnames'
 
-import { MOBILE_MATCH_SIZE, PATH_PROJECT, PATH_DOCUMENT, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
+import { MOBILE_MATCH_SIZE, PATH_PROJECT, PATH_DOCUMENT, PATH_DOCUMENT_NEW_PARAM, DOCUMENT_MODE } from 'Shared/constants'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
-import DocumentContainer from 'Components/Document/DocumentContainer'
+import DocumentPanelContainer from 'Components/DocumentPanel/DocumentPanelContainer'
+import DocumentHeaderContainer from 'Components/Document/DocumentHeaderContainer'
+import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbarContainer'
 import NoProject from 'Components/Pages/NoProject'
+import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 const Project = ({ isFullScreen }) => {
   const { documentId, projectId } = useParams()
@@ -40,6 +43,8 @@ const Project = ({ isFullScreen }) => {
     'project__document-container--document-only': isMobileDocumentView && !isMobileCreateView,
     'project__document-container--full-screen': isFullScreen
   })
+  const docKey = documentId || 0
+  const documentRef = useRef()
 
   useEffect(() => {
     function bodyDragHandler(e) {
@@ -69,7 +74,12 @@ const Project = ({ isFullScreen }) => {
           </div>
           }
           <div className={documentsClasses}>
-            <DocumentContainer />
+            <div className="document" key={docKey} ref={documentRef}>
+              <ValidationContainer resource="document" value="name" />
+              <DocumentPanelContainer />
+              <DocumentHeaderContainer />
+              <DocumentFieldsContainer />
+            </div>
           </div>
         </>
       </main>

@@ -19,14 +19,12 @@ import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
 import ValidationContainer from 'Components/Validation/ValidationContainer'
-import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
-import DocumentPanelContainer from 'Components/DocumentPanel/DocumentPanelContainer'
 import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContainer'
 
 import './_Document.scss'
 import { IconButton } from 'Components/Buttons/index'
 
-const DocumentComponent = ({
+const DocumentHeaderComponent = ({
   document,
   documentMode,
   isFullScreen,
@@ -57,7 +55,6 @@ const DocumentComponent = ({
 
   if (!document.id) return null
 
-  const docKey = document ? document.id : 0
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
@@ -83,37 +80,34 @@ const DocumentComponent = ({
   })
 
   return (
-    <div className="document" key={docKey} ref={documentRef}>
+    <div>
       <ValidationContainer resource="document" value="name" />
-      {documentMode === DOCUMENT_MODE.EDIT &&
-      <DocumentPanelContainer />
-      }
       <header className="document__header">
         {mobileView &&
-        <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">
-          <ArrowIcon direction="left" width="12" height="12" />
-        </Link>
+          <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">
+            <ArrowIcon direction="left" width="12" height="12" />
+          </Link>
         }
         {!mobileView && !isLikelyAniPad && supportsFullScreen &&
-        <button
-          aria-label="Expand the editor to full screen"
-          className="btn btn--blank btn--with-circular-icon document__button-expand"
-          onClick={() => {
-            // This has to be here because of Safari
-            // You have to call fullscreen functions on the actual element onClick
-            if (window.document.fullscreenElement || window.document.webkitFullscreenElement) {
-              const exitFullscreen = window.document.exitFullscreen || window.document.webkitExitFullscreen
-              exitFullscreen.call(window.document)
-            } else {
-              const documentEl = window.document.documentElement
-              const requestFullscreen = documentEl.webkitRequestFullscreen || documentEl.requestFullscreen
-              requestFullscreen.call(documentEl)
-            }
-            toggleFullScreenHandler()
-          }}
-          title="Expand to full screen">
-          <ExpandIcon />
-        </button>
+          <button
+            aria-label="Expand the editor to full screen"
+            className="btn btn--blank btn--with-circular-icon document__button-expand"
+            onClick={() => {
+              // This has to be here because of Safari
+              // You have to call fullscreen functions on the actual element onClick
+              if (window.document.fullscreenElement || window.document.webkitFullscreenElement) {
+                const exitFullscreen = window.document.exitFullscreen || window.document.webkitExitFullscreen
+                exitFullscreen.call(window.document)
+              } else {
+                const documentEl = window.document.documentElement
+                const requestFullscreen = documentEl.webkitRequestFullscreen || documentEl.requestFullscreen
+                requestFullscreen.call(documentEl)
+              }
+              toggleFullScreenHandler()
+            }}
+            title="Expand to full screen">
+            <ExpandIcon />
+          </button>
         }
         <div className="document__title-container">
           <input
@@ -150,7 +144,7 @@ const DocumentComponent = ({
 }
 
 // @todo fill out this document object and add defaults
-DocumentComponent.propTypes = {
+DocumentHeaderComponent.propTypes = {
   document: PropTypes.object,
   documentMode: PropTypes.string,
   isFullScreen: PropTypes.bool.isRequired,
@@ -159,10 +153,10 @@ DocumentComponent.propTypes = {
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 
-DocumentComponent.defaultProps = {
+DocumentHeaderComponent.defaultProps = {
   document: {
     name: ''
   },
 }
 
-export default DocumentComponent
+export default DocumentHeaderComponent
