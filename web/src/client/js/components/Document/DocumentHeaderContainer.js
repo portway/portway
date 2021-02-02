@@ -77,7 +77,6 @@ const DocumentHeaderContainer = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   /**
    * If we're creating a document, render nothing
    */

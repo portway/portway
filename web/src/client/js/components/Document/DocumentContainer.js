@@ -37,7 +37,6 @@ const DocumentContainer = ({
   updateDocumentRoomUsers,
   updateRemoteUserFieldFocus
 }) => {
-  console.log('rerender')
   const location = useLocation()
   const params = useParams()
   const currentDocumentIdRef = useRef()

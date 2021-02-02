@@ -14,7 +14,7 @@ const DocumentPanelContainer = ({ documentMode }) => {
 }
 
 DocumentPanelContainer.propTypes = {
-  documentMode: PropTypes.string.required
+  documentMode: PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state) => {

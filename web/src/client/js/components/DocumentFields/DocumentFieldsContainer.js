@@ -73,7 +73,6 @@ const DocumentFieldsContainer = ({
     if (!hasFields) {
       document.addEventListener('click', createTextFieldHandler, false)
       return function cleanup() {
-        console.log('unmounting container')
         document.removeEventListener('click', createTextFieldHandler, false)
       }
     }
