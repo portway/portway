@@ -62,7 +62,7 @@
 // Container contains the name and the content
 .document-field__container {
   flex: 1;
-  margin: 0 1.9rem;
+  margin: 0 1.9rem 0 0;
 
   // Data fields get a border and background-color, like a table
   .document-field--data & {
@@ -70,9 +70,13 @@
     border: thin solid var(--field-data-border);
     display: flex;
     flex-direction: column;
+    margin: 0 1.9rem 0 0;
+
     @include media('>medium') {
       flex-direction: row;
+      margin: 0 1.9rem 0 0;
     }
+
     input {
       background-color: transparent;
     }
@@ -148,6 +152,9 @@
 
   input {
     border: thin solid transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     .using-mouse & {
       &:focus {
         border: thin solid transparent;
