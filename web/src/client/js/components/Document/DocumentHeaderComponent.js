@@ -18,7 +18,6 @@ import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
-import ValidationContainer from 'Components/Validation/ValidationContainer'
 import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContainer'
 
 import './_Document.scss'
@@ -81,7 +80,6 @@ const DocumentHeaderComponent = ({
 
   return (
     <div>
-      <ValidationContainer resource="document" value="name" />
       <header className="document__header">
         {mobileView &&
           <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">
