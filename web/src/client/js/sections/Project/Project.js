@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import cx from 'classnames'
 
 import { debounce } from 'Shared/utilities'
-import { MOBILE_MATCH_SIZE, PATH_PROJECT, PATH_DOCUMENT, PATH_DOCUMENT_NEW_PARAM, DOCUMENT_MODE } from 'Shared/constants'
+import { MOBILE_MATCH_SIZE, PATH_PROJECT, PATH_DOCUMENT, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
@@ -96,8 +96,8 @@ const Project = ({ isFullScreen }) => {
           <div className={documentsClasses}>
             <div className="document" key={docKey} ref={documentRef}>
               <ValidationContainer resource="document" value="name" />
-              <DocumentPanelContainer />
               <DocumentHeaderContainer />
+              <DocumentPanelContainer />
               <DocumentFieldsContainer />
             </div>
           </div>
