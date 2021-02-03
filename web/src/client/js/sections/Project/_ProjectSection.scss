@@ -2,6 +2,7 @@
 
 // Documents list is by itself on small screens, and then a sidebar on medium +
 .project {
+  overflow-y: auto;
   padding: 0;
   position: relative;
   width: 100vw;
@@ -9,7 +10,7 @@
   @include media('>medium') {
     display: flex;
     flex-direction: row;
-    overflow: auto;
+    overflow-y: auto;
   }
 }
 
