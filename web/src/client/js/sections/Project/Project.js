@@ -45,6 +45,10 @@ const Project = ({ isFullScreen }) => {
   const [isMobileDocumentView, setIsMobileDocumentView] = useState(isMobileCheck())
 
   useEffect(() => {
+    setIsMobileDocumentView(isMobileCheck())
+  }, [documentId, isMobileCheck])
+
+  useEffect(() => {
     const resizeWindowHandler = debounce(500, (e) => {
       setIsMobileDocumentView(isMobileCheck())
     })
@@ -52,7 +56,7 @@ const Project = ({ isFullScreen }) => {
     return () => {
       window.removeEventListener('resize', resizeWindowHandler, { passive: false })
     }
-  }, [documentId, isDocumentView, isMobileCheck])
+  }, [documentId, isMobileCheck])
 
   useEffect(() => {
     function bodyDragHandler(e) {
@@ -83,6 +87,9 @@ const Project = ({ isFullScreen }) => {
   if (projectId && isNaN(projectId)) {
     return <NoProject />
   }
+
+  console.log(listClasses)
+  console.log(documentsClasses)
 
   return (
     <>
