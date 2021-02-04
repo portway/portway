@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouteMatch, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -9,15 +9,20 @@ import { MOBILE_MATCH_SIZE, PATH_PROJECT, PATH_DOCUMENT, PATH_DOCUMENT_NEW_PARAM
 
 import ProjectToolbarContainer from 'Components/ProjectToolbar/ProjectToolbarContainer'
 import DocumentsListContainer from 'Components/DocumentsList/DocumentsListContainer'
-import DocumentContainer from 'Components/Document/DocumentContainer'
+import DocumentPanelContainer from 'Components/DocumentPanel/DocumentPanelContainer'
+import DocumentHeaderContainer from 'Components/Document/DocumentHeaderContainer'
+import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
 import DocumentToolbarContainer from 'Components/DocumentToolbar/DocumentToolbarContainer'
 import NoProject from 'Components/Pages/NoProject'
+import ValidationContainer from 'Components/Validation/ValidationContainer'
 
 const Project = ({ isFullScreen }) => {
   const { documentId, projectId } = useParams()
   const isDocumentList = useRouteMatch(`${PATH_PROJECT}/:projectId`)
   const isCreateDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/${PATH_DOCUMENT_NEW_PARAM}`)
   const isDocumentView = useRouteMatch(`${PATH_PROJECT}/:projectId${PATH_DOCUMENT}/:documentId`)
+  const docKey = documentId || 0
+  const documentRef = useRef()
 
   // When we are looking at a document list on mobile
   const isMobileListView = isDocumentList &&
@@ -40,6 +45,10 @@ const Project = ({ isFullScreen }) => {
   const [isMobileDocumentView, setIsMobileDocumentView] = useState(isMobileCheck())
 
   useEffect(() => {
+    setIsMobileDocumentView(isMobileCheck())
+  }, [documentId, isMobileCheck])
+
+  useEffect(() => {
     const resizeWindowHandler = debounce(500, (e) => {
       setIsMobileDocumentView(isMobileCheck())
     })
@@ -47,7 +56,7 @@ const Project = ({ isFullScreen }) => {
     return () => {
       window.removeEventListener('resize', resizeWindowHandler, { passive: false })
     }
-  }, [documentId, isDocumentView, isMobileCheck])
+  }, [documentId, isMobileCheck])
 
   useEffect(() => {
     function bodyDragHandler(e) {
@@ -89,7 +98,12 @@ const Project = ({ isFullScreen }) => {
           </div>
           }
           <div className={documentsClasses}>
-            <DocumentContainer />
+            <div className="document" key={docKey} ref={documentRef}>
+              <ValidationContainer resource="document" value="name" />
+              <DocumentHeaderContainer />
+              <DocumentPanelContainer />
+              <DocumentFieldsContainer />
+            </div>
           </div>
         </>
       </main>

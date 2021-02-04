@@ -206,14 +206,9 @@ export const documents = (state = initialState, action) => {
       if (state.loading.byProject[action.projectId] == null) return state
       // documents for the remotely changed project are loading or have already loaded, set loading state to null to trigger refresh
       const byProject = { ...state.loading.byProject, [action.projectId]: null }
-      // clear out document list for that project
-      // eslint-disable-next-line no-unused-vars
-      const projectDocumentsById = { ...state.projectDocumentsById }
-      delete projectDocumentsById[action.projectId]
 
       return {
         ...state,
-        projectDocumentsById,
         loading: {
           ...state.loading,
           byProject

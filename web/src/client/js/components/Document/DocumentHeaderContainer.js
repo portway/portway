@@ -18,14 +18,14 @@ import { documentSocket } from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
 
 import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
-import DocumentComponent from './DocumentComponent'
+import DocumentHeaderComponent from './DocumentHeaderComponent'
 import NoDocument from './NoDocument'
 
 const defaultDocument = {
   name: ''
 }
 
-const DocumentContainer = ({
+const DocumentHeaderContainer = ({
   createMode,
   documentMode,
   fetchDocument,
@@ -37,7 +37,6 @@ const DocumentContainer = ({
   updateDocumentRoomUsers,
   updateRemoteUserFieldFocus
 }) => {
-  console.log('rerender')
   const location = useLocation()
   const params = useParams()
   const currentDocumentIdRef = useRef()
@@ -78,7 +77,6 @@ const DocumentContainer = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   /**
    * If we're creating a document, render nothing
    */
@@ -156,7 +154,7 @@ const DocumentContainer = ({
         <title>{project.name}: {currentDocument.name} –– {PRODUCT_NAME}</title>
       </Helmet>
 
-      <DocumentComponent
+      <DocumentHeaderComponent
         document={currentDocument}
         documentMode={documentMode}
         isFullScreen={isFullScreen}
@@ -167,7 +165,7 @@ const DocumentContainer = ({
   )
 }
 
-DocumentContainer.propTypes = {
+DocumentHeaderContainer.propTypes = {
   createMode: PropTypes.bool.isRequired,
   documentMode: PropTypes.string,
   fetchDocument: PropTypes.func.isRequired,
@@ -199,4 +197,4 @@ const mapDispatchToProps = {
   updateDocumentRoomUsers
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentHeaderContainer)
