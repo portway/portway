@@ -38,6 +38,11 @@ spec:
             configMapKeyRef:
               name: sync-config
               key: sync.logger
+        - name: CLIENT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.client-url
         - name: LOG_TOKEN_SYNC
           valueFrom:
             secretKeyRef:

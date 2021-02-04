@@ -3,6 +3,12 @@ import { getCookieValue } from '../utilities/cookieParser'
 import { receiveDocumentCreatedEvent } from 'Actions/organizationSync'
 import Store from '../reducers'
 
+const cors = {
+  // eslint-disable-next-line no-undef
+  origin: SYNC_URL,
+  methods: ['GET', 'POST']
+}
+
 const RECONNECTION_ATTEMPTS = 100
 const RECONNECTION_DELAY = 1000
 const RECONNECTION_DELAY_MAX = 1200000 // 20 minutes
@@ -19,13 +25,15 @@ const organizationUrl = new URL(`/organization?token=${token}`, SYNC_URL)
 export const documentSocket = openSocket(documentUrl.href, {
   reconnectionAttempts: RECONNECTION_ATTEMPTS,
   reconnectionDelay: RECONNECTION_DELAY,
-  reconnectionDelayMax: RECONNECTION_DELAY_MAX
+  reconnectionDelayMax: RECONNECTION_DELAY_MAX,
+  cors
 })
 
 export const organizationSocket = openSocket(organizationUrl.href, {
   reconnectionAttempts: RECONNECTION_ATTEMPTS,
   reconnectionDelay: RECONNECTION_DELAY,
-  reconnectionDelayMax: RECONNECTION_DELAY_MAX
+  reconnectionDelayMax: RECONNECTION_DELAY_MAX,
+  cors
 })
 
 documentSocket.on('connect', () => {
