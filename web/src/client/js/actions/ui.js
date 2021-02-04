@@ -33,13 +33,6 @@ export const uiCreateUserMode = (value) => {
   }
 }
 
-// Billing
-export const uiToggleStripeForm = (value) => {
-  return async (dispatch) => {
-    dispatch(UI.toggleStripeForm(value))
-  }
-}
-
 /**
  * Confirmation system
  */
