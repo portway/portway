@@ -88,9 +88,6 @@ const Project = ({ isFullScreen }) => {
     return <NoProject />
   }
 
-  console.log(listClasses)
-  console.log(documentsClasses)
-
   return (
     <>
       <main className="project">
