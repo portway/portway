@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
-import { PLAN_TITLES, PLAN_TYPES } from 'Shared/constants'
+import { PATH_PAYMENT } from 'Shared/constants'
 import FlashComponent from 'Components/Flash/FlashComponent'
 
 const AccountTrialing = ({ trialEndDate }) => {
@@ -18,7 +19,7 @@ const AccountTrialing = ({ trialEndDate }) => {
         </div>
       </div>
       <p>
-        <a href="#payment">Add your payment information below</a> to activate your account or to add more seats.
+        <Link to={PATH_PAYMENT}>Add your payment information below</Link> to activate your account or to add more seats.
       </p>
     </FlashComponent>
   )

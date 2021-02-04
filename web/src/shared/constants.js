@@ -208,6 +208,7 @@ module.exports = {
   PATH_ADMIN: '/admin',
   PATH_APP: '/d',
   PATH_BILLING: '/admin/billing',
+  PATH_PAYMENT: '/admin/billing/payment',
   PATH_DOCUMENT_NEW_PARAM: 'new',
   PATH_DOCUMENT_NEW: '/document/new',
   PATH_DOCUMENT: '/document',
