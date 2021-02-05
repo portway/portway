@@ -15,7 +15,13 @@ import { LOG_LEVELS } from '../constants/logging'
 
 const { CLIENT_URL } = process.env
 
-async function createUserAndOrganization(name, email) {
+/**
+ * 
+ * @param {String} name the user's name, all one string in whatever format they choose
+ * @param {String} email the user's email address. Must be valid email to verify and use account
+ * @param {String} source (optional) a string indicating where the user signed up from
+ */
+async function createUserAndOrganization(name, email, source) {
   const existingUser = await BusinessUser.findByEmail(email)
 
   if (existingUser) {
@@ -23,7 +29,12 @@ async function createUserAndOrganization(name, email) {
   }
 
   const organizationName = `${name}'s Organization`
-  const organization = await BusinessOrganization.create({ name: organizationName })
+
+  const newOrg = { name: organizationName }
+  if (source) {
+    newOrg.source = source
+  }
+  const organization = await BusinessOrganization.create(newOrg)
 
   const createdUser = await userCoordinator.createPendingUser(
     email, name, organization.id, ORGANIZATION_ROLE_IDS.OWNER

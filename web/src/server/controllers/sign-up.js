@@ -21,21 +21,29 @@ const footerLinks = {
 }
 
 const SignUpController = function(router) {
+  // Initial sign up form. Posts to /registration route and then redirects to /processing
   router.get('/', (req, res) => {
-    res.render('user/sign-up', renderBundles(req, 'Sign up', 'signup', footerLinks))
+    const { source } = req.query
+    res.render('user/sign-up', { ...renderBundles(req, 'Sign up', 'signup', footerLinks), source })
   })
 
+  // After initial signup, this route renders "Verify email address" static page
   router.get('/processing', (req, res) => {
     res.render('user/processing', renderBundles(req, 'Processing', 'index', footerLinks))
   })
 
+  // This is the initial signup route, when a user first submits their name and email to create
+  // a Portway account
   router.post('/registration', registerOrganization)
 
+  // This is the page rendered for the user to set their initial password _after_ they have verified
+  // their email
   router.get('/registration/complete', async (req, res) => {
     const { token } = req.query
     res.render('user/registration', { ...renderBundles(req, 'Registration', 'registration', footerLinks), token })
   })
 
+  // Set initial password form submission
   router.post('/registration/complete', completeRegistration)
 }
 
@@ -44,7 +52,7 @@ const registerOrganization = async (req, res) => {
     return res.status(403).send('Signup disabled')
   }
 
-  const { name, email } = req.body
+  const { name, email, source } = req.body
 
   try {
     await API.send({
@@ -52,7 +60,8 @@ const registerOrganization = async (req, res) => {
       method: 'POST',
       data: {
         name,
-        email
+        email,
+        source
       }
     })
   } catch ({ response }) {
