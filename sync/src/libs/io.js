@@ -8,7 +8,8 @@ export function loadIO(server) {
   loadedIO = io(server, {
     cors: {
       origin: CLIENT_URL,
-      methods: ['GET', 'POST']
+      methods: ['GET', 'POST'],
+      credentials: true
     }
   })
   return loadedIO
