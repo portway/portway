@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
+import { PATH_PAYMENT } from 'Shared/constants'
 import FlashComponent from 'Components/Flash/FlashComponent'
 
 const AccountTrialEnded = () => {
@@ -11,12 +13,12 @@ const AccountTrialEnded = () => {
           <p className="note">
             Thanks for checking out Portway! We’re sad to see you go.
             Your account will be completely erased soon.
-            <br />If you change your mind you can <a href="#payment">activate your account now</a>.
+            <br />If you change your mind you can <Link to={PATH_PAYMENT}>activate your account now</Link>.
           </p>
         </div>
       </div>
       <p>
-        <a href="#payment">Add your payment information below</a> to activate your account.
+        <Link to={PATH_PAYMENT}>Add your payment information below</Link> to activate your account.
       </p>
     </FlashComponent>
   )

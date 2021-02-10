@@ -14,7 +14,6 @@ import { debounce } from 'Shared/utilities'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-
 import { createDocument, deleteDocument, unpublishDocument } from 'Actions/document'
 import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
@@ -37,11 +36,13 @@ const DocumentsListContainer = ({
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
+  projectDocumentsLoading
 }) => {
   const { documentId, projectId } = useParams()
   const history = useHistory()
 
-  const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [projectId])
+  // trigger refetching if projectDocumentsLoading[projectId] gets set to null, this happens when there's a remote org doc change event
+  const { data: documents, loading } = useDataService(dataMapper.documents.list(projectId), [projectId, projectDocumentsLoading[projectId] == null])
   const { data: projectAssignments, loading: assignmentsLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // trigger clear search action if project id changes
@@ -203,6 +204,7 @@ DocumentsListContainer.propTypes = {
   uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
   unpublishDocument: PropTypes.func.isRequired,
+  projectDocumentsLoading: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -213,6 +215,7 @@ const mapStateToProps = (state) => {
     isSearching: state.ui.documents.isSearching,
     searchResults: state.search.searchResultsByDocumentId,
     searchTerm: state.search.searchTerm,
+    projectDocumentsLoading: state.documents.loading.byProject
   }
 }
 

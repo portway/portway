@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import cx from 'classnames'
+import { Link } from 'react-router-dom'
 
+import { PATH_PAYMENT } from 'Shared/constants'
 import ValidationComponent from 'Components/Validation/ValidationComponent'
 import StripeContainer from './StripeContainer'
 import './_AdminPaymentStyles.scss'
@@ -44,7 +46,6 @@ const AdminPaymentComponent = ({
   errors,
   isStripeOpen,
   isSubmitting,
-  openStripeHandler,
   organization,
   orgBilling
 }) => {
@@ -53,7 +54,7 @@ const AdminPaymentComponent = ({
       <div className="admin-payment">
         <>
           <p>We don’t have payment information on file</p>
-          <button className="btn btn--small" onClick={() => { openStripeHandler(true) }}>Add Payment Info</button>
+          <Link to={PATH_PAYMENT} className="btn btn--small">Add Payment Info</Link>
         </>
       </div>
     )
@@ -65,7 +66,7 @@ const AdminPaymentComponent = ({
         <>
           <p>Enter your new card information. We will use this new form of payment from now on.</p>
           <ValidationComponent errors={errors.stripe} />
-          <StripeContainer cancelHandler={() => { openStripeHandler(false) }} isSubmitting={isSubmitting} />
+          <StripeContainer isSubmitting={isSubmitting} />
         </>
       </div>
     )
@@ -101,7 +102,7 @@ const AdminPaymentComponent = ({
               <span className={expiringClass}>{expDate.format('MMMM, YYYY')}</span>
             </div>
           </div>
-          <button className="btn btn--like-a-link" onClick={() => { openStripeHandler(true) }}>Change Payment Info</button>
+          <Link to={PATH_PAYMENT} className="btn btn--like-a-link">Change Payment Info</Link>
         </>
         }
       </div>
@@ -113,7 +114,6 @@ AdminPaymentComponent.propTypes = {
   errors: PropTypes.object,
   isStripeOpen: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
-  openStripeHandler: PropTypes.func.isRequired,
   organization: PropTypes.object,
   orgBilling: PropTypes.object
 }

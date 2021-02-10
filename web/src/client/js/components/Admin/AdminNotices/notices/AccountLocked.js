@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
+import { PATH_PAYMENT } from 'Shared/constants'
 import FlashComponent from 'Components/Flash/FlashComponent'
 
 const AccountLocked = () => {
@@ -11,7 +13,7 @@ const AccountLocked = () => {
           <p className="note">We cannot successfully bill you with your current payment information.</p>
         </div>
       </div>
-      <p>Please <a href="#payment">update your payment information below</a> to activate your account.</p>
+      <p>Please <Link to={PATH_PAYMENT}>update your payment information below</Link> to activate your account.</p>
     </FlashComponent>
   )
 }
