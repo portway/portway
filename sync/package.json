@@ -33,6 +33,6 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "r7insight_node": "^2.0.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^3.1.1"
   }
 }

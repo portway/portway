@@ -18,15 +18,12 @@ import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import OrgPlanPermission from 'Components/Permission/OrgPlanPermission'
-import ValidationContainer from 'Components/Validation/ValidationContainer'
-import DocumentFieldsContainer from 'Components/DocumentFields/DocumentFieldsContainer'
-import DocumentPanelContainer from 'Components/DocumentPanel/DocumentPanelContainer'
 import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContainer'
 
 import './_Document.scss'
 import { IconButton } from 'Components/Buttons/index'
 
-const DocumentComponent = ({
+const DocumentHeaderComponent = ({
   document,
   documentMode,
   isFullScreen,
@@ -57,7 +54,6 @@ const DocumentComponent = ({
 
   if (!document.id) return null
 
-  const docKey = document ? document.id : 0
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
@@ -83,18 +79,13 @@ const DocumentComponent = ({
   })
 
   return (
-    <div className="document" key={docKey} ref={documentRef}>
-      <ValidationContainer resource="document" value="name" />
-      {documentMode === DOCUMENT_MODE.EDIT &&
-      <DocumentPanelContainer />
-      }
-      <header className="document__header">
-        {mobileView &&
+    <header className="document__header">
+      {mobileView &&
         <Link className="btn btn--blank btn--with-circular-icon document__button-expand" to={`${PATH_PROJECT}/${document.projectId}`} aria-label="Back to document list">
           <ArrowIcon direction="left" width="12" height="12" />
         </Link>
-        }
-        {!mobileView && !isLikelyAniPad && supportsFullScreen &&
+      }
+      {!mobileView && !isLikelyAniPad && supportsFullScreen &&
         <button
           aria-label="Expand the editor to full screen"
           className="btn btn--blank btn--with-circular-icon document__button-expand"
@@ -114,44 +105,42 @@ const DocumentComponent = ({
           title="Expand to full screen">
           <ExpandIcon />
         </button>
-        }
-        <div className="document__title-container">
-          <input
-            className="document__title"
-            defaultValue={document.name}
-            onChange={(e) => {
-              e.persist()
-              changeHandlerAction(e)
-            }}
-            onKeyDown={(e) => {
-              if (e.key.toLowerCase() === 'enter') {
-                nameChangeHandler(e)
-                titleRef.current.blur()
-              }
-            }}
-            readOnly={documentReadOnlyMode}
-            ref={titleRef} />
+      }
+      <div className="document__title-container">
+        <input
+          className="document__title"
+          defaultValue={document.name}
+          onChange={(e) => {
+            e.persist()
+            changeHandlerAction(e)
+          }}
+          onKeyDown={(e) => {
+            if (e.key.toLowerCase() === 'enter') {
+              nameChangeHandler(e)
+              titleRef.current.blur()
+            }
+          }}
+          readOnly={documentReadOnlyMode}
+          ref={titleRef} />
+      </div>
+      <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
+        <div className={documentUsersClasses}>
+          <DocumentUsersContainer />
         </div>
-        <OrgPlanPermission acceptedPlans={MULTI_USER_PLAN_TYPES} acceptedSubscriptionStatuses={[ORG_SUBSCRIPTION_STATUS.ACTIVE]}>
-          <div className={documentUsersClasses}>
-            <DocumentUsersContainer />
-          </div>
-        </OrgPlanPermission>
-        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
-          <div className="document__toggle-container">
-            <IconButton color={panelButtonColor} onClick={toggleDocumentMode} title="Toggle the document panel">
-              <PanelIcon fill={panelIconFill} />
-            </IconButton>
-          </div>
-        </ProjectPermission>
-      </header>
-      <DocumentFieldsContainer />
-    </div>
+      </OrgPlanPermission>
+      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
+        <div className="document__toggle-container">
+          <IconButton color={panelButtonColor} onClick={toggleDocumentMode} title="Toggle the document panel">
+            <PanelIcon fill={panelIconFill} />
+          </IconButton>
+        </div>
+      </ProjectPermission>
+    </header>
   )
 }
 
 // @todo fill out this document object and add defaults
-DocumentComponent.propTypes = {
+DocumentHeaderComponent.propTypes = {
   document: PropTypes.object,
   documentMode: PropTypes.string,
   isFullScreen: PropTypes.bool.isRequired,
@@ -160,10 +149,10 @@ DocumentComponent.propTypes = {
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 
-DocumentComponent.defaultProps = {
+DocumentHeaderComponent.defaultProps = {
   document: {
     name: ''
   },
 }
 
-export default DocumentComponent
+export default DocumentHeaderComponent

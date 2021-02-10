@@ -167,7 +167,10 @@ export const ActionTypes = {
   FIELD_BLUR_EMITTED: 'FIELD_BLUR_EMITTED',
   FIELD_CHANGE_EMITTED: 'FIELD_CHANGE_EMITTED',
   REMOTE_USER_FIELD_FOCUS_UPDATED: 'USER_FIELD_FOCUS_UPDATED',
-  REMOTE_FIELD_CHANGE_EVENT_RECEIVED: 'REMOTE_FIELD_CHANGE_EVENT_RECEIVED'
+  REMOTE_FIELD_CHANGE_EVENT_RECEIVED: 'REMOTE_FIELD_CHANGE_EVENT_RECEIVED',
+  // Organization Sync
+  DOCUMENT_CREATED_EVENT_EMITTED: 'DOCUMENT_CREATED_EVENT_EMITTED',
+  DOCUMENT_CREATED_EVENT_RECEIVED: 'DOCUMENT_CREATED_EVENT_RECEIVED'
 }
 
 export const Route = {
@@ -378,4 +381,10 @@ export const UserSync = {
   fieldChangeEmitted: makeActionCreator(ActionTypes.FIELD_CHANGE_EMITTED, 'fieldId'),
   remoteUserFieldFocusUpdated: makeActionCreator(ActionTypes.REMOTE_USER_FIELD_FOCUS_UPDATED, 'userId', 'fieldId'),
   remoteFieldChangeEventReceived: makeActionCreator(ActionTypes.REMOTE_FIELD_CHANGE_EVENT_RECEIVED, 'userId', 'fieldId', 'focusedFieldId')
+}
+
+export const OrganizationSync = {
+  documentCreatedEventEmitted: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_EMITTED, 'projectId'),
+  documentCreatedEventReceived: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_RECEIVED, 'projectId'),
+  socketError: makeActionCreator(ActionTypes.SOCKET_ERROR)
 }
