@@ -105,6 +105,7 @@ form {
     &__option {
       &--is-selected {
         background: var(--react-select-option-selected);
+        color: var(--theme-text-color);
         font-weight: 700;
       }
       &--is-focused {

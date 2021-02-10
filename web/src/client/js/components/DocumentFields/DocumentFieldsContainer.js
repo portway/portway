@@ -28,10 +28,11 @@ const DocumentFieldsContainer = ({
 }) => {
   const { projectId, documentId } = useParams()
   const fieldKeys = useRef([])
-  const { data: fields = {} } = useDataService(dataMapper.fields.list(documentId), [documentId])
+  const { data: foundFields } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
   const activeUsers = activeDocumentUsers[documentId]
   const projectAssignment = userProjectAssignments[Number(projectId)]
+  const fields = foundFields || {}
 
   const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   let documentReadOnlyMode = false

@@ -48,6 +48,8 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
+    "@stripe/react-stripe-js": "^1.2.1",
+    "@stripe/stripe-js": "^1.11.0",
     "autoprefixer": "^9.7.3",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
@@ -61,7 +63,7 @@
     "dotenv-webpack": "^1.5.7",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
-    "eslint": "^5.13.0",
+    "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
@@ -91,7 +93,6 @@
     "react-redux": "^6.0.0",
     "react-router-dom": "^5.1.2",
     "react-select": "^2.4.2",
-    "react-stripe-elements": "^2.0.3",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
@@ -127,6 +128,6 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "r7insight_node": "^2.0.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^3.1.1"
   }
 }

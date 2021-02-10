@@ -1,4 +1,4 @@
-import documentSocket from '../sockets/SocketProvider'
+import { documentSocket } from '../sockets/SocketProvider'
 import { UserSync } from './index'
 
 export const emitJoinDocumentRoom = (documentId) => {
