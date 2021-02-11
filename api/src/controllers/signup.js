@@ -10,7 +10,8 @@ const signupPayloadSchema = Joi.compile({
   name: Joi.string().required(),
   email: Joi.string()
     .email()
-    .required()
+    .required(),
+  source: Joi.string().allow('')
 })
 
 const signupController = function(router) {
@@ -25,10 +26,11 @@ const signupController = function(router) {
 }
 
 const signUp = async function(req, res, next) {
-  const { name, email } = req.body
+  const { name, email, source } = req.body
+  const plainSource = decodeURIComponent(source)
 
   try {
-    await signUpCoordinator.createUserAndOrganization(name, email)
+    await signUpCoordinator.createUserAndOrganization(name, email, plainSource)
     res.status(204).send()
   } catch (e) {
     next(e)
