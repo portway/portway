@@ -68,7 +68,8 @@ async function createUserAndOrganization(name, email, source) {
   await emailCoordinator.sendSignupVerification(linkUrl, createdUser.email)
 
   // not awaiting this, sends a notification to slack channel
-  slackIntegrator.sendNotification(`${email} has signed up for Portway`)
+  const fromSource = source ? ` from ${source}` : ''
+  slackIntegrator.sendNotification(`${email} has signed up for Portway${fromSource}`)
 }
 
 export default {
