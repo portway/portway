@@ -24,7 +24,8 @@ async function handleEvent(event) {
       // No need to await webhook
       emailCoordinator.sendPaymentSuccess(customer.email, eventData.amount)
       // not awaiting this, sends a notification to slack channel
-      slackIntegrator.sendNotification(`:moneybag: ${customer.email} was successfully charged :moneybag:`)
+      const fromSource = org.source ? ` (source: ${source})` : ''
+      slackIntegrator.sendNotification(`:moneybag: ${customer.email} was successfully charged :moneybag:${fromSource}`)
       break
     }
     case 'customer.subscription.deleted': {

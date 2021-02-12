@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       plan: DataTypes.ENUM(Object.keys(PLANS)),
       subscriptionStatus: DataTypes.STRING,
       canceledAt: DataTypes.DATE,
-      introProjectId: DataTypes.INTEGER
+      introProjectId: DataTypes.INTEGER,
+      source: DataTypes.STRING
     },
     {
       paranoid: true
