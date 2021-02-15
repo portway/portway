@@ -42,8 +42,8 @@ const DocumentFieldsContainer = ({
   }
 
   const sortedFields = useMemo(() => {
-    // Sort the fields every re-render
     fieldKeys.current = Object.keys(fields)
+
     const fieldMapTemp = fieldKeys.current.map((fieldId) => {
       return fields[fieldId]
     })
@@ -57,7 +57,7 @@ const DocumentFieldsContainer = ({
   const hasOnlyOneTextField = hasFields && sortedFields.length === 1 && fields[sortedFields[0].id].type === FIELD_TYPES.TEXT
 
   const createTextFieldHandler = useCallback(() => {
-    if (!documentReadOnlyMode) {
+    if (!documentReadOnlyMode && parseInt(documentId) && parseInt(projectId)) {
       // This is triggered by the Big Invisible Button™
       // It should append a new text field to the end of the document, making it seem as though the
       // user is clicking to continue the document body
