@@ -11,7 +11,7 @@ import FieldImageComponent from 'Components/FieldImage/FieldImageComponent'
 import FieldDateComponent from 'Components/FieldDate/FieldDateComponent'
 import FieldFileComponent from 'Components/FieldFile/FieldFileComponent'
 
-const DocumentFieldsComponent = ({
+const DocumentFieldsComponent = React.forwardRef(({
   createdFieldId,
   createFieldHandler,
   disabled,
@@ -24,7 +24,7 @@ const DocumentFieldsComponent = ({
   fieldsUpdating,
   isPublishing,
   readOnly
-}) => {
+}, ref) => {
   const [settingsForField, setSettingsForField] = useState(null)
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
@@ -169,13 +169,13 @@ const DocumentFieldsComponent = ({
     'document__fields--disabled': isPublishing || disabled
   })
   return (
-    <div className={fieldsClasses}>
+    <div ref={ref} className={fieldsClasses}>
       <ol className="document__fields-list">
         {renderFields()}
       </ol>
     </div>
   )
-}
+})
 
 DocumentFieldsComponent.propTypes = {
   createdFieldId: PropTypes.number,

@@ -28,6 +28,7 @@ const DocumentFieldsContainer = ({
 }) => {
   const { projectId, documentId } = useParams()
   const fieldKeys = useRef([])
+  const docAreaRef = useRef()
   const { data: foundFields } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
   const activeUsers = activeDocumentUsers[documentId]
@@ -68,6 +69,28 @@ const DocumentFieldsContainer = ({
       })
     }
   }, [documentReadOnlyMode, fields, createField, documentId, projectId])
+
+  const createTextFieldForExistingEmptyDocumentHandler = useCallback(() => {
+
+  })
+
+  // This listener handles the scenario where a document has already been created
+  // and has no fields. The document create action creates a text field, so the user would
+  // need to delete all the fields, or create a document via the API in order to have no fields
+  useEffect(() => {
+    if (
+      docAreaRef && docAreaRef.current && 
+      !hasFields && foundFields && Object.keys(foundFields).length === 0
+    ) {
+      docAreaRef.current.addEventListener('click', createTextFieldHandler, false)
+      return function cleanup() {
+        docAreaRef.current.removeEventListener('click', createTextFieldHandler, false)
+      }
+    }
+  // Check hasFields and foundFields. hasFields provides an already computed quick check, and
+  // foundFields is the value from the redux store. We want to explicitly look at foundFields to
+  // determine 1) have the fields loaded 2) are there any fields
+  }, [hasFields, foundFields])
 
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
@@ -124,6 +147,7 @@ const DocumentFieldsContainer = ({
 
   return (
     <DocumentFieldsComponent
+      ref={docAreaRef}
       activeUsers={activeUsers}
       createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
