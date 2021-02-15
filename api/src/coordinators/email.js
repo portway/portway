@@ -109,9 +109,11 @@ async function sendPaymentFailed(email) {
   })
 }
 
+// amount is coming in as a four digit number ie 2003, which represents $20.03
 async function sendPaymentSuccess(email, amount) {
   const subject = 'Payment successful'
-  const displayAmount = `$${amount / 100}.00`
+  const amountString = `${amount}`
+  const displayAmount = `${amountString.slice(0, 2)}.${amountString.slice(2, 4)}`
   const message = `You've been charged ${displayAmount}`
 
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PAYMENT_SUCCESS]({ paymentAmount: displayAmount })
