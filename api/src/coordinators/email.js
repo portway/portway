@@ -113,7 +113,8 @@ async function sendPaymentFailed(email) {
 async function sendPaymentSuccess(email, amount) {
   const subject = 'Payment successful'
   const amountString = `${amount}`
-  const displayAmount = `${amountString.slice(0, 2)}.${amountString.slice(2, 4)}`
+  const decimalPlace = amountString.length - 2
+  const displayAmount = `$${amountString.slice(0, decimalPlace)}.${amountString.slice(decimalPlace, amountString.length)}`
   const message = `You've been charged ${displayAmount}`
 
   const htmlBody = await EJS_TEMPLATE_FUNCTIONS[EMAIL_TEMPLATES.PAYMENT_SUCCESS]({ paymentAmount: displayAmount })
