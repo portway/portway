@@ -5,8 +5,15 @@ import { QUEUE_NAMES } from '../constants/queue'
 
 const redisUrl = new url.URL(process.env.REDIS_URL)
 
-// TODO: move to constants for queue name
 const exportQueue = new Queue(QUEUE_NAMES.PROJECT_EXPORT, {
+  isWorker: false,
+  redis: {
+    host: redisUrl.hostname,
+    port: redisUrl.port
+  }
+})
+
+const imageProcessingQueue = new Queue(QUEUE_NAMES.IMAGE_PROCESSING, {
   isWorker: false,
   redis: {
     host: redisUrl.hostname,
@@ -35,6 +42,29 @@ const runProjectExport = async (projectId, token) => {
   })
 }
 
+const runImageProcessing = async (fileLocation, documentId, fieldId) => {
+  return new Promise((resolve, reject) => {
+    const job = imageProcessingQueue.createJob({
+      fileLocation,
+      documentId,
+      fieldId
+    })
+
+    job.on('succeeded', (result) => {
+      resolve(result)
+    })
+
+    job.on('failed', reject)
+
+    job.save((err) => {
+      if (err) {
+        reject(err)
+      }
+    })
+  })
+}
+
 export default {
-  runProjectExport
+  runProjectExport,
+  runImageProcessing
 }
