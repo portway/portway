@@ -12,6 +12,7 @@ import axios from 'axios'
 import { lookup } from 'mime-types'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
+import jobQueue from '../integrators/jobQueue'
 
 const stat = util.promisify(fs.stat)
 
@@ -21,7 +22,14 @@ const addFieldToDocument = async function(documentId, body, file) {
   const { orgId } = body
   const fieldBody = await getFieldBodyByType(body, documentId, orgId, file)
 
-  return BusinessField.createForDocument(documentId, fieldBody)
+  const field = await BusinessField.createForDocument(documentId, fieldBody)
+
+  // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
+  if (file && field.type === FIELD_TYPES.IMAGE) {
+    jobQueue.runImageProcessing(field.value, field.documentId, field.id)
+  }
+  
+  return field
 }
 
 const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
@@ -60,7 +68,13 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
-  return BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
+  const updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
+  // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
+  if (field.type === FIELD_TYPES.IMAGE && file) {
+    jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id)
+  }
+
+  return updatedField
 }
 
 /*
