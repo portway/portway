@@ -42,10 +42,10 @@ const runProjectExport = async (projectId, token) => {
   })
 }
 
-const runImageProcessing = async (fileLocation, documentId, fieldId) => {
+const runImageProcessing = async (url, documentId, fieldId) => {
   return new Promise((resolve, reject) => {
     const job = imageProcessingQueue.createJob({
-      fileLocation,
+      url,
       documentId,
       fieldId
     })
