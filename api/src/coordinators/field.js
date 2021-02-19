@@ -26,9 +26,9 @@ const addFieldToDocument = async function(documentId, body, file) {
 
   // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
   if (file && field.type === FIELD_TYPES.IMAGE) {
-    jobQueue.runImageProcessing(field.value, field.documentId, field.id)
+    jobQueue.runImageProcessing(field.value, field.documentId, field.id, orgId)
   }
-  
+
   return field
 }
 
