@@ -5,6 +5,7 @@ import { processMarkdownSync } from './markdown'
 import { callFuncWithArgs } from '../libs/utils'
 import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import axios from 'axios'
+import jobQueue from '../integrators/jobQueue'
 
 jest.mock('axios')
 jest.mock('../businesstime/field')
@@ -12,6 +13,7 @@ jest.mock('./assets')
 jest.mock('./markdown')
 jest.mock('../libs/utils')
 jest.mock('../libs/promisifyStreamPipe')
+jest.mock('../integrators/jobQueue')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
@@ -29,11 +31,14 @@ describe('fieldCoordinator', () => {
     })
 
     describe('when it is an image field', () => {
-      const imageBody = { type: 4, orgId: 0 }
+      const orgId = 0
+      const imageBody = { type: 4, orgId }
       const file = { buffer: new Buffer('not-a-real-buffer') }
+      const fieldId = 999
 
       beforeAll(async () => {
         BusinessField.createForDocument.mockReset()
+        BusinessField.createForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId })
         await fieldCoordinator.addFieldToDocument(documentId, imageBody, file )
       })
 
@@ -45,6 +50,14 @@ describe('fieldCoordinator', () => {
       it('should call BusinessField.createForDocument with the passed in documentId and body with uploaded file url added', () => {
         expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
         expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
+      })
+
+      it('should call jobQueue.runImageProcessing', () => {
+        expect(jobQueue.runImageProcessing.mock.calls.length).toBe(1)
+        expect(jobQueue.runImageProcessing.mock.calls[0][0]).toEqual(body.value)
+        expect(jobQueue.runImageProcessing.mock.calls[0][1]).toEqual(documentId)
+        expect(jobQueue.runImageProcessing.mock.calls[0][2]).toEqual(fieldId)
+        expect(jobQueue.runImageProcessing.mock.calls[0][3]).toEqual(orgId)
       })
     })
 
