@@ -161,13 +161,17 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
  * @param {Number} id 
  * @param {Number} documentId
  * @param {Number} orgId
- * @param {Object} options
+ * @param {Object} options (optional)
  * 
  * options = {
- *   deletePublished: true // ignores published status of field
+ *   deletePublished: true/false // ignores published status of field
+ *   markUpdated: true/false // whether to update parent document and project
  * }
  */
-async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
+async function deleteByIdForDocument(id, documentId, orgId, options = {
+  deletePublished: false,
+  markUpdated: true
+}) {
   const db = getDb()
 
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -187,10 +191,12 @@ async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
   await field.destroy()
 
   // this is async, but don't wait for it, fire and move on
-  document.markUpdated()
+  if (options.markUpdated) {
+    document.markUpdated()
 
-  // another async chain we don't need to wait for, updatedAt gets set all the way up
-  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+    // another async chain we don't need to wait for, updatedAt gets set all the way up
+    db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+  }
 
   await normalizeFieldOrderAndGetCount(documentId, orgId)
 }
