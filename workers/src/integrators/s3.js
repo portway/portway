@@ -29,18 +29,15 @@ export const uploadExportZip = async function(filePath, uniqueId) {
   return res.Location
 }
 
-export const uploadStream = async function(readStream, key, contentType) {
-  const writeStream = new stream.PassThrough()
+export const uploadBuffer = async function(buffer, key, contentType) {
 
   const params = {
     Bucket: S3_CONTENT_BUCKET,
     Key: key,
     ContentType: contentType,
-    Body: writeStream,
+    Body: buffer,
     ACL: 'public-read'
   }
-  
-  const result = await promisifyStreamPipe(readStream, writeStream)
 
   return s3.upload(params).promise()
 }
