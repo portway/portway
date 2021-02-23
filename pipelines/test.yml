@@ -25,35 +25,48 @@ steps:
         - name: main_clone
           on:
             - success
-  build_and_run_web_and_api_tests:
+  build_web_image:
+    stage: Web Build and Test
+    title: Building Web Docker Image
+    type: build
+    image_name: bonkeybong/portway_web
+    working_directory: ./web/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
+  build_worker_image:
+    stage: Worker Build and Test
+    title: Building Worker Docker Image
+    type: build
+    image_name: bonkeybong/portway_workers
+    working_directory: ./workers/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
+  build_api_image:
+    stage: API Build and test
+    title: Building API Docker Image
+    type: build
+    image_name: bonkeybong/portway_api
+    working_directory: ./api/
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    dockerfile: Dockerfile
+    when:
+      steps:
+        - name: hide_dockerignore
+          on:
+            - success
+  testing_phase:
     type: parallel
-    steps:
-      build_api_image:
-        stage: API Build and test
-        title: Building API Docker Image
-        type: build
-        image_name: bonkeybong/portway_api
-        working_directory: ./api/
-        tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-        dockerfile: Dockerfile
-        when:
-          steps:
-            - name: hide_dockerignore
-              on:
-                - success
-      build_web_image:
-        stage: Web Build and Test
-        title: Building Web Docker Image
-        type: build
-        image_name: bonkeybong/portway_web
-        working_directory: ./web/
-        tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-        dockerfile: Dockerfile
-        when:
-          steps:
-            - name: hide_dockerignore
-              on:
-                - success
+    steps:  
       run_web_tests:
         stage: Web Build and Test
         image: ${{build_web_image}}
@@ -100,22 +113,6 @@ steps:
             - name: build_api_image
               on:
                 - success
-  build_and_run_worker_tests:
-    type: parallel
-    steps:
-      build_worker_image:
-      stage: Worker Build and Test
-      title: Building Worker Docker Image
-      type: build
-      image_name: bonkeybong/portway_workers
-      working_directory: ./workers/
-      tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
-      dockerfile: Dockerfile
-      when:
-        steps:
-          - name: hide_dockerignore
-            on:
-              - success
       run_worker_tests:
         stage: Worker Build and Test
         image: ${{build_worker_image}}
