@@ -45,7 +45,7 @@ describe('fieldCoordinator', () => {
       it('should call BusinessField.createForDocument with the passed in documentId and body with uploaded file url added', () => {
         expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
         expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
-      })
+      }) 
     })
 
     describe('when it is a text field', () => {
