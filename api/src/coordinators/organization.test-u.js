@@ -174,6 +174,7 @@ describe('organization coordinator', () => {
 
   describe('#deleteOrg', () => {
     beforeAll(async () => {
+      BusinessOrganization.findById.mockClear()
       BusinessOrganization.findById.mockReturnValueOnce({ id: orgId, stripeId })
       organizationCoordinator.removeAllOrgData.mockClear()
       await organizationCoordinator.deleteOrg(orgId)
