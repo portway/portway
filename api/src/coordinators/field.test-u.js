@@ -6,6 +6,7 @@ import { callFuncWithArgs } from '../libs/utils'
 import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import axios from 'axios'
 import jobQueue from '../integrators/jobQueue'
+import { FIELD_TYPES } from '../constants/fieldTypes'
 
 jest.mock('axios')
 jest.mock('../businesstime/field')
@@ -38,7 +39,7 @@ describe('fieldCoordinator', () => {
 
       beforeAll(async () => {
         BusinessField.createForDocument.mockReset()
-        BusinessField.createForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId })
+        BusinessField.createForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId, type: FIELD_TYPES.IMAGE, value: body.value })
         await fieldCoordinator.addFieldToDocument(documentId, imageBody, file )
       })
 
@@ -105,6 +106,8 @@ describe('fieldCoordinator', () => {
 
     beforeAll(async () => {
       BusinessField.setFindByIdReturnValue({ type: 2 })
+      BusinessField.updateByIdForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId, type: FIELD_TYPES.TEXT, value: body.value })
+
       await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, body)
     })
 
@@ -126,13 +129,14 @@ describe('fieldCoordinator', () => {
     })
 
     describe('when it is an image field', () => {
-      const imageBody = { orgId: 0 }
+      const imageBody = { orgId: 0, value: 'not-a-real-update-value' }
       const file = { buffer: new Buffer('not-a-real-buffer') }
 
       beforeAll(async () => {
         BusinessField.setFindByIdReturnValue({ type: 4 })
         BusinessField.updateByIdForDocument.mockReset()
         assetCoordinator.addAssetForDocument.mockReset()
+        BusinessField.updateByIdForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId, type: FIELD_TYPES.IMAGE, value: imageBody.value })
         await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, imageBody, file)
       })
 
@@ -147,6 +151,14 @@ describe('fieldCoordinator', () => {
         expect(BusinessField.updateByIdForDocument.mock.calls[0][0]).toEqual(fieldId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][1]).toEqual(documentId)
         expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
+      })
+
+      it('should call jobQueue.runImageProcessing', () => {
+        expect(jobQueue.runImageProcessing.mock.calls.length).toBe(1)
+        expect(jobQueue.runImageProcessing.mock.calls[0][0]).toEqual(imageBody.value)
+        expect(jobQueue.runImageProcessing.mock.calls[0][1]).toEqual(documentId)
+        expect(jobQueue.runImageProcessing.mock.calls[0][2]).toEqual(fieldId)
+        expect(jobQueue.runImageProcessing.mock.calls[0][3]).toEqual(orgId)
       })
     })
   })
