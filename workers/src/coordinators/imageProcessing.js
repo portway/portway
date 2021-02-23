@@ -1,12 +1,11 @@
 import sharp from 'sharp'
 import axios from 'axios'
 import { uploadBuffer } from '../integrators/s3'
-import { lookup } from 'mime-types'
 import path from 'path'
 
+// TODO: update field with new image urls
 const createImageAlternatives = async function(url, documentId, fieldId) {
   const resp = await axios({ url, responseType: 'arraybuffer', method: 'get' })
-  const mimeType = lookup(url)
   const s3Location = url.split('/').slice(3, -1).join('/')
   const extension = path.extname(url)
   const basename = path.basename(url, extension)
@@ -14,7 +13,7 @@ const createImageAlternatives = async function(url, documentId, fieldId) {
   const image = sharp(resp.data)
   const metadata = await image.metadata()
   const basekey = path.join(s3Location, basename, basename)
-  const results = {}
+
   // webPFull
   const webPFull = await image
     .toFormat('webp')
@@ -45,10 +44,10 @@ const createImageAlternatives = async function(url, documentId, fieldId) {
   ])
 
   return {
-    webPFull: uploadResults[0],
-    webPHalf: uploadResults[1],
-    pngFull: uploadResults[0],
-    pngHalf: uploadResults[1]
+    webPFull: uploadResults[0].Location,
+    webPHalf: uploadResults[1].Location,
+    pngFull: uploadResults[2].Location,
+    pngHalf: uploadResults[3].Location
   }
 }
 

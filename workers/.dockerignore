@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.env
+.prettierrc
+Dockerfile-dev
+Dockerfile
+example.env
+(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$
+**/*.test-(u|a|i).js
+**/__mocks__
+**/__testSetup__/
+.dockerignore
+.git
+.gitignore
