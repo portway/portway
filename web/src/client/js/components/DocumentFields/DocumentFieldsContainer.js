@@ -39,8 +39,11 @@ const DocumentFieldsContainer = ({
   let documentReadOnlyMode = false
   // False because null / true == loading
   if (assignmentLoading === false) {
-    // User has the project reader role
-    if (projectAssignment && PROJECT_ROLE_IDS.READER === projectAssignment.roleId) {
+    // User has the project reader role and project is not set to "write"
+    if (projectAssignment && 
+      PROJECT_ROLE_IDS.READER === projectAssignment.roleId && 
+      project.accessLevel !== PROJECT_ACCESS_LEVELS.WRITE
+    ) {
       documentReadOnlyMode = true
     } else if (projectAssignment === undefined && project.accessLevel === PROJECT_ACCESS_LEVELS.READ) {
       documentReadOnlyMode = true
