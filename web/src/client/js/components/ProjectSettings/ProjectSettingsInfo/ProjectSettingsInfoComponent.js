@@ -29,8 +29,6 @@ const ProjectSettingsInfoComponent = ({
     })
   }
 
-  const helpText = "Checking this box allows anyone in your organization to view this project's documents, whether they are part of the project team or not"
-
   return (
     <>
       <Form className="project-settings__info" name={formId} onSubmit={submitHandler} submitLabel="Update project settings">
@@ -57,18 +55,50 @@ const ProjectSettingsInfoComponent = ({
         </section>
         <section>
           <h2>Privacy</h2>
+          <div className="project-settings__descriptions">
+            {projectAccessLevel === null &&
+              <p>Only the team you create for this project can view or edit this project, based on the role you give them.</p>
+            }
+            {projectAccessLevel === PROJECT_ACCESS_LEVELS.READ &&
+              <p>Anyone in your organization can <b style={{ color: 'var(--color-green)' }}>read</b> this project’s documents, whether they are part of the project team or not.</p>
+            }
+            {projectAccessLevel === PROJECT_ACCESS_LEVELS.WRITE &&
+              <p>Anyone in your organization can <b style={{ color: 'var(--color-red)' }}>edit</b> this project’s documents, whether they are part of the project team or not.</p>
+            }
+          </div>
           <FormField
-            id="projectPrivacy"
-            help={helpText}
-            label="Make this project public"
+            id="projectPrivacyDefault"
+            label={<>Only the project team can view or edit this project</>}
+            large
             name="project[privacy]"
             errors={errors.privacy}
-            onChange={(e) => {
-              const accessLevel = e.target.checked ? PROJECT_ACCESS_LEVELS.READ : null
-              setProjectAccessLevel(accessLevel)
+            onChange={() => {
+              setProjectAccessLevel(null)
             }}
-            type="checkbox"
+            type="radio"
+            value={project.accessLevel === null} />
+          <FormField
+            id="projectPrivacyRead"
+            label={<>Everyone in my organization can <b>see</b> this project</>}
+            large
+            name="project[privacy]"
+            errors={errors.privacy}
+            onChange={() => {
+              setProjectAccessLevel(PROJECT_ACCESS_LEVELS.READ)
+            }}
+            type="radio"
             value={project.accessLevel === PROJECT_ACCESS_LEVELS.READ} />
+          <FormField
+            id="projectPrivacyWrite"
+            label={<>Everyone in my organization can <b>edit</b> this project</>}
+            large
+            name="project[privacy]"
+            errors={errors.privacy}
+            onChange={() => {
+              setProjectAccessLevel(PROJECT_ACCESS_LEVELS.WRITE)
+            }}
+            type="radio"
+            value={project.accessLevel === PROJECT_ACCESS_LEVELS.WRITE} />
         </section>
       </Form>
       <section>
