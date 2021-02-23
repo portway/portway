@@ -291,5 +291,24 @@ describe('markdownProcessor', () => {
       })
     })
   })
+
+  describe('with an error prone markdown document', () => {
+    let tokens, output
+    const TEST_MD = "## Installing 11ty\n\nFirst, let's create a directory, initialize the project, and install 11ty.\n\n```bash\nmkdir 11ty-example\ncd 11ty-example\nnpm init -y\nnpm install --save-dev @11ty/eleventy node-fetch dotenv outdent\n```\n\nYou now have 11ty installed and should be able to run `npx eleventy` to make sure. If all is well, you should see the following:\n\n```bash\n➜  11ty-example npx eleventy\nWrote 0 files in 0.17 seconds (v0.11.1)\n```\n\n## A basic 11ty setup\n\nFirst, we're going to add some configuration and then add a basic layout for all of your pages to use.By default, 11ty likes to put everything in an directory named`_includes`, but we like to be more specific.\n\n1.Create a file`.eleventy.js`(note the preceeding dot) at the root of your project.Add this tiny configuration to this file and save it: \n\n```javascript\nrequire('dotenv').config()\nconst markdownIt = require(\"markdown-it\")\nconst outdent = require('outdent')\n\nmodule.exports = function (eleventyConfig) {\n  const md = new markdownIt()\n\n  eleventyConfig.addPairedShortcode(\"markdown\", (content) => {\n    return md.render(outdent`${ content } `)\n  })\n\n  return {\n    dir: {\n      includes: \"_includes\",\n      layouts: \"_layouts\"\n    }\n  }\n}\n```\n\n2.Next, create a directory`_layouts` and add the following file to it, named`default.njk`: \n\n```html\n<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>{{ title }}</title>\n  </head>\n  <body>\n    <div>\n      <header>\n        <h1><a href=\"/\">My blog with Portway</a></h1>\n      </header>\n      <main>\n        {{ content | safe }}\n      </main>\n    </div>\n  </body>\n</html>\n```\n\n3.Finally, let’s add your homepage by creating a file named`index.md` at the root of your project.In that file: \n\n```markdown\n---\nlayout: default.njk\ntitle: Home\n---\n\nI am some homepage content\n```\n\n4.Now that you have the most basic setup, run the 11ty server and see your homepage!\n\n```bash\nnpx eleventy --serve\n```"
+
+    beforeAll(() => {
+      const mdTokens = md.parse(TEST_MD, {})
+      tokens = processTokens(mdTokens)
+      output = JSON.stringify(tokens)
+    })
+
+    it('should produce the same value repeatedly', () => {
+      for(let i=0;i<10000;i++) {
+        const mdTokens = md.parse(TEST_MD, {})
+        const newTokens = processTokens(mdTokens)
+        expect(JSON.stringify(newTokens)).toEqual(output)
+      }
+    })
+  })
 })
 
