@@ -63,64 +63,61 @@ steps:
         - name: hide_dockerignore
           on:
             - success
-  testing_phase:
-    type: parallel
-    steps:  
-      run_web_tests:
-        stage: Running Tests
-        image: ${{build_web_image}}
-        title: Running Web Tests
-        working_directory: /web/
-        cmd:
-          - test
-        when:
-          steps:
-            - name: build_web_image
-              on:
-                - success
-      run_api_tests:
-        stage: Running Tests
-        title: Running API Tests
-        type: composition
-        composition:
-          version: '2'
-          services:
-            db-test:
-              image: postgres:11.2-alpine
-              ports:
-                - 5432
-              environment:
-                POSTGRES_DB: test
-                POSTGRES_USER: bonkey
-                POSTGRES_PASSWORD: bong
-        composition_candidates:
-          api_service:
-            image: ${{build_api_image}}
-            command: './wait-for.sh db-test:5432 -- ./run.sh test'
-            links:
-              - db-test
-            environment:
-              - API_ENV=test
-              - API_PORT=3001
-              - DB_USER=bonkey
-              - DB_PASSWORD=bong
-              - DB_HOST=db-test
-              - DB_PORT=5432
-              - DB_NAME=test
-        when:
-          steps:
-            - name: build_api_image
-              on:
-                - success
-      run_worker_tests:
-        stage: Running Tests
-        image: ${{build_worker_image}}
-        title: Running Worker Tests
-        working_directory: /workers/
-        cmd:
-          - test
-        when:
-          steps:
-            - name: build_worker_image
-              on:
-                - success
+  run_web_tests:
+    stage: Running Tests
+    image: ${{build_web_image}}
+    title: Running Web Tests
+    working_directory: /web/
+    cmd:
+      - test
+    when:
+      steps:
+        - name: build_web_image
+          on:
+            - success
+  run_api_tests:
+    stage: Running Tests
+    title: Running API Tests
+    type: composition
+    composition:
+      version: '2'
+      services:
+        db-test:
+          image: postgres:11.2-alpine
+          ports:
+            - 5432
+          environment:
+            POSTGRES_DB: test
+            POSTGRES_USER: bonkey
+            POSTGRES_PASSWORD: bong
+    composition_candidates:
+      api_service:
+        image: ${{build_api_image}}
+        command: './wait-for.sh db-test:5432 -- ./run.sh test'
+        links:
+          - db-test
+        environment:
+          - API_ENV=test
+          - API_PORT=3001
+          - DB_USER=bonkey
+          - DB_PASSWORD=bong
+          - DB_HOST=db-test
+          - DB_PORT=5432
+          - DB_NAME=test
+    when:
+      steps:
+        - name: build_api_image
+          on:
+            - success
+  run_worker_tests:
+    stage: Running Tests
+    image: ${{build_worker_image}}
+    title: Running Worker Tests
+    working_directory: /workers/
+    cmd:
+      - test
+    when:
+      steps:
+        - name: build_worker_image
+          on:
+            - success
