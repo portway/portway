@@ -55,20 +55,9 @@ const ProjectSettingsInfoComponent = ({
         </section>
         <section>
           <h2>Privacy</h2>
-          <div className="project-settings__descriptions">
-            {projectAccessLevel === null &&
-              <p>Only the team you create for this project can view or edit this project, based on the role you give them.</p>
-            }
-            {projectAccessLevel === PROJECT_ACCESS_LEVELS.READ &&
-              <p>Anyone in your organization can <b style={{ color: 'var(--color-green)' }}>read</b> this project’s documents, whether they are part of the project team or not.</p>
-            }
-            {projectAccessLevel === PROJECT_ACCESS_LEVELS.WRITE &&
-              <p>Anyone in your organization can <b style={{ color: 'var(--color-red)' }}>edit</b> this project’s documents, whether they are part of the project team or not.</p>
-            }
-          </div>
           <FormField
             id="projectPrivacyDefault"
-            label={<>Only the project team can view or edit this project</>}
+            label={<>Only the <Link aria-label="Project team" to={`/project/${project.id}/settings/teams`}>project team</Link> can access this project</>}
             large
             name="project[privacy]"
             errors={errors.privacy}
