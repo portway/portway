@@ -1,9 +1,8 @@
 version: '1.0'
 stages:
   - Setup Repo
-  - Web Build and Test
-  - API Build and test
-  - Worker Build and Test
+  - Building Images
+  - Running Tests
 steps:
   main_clone:
     title: Cloning main repository...
@@ -26,7 +25,7 @@ steps:
           on:
             - success
   build_web_image:
-    stage: Web Build and Test
+    stage: Building Images
     title: Building Web Docker Image
     type: build
     image_name: bonkeybong/portway_web
@@ -39,7 +38,7 @@ steps:
           on:
             - success
   build_worker_image:
-    stage: Worker Build and Test
+    stage: Building Images
     title: Building Worker Docker Image
     type: build
     image_name: bonkeybong/portway_workers
@@ -52,7 +51,7 @@ steps:
           on:
             - success
   build_api_image:
-    stage: API Build and test
+    stage: Building Images
     title: Building API Docker Image
     type: build
     image_name: bonkeybong/portway_api
@@ -68,7 +67,7 @@ steps:
     type: parallel
     steps:  
       run_web_tests:
-        stage: Web Build and Test
+        stage: Running Tests
         image: ${{build_web_image}}
         title: Running Web Tests
         working_directory: /web/
@@ -80,7 +79,7 @@ steps:
               on:
                 - success
       run_api_tests:
-        stage: API Build and test
+        stage: Running Tests
         title: Running API Tests
         type: composition
         composition:
@@ -114,7 +113,7 @@ steps:
               on:
                 - success
       run_worker_tests:
-        stage: Worker Build and Test
+        stage: Running Tests
         image: ${{build_worker_image}}
         title: Running Worker Tests
         working_directory: /workers/
