@@ -71,10 +71,18 @@ const deleteCanceledOrg = async function(orgId) {
   await organizationCoordinator.removeAllOrgData(orgId)
 }
 
+// Permanently deletes an org and associated resources
+const deleteOrg = async function (orgId) {
+  const org = await BusinessOrganization.findById(orgId)
+  await stripeIntegrator.deleteCustomer(org.stripeId)
+  await organizationCoordinator.removeAllOrgData(orgId)
+}
+
 const organizationCoordinator = {
   updateById,
   removeAllOrgData,
-  deleteCanceledOrg
+  deleteCanceledOrg,
+  deleteOrg
 }
 
 export default organizationCoordinator
