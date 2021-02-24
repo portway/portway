@@ -5,9 +5,10 @@ import { Op } from 'sequelize'
 import { getDb } from '../db/dbConnector'
 import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
 import apiErrorTypes from '../constants/apiErrorTypes'
-import resourceTypes, { PROJECT_RESOURCE_TYPES } from '../constants/resourceTypes'
+import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import logger from '../integrators/logger'
 
 const MODEL_NAME = 'Field'
 
@@ -143,6 +144,12 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
 
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
+
+  // Debugging log for mismatched text value to structuredValue
+  // Added 2/23/2021 -DH
+  if (field.type === FIELD_TYPES.TEXT && body.value && !Boolean(body.structuredValue)) {
+    logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue`)
+  }
 
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
