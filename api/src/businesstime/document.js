@@ -133,7 +133,18 @@ async function updateByIdForProject(id, projectId, orgId, body) {
   return publicFields(updatedDocument)
 }
 
-async function deleteByIdForProject(id, projectId, orgId) {
+/**
+ * 
+ * @param {Integer} id 
+ * @param {Integer} projectId 
+ * @param {Integer} orgId 
+ * @param {Object} options 
+ * 
+ * options = {
+ *   markUpdated: true/false // whether to mark the parent project as updated
+ * }
+ */
+async function deleteByIdForProject(id, projectId, orgId, options = { markUpdated: true }) {
   const db = getDb()
   const document = await db.model(MODEL_NAME).findOne({ where: { id, projectId, orgId } })
 
@@ -141,8 +152,14 @@ async function deleteByIdForProject(id, projectId, orgId) {
 
   await document.destroy()
 
-  // set updatedAt on the parent project, no need to wait for it
-  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+  if (options.markUpdated) {
+    // set updatedAt on the parent project, no need to wait for it
+    db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => {
+      if (project && typeof project.markUpdated === 'function') {
+        project.markUpdated()
+      }
+    })
+  }
 }
 
 async function findParentProjectByDocumentId(id, orgId) {

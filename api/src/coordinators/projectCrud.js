@@ -15,9 +15,10 @@ const createProject = async (projectBody, creatorUserId, orgId) => {
 }
 
 const deleteById = async (projectId, orgId) => {
-  await BusinessProject.deleteById(projectId, orgId)
+
   await BusinessProjectUser.removeAllUsersFromProject(projectId, orgId)
   await documentCoordinator.deleteAllForProject(projectId, orgId)
+  await BusinessProject.deleteById(projectId, orgId)
 }
 
 export default {

@@ -121,6 +121,11 @@ const cancelSubscriptionAtPeriodEnd = function(subscriptionId) {
   return stripe.subscriptions.update(subscriptionId, { cancel_at_period_end: true })
 }
 
+// Removes customer + active subscriptions. Cannot be undone, but Stripe preserves history
+const deleteCustomer = function(customerId) {
+  return stripe.customers.del(customerId)
+}
+
 
 export default {
   createCustomer,
@@ -129,5 +134,6 @@ export default {
   createOrUpdateSubscription,
   constructWebhookEvent,
   cancelSubscription,
-  cancelSubscriptionAtPeriodEnd
+  cancelSubscriptionAtPeriodEnd,
+  deleteCustomer
 }

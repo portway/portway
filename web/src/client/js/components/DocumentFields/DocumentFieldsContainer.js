@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { FIELD_TYPES, PROJECT_ROLE_IDS, PROJECT_ACCESS_LEVELS } from 'Shared/constants'
 import { debounce, getNewNameInSequence } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -31,15 +31,23 @@ const DocumentFieldsContainer = ({
   const docAreaRef = useRef()
   const { data: foundFields } = useDataService(dataMapper.fields.list(documentId), [documentId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
+  const { data: project } = useDataService(dataMapper.projects.id(projectId), [projectId])
   const activeUsers = activeDocumentUsers[documentId]
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const fields = foundFields || {}
 
-  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   let documentReadOnlyMode = false
   // False because null / true == loading
   if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment === undefined || readOnlyRoleIds.includes(projectAssignment.roleId)
+    // User has the project reader role and project is not set to "write"
+    if (projectAssignment && 
+      PROJECT_ROLE_IDS.READER === projectAssignment.roleId && 
+      project.accessLevel !== PROJECT_ACCESS_LEVELS.WRITE
+    ) {
+      documentReadOnlyMode = true
+    } else if (projectAssignment === undefined && project.accessLevel === PROJECT_ACCESS_LEVELS.READ) {
+      documentReadOnlyMode = true
+    }
   }
 
   const sortedFields = useMemo(() => {
@@ -69,10 +77,6 @@ const DocumentFieldsContainer = ({
       })
     }
   }, [documentReadOnlyMode, fields, createField, documentId, projectId])
-
-  const createTextFieldForExistingEmptyDocumentHandler = useCallback(() => {
-
-  })
 
   // This listener handles the scenario where a document has already been created
   // and has no fields. The document create action creates a text field, so the user would
