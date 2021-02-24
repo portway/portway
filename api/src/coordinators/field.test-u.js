@@ -153,7 +153,7 @@ describe('fieldCoordinator', () => {
         expect(BusinessField.updateByIdForDocument.mock.calls[0][2]).toEqual(orgId)
       })
 
-      it('should call jobQueue.runImageProcessing', () => {
+      it.skip('should call jobQueue.runImageProcessing', () => {
         expect(jobQueue.runImageProcessing.mock.calls.length).toBe(1)
         expect(jobQueue.runImageProcessing.mock.calls[0][0]).toEqual(imageBody.value)
         expect(jobQueue.runImageProcessing.mock.calls[0][1]).toEqual(documentId)
