@@ -12,7 +12,7 @@ import axios from 'axios'
 import { lookup } from 'mime-types'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
-import jobQueue from '../integrators/jobQueue'
+// import jobQueue from '../integrators/jobQueue'
 
 const stat = util.promisify(fs.stat)
 
