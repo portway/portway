@@ -10,23 +10,46 @@ const addProjectDocument = async (projectId, body) => {
   return await BusinessDocument.createForProject(projectId, body)
 }
 
-// Removes a document and all associated resources
-const deleteDocument = async (docId, projectId, orgId) => {
+/**
+ * Removes a document and all associated resources
+ *
+ * @param {Integer} docId
+ * @param {Integer} projectId
+ * @param {Integer} orgId
+ * @param {Object} options optional options
+ *
+ * options = {
+ *   // Whether to set updatedAt on the parent project and document
+ *   markUpdated: true/false
+ * }
+ */
+const deleteDocument = async (docId, projectId, orgId, options = {
+  markUpdated: true
+}) => {
+
+  const fieldOptions = {
+    deletePublished: true,
+    markUpdated: options.markUpdated
+  }
+
   // Delete document fields
   const fields = await BusinessField.findAllForDocument(docId, orgId)
   for (const field of fields) {
-    await FieldCoordinator.removeDocumentField(field.id, docId, orgId, { deletePublished: true })
+    await FieldCoordinator.removeDocumentField(field.id, docId, orgId, fieldOptions)
   }
   // Delete document versions
   await BusinessDocumentVersion.deleteAllForDocument(docId, orgId)
   // Delete document
-  await BusinessDocument.deleteByIdForProject(docId, projectId, orgId)
+  await BusinessDocument.deleteByIdForProject(docId, projectId, orgId, options)
 }
 
 const deleteAllForProject = async (projectId, orgId) => {
+  // Do not update parent resource (project, document) with updatedAt since we're deleting the project
+  const options = { markUpdated: false }
+
   const docs = await BusinessDocument.findAllForProject(projectId, orgId)
   await Promise.all(docs.map((doc) => {
-    return documentCoordinator.deleteDocument(doc.id, projectId, orgId)
+    return documentCoordinator.deleteDocument(doc.id, projectId, orgId, options)
   }))
 }
 
