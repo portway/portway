@@ -3,8 +3,6 @@ import BusinessUser from '../businesstime/user'
 import BusinessOrganization from '../businesstime/organization'
 import tokenIntegrator from '../integrators/token'
 import stripeIntegrator from '../integrators/stripe'
-import passwordResetKey from '../libs/passwordResetKey'
-import { ORGANIZATION_ROLE_IDS } from '../constants/roles'
 import { sendSingleRecipientEmail } from '../integrators/email'
 import { PLANS, TRIAL_PERIOD_DAYS } from '../constants/plans'
 import billingCoordinator from './billing'
@@ -20,6 +18,7 @@ jest.mock('../integrators/email')
 jest.mock('./billing')
 jest.mock('./intro')
 jest.mock('./user')
+jest.mock('./field')
 
 describe('signUp coordinator', () => {
   const name = 'Nicolas Cage'

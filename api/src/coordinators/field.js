@@ -69,10 +69,9 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
 
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
   const updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
-  console.log(updatedField)
   // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
   if (updatedField.type === FIELD_TYPES.IMAGE && file) {
-    jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id)
+    jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id, updatedField.orgId)
   }
 
   return updatedField

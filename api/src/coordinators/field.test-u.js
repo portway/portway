@@ -16,13 +16,22 @@ jest.mock('../libs/utils')
 jest.mock('../libs/promisifyStreamPipe')
 jest.mock('../integrators/jobQueue')
 
+// separate these internally used functions from the mock object so we can use them for their unit tests
+const addFieldToDocument = fieldCoordinator.addFieldToDocument
+fieldCoordinator.addFieldToDocument = jest.fn()
+
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
     const documentId = 0
     const body = { type: 1, value: 'some-random-text', orgId: 0 }
 
     beforeAll(async () => {
+      fieldCoordinator.addFieldToDocument = addFieldToDocument
       await fieldCoordinator.addFieldToDocument(documentId, body)
+    })
+
+    afterAll(() => {
+      fieldCoordinator.addFieldToDocument = jest.fn()
     })
 
     it('should call BusinessField.createForDocument with the passed in documentId and body', () => {
@@ -136,7 +145,8 @@ describe('fieldCoordinator', () => {
         BusinessField.setFindByIdReturnValue({ type: 4 })
         BusinessField.updateByIdForDocument.mockReset()
         assetCoordinator.addAssetForDocument.mockReset()
-        BusinessField.updateByIdForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId, type: FIELD_TYPES.IMAGE, value: imageBody.value })
+        jobQueue.runImageProcessing.mockReset()
+        BusinessField.updateByIdForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId, type: FIELD_TYPES.IMAGE, value: imageBody.value, orgId })
         await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, imageBody, file)
       })
 
@@ -175,6 +185,7 @@ describe('fieldCoordinator', () => {
       axios.mockImplementation(() => {
         return { data: null }
       })
+      fieldCoordinator.addFieldToDocument.mockImplementationOnce()
       callFuncWithArgs.mockReturnValueOnce({ size: 143 })
       await fieldCoordinator.addImageFieldFromUrlToDocument(docId, body, url)
     })
