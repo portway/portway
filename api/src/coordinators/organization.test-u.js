@@ -171,4 +171,29 @@ describe('organization coordinator', () => {
       })
     })
   })
+
+  describe('#deleteOrg', () => {
+    beforeAll(async () => {
+      BusinessOrganization.findById.mockClear()
+      BusinessOrganization.findById.mockReturnValueOnce({ id: orgId, stripeId })
+      organizationCoordinator.removeAllOrgData.mockClear()
+      await organizationCoordinator.deleteOrg(orgId)
+    })
+
+    it('should call BusinessOrganization.findById with orgId', () => {
+      expect(BusinessOrganization.findById.mock.calls.length).toBe(1)
+      expect(BusinessOrganization.findById.mock.calls[0][0]).toEqual(orgId)
+    })
+
+    it('should call stripeIntegrator.deleteCustomer', () => {
+      expect(stripeIntegrator.deleteCustomer.mock.calls.length).toBe(1)
+      expect(stripeIntegrator.deleteCustomer.mock.calls[0][0]).toEqual(stripeId)
+    })
+
+    it('should call organizationCoordinator.removeAllOrgData with the passed in org id', () => {
+      expect(organizationCoordinator.removeAllOrgData.mock.calls.length).toBe(1)
+      expect(organizationCoordinator.removeAllOrgData.mock.calls[0][0]).toBe(orgId)
+    })
+
+  })
 })
