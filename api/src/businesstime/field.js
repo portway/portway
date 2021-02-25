@@ -43,6 +43,12 @@ async function createForDocument(documentId, body) {
 
   const createdField = await document.createField(createFieldBody)
 
+  // Debugging log for mismatched text value to structuredValue
+  // Added 2/24/2021 -DH
+  if (body.type === FIELD_TYPES.TEXT && body.value && !Boolean(body.structuredValue)) {
+    logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue in BusinessField.createForDocument`)
+  }
+
   const fieldValue = await createdField.addFieldValue({
     value: getDefaultFieldValueByType(body.value, body.type),
     structuredValue: body.structuredValue,
@@ -148,7 +154,7 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   // Debugging log for mismatched text value to structuredValue
   // Added 2/23/2021 -DH
   if (field.type === FIELD_TYPES.TEXT && body.value && !Boolean(body.structuredValue)) {
-    logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue`)
+    logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue in BusinessField.updateByIdForDocument`)
   }
 
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
