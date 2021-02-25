@@ -27,27 +27,27 @@ const createImageAlternatives = async function(url, documentId, fieldId) {
 
   // pngFull
   const pngFull = await image
-    .toFormat('png')
+    .toFormat('avif')
     .toBuffer()
 
   // pngHalf
   const pngHalf = await image
     .resize(Math.round(metadata.width / 2))
-    .toFormat('png')
+    .toFormat('avif')
     .toBuffer()
   
   const uploadResults = await Promise.all([
     uploadBuffer(webPFull, `${basekey}-full.webp`, 'image/webp'),
     uploadBuffer(webPHalf, `${basekey}-half.webp`, 'image/webp'),
-    uploadBuffer(pngFull, `${basekey}-full.png`, 'image/png'),
-    uploadBuffer(pngHalf, `${basekey}-half.png`, 'image/png')
+    uploadBuffer(pngFull, `${basekey}-full.avif`, 'image/avif'),
+    uploadBuffer(pngHalf, `${basekey}-half.avif`, 'image/avif')
   ])
 
   return {
     webPFull: uploadResults[0].Location,
     webPHalf: uploadResults[1].Location,
-    pngFull: uploadResults[2].Location,
-    pngHalf: uploadResults[3].Location
+    avifFull: uploadResults[2].Location,
+    avifHalf: uploadResults[3].Location
   }
 }
 
