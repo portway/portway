@@ -3,15 +3,42 @@
   <div class="container">
     <img src="/images/logo.svg" alt="Portway Logo" width="85" />
     <h2>Create your free account</h2>
-    <p>Start your <b>free, 30-day trial</b> now. <b>No credit card required.</b></p>
+    <p style="text-align: center;">
+      Start your <b>free, 30-day trial</b> now.<br /><b>No credit card required.</b><br />
+      <span class="note">Already have an account? <a href="/">Sign in</a></span>
+    </p>
     <% if (flash) { %>
       <p class="flash flash--<%= flash.type %>"><%= flash.message %></p>
     <% } %>
-    <% if (typeof disableSignup !== 'undefined' && disableSignup === true) { %>
-      <p>Registration is currently disabled</p>
-    <% } else { %>
-      <%- include('../partials/sign-up', { termsLink: options.termsLink }); %>
-    <% } %>
+    <section class="sign-up">
+      <div class="sign-up__features">
+        <div class="card">
+          <h3 class="card__title">Simple pricing</h3>
+          <div class="card__content">
+            <ul class="feature-list">
+              <li>Unlimited projects</li>
+              <li>Unlimited documents</li>
+              <li>10GB Storage</li>
+              <li>Private & Secure</li>
+              <li>Multiple teams and users</li>
+              <li>Real-time document collaboration</li>
+              <li>Export all of your data easily</li>
+              <li>Cancel anytime</li>
+            </ul>
+          </div>
+          <div class="card__action">
+            <span class="card__price">$10</span> per user / month
+          </div>
+        </div>
+      </div>
+      <div class="sign-up__form">
+        <% if (typeof disableSignup !== 'undefined' && disableSignup === true) { %>
+          <p>Registration is currently disabled</p>
+        <% } else { %>
+          <%- include('../partials/sign-up', { termsLink: options.termsLink }); %>
+        <% } %>
+      </div>
+    </section>
   </div>
 </main>
 <%- include('../partials/footer', {
