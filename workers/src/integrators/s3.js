@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk'
 import fs from 'fs'
 import ono from 'ono'
+const { PassThrough } = require('stream')
 
 const { S3_CONTENT_BUCKET, AWS_SES_REGION, CDN_HOSTNAME } = process.env
 
@@ -28,7 +29,8 @@ export const uploadExportZip = async function(filePath, uniqueId) {
   return res.Location
 }
 
-export const uploadBuffer = async function(buffer, key, contentType) {
+export const uploadBuffer = async function (buffer, key, contentType) {
+  const writeStream = new PassThrough()
 
   const params = {
     Bucket: S3_CONTENT_BUCKET,
@@ -40,3 +42,12 @@ export const uploadBuffer = async function(buffer, key, contentType) {
 
   return s3.upload(params).promise()
 }
+
+// const promisifyStreamPipe = (readStream, writeStream) => {
+//   return new Promise((resolve, reject) => {
+//     readStream.on('error', reject)
+//     writeStream.on('error', reject)
+//     writeStream.on('finish', resolve)
+//     readStream.pipe(writeStream)
+//   })
+// } 

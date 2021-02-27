@@ -48,7 +48,6 @@ export default function() {
     imageProcessingQueue.process(async (job) => {
       logger(LOG_LEVELS.INFO, `processing job ${job.id} in queue ${ QUEUES.IMAGE_PROCESSING }`)
       const results = await imageProcessingCoordinator.createImageAlternatives(job.data.url, job.data.documentId, job.data.fieldId)
-      // TODO: Remove
       console.log(results)
       return results
     })
