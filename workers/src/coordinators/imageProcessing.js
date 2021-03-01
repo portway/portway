@@ -11,7 +11,6 @@ import { LOG_LEVELS } from '../constants/logging'
 
 sharp.cache(false)
 sharp.concurrency(0)
-sharp.simd(false)
 
 const IMAGE_TEMP_DIRECTORY = process.env.IMAGE_TEMP_DIRECTORY || 'image_temp/'
 

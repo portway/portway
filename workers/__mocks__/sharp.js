@@ -17,4 +17,8 @@ sharpResize.mockImplementation(() => sharpObject);
 sharpToFormat.mockImplementation(() => sharpObject);
 sharpToBuffer.mockImplementation(() => sharpObject);
 
-export default jest.fn(() => sharpObject)
+const sharp = jest.fn(() => sharpObject)
+sharp.cache = jest.fn()
+sharp.concurrency = jest.fn()
+
+export default sharp
