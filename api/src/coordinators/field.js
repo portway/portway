@@ -24,7 +24,6 @@ const addFieldToDocument = async function(documentId, body, file) {
   const fieldBody = await getFieldBodyByType(body, documentId, orgId, file)
 
   const field = await BusinessField.createForDocument(documentId, fieldBody)
-
   // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
   if (file && field.type === FIELD_TYPES.IMAGE) {
     jobQueue.runImageProcessing(field.value, field.documentId, field.id, orgId)
@@ -72,7 +71,7 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   const updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
   // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
   if (updatedField.type === FIELD_TYPES.IMAGE && file) {
-    jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id, updatedField.orgId)
+    jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id, orgId)
   }
 
   return updatedField

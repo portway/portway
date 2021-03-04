@@ -47,7 +47,7 @@ export default function() {
   imageProcessingQueue.on('ready', function () {
     imageProcessingQueue.process(async (job) => {
       logger(LOG_LEVELS.INFO, `processing job ${job.id} in queue ${ QUEUES.IMAGE_PROCESSING }`)
-      const results = await imageProcessingCoordinator.createImageAlternatives(job.data.url, job.data.documentId, job.data.fieldId)
+      const results = await imageProcessingCoordinator.createImageAlternatives(job.data.url, job.data.documentId, job.data.fieldId, job.data.orgId)
       console.log(results)
       return results
     })
