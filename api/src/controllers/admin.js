@@ -74,7 +74,7 @@ const adminController = function(router) {
     deleteStaleResources
   )
 
-  router.put('organizations/:orgId/documents/:documentId/fieldformats/:id',
+  router.put('/organizations/:orgId/documents/:documentId/fields/:id/formats',
     bodyParser.json(),
     validateBody(adminImageFieldFormatsSchema, { includeDetails: true }),
     adminAuth,
@@ -186,7 +186,7 @@ const updateImageFieldFormats = async function(req, res, next) {
   const { body } = req
 
   try {
-    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, { formats: field })
+    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, { formats: body })
     res.status(200).json({ data: field })
   } catch (e) {
     next(e)
