@@ -11,6 +11,9 @@ import BusinessWebhookDelivery from '../businesstime/webhookDelivery'
 import organizationCoordinator from '../coordinators/organization'
 import billingCoordinator from '../coordinators/billing'
 import { deleteSoftDeletedResources } from '../coordinators/resources'
+import adminImageFieldFormatsSchema from './payloadSchemas/adminImageFieldFormats'
+import { validateBody } from '../libs/middleware/payloadValidation'
+import BusinessField from '../businesstime/field'
 
 const adminController = function(router) {
   /**
@@ -70,6 +73,13 @@ const adminController = function(router) {
     adminAuth,
     deleteStaleResources
   )
+
+  router.put('organizations/:orgId/documents/:documentId/fieldformats/:id',
+    bodyParser.json(),
+    validateBody(adminImageFieldFormatsSchema, { includeDetails: true }),
+    adminAuth,
+    updateImageFieldFormats
+  )
 }
 
 const createAccount = async function(req, res, next) {
@@ -96,7 +106,7 @@ const updateOrgBillingStatus = async function(req, res, next) {
   try {
     await billingCoordinator.fetchCustomerAndSetSubscriptionDataOnOrg(req.params.id)
     res.status(200).send()
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 }
@@ -134,7 +144,7 @@ const getWebhookDeliveries = async function(req, res, next) {
       total: result.count,
       totalPages: Math.ceil(result.count / perPage)
     })
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 }
@@ -143,7 +153,7 @@ const deleteWebhookDelivery = async function(req, res, next) {
   try {
     await BusinessWebhookDelivery.deleteById(req.params.id)
     res.status(204).send()
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 }
@@ -157,7 +167,7 @@ const deleteUnverifiedOrgs = async function(req, res, next) {
       removedOrgsCount += 1
     }
     res.status(200).send({ data: { removedOrgsCount } })
-  } catch(e) {
+  } catch (e) {
     next(e)
   }
 }
@@ -166,7 +176,19 @@ const deleteStaleResources = async function(req, res, next) {
   try {
     await deleteSoftDeletedResources()
     res.status(204).send()
-  } catch(e) {
+  } catch (e) {
+    next(e)
+  }
+}
+
+const updateImageFieldFormats = async function(req, res, next) {
+  const { id, documentId, orgId } = req.params
+  const { body } = req
+
+  try {
+    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, { formats: field })
+    res.status(200).json({ data: field })
+  } catch (e) {
     next(e)
   }
 }
