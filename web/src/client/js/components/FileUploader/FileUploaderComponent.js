@@ -91,27 +91,27 @@ const FileUploaderComponent = ({
       onDrop={dropHandler}>
       <div className="file-uploader__settings">
         {children}
+        {!uploading && !isUpdating &&
+        <form className="file-uploader__form" method="post" encType="multipart/form-data">
+          <label className="file-uploader__content">
+            <span className="file-uploader__label">{label}</span>
+            <span className="btn btn--small btn--cyan">Or select a file</span>
+            <input
+              hidden
+              type="file"
+              accept={accept}
+              multiple={multiple}
+              onClick={() => { clickHandler && clickHandler() }}
+              onChange={(e) => {
+                blurHandler && blurHandler()
+                setUploading(true)
+                fileChangeHandler(multiple ? e.target.files : e.target.files[0])
+              }}
+            />
+          </label>
+        </form>
+        }
       </div>
-      {!uploading && !isUpdating &&
-      <form className="file-uploader__form" method="post" encType="multipart/form-data">
-        <label className="file-uploader__content">
-          <span className="file-uploader__label">{label}</span>
-          <span className="btn btn--small btn--cyan">Or select a file</span>
-          <input
-            hidden
-            type="file"
-            accept={accept}
-            multiple={multiple}
-            onClick={() => { clickHandler && clickHandler() }}
-            onChange={(e) => {
-              blurHandler && blurHandler()
-              setUploading(true)
-              fileChangeHandler(multiple ? e.target.files : e.target.files[0])
-            }}
-          />
-        </label>
-      </form>
-      }
       {isUpdating &&
       <div className="file-uploader__status">
         <SpinnerComponent />

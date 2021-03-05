@@ -12,6 +12,11 @@
 
 // Actual component
 .document-field__image {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0;
   position: relative;
 
   // Override
@@ -23,7 +28,7 @@
   }
 
   .file-uploader {
-    border: thin solid var(--theme-overlay-dark);
+    border: none;
   }
 
   // Only show the edit button on hover of the whole field
@@ -38,14 +43,6 @@
     }
   }
 
-}
-
-.document-field__image-figure {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin: 0;
 }
 
 .document-field__image-container {

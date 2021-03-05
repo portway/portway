@@ -47,14 +47,13 @@ const FieldImageComponent = ({
   const previewRef = useRef() // the File data
 
   // Image
-  const imageRef = useRef() // temporary image to do width/height
   const imageNodeRef = useRef() // the actual <img /> tag
-  const [imageSrc, setImageSrc] = useState(field.value || IconImage) // the source of the image
+  const imageSrc = field.value || IconImage // the source of the image
   const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
   const nameRef = useRef()
   const previousField = usePrevious(field)
 
-  // Formats
+  // Use the formats if we have them
   const webpSource = field.formats && field.formats.webp
 
   // Name
@@ -70,12 +69,9 @@ const FieldImageComponent = ({
       const reader = new FileReader()
       reader.readAsDataURL(previewRef.current)
       reader.onload = (e) => {
-        imageRef.current = new Image()
-        imageRef.current.src = e.target.result
-        imageRef.current.onload = () => {
-          if (isMounted.current) {
-            setImageSrc(e.target.result)
-          }
+        if (isMounted.current) {
+          imageNodeRef.current.setAttribute('srcset', e.target.result)
+          imageNodeRef.current.setAttribute('src', e.target.result)
         }
       }
     }
@@ -100,7 +96,7 @@ const FieldImageComponent = ({
       return
     }
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setWarning(`Sorry, the image type “${file.type}” is not supported. Try a jpg, png, or gif!`)
+      setWarning(`Sorry, the image type “${file.type}” is not supported. Try a jpg, png, or webp!`)
       return
     }
     // Save the file for previewing AFTER updating starts
@@ -129,96 +125,89 @@ const FieldImageComponent = ({
     'document-field__image-container--settings-mode': settingsMode,
   })
 
-  console.log(field)
-
   return (
-    <div className="document-field__image">
-      <figure className="document-field__image-figure">
-        <div className={containerClassnames}>
-          {imageSrc &&
-          <img
-            className={imageClassnames}
-            src={webpSource ? webpSource.half : imageSrc}
-            srcSet={webpSource ? `${webpSource.half}, ${webpSource.full} 2x` : ``}
-            alt={field && field.name}
-            ref={imageNodeRef}
-            lazy="true"
-          />
-          }
-          <div className="document-field__settings-button">
-            <>
-              {!settingsMode && !readOnly && field.value &&
-              <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
-                <EditIcon width="14" height="14" />
-              </IconButton>
-              }
-              {settingsMode && field.value &&
-                <IconButton color="green" aria-label="Exit settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
-                  <CheckIcon fill="#ffffff" width="12" height="12" />
-                </IconButton>
-              }
-            </>
-          </div>
-          {(settingsMode || !field.value) &&
-          <FileUploaderComponent
-            accept="image/*"
-            hasValue={field.value !== null}
-            isUpdating={updating}
-            label="Drag and drop an image"
-            fileChangeHandler={uploadImage}
-            clickHandler={() => { onFocus(field.id, field.type, documentId) }}
-            blurHandler={() => { onBlur(field.id, field.type, documentId )}}
-            fileUploadedHandler={() => {
-              // Since we render this uploader if there is no field.value,
-              // once the field gets a value it will remove it
-              // However, when updating an image, we have to manually remove it
-              if (field.value && settingsMode) {
-                settingsHandler(field.id)
-              }
-            }}>
-            <div className="field-settings">
-              <div className="field-settings__field">
-                <label>
-                  Image name
-                  <input
-                    defaultValue={field.name}
-                    onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
-                    placeholder="Name your image"
-                    ref={nameRef}
-                    type="text"
-                  />
-                </label>
-              </div>
-              {/* /field */}
-              <div className="field-settings__field">
-                <div>
-                  <b>Alignment</b>
-                  <div className="field-settings__radiogroup-text-only">
-                    <input id={`alignment-left-${field.id}`} type="radio" name="alignment" value="left" />
-                    <label htmlFor={`alignment-left-${field.id}`}>Left</label>
-                    <input id={`alignment-center-${field.id}`} type="radio" name="alignment" value="center" defaultChecked />
-                    <label htmlFor={`alignment-center-${field.id}`}>Center</label>
-                    <input id={`alignment-right-${field.id}`} type="radio" name="alignment" value="right" />
-                    <label htmlFor={`alignment-right-${field.id}`}>Right</label>
-                  </div>
-                </div>
-              </div>
-              {/* /field */}
-              <div className="field-settings__field">
-                <label>
-                  Alt text
-                  <input placeholder="Alt tag text" type="text" />
-                </label>
-              </div>
-            </div>
-            {warning &&
-            <p className="small warning">{warning}</p>
-            }
-          </FileUploaderComponent>
+    <figure className="document-field__image">
+      <div className={containerClassnames}>
+        {imageSrc &&
+        <img
+          className={imageClassnames}
+          src={webpSource ? webpSource.half : imageSrc}
+          srcSet={webpSource ? `${webpSource.half}, ${webpSource.full} 2x` : ``}
+          alt={field && field.name}
+          ref={imageNodeRef}
+          lazy="true"
+        />
+        }
+        <div className="document-field__settings-button">
+          {!settingsMode && !readOnly && field.value &&
+          <IconButton color="dark" className="document-field__edit-btn" aria-label="Configure image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
+            <EditIcon width="14" height="14" />
+          </IconButton>
           }
         </div>
-      </figure>
-    </div>
+        {(settingsMode || !field.value) &&
+        <FileUploaderComponent
+          accept="image/*"
+          hasValue={field.value !== null}
+          isUpdating={updating}
+          label="Drag and drop an image"
+          fileChangeHandler={uploadImage}
+          clickHandler={() => { onFocus(field.id, field.type, documentId) }}
+          blurHandler={() => { onBlur(field.id, field.type, documentId )}}
+          fileUploadedHandler={() => {
+            // Since we render this uploader if there is no field.value,
+            // once the field gets a value it will remove it
+            // However, when updating an image, we have to manually remove it
+            if (field.value && settingsMode) {
+              settingsHandler(field.id)
+            }
+          }}>
+          <div className="field-settings">
+            <div className="field-settings__field">
+              <label>
+                Image name
+                <input
+                  defaultValue={field.name}
+                  onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
+                  placeholder="Name your image"
+                  ref={nameRef}
+                  type="text"
+                />
+              </label>
+            </div>
+            {/* /field */}
+            <div className="field-settings__field">
+              <div>
+                <b>Alignment</b>
+                <div className="field-settings__radiogroup-text-only">
+                  <input id={`alignment-left-${field.id}`} type="radio" name="alignment" value="left" />
+                  <label htmlFor={`alignment-left-${field.id}`}>Left</label>
+                  <input id={`alignment-center-${field.id}`} type="radio" name="alignment" value="center" defaultChecked />
+                  <label htmlFor={`alignment-center-${field.id}`}>Center</label>
+                  <input id={`alignment-right-${field.id}`} type="radio" name="alignment" value="right" />
+                  <label htmlFor={`alignment-right-${field.id}`}>Right</label>
+                </div>
+              </div>
+            </div>
+            {/* /field */}
+            <div className="field-settings__field">
+              <label>
+                Alt text
+                <input placeholder="Alt tag text" type="text" />
+              </label>
+            </div>
+            {/* /field */}
+            <IconButton color="green" className="document-field__save-btn" aria-label="Save settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
+              <CheckIcon fill="#ffffff" width="12" height="12" />
+            </IconButton>
+          </div>
+          {warning &&
+          <p className="small warning">{warning}</p>
+          }
+        </FileUploaderComponent>
+        }
+      </div>
+    </figure>
   )
 }
 
