@@ -96,7 +96,7 @@ const createAccount = async function(req, res, next) {
 const getOrganizations = async function(req, res, next) {
   try {
     const orgs = await BusinessOrganization.findAll()
-    res.json({data: orgs})
+    res.json({data: orgs })
   } catch (e) {
     next(e)
   }
