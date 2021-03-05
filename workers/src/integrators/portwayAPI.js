@@ -51,7 +51,6 @@ const fetch = async function(url, token) {
 }
 
 const updateFieldFormats = async function(documentId, fieldId, orgId, formats) {
-  console.log(documentId, fieldId, orgId, formats)
   let data
   const url = (new URL(`admin/organizations/${orgId}/documents/${documentId}/fields/${fieldId}/formats`, API_URL)).href
   try {
