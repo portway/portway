@@ -109,18 +109,17 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
       if (file) {
         // set the meta data for file type
         fieldBody.meta = { originalName: file.originalname, mimeType: file.mimetype, size: file.size }
-        url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
+        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
+        fieldBody.value = url
       }
-      fieldBody.value = url
       break
     case FIELD_TYPES.IMAGE:
-      let url
       if (file) {
         const cleanFilePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
         const cleanImageInfo = await sharp(file.path).toFile(cleanFilePath)
-        url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
+        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
+        fieldBody.value = url
       }
-      fieldBody.value = url
       break
     case FIELD_TYPES.TEXT:
       const inputBody = body.value || ''
