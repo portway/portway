@@ -3,6 +3,7 @@ import url from 'url'
 
 const API_URL = process.env.API_URL
 const baseURL = (new url.URL('api/v1', API_URL)).href
+const ADMIN_SECRET_KEY = process.env.ADMIN_SECRET_KEY
 
 const fetchProject = async function(projectId, token) {
   const project = await fetch(`projects/${projectId}`, token)
@@ -49,8 +50,42 @@ const fetch = async function(url, token) {
   return data
 }
 
+const updateFieldFormats = async function(documentId, fieldId, orgId, formats) {
+  console.log(documentId, fieldId, orgId, formats)
+  let data
+  const url = (new URL(`admin/organizations/${orgId}/documents/${documentId}/fields/${fieldId}/formats`, API_URL)).href
+  try {
+    data = (await axios.put(url,
+      formats,
+      {
+        headers: {
+          Authorization: `Admin ${ADMIN_SECRET_KEY}`
+      }
+    })).data
+  } catch (err) {
+    const customError = new Error()
+    if (err.response) {
+      // non-2xx response condition
+      customError.message = err.response.data
+      customError.statusCode = err.response.status
+    } else if (err.request) {
+      // no response
+      customError.message = 'no response received from api'
+      customError.statusCode = 504
+    } else {
+      // configuration error
+      customError.message = err.message
+      customError.statusCode = 500
+    }
+    throw customError
+  }
+
+  return data
+}
+
 export default {
   fetchProject,
   fetchProjectDocuments,
-  fetchFullDocument
+  fetchFullDocument,
+  updateFieldFormats
 }
