@@ -224,3 +224,33 @@
   height: 88px;
   width: 100%;
 }
+
+.field-settings__field {
+  margin-bottom: var(--icon-margin);
+  &:last-child {
+    margin: 0;
+  }
+  input[type="text"], input[type="email"], input[type="number"] {
+    display: block;
+    min-height: 24px;
+    padding: 0;
+  }
+}
+
+.field-settings__radiogroup-text-only {
+  label {
+    color: rgba(255, 255, 255, .7);
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 300;
+    margin-right: var(--icon-margin);
+  }
+  input[type="radio"] {
+    display:none;
+  }
+  input[type="radio"]:checked + label {
+    color: rgba(255, 255, 255, 1);
+    font-weight: 500;
+    text-decoration: underline;
+  }
+}

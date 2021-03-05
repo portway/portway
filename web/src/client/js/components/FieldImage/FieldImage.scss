@@ -16,29 +16,14 @@
 
   // Override
   .document-field__settings-button {
-    left: 1.75rem;
+    right: 1.75rem;
     position: absolute;
-    top: 1.75rem;
+    bottom: 1.75rem;
     z-index: 5;
   }
 
   .file-uploader {
     border: thin solid var(--theme-overlay-dark);
-  }
-
-  input.input--without-styling {
-    background-color: var(--theme-overlay-dark);
-    border-radius: var(--border-radius);
-    font-size: 1.2rem;
-    min-height: auto;
-    overflow: hidden;
-    padding: 2px;
-    text-align: center;
-    text-overflow: ellipsis;
-    width: auto;
-    &:focus {
-      background-color: var(--theme-overlay-light);
-    }
   }
 
   // Only show the edit button on hover of the whole field
@@ -67,22 +52,18 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  min-height: 135px;
-  min-width: 200px;
   position: relative;
+
+  &--settings-mode {
+    min-height: 300px;
+    width: 100%;
+  }
 }
 
 .document-field__image-details {
-  flex: 1;
-  margin: 0;
-  padding: 0 1rem;
-  text-align: center;
-  width: 100%;
-  // Lighter text
-  &--meta {
-    color: var(--color-gray-40);
-    font-size: 1.1rem;
-  }
+  left: 1.75rem;
+  bottom: 1.75rem;
+  position: absolute;
 }
 
 .document-field__image-tag {
@@ -91,6 +72,7 @@
   height: auto;
   max-height: 700px;
   max-width: 100%;
+  min-width: 200px;
   padding: calc(var(--icon-margin) * 2);
 
   &--empty {

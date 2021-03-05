@@ -6,7 +6,7 @@ import useIsMounted from 'Hooks/useIsMounted'
 import usePrevious from 'Hooks/usePrevious'
 
 import { MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
-import { RemoveIcon, EditIcon } from 'Components/Icons'
+import { CheckIcon, EditIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
 
@@ -50,35 +50,18 @@ const FieldImageComponent = ({
   const imageRef = useRef() // temporary image to do width/height
   const imageNodeRef = useRef() // the actual <img /> tag
   const [imageSrc, setImageSrc] = useState(field.value || IconImage) // the source of the image
-  const [imageDetails, setImageDetails] = useState({}) // image metadata
   const isUpdatingTheActualImage = settingsMode && updating && previewRef.current
   const nameRef = useRef()
   const previousField = usePrevious(field)
+
+  // Formats
+  const webpSource = field.formats && field.formats.webp
 
   // Name
   // There was a field name change and we're not currently focused, update the uncontrolled value
   if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField && field !== previousField) {
     nameRef.current.value = field.name
   }
-
-  useEffect(() => {
-    // If the source of the image changes (field.value), let's create a new
-    // image to get its size and dimensions
-    if (field.value) {
-      imageRef.current = new Image()
-      imageRef.current.src = field.value
-      imageRef.current.onload = () => {
-        if (isMounted.current) {
-          nameRef.current.value = field.name
-          setImageSrc(field.value)
-          setImageDetails({
-            height: imageRef.current.naturalHeight,
-            width: imageRef.current.naturalWidth,
-          })
-        }
-      }
-    }
-  }, [isMounted, field.value, field.name])
 
   useEffect(() => {
     // When the image src is updating, render a preview of the image with the
@@ -92,11 +75,6 @@ const FieldImageComponent = ({
         imageRef.current.onload = () => {
           if (isMounted.current) {
             setImageSrc(e.target.result)
-            // Updating the preview
-            setImageDetails({
-              height: imageRef.current.naturalHeight,
-              width: imageRef.current.naturalWidth,
-            })
           }
         }
       }
@@ -146,14 +124,22 @@ const FieldImageComponent = ({
     'document-field__image-tag--empty': !field.value,
   })
 
+  const containerClassnames = cx({
+    'document-field__image-container': true,
+    'document-field__image-container--settings-mode': settingsMode,
+  })
+
+  console.log(field)
+
   return (
     <div className="document-field__image">
       <figure className="document-field__image-figure">
-        <div className="document-field__image-container">
+        <div className={containerClassnames}>
           {imageSrc &&
           <img
             className={imageClassnames}
-            src={imageSrc}
+            src={webpSource ? webpSource.half : imageSrc}
+            srcSet={webpSource ? `${webpSource.half}, ${webpSource.full} 2x` : ``}
             alt={field && field.name}
             ref={imageNodeRef}
             lazy="true"
@@ -162,13 +148,13 @@ const FieldImageComponent = ({
           <div className="document-field__settings-button">
             <>
               {!settingsMode && !readOnly && field.value &&
-                <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
-                  <EditIcon width="14" height="14" />
-                </IconButton>
+              <IconButton color="dark" className="document-field__edit-btn" aria-label="Change image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
+                <EditIcon width="14" height="14" />
+              </IconButton>
               }
               {settingsMode && field.value &&
-                <IconButton color="dark" aria-label="Exit settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
-                  <RemoveIcon width="12" height="12" />
+                <IconButton color="green" aria-label="Exit settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
+                  <CheckIcon fill="#ffffff" width="12" height="12" />
                 </IconButton>
               }
             </>
@@ -190,43 +176,47 @@ const FieldImageComponent = ({
                 settingsHandler(field.id)
               }
             }}>
+            <div className="field-settings">
+              <div className="field-settings__field">
+                <label>
+                  Image name
+                  <input
+                    defaultValue={field.name}
+                    onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
+                    placeholder="Name your image"
+                    ref={nameRef}
+                    type="text"
+                  />
+                </label>
+              </div>
+              {/* /field */}
+              <div className="field-settings__field">
+                <div>
+                  <b>Alignment</b>
+                  <div className="field-settings__radiogroup-text-only">
+                    <input id={`alignment-left-${field.id}`} type="radio" name="alignment" value="left" />
+                    <label htmlFor={`alignment-left-${field.id}`}>Left</label>
+                    <input id={`alignment-center-${field.id}`} type="radio" name="alignment" value="center" defaultChecked />
+                    <label htmlFor={`alignment-center-${field.id}`}>Center</label>
+                    <input id={`alignment-right-${field.id}`} type="radio" name="alignment" value="right" />
+                    <label htmlFor={`alignment-right-${field.id}`}>Right</label>
+                  </div>
+                </div>
+              </div>
+              {/* /field */}
+              <div className="field-settings__field">
+                <label>
+                  Alt text
+                  <input placeholder="Alt tag text" type="text" />
+                </label>
+              </div>
+            </div>
+            {warning &&
+            <p className="small warning">{warning}</p>
+            }
           </FileUploaderComponent>
           }
         </div>
-        <figcaption className="document-field__image-details">
-          <ul className="list list--blank">
-            <li className="document-field__image-details">
-              <input
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus={autoFocusElement}
-                className="input--without-styling"
-                defaultValue={field.name}
-                onFocus={(e) => {
-                  if (!isReadOnly) {
-                    onFocus(field.id, field.type, documentId, field)
-                    e.target.select()
-                  }
-                }}
-                onBlur={(e) => {
-                  onBlur(field.id, field.type, documentId, field)
-                }}
-                onChange={(e) => { onRename(field.id, e.currentTarget.value) }}
-                placeholder="Name your image"
-                ref={nameRef}
-                type="text"
-                readOnly={isReadOnly}
-              />
-            </li>
-            {imageDetails && imageDetails.width && imageDetails.height &&
-            <li className="document-field__image-details document-field__image-details--meta">
-              {`${imageDetails.width}x${imageDetails.height}`}
-            </li>
-            }
-          </ul>
-          {warning &&
-          <p className="small warning">{warning}</p>
-          }
-        </figcaption>
       </figure>
     </div>
   )
