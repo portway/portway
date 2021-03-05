@@ -7,8 +7,10 @@ import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import axios from 'axios'
 import jobQueue from '../integrators/jobQueue'
 import { FIELD_TYPES } from '../constants/fieldTypes'
+import sharp from 'sharp'
 
 jest.mock('axios')
+jest.mock('sharp')
 jest.mock('../businesstime/field')
 jest.mock('./assets')
 jest.mock('./markdown')
@@ -68,6 +70,11 @@ describe('fieldCoordinator', () => {
         expect(jobQueue.runImageProcessing.mock.calls[0][1]).toEqual(documentId)
         expect(jobQueue.runImageProcessing.mock.calls[0][2]).toEqual(fieldId)
         expect(jobQueue.runImageProcessing.mock.calls[0][3]).toEqual(orgId)
+      })
+
+      it('should call sharp() and sharp().toFile()', () => {
+        expect(sharp.mock.calls.length).toBe(1)
+        expect(sharp().toFile.mock.calls.length).toBe(1)
       })
     })
 
@@ -142,6 +149,7 @@ describe('fieldCoordinator', () => {
       const file = { buffer: new Buffer('not-a-real-buffer') }
 
       beforeAll(async () => {
+        sharp.clearAllMocks()
         BusinessField.setFindByIdReturnValue({ type: 4 })
         BusinessField.updateByIdForDocument.mockReset()
         assetCoordinator.addAssetForDocument.mockReset()
@@ -169,6 +177,11 @@ describe('fieldCoordinator', () => {
         expect(jobQueue.runImageProcessing.mock.calls[0][1]).toEqual(documentId)
         expect(jobQueue.runImageProcessing.mock.calls[0][2]).toEqual(fieldId)
         expect(jobQueue.runImageProcessing.mock.calls[0][3]).toEqual(orgId)
+      })
+
+      it('should call sharp() and sharp().toFile()', () => {
+        expect(sharp.mock.calls.length).toBe(1)
+        expect(sharp().toFile.mock.calls.length).toBe(1)
       })
     })
   })

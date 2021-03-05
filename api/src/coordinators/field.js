@@ -13,6 +13,7 @@ import { lookup } from 'mime-types'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 import jobQueue from '../integrators/jobQueue'
+import sharp from 'sharp'
 
 const stat = util.promisify(fs.stat)
 
@@ -106,14 +107,19 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
 
   switch (body.type) {
     case FIELD_TYPES.FILE:
-      // set the meta data for file type, and pass through without break to upload in same manner as image
       if (file) {
+        // set the meta data for file type
         fieldBody.meta = { originalName: file.originalname, mimeType: file.mimetype, size: file.size }
+        url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
       }
+      fieldBody.value = url
+      break
     case FIELD_TYPES.IMAGE:
       let url
       if (file) {
-        url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
+        const cleanFilePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
+        const cleanImageInfo = await sharp(file.path).toFile(cleanFilePath)
+        url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
       }
       fieldBody.value = url
       break
