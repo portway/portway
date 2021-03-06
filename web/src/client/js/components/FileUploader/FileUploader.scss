@@ -2,22 +2,32 @@
 
 .file-uploader {
   align-items: center;
+  background-color: rgba(255, 255, 255, .9);
   border-radius: var(--border-radius);
-  border: thin solid var(--theme-border);
+  border: thin dashed var(--theme-border);
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: flex-end;
+  justify-content: center;
   left: 0;
   padding: 0;
   position: absolute;
   top: 0;
   width: 100%;
 
+  @media(prefers-color-scheme: dark) {
+    background-color: rgba(0, 0, 0, .8);
+  }
+
+  &--invisible {
+    background-color: transparent;
+    border: none;
+  }
+
   &--dragged-over {
-    background-color: rgba(255, 255, 255, .4);
+    background-color: rgba(255, 255, 255, .6);
     @media(prefers-color-scheme: dark) {
-      background-color: rgba(0, 0, 0, .2);
+      background-color: rgba(0, 0, 0, .3);
     }
   }
 
@@ -35,57 +45,16 @@
     text-align: center;
   }
 
-  &__settings {
-    background-color: hsla(0, 0%, 20%, .95); // gray-80
-    border: thin solid var(--color-gray-80);
-    border-radius: 4px;
-    box-shadow: 0px 2px 3px 1px rgba(77, 77, 77, 0.2);
-    color: rgba(255, 255, 255, .9);
-    padding: 1.2rem;
-    position: absolute;
-    left: 50%;
-    bottom: 2.5rem;
-    transform: translateX(-50%);
-    width: 90%;
-
-    @include media('>=medium') {
-      left: auto;
-      right: 0;
-      transform: none;
-      min-width: 185px;
-      width: auto;
-    }
-
-    div, input {
-      color: rgba(255, 255, 255, .9);
-      font-size: 1.1rem;
-      &::placeholder {
-        color: rgba(255, 255, 255, .4);
-      }
-    }
-
-    .document-field__save-btn {
-      bottom: -12px;
-      left: 50%;
-      position: absolute;
-      transform: translateX(-50%);
-    }
-  }
-
   &__form {
     align-items: center;
-    background-color: hsla(0, 0%, 20%, .95); // gray-80
-    border: thin dashed rgba(255, 255, 255, .2);
-    border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: var(--icon-margin) 0 0;
     padding: 1.2rem;
     width: 100%;
 
-    .file-uploader--dragged-over & {
-      background-color: var(--color-gray-90);
+    .file-uploader--invisible & {
+      display: none;
     }
 
   }

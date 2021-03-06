@@ -10,6 +10,7 @@ const FileUploaderComponent = ({
   accept,
   children,
   hasValue,
+  invisible,
   isUpdating,
   label,
   fileChangeHandler,
@@ -77,6 +78,7 @@ const FileUploaderComponent = ({
   // File upload class states
   const fileUploaderClasses = cx({
     'file-uploader': true,
+    'file-uploader--invisible': invisible,
     'file-uploader--with-value': hasValue,
     'file-uploader--dragged-over': draggedOver,
     'file-uploader--uploading': uploading
@@ -89,29 +91,26 @@ const FileUploaderComponent = ({
       onDragOver={dragOverHandler}
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
-      <div className="file-uploader__settings">
-        {children}
-        {!uploading && !isUpdating &&
-        <form className="file-uploader__form" method="post" encType="multipart/form-data">
-          <label className="file-uploader__content">
-            <span className="file-uploader__label">{label}</span>
-            <span className="btn btn--small btn--cyan">Or select a file</span>
-            <input
-              hidden
-              type="file"
-              accept={accept}
-              multiple={multiple}
-              onClick={() => { clickHandler && clickHandler() }}
-              onChange={(e) => {
-                blurHandler && blurHandler()
-                setUploading(true)
-                fileChangeHandler(multiple ? e.target.files : e.target.files[0])
-              }}
-            />
-          </label>
-        </form>
-        }
-      </div>
+      {!uploading && !isUpdating && !invisible &&
+      <form className="file-uploader__form" method="post" encType="multipart/form-data">
+        <label className="file-uploader__content">
+          <span className="file-uploader__label">{label}</span>
+          <span className="btn btn--small btn--cyan">Or select a file</span>
+          <input
+            hidden
+            type="file"
+            accept={accept}
+            multiple={multiple}
+            onClick={() => { clickHandler && clickHandler() }}
+            onChange={(e) => {
+              blurHandler && blurHandler()
+              setUploading(true)
+              fileChangeHandler(multiple ? e.target.files : e.target.files[0])
+            }}
+          />
+        </label>
+      </form>
+      }
       {isUpdating &&
       <div className="file-uploader__status">
         <SpinnerComponent />
@@ -125,6 +124,7 @@ FileUploaderComponent.propTypes = {
   accept: PropTypes.string,
   children: PropTypes.node,
   hasValue: PropTypes.bool,
+  invisible: PropTypes.bool,
   isUpdating: PropTypes.bool,
   label: PropTypes.string,
   fileChangeHandler: PropTypes.func.isRequired,
@@ -136,6 +136,7 @@ FileUploaderComponent.propTypes = {
 
 FileUploaderComponent.defaultProps = {
   hasValue: false,
+  invisible: false,
   isUpdating: false,
   label: 'Drag and drop a file',
   multiple: false,

@@ -1,0 +1,39 @@
+@import 'CSS/inc/_include-media.scss';
+
+.field-settings {
+  background-color: hsla(0, 0%, 20%, .95); // gray-80
+  border-radius: 4px;
+  border: thin solid var(--color-gray-80);
+  box-shadow: 0px 2px 3px 1px rgba(77, 77, 77, 0.2);
+  color: rgba(255, 255, 255, .9);
+  display: none;
+  padding: 1.2rem;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 6;
+
+  &--visible {
+    display: block;
+  }
+
+  @include media('>=medium') {
+    right: 1.75rem;
+    top: 1.75rem;
+    width: auto;
+  }
+
+  div, input {
+    color: rgba(255, 255, 255, .9);
+    font-size: 1.1rem;
+    &::placeholder {
+      color: rgba(255, 255, 255, .4);
+    }
+  }
+
+  .document-field__save-btn {
+    bottom: 0;
+    right: 0;
+    position: absolute;
+  }
+}

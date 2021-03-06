@@ -5,30 +5,27 @@
   margin: 1.8rem 0;
 
   .document-field__content {
-    align-items: unset;
+    align-items: center;
   }
-
 }
 
 // Actual component
 .document-field__image {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   margin: 0;
   position: relative;
 
   // Override
   .document-field__settings-button {
-    right: 1.75rem;
+    right: -1rem;
     position: absolute;
-    bottom: 1.75rem;
-    z-index: 5;
+    top: -1rem;
+    z-index: 7;
   }
 
   .file-uploader {
-    border: none;
+    &--dragged-over {
+      border: thin dashed var(--theme-border);
+    }
   }
 
   // Only show the edit button on hover of the whole field
@@ -46,31 +43,18 @@
 }
 
 .document-field__image-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
+  min-height: 275px;
   position: relative;
-
-  &--settings-mode {
-    min-height: 300px;
-    width: 100%;
-  }
-}
-
-.document-field__image-details {
-  left: 1.75rem;
-  bottom: 1.75rem;
-  position: absolute;
 }
 
 .document-field__image-tag {
-  // background-color: var(--theme-overlay-light);
   border-radius: var(--border-radius);
   height: auto;
   max-height: 700px;
   max-width: 100%;
   min-width: 200px;
-  padding: calc(var(--icon-margin) * 2);
+  // padding: calc(var(--icon-margin) * 2);
+  width: 100%;
 
   &--empty {
     height: 250px;
@@ -82,5 +66,13 @@
       width: 400px;
     }
   }
+}
 
+.document-field__image {
+  .file-uploader {
+    justify-content: flex-end;
+    @include media('>=medium') {
+      justify-content: center;
+    }
+  }
 }
