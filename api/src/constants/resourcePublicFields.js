@@ -28,7 +28,9 @@ const FIELD_PUBLIC_FIELDS = [
   'type',
   'order',
   'meta',
-  'formats'
+  'formats',
+  'alignment',
+  'alt'
 ].concat(globalPublicFields)
 
 const PROJECT_USERS_PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId'].concat(globalPublicFields)

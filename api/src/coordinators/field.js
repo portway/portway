@@ -1,5 +1,5 @@
 import BusinessField from '../businesstime/field'
-import { FIELD_TYPES } from '../constants/fieldTypes'
+import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../constants/fieldTypes'
 import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { callFuncWithArgs } from '../libs/utils'
