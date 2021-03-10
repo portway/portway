@@ -16,6 +16,7 @@
 
   @include media('>=medium') {
     border-radius: 0 4px 4px 0;
+    min-width: 190px;
   }
 
   div, input {
