@@ -91,6 +91,13 @@ const FieldImageComponent = ({
     onBlur(fieldId, fieldType, documentId)
   }
 
+  function updateSettingsHandler(settings) {
+    const formData = new FormData()
+    formData.append('alignment', settings.alignment)
+    formData.append('alt', settings.alt)
+    onChange(field.id, formData)
+  }
+
   function uploadImage(file) {
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
@@ -136,18 +143,20 @@ const FieldImageComponent = ({
       <div className={containerClassnames}>
         {imageSrc &&
         <img
+          alt={field && field.name}
           className={imageClassnames}
+          height={field.meta && field.meta.height}
+          lazy="true"
+          ref={imageNodeRef}
           src={webpSource ? webpSource.half : imageSrc}
           srcSet={webpSource ? `${webpSource.half}, ${webpSource.full} 2x` : ``}
-          alt={field && field.name}
-          ref={imageNodeRef}
-          lazy="true"
+          width={field.meta && field.meta.width}
         />
         }
         <FileUploaderComponent
           accept="image/*"
           hasValue={field.value !== null}
-          invisible={!settingsMode && field.value}
+          invisible={!settingsMode && field.value !== null}
           isUpdating={updating}
           label="Drag and drop an image"
           fileChangeHandler={uploadImage}
@@ -155,7 +164,12 @@ const FieldImageComponent = ({
           blurHandler={() => { onBlur(field.id, field.type, documentId )}}>
         </FileUploaderComponent>
       </div>
-      <FieldImageSettings field={field} onRename={onRename} visible={settingsMode} />
+      <FieldImageSettings
+        field={field}
+        onRename={onRename}
+        updateSettingsHandler={updateSettingsHandler}
+        visible={settingsMode}
+      />
       <div className="document-field__settings-button">
         {!settingsMode && !readOnly && field.value &&
         <IconButton color="dark" className="document-field__edit-btn" aria-label="Configure image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
