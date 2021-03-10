@@ -15,8 +15,11 @@
   position: relative;
 
   &--settings-mode {
+    border: thin dashed var(--theme-border);
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
+    padding: .25rem;
     @include media('>=medium') {
       flex-direction: row;
     }
