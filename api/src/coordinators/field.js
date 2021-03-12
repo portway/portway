@@ -80,6 +80,7 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
 /*
  * options = {
  *   deletePublished: true // ignores published status of field when deleting field
+ *   markUpdated: true/false // whether to mark parent document and project as updated
  * }
  */
 const removeDocumentField = async function(fieldId, documentId, orgId, options) {

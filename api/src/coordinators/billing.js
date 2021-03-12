@@ -41,7 +41,7 @@ const formatBilling = (customer, userCount) => {
   }
 
   const billingSubscription = customer.subscriptions.data[0]
-  const portwayPlanId = STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[billingSubscription.plan.id]
+  const portwayPlanId = billingSubscription ? STRIPE_PLAN_ID_TO_PORTWAY_PLAN_MAP[billingSubscription.plan.id] : null
 
   const subscription = {
     status: null,

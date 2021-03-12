@@ -6,7 +6,8 @@ export default {
   getCustomer: jest.fn(() => getGenericStripeCustomerData()),
   updateCustomer: jest.fn(() => getGenericStripeCustomerData()),
   cancelSubscription: jest.fn(),
-  cancelSubscriptionAtPeriodEnd: jest.fn()
+  cancelSubscriptionAtPeriodEnd: jest.fn(),
+  deleteCustomer: jest.fn()
 }
 
 

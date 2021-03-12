@@ -61,7 +61,65 @@ form {
       margin: 0 auto 1.8rem;
     }
   }
+}
 
+.sign-up {
+  display: flex;
+  flex-direction: column-reverse;
+  @include media('>=768px') {
+    flex-direction: row;
+    margin: 4rem 0 4rem 0;
+  }
+}
+.sign-up__features {
+  flex: 1;
+  padding-right: 6rem;
+}
+.sign-up__form {
+  form {
+    margin-bottom: 0;
+    padding: 2rem 2rem 1rem 2rem;
+  }
+  .small {
+    margin: 0;
+  }
+}
+
+.card__title {
+  font-weight: 500;
+}
+.card__action {
+  align-items: center;
+  display: flex;
+}
+.card__price {
+  font-weight: bold;
+  font-size: 3.2rem;
+  padding-right: .6rem;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    align-items: center;
+    display: flex;
+    font-size: 1.6rem;
+    font-weight: 300;
+    line-height: 2.2rem;
+
+    &:before {
+      background-image: url('data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjExIiB2aWV3Qm94PSIwIDAgMTYgMTEiIHdpZHRoPSIxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtNS42Mjk3NzA0MSAxMS45NjQzNDIyLTQuNDI2NjExODQtNC40MjY2MTE4OGMtLjE3MzU2NjM1LS4xNzM1NjYzNS0uNDU0OTczMDEtLjE3MzU2NjM1LS42Mjg1MzkzNiAwcy0uMTczNTY2MzUuNDU0OTczMDEgMCAuNjI4NTM5MzZsNC43NDA4ODg4OSA0Ljc0MDg4ODkyYy4xNzM1NjkyMy4xNzM1NjkyLjQ1NDk4MTU2LjE3MzU2NTkuNjI4NTQ2NzItLjAwMDAwNzRsOS40ODEzMzMzOC05LjQ4MTc3Nzc3Yy4xNzM1NjIyLS4xNzM1NzA0Mi4xNzM1NTU2LS40NTQ5NzcwOC0uMDAwMDE0OC0uNjI4NTM5MzYtLjE3MzU3MDQtLjE3MzU2MjI5LS40NTQ5NzcxLS4xNzM1NTU2OS0uNjI4NTM5My4wMDAwMTQ3M3oiIGZpbGw9IiM2YWNhNjUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMikiLz48L3N2Zz4=');
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      content: '';
+      display: block;
+      height: 16px;
+      margin-right: 1rem;
+      width: 16px;
+    }
+  }
 }
 
 .registration__newsletter {

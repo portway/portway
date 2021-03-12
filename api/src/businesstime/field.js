@@ -5,9 +5,10 @@ import { Op } from 'sequelize'
 import { getDb } from '../db/dbConnector'
 import { FIELD_TYPE_MODELS, FIELD_TYPES, MAX_NUMBER_PRECISION } from '../constants/fieldTypes'
 import apiErrorTypes from '../constants/apiErrorTypes'
-import resourceTypes, { PROJECT_RESOURCE_TYPES } from '../constants/resourceTypes'
+import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
+import logger from '../integrators/logger'
 
 const MODEL_NAME = 'Field'
 
@@ -41,6 +42,12 @@ async function createForDocument(documentId, body) {
   }
 
   const createdField = await document.createField(createFieldBody)
+
+  // Debugging log for mismatched text value to structuredValue
+  // Added 2/24/2021 -DH
+  if (body.type === FIELD_TYPES.TEXT && body.value && !Boolean(body.structuredValue)) {
+    logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue in BusinessField.createForDocument`)
+  }
 
   const fieldValue = await createdField.addFieldValue({
     value: getDefaultFieldValueByType(body.value, body.type),
@@ -144,6 +151,12 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   const updatedField = await field.update(body)
   const fieldValue = await updatedField.getFieldValue()
 
+  // Debugging log for mismatched text value to structuredValue
+  // Added 2/23/2021 -DH
+  if (field.type === FIELD_TYPES.TEXT && body.value && !Boolean(body.structuredValue)) {
+    logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue in BusinessField.updateByIdForDocument`)
+  }
+
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
   await updatedField.markUpdated()
@@ -161,13 +174,17 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
  * @param {Number} id 
  * @param {Number} documentId
  * @param {Number} orgId
- * @param {Object} options
+ * @param {Object} options (optional)
  * 
  * options = {
- *   deletePublished: true // ignores published status of field
+ *   deletePublished: true/false // ignores published status of field
+ *   markUpdated: true/false // whether to update parent document and project
  * }
  */
-async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
+async function deleteByIdForDocument(id, documentId, orgId, options = {
+  deletePublished: false,
+  markUpdated: true
+}) {
   const db = getDb()
 
   const document = await db.model('Document').findOne({ where: { id: documentId, orgId } })
@@ -187,10 +204,12 @@ async function deleteByIdForDocument(id, documentId, orgId, options = {}) {
   await field.destroy()
 
   // this is async, but don't wait for it, fire and move on
-  document.markUpdated()
+  if (options.markUpdated) {
+    document.markUpdated()
 
-  // another async chain we don't need to wait for, updatedAt gets set all the way up
-  db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+    // another async chain we don't need to wait for, updatedAt gets set all the way up
+    db.model('Project').findOne({ where: { id: document.projectId, orgId } }).then((project) => { project.markUpdated() })
+  }
 
   await normalizeFieldOrderAndGetCount(documentId, orgId)
 }

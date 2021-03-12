@@ -44,6 +44,11 @@ label, .field__label {
   display: block;
   font-weight: 700;
   padding: 4px 0;
+
+  .field--radio &, .field--checkbox & {
+    font-weight: normal;
+  }
+
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -190,7 +195,7 @@ input.input--without-styling {
     align-items: center;
     flex-direction: row-reverse;
     justify-content: flex-end;
-    label { flex: 1 0 90%; }
+    // label { flex: 1 0 90%; }
   }
 
   &--centered {
@@ -219,7 +224,7 @@ input.input--without-styling {
     }
 
     // checkboxes get no width
-    .field--checkbox & {
+    .field--checkbox &, .field--radio & {
       margin-right: .8rem;
       width: auto;
     }

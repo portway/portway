@@ -163,7 +163,7 @@ const deleteUnverifiedOrgs = async function(req, res, next) {
     const unverifiedUsers = await BusinessUser.findAllUnverifiedOwners()
     let removedOrgsCount = 0
     for (const user of unverifiedUsers) {
-      await organizationCoordinator.removeAllOrgData(user.orgId)
+      await organizationCoordinator.deleteOrg(user.orgId)
       removedOrgsCount += 1
     }
     res.status(200).send({ data: { removedOrgsCount } })
