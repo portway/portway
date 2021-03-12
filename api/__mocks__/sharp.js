@@ -20,7 +20,7 @@ sharpToFormat.mockImplementation(() => sharpObject)
 sharpToBuffer.mockImplementation(() => sharpObject)
 sharpToFile.mockImplementation(() => sharpObject)
 
-const clearAllMocks = function () {
+const clearAllMocks = function() {
   sharp.mockClear()
   sharpResize.mockClear()
   sharpToFormat.mockClear()

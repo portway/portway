@@ -8,6 +8,7 @@ import { promisifyStreamPipe } from '../libs/utils'
 import moment from 'moment'
 import logger from '../libs/logger'
 import { LOG_LEVELS } from '../constants/logging'
+import portwayAPI from '../integrators/portwayAPI'
 
 sharp.cache(false)
 sharp.concurrency(0)
@@ -15,7 +16,7 @@ sharp.concurrency(0)
 const IMAGE_TEMP_DIRECTORY = process.env.IMAGE_TEMP_DIRECTORY || 'image_temp/'
 
 // TODO: update field with new image urls
-const createImageAlternatives = async function(url, documentId, fieldId) {
+const createImageAlternatives = async function(url, documentId, fieldId, orgId) {
   const s3Location = url.split('/').slice(3, -1).join('/')
   const extension = path.extname(url)
   const basename = path.basename(url, extension)
@@ -70,11 +71,18 @@ const createImageAlternatives = async function(url, documentId, fieldId) {
     logger(LOG_LEVELS.ERROR, `error deleting temp file for job ${job.id} in queue ${QUEUES.IMAGE_PROCESSING}, filename: ${filePath}`)
   }
 
-  return {
-    originalHalf: originalHalfResult,
-    webPFull: webPFullResult,
-    webPHalf: webPHalfResult
+  const formatData = {
+    original: {
+      full: url,
+      half: originalHalfResult.Location
+    },
+    webp: {
+      full: webPFullResult.Location,
+      half: webPHalfResult.Location
+    }
   }
+
+  return portwayAPI.updateFieldFormats(documentId, fieldId, orgId, formatData)
 }
 
 export default {
