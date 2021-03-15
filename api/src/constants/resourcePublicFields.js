@@ -27,7 +27,8 @@ const FIELD_PUBLIC_FIELDS = [
   'versionId',
   'type',
   'order',
-  'meta'
+  'meta',
+  'renderedValue'
 ].concat(globalPublicFields)
 
 const PROJECT_USERS_PUBLIC_FIELDS = ['id', 'roleId', 'projectId', 'userId'].concat(globalPublicFields)

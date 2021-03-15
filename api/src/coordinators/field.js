@@ -12,6 +12,7 @@ import axios from 'axios'
 import { lookup } from 'mime-types'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
+import { getRenderedValueByType } from '../libs/fieldRenderedValue'
 
 const stat = util.promisify(fs.stat)
 
@@ -103,6 +104,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
       }
       fieldBody.value = url
+      fieldBody.renderedValue = await getRenderedValueByType(fieldBody.type, fieldBody.value)
       break
     case FIELD_TYPES.TEXT:
       const inputBody = body.value || ''
