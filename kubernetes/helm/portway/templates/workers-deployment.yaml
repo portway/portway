@@ -68,6 +68,11 @@ spec:
             secretKeyRef:
               name: aws-secrets
               key: secret_access_key
+        - name: ADMIN_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: admin-secrets
+              key: admin_secret_key
         ports:
         - containerPort: {{ .Values.workers.port }}
           protocol: TCP
