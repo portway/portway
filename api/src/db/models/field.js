@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
           min: 0
         }
       },
-      meta: DataTypes.JSON
+      meta: DataTypes.JSON,
+      renderedValue: DataTypes.STRING
     },
     {
       paranoid: true,
