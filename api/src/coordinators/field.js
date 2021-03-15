@@ -1,5 +1,5 @@
 import BusinessField from '../businesstime/field'
-import { FIELD_TYPES } from '../constants/fieldTypes'
+import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../constants/fieldTypes'
 import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { callFuncWithArgs } from '../libs/utils'
@@ -120,6 +120,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         const cleanImageInfo = await sharp(file.path).toFile(cleanFilePath)
         const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
         fieldBody.value = url
+        fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
       }
       break
     case FIELD_TYPES.TEXT:
