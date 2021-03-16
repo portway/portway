@@ -4,7 +4,12 @@ import ejs from 'ejs'
 import path from 'path'
 
 const FIELD_VALUE_RENDERING_FILES = {
-  [FIELD_TYPES.IMAGE]: 'image.html'
+  [FIELD_TYPES.STRING]: 'string.html',
+  [FIELD_TYPES.TEXT]: 'text.html',
+  [FIELD_TYPES.IMAGE]: 'image.html',
+  [FIELD_TYPES.NUMBER]: 'number.html',
+  [FIELD_TYPES.DATE]: 'date.html',
+  [FIELD_TYPES.FILE]: 'file.html'
 }
 
 const EJS_TEMPLATE_FUNCTIONS = {}
@@ -20,14 +25,21 @@ Object.keys(FIELD_VALUE_RENDERING_FILES).forEach((key) => {
   )
 })
 
-export function getRenderedValueByType(type, value) {
-  switch (type) {
+export function getRenderedValueByType(field) {
+  const value = field.value
+
+  switch (field.type) {
     case FIELD_TYPES.STRING:
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.STRING]({ value })
     case FIELD_TYPES.TEXT:
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ value })
     case FIELD_TYPES.IMAGE:
+      // todo: pass in alt, and meta width and height when available
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({ value, alt: 'blah', width: 500, height: 500 })
     case FIELD_TYPES.NUMBER:
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.NUMBER]({ value })
     case FIELD_TYPES.DATE:
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.DATE]({ value })
     case FIELD_TYPES.FILE:
-      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({ src: value, alt: 'blah', width: 500, height: 500 })
   }
 }

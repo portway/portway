@@ -104,7 +104,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
       }
       fieldBody.value = url
-      fieldBody.renderedValue = await getRenderedValueByType(fieldBody.type, fieldBody.value)
       break
     case FIELD_TYPES.TEXT:
       const inputBody = body.value || ''
@@ -115,6 +114,7 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
     // keep body the same
   }
 
+  fieldBody.renderedValue = await getRenderedValueByType(fieldBody)
   return fieldBody
 }
 
