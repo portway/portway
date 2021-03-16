@@ -5,6 +5,7 @@ import { processMarkdownSync } from './markdown'
 import { callFuncWithArgs } from '../libs/utils'
 import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import axios from 'axios'
+import { getRenderedValueByType } from '../libs/fieldRenderedValue'
 
 jest.mock('axios')
 jest.mock('../businesstime/field')
@@ -12,6 +13,7 @@ jest.mock('./assets')
 jest.mock('./markdown')
 jest.mock('../libs/utils')
 jest.mock('../libs/promisifyStreamPipe')
+jest.mock('../libs/fieldRenderedValue')
 
 describe('fieldCoordinator', () => {
   describe('#addFieldToDocument', () => {
@@ -26,6 +28,11 @@ describe('fieldCoordinator', () => {
       expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
       expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
       expect(BusinessField.createForDocument.mock.calls[0][1]).toEqual(expect.objectContaining(body))
+    })
+
+    it('should call fieldRenderedValue.getRenderedValueByType with the field body', () => {
+      expect(getRenderedValueByType.mock.calls.length).toBe(1)
+      expect(getRenderedValueByType.mock.calls[0][0]).toEqual(body)
     })
 
     describe('when it is an image field', () => {
@@ -91,6 +98,7 @@ describe('fieldCoordinator', () => {
     const body = { value: 'some-random-text', orgId: 0 }
 
     beforeAll(async () => {
+      getRenderedValueByType.mockReset()
       BusinessField.setFindByIdReturnValue({ type: 2 })
       await fieldCoordinator.updateDocumentField(fieldId, documentId, orgId, body)
     })
@@ -110,6 +118,11 @@ describe('fieldCoordinator', () => {
       expect(BusinessField.updateByIdForDocument.mock.calls[0][3]).toEqual(
         expect.objectContaining(body)
       )
+    })
+
+    it('should call fieldRenderedValue.getRenderedValueByType with the field body', () => {
+      expect(getRenderedValueByType.mock.calls.length).toBe(1)
+      expect(getRenderedValueByType.mock.calls[0][0].value).toEqual(body.value)
     })
 
     describe('when it is an image field', () => {

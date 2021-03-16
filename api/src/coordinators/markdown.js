@@ -7,3 +7,7 @@ export function processMarkdownSync(rawMarkdown) {
   const result = md.parse(rawMarkdown, {})
   return processTokens(result)
 }
+
+export function renderMarkdownSync(rawMarkdown) {
+  return md.render(rawMarkdown)
+}

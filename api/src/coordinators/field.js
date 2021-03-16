@@ -113,8 +113,10 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
     case FIELD_TYPES.NUMBER:
     // keep body the same
   }
+  if (fieldBody.value) {
+    fieldBody.renderedValue = await getRenderedValueByType(fieldBody)
+  }
 
-  fieldBody.renderedValue = await getRenderedValueByType(fieldBody)
   return fieldBody
 }
 
