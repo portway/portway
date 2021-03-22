@@ -40,12 +40,3 @@ export const uploadBuffer = async function (buffer, key, contentType) {
 
   return s3.upload(params).promise()
 }
-
-// const promisifyStreamPipe = (readStream, writeStream) => {
-//   return new Promise((resolve, reject) => {
-//     readStream.on('error', reject)
-//     writeStream.on('error', reject)
-//     writeStream.on('finish', resolve)
-//     readStream.pipe(writeStream)
-//   })
-// } 
