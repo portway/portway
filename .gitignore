@@ -5,8 +5,8 @@ api/dist
 sync/dist
 workers/dist
 
-
 workers/temp
+workers/image_temp
 
 # Logs
 logs

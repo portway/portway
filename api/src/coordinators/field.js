@@ -1,5 +1,5 @@
 import BusinessField from '../businesstime/field'
-import { FIELD_TYPES } from '../constants/fieldTypes'
+import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../constants/fieldTypes'
 import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { callFuncWithArgs } from '../libs/utils'
@@ -12,6 +12,8 @@ import axios from 'axios'
 import { lookup } from 'mime-types'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
+import jobQueue from '../integrators/jobQueue'
+import sharp from 'sharp'
 
 const stat = util.promisify(fs.stat)
 
@@ -21,7 +23,13 @@ const addFieldToDocument = async function(documentId, body, file) {
   const { orgId } = body
   const fieldBody = await getFieldBodyByType(body, documentId, orgId, file)
 
-  return BusinessField.createForDocument(documentId, fieldBody)
+  const field = await BusinessField.createForDocument(documentId, fieldBody)
+  // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
+  if (file && field.type === FIELD_TYPES.IMAGE) {
+    jobQueue.runImageProcessing(field.value, field.documentId, field.id, orgId)
+  }
+
+  return field
 }
 
 const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
@@ -60,7 +68,13 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
-  return BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
+  const updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
+  // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
+  if (updatedField.type === FIELD_TYPES.IMAGE && file) {
+    jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id, orgId)
+  }
+
+  return updatedField
 }
 
 /*
@@ -93,16 +107,21 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
 
   switch (body.type) {
     case FIELD_TYPES.FILE:
-      // set the meta data for file type, and pass through without break to upload in same manner as image
       if (file) {
+        // set the meta data for file type
         fieldBody.meta = { originalName: file.originalname, mimeType: file.mimetype, size: file.size }
+        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
+        fieldBody.value = url
       }
+      break
     case FIELD_TYPES.IMAGE:
-      let url
       if (file) {
-        url = await assetCoordinator.addAssetForDocument(documentId, orgId, file)
+        const cleanFilePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
+        const cleanImageInfo = await sharp(file.path).toFile(cleanFilePath)
+        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
+        fieldBody.value = url
+        fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
       }
-      fieldBody.value = url
       break
     case FIELD_TYPES.TEXT:
       const inputBody = body.value || ''

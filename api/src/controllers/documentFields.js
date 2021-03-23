@@ -49,7 +49,7 @@ const documentFields = function(router) {
         fileSize: MAX_FILE_SIZE_BYTES
       }
     }).single('file'),
-    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue'), {
+    validateBody(partialFields(RESOURCE_TYPES.FIELD, 'name', 'value', 'structuredValue', 'alt', 'alignment'), {
       includeDetails: true
     }),
     updatePerm,
