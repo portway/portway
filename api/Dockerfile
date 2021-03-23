@@ -13,7 +13,7 @@ WORKDIR /api
 # Only copy package.json first to take advantage of docker caching
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --target_arch=x64
 
 # .dockerignore ensures not everything is copied
 COPY . .
