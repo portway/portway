@@ -32,20 +32,22 @@ Object.keys(FIELD_VALUE_RENDERING_FILES).forEach((key) => {
  * @param {FieldBody} field -
  */
 export function getRenderedValueByType(field) {
+  console.log(field)
   const value = field.value
-  const type = FIELD_TYPES[field.type]
   const name = field.name
 
   switch (field.type) {
     case FIELD_TYPES.STRING:
-      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.STRING]({ type, name, value })
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.STRING]({ type: 'string', name, value })
     case FIELD_TYPES.TEXT:
       const html = renderMarkdownSync(value)
-      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ html, type, name, value })
+      console.log("HHEHEHEHE")
+      console.log(name)
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ html, type: 'text', name })
     case FIELD_TYPES.IMAGE:
       // todo: pass in alt, and meta width and height when available
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({
-        type,
+        type: 'image',
         name,
         value,
         alt: field.alt,
@@ -54,11 +56,11 @@ export function getRenderedValueByType(field) {
         alignment: field.alignment
       })
     case FIELD_TYPES.NUMBER:
-      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.NUMBER]({ type, name, value })
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.NUMBER]({ type: 'number', name, value })
     case FIELD_TYPES.DATE:
       const formattedDate = field.value && moment(field.value).format('MMMM Do YYYY, h:mm a')
-      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.DATE]({ type, name, value, formattedDate })
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.DATE]({ type: 'date', name, value, formattedDate })
     case FIELD_TYPES.FILE:
-      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.FILE]({ type, name, value })
+      return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.FILE]({ type: 'file', name, value })
   }
 }

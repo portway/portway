@@ -19,15 +19,13 @@ const publishDocumentVersion = async function(documentId, projectId, orgId) {
     const value = await createVersionedFieldValue(field)
     const newField = processNewFieldVersionByType(field,
       {
-        name: field.name,
         value,
-        type: field.type,
         versionId: docVersion.id,
-        orgId,
-        order: field.order
+        orgId
       })
     return BusinessField.createForDocument(doc.id, newField)
   }))
+
   const updatedDoc = await BusinessDocument.updateByIdForProject(doc.id, doc.projectId, orgId, {
     publishedVersionId: docVersion.id,
     lastPublishedAt: new Date()
@@ -91,7 +89,10 @@ const processNewFieldVersionByType = function(field, newField) {
       newField.structuredValue = field.structuredValue
     }
   }
-  return newField
+  const fieldForUpdate = { ...field, ...newField }
+  delete fieldForUpdate.documentId
+  delete fieldForUpdate.id
+  return fieldForUpdate
 }
 
 export default {
