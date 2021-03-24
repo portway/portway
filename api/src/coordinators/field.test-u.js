@@ -5,7 +5,6 @@ import { processMarkdownSync } from './markdown'
 import { callFuncWithArgs } from '../libs/utils'
 import promisifyStreamPipe from '../libs/promisifyStreamPipe'
 import axios from 'axios'
-import { getRenderedValueByType } from '../libs/fieldRenderedValue'
 import jobQueue from '../integrators/jobQueue'
 import { FIELD_TYPES } from '../constants/fieldTypes'
 import sharp from 'sharp'
@@ -17,7 +16,6 @@ jest.mock('./assets')
 jest.mock('./markdown')
 jest.mock('../libs/utils')
 jest.mock('../libs/promisifyStreamPipe')
-jest.mock('../libs/fieldRenderedValue')
 jest.mock('../integrators/jobQueue')
 
 // separate these internally used functions from the mock object so we can use them for their unit tests
@@ -42,11 +40,6 @@ describe('fieldCoordinator', () => {
       expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
       expect(BusinessField.createForDocument.mock.calls[0][0]).toEqual(documentId)
       expect(BusinessField.createForDocument.mock.calls[0][1]).toEqual(expect.objectContaining(body))
-    })
-
-    it('should call fieldRenderedValue.getRenderedValueByType with the field body', () => {
-      expect(getRenderedValueByType.mock.calls.length).toBe(1)
-      expect(getRenderedValueByType.mock.calls[0][0]).toEqual(body)
     })
 
     describe('when it is an image field', () => {
@@ -128,7 +121,6 @@ describe('fieldCoordinator', () => {
     const body = { value: 'some-random-text', orgId: 0 }
 
     beforeAll(async () => {
-      getRenderedValueByType.mockReset()
       BusinessField.setFindByIdReturnValue({ type: 2 })
       BusinessField.updateByIdForDocument.mockReturnValueOnce({ id: fieldId, documentId, orgId, type: FIELD_TYPES.TEXT, value: body.value })
 
@@ -150,11 +142,6 @@ describe('fieldCoordinator', () => {
       expect(BusinessField.updateByIdForDocument.mock.calls[0][3]).toEqual(
         expect.objectContaining(body)
       )
-    })
-
-    it('should call fieldRenderedValue.getRenderedValueByType with the field body', () => {
-      expect(getRenderedValueByType.mock.calls.length).toBe(1)
-      expect(getRenderedValueByType.mock.calls[0][0].value).toEqual(body.value)
     })
 
     describe('when it is an image field', () => {
