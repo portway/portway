@@ -27,3 +27,16 @@ export const uploadExportZip = async function(filePath, uniqueId) {
   }
   return res.Location
 }
+
+export const uploadBuffer = async function (buffer, key, contentType) {
+
+  const params = {
+    Bucket: S3_CONTENT_BUCKET,
+    Key: key,
+    ContentType: contentType,
+    Body: buffer,
+    ACL: 'public-read'
+  }
+
+  return s3.upload(params).promise()
+}
