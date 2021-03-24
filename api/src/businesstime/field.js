@@ -167,7 +167,7 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
   // set the rendered value on the field
-  if (fieldValue.value != null ) {
+  if (fieldValue.get('value') != null ) {
     const renderedValue = await getRenderedValueByType(updatedField, fieldValue.value)
     await updatedField.update({ renderedValue })
   }

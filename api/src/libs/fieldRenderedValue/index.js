@@ -1,4 +1,4 @@
-import { FIELD_TYPES } from '../../constants/fieldTypes'
+import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../../constants/fieldTypes'
 import fs from 'fs'
 import ejs from 'ejs'
 import path from 'path'
@@ -33,26 +33,25 @@ Object.keys(FIELD_VALUE_RENDERING_FILES).forEach((key) => {
  */
 export function getRenderedValueByType(field, value) {
   const name = field.name
-  console.log(value)
 
   switch (field.type) {
     case FIELD_TYPES.STRING:
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.STRING]({ type: 'string', name, value })
     case FIELD_TYPES.TEXT:
       const html = renderMarkdownSync(value)
-      console.log("HHEHEHEHE")
-      console.log(name)
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ html, type: 'text', name })
     case FIELD_TYPES.IMAGE:
-      // todo: pass in alt, and meta width and height when available
+      const imageSource = field.formats ? field.formats.webp.half : field.value
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({
         type: 'image',
         name,
-        value,
+        imageSource,
         alt: field.alt,
-        width: field.width,
-        height: field.height,
-        alignment: field.alignment
+        width: field.meta.width,
+        height: field.meta.height,
+        alignment: field.alignment || IMAGE_ALIGNMENT_OPTIONS.CENTER,
+        webpHalf: field.formats && field.formats.webp.half,
+        webpFull: field.formats && field.formats.webp.full
       })
     case FIELD_TYPES.NUMBER:
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.NUMBER]({ type: 'number', name, value })
