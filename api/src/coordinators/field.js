@@ -12,7 +12,6 @@ import axios from 'axios'
 import { lookup } from 'mime-types'
 import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
-import { getRenderedValueByType } from '../libs/fieldRenderedValue'
 import jobQueue from '../integrators/jobQueue'
 import sharp from 'sharp'
 
@@ -131,9 +130,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.NUMBER:
     // keep body the same
-  }
-  if (fieldBody.value) {
-    fieldBody.renderedValue = await getRenderedValueByType(fieldBody)
   }
   return fieldBody
 }

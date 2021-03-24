@@ -9,6 +9,7 @@ import resourceTypes from '../constants/resourceTypes'
 import resourcePublicFields from '../constants/resourcePublicFields'
 import { pick } from '../libs/utils'
 import logger from '../integrators/logger'
+import { getRenderedValueByType } from '../libs/fieldRenderedValue'
 
 const MODEL_NAME = 'Field'
 
@@ -56,6 +57,12 @@ async function createForDocument(documentId, body) {
   })
 
   await createdField.setFieldValue(fieldValue.id)
+
+  // set the rendered value on the field
+  if (fieldValue.value) {
+    const renderedValue = await getRenderedValueByType(createdField, fieldValue.value)
+    await createdField.update({ renderedValue })
+  }
 
   // this is async, but don't wait for it, fire and move on
   document.markUpdated()
@@ -158,6 +165,12 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   }
 
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
+
+  // set the rendered value on the field
+  if (fieldValue.value) {
+    const renderedValue = await getRenderedValueByType(updatedField, fieldValue.value)
+    await updatedField.update({ renderedValue })
+  }
 
   await updatedField.markUpdated()
   // this is async, but don't wait for it, fire and move on

@@ -31,10 +31,9 @@ Object.keys(FIELD_VALUE_RENDERING_FILES).forEach((key) => {
  * Takes a field body and returns the rendered value for each type of field
  * @param {FieldBody} field -
  */
-export function getRenderedValueByType(field) {
-  console.log(field)
-  const value = field.value
+export function getRenderedValueByType(field, value) {
   const name = field.name
+  console.log(value)
 
   switch (field.type) {
     case FIELD_TYPES.STRING:
