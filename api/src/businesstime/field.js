@@ -59,7 +59,7 @@ async function createForDocument(documentId, body) {
   await createdField.setFieldValue(fieldValue.id)
 
   // set the rendered value on the field
-  if (fieldValue.value) {
+  if (fieldValue.value != null) {
     const renderedValue = await getRenderedValueByType(createdField, fieldValue.value)
     await createdField.update({ renderedValue })
   }
@@ -167,7 +167,7 @@ async function updateByIdForDocument(id, documentId, orgId, body) {
   await fieldValue.update({ value: body.value, structuredValue: body.structuredValue })
 
   // set the rendered value on the field
-  if (fieldValue.value) {
+  if (fieldValue.value != null ) {
     const renderedValue = await getRenderedValueByType(updatedField, fieldValue.value)
     await updatedField.update({ renderedValue })
   }
