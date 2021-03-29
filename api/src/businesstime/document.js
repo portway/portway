@@ -287,5 +287,6 @@ export default {
   findByIdWithFields,
   findById,
   deleteAllForOrg,
-  deleteAllSoftDeletedBefore
+  deleteAllSoftDeletedBefore,
+  duplicateById
 }
