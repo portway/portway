@@ -3,6 +3,7 @@ import FieldCoordinator from './field'
 import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
+import webhookCoordinator from '../coordinators/webhook'
 import { slugify } from '../libs/utils'
 
 const addProjectDocument = async (projectId, body) => {
@@ -26,7 +27,6 @@ const addProjectDocument = async (projectId, body) => {
 const deleteDocument = async (docId, projectId, orgId, options = {
   markUpdated: true
 }) => {
-
   const fieldOptions = {
     deletePublished: true,
     markUpdated: options.markUpdated
@@ -41,6 +41,9 @@ const deleteDocument = async (docId, projectId, orgId, options = {
   await BusinessDocumentVersion.deleteAllForDocument(docId, orgId)
   // Delete document
   await BusinessDocument.deleteByIdForProject(docId, projectId, orgId, options)
+
+  // Don't wait for it, does its own error handling
+  webhookCoordinator.sendDocumentDeleteWebhook(docId, projectId, orgId)
 }
 
 const deleteAllForProject = async (projectId, orgId) => {

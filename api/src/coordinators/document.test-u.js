@@ -4,12 +4,14 @@ import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
 import { slugify } from '../libs/utils'
+import webhookCoordinator from '../coordinators/webhook'
 
 jest.mock('./field')
 jest.mock('../businesstime/document')
 jest.mock('../businesstime/field')
 jest.mock('../businesstime/documentversion')
 jest.mock('../libs/utils')
+jest.mock('../coordinators/webhook')
 
 describe('documentCoordinator', () => {
   const docId = 12
@@ -65,6 +67,13 @@ describe('documentCoordinator', () => {
       expect(BusinessDocument.deleteByIdForProject.mock.calls[0][0]).toEqual(docId)
       expect(BusinessDocument.deleteByIdForProject.mock.calls[0][1]).toEqual(projectId)
       expect(BusinessDocument.deleteByIdForProject.mock.calls[0][2]).toEqual(orgId)
+    })
+
+    it('should call webhookCoordinator.sendDocumentDeleteWebhook with the correct args', () => {
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls.length).toBe(1)
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls[0][0]).toBe(docId)
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls[0][1]).toBe(projectId)
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls[0][2]).toBe(orgId)
     })
   })
 
