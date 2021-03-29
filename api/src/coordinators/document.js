@@ -56,10 +56,24 @@ const deleteAllForProject = async (projectId, orgId) => {
   }))
 }
 
+const duplicateDocument = async (documentId, projectId, orgId) => {
+  // duplicate the document
+  const dupDoc = await BusinessDocument.duplicateById(documentId, orgId)
+  // fetch the fields
+  const fields = await BusinessField.findAllDraftForDocument(documentId, orgId)
+  // loop through fields and create the duplicates
+  await Promise.all(fields.map((field) => {
+    return BusinessField.duplicateById(field.id, dupDoc.id, orgId)
+  }))
+
+  return BusinessDocument.findByIdWithFields(documentId, orgId)
+}
+
 const documentCoordinator = {
   addProjectDocument,
   deleteDocument,
-  deleteAllForProject
+  deleteAllForProject,
+  duplicateDocument
 }
 
 export default documentCoordinator
