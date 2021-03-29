@@ -50,13 +50,13 @@ const FieldImageComponent = ({
 
   // Image
   const imageNodeRef = useRef() // the actual <img /> tag
-  const imageSrc = field.value || IconImage // the source of the image
+  const [imageSrc, setImageSrc] = useState(field.value || IconImage)
   const isUpdatingTheActualImage = updating && previewRef.current
   const nameRef = useRef()
   const previousField = usePrevious(field)
 
   // Use the formats if we have them
-  const webpSource = field.formats && field.formats.webp
+  const webpSource = useRef(field.formats && field.formats.webp)
 
   // Name
   // There was a field name change and we're not currently focused, update the uncontrolled value
@@ -72,8 +72,10 @@ const FieldImageComponent = ({
       reader.readAsDataURL(previewRef.current)
       reader.onload = (e) => {
         if (isMounted.current) {
-          imageNodeRef.current.setAttribute('srcset', e.target.result)
-          imageNodeRef.current.setAttribute('src', e.target.result)
+          // Reset all stored image values, and show the preview
+          imageNodeRef.current.setAttribute('srcset', '')
+          webpSource.current = null
+          setImageSrc(e.target.result)
         }
       }
     }
@@ -148,8 +150,8 @@ const FieldImageComponent = ({
           height={field.meta && field.meta.height}
           lazy="true"
           ref={imageNodeRef}
-          src={webpSource ? webpSource.half : imageSrc}
-          srcSet={webpSource ? `${webpSource.half}, ${webpSource.full} 2x` : ``}
+          src={webpSource.current ? webpSource.current.half : imageSrc}
+          srcSet={webpSource.current ? `${webpSource.current.half}, ${webpSource.current.full} 2x` : ``}
           width={field.meta && field.meta.width}
         />
         }
