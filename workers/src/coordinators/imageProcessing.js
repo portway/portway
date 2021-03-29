@@ -15,7 +15,6 @@ sharp.concurrency(0)
 
 const IMAGE_TEMP_DIRECTORY = process.env.IMAGE_TEMP_DIRECTORY || 'image_temp/'
 
-// TODO: update field with new image urls
 const createImageAlternatives = async function(url, documentId, fieldId, orgId) {
   const s3Location = url.split('/').slice(3, -1).join('/')
   const extension = path.extname(url)
