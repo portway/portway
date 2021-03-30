@@ -56,14 +56,15 @@ const deleteAllForProject = async (projectId, orgId) => {
 const duplicateDocument = async (documentId, projectId, orgId) => {
   // duplicate the document
   const dupDoc = await BusinessDocument.duplicateById(documentId, orgId)
+  console.log(dupDoc)
   // fetch the fields
   const fields = await BusinessField.findAllDraftForDocument(documentId, orgId)
   // loop through fields and create the duplicates
-  await Promise.all(fields.map((field) => {
-    return BusinessField.duplicateById(field.id, dupDoc.id, orgId)
-  }))
+  // await Promise.all(fields.map((field) => {
+  //   return BusinessField.duplicateById(field.id, dupDoc.id, orgId)
+  // }))
 
-  return BusinessDocument.findByIdWithFields(documentId, orgId)
+  return BusinessDocument.findByIdWithFields(dupDoc.id, orgId)
 }
 
 const documentCoordinator = {
