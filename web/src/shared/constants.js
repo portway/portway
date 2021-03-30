@@ -248,5 +248,5 @@ module.exports = {
   SUPPORT_LINK: 'https://getportway.com/support',
   // UI Related
   DOCUMENT_MODE: DOCUMENT_MODE,
-  MOBILE_MATCH_SIZE: '(max-width: 767px)',
+  MOBILE_MATCH_SIZE: '(max-width: 768px)',
 }
