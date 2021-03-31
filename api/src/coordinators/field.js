@@ -116,11 +116,30 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
   return fieldBody
 }
 
+const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name']
+
+const duplicateField = async function(id, originalParentDocId, newParentDocId, orgId) {
+  const field = await BusinessField.findByIdForDocument(id, originalParentDocId, orgId)
+
+  const body = FIELD_PROPS_TO_COPY.reduce((body, fieldProp) => {
+    body[fieldProp] = field[fieldProp]
+    return body
+  }, {})
+  body.orgId = orgId
+
+  if (body.type === FIELD_TYPES.IMAGE) {
+    return fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, field.value)
+  }
+
+  return BusinessField.createForDocument(newParentDocId, body)
+}
+
 const fieldCoordinator = {
   addFieldToDocument,
   addImageFieldFromUrlToDocument,
   updateDocumentField,
-  removeDocumentField
+  removeDocumentField,
+  duplicateField
 }
 
 export default fieldCoordinator
