@@ -274,26 +274,6 @@ async function deleteAllSoftDeletedBefore(timestamp) {
   })
 }
 
-const DOCUMENT_PROPERTIES_FOR_DUPLICATION = ['name', 'slug', 'orgId', 'projectId']
-
-async function duplicateById(id, orgId) {
-  const db = getDb()
-
-  const document = await db.model(MODEL_NAME).findOne({
-    where: { id, orgId },
-    attributes: DOCUMENT_PROPERTIES_FOR_DUPLICATION,
-    raw: true
-  })
-
-  const createdDocument = await db.model(MODEL_NAME).create({
-    ...document,
-    name: `${document.name}_copy`,
-    slug: `${document.slug}_copy`
-  })
-
-  return publicFields(createdDocument)
-}
-
 export default {
   createForProject,
   updateByIdForProject,
@@ -307,6 +287,5 @@ export default {
   findByIdWithFields,
   findById,
   deleteAllForOrg,
-  deleteAllSoftDeletedBefore,
-  duplicateById
+  deleteAllSoftDeletedBefore
 }
