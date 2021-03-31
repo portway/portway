@@ -53,26 +53,6 @@ const deleteAllForProject = async (projectId, orgId) => {
   }))
 }
 
-const DOCUMENT_PROPERTIES_FOR_DUPLICATION = ['name', 'slug', 'orgId', 'projectId']
-
-async function duplicateById(id, orgId) {
-  const db = getDb()
-
-  const document = await db.model(MODEL_NAME).findOne({
-    where: { id, orgId },
-    attributes: DOCUMENT_PROPERTIES_FOR_DUPLICATION,
-    raw: true
-  })
-
-  const createdDocument = await db.model(MODEL_NAME).create({
-    ...document,
-    name: `${document.name}_copy`,
-    slug: `${document.slug}_copy`
-  })
-
-  return publicFields(createdDocument)
-}
-
 const duplicateDocument = async (documentId, projectId, orgId) => {
   // fetch the original document
   const document = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
@@ -91,7 +71,8 @@ const duplicateDocument = async (documentId, projectId, orgId) => {
   await Promise.all(fields.map((field) => {
     return FieldCoordinator.duplicateField(field.id, document.id, dupeDoc.id, orgId)
   }))
-
+  // we could technically assemble this payload from the retuned values above, but
+  // just in case, go through the normal pathway for fetching
   return BusinessDocument.findByIdWithFields(dupeDoc.id, orgId)
 }
 
