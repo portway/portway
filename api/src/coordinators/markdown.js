@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it'
 import processTokens from '../libs/markdownProcessor'
 
-const md = new MarkdownIt()
+const md = new MarkdownIt({ breaks: true })
 
 export function processMarkdownSync(rawMarkdown) {
   const result = md.parse(rawMarkdown, {})
