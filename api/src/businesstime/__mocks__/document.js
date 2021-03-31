@@ -15,5 +15,6 @@ export default {
   deleteAllForOrg: jest.fn(),
   findByIdWithFields: jest.fn(),
   findByIdWithPublishedFields: jest.fn(),
-  duplicateById: jest.fn()
+  duplicateById: jest.fn(),
+  findByIdForProject: jest.fn()
 }
