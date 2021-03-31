@@ -170,8 +170,8 @@ describe('documentCoordinator', () => {
 
     it('should call BusinessDocument.findByIdWithFields', () => {
       expect(BusinessDocument.findByIdWithFields.mock.calls.length).toBe(1)
-      expect(BusinessDocument.findByIdWithFields.mock.calls[0]).toBe(dupeDocId)
-      expect(BusinessDocument.findByIdWithFields.mock.calls[0]).toBe(orgId)
+      expect(BusinessDocument.findByIdWithFields.mock.calls[0][0]).toBe(dupeDocId)
+      expect(BusinessDocument.findByIdWithFields.mock.calls[0][1]).toBe(orgId)
     })
 
     afterAll(() => {
