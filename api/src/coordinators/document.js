@@ -56,17 +56,46 @@ const deleteAllForProject = async (projectId, orgId) => {
   }))
 }
 
+const DOCUMENT_PROPERTIES_FOR_DUPLICATION = ['name', 'slug', 'orgId', 'projectId']
+
+async function duplicateById(id, orgId) {
+  const db = getDb()
+
+  const document = await db.model(MODEL_NAME).findOne({
+    where: { id, orgId },
+    attributes: DOCUMENT_PROPERTIES_FOR_DUPLICATION,
+    raw: true
+  })
+
+  const createdDocument = await db.model(MODEL_NAME).create({
+    ...document,
+    name: `${document.name}_copy`,
+    slug: `${document.slug}_copy`
+  })
+
+  return publicFields(createdDocument)
+}
+
 const duplicateDocument = async (documentId, projectId, orgId) => {
-  // duplicate the document
-  const dupDoc = await BusinessDocument.duplicateById(documentId, orgId)
+  // fetch the original document
+  const document = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
   // fetch the fields
   const fields = await BusinessField.findAllDraftForDocument(documentId, orgId)
+  // creatch the dupe doc body
+  const body = {
+    name: `${document.name}_copy`,
+    slug: `${document.slug}_copy`,
+    projectId: document.projectId,
+    orgId
+  }
+  // create the duplicate document
+  const dupeDoc = await BusinessDocument.createForProject(projectId, body)
   // loop through fields and create the duplicates
   await Promise.all(fields.map((field) => {
-    return FieldCoordinator.duplicateField(field.id, documentId, dupDoc.id, orgId)
+    return FieldCoordinator.duplicateField(field.id, document.id, dupeDoc.id, orgId)
   }))
 
-  return BusinessDocument.findByIdWithFields(dupDoc.id, orgId)
+  return BusinessDocument.findByIdWithFields(dupeDoc.id, orgId)
 }
 
 const documentCoordinator = {
