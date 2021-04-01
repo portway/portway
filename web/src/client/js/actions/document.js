@@ -41,7 +41,7 @@ export const createDocument = (projectId, history, body, options = {}) => {
       return
     }
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
       return
     }
     const createFieldBody = {
@@ -69,7 +69,7 @@ export const publishDocument = (documentId, projectId) => {
     dispatch(Documents.publish(documentId))
     const { data, status } = await add(`v1/documents/${documentId}/publish`)
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
       return
     }
     dispatch(Documents.receivePublishedVersion(projectId, data))
@@ -81,7 +81,7 @@ export const updateDocument = (projectId, documentId, body) => {
     dispatch(Documents.update(projectId, documentId, body))
     const { data, status } = await update(`v1/projects/${projectId}/documents/${documentId}`, body)
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
       return
     }
     validationCodes.includes(status) ?
@@ -95,10 +95,23 @@ export const unpublishDocument = (documentId, projectId) => {
     dispatch(Documents.unpublish(documentId))
     const { data, status } = await add(`v1/documents/${documentId}/unpublish`)
     if (globalErrorCodes.includes(status)) {
-      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.USER, status))
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
       return
     }
     dispatch(Documents.receiveUnpublishedVersion(projectId, data))
+  }
+}
+
+export const duplicateDocument = (projectId, documentId) => {
+  return async (dispatch) => {
+    dispatch(Documents.duplicate(projectId, documentId))
+    const { data, status } = await add(`v1/projects/${projectId}/documents/${documentId}/duplicate`)
+    if (globalErrorCodes.includes(status)) {
+      dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.DOCUMENT, status))
+      return
+    }
+    dispatch(Documents.receiveOneCreated(projectId, data))
+    dispatch(emitDocumentCreated(projectId))
   }
 }
 

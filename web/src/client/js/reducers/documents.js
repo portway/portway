@@ -186,6 +186,17 @@ export const documents = (state = initialState, action) => {
         }
       }
     }
+    // Duplicating documents
+    case ActionTypes.INITIATE_DOCUMENT_DUPLICATION: {
+      const byProject = { ...state.loading.byProject, [action.projectId]: true }
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          byProject
+        }
+      }
+    }
     // When fields are added/updated/removed, adjust the updatedAt field
     // accordingly, only client-side... next request for document will get the
     // right date

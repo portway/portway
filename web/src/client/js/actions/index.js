@@ -66,6 +66,8 @@ export const ActionTypes = {
   RECEIVE_UNPUBLISHED_DOCUMENT: 'RECEIVE_UNPUBLISHED_DOCUMENT',
   RECEIVE_DOCUMENT_RESULTS: 'RECEIVE_DOCUMENT_RESULTS',
   INITIATE_DOCUMENT_SEARCH: 'INITIATE_DOCUMENT_SEARCH',
+  INITIATE_DOCUMENT_DUPLICATION: 'INITIATE_DOCUMENT_DUPLICATION',
+  RECEIVE_DUPLICATED_DOCUMENT: 'RECEIVE_DUPLICATED_DOCUMENT',
   // Fields
   INITIATE_FIELD_CREATE: 'INITIATE_FIELD_CREATE',
   RECEIVE_CREATED_FIELD: 'RECEIVE_CREATED_FIELD',
@@ -263,7 +265,9 @@ export const Documents = {
   unpublish: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_UNPUBLISH, 'documentId'),
   receiveUnpublishedVersion: makeActionCreator(ActionTypes.RECEIVE_UNPUBLISHED_DOCUMENT, 'projectId', 'data'),
   initiateSearch: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_SEARCH, 'value'),
-  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data')
+  receiveSearchResults: makeActionCreator(ActionTypes.RECEIVE_DOCUMENT_RESULTS, 'data'),
+  duplicate: makeActionCreator(ActionTypes.INITIATE_DOCUMENT_DUPLICATION, 'projectId', 'documentId'),
+  receiveDuplicatedDocument: makeActionCreator(ActionTypes.RECEIVE_DUPLICATED_DOCUMENT, 'projectId', 'data'),
 }
 
 export const Fields = {

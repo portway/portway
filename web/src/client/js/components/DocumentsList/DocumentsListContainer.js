@@ -14,7 +14,7 @@ import { debounce } from 'Shared/utilities'
 
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
-import { createDocument, deleteDocument, unpublishDocument } from 'Actions/document'
+import { createDocument, deleteDocument, duplicateDocument, unpublishDocument } from 'Actions/document'
 import { copyField, moveField } from 'Actions/field'
 import { clearSearch, searchDocuments } from 'Actions/search'
 import { uiConfirm, uiDocumentCreate } from 'Actions/ui'
@@ -27,6 +27,7 @@ const DocumentsListContainer = ({
   createMode,
   deleteDocument,
   documentFields,
+  duplicateDocument,
   isCreating,
   isSearching,
   moveField,
@@ -122,6 +123,10 @@ const DocumentsListContainer = ({
     uiConfirm({ message, options })
   }
 
+  function duplicateDocumentHandler(documentId) {
+    duplicateDocument(projectId, documentId)
+  }
+
   function removeDocumentHandler(document) {
     const message = (
       <span>{strings.DELETE_CONFIRMATION_TITLE_PREFIX} <span className="highlight">{document.name}</span> {strings.DELETE_CONFIRMATION_TITLE_SUFFIX}</span>
@@ -175,6 +180,7 @@ const DocumentsListContainer = ({
       createMode={createMode || documentId === PATH_DOCUMENT_NEW_PARAM}
       documents={sortedSearchResults ? sortedSearchResults : sortedDocuments}
       draggedDocumentHandler={draggedDocumentHandler}
+      duplicateDocumentHandler={duplicateDocumentHandler}
       fieldCopyHandler={fieldCopyHandler}
       fieldMoveHandler={fieldMoveHandler}
       isCreating={isCreating}
@@ -195,6 +201,7 @@ DocumentsListContainer.propTypes = {
   createMode: PropTypes.bool.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   documentFields: PropTypes.object,
+  duplicateDocument: PropTypes.func.isRequired,
   isCreating: PropTypes.bool.isRequired,
   isSearching: PropTypes.bool.isRequired,
   moveField: PropTypes.func.isRequired,
@@ -224,6 +231,7 @@ const mapDispatchToProps = {
   createDocument,
   clearSearch,
   deleteDocument,
+  duplicateDocument,
   moveField,
   searchDocuments,
   uiConfirm,
