@@ -129,13 +129,14 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
       break
     case FIELD_TYPES.STRING:
     case FIELD_TYPES.NUMBER:
+    case FIELD_TYPES.DATE:
     // keep body the same
   }
 
   return fieldBody
 }
 
-const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name']
+const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name', 'structuredValue']
 
 const duplicateField = async function(id, originalParentDocId, newParentDocId, orgId) {
   const field = await BusinessField.findByIdForDocument(id, originalParentDocId, orgId)
@@ -147,7 +148,9 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
   body.orgId = orgId
 
   if (body.type === FIELD_TYPES.IMAGE) {
-    return fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, field.value)
+    await fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, body.value)
+  } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object') {
+    body.value = body.value.toISOString()
   }
 
   return BusinessField.createForDocument(newParentDocId, body)

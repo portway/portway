@@ -26,6 +26,7 @@ const DocumentsListComponent = ({
   createMode,
   documents,
   draggedDocumentHandler,
+  duplicateDocumentHandler,
   fieldCopyHandler,
   fieldMoveHandler,
   isCreating,
@@ -161,6 +162,7 @@ const DocumentsListComponent = ({
                 disable={createMode}
                 disableDragging={dragActive}
                 document={doc}
+                duplicateDocumentHandler={duplicateDocumentHandler}
                 fieldCopyHandler={fieldCopyHandler}
                 fieldMoveHandler={fieldMoveHandler}
                 key={`d-${doc.id}-${index}`}
@@ -186,6 +188,7 @@ DocumentsListComponent.propTypes = {
   createMode: PropTypes.bool.isRequired,
   documents: PropTypes.array.isRequired,
   draggedDocumentHandler: PropTypes.func.isRequired,
+  duplicateDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   isCreating: PropTypes.bool.isRequired,

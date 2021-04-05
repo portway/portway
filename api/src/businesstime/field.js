@@ -45,6 +45,7 @@ async function createForDocument(documentId, body) {
 
   // Debugging log for mismatched text value to structuredValue
   // Added 2/24/2021 -DH
+
   if (body.type === FIELD_TYPES.TEXT && body.value && !Boolean(body.structuredValue)) {
     logger(`DEBUG: found TEXT field with length ${body.value.length} with empty structuredValue in BusinessField.createForDocument`)
   }
