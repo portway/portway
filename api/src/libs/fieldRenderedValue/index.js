@@ -41,7 +41,7 @@ export function getRenderedValueByType(field, value) {
       const html = renderMarkdownSync(value)
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ html, type: 'text', name })
     case FIELD_TYPES.IMAGE:
-      const imageSource = field.formats ? field.formats.webp.half : field.value
+      const imageSource = field.formats ? field.formats.webp.half : value
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({
         type: 'image',
         name,
@@ -60,5 +60,7 @@ export function getRenderedValueByType(field, value) {
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.DATE]({ type: 'date', name, value, formattedDate })
     case FIELD_TYPES.FILE:
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.FILE]({ type: 'file', name, value })
+    default:
+      return Promise.reject(`No renderer found for field type: ${field.type}`)
   }
 }
