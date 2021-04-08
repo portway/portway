@@ -75,7 +75,7 @@ spec:
               name: admin-secrets
               key: admin_secret_key
         - name: API_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: web-config
-                  key: web.api_url
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.api_url
