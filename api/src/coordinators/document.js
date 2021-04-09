@@ -74,9 +74,6 @@ const duplicateDocument = async (documentId, projectId, orgId) => {
   for (const field of fields) {
     await FieldCoordinator.duplicateField(field.id, document.id, dupeDoc.id, orgId)
   }
-  // await Promise.all(fields.map((field) => {
-  //   return FieldCoordinator.duplicateField(field.id, document.id, dupeDoc.id, orgId)
-  // }))
   // we could technically assemble this payload from the retuned values above, but
   // just in case, go through the normal pathway for fetching
   return BusinessDocument.findByIdWithFields(dupeDoc.id, orgId)
