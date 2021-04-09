@@ -14,6 +14,7 @@ import logger from '../integrators/logger'
 import { LOG_LEVELS } from '../constants/logging'
 import jobQueue from '../integrators/jobQueue'
 import sharp from 'sharp'
+import { getRenderedValueByType } from '../libs/fieldRenderedValue'
 
 const stat = util.promisify(fs.stat)
 
@@ -23,7 +24,14 @@ const addFieldToDocument = async function(documentId, body, file) {
   const { orgId } = body
   const fieldBody = await getFieldBodyByType(body, documentId, orgId, file)
 
-  const field = await BusinessField.createForDocument(documentId, fieldBody)
+  let field = await BusinessField.createForDocument(documentId, fieldBody)
+
+  // set the rendered value on the field
+  if (field.value != null) {
+    const renderedValue = await getRenderedValueByType(field, field.value)
+    field = await BusinessField.updateByIdForDocument(field.id, field.documentId, orgId, { renderedValue })
+  }
+
   // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
   if (file && field.type === FIELD_TYPES.IMAGE) {
     jobQueue.runImageProcessing(field.value, field.documentId, field.id, orgId)
@@ -68,7 +76,14 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
-  const updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
+  let updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
+
+  // set the rendered value on the field
+  if (updatedField.value != null) {
+    const renderedValue = await getRenderedValueByType(updatedField, updatedField.value)
+    updatedField = await BusinessField.updateByIdForDocument(updatedField.id, updatedField.documentId, orgId, { renderedValue })
+  }
+
   // if it's an image field and has a file, kick off job to generate additional image sizes and store the data on field
   if (updatedField.type === FIELD_TYPES.IMAGE && file) {
     jobQueue.runImageProcessing(updatedField.value, updatedField.documentId, updatedField.id, orgId)
