@@ -148,7 +148,7 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
   body.orgId = orgId
 
   if (body.type === FIELD_TYPES.IMAGE) {
-    await fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, body.value)
+    return fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, body.value)
   } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object') {
     body.value = body.value.toISOString()
   }
