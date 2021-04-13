@@ -37,6 +37,7 @@ describe('fieldCoordinator', () => {
 
     afterAll(() => {
       fieldCoordinator.addFieldToDocument = jest.fn()
+      BusinessField.createForDocument.mockRestore()
     })
 
     describe('when it is a non-image field', () => {
@@ -269,6 +270,45 @@ describe('fieldCoordinator', () => {
 
     afterAll(() => {
       fieldCoordinator.addFieldToDocument.mockRestore()
+      BusinessField.findByIdForDocument.mockRestore()
+      BusinessField.createForDocument.mockRestore()
+    })
+  })
+
+  describe('#duplicateField', () => {
+    const id = 90009
+    const originalParentDocId = 90101
+    const newParentDocId = 90102
+    const orgId = 10000000
+  
+    const field = {
+      id,
+      type: 1,
+      value: 99,
+      order: 1,
+      name: 'not-a-real-field-name'
+    }
+    beforeAll(async () => {
+      jest.spyOn(fieldCoordinator, 'duplicateField')
+      BusinessField.findByIdForDocument.mockReturnValueOnce(field)
+      await fieldCoordinator.duplicateField(id, originalParentDocId, newParentDocId, orgId)
+    })
+    
+    it('should call BusinessField.findByIdForDocument with the correct args', () => {
+      expect(BusinessField.findByIdForDocument.mock.calls.length).toBe(1)
+      expect(BusinessField.findByIdForDocument.mock.calls[0][0]).toBe(id)
+      expect(BusinessField.findByIdForDocument.mock.calls[0][1]).toBe(originalParentDocId)
+      expect(BusinessField.findByIdForDocument.mock.calls[0][2]).toBe(orgId)
+    })
+
+    it('should call BusinessField.createForDocument with a copy of the field', () => {
+      expect(BusinessField.createForDocument.mock.calls.length).toBe(1)
+      expect(BusinessField.createForDocument.mock.calls[0][0]).toBe(newParentDocId)
+      expect(BusinessField.createForDocument.mock.calls[0][1].name).toBe(field.name)
+      expect(BusinessField.createForDocument.mock.calls[0][1].type).toBe(field.type)
+      expect(BusinessField.createForDocument.mock.calls[0][1].value).toBe(field.value)
+      expect(BusinessField.createForDocument.mock.calls[0][1].order).toBe(field.order)
+      expect(BusinessField.createForDocument.mock.calls[0][1].orgId).toBe(orgId)
     })
   })
 })

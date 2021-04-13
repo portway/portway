@@ -39,7 +39,8 @@ const projectDocumentsController = function(router) {
     updatePerm,
     updateProjectDocument
   )
-  router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectDocument)
+  router.delete('/:id', validateParams(paramSchema), deletePerm, deleteProjectDocument),
+  router.post('/:id/duplicate', validateParams(paramSchema), updatePerm, duplicateDocument)
 }
 
 const addProjectDocument = async (req, res, next) => {
@@ -123,6 +124,18 @@ const deleteProjectDocument = async function(req, res, next) {
     await documentCoordinator.deleteDocument(id, projectId, orgId)
     res.status(204).send()
     auditLog({ userId: req.requestorInfo.requestorId, primaryModel: RESOURCE_TYPES.DOCUMENT, primaryId: id, action: auditActions.REMOVED_PRIMARY })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const duplicateDocument = async function(req, res, next) {
+  const { id, projectId } = req.params
+  const { orgId } = req.requestorInfo
+
+  try {
+    const document = await documentCoordinator.duplicateDocument(id, projectId, orgId)
+    res.status(201).json({ data: document })
   } catch (e) {
     next(e)
   }

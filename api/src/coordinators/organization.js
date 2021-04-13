@@ -72,7 +72,7 @@ const deleteCanceledOrg = async function(orgId) {
 }
 
 // Permanently deletes an org and associated resources
-const deleteOrg = async function (orgId) {
+const deleteOrg = async function(orgId) {
   const org = await BusinessOrganization.findById(orgId)
   await stripeIntegrator.deleteCustomer(org.stripeId)
   await organizationCoordinator.removeAllOrgData(orgId)

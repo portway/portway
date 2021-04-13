@@ -56,10 +56,34 @@ const deleteAllForProject = async (projectId, orgId) => {
   }))
 }
 
+const duplicateDocument = async (documentId, projectId, orgId) => {
+  // fetch the original document
+  const document = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
+  // fetch the fields
+  const fields = await BusinessField.findAllDraftForDocument(documentId, orgId)
+  // creatch the dupe doc body
+  const body = {
+    name: `${document.name}_copy`,
+    slug: `${document.slug}_copy`,
+    projectId: document.projectId,
+    orgId
+  }
+  // create the duplicate document
+  const dupeDoc = await BusinessDocument.createForProject(projectId, body)
+  // loop through fields and create the duplicates
+  for (const field of fields) {
+    await FieldCoordinator.duplicateField(field.id, document.id, dupeDoc.id, orgId)
+  }
+  // we could technically assemble this payload from the retuned values above, but
+  // just in case, go through the normal pathway for fetching
+  return BusinessDocument.findByIdWithFields(dupeDoc.id, orgId)
+}
+
 const documentCoordinator = {
   addProjectDocument,
   deleteDocument,
-  deleteAllForProject
+  deleteAllForProject,
+  duplicateDocument
 }
 
 export default documentCoordinator
