@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       meta: DataTypes.JSON,
+      renderedValue: DataTypes.TEXT,
       formats: DataTypes.JSON,
       // alignment and alt are specific to image type fields, so we have special getters to omit them if they are set to null 
       alignment: {

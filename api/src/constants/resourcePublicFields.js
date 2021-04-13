@@ -28,6 +28,7 @@ const FIELD_PUBLIC_FIELDS = [
   'type',
   'order',
   'meta',
+  'renderedValue',
   'formats',
   'alignment',
   'alt'
