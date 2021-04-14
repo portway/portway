@@ -52,6 +52,7 @@ workers:
   tag: "1.4.0"
   logger: "r7insight"
   exportTempDirectory: "temp/"
+  imageTempDirectory: "image_temp/"
 
 serviceNames:
   api: api
