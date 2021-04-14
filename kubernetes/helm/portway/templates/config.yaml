@@ -47,6 +47,7 @@ items:
   data:
     workers.exportTempDirectory: {{ .Values.workers.exportTempDirectory | quote }}
     workers.logger: {{ .Values.workers.logger | quote }}
+    workers.imageTempDirectory: {{ .Values.workers.imageTempDirectory | quote }}
   kind: ConfigMap
   metadata:
     name: workers-config
