@@ -48,6 +48,11 @@ spec:
             configMapKeyRef:
               name: workers-config
               key: workers.exportTempDirectory
+        - name: IMAGE_TEMP_DIRECTORY
+          valueFrom:
+            configMapKeyRef:
+              name: workers-config
+              key: workers.imageTempDirectory
         - name: AWS_SES_REGION
           valueFrom:
             configMapKeyRef:
@@ -68,6 +73,11 @@ spec:
             secretKeyRef:
               name: aws-secrets
               key: secret_access_key
+        - name: ADMIN_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: admin-secrets
+              key: admin_secret_key
         ports:
         - containerPort: {{ .Values.workers.port }}
           protocol: TCP

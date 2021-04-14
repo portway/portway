@@ -49,3 +49,33 @@ spec:
             secretKeyRef:
               name: db-secrets
               key: db_user_password
+        - name: AWS_SES_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.aws-ses-region
+        - name: S3_CONTENT_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: api-config
+              key: api.s3-content-bucket
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-secrets
+              key: access_key_id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-secrets
+              key: secret_access_key
+        - name: ADMIN_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: admin-secrets
+              key: admin_secret_key
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: web-config
+              key: web.api_url

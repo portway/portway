@@ -1,0 +1,1 @@
+export const getRenderedValueByType = jest.fn()

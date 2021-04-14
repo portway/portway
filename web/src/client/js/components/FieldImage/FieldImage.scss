@@ -5,39 +5,38 @@
   margin: 1.8rem 0;
 
   .document-field__content {
-    align-items: unset;
+    align-items: center;
   }
-
 }
 
 // Actual component
 .document-field__image {
+  margin: 0;
   position: relative;
+
+  &--settings-mode {
+    border: thin dashed var(--theme-border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    padding: .25rem;
+    @include media('>=medium') {
+      flex-direction: row;
+    }
+  }
 
   // Override
   .document-field__settings-button {
-    left: 1.75rem;
+    right: -1rem;
     position: absolute;
-    top: 1.75rem;
-    z-index: 5;
+    top: -1rem;
+    z-index: 7;
   }
 
   .file-uploader {
-    border: thin solid var(--theme-overlay-dark);
-  }
-
-  input.input--without-styling {
-    background-color: var(--theme-overlay-dark);
-    border-radius: var(--border-radius);
-    font-size: 1.2rem;
-    min-height: auto;
-    overflow: hidden;
-    padding: 2px;
-    text-align: center;
-    text-overflow: ellipsis;
-    width: auto;
-    &:focus {
-      background-color: var(--theme-overlay-light);
+    border: thin solid transparent;
+    &--dragged-over {
+      border: thin dashed var(--theme-border);
     }
   }
 
@@ -55,43 +54,26 @@
 
 }
 
-.document-field__image-figure {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin: 0;
-}
-
 .document-field__image-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  min-height: 135px;
-  min-width: 200px;
+  // min-height: 275px;
   position: relative;
-}
 
-.document-field__image-details {
-  flex: 1;
-  margin: 0;
-  padding: 0 1rem;
-  text-align: center;
-  width: 100%;
-  // Lighter text
-  &--meta {
-    color: var(--color-gray-40);
-    font-size: 1.1rem;
+  &--settings-mode {
+    align-items: center;
+    display: flex;
   }
+
 }
 
 .document-field__image-tag {
-  // background-color: var(--theme-overlay-light);
   border-radius: var(--border-radius);
+  display: block;
   height: auto;
   max-height: 700px;
   max-width: 100%;
-  padding: calc(var(--icon-margin) * 2);
+  min-width: 200px;
+  // padding: calc(var(--icon-margin) * 2);
+  // width: 100%;
 
   &--empty {
     height: 250px;
@@ -103,5 +85,4 @@
       width: 400px;
     }
   }
-
 }
