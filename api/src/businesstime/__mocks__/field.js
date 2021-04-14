@@ -10,5 +10,6 @@ export default {
   },
   resetFindByIdReturnValue: () => { findByIdReturnValue = undefined },
   deleteAllForDocument: jest.fn(),
-  deleteAllForOrg: jest.fn()
+  deleteAllForOrg: jest.fn(),
+  findAllDraftForDocument: jest.fn()
 }

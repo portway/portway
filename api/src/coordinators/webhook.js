@@ -31,6 +31,16 @@ const sendUnpublishWebhook = async (docId, orgId) => {
   await sendWebhook(docWithFields.projectId, payload, orgId)
 }
 
+const sendDocumentDeleteWebhook = async (docId, projectId, orgId) => {
+  const payload = {
+    documentId: docId,
+    projectId,
+    event: HOOK_TYPES.DOCUMENT_DELETE
+  }
+
+  await sendWebhook(projectId, payload, orgId)
+}
+
 const sendWebhook = async (projectId, payload, orgId) => {
   const webhooks = await BusinessWebhook.findAllByProjectId(projectId, orgId)
 
@@ -62,7 +72,8 @@ const sendWebhook = async (projectId, payload, orgId) => {
 
 const webhookCoordinator = {
   sendPublishWebhook,
-  sendUnpublishWebhook
+  sendUnpublishWebhook,
+  sendDocumentDeleteWebhook
 }
 
 export default webhookCoordinator

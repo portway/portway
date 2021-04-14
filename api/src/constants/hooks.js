@@ -1,5 +1,6 @@
 
 export const HOOK_TYPES = {
   PUBLISH: 'publish',
-  UNPUBLISH: 'unpublish'
+  UNPUBLISH: 'unpublish',
+  DOCUMENT_DELETE: 'document.delete'
 }

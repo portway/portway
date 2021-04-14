@@ -17,6 +17,7 @@ const DocumentsListItem = ({
   disable,
   disableDragging,
   document,
+  duplicateDocumentHandler,
   fieldCopyHandler,
   fieldMoveHandler,
   removeDocumentHandler,
@@ -82,9 +83,9 @@ const DocumentsListItem = ({
     'documents-list__item': true,
     'documents-list__item--active': draggedOver
   })
-  
+
   const hasUnpublishedChanges = document.lastPublishedAt ? moment(document.updatedAt).isAfter(document.lastPublishedAt, 'second') : true
-  
+
   const documentNameClasses = cx({
     'documents-list__name': true,
     'documents-list__name--unpublished': hasUnpublishedChanges
@@ -105,13 +106,13 @@ const DocumentsListItem = ({
       >
         <div className="documents-list__name-container">
           <span className={documentNameClasses}>{ document.name }</span>
-            <time className="documents-list__date" dateTime={document.updatedAt}>
-              <TimeIcon width="13" height="13" />
-              <span>{moment(document.updatedAt).fromNow()}</span>
-              {hasUnpublishedChanges &&
+          <time className="documents-list__date" dateTime={document.updatedAt}>
+            <TimeIcon width="13" height="13" />
+            <span>{moment(document.updatedAt).fromNow()}</span>
+            {hasUnpublishedChanges &&
                 <span className="documents-list__unpublished-label" title="This document has unpublished changes">Unpublished</span>
-              }
-            </time> 
+            }
+          </time>
         </div>
         <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
           <PopperGroup anchorRef={containerRef}>
@@ -137,7 +138,18 @@ const DocumentsListItem = ({
               open={expanded}
             >
               <Menu anchorRef={anchorRef}>
-                <MenuItem disabled={document.lastPublishedAt === null} tabIndex="0">
+                <MenuItem tabIndex="0">
+                  <button
+                    className="btn btn--blank"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      duplicateDocumentHandler(document.id)
+                    }}
+                  >
+                    Duplicate document
+                  </button>
+                </MenuItem>
+                <MenuItem disabled={document.lastPublishedAt === null} tabIndex="-1">
                   <button
                     className="btn btn--blank"
                     disabled={document.lastPublishedAt === null}
@@ -173,6 +185,7 @@ DocumentsListItem.propTypes = {
   disable: PropTypes.bool.isRequired,
   disableDragging: PropTypes.bool.isRequired,
   document: PropTypes.object.isRequired,
+  duplicateDocumentHandler: PropTypes.func.isRequired,
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,

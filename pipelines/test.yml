@@ -20,6 +20,7 @@ steps:
     commands:
       - mv api/.dockerignore ./apidockerignore
       - mv web/.dockerignore ./webdockerignore
+      - mv workers/.dockerignore ./workersdockerignore
     when:
       steps:
         - name: main_clone

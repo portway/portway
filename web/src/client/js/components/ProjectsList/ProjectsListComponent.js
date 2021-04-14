@@ -45,11 +45,11 @@ function ProjectsListComponent({
 
   for (let i = 0; i < projects.length; i++) {
     const project = projects[i]
-    const privateProject = project.accessLevel == null
+    // const privateProject = project.accessLevel == null
     const projectId = Number(project.id)
     tableRows[i + 1] = [
       <ProjectLink key={`p-${projectId}`} project={project} />,
-      <ProjectTeam key={`pt-${projectId}`} projectId={projectId} show={privateProject} />,
+      <ProjectTeam key={`pt-${projectId}`} projectId={projectId} show={true}/>,
       <span key={`pu-${projectId}`} className="project-list__updated-at">{moment(project.updatedAt).fromNow()}</span>,
       <ProjectActions key={`pa-${projectId}`} handleDelete={() => handleDelete(projectId)} projectId={projectId} />
     ]

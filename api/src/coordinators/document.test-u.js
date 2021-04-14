@@ -4,12 +4,14 @@ import BusinessDocument from '../businesstime/document'
 import BusinessField from '../businesstime/field'
 import BusinessDocumentVersion from '../businesstime/documentversion'
 import { slugify } from '../libs/utils'
+import webhookCoordinator from '../coordinators/webhook'
 
 jest.mock('./field')
 jest.mock('../businesstime/document')
 jest.mock('../businesstime/field')
 jest.mock('../businesstime/documentversion')
 jest.mock('../libs/utils')
+jest.mock('../coordinators/webhook')
 
 describe('documentCoordinator', () => {
   const docId = 12
@@ -33,6 +35,10 @@ describe('documentCoordinator', () => {
     it('should call BusinessDocument.createForProject', () => {
       expect(BusinessDocument.createForProject.mock.calls.length).toBe(1)
       expect(BusinessDocument.createForProject.mock.calls[0][0]).toEqual(projectId)
+    })
+
+    afterAll(async () => {
+      BusinessDocument.createForProject.mockRestore()
     })
   })
 
@@ -66,6 +72,13 @@ describe('documentCoordinator', () => {
       expect(BusinessDocument.deleteByIdForProject.mock.calls[0][1]).toEqual(projectId)
       expect(BusinessDocument.deleteByIdForProject.mock.calls[0][2]).toEqual(orgId)
     })
+
+    it('should call webhookCoordinator.sendDocumentDeleteWebhook with the correct args', () => {
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls.length).toBe(1)
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls[0][0]).toBe(docId)
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls[0][1]).toBe(projectId)
+      expect(webhookCoordinator.sendDocumentDeleteWebhook.mock.calls[0][2]).toBe(orgId)
+    })
   })
 
   describe('#deleteAllForProject', () => {
@@ -96,6 +109,76 @@ describe('documentCoordinator', () => {
     afterAll(() => {
       BusinessField.findAllForDocument.mockReset()
       documentCoordinator.deleteDocument.mockRestore()
+    })
+  })
+
+  describe('#duplicateDocument', () => {
+    const docId = 8232
+    const projectId = 9898
+    const orgId = 4747
+    const field1Id = 6666
+    const field2Id = 7777
+    const dupeDocId = 888
+    const name = 'not-a-real-name'
+    const slug = 'not-a-real-slug'
+  
+    beforeAll(async () => {
+      jest.spyOn(documentCoordinator, 'duplicateDocument')
+      BusinessDocument.findByIdForProject.mockReturnValueOnce({
+        id: docId,
+        name,
+        slug,
+      })
+      BusinessField.findAllDraftForDocument.mockReturnValueOnce([{ id: field1Id }, { id: field2Id }])
+      BusinessDocument.createForProject.mockReturnValueOnce({
+        id: dupeDocId
+      })
+
+      await documentCoordinator.duplicateDocument(docId, projectId, orgId)
+    })
+
+    it('should call BusinessDocument.findByIdForProject', () => {
+      expect(BusinessDocument.findByIdForProject.mock.calls.length).toBe(1)
+      expect(BusinessDocument.findByIdForProject.mock.calls[0][0]).toEqual(docId)
+      expect(BusinessDocument.findByIdForProject.mock.calls[0][1]).toEqual(projectId)
+      expect(BusinessDocument.findByIdForProject.mock.calls[0][2]).toEqual(orgId)
+    })
+
+    it('should call BusinessField.findAllDraftForDocument', () => {
+      expect(BusinessField.findAllDraftForDocument.mock.calls.length).toBe(1)
+      expect(BusinessField.findAllDraftForDocument.mock.calls[0][0]).toBe(docId)
+      expect(BusinessField.findAllDraftForDocument.mock.calls[0][1]).toBe(orgId)
+    })
+
+    it('should call BusinessDocument.createForProject', () => {
+      expect(BusinessDocument.createForProject.mock.calls.length).toBe(1)
+      expect(BusinessDocument.createForProject.mock.calls[0][0]).toBe(projectId)
+      expect(BusinessDocument.createForProject.mock.calls[0][1]).toBeInstanceOf(Object)
+    })
+
+    it('should call fieldCoordinator.duplicateField for each doc field', () => {
+      expect(fieldCoordinator.duplicateField.mock.calls.length).toBe(2)
+      expect(fieldCoordinator.duplicateField.mock.calls[0][0]).toBe(field1Id)
+      expect(fieldCoordinator.duplicateField.mock.calls[0][1]).toBe(docId)
+      expect(fieldCoordinator.duplicateField.mock.calls[0][2]).toBe(dupeDocId)
+      expect(fieldCoordinator.duplicateField.mock.calls[0][3]).toBe(orgId)
+      expect(fieldCoordinator.duplicateField.mock.calls[1][0]).toBe(field2Id)
+      expect(fieldCoordinator.duplicateField.mock.calls[1][1]).toBe(docId)
+      expect(fieldCoordinator.duplicateField.mock.calls[1][2]).toBe(dupeDocId)
+      expect(fieldCoordinator.duplicateField.mock.calls[1][3]).toBe(orgId)
+    })
+
+    it('should call BusinessDocument.findByIdWithFields', () => {
+      expect(BusinessDocument.findByIdWithFields.mock.calls.length).toBe(1)
+      expect(BusinessDocument.findByIdWithFields.mock.calls[0][0]).toBe(dupeDocId)
+      expect(BusinessDocument.findByIdWithFields.mock.calls[0][1]).toBe(orgId)
+    })
+
+    afterAll(() => {
+      BusinessDocument.findByIdForProject.mockReset()
+      BusinessField.findAllDraftForDocument.mockReset()
+      BusinessDocument.createForProject.mockReset()
+      documentCoordinator.duplicateDocument.mockRestore()
     })
   })
 })

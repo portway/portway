@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { DropIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 import './FileUploader.scss'
@@ -11,6 +10,7 @@ const FileUploaderComponent = ({
   accept,
   children,
   hasValue,
+  invisible,
   isUpdating,
   label,
   fileChangeHandler,
@@ -78,6 +78,7 @@ const FileUploaderComponent = ({
   // File upload class states
   const fileUploaderClasses = cx({
     'file-uploader': true,
+    'file-uploader--invisible': invisible,
     'file-uploader--with-value': hasValue,
     'file-uploader--dragged-over': draggedOver,
     'file-uploader--uploading': uploading
@@ -90,9 +91,8 @@ const FileUploaderComponent = ({
       onDragOver={dragOverHandler}
       onDragLeave={dragLeaveHandler}
       onDrop={dropHandler}>
-      {!uploading && !isUpdating &&
+      {!uploading && !isUpdating && !invisible &&
       <form className="file-uploader__form" method="post" encType="multipart/form-data">
-        <DropIcon className="file-uploader__icon" width="32" height="32" />
         <label className="file-uploader__content">
           <span className="file-uploader__label">{label}</span>
           <span className="btn btn--small btn--cyan">Or select a file</span>
@@ -109,7 +109,6 @@ const FileUploaderComponent = ({
             }}
           />
         </label>
-        {children}
       </form>
       }
       {isUpdating &&
@@ -125,6 +124,7 @@ FileUploaderComponent.propTypes = {
   accept: PropTypes.string,
   children: PropTypes.node,
   hasValue: PropTypes.bool,
+  invisible: PropTypes.bool,
   isUpdating: PropTypes.bool,
   label: PropTypes.string,
   fileChangeHandler: PropTypes.func.isRequired,
@@ -136,6 +136,7 @@ FileUploaderComponent.propTypes = {
 
 FileUploaderComponent.defaultProps = {
   hasValue: false,
+  invisible: false,
   isUpdating: false,
   label: 'Drag and drop a file',
   multiple: false,
