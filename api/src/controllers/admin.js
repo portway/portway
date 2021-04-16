@@ -13,7 +13,7 @@ import billingCoordinator from '../coordinators/billing'
 import { deleteSoftDeletedResources } from '../coordinators/resources'
 import adminImageFieldFormatsSchema from './payloadSchemas/adminImageFieldFormats'
 import { validateBody } from '../libs/middleware/payloadValidation'
-import BusinessField from '../businesstime/field'
+import fieldCoordinator from '../coordinators/field'
 
 const adminController = function(router) {
   /**
@@ -186,7 +186,7 @@ const updateImageFieldFormats = async function(req, res, next) {
   const { body } = req
 
   try {
-    const field = await BusinessField.updateByIdForDocument(id, documentId, orgId, { formats: body })
+    const field = await fieldCoordinator.updateDocumentField(id, documentId, orgId, { formats: body })
     res.status(200).json({ data: field })
   } catch (e) {
     next(e)
