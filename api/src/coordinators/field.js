@@ -1,5 +1,5 @@
 import BusinessField from '../businesstime/field'
-import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../constants/fieldTypes'
+import { FIELD_TYPES, FIELD_PROPS_TO_COPY } from '../constants/fieldTypes'
 import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { callFuncWithArgs } from '../libs/utils'
@@ -149,8 +149,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
   }
   return fieldBody
 }
-
-const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name', 'structuredValue']
 
 const duplicateField = async function(id, originalParentDocId, newParentDocId, orgId) {
   const field = await BusinessField.findByIdForDocument(id, originalParentDocId, orgId)
