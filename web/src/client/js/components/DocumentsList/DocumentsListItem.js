@@ -7,7 +7,7 @@ import cx from 'classnames'
 import useClickOutside from 'Hooks/useClickOutside'
 import useBlur from 'Hooks/useBlur'
 
-import { PATH_PROJECT, PATH_DOCUMENT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { PATH_PROJECT, PATH_DOCUMENT, PROJECT_ROLE_IDS, STATUS_TYPES } from 'Shared/constants'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import { MoreIcon, TimeIcon } from 'Components/Icons'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
@@ -21,6 +21,7 @@ const DocumentsListItem = ({
   fieldCopyHandler,
   fieldMoveHandler,
   removeDocumentHandler,
+  status,
   unpublishDocumentHandler,
 }) => {
   const [draggedOver, setDraggedOver] = useState(false)
@@ -138,7 +139,10 @@ const DocumentsListItem = ({
               open={expanded}
             >
               <Menu anchorRef={anchorRef}>
-                <MenuItem tabIndex="0">
+                <MenuItem
+                  disabled={status.visible && status.type === STATUS_TYPES.DUPLICATING_DOCUMENT}
+                  tabIndex="0"
+                >
                   <button
                     className="btn btn--blank"
                     onClick={(e) => {
@@ -189,6 +193,7 @@ DocumentsListItem.propTypes = {
   fieldCopyHandler: PropTypes.func.isRequired,
   fieldMoveHandler: PropTypes.func.isRequired,
   removeDocumentHandler: PropTypes.func.isRequired,
+  status: PropTypes.object.isRequired,
   unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 

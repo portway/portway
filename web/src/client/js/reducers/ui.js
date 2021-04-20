@@ -1,5 +1,5 @@
 import { ActionTypes } from '../actions'
-import { DOCUMENT_MODE } from 'Shared/constants'
+import { DOCUMENT_MODE, STATUS_TYPES } from 'Shared/constants'
 
 const initialState = {
   confirmation: {
@@ -45,6 +45,7 @@ const initialState = {
   },
   status: {
     label: null,
+    type: null,
     visible: false,
   }
 }
@@ -108,6 +109,7 @@ export const ui = (state = initialState, action) => {
         },
         status: {
           label: null,
+          type: null,
           visible: false,
         }
       }
@@ -126,6 +128,7 @@ export const ui = (state = initialState, action) => {
         ...state,
         status: {
           label: 'Duplicating document...',
+          type: STATUS_TYPES.DUPLICATING_DOCUMENT,
           visible: true
         }
       }
