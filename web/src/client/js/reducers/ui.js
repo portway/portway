@@ -1,5 +1,5 @@
 import { ActionTypes } from '../actions'
-import { DOCUMENT_MODE } from 'Shared/constants'
+import { DOCUMENT_MODE, STATUS_TYPES } from 'Shared/constants'
 
 const initialState = {
   confirmation: {
@@ -42,6 +42,11 @@ const initialState = {
   },
   spinner: {
     spinning: false
+  },
+  status: {
+    label: null,
+    type: null,
+    visible: false,
   }
 }
 
@@ -95,7 +100,19 @@ export const ui = (state = initialState, action) => {
       return { ...state, fields: initialState.fields }
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
-      return { ...state, documents: { ...state.documents, creating: false, isCreating: false } }
+      return {
+        ...state,
+        documents: {
+          ...state.documents,
+          creating: false,
+          isCreating: false
+        },
+        status: {
+          label: null,
+          type: null,
+          visible: false,
+        }
+      }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [action.fieldId]: true }
@@ -105,6 +122,16 @@ export const ui = (state = initialState, action) => {
       const { fieldId } = action
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [fieldId]: false }
       return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+    case ActionTypes.INITIATE_DOCUMENT_DUPLICATION: {
+      return {
+        ...state,
+        status: {
+          label: 'Duplicating document...',
+          type: STATUS_TYPES.DUPLICATING_DOCUMENT,
+          visible: true
+        }
+      }
     }
 
     // Document search list

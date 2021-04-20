@@ -6,8 +6,8 @@
   border-top: thin solid var(--theme-border);
   border-right: thin solid var(--theme-border);
   display: flex;
-  font-size: 1.2rem;
   height: 50px;
+  justify-content: space-between;
   padding: 0 calc(var(--gutter-width) / 4);
   width: 100%;
   z-index: 100;
@@ -20,5 +20,8 @@
     height: 75px;
     padding: 0 calc(var(--gutter-width) / 4) 2rem;
   }
+}
 
+.project-toolbar__actions {
+  font-size: 1.2rem;
 }

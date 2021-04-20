@@ -161,6 +161,10 @@ const DOCUMENT_MODE = {
   EDIT: 'EDIT',
 }
 
+const STATUS_TYPES = {
+  DUPLICATING_DOCUMENT: 'DUPLICATING_DOCUMENT'
+}
+
 const NETWORK_STATUS = {
   OFFLINE: 'offline',
   ONLINE: 'online',
@@ -248,5 +252,6 @@ module.exports = {
   SUPPORT_LINK: 'https://getportway.com/support',
   // UI Related
   DOCUMENT_MODE: DOCUMENT_MODE,
+  STATUS_TYPES: STATUS_TYPES,
   MOBILE_MATCH_SIZE: '(max-width: 768px)',
 }
