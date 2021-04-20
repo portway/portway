@@ -42,6 +42,10 @@ const initialState = {
   },
   spinner: {
     spinning: false
+  },
+  status: {
+    label: null,
+    visible: false,
   }
 }
 
@@ -95,7 +99,18 @@ export const ui = (state = initialState, action) => {
       return { ...state, fields: initialState.fields }
     }
     case ActionTypes.RECEIVE_CREATED_DOCUMENT: {
-      return { ...state, documents: { ...state.documents, creating: false, isCreating: false } }
+      return {
+        ...state,
+        documents: {
+          ...state.documents,
+          creating: false,
+          isCreating: false
+        },
+        status: {
+          label: null,
+          visible: false,
+        }
+      }
     }
     case ActionTypes.INITIATE_FIELD_UPDATE: {
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [action.fieldId]: true }
@@ -105,6 +120,15 @@ export const ui = (state = initialState, action) => {
       const { fieldId } = action
       const fieldsUpdating = { ...state.fields.fieldsUpdating, [fieldId]: false }
       return { ...state, fields: { ...state.fields, fieldsUpdating } }
+    }
+    case ActionTypes.INITIATE_DOCUMENT_DUPLICATION: {
+      return {
+        ...state,
+        status: {
+          label: 'Duplicating document...',
+          visible: true
+        }
+      }
     }
 
     // Document search list
