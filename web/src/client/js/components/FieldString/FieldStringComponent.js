@@ -38,7 +38,8 @@ const FieldStringComponent = ({
       placeholder="A string value..."
       readOnly={readOnly}
       ref={focusRef}
-      type="text" />
+      type="text"
+      maxLength="255" />
   )
 }
 
