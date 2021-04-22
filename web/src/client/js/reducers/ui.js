@@ -194,21 +194,6 @@ export const ui = (state = initialState, action) => {
       }
     }
 
-    // Field Settings
-    case ActionTypes.UI_TOGGLE_FIELD_SETTINGS: {
-      const withOpenSettings = {
-        ...state.fields.withOpenSettings,
-        [action.fieldId]: !state.fields.withOpenSettings[action.fieldId]
-      }
-      return {
-        ...state,
-        fields: {
-          ...state.fields,
-          withOpenSettings
-        }
-      }
-    }
-
     // Document full screen
     // -------------------------------------------------------------------------
     case ActionTypes.UI_DOCUMENT_FULL_SCREEN: {

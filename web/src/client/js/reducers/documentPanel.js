@@ -1,10 +1,13 @@
 import { ActionTypes } from '../actions'
 
 const initialState = {
+  fields: {
+    selectedFieldId: null,
+  },
   panel: {
     visible: false,
     selectedTabIndex: 0,
-  }
+  },
 }
 
 export const documentPanel = (state = initialState, action) => {
@@ -22,6 +25,13 @@ export const documentPanel = (state = initialState, action) => {
       return {
         ...state,
         panel: { ...state.panel, selectedTabIndex: action.value }
+      }
+    }
+
+    // Selecting a field in the outline
+    case ActionTypes.DOCUMENT_PANEL_FIELD_SELECTION: {
+      return {
+        ...state, fields: { ...state.fields, selectedFieldId: action.value }
       }
     }
 

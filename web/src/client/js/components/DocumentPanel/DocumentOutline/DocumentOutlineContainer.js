@@ -9,7 +9,8 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
-import { uiConfirm, uiToggleFieldSettings } from 'Actions/ui'
+import { uiConfirm } from 'Actions/ui'
+import { selectDocumentField } from 'Actions/documentPanel'
 import { removeField, updateField, updateFieldOrder } from 'Actions/field'
 
 import DocumentOutlineComponent from './DocumentOutlineComponent'
@@ -18,8 +19,8 @@ const DocumentOutlineContainer = ({
   fieldsUpdating,
   isDocumentPanelOpen,
   removeField,
+  selectDocumentField,
   uiConfirm,
-  uiToggleFieldSettings,
   updateField,
   updateFieldOrder
 }) => {
@@ -177,7 +178,7 @@ const DocumentOutlineContainer = ({
   }
 
   function fieldSettingToggleHandler(fieldId) {
-    uiToggleFieldSettings(fieldId)
+    selectDocumentField(fieldId)
   }
 
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
@@ -205,8 +206,8 @@ DocumentOutlineContainer.propTypes = {
   fieldsUpdating: PropTypes.object,
   isDocumentPanelOpen: PropTypes.bool.isRequired,
   removeField: PropTypes.func.isRequired,
+  selectDocumentField: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
-  uiToggleFieldSettings: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
 }
@@ -220,8 +221,8 @@ const mapStateToProps = (state) => {
 
 const mapDisatchToProps = {
   removeField,
+  selectDocumentField,
   uiConfirm,
-  uiToggleFieldSettings,
   updateField,
   updateFieldOrder,
 }

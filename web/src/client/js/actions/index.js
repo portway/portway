@@ -152,7 +152,6 @@ export const ActionTypes = {
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
-  UI_TOGGLE_FIELD_SETTINGS: 'UI_TOGGLE_FIELD_SETTINGS',
   // Search
   SEARCH_CLEAR: 'SEARCH_CLEAR',
   // User Sync
@@ -176,6 +175,7 @@ export const ActionTypes = {
   // Document Panel
   DOCUMENT_PANEL_TOGGLE: 'DOCUMENT_PANEL_TOGGLE',
   DOCUMENT_PANEL_TAB_SELECTION: 'DOCUMENT_PANEL_TAB_SELECTION',
+  DOCUMENT_PANEL_FIELD_SELECTION: 'DOCUMENT_PANEL_FIELD_SELECTION',
 }
 
 export const Route = {
@@ -366,7 +366,6 @@ export const UI = {
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'options'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
-  toggleFieldSettings: makeActionCreator(ActionTypes.UI_TOGGLE_FIELD_SETTINGS, 'fieldId'),
 }
 
 export const Search = {
@@ -399,4 +398,5 @@ export const OrganizationSync = {
 export const DocumentPanel = {
   togglePanel: makeActionCreator(ActionTypes.DOCUMENT_PANEL_TOGGLE, 'value'),
   selectTab: makeActionCreator(ActionTypes.DOCUMENT_PANEL_TAB_SELECTION, 'value'),
+  selectField: makeActionCreator(ActionTypes.DOCUMENT_PANEL_FIELD_SELECTION, 'value'),
 }

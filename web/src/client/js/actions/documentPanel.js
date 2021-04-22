@@ -5,3 +5,15 @@ export const toggleDocumentPanel = (value) => {
     dispatch(DocumentPanel.togglePanel(value))
   }
 }
+
+export const selectDocumentPanelTab = (tabIndex) => {
+  return async (dispatch) => {
+    dispatch(DocumentPanel.selectTab(tabIndex))
+  }
+}
+
+export const selectDocumentField = (fieldId) => {
+  return async (dispatch) => {
+    dispatch(DocumentPanel.selectField(fieldId))
+  }
+}

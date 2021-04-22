@@ -13,11 +13,6 @@ export const uiToggleFullScreen = (value) => {
     dispatch(UI.toggleFullScreen(value))
   }
 }
-export const uiToggleFieldSettings = (fieldId) => {
-  return async (dispatch) => {
-    dispatch(UI.toggleFieldSettings(fieldId))
-  }
-}
 
 // Projects
 export const uiCreateTokenMode = (value) => {
