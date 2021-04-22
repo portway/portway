@@ -3,22 +3,23 @@ import PropTypes from 'prop-types'
 import { useLocation, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { DOCUMENT_MODE, FIELD_TYPES } from 'Shared/constants'
+import { FIELD_TYPES } from 'Shared/constants'
 import { debounce, isAnyPartOfElementInViewport } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 import currentResource from 'Libs/currentResource'
 
-import { uiConfirm } from 'Actions/ui'
+import { uiConfirm, uiToggleFieldSettings } from 'Actions/ui'
 import { removeField, updateField, updateFieldOrder } from 'Actions/field'
 
 import DocumentOutlineComponent from './DocumentOutlineComponent'
 
 const DocumentOutlineContainer = ({
-  documentMode,
   fieldsUpdating,
+  isDocumentPanelOpen,
   removeField,
   uiConfirm,
+  uiToggleFieldSettings,
   updateField,
   updateFieldOrder
 }) => {
@@ -47,7 +48,7 @@ const DocumentOutlineContainer = ({
 
   if (!currentDocument) return null
 
-  const notReadOnlyModeButDontDoDragEvents = documentMode === DOCUMENT_MODE.NORMAL
+  const notReadOnlyModeButDontDoDragEvents = isDocumentPanelOpen
 
   function fieldDestroyHandler(fieldId, fieldType) {
     let type = 'field'
@@ -175,6 +176,10 @@ const DocumentOutlineContainer = ({
     setDropped(!dropped)
   }
 
+  function fieldSettingToggleHandler(fieldId) {
+    uiToggleFieldSettings(fieldId)
+  }
+
   const debouncedNameChangeHandler = debounce(1000, (fieldId, value) => {
     if (value === '') return
     updateField(projectId, documentId, fieldId, { name: value })
@@ -191,29 +196,32 @@ const DocumentOutlineContainer = ({
       fieldsUpdating={fieldsUpdating}
       fieldDestroyHandler={fieldDestroyHandler}
       fieldRenameHandler={debouncedNameChangeHandler}
+      fieldSettingToggleHandler={fieldSettingToggleHandler}
     />
   )
 }
 
 DocumentOutlineContainer.propTypes = {
-  documentMode: PropTypes.string,
   fieldsUpdating: PropTypes.object,
+  isDocumentPanelOpen: PropTypes.bool.isRequired,
   removeField: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
+  uiToggleFieldSettings: PropTypes.func.isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldOrder: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
-    documentMode: state.ui.document.documentMode,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
+    isDocumentPanelOpen: state.documentPanel.panel.visible,
   }
 }
 
 const mapDisatchToProps = {
   removeField,
   uiConfirm,
+  uiToggleFieldSettings,
   updateField,
   updateFieldOrder,
 }

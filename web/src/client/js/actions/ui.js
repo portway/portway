@@ -8,14 +8,14 @@ export const uiDocumentCreate = (value) => {
     dispatch(UI.documentCreate(value))
   }
 }
-export const uiToggleDocumentMode = (value) => {
-  return async (dispatch) => {
-    dispatch(UI.toggleDocumentMode(value))
-  }
-}
 export const uiToggleFullScreen = (value) => {
   return async (dispatch) => {
     dispatch(UI.toggleFullScreen(value))
+  }
+}
+export const uiToggleFieldSettings = (fieldId) => {
+  return async (dispatch) => {
+    dispatch(UI.toggleFieldSettings(fieldId))
   }
 }
 

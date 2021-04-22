@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { DOCUMENT_MODE } from 'Shared/constants'
 
 import DocumentPanelComponent from './DocumentPanelComponent'
 
-const DocumentPanelContainer = ({ documentMode }) => {
-  if (documentMode === DOCUMENT_MODE.EDIT) {
+const DocumentPanelContainer = ({ isDocumentPanelOpen }) => {
+  if (isDocumentPanelOpen) {
     return <DocumentPanelComponent/>
   }
 
@@ -14,12 +13,12 @@ const DocumentPanelContainer = ({ documentMode }) => {
 }
 
 DocumentPanelContainer.propTypes = {
-  documentMode: PropTypes.string.isRequired
+  isDocumentPanelOpen: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = (state) => {
   return {
-    documentMode: state.ui.document.documentMode,
+    isDocumentPanelOpen: state.documentPanel.panel.visible,
   }
 }
 

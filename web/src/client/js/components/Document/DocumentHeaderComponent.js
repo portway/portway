@@ -7,7 +7,6 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
 import {
-  DOCUMENT_MODE,
   MOBILE_MATCH_SIZE,
   MULTI_USER_PLAN_TYPES,
   PATH_PROJECT,
@@ -25,10 +24,10 @@ import { IconButton } from 'Components/Buttons/index'
 
 const DocumentHeaderComponent = ({
   document,
-  documentMode,
   isFullScreen,
+  isDocumentPanelOpen,
   nameChangeHandler,
-  toggleDocumentMode,
+  toggleDocumentPanel,
   toggleFullScreenHandler,
 }) => {
   const { projectId } = useParams()
@@ -71,8 +70,8 @@ const DocumentHeaderComponent = ({
     'document__users-list--without-settings': documentReadOnlyMode
   })
 
-  const panelButtonColor = documentMode === DOCUMENT_MODE.NORMAL ? 'transparent' : ''
-  const panelIconFill = documentMode === DOCUMENT_MODE.NORMAL ? 'var(--theme-icon-color)' : 'var(--color-blue)'
+  const panelButtonColor = isDocumentPanelOpen ? '' : 'transparent'
+  const panelIconFill = isDocumentPanelOpen ? 'var(--color-blue)' : 'var(--theme-icon-color)'
 
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
@@ -130,7 +129,7 @@ const DocumentHeaderComponent = ({
       </OrgPlanPermission>
       <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
         <div className="document__toggle-container">
-          <IconButton color={panelButtonColor} onClick={toggleDocumentMode} title="Toggle the document panel">
+          <IconButton color={panelButtonColor} onClick={toggleDocumentPanel} title="Toggle the document panel">
             <PanelIcon fill={panelIconFill} />
           </IconButton>
         </div>
@@ -142,10 +141,10 @@ const DocumentHeaderComponent = ({
 // @todo fill out this document object and add defaults
 DocumentHeaderComponent.propTypes = {
   document: PropTypes.object,
-  documentMode: PropTypes.string,
+  isDocumentPanelOpen: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
-  toggleDocumentMode: PropTypes.func.isRequired,
+  toggleDocumentPanel: PropTypes.func.isRequired,
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 

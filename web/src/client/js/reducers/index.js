@@ -3,6 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import thunk from 'redux-thunk'
 
 import { documentFields } from './documentFields'
+import { documentPanel } from './documentPanel'
 import { documents } from './documents'
 import { forms } from './forms'
 import { notifications } from './notifications'
@@ -22,6 +23,7 @@ import { userSync } from './userSync'
 
 const rootReducer = combineReducers({
   documentFields,
+  documentPanel,
   documents,
   forms,
   notifications,

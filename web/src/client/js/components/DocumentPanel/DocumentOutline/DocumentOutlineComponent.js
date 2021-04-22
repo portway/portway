@@ -14,6 +14,7 @@ const DocumentOutlineComponent = ({
   fieldsUpdating,
   fieldDestroyHandler,
   fieldRenameHandler,
+  fieldSettingToggleHandler,
 }) => {
   return (
     <div className="document-outline">
@@ -27,6 +28,7 @@ const DocumentOutlineComponent = ({
               dragStartHandler={dragStartHandler}
               dropHandler={dropHandler}
               field={field}
+              fieldSettingToggleHandler={() => { fieldSettingToggleHandler(field.id) }}
               index={index}
               isUpdating={fieldsUpdating[field.id]}
               key={field.id}
@@ -50,6 +52,7 @@ DocumentOutlineComponent.propTypes = {
   fieldsUpdating: PropTypes.object,
   fieldDestroyHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
+  fieldSettingToggleHandler: PropTypes.func.isRequired,
 }
 
 export default DocumentOutlineComponent

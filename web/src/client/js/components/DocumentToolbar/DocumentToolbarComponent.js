@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { DELETE_DOCUMENT_BUTTON_LABEL, UNPUBLISH_BUTTON_LABEL } from 'Loc/strings'
-import { DOCUMENT_MODE, PROJECT_ROLE_IDS } from 'Shared/constants'
+import { PROJECT_ROLE_IDS } from 'Shared/constants'
 import { PublishIcon } from 'Components/Icons'
 
 import ProjectPermission from 'Components/Permission/ProjectPermission'
@@ -15,8 +15,8 @@ import './_DocumentToolbar.scss'
 
 const DocumentToolbarComponent = ({
   document,
-  documentMode,
   isCreating,
+  isDocumentPanelOpen,
   isPublishing,
   projectUsers,
   publishDocumentHandler,
@@ -38,7 +38,7 @@ const DocumentToolbarComponent = ({
     <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
       <footer className="document-toolbar">
         <div className="document-toolbar__start">
-          {documentMode === DOCUMENT_MODE.NORMAL &&
+          {!isDocumentPanelOpen &&
           <>
           <FormatMenuContainer />
           <ContentMenuContainer />
@@ -49,7 +49,7 @@ const DocumentToolbarComponent = ({
 
           {document &&
           <div className="document-toolbar__info">
-            {documentMode === DOCUMENT_MODE.NORMAL &&
+            {!isDocumentPanelOpen &&
             <>
             Last update:&nbsp;
             <span title={moment(document.updatedAt).format('MMMM do, YYYY - h:mma')}>
@@ -58,7 +58,7 @@ const DocumentToolbarComponent = ({
             </>
             }
 
-            {documentMode === DOCUMENT_MODE.EDIT && document.lastPublishedAt !== null &&
+            {isDocumentPanelOpen && document.lastPublishedAt !== null &&
             <>
             Last published:&nbsp;
             <span title={moment(document.lastPublishedAt).format('MMMM do, YYYY - h:mma')}>
@@ -69,7 +69,7 @@ const DocumentToolbarComponent = ({
           </div>
           }
 
-          {documentMode === DOCUMENT_MODE.EDIT &&
+          {isDocumentPanelOpen &&
           <>
           <button
             className="btn btn--small btn--white"
@@ -85,7 +85,7 @@ const DocumentToolbarComponent = ({
           </>
           }
 
-          {documentMode === DOCUMENT_MODE.NORMAL &&
+          {!isDocumentPanelOpen &&
           <button
             className="btn btn--small btn--with-icon"
             disabled={isPublishing || isCreating || publishDisabled}
@@ -106,8 +106,8 @@ const DocumentToolbarComponent = ({
 
 DocumentToolbarComponent.propTypes = {
   document: PropTypes.object,
-  documentMode: PropTypes.string,
   isCreating: PropTypes.bool,
+  isDocumentPanelOpen: PropTypes.bool,
   isPublishing: PropTypes.bool,
   projectUsers: PropTypes.array,
   publishDocumentHandler: PropTypes.func,
