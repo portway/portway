@@ -20,6 +20,7 @@ export const validation = (state = initialState, action) => {
     case ActionTypes.CREATE_VALIDATION_ERRORS: {
       const resource = action.resource
       const errorsByField = groupBy(action.data.errorDetails, 'key')
+      console.log(errorsByField)
       return {
         ...state,
         [resource]: errorsByField
