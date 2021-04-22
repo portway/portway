@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
+import { DocumentIcon, SettingsIcon, OutlineIcon } from 'Components/Icons'
 import DocumentInfoContainer from './DocumentInfo/DocumentInfoContainer'
 import DocumentOutlineContainer from './DocumentOutline/DocumentOutlineContainer'
 
@@ -14,17 +15,20 @@ const DocumentPanelComponent = ({ selectedTabIndex, selectTabHandler }) => {
   const panelTabs = [
     {
       component: <DocumentInfoContainer />,
-      label: 'Info',
+      label: 'Document info',
+      icon: <DocumentIcon />,
       index: 0
     },
     {
       component: <DocumentOutlineContainer />,
-      label: 'Outline',
+      label: 'Document outline',
+      icon: <OutlineIcon />,
       index: 1
     },
     {
       component: <>Field settings</>,
-      label: 'Field',
+      label: 'Field settings',
+      icon: <SettingsIcon />,
       index: 2
     },
   ]
@@ -74,6 +78,7 @@ const DocumentPanelComponent = ({ selectedTabIndex, selectTabHandler }) => {
           return (
             <button
               aria-controls={`panel-${tab.index}`}
+              aria-label={tab.label}
               aria-selected={selectedTabIndex === tab.index}
               className="document-panel__tab"
               id={`tab-${tab.index + 1}`}
@@ -83,8 +88,9 @@ const DocumentPanelComponent = ({ selectedTabIndex, selectTabHandler }) => {
               }}
               role="tab"
               tabIndex={tabIndex}
+              title={tab.label}
             >
-              {tab.label}
+              {tab.icon}
             </button>
           )
         })}
