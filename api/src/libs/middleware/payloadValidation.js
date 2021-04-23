@@ -1,6 +1,7 @@
 import ono from 'ono'
 import apiErrorTypes from '../../constants/apiErrorTypes'
 import PUBLIC_MESSAGES from '../../constants/publicMessages'
+import joiErrorToApiError from '../joiErrorToApiError'
 
 // validation occurs on req.body
 export function validateBody(schema, options = {}) {
@@ -20,14 +21,7 @@ export function validateBody(schema, options = {}) {
       req.body = value
       return next()
     }
-
-    const apiError = new ono({ code: 400, publicMessage: PUBLIC_MESSAGES.INVALID_PAYLOAD }, error.message)
-
-    if (error.name === 'ValidationError' && includeDetails) {
-      apiError.errorDetails = error.details.map((detail) => { return { message: detail.message, key: detail.context.key }})
-      apiError.errorType = apiErrorTypes.ValidationError
-    }
-
+    const apiError = joiErrorToApiError(error, includeDetails)
     next(apiError)
   }
 }

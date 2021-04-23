@@ -23,13 +23,14 @@ export const createField = (projectId, documentId, fieldType, body) => {
     }
     if (validationCodes.includes(status)) {
       dispatch(Validation.create('field', data, status))
-    } else {
-      dispatch(Fields.receiveOneCreated(projectId, documentId, data))
-      dispatch(Fields.setLastCreatedFieldId(data.id))
-      return data
+      return
     }
+
+    dispatch(Fields.receiveOneCreated(projectId, documentId, data))
+    dispatch(Fields.setLastCreatedFieldId(data.id))
     // emit user sync message
     dispatch(emitFieldChange(data.id, documentId))
+    return data
   }
 }
 
@@ -48,11 +49,16 @@ export const updateField = (projectId, documentId, fieldId, body) => {
       dispatch(Notifications.create(data.error, NOTIFICATION_TYPES.ERROR, NOTIFICATION_RESOURCE.FIELD, status))
       return
     }
-    validationCodes.includes(status) ?
-      dispatch(Validation.create('field', data, status)) :
-      dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
+
+    if (validationCodes.includes(status)) {
+      dispatch(Validation.create('field', data, status))
+      return
+    }
+
+    dispatch(Fields.receiveOneUpdated(projectId, documentId, fieldId, data))
     // emit user sync message
     dispatch(emitFieldChange(fieldId, documentId))
+    return data
   }
 }
 

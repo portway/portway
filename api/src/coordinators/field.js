@@ -15,6 +15,8 @@ import { LOG_LEVELS } from '../constants/logging'
 import jobQueue from '../integrators/jobQueue'
 import sharp from 'sharp'
 import { getRenderedValueByType } from '../libs/fieldRenderedValue'
+import fieldSchema from '../controllers/payloadSchemas/field'
+import joiErrorToApiError from '../libs/joiErrorToApiError'
 
 const stat = util.promisify(fs.stat)
 
@@ -76,6 +78,20 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
+
+  // when we update a field value, we need to validate its value against its type, which won't usually be passed in the update body,
+  // so won't be handled in the controller body validator
+  // we have the original field and type at this point, so we can validate the value
+  // NOTE: this will always result in error details being passed to the calling controller,
+  // if we don't want these included in the payload, remove them there before sending
+
+  if (fieldBody.value) {
+    const { error } = fieldSchema.validate({ ...fieldBody, type: field.type })
+    if (error && error.name === 'ValidationError') {
+      throw joiErrorToApiError(error, true)
+    }
+  }
+
   let updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 
   // set the rendered value on the field
