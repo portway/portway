@@ -159,7 +159,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
 
 DocumentFieldSettingsComponent.propTypes = {
   field: PropTypes.object,
-  isUpdating: PropTypes.bool.isRequired,
+  isUpdating: PropTypes.bool,
   updateHandler: PropTypes.func.isRequired,
 }
 
