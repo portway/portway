@@ -88,10 +88,18 @@
   }
 
   &__toggle-container {
+    align-items: center;
+    display: flex;
     padding: 0 1.5rem;
     @include media('>medium') {
       padding: 0 1.8rem;
     }
+
+    .note {
+      opacity: 0.5;
+      padding-right: var(--icon-margin);
+    }
+
   }
 
   &__loading {

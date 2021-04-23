@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import {
-  ArrowIcon,
   DateIcon,
   DragIcon,
+  FieldSettingsIcon,
   FileIcon,
   ImageIcon,
   NumberIcon,
@@ -125,7 +125,7 @@ const DocumentOutlineItem = ({
       <div className="document-outline__actions">
         {fieldsWithSettings.includes(field.type) &&
         <IconButton color="transparent" onClick={fieldSettingToggleHandler}>
-          <ArrowIcon direction="right" width="14" height="14" />
+          <FieldSettingsIcon width="14" height="14" />
         </IconButton>
         }
         <IconButton color="transparent" onClick={onDestroy}>

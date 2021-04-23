@@ -129,6 +129,9 @@ const DocumentHeaderComponent = ({
       </OrgPlanPermission>
       <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
         <div className="document__toggle-container">
+          {isDocumentPanelOpen &&
+          <span className="note">Close the document panel</span>
+          }
           <IconButton color={panelButtonColor} onClick={toggleDocumentPanel} title="Toggle the document panel">
             <PanelIcon fill={panelIconFill} />
           </IconButton>
