@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
 
+const STRING_MAX_LENGTH = 255
+
 const FieldStringComponent = ({
   autoFocusElement,
   id,
@@ -20,26 +22,29 @@ const FieldStringComponent = ({
     }
   }, [autoFocusElement])
   return (
-    <input
-      // eslint-disable-next-line jsx-a11y/no-autofocus
-      autoFocus={autoFocusElement}
-      className="document-field__string"
-      value={value || ''}
-      onBlur={(e) => { onBlur(id, type, documentId) }}
-      onChange={(e) => {
-        onChange(id, e.target.value)
-      }}
-      onFocus={(e) => {
-        if (!readOnly) {
-          onFocus(id, type, documentId)
-          e.target.select()
-        }
-      }}
-      placeholder="A string value..."
-      readOnly={readOnly}
-      ref={focusRef}
-      type="text"
-      maxLength="255" />
+    <>
+      <input
+        // eslint-disable-next-line jsx-a11y/no-autofocus
+        autoFocus={autoFocusElement}
+        className="document-field__string"
+        value={value || ''}
+        onBlur={(e) => { onBlur(id, type, documentId) }}
+        onChange={(e) => {
+          onChange(id, e.target.value)
+        }}
+        onFocus={(e) => {
+          if (!readOnly) {
+            onFocus(id, type, documentId)
+            e.target.select()
+          }
+        }}
+        placeholder="A string value..."
+        readOnly={readOnly}
+        ref={focusRef}
+        type="text"
+        maxLength={STRING_MAX_LENGTH} />
+      <span className="document-field__string-status">{focusRef.current && focusRef.current.value.length} / {STRING_MAX_LENGTH}</span>
+    </>
   )
 }
 
