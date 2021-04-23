@@ -2,7 +2,9 @@ import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { FIELD_TYPES, MAX_FILE_SIZE } from 'Shared/constants'
+import { FIELD_TYPES, FILES_DISALLOWED_EXTENSIONS, IMAGE_ALLOWED_TYPES, MAX_FILE_SIZE } from 'Shared/constants'
+import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
+import { FileIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const FIELD_IMAGE_ALIGNMENT = {
@@ -26,13 +28,51 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
     updateHandler({ alignment: value })
   }
 
+  function handleFileUpload(e) {
+    setWarning(null)
+    updatingFieldType.current = FIELD_UPDATE_TYPES.IMAGE
+    const data = e.target.files
+    const file = Array.from(data)[0]
+    const extension = getFileExtension(file.name)
+
+    if (file.size >= MAX_FILE_SIZE) {
+      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
+      return
+    }
+
+    if (field.type === FIELD_TYPES.IMAGE && !IMAGE_ALLOWED_TYPES.includes(file.type)) {
+      setWarning(`Sorry, the image type “${file.type}” is not supported. Try a jpg, png, or webp!`)
+      return
+    }
+
+    if (field.type === FIELD_TYPES.FILE && FILES_DISALLOWED_EXTENSIONS.includes(extension)) {
+      setWarning(`This type of file is not supported.`)
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('file', file)
+    updateHandler({ value: formData })
+  }
+
+  const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
+
   return (
     <div className="document-field-settings">
+
       {field.type === FIELD_TYPES.IMAGE &&
       <a className="document-panel__image-link" href={field.value} target="_blank" rel="noopener noreferrer">
         <img src={field.value} width={field.meta.width} height={field.meta.height} alt={field.alt} />
       </a>
       }
+
+      {field.type === FIELD_TYPES.FILE &&
+      <div className="document-panel__file-info">
+        <FileIcon width="36" height="36" extension={fileExtension.toUpperCase()} />
+        <span><a href={field.value} download>Download</a> ({humanFileSize(field.meta.size, true)})</span>
+      </div>
+      }
+
       <dl>
         {field.type === FIELD_TYPES.IMAGE &&
         <>
@@ -125,20 +165,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
           <input
             className="document-panel__input document-panel__input--file"
             type="file"
-            onChange={(e) => {
-              updatingFieldType.current = FIELD_UPDATE_TYPES.IMAGE
-              const data = e.target.files
-              const files = Array.from(data)
-
-              if (files[0].size >= MAX_FILE_SIZE) {
-                setWarning(`File size must be less than ${MAX_FILE_SIZE / 1000}K`)
-                return
-              }
-
-              const formData = new FormData()
-              formData.append('file', files[0])
-              updateHandler({ value: formData })
-            }}
+            onChange={handleFileUpload}
           />
           }
           {warning &&

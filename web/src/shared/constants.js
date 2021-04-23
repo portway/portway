@@ -200,8 +200,6 @@ module.exports = {
   LABEL_NEW_DOCUMENT: 'New document',
   MAX_COOKIE_AGE_MS: 1.21e+9, // 14 days
   MAX_FIELD_NAME_SIZE: 50,
-  MAX_FILE_SIZE: 10000000,
-  MAX_AVATAR_SIZE: 1024 * 1000,
   MIN_PASSWORD_LENGTH: 8,
   // Page titles
   TITLE_PROJECTS: 'Projects',
@@ -254,4 +252,20 @@ module.exports = {
   DOCUMENT_MODE: DOCUMENT_MODE,
   STATUS_TYPES: STATUS_TYPES,
   MOBILE_MATCH_SIZE: '(max-width: 768px)',
+  // Files max values
+  MAX_FILE_SIZE: 10000000,
+  MAX_AVATAR_SIZE: 1024 * 1000,
+  IMAGE_ALLOWED_TYPES: [
+    'image/apng',
+    'image/bmp',
+    'image/gif',
+    'image/jpeg',
+    'image/png',
+    'image/svg+xml',
+    'image/webp',
+    'image/x-icon'
+  ],
+  FILES_DISALLOWED_EXTENSIONS: [
+    'exe',
+  ],
 }
