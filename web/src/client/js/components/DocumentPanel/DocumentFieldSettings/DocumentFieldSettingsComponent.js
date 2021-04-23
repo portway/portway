@@ -36,7 +36,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
     const extension = getFileExtension(file.name)
 
     if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your file must be less than ${MAX_FILE_SIZE / 1e+6}MB.`)
+      setWarning(`Your file must be less than ${MAX_FILE_SIZE / 100000}MB.`)
       return
     }
 
