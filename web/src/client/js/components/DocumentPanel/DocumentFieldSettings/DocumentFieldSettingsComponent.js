@@ -37,7 +37,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
         {field.type === FIELD_TYPES.IMAGE &&
         <>
           <dt>Dimensions</dt>
-          <dd>{field.meta.width}x{field.meta.height}</dd>
+          <dd className="document-panel__definiton-list-divider--bottom">{field.meta.width}x{field.meta.height}</dd>
         </>
         }
 
@@ -148,7 +148,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
         </>
         }
 
-        <dt>Last update</dt>
+        <dt className="document-panel__definiton-list-divider--top">Last update</dt>
         <dd>{moment(field.updatedAt).fromNow()}</dd>
         <dt>Created on</dt>
         <dd>{moment(field.createdAt).format('MMMM do, YYYY - h:mma')}</dd>

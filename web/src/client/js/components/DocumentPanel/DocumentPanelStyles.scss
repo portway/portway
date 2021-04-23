@@ -141,6 +141,17 @@
 /**
  * Document Panel form styles
  */
+.document-panel__definiton-list-divider {
+  &--top {
+    border-top: thin solid var(--theme-border-light);
+    padding-top: 1rem;
+  }
+  &--bottom {
+    border-bottom: thin solid var(--theme-border-light);
+    padding-bottom: 1rem;
+  }
+}
+
 .document-panel__input {
   background-color: var(--theme-overflow);
   border: thin solid var(--theme-border);
