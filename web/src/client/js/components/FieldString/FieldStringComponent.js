@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
 
@@ -15,12 +15,25 @@ const FieldStringComponent = ({
   onFocus,
   readOnly
 }) => {
+  const [counterVisible, setCounterVisible] = useState(false)
   const focusRef = useRef()
+
   useEffect(() => {
     if (autoFocusElement && focusRef.current) {
       focusRef.current.focus()
     }
   }, [autoFocusElement])
+
+  useEffect(() => {
+    let interval = null
+    if (counterVisible) {
+      interval = setInterval(() => {
+        setCounterVisible(false)
+      }, 5000)
+    }
+    return () => { clearInterval(interval) }
+  }, [counterVisible])
+
   return (
     <>
       <input
@@ -30,6 +43,7 @@ const FieldStringComponent = ({
         value={value || ''}
         onBlur={(e) => { onBlur(id, type, documentId) }}
         onChange={(e) => {
+          setCounterVisible(true)
           onChange(id, e.target.value)
         }}
         onFocus={(e) => {
@@ -43,7 +57,13 @@ const FieldStringComponent = ({
         ref={focusRef}
         type="text"
         maxLength={STRING_MAX_LENGTH} />
-      <span className="document-field__string-status">{focusRef.current && focusRef.current.value.length} / {STRING_MAX_LENGTH}</span>
+      <span className="document-field__string-status">
+        {counterVisible &&
+        <>
+        {focusRef.current && focusRef.current.value.length} / {STRING_MAX_LENGTH}
+        </>
+        }
+      </span>
     </>
   )
 }
