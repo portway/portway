@@ -36,7 +36,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
     const extension = getFileExtension(file.name)
 
     if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
+      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 1000}MB.`)
       return
     }
 
@@ -169,7 +169,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
           />
           }
           {warning &&
-          <p className="small warning">{warning}</p>
+          <div className="small warning">{warning}</div>
           }
         </dd>
         </>
