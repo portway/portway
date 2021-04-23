@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { FIELD_TYPES, FILES_DISALLOWED_EXTENSIONS, IMAGE_ALLOWED_TYPES, MAX_FILE_SIZE } from 'Shared/constants'
+import { FIELD_TYPES, FILES_DISALLOWED_EXTENSIONS, IMAGE_ALLOWED_TYPES, MAX_FILE_SIZE_BYTES } from 'Shared/constants'
 import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
 import { FileIcon } from 'Components/Icons'
 import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
@@ -35,8 +35,8 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
     const file = Array.from(data)[0]
     const extension = getFileExtension(file.name)
 
-    if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 1000}MB.`)
+    if (file.size >= MAX_FILE_SIZE_BYTES) {
+      setWarning(`Your image must be less than ${MAX_FILE_SIZE_BYTES / 10e5}MB.`)
       return
     }
 

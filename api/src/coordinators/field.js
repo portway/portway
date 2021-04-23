@@ -152,6 +152,8 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
         fieldBody.value = url
         fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
+        // always clear out the field formats, this will get updated by a worker later
+        fieldBody.formats = null
       }
       break
     case FIELD_TYPES.TEXT:

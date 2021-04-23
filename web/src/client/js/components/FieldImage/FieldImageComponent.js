@@ -5,7 +5,7 @@ import cx from 'classnames'
 import useIsMounted from 'Hooks/useIsMounted'
 import usePrevious from 'Hooks/usePrevious'
 
-import { IMAGE_ALLOWED_TYPES, MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
+import { IMAGE_ALLOWED_TYPES, MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE_BYTES } from 'Shared/constants'
 import { FieldSettingsIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 
@@ -42,7 +42,7 @@ const FieldImageComponent = ({
   const nameRef = useRef()
   const previousField = usePrevious(field)
 
-  // Use the formats if we have them
+  // // Use the formats if we have them
   const webpSource = useRef(field.formats && field.formats.webp)
 
   // Name
@@ -50,6 +50,16 @@ const FieldImageComponent = ({
   if (nameRef.current && field.name !== nameRef.current && !isCurrentlyFocusedField && field !== previousField) {
     nameRef.current.value = field.name
   }
+
+  // if the image is updated in the settings panel, webp will be wiped out until the image can process in the background
+  // in these cases, formats will be undefined and we want the component to reflect that
+  useEffect(() => {
+    webpSource.current = field.formats && field.formats.webp
+  }, [field.formats])
+
+  useEffect(() => {
+    setImageSrc(field.value || IconImage)
+  }, [field.value])
 
   useEffect(() => {
     // When the image src is updating, render a preview of the image with the
@@ -76,8 +86,8 @@ const FieldImageComponent = ({
 
   function uploadImage(file) {
     setWarning(null)
-    if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 1000}MB.`)
+    if (file.size >= MAX_FILE_SIZE_BYTES) {
+      setWarning(`Your image must be less than ${MAX_FILE_SIZE_BYTES / 10e5}MB.`)
       return
     }
     if (!IMAGE_ALLOWED_TYPES.includes(file.type)) {

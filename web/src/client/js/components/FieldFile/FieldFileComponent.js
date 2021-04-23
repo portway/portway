@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { FILES_DISALLOWED_EXTENSIONS, MAX_FILE_SIZE } from 'Shared/constants'
+import { FILES_DISALLOWED_EXTENSIONS, MAX_FILE_SIZE_BYTES } from 'Shared/constants'
 import { FieldSettingsIcon, FileIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
@@ -27,8 +27,8 @@ const FieldFileComponent = ({
   function uploadFile(file) {
     setWarning(null)
     const extension = getFileExtension(file.name)
-    if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your file must be less than ${MAX_FILE_SIZE / 1000}MB.`)
+    if (file.size >= MAX_FILE_SIZE_BYTES) {
+      setWarning(`Your file must be less than ${MAX_FILE_SIZE_BYTES / 10e5}MB.`)
       return
     }
     if (FILES_DISALLOWED_EXTENSIONS.includes(extension)) {
