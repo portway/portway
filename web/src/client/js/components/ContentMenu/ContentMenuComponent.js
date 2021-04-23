@@ -16,7 +16,7 @@ import {
 } from 'Components/Icons'
 import { FIELD_TYPES } from 'Shared/constants'
 import { Popper, PopperGroup } from 'Components/Popper/Popper'
-import { Menu, MenuItem } from 'Components/Menu'
+import { Menu, MenuItem, MenuDivider } from 'Components/Menu'
 
 const ContentMenuComponent = ({ createFieldHandler }) => {
   const [expanded, setExpanded] = useState(false)
@@ -55,14 +55,14 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         autoCollapse={collapseCallback}
         open={expanded}
         placement="bottom"
-        width="130"
       >
         <Menu anchorRef={anchorRef} isActive={expanded}>
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }} ref={React.createRef()}>
-              <TextIcon width="26" height="26" /> <span className="label">Text</span>
+              <TextIcon width="26" height="26" /> <span className="label">Text area</span>
             </button>
           </MenuItem>
+          <MenuDivider />
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.IMAGE) }} ref={React.createRef()}>
               <ImageIcon width="26" height="26" /> <span className="label">Image</span>
