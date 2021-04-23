@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { FIELD_TYPES, MAX_FILE_SIZE } from 'Shared/constants'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
 
 const FIELD_IMAGE_ALIGNMENT = {
   CENTER: 'center',
@@ -10,11 +11,17 @@ const FIELD_IMAGE_ALIGNMENT = {
   RIGHT: 'right'
 }
 
-const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
+const FIELD_UPDATE_TYPES = {
+  IMAGE: 'IMAGE',
+}
+
+const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) => {
   const [warning, setWarning] = useState()
   const [alignmentChecked, setAlignmentChecked] = useState(field.alignment ? field.alignment : FIELD_IMAGE_ALIGNMENT.CENTER)
+  const updatingFieldType = useRef()
 
   function handleAlignmentChange(value) {
+    updatingFieldType.current = null
     setAlignmentChecked(value)
     updateHandler({ alignment: value })
   }
@@ -22,7 +29,7 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
   return (
     <div className="document-field-settings">
       {field.type === FIELD_TYPES.IMAGE &&
-      <a href={field.value} target="_blank" rel="noopener noreferrer">
+      <a className="document-panel__image-link" href={field.value} target="_blank" rel="noopener noreferrer">
         <img src={field.value} width={field.meta.width} height={field.meta.height} alt={field.alt} />
       </a>
       }
@@ -43,6 +50,7 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
             defaultValue={field.name}
             id="field-name"
             onChange={(e) => {
+              updatingFieldType.current = null
               updateHandler({ name: e.target.value })
             }}
             placeholder="Enter a field name"
@@ -60,6 +68,7 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
               defaultValue={field.alt}
               id="field-alt"
               onChange={(e) => {
+                updatingFieldType.current = null
                 updateHandler({ alt: e.target.value })
               }}
               placeholder="Enter alt text"
@@ -106,10 +115,18 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
         <>
         <dt>Value</dt>
         <dd>
+          {isUpdating && updatingFieldType.current === FIELD_UPDATE_TYPES.IMAGE &&
+          <div className="document-panel__row">
+            <SpinnerComponent message="Uploading image..." width="14" height="14" />
+            <span className="note">Uploading image</span>
+          </div>
+          }
+          {!isUpdating &&
           <input
             className="document-panel__input document-panel__input--file"
             type="file"
             onChange={(e) => {
+              updatingFieldType.current = FIELD_UPDATE_TYPES.IMAGE
               const data = e.target.files
               const files = Array.from(data)
 
@@ -123,6 +140,7 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
               updateHandler({ value: formData })
             }}
           />
+          }
           {warning &&
           <p className="small warning">{warning}</p>
           }
@@ -141,6 +159,7 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
 
 DocumentFieldSettingsComponent.propTypes = {
   field: PropTypes.object,
+  isUpdating: PropTypes.bool.isRequired,
   updateHandler: PropTypes.func.isRequired,
 }
 

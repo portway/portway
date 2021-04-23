@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import { MAX_FILE_SIZE } from 'Shared/constants'
-import { EditIcon, FileIcon } from 'Components/Icons'
+import { FieldSettingsIcon, FileIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
@@ -80,7 +80,7 @@ const FieldFileComponent = ({
                   onClick={() => {
                     internalSettingsFocusHandler(field.id)
                   }}>
-                  <EditIcon width="14" height="14" />
+                  <FieldSettingsIcon width="14" height="14" />
                 </IconButton>
               )}
             </>

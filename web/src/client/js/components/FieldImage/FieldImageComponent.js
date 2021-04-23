@@ -6,7 +6,7 @@ import useIsMounted from 'Hooks/useIsMounted'
 import usePrevious from 'Hooks/usePrevious'
 
 import { MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
-import { EditIcon } from 'Components/Icons'
+import { FieldSettingsIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
@@ -112,6 +112,7 @@ const FieldImageComponent = ({
 
   const imageFieldClassNames = cx({
     'document-field__image': true,
+    'document-field__image--empty': !field.value,
   })
 
   const imageClassnames = cx({
@@ -121,6 +122,7 @@ const FieldImageComponent = ({
 
   const containerClassnames = cx({
     'document-field__image-container': true,
+    'document-field__image-container--empty': !field.value,
   })
 
   return (
@@ -152,7 +154,7 @@ const FieldImageComponent = ({
       <div className="document-field__settings-button">
         {!readOnly && field.value &&
         <IconButton color="dark" className="document-field__edit-btn" aria-label="Configure image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
-          <EditIcon width="14" height="14" />
+          <FieldSettingsIcon width="14" height="14" />
         </IconButton>
         }
       </div>

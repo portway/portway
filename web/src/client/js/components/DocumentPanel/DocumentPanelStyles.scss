@@ -31,6 +31,7 @@
   img {
     height: auto;
     max-width: 100%;
+    width: 100%;
   }
   dl {
     font-size: 1.2rem;
@@ -60,6 +61,18 @@
   }
 }
 
+// Use when you want a flex row
+.document-panel__row {
+  align-items: center;
+  display: flex;
+  padding: var(--icon-margin) 0;
+  .note {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// Blank slate with no field selected
 .document-panel__blank {
   font-size: 1.2rem;
   text-align: center;
@@ -120,6 +133,7 @@
   }
 }
 
+// The content part of the panel
 .document-panel__tab-panel {
   padding: 1rem;
 }
@@ -161,5 +175,24 @@
     color: var(--theme-header-color);
     font-weight: 500;
     text-decoration: underline;
+  }
+}
+
+.document-panel__image-link {
+  border: 2px solid var(--theme-border);
+  display: block;
+  margin: 0 0 var(--icon-margin);
+
+  @media(hover: hover) {
+    &:hover {
+      border: 2px solid var(--theme-border-light);
+      img {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  img {
+    display: block;
   }
 }
