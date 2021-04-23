@@ -253,7 +253,7 @@ module.exports = {
   STATUS_TYPES: STATUS_TYPES,
   MOBILE_MATCH_SIZE: '(max-width: 768px)',
   // Files max values
-  MAX_FILE_SIZE: 10000, // 10 MB in Kilobytes
+  MAX_FILE_SIZE: 1000000, // 10 MB in bytes
   MAX_AVATAR_SIZE: 1024 * 1000,
   IMAGE_ALLOWED_TYPES: [
     'image/apng',

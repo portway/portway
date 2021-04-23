@@ -77,7 +77,7 @@ const FieldImageComponent = ({
   function uploadImage(file) {
     setWarning(null)
     if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 1000}MB.`)
+      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 1e+6}MB.`)
       return
     }
     if (!IMAGE_ALLOWED_TYPES.includes(file.type)) {

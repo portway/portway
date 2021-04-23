@@ -36,7 +36,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
     const extension = getFileExtension(file.name)
 
     if (file.size >= MAX_FILE_SIZE) {
-      setWarning(`Your image must be less than ${MAX_FILE_SIZE / 1000}MB.`)
+      setWarning(`Your file must be less than ${MAX_FILE_SIZE / 1e+6}MB.`)
       return
     }
 
@@ -161,13 +161,11 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
             <span className="note">Uploading image</span>
           </div>
           }
-          {!isUpdating &&
           <input
             className="document-panel__input document-panel__input--file"
             type="file"
             onChange={handleFileUpload}
           />
-          }
           {warning &&
           <div className="small warning">{warning}</div>
           }
