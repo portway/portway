@@ -119,8 +119,8 @@ const DocumentFieldSettingsComponent = ({ field, updateHandler }) => {
               }
 
               const formData = new FormData()
-              formData.append('value', files[0])
-              updateHandler(formData)
+              formData.append('file', files[0])
+              updateHandler({ value: formData })
             }}
           />
           {warning &&
