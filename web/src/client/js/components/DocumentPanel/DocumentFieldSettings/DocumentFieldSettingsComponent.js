@@ -161,13 +161,11 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
             <span className="note">Uploading image</span>
           </div>
           }
-          {!isUpdating &&
           <input
             className="document-panel__input document-panel__input--file"
             type="file"
             onChange={handleFileUpload}
           />
-          }
           {warning &&
           <div className="small warning">{warning}</div>
           }
