@@ -29,7 +29,7 @@ describe('fieldCoordinator', () => {
     const documentId = 0
     const orgId = 0
     const fieldId = 999
-    const body = { type: 1, value: 'some-random-text', orgId: 0 }
+    const body = { type: 1, value: 'some-random-text' }
 
     beforeAll(() => {
       fieldCoordinator.addFieldToDocument = addFieldToDocument
