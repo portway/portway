@@ -5,7 +5,7 @@ import cx from 'classnames'
 import useIsMounted from 'Hooks/useIsMounted'
 import usePrevious from 'Hooks/usePrevious'
 
-import { MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
+import { IMAGE_ALLOWED_TYPES, MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
 import { FieldSettingsIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 
@@ -13,17 +13,6 @@ import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent
 
 import IconImage from '../../../images/icon/image.svg'
 import './FieldImage.scss'
-
-const ALLOWED_TYPES = [
-  'image/apng',
-  'image/bmp',
-  'image/gif',
-  'image/jpeg',
-  'image/png',
-  'image/svg+xml',
-  'image/webp',
-  'image/x-icon'
-]
 
 const FieldImageComponent = ({
   autoFocusElement,
@@ -91,7 +80,7 @@ const FieldImageComponent = ({
       setWarning(`Your image must be less than ${MAX_FILE_SIZE / 100}MB.`)
       return
     }
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!IMAGE_ALLOWED_TYPES.includes(file.type)) {
       setWarning(`Sorry, the image type “${file.type}” is not supported. Try a jpg, png, or webp!`)
       return
     }

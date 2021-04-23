@@ -2,17 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
-import { MAX_FILE_SIZE } from 'Shared/constants'
+import { FILES_DISALLOWED_EXTENSIONS, MAX_FILE_SIZE } from 'Shared/constants'
 import { FieldSettingsIcon, FileIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
 
 import './FieldFile.scss'
-
-const DISALLOWED_EXTENSIONS = [
-  'exe',
-]
 
 const FieldFileComponent = ({
   field,
@@ -35,7 +31,7 @@ const FieldFileComponent = ({
       setWarning(`Your file must be less than ${MAX_FILE_SIZE / 100}MB.`)
       return
     }
-    if (DISALLOWED_EXTENSIONS.includes(extension)) {
+    if (FILES_DISALLOWED_EXTENSIONS.includes(extension)) {
       setWarning(`This type of file is not supported.`)
       return
     }

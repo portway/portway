@@ -77,6 +77,10 @@
   }
 }
 
+.document-outline__status {
+  height: 18px;
+}
+
 .document-outline__button {
   background-color: var(--theme-surface);
   border-top: thin solid var(--theme-border-light);

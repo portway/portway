@@ -52,7 +52,7 @@ const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
           />
           <span className="note">Use the document slug in your URLs. Changing this may affect any existing applications.</span>
         </dd>
-        <dt>Last update</dt>
+        <dt className="document-panel__definiton-list-divider--top">Last update</dt>
         <dd>{moment(document.updatedAt).fromNow()}</dd>
         <dt>Created on</dt>
         <dd>{moment(document.createdAt).format('MMMM do, YYYY - h:mma')}</dd>
