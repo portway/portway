@@ -59,7 +59,7 @@ const ContentMenuComponent = ({ createFieldHandler }) => {
         <Menu anchorRef={anchorRef} isActive={expanded}>
           <MenuItem>
             <button className="btn btn--blank btn--with-icon" onClick={() => { createFieldHandler(FIELD_TYPES.TEXT) }} ref={React.createRef()}>
-              <TextIcon width="26" height="26" /> <span className="label">New paragraph</span>
+              <TextIcon width="26" height="26" /> <span className="label">Text area</span>
             </button>
           </MenuItem>
           <MenuDivider />
