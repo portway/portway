@@ -12,6 +12,7 @@
 // Actual component
 .document-field__image {
   margin: 0;
+  max-width: 75%;
   position: relative;
 
   &--empty {
@@ -56,11 +57,8 @@
   display: block;
   height: auto;
   margin: auto;
-  max-height: 700px;
   max-width: 100%;
   min-width: 200px;
-  // padding: calc(var(--icon-margin) * 2);
-  // width: 100%;
 
   &--empty {
     height: 250px;

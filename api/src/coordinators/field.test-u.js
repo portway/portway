@@ -153,7 +153,7 @@ describe('fieldCoordinator', () => {
     const fieldId = 999
     const documentId = 0
     const orgId = 111
-    const body = { value: 'some-random-text', orgId: 0 }
+    const body = { value: 'some-random-text' }
     const mockReturnField = { id: fieldId, documentId, orgId, type: FIELD_TYPES.TEXT, value: body.value }
 
     beforeAll(async () => {

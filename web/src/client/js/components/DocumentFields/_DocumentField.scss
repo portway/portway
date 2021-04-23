@@ -216,6 +216,18 @@
   }
 }
 
+.document-field__string-status {
+  font-size: 1rem;
+  opacity: 0.5;
+  position: absolute;
+  right: .8rem;
+  top: -4.2rem;
+  @include media('>=medium') {
+    right: var(--icon-margin);
+    top: var(--icon-margin);
+  }
+}
+
 // This is the invisible big button at the bottom of the document that only
 // appears if the last field is NOT a text field
 // This is for tricky "pretend" document body behavior

@@ -82,6 +82,14 @@ async function deleteAllSoftDeletedBefore(timestamp) {
   })
 }
 
+async function deleteAllForProject(projectId, orgId) {
+  const db = getDb()
+
+  return db.model(MODEL_NAME).destroy({
+    where: { projectId, orgId }
+  })
+}
+
 export default {
   create,
   findById,
@@ -89,5 +97,6 @@ export default {
   updateById,
   deleteById,
   deleteAllForOrg,
-  deleteAllSoftDeletedBefore
+  deleteAllSoftDeletedBefore,
+  deleteAllForProject
 }
