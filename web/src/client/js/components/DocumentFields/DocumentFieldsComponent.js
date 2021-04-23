@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import cx from 'classnames'
 
@@ -17,15 +17,15 @@ const DocumentFieldsComponent = React.forwardRef(({
   disabled,
   fieldBlurHandler,
   fieldChangeHandler,
+  fieldDiscardHandler,
   fieldFocusHandler,
   fieldRenameHandler,
-  fieldDiscardHandler,
   fields,
+  fieldSettingsHandler,
   fieldsUpdating,
   isPublishing,
   readOnly
 }, ref) => {
-  const [settingsForField, setSettingsForField] = useState(null)
   const hasOnlyOneTextField = fields.length === 1 && fields[0].type === FIELD_TYPES.TEXT
 
   const bigInvisibleButton = (
@@ -39,11 +39,7 @@ const DocumentFieldsComponent = React.forwardRef(({
   )
 
   function toggleSettingsFor(fieldId) {
-    if (settingsForField === fieldId) {
-      setSettingsForField(null)
-      return
-    }
-    setSettingsForField(fieldId)
+    fieldSettingsHandler(fieldId)
   }
 
   function renderFieldType(field, index) {
@@ -90,7 +86,6 @@ const DocumentFieldsComponent = React.forwardRef(({
             onDiscard={fieldDiscardHandler}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-            settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]}
           />
         )
@@ -116,7 +111,6 @@ const DocumentFieldsComponent = React.forwardRef(({
             onRename={fieldRenameHandler}
             readOnly={readOnly}
             settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-            settingsMode={settingsForField === field.id}
             updating={fieldsUpdating[field.id]}
           />
         )
@@ -125,8 +119,6 @@ const DocumentFieldsComponent = React.forwardRef(({
         break
     }
     if (field) {
-      const settingsModeForField = settingsForField === field.id
-
       return (
         <DocumentFieldComponent
           field={field}
@@ -140,8 +132,6 @@ const DocumentFieldsComponent = React.forwardRef(({
           onRename={fieldRenameHandler}
           onDiscard={fieldDiscardHandler}
           readOnly={readOnly}
-          settingsHandler={(fieldId) => { toggleSettingsFor(fieldId) }}
-          settingsMode={settingsModeForField}
         >
           {fieldTypeComponent}
         </DocumentFieldComponent>
@@ -187,6 +177,7 @@ DocumentFieldsComponent.propTypes = {
   fieldRenameHandler: PropTypes.func.isRequired,
   fieldDiscardHandler: PropTypes.func.isRequired,
   fields: PropTypes.array.isRequired,
+  fieldSettingsHandler: PropTypes.func.isRequired,
   fieldsUpdating: PropTypes.object.isRequired,
   isPublishing: PropTypes.bool.isRequired,
   readOnly: PropTypes.bool.isRequired

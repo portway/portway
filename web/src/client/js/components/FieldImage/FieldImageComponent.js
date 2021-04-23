@@ -6,10 +6,9 @@ import useIsMounted from 'Hooks/useIsMounted'
 import usePrevious from 'Hooks/usePrevious'
 
 import { MAX_FIELD_NAME_SIZE, MAX_FILE_SIZE } from 'Shared/constants'
-import { CheckIcon, EditIcon } from 'Components/Icons'
+import { EditIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 
-import FieldImageSettings from './FieldImageSettings'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
 
 import IconImage from '../../../images/icon/image.svg'
@@ -35,7 +34,6 @@ const FieldImageComponent = ({
   onBlur,
   readOnly,
   settingsHandler,
-  settingsMode,
   updating,
   isCurrentlyFocusedField,
   isBeingRemotelyEdited,
@@ -84,20 +82,7 @@ const FieldImageComponent = ({
   function internalSettingsFocusHandler(fieldId, fieldType) {
     if (!isReadOnly) {
       settingsHandler(fieldId)
-      onFocus(fieldId, fieldType, documentId)
     }
-  }
-
-  function internalSettingsBlurHandler(fieldId, fieldType) {
-    settingsHandler(fieldId)
-    onBlur(fieldId, fieldType, documentId)
-  }
-
-  function updateSettingsHandler(settings) {
-    const formData = new FormData()
-    formData.append('alignment', settings.alignment)
-    formData.append('alt', settings.alt)
-    onChange(field.id, formData)
   }
 
   function uploadImage(file) {
@@ -127,7 +112,6 @@ const FieldImageComponent = ({
 
   const imageFieldClassNames = cx({
     'document-field__image': true,
-    'document-field__image--settings-mode': settingsMode,
   })
 
   const imageClassnames = cx({
@@ -137,7 +121,6 @@ const FieldImageComponent = ({
 
   const containerClassnames = cx({
     'document-field__image-container': true,
-    'document-field__image-container--settings-mode': settingsMode,
   })
 
   return (
@@ -158,7 +141,7 @@ const FieldImageComponent = ({
         <FileUploaderComponent
           accept="image/*"
           hasValue={field.value !== null}
-          invisible={!settingsMode && field.value !== null}
+          invisible={field.value !== null}
           isUpdating={updating}
           label="Drag and drop an image"
           fileChangeHandler={uploadImage}
@@ -166,21 +149,10 @@ const FieldImageComponent = ({
           blurHandler={() => { onBlur(field.id, field.type, documentId )}}>
         </FileUploaderComponent>
       </div>
-      <FieldImageSettings
-        field={field}
-        onRename={onRename}
-        updateSettingsHandler={updateSettingsHandler}
-        visible={settingsMode}
-      />
       <div className="document-field__settings-button">
-        {!settingsMode && !readOnly && field.value &&
+        {!readOnly && field.value &&
         <IconButton color="dark" className="document-field__edit-btn" aria-label="Configure image" onClick={() => { internalSettingsFocusHandler(field.id, field.type) }}>
           <EditIcon width="14" height="14" />
-        </IconButton>
-        }
-        {settingsMode &&
-        <IconButton color="dark" className="document-field__save-btn" aria-label="Save settings" onClick={() => { internalSettingsBlurHandler(field.id, field.type) }}>
-          <CheckIcon fill="#ffffff" width="12" height="12" />
         </IconButton>
         }
       </div>
@@ -200,7 +172,6 @@ FieldImageComponent.propTypes = {
   onBlur: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
-  settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
   isCurrentlyFocusedField: PropTypes.bool,
   isBeingRemotelyEdited: PropTypes.bool,

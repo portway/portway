@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { DocumentIcon, SettingsIcon, OutlineIcon } from 'Components/Icons'
+import { DocumentIcon, ArrowIcon, OutlineIcon } from 'Components/Icons'
 import DocumentInfoContainer from './DocumentInfo/DocumentInfoContainer'
 import DocumentOutlineContainer from './DocumentOutline/DocumentOutlineContainer'
+import DocumentFieldSettingsContainer from './DocumentFieldSettings/DocumentFieldSettingsContainer'
 
 import './DocumentPanelStyles.scss'
 
@@ -26,9 +27,9 @@ const DocumentPanelComponent = ({ selectedTabIndex, selectTabHandler }) => {
       index: 1
     },
     {
-      component: <>Field settings</>,
+      component: <DocumentFieldSettingsContainer />,
       label: 'Field settings',
-      icon: <SettingsIcon />,
+      icon: <ArrowIcon direction="right" />,
       index: 2
     },
   ]

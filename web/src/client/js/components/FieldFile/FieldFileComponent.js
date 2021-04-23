@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cx from 'classnames'
 
 import { MAX_FILE_SIZE } from 'Shared/constants'
-import { EditIcon, FileIcon, RemoveIcon } from 'Components/Icons'
+import { EditIcon, FileIcon } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { getFileExtension, humanFileSize } from 'Utilities/fileUtilities'
 import FileUploaderComponent from 'Components/FileUploader/FileUploaderComponent'
@@ -21,7 +21,6 @@ const FieldFileComponent = ({
   onBlur,
   readOnly,
   settingsHandler,
-  settingsMode,
   updating,
   isBeingRemotelyEdited,
   documentId
@@ -48,16 +47,10 @@ const FieldFileComponent = ({
     onChange(field.id, formData)
   }
 
-  function internalSettingsFocusHandler(fieldId, fieldType) {
+  function internalSettingsFocusHandler(fieldId) {
     if (!isReadOnly) {
       settingsHandler(fieldId)
-      onFocus(fieldId, fieldType, documentId)
     }
-  }
-
-  function internalSettingsBlurHandler(fieldId, fieldType) {
-    settingsHandler(fieldId)
-    onBlur(fieldId, fieldType, documentId)
   }
 
   const fileClassNames = cx({
@@ -71,7 +64,7 @@ const FieldFileComponent = ({
     <div className="document-field__file">
       <div className="document-field__file-container">
         <div className={fileClassNames}>
-          {field.value && field.meta && !settingsMode && (
+          {field.value && field.meta && (
             <>
               <FileIcon width="36" height="36" extension={fileExtension.toUpperCase()} />
               <a href={field.value} target="_blank" rel="noopener noreferrer">
@@ -85,39 +78,23 @@ const FieldFileComponent = ({
                   className="document-field__edit-btn"
                   aria-label="Change file"
                   onClick={() => {
-                    internalSettingsFocusHandler(field.id, field.type)
+                    internalSettingsFocusHandler(field.id)
                   }}>
                   <EditIcon width="14" height="14" />
                 </IconButton>
               )}
             </>
           )}
-          {(settingsMode || !field.value) && !warning && (
+          {(!field.value) && !warning && (
             <FileUploaderComponent
               hasValue={field.value !== null}
               isUpdating={updating}
               label="Drag and drop a file"
               fileChangeHandler={uploadFile}
               fileUploadedHandler={() => {
-                // Since we render this uploader if there is no field.value,
-                // once the field gets a value it will remove it
-                // However, when updating an image, we have to manually remove it
-                if (field.value && settingsMode) {
-                  settingsHandler(field.id, field.type)
-                }
+                settingsHandler(field.id)
               }}
             />
-          )}
-          {settingsMode && (
-            <IconButton
-              className="document-field__cancel-btn"
-              aria-label="Cancel editing"
-              onClick={() => {
-                setWarning(null)
-                internalSettingsBlurHandler(field.id)
-              }}>
-              <RemoveIcon width="12" height="12" />
-            </IconButton>
           )}
           {warning && <p className="small warning">{warning}</p>}
         </div>
@@ -135,7 +112,6 @@ FieldFileComponent.propTypes = {
   onRename: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
   settingsHandler: PropTypes.func.isRequired,
-  settingsMode: PropTypes.bool.isRequired,
   updating: PropTypes.bool.isRequired,
   isBeingRemotelyEdited: PropTypes.bool,
   documentId: PropTypes.number

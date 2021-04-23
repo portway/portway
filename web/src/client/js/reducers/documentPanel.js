@@ -6,7 +6,7 @@ const initialState = {
   },
   panel: {
     visible: false,
-    selectedTabIndex: 0,
+    selectedTabIndex: 0, // 0 is document info, 1 is outline, 2 is field settings
   },
 }
 
@@ -28,10 +28,19 @@ export const documentPanel = (state = initialState, action) => {
       }
     }
 
-    // Selecting a field in the outline
+    // Selecting a field in the outline, and change the selected tab
     case ActionTypes.DOCUMENT_PANEL_FIELD_SELECTION: {
       return {
-        ...state, fields: { ...state.fields, selectedFieldId: action.value }
+        ...state,
+        fields: {
+          ...state.fields,
+          selectedFieldId: action.value
+        },
+        panel: {
+          ...state.panel,
+          visible: true,
+          selectedTabIndex: 2
+        }
       }
     }
 
@@ -39,7 +48,8 @@ export const documentPanel = (state = initialState, action) => {
     case ActionTypes.ROUTE_CHANGE: {
       return {
         ...state,
-        panel: { ...state.panel, visible: false }
+        panel: { ...state.panel, visible: false, selectedTabIndex: 0 },
+        fields: { ...state.fields, selectedFieldId: null },
       }
     }
 

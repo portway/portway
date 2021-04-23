@@ -5,7 +5,8 @@ import { Link, useParams } from 'react-router-dom'
 import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
 import ProjectPermission from 'Components/Permission/ProjectPermission'
 import DocumentOutlineItem from './DocumentOutlineItem'
-import './_DocumentOutline.scss'
+
+import './DocumentOutlineStyles.scss'
 
 const DocumentOutlineComponent = ({
   dragEndHandler,
@@ -22,11 +23,11 @@ const DocumentOutlineComponent = ({
   const { projectId } = useParams()
   return (
     <div className="document-outline">
+      <p className="note">Drag and drop to reorder your document, or remove fields altogether</p>
+      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+        <p className="note">Name your fields for use in <Link to={`${PATH_PROJECT}/${projectId}/settings/keys`}>the API</Link></p>
+      </ProjectPermission>
       <ol className="document-outline__list" onDrop={dropHandler}>
-        <p>Drag and drop to reorder your document, or remove fields altogether</p>
-        <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
-          <p className="document-outline__description note">Name your fields for use in <Link to={`${PATH_PROJECT}/${projectId}/settings/keys`}>the API</Link></p>
-        </ProjectPermission>
         {fields.map((field, index) => {
           return (
             <DocumentOutlineItem

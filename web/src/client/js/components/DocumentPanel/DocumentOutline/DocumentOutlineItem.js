@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 
 import { FIELD_TYPES } from 'Shared/constants'
 import {
+  ArrowIcon,
   DateIcon,
   DragIcon,
   FileIcon,
   ImageIcon,
   NumberIcon,
-  SettingsIcon,
   StringIcon,
   TextIcon,
-  TrashIcon,
+  TrashIcon
 } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { getFileExtension } from 'Utilities/fileUtilities'
@@ -36,7 +36,8 @@ const DocumentOutlineItem = ({
   const nameRef = useRef()
 
   const fieldsWithSettings = [
-    FIELD_TYPES.IMAGE
+    FIELD_TYPES.FILE,
+    FIELD_TYPES.IMAGE,
   ]
 
   const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
@@ -124,7 +125,7 @@ const DocumentOutlineItem = ({
       <div className="document-outline__actions">
         {fieldsWithSettings.includes(field.type) &&
         <IconButton color="transparent" onClick={fieldSettingToggleHandler}>
-          <SettingsIcon width="14" height="14" />
+          <ArrowIcon direction="right" width="14" height="14" />
         </IconButton>
         }
         <IconButton color="transparent" onClick={onDestroy}>
