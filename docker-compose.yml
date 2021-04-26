@@ -3,6 +3,7 @@ version: '3'
 services:
 
   web:
+    platform: linux/x86_64
     build:
       context: ./web
     volumes:
@@ -19,6 +20,7 @@ services:
     container_name: portway-web
 
   api:
+    platform: linux/x86_64
     build:
       context: ./api
     volumes:
@@ -39,6 +41,7 @@ services:
     container_name: portway-api
 
   sync:
+    platform: linux/x86_64
     build:
       context: ./sync
     volumes:
@@ -59,6 +62,7 @@ services:
     container_name: portway-sync
 
   workers:
+    platform: linux/x86_64
     build:
       context: ./workers
     volumes:
@@ -76,6 +80,7 @@ services:
     container_name: portway-worker
 
   db:
+    platform: linux/x86_64
     image: postgres:11.2-alpine
     restart: always
     environment:
@@ -88,6 +93,7 @@ services:
       - 5432:5432
 
   redis:
+    platform: linux/x86_64
     restart: always
     image: redis:5.0.7-alpine
     ports:
