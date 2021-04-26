@@ -62,7 +62,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
 
       {field.type === FIELD_TYPES.IMAGE &&
       <a className="document-panel__image-link" href={field.value} target="_blank" rel="noopener noreferrer">
-        <img src={field.value} width={field.meta.width} height={field.meta.height} alt={field.alt} />
+        <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt} />
       </a>
       }
 
@@ -74,7 +74,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
       }
 
       <dl>
-        {field.type === FIELD_TYPES.IMAGE &&
+        {field.type === FIELD_TYPES.IMAGE && field.meta && field.meta.width && field.meta.height &&
         <>
           <dt>Dimensions</dt>
           <dd className="document-panel__definiton-list-divider--bottom">{field.meta.width}x{field.meta.height}</dd>

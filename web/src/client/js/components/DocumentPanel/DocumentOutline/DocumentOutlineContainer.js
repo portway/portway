@@ -49,8 +49,6 @@ const DocumentOutlineContainer = ({
 
   if (!currentDocument) return null
 
-  const notReadOnlyModeButDontDoDragEvents = isDocumentPanelOpen
-
   function fieldDestroyHandler(fieldId, fieldType) {
     let type = 'field'
     switch (fieldType) {
@@ -81,9 +79,8 @@ const DocumentOutlineContainer = ({
 
   let cloneElement
   function dragStartHandler(e) {
-    // console.info('drag start')
+    console.info('drag start')
     e.stopPropagation()
-    if (notReadOnlyModeButDontDoDragEvents) return
     const listItem = e.currentTarget
     e.dataTransfer.dropEffect = 'move'
     e.dataTransfer.effectAllowed = 'copyMove'
@@ -120,7 +117,6 @@ const DocumentOutlineContainer = ({
     // console.info('drag enter', draggingElement)
     e.preventDefault()
     e.stopPropagation()
-    if (notReadOnlyModeButDontDoDragEvents) return
     e.dataTransfer.dropEffect = 'move'
     if (e.dataTransfer.types.includes('Files')) {
       return
@@ -153,7 +149,6 @@ const DocumentOutlineContainer = ({
     // console.info('drop handler', draggingElement)
     e.preventDefault()
     e.stopPropagation()
-    if (notReadOnlyModeButDontDoDragEvents) return
     if (e.dataTransfer.types.includes('Files')) {
       return
     }
@@ -166,7 +161,6 @@ const DocumentOutlineContainer = ({
     e.preventDefault()
     e.stopPropagation()
     draggingElement.current.classList.remove('document-outline__list-item--dragging')
-    if (notReadOnlyModeButDontDoDragEvents) return
     const fieldIdToUpdate = draggingElement.current.dataset.id
     const to = Number(draggingElement.current.dataset.order)
     // Trigger action with documentId, fieldId
