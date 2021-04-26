@@ -35,11 +35,6 @@ const DocumentOutlineItem = ({
   const documentFieldRef = useRef()
   const nameRef = useRef()
 
-  const fieldsWithSettings = [
-    FIELD_TYPES.FILE,
-    FIELD_TYPES.IMAGE,
-  ]
-
   const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
   const fieldIcons = {
     [FIELD_TYPES.TEXT]: <TextIcon width="24" height="24" />,
@@ -123,11 +118,9 @@ const DocumentOutlineItem = ({
         }
       </div>
       <div className="document-outline__actions">
-        {fieldsWithSettings.includes(field.type) &&
         <IconButton color="transparent" onClick={fieldSettingToggleHandler}>
           <FieldSettingsIcon width="14" height="14" />
         </IconButton>
-        }
         <IconButton color="transparent" onClick={onDestroy}>
           <TrashIcon width="14" height="14" />
         </IconButton>
