@@ -38,7 +38,6 @@ export const documentPanel = (state = initialState, action) => {
         },
         panel: {
           ...state.panel,
-          visible: true,
           selectedTabIndex: 2
         }
       }
