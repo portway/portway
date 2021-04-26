@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
 import cx from 'classnames'
@@ -33,6 +33,7 @@ const DocumentHeaderComponent = ({
   const { projectId } = useParams()
   const documentRef = useRef()
   const titleRef = useRef()
+  const [documentName, setDocumentName ] = useState(document.name)
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // If we've exited fullscreen, but the UI is still in fullscreen
@@ -50,6 +51,13 @@ const DocumentHeaderComponent = ({
       window.document.removeEventListener('webkitfullscreenchange', fullScreenChangeHandler, false)
     }
   })
+
+  useEffect(() => {
+    // only set the document name from incoming data if the user isn't currenly focused on that element
+    if (window.document.activeElement !== titleRef.current) {
+      setDocumentName(document.name)
+    }
+  }, [document.name])
 
   if (!document.id) return null
 
@@ -108,9 +116,10 @@ const DocumentHeaderComponent = ({
       <div className="document__title-container">
         <input
           className="document__title"
-          defaultValue={document.name}
+          value={documentName}
           onChange={(e) => {
             e.persist()
+            setDocumentName(e.target.value)
             changeHandlerAction(e)
           }}
           onKeyDown={(e) => {
