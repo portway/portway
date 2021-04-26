@@ -125,12 +125,14 @@ const DocumentFieldsContainer = ({
     // Unfortunately we're tracking focus state both in redux and within the sync
     // context. We may want to look into hooking sync into redux? -Dirk 4/20
     if (!documentReadOnlyMode) {
+      selectDocumentField(fieldId)
       focusField(fieldId, fieldType, documentId, fieldData)
     }
   }
 
   function fieldBlurHandler(fieldId, fieldType, documentId, fieldData) {
     if (!documentReadOnlyMode) {
+      selectDocumentField(null)
       blurField(fieldId, fieldType, documentId, fieldData)
     }
   }
@@ -198,11 +200,11 @@ DocumentFieldsContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    activeDocumentUsers: state.userSync.activeDocumentUsers,
     createdFieldId: state.documentFields.lastCreatedFieldId,
     disabled: state.ui.fields.disabled,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
     isPublishing: state.ui.documents.isPublishing,
-    activeDocumentUsers: state.userSync.activeDocumentUsers
   }
 }
 
