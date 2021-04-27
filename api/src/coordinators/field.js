@@ -85,8 +85,8 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
   // NOTE: this will always result in error details being passed to the calling controller,
   // if we don't want these included in the payload, remove them there before sending
 
-  if (fieldBody.value) {
-    const { error } = fieldSchema.validate({ ...fieldBody, type: field.type })
+  if (body.value) {
+    const { error } = fieldSchema.validate({ ...body, type: field.type })
     if (error && error.name === 'ValidationError') {
       throw joiErrorToApiError(error, true)
     }
