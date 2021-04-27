@@ -16,6 +16,9 @@ const DocumentFieldSettingsContainer = ({
   updatingDocumentFields
 }) => {
   const { projectId, documentId } = useParams()
+
+  if (!documentId) return null
+
   const selectedField = documentFields[documentId][selectedFieldId]
   const fieldIsUpdating = updatingDocumentFields[selectedFieldId]
 

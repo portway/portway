@@ -1,9 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { set } from 'date-fns'
 
-const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
+import { DELETE_DOCUMENT_BUTTON_LABEL, UNPUBLISH_BUTTON_LABEL } from 'Loc/strings'
+import SpinnerComponent from 'Components/Spinner/SpinnerComponent'
+
+import './DocumentInfoStyles.scss'
+
+const DocumentInfoComponent = ({
+  document,
+  documentChangeHandler,
+  isPublishing,
+  removeDocumentHandler,
+  unpublishDocumentHandler,
+}) => {
   const documentNameRef = useRef()
   const [documentName, setDocumentName] = useState(document.name)
 
@@ -15,7 +25,7 @@ const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
 
   return (
     <div className="document-info">
-      <dl>
+      <dl className="document-info__list">
         <dt>
           <label
             className="document-panel__label"
@@ -65,11 +75,32 @@ const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
           />
           <span className="note">Use the document slug in your URLs. Changing this may affect any existing applications.</span>
         </dd>
+        {document.lastPublishedAt !== null &&
+        <>
+        <dt>Last published</dt>
+        <dd title={moment(document.lastPublishedAt).format('MMMM do, YYYY - h:mma')}>
+          {moment(document.lastPublishedAt).fromNow()}
+        </dd>
+        </>
+        }
         <dt className="document-panel__definiton-list-divider--top">Last update</dt>
         <dd>{moment(document.updatedAt).fromNow()}</dd>
         <dt>Created on</dt>
         <dd>{moment(document.createdAt).format('MMMM do, YYYY - h:mma')}</dd>
       </dl>
+      <div className="document-info__actions">
+        <button
+          className="btn btn--small btn--white"
+          disabled={document.lastPublishedAt === null}
+          onClick={unpublishDocumentHandler}
+        >
+          {isPublishing && <SpinnerComponent width="12" height="12" color="#ffffff" />}
+          <span className="label">{UNPUBLISH_BUTTON_LABEL}</span>
+        </button>
+        <button className="btn btn--small btn--white btn--danger" onClick={removeDocumentHandler}>
+          <span className="label">{DELETE_DOCUMENT_BUTTON_LABEL}</span>
+        </button>
+      </div>
     </div>
   )
 }
@@ -77,6 +108,9 @@ const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
 DocumentInfoComponent.propTypes = {
   document: PropTypes.object,
   documentChangeHandler: PropTypes.func.isRequired,
+  isPublishing: PropTypes.bool.isRequired,
+  removeDocumentHandler: PropTypes.func.isRequired,
+  unpublishDocumentHandler: PropTypes.func.isRequired,
 }
 
 export default DocumentInfoComponent
