@@ -19,7 +19,6 @@ const FIELD_UPDATE_TYPES = {
 
 const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) => {
   const [warning, setWarning] = useState()
-  const [fieldName, setFieldName] = useState()
   const [alignmentChecked, setAlignmentChecked] = useState(field.alignment ? field.alignment : FIELD_IMAGE_ALIGNMENT.CENTER)
   const updatingFieldType = useRef()
 
@@ -88,7 +87,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
         <dd>
           <input
             className="document-panel__input"
-            value={fieldName}
+            value={field.name}
             id="field-name"
             onChange={(e) => {
               updatingFieldType.current = null
