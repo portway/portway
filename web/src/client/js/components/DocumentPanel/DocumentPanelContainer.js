@@ -1,26 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { DOCUMENT_MODE } from 'Shared/constants'
 
+import { selectDocumentPanelTab } from 'Actions/documentPanel'
 import DocumentPanelComponent from './DocumentPanelComponent'
 
-const DocumentPanelContainer = ({ documentMode }) => {
-  if (documentMode === DOCUMENT_MODE.EDIT) {
-    return <DocumentPanelComponent/>
+const DocumentPanelContainer = ({ isDocumentPanelOpen, selectDocumentPanelTab, selectedTabIndex }) => {
+  function selectTabHandler(tabIndex) {
+    selectDocumentPanelTab(tabIndex)
+  }
+
+  if (isDocumentPanelOpen) {
+    return (
+      <DocumentPanelComponent
+        selectTabHandler={selectTabHandler}
+        selectedTabIndex={selectedTabIndex}
+      />
+    )
   }
 
   return null
 }
 
 DocumentPanelContainer.propTypes = {
-  documentMode: PropTypes.string.isRequired
+  isDocumentPanelOpen: PropTypes.bool.isRequired,
+  selectDocumentPanelTab: PropTypes.func.isRequired,
+  selectedTabIndex: PropTypes.number,
+}
+
+const mapDispatchToProps = {
+  selectDocumentPanelTab
 }
 
 const mapStateToProps = (state) => {
   return {
-    documentMode: state.ui.document.documentMode,
+    isDocumentPanelOpen: state.documentPanel.panel.visible,
+    selectedTabIndex: state.documentPanel.panel.selectedTabIndex,
   }
 }
 
-export default connect(mapStateToProps)(DocumentPanelContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentPanelContainer)

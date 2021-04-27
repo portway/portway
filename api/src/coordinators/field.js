@@ -77,8 +77,6 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
 
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
-  const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
-
   // when we update a field value, we need to validate its value against its type, which won't usually be passed in the update body,
   // so won't be handled in the controller body validator
   // we have the original field and type at this point, so we can validate the value
@@ -91,6 +89,8 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
       throw joiErrorToApiError(error, true)
     }
   }
+
+  const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
 
   let updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 
@@ -152,6 +152,8 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
         fieldBody.value = url
         fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
+        // always clear out the field formats, this will get updated by a worker later
+        fieldBody.formats = null
       }
       break
     case FIELD_TYPES.TEXT:

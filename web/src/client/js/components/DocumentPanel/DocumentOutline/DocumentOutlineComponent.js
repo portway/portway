@@ -1,8 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link, useParams } from 'react-router-dom'
 
+import { PATH_PROJECT, PROJECT_ROLE_IDS } from 'Shared/constants'
+import ProjectPermission from 'Components/Permission/ProjectPermission'
 import DocumentOutlineItem from './DocumentOutlineItem'
-import './_DocumentOutline.scss'
+
+import './DocumentOutlineStyles.scss'
 
 const DocumentOutlineComponent = ({
   dragEndHandler,
@@ -14,9 +18,15 @@ const DocumentOutlineComponent = ({
   fieldsUpdating,
   fieldDestroyHandler,
   fieldRenameHandler,
+  fieldSettingToggleHandler,
 }) => {
+  const { projectId } = useParams()
   return (
     <div className="document-outline">
+      <p className="note">Drag and drop to reorder your document, or remove fields altogether</p>
+      <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN]}>
+        <p className="note">Name your fields for use in <Link to={`${PATH_PROJECT}/${projectId}/settings/keys`}>the API</Link></p>
+      </ProjectPermission>
       <ol className="document-outline__list" onDrop={dropHandler}>
         {fields.map((field, index) => {
           return (
@@ -27,6 +37,7 @@ const DocumentOutlineComponent = ({
               dragStartHandler={dragStartHandler}
               dropHandler={dropHandler}
               field={field}
+              fieldSettingToggleHandler={() => { fieldSettingToggleHandler(field.id) }}
               index={index}
               isUpdating={fieldsUpdating[field.id]}
               key={field.id}
@@ -50,6 +61,7 @@ DocumentOutlineComponent.propTypes = {
   fieldsUpdating: PropTypes.object,
   fieldDestroyHandler: PropTypes.func.isRequired,
   fieldRenameHandler: PropTypes.func.isRequired,
+  fieldSettingToggleHandler: PropTypes.func.isRequired,
 }
 
 export default DocumentOutlineComponent

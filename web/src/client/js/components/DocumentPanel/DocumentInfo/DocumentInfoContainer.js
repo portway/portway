@@ -18,11 +18,8 @@ const DocumentInfoContainer = ({ updateDocument }) => {
     location.pathname
   ])
 
-  const debouncedDocumentChangeHandler = debounce(1000, (value) => {
-    if (value === '') return
-    updateDocument(projectId, documentId, {
-      slug: value
-    })
+  const debouncedDocumentChangeHandler = debounce(1000, (body) => {
+    updateDocument(projectId, documentId, body)
   })
 
   return (

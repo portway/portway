@@ -1,5 +1,5 @@
 import { ActionTypes } from '../actions'
-import { DOCUMENT_MODE, STATUS_TYPES } from 'Shared/constants'
+import { STATUS_TYPES } from 'Shared/constants'
 
 const initialState = {
   confirmation: {
@@ -14,7 +14,6 @@ const initialState = {
     },
   },
   document: {
-    documentMode: DOCUMENT_MODE.NORMAL,
     isFullScreen: false,
   },
   documents: {
@@ -24,6 +23,7 @@ const initialState = {
     isSearching: false,
   },
   fields: {
+    withOpenSettings: {},
     currentFieldForFormatting: null,
     disabled: false,
     fieldsUpdating: {},
@@ -190,26 +190,6 @@ export const ui = (state = initialState, action) => {
         fields: {
           ...state.fields,
           disabled: false
-        }
-      }
-    }
-
-    // Document mode
-    case ActionTypes.UI_DOCUMENT_MODE: {
-      return {
-        ...state,
-        document: {
-          ...state.document,
-          documentMode: action.value
-        }
-      }
-    }
-    case ActionTypes.ROUTE_CHANGE: {
-      return {
-        ...state,
-        document: {
-          ...state.document,
-          documentMode: initialState.document.documentMode,
         }
       }
     }

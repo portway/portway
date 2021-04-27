@@ -15,9 +15,9 @@ import DocumentToolbarComponent from './DocumentToolbarComponent'
 
 const DocumentToolbarContainer = ({
   deleteDocument,
-  documentMode,
   history,
   isCreating,
+  isDocumentPanelOpen,
   isPublishing,
   publishDocument,
   uiConfirm,
@@ -79,8 +79,8 @@ const DocumentToolbarContainer = ({
   return (
     <DocumentToolbarComponent
       document={document}
-      documentMode={documentMode}
       isCreating={isCreating}
+      isDocumentPanelOpen={isDocumentPanelOpen}
       isPublishing={isPublishing}
       publishDocumentHandler={publishDocumentHandler}
       removeDocumentHandler={removeDocumentHandler}
@@ -91,9 +91,9 @@ const DocumentToolbarContainer = ({
 
 DocumentToolbarContainer.propTypes = {
   deleteDocument: PropTypes.func.isRequired,
-  documentMode: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   isCreating: PropTypes.bool,
+  isDocumentPanelOpen: PropTypes.bool.isRequired,
   isPublishing: PropTypes.bool,
   publishDocument: PropTypes.func.isRequired,
   uiConfirm: PropTypes.func.isRequired,
@@ -102,8 +102,8 @@ DocumentToolbarContainer.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    documentMode: state.ui.document.documentMode,
     isCreating: state.ui.documents.creating,
+    isDocumentPanelOpen: state.documentPanel.panel.visible,
     isPublishing: state.ui.documents.isPublishing,
   }
 }

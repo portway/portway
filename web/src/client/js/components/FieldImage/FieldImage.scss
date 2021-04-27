@@ -15,15 +15,8 @@
   max-width: 75%;
   position: relative;
 
-  &--settings-mode {
-    border: thin dashed var(--theme-border);
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    padding: .25rem;
-    @include media('>=medium') {
-      flex-direction: row;
-    }
+  &--empty {
+    width: 100%;
   }
 
   // Override
@@ -35,7 +28,7 @@
   }
 
   .file-uploader {
-    border: thin solid transparent;
+    border: thin solid var(--theme-border);
     &--dragged-over {
       border: thin dashed var(--theme-border);
     }
@@ -52,37 +45,24 @@
       }
     }
   }
-
 }
 
 .document-field__image-container {
   // min-height: 275px;
   position: relative;
-
-  &--settings-mode {
-    align-items: center;
-    display: flex;
-  }
-
 }
 
 .document-field__image-tag {
   border-radius: var(--border-radius);
   display: block;
   height: auto;
+  margin: auto;
   max-width: 100%;
   min-width: 200px;
-  // padding: calc(var(--icon-margin) * 2);
-  // width: 100%;
 
   &--empty {
     height: 250px;
     opacity: 0.3;
     width: 250px;
-
-    @include media('>medium') {
-      height: 200px;
-      width: 400px;
-    }
   }
 }
