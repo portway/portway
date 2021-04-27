@@ -42,6 +42,7 @@ const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
             onChange={(e) => {
               if (e.target.value.match(/^[a-z0-9-]+$/) === null) {
                 e.target.setCustomValidity('Please use lowercase letters, numbers, and hyphens only')
+                e.target.reportValidity()
               } else {
                 e.target.setCustomValidity('')
                 documentChangeHandler({ slug: e.target.value })

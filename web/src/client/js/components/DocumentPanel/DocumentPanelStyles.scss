@@ -175,6 +175,11 @@
   white-space: nowrap;
   width: 100%;
 
+  &:invalid {
+    border: thin solid var(--color-red-dark);
+    color: var(--color-red);
+  }
+
   &--file {
     background: transparent;
     font-size: 1rem;

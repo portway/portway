@@ -47,7 +47,7 @@ const DocumentPanelComponent = ({ selectedTabIndex, selectTabHandler }) => {
   // Handle left/right key navigation of tab list
   useEffect(() => {
     function keyDownhandler(e) {
-      if (e.keyCode === 39 || e.keyCode === 37) {
+      if (e.target.tagName === 'BUTTON' && (e.keyCode === 39 || e.keyCode === 37)) {
         tabsRef.current[tabFocus.current].setAttribute('tabindex', -1)
         if (e.keyCode === 39) {
           tabFocus.current++
