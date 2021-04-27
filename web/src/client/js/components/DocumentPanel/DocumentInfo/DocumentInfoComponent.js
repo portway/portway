@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { set } from 'date-fns'
 
 const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
+  const documentNameRef = useRef()
+  const [documentName, setDocumentName] = useState(document.name)
+
+  useEffect(() => {
+    if (window.document.activeElement !== documentNameRef) {
+      setDocumentName(document.name)
+    }
+  }, [document.name])
+
   return (
     <div className="document-info">
       <dl>
@@ -17,12 +27,14 @@ const DocumentInfoComponent = ({ document, documentChangeHandler }) => {
         <dd>
           <input
             className="document-panel__input"
-            defaultValue={document.name}
+            value={documentName}
             id="do-name"
             onChange={(e) => {
+              setDocumentName(e.target.value)
               documentChangeHandler({ name: e.target.value })
             }}
             placeholder="Enter a document name"
+            ref={documentNameRef}
           />
         </dd>
         <dt>

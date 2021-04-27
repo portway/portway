@@ -87,7 +87,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
         <dd>
           <input
             className="document-panel__input"
-            defaultValue={field.name}
+            value={field.name}
             id="field-name"
             onChange={(e) => {
               updatingFieldType.current = null
