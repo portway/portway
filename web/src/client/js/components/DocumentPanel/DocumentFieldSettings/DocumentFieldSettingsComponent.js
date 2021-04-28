@@ -55,7 +55,8 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
     updateHandler({ value: formData })
   }
 
-  const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : null
+  // Default should be FILE if there isn't a file to get an extension from
+  const fileExtension = field.meta ? getFileExtension(field.meta.originalName) : 'FILE'
 
   return (
     <div className="document-field-settings">
