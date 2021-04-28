@@ -61,16 +61,21 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
   return (
     <div className="document-field-settings">
 
-      {field.type === FIELD_TYPES.IMAGE &&
+      {field.type === FIELD_TYPES.IMAGE && field.value &&
       <a className="document-panel__image-link" href={field.value} target="_blank" rel="noopener noreferrer">
-        <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt} />
+        <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt && field.alt} />
       </a>
       }
 
       {field.type === FIELD_TYPES.FILE &&
       <div className="document-panel__file-info">
         <FileIcon width="36" height="36" extension={fileExtension.toUpperCase()} />
-        <span><a href={field.value} download>Download</a> ({humanFileSize(field.meta.size, true)})</span>
+        {field.value &&
+        <span><a href={field.value} download>Download</a> {field.meta && field.meta.size && <>({humanFileSize(field.meta.size, true)})</>}</span>
+        }
+        {!field.value &&
+        <span><em>No file set</em></span>
+        }
       </div>
       }
 
@@ -106,7 +111,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
           <dd>
             <input
               className="document-panel__input"
-              defaultValue={field.alt}
+              defaultValue={field.alt ? field.alt : null}
               id="field-alt"
               onChange={(e) => {
                 updatingFieldType.current = null
