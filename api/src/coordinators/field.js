@@ -51,13 +51,14 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
 
   const fileStats = await callFuncWithArgs(stat, filePath)
 
-  const urlParts = url.split('/')
-  const name = urlParts[urlParts.length - 1]
+  const urlPath = path.parse(url)
+  // truncate the file name
+  const truncatedName = `${urlPath.name.slice(0, 14)}${urlPath.ext}`
 
   // This is mimic'ing multer's file object.
   // Not ideal to be passing the multer object around, but that's a larger rewrite to fix
   const file = {
-    originalname: name,
+    originalname: truncatedName,
     mimetype: lookup(url),
     path: filePath,
     size: fileStats.size
