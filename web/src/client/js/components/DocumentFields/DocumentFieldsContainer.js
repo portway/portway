@@ -9,22 +9,26 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
 import { uiConfirm } from 'Actions/ui'
+import { toggleDocumentPanel, selectDocumentPanelTab, selectDocumentField } from 'Actions/documentPanel'
 import { blurField, createField, focusField, updateField } from 'Actions/field'
 import { fetchDocument } from 'Actions/document'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
 
 const DocumentFieldsContainer = ({
+  activeDocumentUsers,
   blurField,
-  createField,
   createdFieldId,
+  createField,
   disabled,
+  fetchDocument,
   fieldsUpdating,
   focusField,
   isPublishing,
-  updateField,
-  fetchDocument,
-  activeDocumentUsers
+  selectDocumentField,
+  selectDocumentPanelTab,
+  toggleDocumentPanel,
+  updateField
 }) => {
   const { projectId, documentId } = useParams()
   const fieldKeys = useRef([])
@@ -40,8 +44,8 @@ const DocumentFieldsContainer = ({
   // False because null / true == loading
   if (assignmentLoading === false) {
     // User has the project reader role and project is not set to "write"
-    if (projectAssignment && 
-      PROJECT_ROLE_IDS.READER === projectAssignment.roleId && 
+    if (projectAssignment &&
+      PROJECT_ROLE_IDS.READER === projectAssignment.roleId &&
       project.accessLevel !== PROJECT_ACCESS_LEVELS.WRITE
     ) {
       documentReadOnlyMode = true
@@ -83,18 +87,19 @@ const DocumentFieldsContainer = ({
   // need to delete all the fields, or create a document via the API in order to have no fields
   useEffect(() => {
     if (
-      docAreaRef && docAreaRef.current && 
+      docAreaRef && docAreaRef.current &&
       !hasFields && foundFields && Object.keys(foundFields).length === 0
     ) {
-      docAreaRef.current.addEventListener('click', createTextFieldHandler, false)
+      const dar = docAreaRef.current
+      dar.addEventListener('click', createTextFieldHandler, false)
       return function cleanup() {
-        docAreaRef.current.removeEventListener('click', createTextFieldHandler, false)
+        dar.removeEventListener('click', createTextFieldHandler, false)
       }
     }
   // Check hasFields and foundFields. hasFields provides an already computed quick check, and
   // foundFields is the value from the redux store. We want to explicitly look at foundFields to
   // determine 1) have the fields loaded 2) are there any fields
-  }, [hasFields, foundFields])
+  }, [hasFields, foundFields, createTextFieldHandler])
 
   useEffect(() => {
     // If we are in a new document, or a document with one blank text field,
@@ -120,12 +125,14 @@ const DocumentFieldsContainer = ({
     // Unfortunately we're tracking focus state both in redux and within the sync
     // context. We may want to look into hooking sync into redux? -Dirk 4/20
     if (!documentReadOnlyMode) {
+      selectDocumentField(fieldId)
       focusField(fieldId, fieldType, documentId, fieldData)
     }
   }
 
   function fieldBlurHandler(fieldId, fieldType, documentId, fieldData) {
     if (!documentReadOnlyMode) {
+      selectDocumentField(null)
       blurField(fieldId, fieldType, documentId, fieldData)
     }
   }
@@ -148,23 +155,29 @@ const DocumentFieldsContainer = ({
     if (value === '') return
     fieldChangeHandler(fieldId, { name: value })
   })
+  function openSettingsForFieldHandler(fieldId) {
+    toggleDocumentPanel(true)
+    selectDocumentPanelTab(2)
+    selectDocumentField(fieldId)
+  }
 
   return (
     <DocumentFieldsComponent
-      ref={docAreaRef}
       activeUsers={activeUsers}
-      createFieldHandler={createTextFieldHandler}
       createdFieldId={createdFieldId}
+      createFieldHandler={createTextFieldHandler}
       disabled={disabled}
-      fieldChangeHandler={debouncedValueChangeHandler}
-      fieldFocusHandler={fieldFocusHandler}
       fieldBlurHandler={fieldBlurHandler}
-      fieldRenameHandler={debouncedNameChangeHandler}
+      fieldChangeHandler={debouncedValueChangeHandler}
       fieldDiscardHandler={fieldDiscardHandler}
+      fieldFocusHandler={fieldFocusHandler}
+      fieldRenameHandler={debouncedNameChangeHandler}
       fields={sortedFields}
+      fieldSettingsHandler={openSettingsForFieldHandler}
       fieldsUpdating={fieldsUpdating}
       isPublishing={isPublishing}
       readOnly={documentReadOnlyMode}
+      ref={docAreaRef}
     />
   )
 }
@@ -179,26 +192,32 @@ DocumentFieldsContainer.propTypes = {
   isPublishing: PropTypes.bool.isRequired,
   updateField: PropTypes.func.isRequired,
   fetchDocument: PropTypes.func.isRequired,
-  activeDocumentUsers: PropTypes.object
+  activeDocumentUsers: PropTypes.object,
+  selectDocumentField: PropTypes.func.isRequired,
+  selectDocumentPanelTab: PropTypes.func.isRequired,
+  toggleDocumentPanel: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
+    activeDocumentUsers: state.userSync.activeDocumentUsers,
     createdFieldId: state.documentFields.lastCreatedFieldId,
     disabled: state.ui.fields.disabled,
     fieldsUpdating: state.ui.fields.fieldsUpdating,
     isPublishing: state.ui.documents.isPublishing,
-    activeDocumentUsers: state.userSync.activeDocumentUsers
   }
 }
 
 const mapDispatchToProps = {
   blurField,
   createField,
+  fetchDocument,
   focusField,
-  updateField,
+  selectDocumentField,
+  selectDocumentPanelTab,
+  toggleDocumentPanel,
   uiConfirm,
-  fetchDocument
+  updateField,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentFieldsContainer)

@@ -29,7 +29,7 @@ describe('fieldCoordinator', () => {
     const documentId = 0
     const orgId = 0
     const fieldId = 999
-    const body = { type: 1, value: 'some-random-text', orgId: 0 }
+    const body = { type: 1, value: 'some-random-text' }
 
     beforeAll(() => {
       fieldCoordinator.addFieldToDocument = addFieldToDocument
@@ -153,7 +153,7 @@ describe('fieldCoordinator', () => {
     const fieldId = 999
     const documentId = 0
     const orgId = 111
-    const body = { value: 'some-random-text', orgId: 0 }
+    const body = { value: 'some-random-text' }
     const mockReturnField = { id: fieldId, documentId, orgId, type: FIELD_TYPES.TEXT, value: body.value }
 
     beforeAll(async () => {
@@ -194,7 +194,7 @@ describe('fieldCoordinator', () => {
     })
 
     describe('when it is an image field', () => {
-      const imageBody = { orgId: 0, value: 'not-a-real-update-value' }
+      const imageBody = { value: 'not-a-real-update-value' }
       const file = { buffer: new Buffer('not-a-real-buffer') }
       const mockReturnImageField = { ...mockReturnField, type: FIELD_TYPES.IMAGE, value: imageBody.value }
 

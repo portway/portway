@@ -4,8 +4,9 @@ import { useLocation, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { uiToggleDocumentMode, uiToggleFullScreen } from 'Actions/ui'
+import { uiToggleFullScreen } from 'Actions/ui'
 import { updateDocument } from 'Actions/document'
+import { toggleDocumentPanel } from 'Actions/documentPanel'
 import useDataService from 'Hooks/useDataService'
 import currentResource from 'Libs/currentResource'
 import { fetchDocument } from 'Actions/document'
@@ -17,7 +18,7 @@ import {
 import { documentSocket } from '../../sockets/SocketProvider'
 import { currentUserId } from 'Libs/currentIds'
 
-import { DOCUMENT_MODE, PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
+import { PRODUCT_NAME, PATH_DOCUMENT_NEW_PARAM } from 'Shared/constants'
 import DocumentHeaderComponent from './DocumentHeaderComponent'
 import NoDocument from './NoDocument'
 
@@ -27,13 +28,13 @@ const defaultDocument = {
 
 const DocumentHeaderContainer = ({
   createMode,
-  documentMode,
   fetchDocument,
   isFullScreen,
-  uiToggleDocumentMode,
+  isDocumentPanelOpen,
+  receiveRemoteFieldChange,
+  toggleDocumentPanel,
   uiToggleFullScreen,
   updateDocument,
-  receiveRemoteFieldChange,
   updateDocumentRoomUsers,
   updateRemoteUserFieldFocus
 }) => {
@@ -143,9 +144,8 @@ const DocumentHeaderContainer = ({
     uiToggleFullScreen(!isFullScreen)
   }
 
-  function toggleDocumentMode(e) {
-    const mode = documentMode === DOCUMENT_MODE.NORMAL ? DOCUMENT_MODE.EDIT : DOCUMENT_MODE.NORMAL
-    uiToggleDocumentMode(mode)
+  function toggleDocumentPanelHandler(e) {
+    toggleDocumentPanel(!isDocumentPanelOpen)
   }
 
   return (
@@ -156,10 +156,10 @@ const DocumentHeaderContainer = ({
 
       <DocumentHeaderComponent
         document={currentDocument}
-        documentMode={documentMode}
         isFullScreen={isFullScreen}
+        isDocumentPanelOpen={isDocumentPanelOpen}
         nameChangeHandler={nameChangeHandler}
-        toggleDocumentMode={toggleDocumentMode}
+        toggleDocumentPanel={toggleDocumentPanelHandler}
         toggleFullScreenHandler={toggleFullScreenHandler} />
     </>
   )
@@ -167,34 +167,34 @@ const DocumentHeaderContainer = ({
 
 DocumentHeaderContainer.propTypes = {
   createMode: PropTypes.bool.isRequired,
-  documentMode: PropTypes.string,
   fetchDocument: PropTypes.func.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
-  uiToggleDocumentMode: PropTypes.func.isRequired,
+  isDocumentPanelOpen: PropTypes.bool.isRequired,
+  receiveRemoteFieldChange: PropTypes.func.isRequired,
+  toggleDocumentPanel: PropTypes.func.isRequired,
   uiToggleFullScreen: PropTypes.func.isRequired,
   updateDocument: PropTypes.func.isRequired,
-  receiveRemoteFieldChange: PropTypes.func.isRequired,
   updateDocumentRoomUsers: PropTypes.func.isRequired,
-  updateRemoteUserFieldFocus: PropTypes.func.isRequired
+  updateRemoteUserFieldFocus: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
     createMode: state.ui.documents.createMode,
-    documentMode: state.ui.document.documentMode,
     fields: state.documentFields[state.documents.currentDocumentId],
-    isFullScreen: state.ui.document.isFullScreen
+    isFullScreen: state.ui.document.isFullScreen,
+    isDocumentPanelOpen: state.documentPanel.panel.visible,
   }
 }
 
 const mapDispatchToProps = {
   fetchDocument,
-  updateDocument,
-  uiToggleDocumentMode,
-  uiToggleFullScreen,
   receiveRemoteFieldChange,
+  toggleDocumentPanel,
+  uiToggleFullScreen,
+  updateDocument,
+  updateDocumentRoomUsers,
   updateRemoteUserFieldFocus,
-  updateDocumentRoomUsers
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentHeaderContainer)

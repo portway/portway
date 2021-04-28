@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FIELD_TYPES } from 'Shared/constants'
+
+const STRING_MAX_LENGTH = 255
 
 const FieldStringComponent = ({
   autoFocusElement,
@@ -13,32 +15,56 @@ const FieldStringComponent = ({
   onFocus,
   readOnly
 }) => {
+  const [counterVisible, setCounterVisible] = useState(false)
   const focusRef = useRef()
+
   useEffect(() => {
     if (autoFocusElement && focusRef.current) {
       focusRef.current.focus()
     }
   }, [autoFocusElement])
+
+  useEffect(() => {
+    let interval = null
+    if (counterVisible) {
+      interval = setInterval(() => {
+        setCounterVisible(false)
+      }, 5000)
+    }
+    return () => { clearInterval(interval) }
+  }, [counterVisible])
+
   return (
-    <input
-      // eslint-disable-next-line jsx-a11y/no-autofocus
-      autoFocus={autoFocusElement}
-      className="document-field__string"
-      value={value || ''}
-      onBlur={(e) => { onBlur(id, type, documentId) }}
-      onChange={(e) => {
-        onChange(id, e.target.value)
-      }}
-      onFocus={(e) => {
-        if (!readOnly) {
-          onFocus(id, type, documentId)
-          e.target.select()
+    <>
+      <input
+        // eslint-disable-next-line jsx-a11y/no-autofocus
+        autoFocus={autoFocusElement}
+        className="document-field__string"
+        value={value || ''}
+        onBlur={(e) => { onBlur(id, type, documentId) }}
+        onChange={(e) => {
+          setCounterVisible(true)
+          onChange(id, e.target.value)
+        }}
+        onFocus={(e) => {
+          if (!readOnly) {
+            onFocus(id, type, documentId)
+            e.target.select()
+          }
+        }}
+        placeholder="A string value..."
+        readOnly={readOnly}
+        ref={focusRef}
+        type="text"
+        maxLength={STRING_MAX_LENGTH} />
+      <span className="document-field__string-status">
+        {counterVisible &&
+        <>
+        {focusRef.current && focusRef.current.value.length} / {STRING_MAX_LENGTH}
+        </>
         }
-      }}
-      placeholder="A string value..."
-      readOnly={readOnly}
-      ref={focusRef}
-      type="text" />
+      </span>
+    </>
   )
 }
 

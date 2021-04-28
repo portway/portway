@@ -1,5 +1,5 @@
 import BusinessField from '../businesstime/field'
-import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../constants/fieldTypes'
+import { FIELD_TYPES, FIELD_PROPS_TO_COPY } from '../constants/fieldTypes'
 import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { callFuncWithArgs } from '../libs/utils'
@@ -15,6 +15,8 @@ import { LOG_LEVELS } from '../constants/logging'
 import jobQueue from '../integrators/jobQueue'
 import sharp from 'sharp'
 import { getRenderedValueByType } from '../libs/fieldRenderedValue'
+import fieldSchema from '../controllers/payloadSchemas/field'
+import joiErrorToApiError from '../libs/joiErrorToApiError'
 
 const stat = util.promisify(fs.stat)
 
@@ -75,7 +77,21 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
 
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
+  // when we update a field value, we need to validate its value against its type, which won't usually be passed in the update body,
+  // so won't be handled in the controller body validator
+  // we have the original field and type at this point, so we can validate the value
+  // NOTE: this will always result in error details being passed to the calling controller,
+  // if we don't want these included in the payload, remove them there before sending
+
+  if (body.value) {
+    const { error } = fieldSchema.validate({ ...body, type: field.type })
+    if (error && error.name === 'ValidationError') {
+      throw joiErrorToApiError(error, true)
+    }
+  }
+
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
+
   let updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 
   // set the rendered value on the field
@@ -136,6 +152,8 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
         const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
         fieldBody.value = url
         fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
+        // always clear out the field formats, this will get updated by a worker later
+        fieldBody.formats = null
       }
       break
     case FIELD_TYPES.TEXT:
@@ -149,8 +167,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
   }
   return fieldBody
 }
-
-const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name', 'structuredValue']
 
 const duplicateField = async function(id, originalParentDocId, newParentDocId, orgId) {
   const field = await BusinessField.findByIdForDocument(id, originalParentDocId, orgId)

@@ -61,10 +61,16 @@ const duplicateDocument = async (documentId, projectId, orgId) => {
   const document = await BusinessDocument.findByIdForProject(documentId, projectId, orgId)
   // fetch the fields
   const fields = await BusinessField.findAllDraftForDocument(documentId, orgId)
-  // creatch the dupe doc body
+  // create the dupe doc body
+  let slug
+  if (document.slug != null) {
+    // sanitize the new slug
+    slug = `${document.slug}-copy`.toLowerCase().replace(/[^a-z0-9\-]/g, '-').slice(0, 140)
+  }
+
   const body = {
-    name: `${document.name}_copy`,
-    slug: `${document.slug}_copy`,
+    name: `${document.name} copy`,
+    slug,
     projectId: document.projectId,
     orgId
   }

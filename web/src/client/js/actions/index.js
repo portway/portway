@@ -151,7 +151,6 @@ export const ActionTypes = {
   UI_CREATE_WEBHOOK_MODE: 'UI_CREATE_WEBHOOK_MODE',
   UI_DOCUMENT_CREATE: 'UI_DOCUMENT_CREATE',
   UI_DOCUMENT_FULL_SCREEN: 'UI_DOCUMENT_FULL_SCREEN',
-  UI_DOCUMENT_MODE: 'UI_DOCUMENT_MODE',
   UI_INITIATE_CONFIRMATION: 'UI_INITIATE_CONFIRMATION',
   // Search
   SEARCH_CLEAR: 'SEARCH_CLEAR',
@@ -172,7 +171,11 @@ export const ActionTypes = {
   REMOTE_FIELD_CHANGE_EVENT_RECEIVED: 'REMOTE_FIELD_CHANGE_EVENT_RECEIVED',
   // Organization Sync
   DOCUMENT_CREATED_EVENT_EMITTED: 'DOCUMENT_CREATED_EVENT_EMITTED',
-  DOCUMENT_CREATED_EVENT_RECEIVED: 'DOCUMENT_CREATED_EVENT_RECEIVED'
+  DOCUMENT_CREATED_EVENT_RECEIVED: 'DOCUMENT_CREATED_EVENT_RECEIVED',
+  // Document Panel
+  DOCUMENT_PANEL_TOGGLE: 'DOCUMENT_PANEL_TOGGLE',
+  DOCUMENT_PANEL_TAB_SELECTION: 'DOCUMENT_PANEL_TAB_SELECTION',
+  DOCUMENT_PANEL_FIELD_SELECTION: 'DOCUMENT_PANEL_FIELD_SELECTION',
 }
 
 export const Route = {
@@ -362,7 +365,6 @@ export const UI = {
   createUserMode: makeActionCreator(ActionTypes.UI_CREATE_USER_MODE, 'value'),
   documentCreate: makeActionCreator(ActionTypes.UI_DOCUMENT_CREATE, 'value'),
   initiateConfirm: makeActionCreator(ActionTypes.UI_INITIATE_CONFIRMATION, 'message', 'options'),
-  toggleDocumentMode: makeActionCreator(ActionTypes.UI_DOCUMENT_MODE, 'value'),
   toggleFullScreen: makeActionCreator(ActionTypes.UI_DOCUMENT_FULL_SCREEN, 'value'),
 }
 
@@ -391,4 +393,10 @@ export const OrganizationSync = {
   documentCreatedEventEmitted: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_EMITTED, 'projectId'),
   documentCreatedEventReceived: makeActionCreator(ActionTypes.DOCUMENT_CREATED_EVENT_RECEIVED, 'projectId'),
   socketError: makeActionCreator(ActionTypes.SOCKET_ERROR)
+}
+
+export const DocumentPanel = {
+  togglePanel: makeActionCreator(ActionTypes.DOCUMENT_PANEL_TOGGLE, 'value'),
+  selectTab: makeActionCreator(ActionTypes.DOCUMENT_PANEL_TAB_SELECTION, 'value'),
+  selectField: makeActionCreator(ActionTypes.DOCUMENT_PANEL_FIELD_SELECTION, 'value'),
 }

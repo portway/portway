@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link, useParams } from 'react-router-dom'
 import cx from 'classnames'
@@ -7,7 +7,6 @@ import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
 
 import {
-  DOCUMENT_MODE,
   MOBILE_MATCH_SIZE,
   MULTI_USER_PLAN_TYPES,
   PATH_PROJECT,
@@ -25,15 +24,16 @@ import { IconButton } from 'Components/Buttons/index'
 
 const DocumentHeaderComponent = ({
   document,
-  documentMode,
   isFullScreen,
+  isDocumentPanelOpen,
   nameChangeHandler,
-  toggleDocumentMode,
+  toggleDocumentPanel,
   toggleFullScreenHandler,
 }) => {
   const { projectId } = useParams()
   const documentRef = useRef()
   const titleRef = useRef()
+  const [documentName, setDocumentName ] = useState(document.name)
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // If we've exited fullscreen, but the UI is still in fullscreen
@@ -51,6 +51,13 @@ const DocumentHeaderComponent = ({
       window.document.removeEventListener('webkitfullscreenchange', fullScreenChangeHandler, false)
     }
   })
+
+  useEffect(() => {
+    // only set the document name from incoming data if the user isn't currenly focused on that element
+    if (window.document.activeElement !== titleRef.current) {
+      setDocumentName(document.name)
+    }
+  }, [document.name])
 
   if (!document.id) return null
 
@@ -71,8 +78,8 @@ const DocumentHeaderComponent = ({
     'document__users-list--without-settings': documentReadOnlyMode
   })
 
-  const panelButtonColor = documentMode === DOCUMENT_MODE.NORMAL ? 'transparent' : ''
-  const panelIconFill = documentMode === DOCUMENT_MODE.NORMAL ? 'var(--theme-icon-color)' : 'var(--color-blue)'
+  const panelButtonColor = isDocumentPanelOpen ? '' : 'transparent'
+  const panelIconFill = isDocumentPanelOpen ? 'var(--color-blue)' : 'var(--theme-icon-color)'
 
   const changeHandlerAction = debounce(500, (e) => {
     nameChangeHandler(e)
@@ -109,9 +116,10 @@ const DocumentHeaderComponent = ({
       <div className="document__title-container">
         <input
           className="document__title"
-          defaultValue={document.name}
+          value={documentName}
           onChange={(e) => {
             e.persist()
+            setDocumentName(e.target.value)
             changeHandlerAction(e)
           }}
           onKeyDown={(e) => {
@@ -130,7 +138,10 @@ const DocumentHeaderComponent = ({
       </OrgPlanPermission>
       <ProjectPermission acceptedRoleIds={[PROJECT_ROLE_IDS.ADMIN, PROJECT_ROLE_IDS.CONTRIBUTOR]}>
         <div className="document__toggle-container">
-          <IconButton color={panelButtonColor} onClick={toggleDocumentMode} title="Toggle the document panel">
+          {isDocumentPanelOpen &&
+          <span className="note">Close the document panel</span>
+          }
+          <IconButton color={panelButtonColor} onClick={toggleDocumentPanel} title="Toggle the document panel">
             <PanelIcon fill={panelIconFill} />
           </IconButton>
         </div>
@@ -142,10 +153,10 @@ const DocumentHeaderComponent = ({
 // @todo fill out this document object and add defaults
 DocumentHeaderComponent.propTypes = {
   document: PropTypes.object,
-  documentMode: PropTypes.string,
+  isDocumentPanelOpen: PropTypes.bool.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   nameChangeHandler: PropTypes.func.isRequired,
-  toggleDocumentMode: PropTypes.func.isRequired,
+  toggleDocumentPanel: PropTypes.func.isRequired,
   toggleFullScreenHandler: PropTypes.func.isRequired,
 }
 
