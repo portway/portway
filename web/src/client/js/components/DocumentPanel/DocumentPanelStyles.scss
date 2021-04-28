@@ -77,6 +77,7 @@
   font-size: 1.2rem;
   text-align: center;
   padding: 1rem 0;
+  width: 100%;
 
   .btn {
     font-size: 1.2rem;
@@ -135,7 +136,13 @@
 
 // The content part of the panel
 .document-panel__tab-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 1rem;
+  &[hidden] {
+    display: none;
+  }
 }
 
 /**

@@ -20,6 +20,11 @@ export const documentPanel = (state = initialState, action) => {
       }
     }
 
+    // If we're removing a document, reset the panel
+    case ActionTypes.INITIATE_DOCUMENT_REMOVE: {
+      return { ...initialState }
+    }
+
     // Switching tabs in the panel
     case ActionTypes.DOCUMENT_PANEL_TAB_SELECTION: {
       return {
