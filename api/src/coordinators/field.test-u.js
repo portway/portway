@@ -241,7 +241,7 @@ describe('fieldCoordinator', () => {
     })
   })
 
-  describe('#addImageFieldFromUrlToDocument', () => {
+  describe('#addAssetFieldFromUrlToDocument', () => {
     const url = 'https://bonkeybong.com/picture.jpg'
     const docId = 12
     const body = {
@@ -255,7 +255,7 @@ describe('fieldCoordinator', () => {
       })
       fieldCoordinator.addFieldToDocument.mockImplementationOnce()
       callFuncWithArgs.mockReturnValueOnce({ size: 143 })
-      await fieldCoordinator.addImageFieldFromUrlToDocument(docId, body, url)
+      await fieldCoordinator.addAssetFieldFromUrlToDocument(docId, body, url)
     })
 
     it('should call promisifyStreamPipe', () => {
