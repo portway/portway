@@ -42,7 +42,7 @@ const addFieldToDocument = async function(documentId, body, file) {
   return field
 }
 
-const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
+const addAssetFieldFromUrlToDocument = async function(documentId, body, url) {
   const filePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
 
   const resp = await axios({ url, responseType: 'stream', method: 'get' })
@@ -53,7 +53,7 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
 
   const urlPath = path.parse(url)
   // truncate the file name
-  const truncatedName = `${urlPath.name.slice(0, 14)}${urlPath.ext}`
+  const truncatedName = `${urlPath.name.slice(0, 13)}${urlPath.ext}`
 
   // This is mimic'ing multer's file object.
   // Not ideal to be passing the multer object around, but that's a larger rewrite to fix
@@ -178,8 +178,8 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
   }, {})
   body.orgId = orgId
 
-  if (body.type === FIELD_TYPES.IMAGE) {
-    return fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, body.value)
+  if (body.type === FIELD_TYPES.IMAGE || body.type === FIELD_TYPES.FILE) {
+    return fieldCoordinator.addAssetFieldFromUrlToDocument(newParentDocId, body, body.value)
   } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object') {
     body.value = body.value.toISOString()
   }
@@ -189,7 +189,7 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
 
 const fieldCoordinator = {
   addFieldToDocument,
-  addImageFieldFromUrlToDocument,
+  addAssetFieldFromUrlToDocument,
   updateDocumentField,
   removeDocumentField,
   duplicateField

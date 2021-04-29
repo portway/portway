@@ -44,7 +44,7 @@ const copyIntroProjectToOrg = async (orgId) => {
       body.orgId = orgId
 
       if (body.type === FIELD_TYPES.IMAGE) {
-        return fieldCoordinator.addImageFieldFromUrlToDocument(newDoc.id, body, field.value)
+        return fieldCoordinator.addAssetFieldFromUrlToDocument(newDoc.id, body, field.value)
       }
       return BusinessField.createForDocument(newDoc.id, body)
     }, Promise.resolve())
