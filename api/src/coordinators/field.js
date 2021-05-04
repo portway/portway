@@ -150,7 +150,13 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
       if (file) {
         const cleanFilePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
         const cleanImageInfo = await sharp(file.path).toFile(cleanFilePath)
-        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
+
+        // for svgs, use the original file, not the sharp-processed image
+        // using the processed image was resulting in corrupted svg data
+        // we're still using the returned cleanImageInfo for svg metadata like width and height though
+        const fileLocation = file.mimetype === 'image/svg+xml' ? file.path : cleanFilePath
+      
+        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: fileLocation, size: cleanImageInfo.size })
         fieldBody.value = url
         fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
         // always clear out the field formats, this will get updated by a worker later
