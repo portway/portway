@@ -22,6 +22,7 @@ import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContai
 
 import './_Document.scss'
 import { IconButton } from 'Components/Buttons/index'
+import isDocumentReadOnly from '../../utilities/isDocumentReadOnly'
 
 const DocumentHeaderComponent = ({
   document,
@@ -64,26 +65,11 @@ const DocumentHeaderComponent = ({
   if (!document.id) return null
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
-  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
   const supportsFullScreen = documentRef.current && (documentRef.current.requestFullscreen || documentRef.current.webkitRequestFullscreen)
   const isLikelyAniPad = 'ontouchstart' in window && navigator.platform === 'MacIntel'
 
-  let documentReadOnlyMode
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    /**
-      Can edit the document name:
-      * If a user is a READER role, and the project is publicly WRITABLE
-      * If a user is a WRITER role, assigned to the project, and the project is publicly READABLE
-      * If a user is not assigned the project, and the project is publicly WRITABLE
-
-      Cannot:
-      * If a user is not assigned the project, and the project is publicly READABLE
-    */
-    documentReadOnlyMode = (projectAssignment == null && project.accessLevel === PROJECT_ACCESS_LEVELS.READ) ||
-                           (projectAssignment && readOnlyRoleIds.includes(projectAssignment.roleId))
-  }
+  const documentReadOnlyMode = isDocumentReadOnly(assignmentLoading, projectAssignment, project.accessLevel)
 
   const documentUsersClasses = cx({
     'document__users-list': true,

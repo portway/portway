@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { FIELD_TYPES, PROJECT_ROLE_IDS, PROJECT_ACCESS_LEVELS } from 'Shared/constants'
+import { FIELD_TYPES } from 'Shared/constants'
 import { debounce, getNewNameInSequence } from 'Shared/utilities'
 import useDataService from 'Hooks/useDataService'
 import dataMapper from 'Libs/dataMapper'
@@ -14,6 +14,7 @@ import { blurField, createField, focusField, updateField } from 'Actions/field'
 import { fetchDocument } from 'Actions/document'
 
 import DocumentFieldsComponent from './DocumentFieldsComponent'
+import isDocumentReadOnly from '../../utilities/isDocumentReadOnly'
 
 const DocumentFieldsContainer = ({
   activeDocumentUsers,
@@ -40,19 +41,7 @@ const DocumentFieldsContainer = ({
   const projectAssignment = userProjectAssignments[Number(projectId)]
   const fields = foundFields || {}
 
-  let documentReadOnlyMode = false
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    // User has the project reader role and project is not set to "write"
-    if (projectAssignment &&
-      PROJECT_ROLE_IDS.READER === projectAssignment.roleId &&
-      project.accessLevel !== PROJECT_ACCESS_LEVELS.WRITE
-    ) {
-      documentReadOnlyMode = true
-    } else if (projectAssignment === undefined && project.accessLevel === PROJECT_ACCESS_LEVELS.READ) {
-      documentReadOnlyMode = true
-    }
-  }
+  const documentReadOnlyMode = isDocumentReadOnly(assignmentLoading, projectAssignment, project.accessLevel)
 
   const sortedFields = useMemo(() => {
     fieldKeys.current = Object.keys(fields)
