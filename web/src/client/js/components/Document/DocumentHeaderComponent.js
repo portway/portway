@@ -9,9 +9,10 @@ import dataMapper from 'Libs/dataMapper'
 import {
   MOBILE_MATCH_SIZE,
   MULTI_USER_PLAN_TYPES,
+  ORG_SUBSCRIPTION_STATUS,
   PATH_PROJECT,
-  PROJECT_ROLE_IDS,
-  ORG_SUBSCRIPTION_STATUS
+  PROJECT_ACCESS_LEVELS,
+  PROJECT_ROLE_IDS
 } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
@@ -21,6 +22,7 @@ import DocumentUsersContainer from 'Components/DocumentUsers/DocumentUsersContai
 
 import './_Document.scss'
 import { IconButton } from 'Components/Buttons/index'
+import isDocumentReadOnly from '../../utilities/isDocumentReadOnly'
 
 const DocumentHeaderComponent = ({
   document,
@@ -33,7 +35,8 @@ const DocumentHeaderComponent = ({
   const { projectId } = useParams()
   const documentRef = useRef()
   const titleRef = useRef()
-  const [documentName, setDocumentName ] = useState(document.name)
+  const [documentName, setDocumentName] = useState(document.name)
+  const { data: project } = useDataService(dataMapper.projects.id(projectId), [projectId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // If we've exited fullscreen, but the UI is still in fullscreen
@@ -62,16 +65,11 @@ const DocumentHeaderComponent = ({
   if (!document.id) return null
 
   const projectAssignment = userProjectAssignments[Number(projectId)]
-  const readOnlyRoleIds = [PROJECT_ROLE_IDS.READER]
   const mobileView = window.matchMedia(MOBILE_MATCH_SIZE).matches
   const supportsFullScreen = documentRef.current && (documentRef.current.requestFullscreen || documentRef.current.webkitRequestFullscreen)
   const isLikelyAniPad = 'ontouchstart' in window && navigator.platform === 'MacIntel'
 
-  let documentReadOnlyMode
-  // False because null / true == loading
-  if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
-  }
+  const documentReadOnlyMode = isDocumentReadOnly(assignmentLoading, projectAssignment, project.accessLevel)
 
   const documentUsersClasses = cx({
     'document__users-list': true,
