@@ -9,9 +9,10 @@ import dataMapper from 'Libs/dataMapper'
 import {
   MOBILE_MATCH_SIZE,
   MULTI_USER_PLAN_TYPES,
+  ORG_SUBSCRIPTION_STATUS,
   PATH_PROJECT,
-  PROJECT_ROLE_IDS,
-  ORG_SUBSCRIPTION_STATUS
+  PROJECT_ACCESS_LEVELS,
+  PROJECT_ROLE_IDS
 } from 'Shared/constants'
 import { debounce } from 'Shared/utilities'
 import { ArrowIcon, ExpandIcon, PanelIcon } from 'Components/Icons'
@@ -33,7 +34,8 @@ const DocumentHeaderComponent = ({
   const { projectId } = useParams()
   const documentRef = useRef()
   const titleRef = useRef()
-  const [documentName, setDocumentName ] = useState(document.name)
+  const [documentName, setDocumentName] = useState(document.name)
+  const { data: project } = useDataService(dataMapper.projects.id(projectId), [projectId])
   const { data: userProjectAssignments = {}, loading: assignmentLoading } = useDataService(dataMapper.users.currentUserProjectAssignments())
 
   // If we've exited fullscreen, but the UI is still in fullscreen
@@ -70,7 +72,11 @@ const DocumentHeaderComponent = ({
   let documentReadOnlyMode
   // False because null / true == loading
   if (assignmentLoading === false) {
-    documentReadOnlyMode = projectAssignment == null || readOnlyRoleIds.includes(projectAssignment.roleId)
+    // If a user is a READER role, but the project is publicly WRITABLE, they can edit the document
+    // If a user is a WRITER role, assigned to the project, and the project is publicly READABLE, they can edit the document
+    // If a user is not assigned the project, but the project is publicly WRITABLE, they can edit the project
+    documentReadOnlyMode = projectAssignment == null && project.accessLevel === PROJECT_ACCESS_LEVELS.READ ||
+                           (projectAssignment && readOnlyRoleIds.includes(projectAssignment.roleId))
   }
 
   const documentUsersClasses = cx({
