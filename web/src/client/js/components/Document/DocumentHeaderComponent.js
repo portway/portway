@@ -75,7 +75,7 @@ const DocumentHeaderComponent = ({
     // If a user is a READER role, but the project is publicly WRITABLE, they can edit the document
     // If a user is a WRITER role, assigned to the project, and the project is publicly READABLE, they can edit the document
     // If a user is not assigned the project, but the project is publicly WRITABLE, they can edit the project
-    documentReadOnlyMode = projectAssignment == null && project.accessLevel === PROJECT_ACCESS_LEVELS.READ ||
+    documentReadOnlyMode = (projectAssignment == null && project.accessLevel === PROJECT_ACCESS_LEVELS.READ) ||
                            (projectAssignment && readOnlyRoleIds.includes(projectAssignment.roleId))
   }
 
