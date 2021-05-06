@@ -1,5 +1,6 @@
 import BusinessProject from '../businesstime/project'
 import BusinessProjectUser from '../businesstime/projectuser'
+import BusinessWebhook from '../businesstime/webhook'
 import documentCoordinator from './document'
 import { PROJECT_ROLE_IDS } from '../constants/roles'
 
@@ -18,6 +19,7 @@ const deleteById = async (projectId, orgId) => {
 
   await BusinessProjectUser.removeAllUsersFromProject(projectId, orgId)
   await documentCoordinator.deleteAllForProject(projectId, orgId)
+  await BusinessWebhook.deleteAllForProject(projectId, orgId)
   await BusinessProject.deleteById(projectId, orgId)
 }
 

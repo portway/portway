@@ -10,13 +10,13 @@ function ArrowIcon({ className, direction, fill, height, width }) {
       arrowDirection = 'rotate(0deg)'
       break
     case 'down':
-      arrowDirection = 'rotate(180deg)'
+      arrowDirection = 'rotate(270deg)'
       break
     case 'left':
-      arrowDirection = 'rotate(0deg)'
+      arrowDirection = 'rotate(360deg)'
       break
     case 'right':
-      arrowDirection = 'rotate(90deg)'
+      arrowDirection = 'rotate(180deg)'
       break
     default:
       arrowDirection = 'rotate(0deg)'

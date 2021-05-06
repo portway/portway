@@ -73,8 +73,8 @@ describe('introCoordinator', () => {
       expect(BusinessDocument.createForProject.mock.calls.length).toBe(2)
     })
 
-    it('should call fieldCoordinator.addImageFieldFromUrlToDocument', () => {
-      expect(fieldCoordinator.addImageFieldFromUrlToDocument.mock.calls.length).toBe(2)
+    it('should call fieldCoordinator.addAssetFieldFromUrlToDocument', () => {
+      expect(fieldCoordinator.addAssetFieldFromUrlToDocument.mock.calls.length).toBe(2)
     })
 
     it('should call BusinessField.createForDocument', () => {

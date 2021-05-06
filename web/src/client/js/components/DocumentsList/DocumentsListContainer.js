@@ -34,6 +34,7 @@ const DocumentsListContainer = ({
   searchDocuments,
   searchResults,
   searchTerm,
+  status,
   uiConfirm,
   uiDocumentCreate,
   unpublishDocument,
@@ -189,6 +190,7 @@ const DocumentsListContainer = ({
       readOnly={readOnly}
       removeDocumentHandler={removeDocumentHandler}
       searchDocumentsHandler={searchDocumentsHandler}
+      status={status}
       unpublishDocumentHandler={unpublishDocumentHandler}
     />
   )
@@ -208,6 +210,7 @@ DocumentsListContainer.propTypes = {
   searchDocuments: PropTypes.func.isRequired,
   searchResults: PropTypes.object,
   searchTerm: PropTypes.string,
+  status: PropTypes.object.isRequired,
   uiConfirm: PropTypes.func.isRequired,
   uiDocumentCreate: PropTypes.func.isRequired,
   unpublishDocument: PropTypes.func.isRequired,
@@ -222,6 +225,7 @@ const mapStateToProps = (state) => {
     isSearching: state.ui.documents.isSearching,
     searchResults: state.search.searchResultsByDocumentId,
     searchTerm: state.search.searchTerm,
+    status: state.ui.status,
     projectDocumentsLoading: state.documents.loading.byProject
   }
 }

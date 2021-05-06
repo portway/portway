@@ -125,6 +125,8 @@ const PROJECT_ROLE_NAMES = {
   [PROJECT_ROLE_IDS.READER]: 'Reader'
 }
 
+const READ_ONLY_ROLE_IDS = [PROJECT_ROLE_IDS.READER]
+
 const PROJECT_ACCESS_LEVELS = {
   READ: 'read',
   WRITE: 'write'
@@ -159,6 +161,10 @@ const QUERY_PARAMS = {
 const DOCUMENT_MODE = {
   NORMAL: 'NORMAL',
   EDIT: 'EDIT',
+}
+
+const STATUS_TYPES = {
+  DUPLICATING_DOCUMENT: 'DUPLICATING_DOCUMENT'
 }
 
 const NETWORK_STATUS = {
@@ -196,8 +202,6 @@ module.exports = {
   LABEL_NEW_DOCUMENT: 'New document',
   MAX_COOKIE_AGE_MS: 1.21e+9, // 14 days
   MAX_FIELD_NAME_SIZE: 50,
-  MAX_FILE_SIZE: 10000000,
-  MAX_AVATAR_SIZE: 1024 * 1000,
   MIN_PASSWORD_LENGTH: 8,
   // Page titles
   TITLE_PROJECTS: 'Projects',
@@ -227,6 +231,7 @@ module.exports = {
   PROJECT_ACCESS_LEVELS: PROJECT_ACCESS_LEVELS,
   PROJECT_ROLE_IDS: PROJECT_ROLE_IDS,
   PROJECT_ROLE_NAMES: PROJECT_ROLE_NAMES,
+  READ_ONLY_ROLE_IDS: READ_ONLY_ROLE_IDS,
   // Plans
   LOCKED_ACCOUNT_STATUSES,
   ORG_SUBSCRIPTION_STATUS: ORG_SUBSCRIPTION_STATUS,
@@ -248,5 +253,22 @@ module.exports = {
   SUPPORT_LINK: 'https://getportway.com/support',
   // UI Related
   DOCUMENT_MODE: DOCUMENT_MODE,
+  STATUS_TYPES: STATUS_TYPES,
   MOBILE_MATCH_SIZE: '(max-width: 768px)',
+  // Files max values
+  MAX_FILE_SIZE_BYTES: 10e7,
+  MAX_AVATAR_SIZE: 1024 * 1000,
+  IMAGE_ALLOWED_TYPES: [
+    'image/apng',
+    'image/bmp',
+    'image/gif',
+    'image/jpeg',
+    'image/png',
+    'image/svg+xml',
+    'image/webp',
+    'image/x-icon'
+  ],
+  FILES_DISALLOWED_EXTENSIONS: [
+    'exe',
+  ],
 }

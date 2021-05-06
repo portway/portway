@@ -1,5 +1,5 @@
 import BusinessField from '../businesstime/field'
-import { FIELD_TYPES, IMAGE_ALIGNMENT_OPTIONS } from '../constants/fieldTypes'
+import { FIELD_TYPES, FIELD_PROPS_TO_COPY } from '../constants/fieldTypes'
 import { processMarkdownSync } from './markdown'
 import assetCoordinator from './assets'
 import { callFuncWithArgs } from '../libs/utils'
@@ -15,6 +15,8 @@ import { LOG_LEVELS } from '../constants/logging'
 import jobQueue from '../integrators/jobQueue'
 import sharp from 'sharp'
 import { getRenderedValueByType } from '../libs/fieldRenderedValue'
+import fieldSchema from '../controllers/payloadSchemas/field'
+import joiErrorToApiError from '../libs/joiErrorToApiError'
 
 const stat = util.promisify(fs.stat)
 
@@ -40,7 +42,7 @@ const addFieldToDocument = async function(documentId, body, file) {
   return field
 }
 
-const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
+const addAssetFieldFromUrlToDocument = async function(documentId, body, url) {
   const filePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
 
   const resp = await axios({ url, responseType: 'stream', method: 'get' })
@@ -49,13 +51,14 @@ const addImageFieldFromUrlToDocument = async function(documentId, body, url) {
 
   const fileStats = await callFuncWithArgs(stat, filePath)
 
-  const urlParts = url.split('/')
-  const name = urlParts[urlParts.length - 1]
+  const urlPath = path.parse(url)
+  // truncate the file name
+  const truncatedName = `${urlPath.name.slice(0, 13)}${urlPath.ext}`
 
   // This is mimic'ing multer's file object.
   // Not ideal to be passing the multer object around, but that's a larger rewrite to fix
   const file = {
-    originalname: name,
+    originalname: truncatedName,
     mimetype: lookup(url),
     path: filePath,
     size: fileStats.size
@@ -75,7 +78,21 @@ const updateDocumentField = async function(fieldId, documentId, orgId, body, fil
 
   if (!field) throw ono({ code: 404 }, `Cannot update, field not found with id: ${fieldId}`)
 
+  // when we update a field value, we need to validate its value against its type, which won't usually be passed in the update body,
+  // so won't be handled in the controller body validator
+  // we have the original field and type at this point, so we can validate the value
+  // NOTE: this will always result in error details being passed to the calling controller,
+  // if we don't want these included in the payload, remove them there before sending
+
+  if (body.value) {
+    const { error } = fieldSchema.validate({ ...body, type: field.type })
+    if (error && error.name === 'ValidationError') {
+      throw joiErrorToApiError(error, true)
+    }
+  }
+
   const fieldBody = await getFieldBodyByType({ ...body, type: field.type }, documentId, orgId, file)
+
   let updatedField = await BusinessField.updateByIdForDocument(fieldId, documentId, orgId, fieldBody)
 
   // set the rendered value on the field
@@ -133,9 +150,17 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
       if (file) {
         const cleanFilePath = path.resolve(__dirname, `../../uploads/${documentId}-${Date.now()}`)
         const cleanImageInfo = await sharp(file.path).toFile(cleanFilePath)
-        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: cleanFilePath, size: cleanImageInfo.size })
+
+        // for svgs, use the original file, not the sharp-processed image
+        // using the processed image was resulting in corrupted svg data
+        // we're still using the returned cleanImageInfo for svg metadata like width and height though
+        const fileLocation = file.mimetype === 'image/svg+xml' ? file.path : cleanFilePath
+      
+        const url = await assetCoordinator.addAssetForDocument(documentId, orgId, { ...file, path: fileLocation, size: cleanImageInfo.size })
         fieldBody.value = url
         fieldBody.meta = { width: cleanImageInfo.width, height: cleanImageInfo.height }
+        // always clear out the field formats, this will get updated by a worker later
+        fieldBody.formats = null
       }
       break
     case FIELD_TYPES.TEXT:
@@ -150,8 +175,6 @@ const getFieldBodyByType = async function(body, documentId, orgId, file) {
   return fieldBody
 }
 
-const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name', 'structuredValue']
-
 const duplicateField = async function(id, originalParentDocId, newParentDocId, orgId) {
   const field = await BusinessField.findByIdForDocument(id, originalParentDocId, orgId)
 
@@ -161,8 +184,8 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
   }, {})
   body.orgId = orgId
 
-  if (body.type === FIELD_TYPES.IMAGE) {
-    return fieldCoordinator.addImageFieldFromUrlToDocument(newParentDocId, body, body.value)
+  if (body.type === FIELD_TYPES.IMAGE || body.type === FIELD_TYPES.FILE) {
+    return fieldCoordinator.addAssetFieldFromUrlToDocument(newParentDocId, body, body.value)
   } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object') {
     body.value = body.value.toISOString()
   }
@@ -172,7 +195,7 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
 
 const fieldCoordinator = {
   addFieldToDocument,
-  addImageFieldFromUrlToDocument,
+  addAssetFieldFromUrlToDocument,
   updateDocumentField,
   removeDocumentField,
   duplicateField

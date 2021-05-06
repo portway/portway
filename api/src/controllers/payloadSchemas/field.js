@@ -6,7 +6,7 @@ export const rawSchema = {
   value: Joi.any().when('type', {
     switch: [
       { is: FIELD_TYPES.TEXT, then: Joi.string() },
-      { is: FIELD_TYPES.STRING, then: Joi.string() },
+      { is: FIELD_TYPES.STRING, then: Joi.string().max(255) },
       { is: FIELD_TYPES.IMAGE, then: Joi.string() },
       { is: FIELD_TYPES.NUMBER, then: Joi.number().strict() },
       { is: FIELD_TYPES.DATE, then: Joi.date().iso() }
