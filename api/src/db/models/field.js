@@ -21,8 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       meta: DataTypes.JSON,
       renderedValue: DataTypes.TEXT,
-      formats: DataTypes.JSON,
-      // alignment and alt are specific to image type fields, so we have special getters to omit them if they are set to null 
+      // formats, alignment and alt are specific to image type fields, so we have special getters to omit them if they are set to null 
+      formats: {
+        type: DataTypes.JSON,
+        get() {
+          if (this.getDataValue('formats') == null) return
+          return this.getDataValue('formats')
+        }
+      },
       alignment: {
         type: DataTypes.STRING,
         get() {

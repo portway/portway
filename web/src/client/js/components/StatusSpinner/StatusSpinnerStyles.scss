@@ -1,0 +1,23 @@
+.status-spinner {
+  align-items: center;
+  display: flex;
+
+  &--leading {
+    flex-direction: row;
+  }
+
+  &--trailing {
+    flex-direction: row-reverse;
+  }
+}
+
+.status-spinner__label {
+  font-size: 1.2rem;
+
+  .status-spinner--leading & {
+    padding-right: var(--icon-margin);
+  }
+  .status-spinner--trailing & {
+    padding-left: var(--icon-margin);
+  }
+}

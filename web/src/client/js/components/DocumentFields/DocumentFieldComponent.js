@@ -33,7 +33,6 @@ const DocumentFieldComponent = ({
   onRename,
   onDiscard,
   readOnly,
-  settingsMode,
   usersById,
   remoteChangesInCurrentlyFocusedField,
   myFocusedFieldId,
@@ -179,7 +178,6 @@ const DocumentFieldComponent = ({
     'document-field--string': field.type === FIELD_TYPES.STRING,
     'document-field--image': field.type === FIELD_TYPES.IMAGE,
     'document-field--file': field.type === FIELD_TYPES.FILE,
-    'document-field--settings-mode': settingsMode,
     'document-field--is-being-remotely-edited': isBeingRemotelyEdited && singleUserEditField
   })
 
@@ -294,7 +292,6 @@ DocumentFieldComponent.propTypes = {
   onRename: PropTypes.func.isRequired,
   onDiscard: PropTypes.func.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  settingsMode: PropTypes.bool.isRequired,
   usersById: PropTypes.object,
   remoteChangesInCurrentlyFocusedField: PropTypes.array,
   myFocusedFieldId: PropTypes.number,

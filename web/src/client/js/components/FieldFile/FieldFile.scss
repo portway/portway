@@ -2,16 +2,10 @@
 
 // Field
 .document-field--file {
-
-  // .document-field__content {
-  //   align-items: unset;
-  // }
-
   .file-uploader {
     border: none;
     position: static;
   }
-
 }
 
 // Actual component
@@ -61,5 +55,4 @@
   .icon-file {
     margin-right: var(--icon-margin);
   }
-
 }

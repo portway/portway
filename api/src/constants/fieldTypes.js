@@ -27,4 +27,6 @@ export const IMAGE_ALIGNMENT_OPTIONS = {
   RIGHT: 'right'
 }
 
+export const FIELD_PROPS_TO_COPY = ['type', 'value', 'order', 'name', 'structuredValue', 'meta', 'alt', 'alignment', 'formats']
+
 export default { FIELD_TYPES, FIELD_TYPE_MODELS }

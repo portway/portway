@@ -5,12 +5,13 @@ import { FIELD_TYPES } from 'Shared/constants'
 import {
   DateIcon,
   DragIcon,
+  FieldSettingsIcon,
   FileIcon,
   ImageIcon,
   NumberIcon,
-  RemoveIcon,
   StringIcon,
   TextIcon,
+  TrashIcon
 } from 'Components/Icons'
 import { IconButton } from 'Components/Buttons'
 import { getFileExtension } from 'Utilities/fileUtilities'
@@ -23,6 +24,7 @@ const DocumentOutlineItem = ({
   dragStartHandler,
   dropHandler,
   field,
+  fieldSettingToggleHandler,
   index,
   isUpdating,
   onDestroy,
@@ -112,12 +114,15 @@ const DocumentOutlineItem = ({
       </div>
       <div className="document-outline__status">
         {isUpdating &&
-        <SpinnerComponent />
+        <SpinnerComponent width="18" height="18" />
         }
       </div>
       <div className="document-outline__actions">
-        <IconButton color="red" onClick={onDestroy}>
-          <RemoveIcon fill="var(--theme-surface)" width="14" height="14" />
+        <IconButton color="transparent" onClick={fieldSettingToggleHandler}>
+          <FieldSettingsIcon width="14" height="14" />
+        </IconButton>
+        <IconButton color="transparent" onClick={onDestroy}>
+          <TrashIcon width="14" height="14" />
         </IconButton>
       </div>
     </li>
@@ -131,6 +136,7 @@ DocumentOutlineItem.propTypes = {
   dragStartHandler: PropTypes.func.isRequired,
   dropHandler: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,
+  fieldSettingToggleHandler: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   isUpdating: PropTypes.bool,
   onDestroy: PropTypes.func.isRequired,

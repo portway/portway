@@ -47,8 +47,8 @@ export function getRenderedValueByType(field, value) {
         name,
         imageSource,
         alt: field.alt,
-        width: field.meta.width,
-        height: field.meta.height,
+        width: field.meta && field.meta.width,
+        height: field.meta && field.meta.height,
         alignment: field.alignment || IMAGE_ALIGNMENT_OPTIONS.CENTER,
         webpHalf: field.formats && field.formats.webp.half,
         webpFull: field.formats && field.formats.webp.full
