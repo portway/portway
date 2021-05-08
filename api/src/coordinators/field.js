@@ -183,10 +183,9 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
     return body
   }, {})
   body.orgId = orgId
-
-  if (body.type === FIELD_TYPES.IMAGE || body.type === FIELD_TYPES.FILE) {
+  if (body.type === FIELD_TYPES.IMAGE || body.type === FIELD_TYPES.FILE && body.value) {
     return fieldCoordinator.addAssetFieldFromUrlToDocument(newParentDocId, body, body.value)
-  } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object') {
+  } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object' && body.value) {
     body.value = body.value.toISOString()
   }
 
