@@ -183,7 +183,6 @@ const duplicateField = async function(id, originalParentDocId, newParentDocId, o
     return body
   }, {})
   body.orgId = orgId
-  console.log(body)
   if (body.type === FIELD_TYPES.IMAGE || body.type === FIELD_TYPES.FILE && body.value) {
     return fieldCoordinator.addAssetFieldFromUrlToDocument(newParentDocId, body, body.value)
   } else if (body.type === FIELD_TYPES.DATE && typeof body.value === 'object' && body.value) {
