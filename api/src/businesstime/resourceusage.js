@@ -59,9 +59,17 @@ async function deleteAllSoftDeletedBefore(timestamp) {
   })
 }
 
+async function findOrgAssetUsageValue(orgId) {
+  const db = getDb()
+  const usage = await db.model(MODEL_NAME).find({ where: { orgId, resourceType: RESOURCE_TYPES.ASSET }})
+
+  return usage ? usage.value : 0
+}
+
 export default {
   updateUsageByType,
   findOrCreateUsageByType,
   deleteAllForOrg,
-  deleteAllSoftDeletedBefore
+  deleteAllSoftDeletedBefore,
+  findOrgAssetUsageValue
 }

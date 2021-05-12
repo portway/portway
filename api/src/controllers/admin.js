@@ -14,6 +14,7 @@ import { deleteSoftDeletedResources } from '../coordinators/resources'
 import adminImageFieldFormatsSchema from './payloadSchemas/adminImageFieldFormats'
 import { validateBody } from '../libs/middleware/payloadValidation'
 import fieldCoordinator from '../coordinators/field'
+import adminCoordinator from '../coordinators/admin'
 
 const adminController = function(router) {
   /**
@@ -79,6 +80,11 @@ const adminController = function(router) {
     validateBody(adminImageFieldFormatsSchema, { includeDetails: true }),
     adminAuth,
     updateImageFieldFormats
+  )
+
+  router.get('/organizations/:orgId/details',
+    adminAuth,
+    getOrgDetails
   )
 }
 
@@ -188,6 +194,17 @@ const updateImageFieldFormats = async function(req, res, next) {
   try {
     const field = await fieldCoordinator.updateDocumentField(id, documentId, orgId, { formats: body })
     res.status(200).json({ data: field })
+  } catch (e) {
+    next(e)
+  }
+}
+
+const getOrgDetails = async function(req, res, next) {
+  const { orgId } = req.params
+
+  try {
+    const orgWithDetails = await adminCoordinator.getOrgWithDetails(orgId)
+    res.status(200).json({ data: orgWithDetails })
   } catch (e) {
     next(e)
   }
