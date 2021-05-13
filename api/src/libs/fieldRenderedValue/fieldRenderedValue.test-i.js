@@ -68,7 +68,7 @@ describe('fieldRenderedValue', () => {
         const half = 'webphalfsource'
         const full = 'webpfullsource'
 
-        beforeAll(async () => {   
+        beforeAll(async () => {
           result = await getRenderedValueByType({ ...field, formats: { webp: { half, full } } }, value)
         })
 
