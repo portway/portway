@@ -63,7 +63,15 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
 
       {field.type === FIELD_TYPES.IMAGE && field.value &&
       <a className="document-panel__image-link" href={field.value} target="_blank" rel="noopener noreferrer">
-        <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt && field.alt} />
+        <picture>
+          {field.formats && field.formats.webp &&
+          <source type="image/webp" srcSet={`${field.formats.webp.half}, ${field.formats.webp.full} 2x`} />
+          }
+          {field.formats && field.formats.original &&
+          <source type="<JJ_HERE>" srcSet={`${field.formats.original.half}, ${field.formats.original.full} 2x`} />
+          }
+          <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt && field.alt} />
+        </picture>
       </a>
       }
 
