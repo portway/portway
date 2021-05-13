@@ -41,11 +41,10 @@ export function getRenderedValueByType(field, value) {
       const html = renderMarkdownSync(value)
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ html, type: 'text', name })
     case FIELD_TYPES.IMAGE:
-      const imageSource = field.formats ? field.formats.webp.half : value
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({
         type: 'image',
         name,
-        imageSource,
+        value,
         alt: field.alt,
         width: field.meta && field.meta.width,
         height: field.meta && field.meta.height,
