@@ -136,7 +136,7 @@ const FieldImageComponent = ({
           <source type="image/webp" srcSet={`${webpSource.current.half}, ${webpSource.current.full} 2x`} />
           }
           {originalSource.current &&
-          <source type="<JJ_HERE>" srcSet={`${originalSource.current.half}, ${originalSource.current.full} 2x`} />
+          <source type={field.formats.original.mimeType} srcSet={`${originalSource.current.half}, ${originalSource.current.full} 2x`} />
           }
           <img
             alt={field && field.name}

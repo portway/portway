@@ -68,7 +68,7 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
           <source type="image/webp" srcSet={`${field.formats.webp.half}, ${field.formats.webp.full} 2x`} />
           }
           {field.formats && field.formats.original &&
-          <source type="<JJ_HERE>" srcSet={`${field.formats.original.half}, ${field.formats.original.full} 2x`} />
+          <source type={field.formats.original.mimeType} srcSet={`${field.formats.original.half}, ${field.formats.original.full} 2x`} />
           }
           <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt && field.alt} />
         </picture>

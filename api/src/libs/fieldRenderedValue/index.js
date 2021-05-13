@@ -53,6 +53,7 @@ export function getRenderedValueByType(field, value) {
         webpFull: field.formats && field.formats.webp.full,
         originalHalf: field.formats && field.formats.original.half,
         originalFull: field.formats && field.formats.original.full,
+        originalMimeType: field.formats && field.formats.original.mimeType
       })
     case FIELD_TYPES.NUMBER:
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.NUMBER]({ type: 'number', name, value })
