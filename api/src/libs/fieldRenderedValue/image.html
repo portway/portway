@@ -1,4 +1,11 @@
 <div data-source="portway" data-type="<%= type %>" data-name="<%= name %>" data-align="<%= alignment %>">
-  <img src="<%= imageSource %>" srcSet="<%= webpHalf %>, <%= webpFull %> 2x" alt="<%= alt %>"
-    width="<%= width %>" height="<%= height %>" align="<%= alignment %>" />
+  <% if (originalMimeType !== "image/svg+xml") { %>
+  <picture>
+    <source type="image/webp" srcset="<%= webpHalf %>, <%= webpFull %> 2x">
+    <source type="<%= originalMimeType %>" srcset="<%= originalHalf %>, <%= originalFull %> 2x">
+    <img src="<%= value %>" alt="<%= alt %>" width="<%= width %>" height="<%= height %>" align="<%= alignment %>" />
+  </picture>
+  <% } else { %>
+    <img src="<%= value %>" alt="<%= alt %>" width="<%= width %>" height="<%= height %>" align="<%= alignment %>" />
+  <% } %>
 </div>
