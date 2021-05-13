@@ -132,10 +132,10 @@ const FieldImageComponent = ({
       <div className={containerClassnames}>
         {imageSrc &&
         <picture>
-          {webpSource.current &&
+          {webpSource.current && field.formats && field.formats.original.mimeType !== 'image/svg+xml' &&
           <source type="image/webp" srcSet={`${webpSource.current.half}, ${webpSource.current.full} 2x`} />
           }
-          {originalSource.current &&
+          {originalSource.current && field.formats && field.formats.original.mimeType !== 'image/svg+xml' &&
           <source type={field.formats.original.mimeType} srcSet={`${originalSource.current.half}, ${originalSource.current.full} 2x`} />
           }
           <img

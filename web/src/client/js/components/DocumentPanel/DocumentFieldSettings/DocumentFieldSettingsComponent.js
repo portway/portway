@@ -64,10 +64,10 @@ const DocumentFieldSettingsComponent = ({ field, isUpdating, updateHandler }) =>
       {field.type === FIELD_TYPES.IMAGE && field.value &&
       <a className="document-panel__image-link" href={field.value} target="_blank" rel="noopener noreferrer">
         <picture>
-          {field.formats && field.formats.webp &&
+          {field.formats && field.formats.webp && field.formats.original.mimeType !== 'image/svg+xml' &&
           <source type="image/webp" srcSet={`${field.formats.webp.half}, ${field.formats.webp.full} 2x`} />
           }
-          {field.formats && field.formats.original &&
+          {field.formats && field.formats.original && field.formats.original.mimeType !== 'image/svg+xml' &&
           <source type={field.formats.original.mimeType} srcSet={`${field.formats.original.half}, ${field.formats.original.full} 2x`} />
           }
           <img src={field.value} width={field.meta && field.meta.width} height={field.meta && field.meta.height} alt={field.alt && field.alt} />
