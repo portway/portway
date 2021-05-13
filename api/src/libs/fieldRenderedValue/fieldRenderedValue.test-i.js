@@ -74,7 +74,7 @@ describe('fieldRenderedValue', () => {
           result = await getRenderedValueByType({
             ...field,
             formats: {
-              webp: { webPhalf, webPfull },
+              webp: { half: webPhalf, full: webPfull },
               original: { half: originalHalf, full: originalFull }
             }
           }, value)
