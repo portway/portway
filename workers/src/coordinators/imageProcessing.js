@@ -73,11 +73,13 @@ const createImageAlternatives = async function(url, documentId, fieldId, orgId) 
   const formatData = {
     original: {
       full: url,
-      half: originalHalfResult.Location
+      half: originalHalfResult.Location,
+      mimeType: originalMimetype
     },
     webp: {
       full: webPFullResult.Location,
-      half: webPHalfResult.Location
+      half: webPHalfResult.Location,
+      mimeType: 'image/webp'
     }
   }
 
