@@ -41,17 +41,19 @@ export function getRenderedValueByType(field, value) {
       const html = renderMarkdownSync(value)
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.TEXT]({ html, type: 'text', name })
     case FIELD_TYPES.IMAGE:
-      const imageSource = field.formats ? field.formats.webp.half : value
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.IMAGE]({
         type: 'image',
         name,
-        imageSource,
+        value,
         alt: field.alt,
         width: field.meta && field.meta.width,
         height: field.meta && field.meta.height,
         alignment: field.alignment || IMAGE_ALIGNMENT_OPTIONS.CENTER,
         webpHalf: field.formats && field.formats.webp.half,
-        webpFull: field.formats && field.formats.webp.full
+        webpFull: field.formats && field.formats.webp.full,
+        originalHalf: field.formats && field.formats.original.half,
+        originalFull: field.formats && field.formats.original.full,
+        originalMimeType: field.formats && field.formats.original.mimeType
       })
     case FIELD_TYPES.NUMBER:
       return EJS_TEMPLATE_FUNCTIONS[FIELD_TYPES.NUMBER]({ type: 'number', name, value })

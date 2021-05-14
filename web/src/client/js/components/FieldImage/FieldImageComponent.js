@@ -43,6 +43,7 @@ const FieldImageComponent = ({
   const previousField = usePrevious(field)
 
   // // Use the formats if we have them
+  const originalSource = useRef(field.formats && field.formats.original)
   const webpSource = useRef(field.formats && field.formats.webp)
 
   // Name
@@ -54,6 +55,7 @@ const FieldImageComponent = ({
   // if the image is updated in the settings panel, webp will be wiped out until the image can process in the background
   // in these cases, formats will be undefined and we want the component to reflect that
   useEffect(() => {
+    originalSource.current = field.formats && field.formats.original
     webpSource.current = field.formats && field.formats.webp
   }, [field.formats])
 
@@ -71,6 +73,7 @@ const FieldImageComponent = ({
         if (isMounted.current) {
           // Reset all stored image values, and show the preview
           imageNodeRef.current.setAttribute('srcset', '')
+          originalSource.current = null
           webpSource.current = null
           setImageSrc(e.target.result)
         }
@@ -128,16 +131,23 @@ const FieldImageComponent = ({
     <figure className={imageFieldClassNames}>
       <div className={containerClassnames}>
         {imageSrc &&
-        <img
-          alt={field && field.name}
-          className={imageClassnames}
-          height={field.meta && field.meta.height}
-          lazy="true"
-          ref={imageNodeRef}
-          src={webpSource.current ? webpSource.current.half : imageSrc}
-          srcSet={webpSource.current ? `${webpSource.current.half}, ${webpSource.current.full} 2x` : ``}
-          width={field.meta && field.meta.width}
-        />
+        <picture>
+          {webpSource.current && field.formats && field.formats.original.mimeType !== 'image/svg+xml' &&
+          <source type="image/webp" srcSet={`${webpSource.current.half}, ${webpSource.current.full} 2x`} />
+          }
+          {originalSource.current && field.formats && field.formats.original.mimeType !== 'image/svg+xml' &&
+          <source type={field.formats.original.mimeType} srcSet={`${originalSource.current.half}, ${originalSource.current.full} 2x`} />
+          }
+          <img
+            alt={field && field.name}
+            className={imageClassnames}
+            height={field.meta && field.meta.height}
+            lazy="true"
+            ref={imageNodeRef}
+            src={imageSrc}
+            width={field.meta && field.meta.width}
+          />
+        </picture>
         }
         <FileUploaderComponent
           accept="image/*"

@@ -65,11 +65,19 @@ describe('fieldRenderedValue', () => {
       })
 
       describe('when there is a webp value', () => {
-        const half = 'webphalfsource'
-        const full = 'webpfullsource'
+        const webPhalf = 'webphalfsource'
+        const webPfull = 'webpfullsource'
+        const originalHalf = 'originalHalf'
+        const originalFull = 'originalFull'
 
-        beforeAll(async () => {   
-          result = await getRenderedValueByType({ ...field, formats: { webp: { half, full } } }, value)
+        beforeAll(async () => {
+          result = await getRenderedValueByType({
+            ...field,
+            formats: {
+              webp: { half: webPhalf, full: webPfull },
+              original: { half: originalHalf, full: originalFull }
+            }
+          }, value)
         })
 
         it('should return a rendered string containing the name and value', () => {
@@ -77,8 +85,8 @@ describe('fieldRenderedValue', () => {
           expect(result).toContain(field.meta.width)
           expect(result).toContain(field.meta.height)
           expect(result).toContain(field.alignment)
-          expect(result).toContain(half)
-          expect(result).toContain(full)
+          expect(result).toContain(webPhalf)
+          expect(result).toContain(webPfull)
         })
       })
     })
