@@ -86,8 +86,8 @@ const SharedConfig = {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
-        config: {
-          path: path.resolve(__dirname, './postcss.config.js')
+        postcssOptions: {
+          config: path.resolve(__dirname, './postcss.config.js')
         }
       }
     },
