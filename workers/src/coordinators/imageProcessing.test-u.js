@@ -15,7 +15,7 @@ describe('imageProcessingCoordinator', () => {
     const documentId = 111111
     const orgId = 222222
     const fieldId = 333333
-    const fileUrl = 'not-a-real-s3-file-url'
+    const fileUrl = 'not-a-real-s3-file-url.jpg'
     const location = 'not-a-real-location'
     const resp = { data: 'not-real-data' }
     let result
@@ -65,11 +65,13 @@ describe('imageProcessingCoordinator', () => {
       expect(portwayAPI.updateFieldFormats.mock.calls[0][3]).toEqual({
         original: {
           full: fileUrl,
-          half: location
+          half: location,
+          mimeType: 'image/jpeg'
         },
         webp: {
           full: location,
-          half: location
+          half: location,
+          mimeType: 'image/webp'
         }
       })
     })
