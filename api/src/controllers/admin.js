@@ -80,6 +80,10 @@ const adminController = function(router) {
     adminAuth,
     updateImageFieldFormats
   )
+
+  router.get('/users/:id/details',
+    
+  )
 }
 
 const createAccount = async function(req, res, next) {
