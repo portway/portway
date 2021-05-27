@@ -3,7 +3,6 @@ version: '3'
 services:
 
   web:
-    platform: linux/x86_64
     build:
       context: ./web
     volumes:
