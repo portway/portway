@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.721.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.21.1",
     "bee-queue": "^1.2.3",
     "cuid": "^2.1.8",
