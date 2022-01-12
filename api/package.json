@@ -66,7 +66,7 @@
     "hashids": "^1.2.2",
     "ioredis": "^4.14.1",
     "jsonwebtoken": "^8.4.0",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^12.3.2",
     "mime-types": "^2.1.26",
     "multer": "^1.4.2",
     "ono": "^5.0.1",
