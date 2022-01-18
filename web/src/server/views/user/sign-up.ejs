@@ -35,7 +35,7 @@
         <% if (typeof disableSignup !== 'undefined' && disableSignup === true) { %>
           <p>Registration is currently disabled</p>
         <% } else { %>
-          <%- include('../partials/sign-up', { termsLink: options.termsLink }); %>
+          <%- include('../partials/sign-up', { termsLink: options.termsLink, source: options.source }); %>
         <% } %>
       </div>
     </section>
