@@ -1,7 +1,10 @@
-FROM node:12.18-stretch-slim as builder
+FROM node:15.14-stretch-slim as builder
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
+
+RUN apt-get -y update
+RUN apt-get -y install build-essential python
 
 WORKDIR /web
 
@@ -17,7 +20,7 @@ RUN rm -rf node_modules/
 RUN rm -rf src/
 RUN rm -rf config/
 
-FROM node:12.18-stretch-slim as app
+FROM node:15.14-stretch-slim as app
 
 COPY --from=builder /web .
 
