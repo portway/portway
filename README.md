@@ -1,3 +1,5 @@
+Fully featured collaborative Markdown editor with Content APIs, team management, billing, etc
+
 ![Portway Image](docs/portway-github.png)
 
 # Portway 🔥
