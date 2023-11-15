@@ -9,14 +9,14 @@ kubectl config get-contexts
 kubectl config use-context [context]
 ```
 
-2. Checkout the appropriate git branch or commit 
-The appropriate branch is the one that has the correct kubernetes config for the k8s cluster. Usually this will be release, but if a new feature with updated kubectl config is in release but hasn't been deployed to the cluster, it may be an earlier commit. To find out what release is on an environment, look at the master branch and in `deploys/[env].txt` which contains deployed release tag. Then checkout that tag: `git checkout 0.13.1`
+2. Checkout the appropriate git branch or commit
+The appropriate branch is the one that has the correct kubernetes config for the k8s cluster. Usually this will be release, but if a new feature with updated kubectl config is in release but hasn't been deployed to the cluster, it may be an earlier commit. To find out what release is on an environment, look at the `main` branch and in `deploys/[env].txt` which contains deployed release tag. Then checkout that tag: `git checkout 0.13.1`
 
 3. Manually update the appropriate values.yml file
-For dev, this is `kubernetes/helm/portway/values.yaml`  
+For dev, this is `kubernetes/helm/portway/values.yaml`
 For prod, this is `kubernetes/helm/portway/prodValues.yaml`
 
-Set the `certIssuer` to `letsencrypt-staging`  
+Set the `certIssuer` to `letsencrypt-staging`
 Set the appropriate release tag for the various images (web, api, docs)
 
 4. Run a helm upgrade

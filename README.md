@@ -44,9 +44,9 @@ A release is the artifacts needed to perform a deployment. In Portway's case, a 
 
 ### Deploy a release
 
-1. Create a `deploy-[environment]-[tag]` branch from `master`. Eg `deploy-dev-2.41.1`
+1. Create a `deploy-[environment]-[tag]` branch from `main`. Eg `deploy-dev-2.41.1`
 1. Replace the contents of `deploys/dev.txt` with `2.41.1`. Commit and push to Github.
-1. PR the `deploy-dev-2.41.1` branch into master
+1. PR the `deploy-dev-2.41.1` branch into `main`
 1. Once approved and merged, the CI/CD service will deploy the 2.41.1 release to dev!
 
 ## Production

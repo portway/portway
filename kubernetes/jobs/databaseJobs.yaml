@@ -16,7 +16,7 @@ spec:
       - name: regcred
       containers:
       - name: portway-db
-        image: "bonkeybong/portway_db_jobs:master-31969aa"
+        image: "bonkeybong/portway_db_jobs:main-31969aa"
         args: ["setDeletedRecords"]
         env:
         - name: DB_HOST
